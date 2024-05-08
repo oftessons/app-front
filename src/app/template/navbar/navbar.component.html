@@ -1,0 +1,67 @@
+<mat-toolbar class="mat-toolbar-fixed d-flex justify-content-between">
+    <button mat-icon-button class="btn" (click)="toggleSidenav()">
+        <mat-icon class="button-menu">{{ sidenav.opened ? 'close' : 'menu' }}</mat-icon>
+    </button>
+
+    <a class="navbar-brand mx-auto" routerLink="/gerente/inicio">
+        <img src="assets/imagens/logo-dt-rm.png" alt="" class="d-inline-block align-text-top">
+    </a>
+
+    <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseLayouts" aria-expanded="false"
+        aria-controls="collapseLayouts">
+        <div class="sb-nav-link-icon">
+            <a class="cor btn" (click)="logout();"> Sair 
+                <img src="assets/icones/Log-out.svg" alt="Ícone de Sair" class="icon">
+            </a>
+        </div>
+    </a>
+</mat-toolbar>
+
+
+<mat-drawer-container>
+    <mat-drawer #sidenav [mode]="getSidenavMode()" [opened]="isSidenavOpen()" class="mat-drawer-sidenav">
+        <mat-nav-list class="pt-5">
+           
+            
+            <div class="heading-home">Home</div>
+            <a mat-list-item routerLink="/usuario/dashboard">
+                <img src="assets/icones/dash.svg" alt="Ícone de Empresa de Engenharia" class="icon">
+                <span class="ml-2">Painel de Controle</span>
+            </a>
+            
+            <div class="heading-home">Serviços</div>
+            <a mat-list-item routerLink="/usuario/projetos">
+                <img src="assets/icones/folder-plus.svg" alt="Ícone de Usuários" class="icon">
+                <span class="ml-2">Projetos</span>
+            </a>         
+            <a mat-list-item routerLink="/usuario/dividas-tecnicas">
+                <img src="assets/icones/coin.svg" alt="Ícone de Inspeções" class="icon">
+                <span class="ml-2">Dívidas Técnicas</span>
+            </a>
+            <a mat-list-item routerLink="/usuario/emitir-relatorio">
+                <img src="assets/icones/doc.svg" alt="Ícone de Inspeções" class="icon">
+                <span class="ml-2">Relatórios</span>
+            </a>
+            <div class="heading-home">Configurações</div>
+            <a mat-list-item routerLink="/usuario/meu-perfil-de-usuario">
+                <img src="assets/icones/myperson.svg" alt="Ícone de Inspeções" class="icon">
+                <span class="ml-2">Meu Perfil</span>
+            </a>
+
+            <div class="mat-drawer-footer" mat-list-item>
+                <div class="small">
+                    <img src="assets/icones/user.svg" alt="Ícone do Usuário" class="icon">
+                    <span class="ml-2" style="font-weight:500;  font-weight: bold; margin: 0 auto;">Usuário Logado: </span>
+                   
+                </div>
+            </div>
+
+        </mat-nav-list>
+
+    </mat-drawer>
+    <mat-drawer-content>
+        <div class="mat-drawer-content">
+            <router-outlet></router-outlet>
+        </div>
+    </mat-drawer-content>
+</mat-drawer-container>
