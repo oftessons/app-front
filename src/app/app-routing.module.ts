@@ -8,7 +8,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: '', component: LayoutComponent, children: [
     { path : 'usuario/dashboard', component: DashboardComponent },
-    { path: '' , redirectTo: 'usuario/inicio', pathMatch: 'full' }
+    { path: '' , redirectTo: 'usuario/dashboard', pathMatch: 'full' }
   ]}
 ];
 

@@ -1,0 +1,73 @@
+#layoutAuthentication #layoutAuthentication_content {
+    background-image: url('src/assets/imagens/login.svg'); 
+    background-size: cover;
+    background-position: center; 
+}
+
+.btn-primary {
+    color: #fff;
+    background-color:#3B5FA0;
+    border-color:#3B5FA0;
+}
+
+.btn-lg {
+    padding: 10px 20px; /* Ajuste o padding conforme necessário */
+    font-size: 17px;
+ 
+}
+
+@media screen and (min-width: 1024px) {
+    .btn-lg{
+        width: 370px;
+    }
+}
+
+
+.card-header{
+    background: #0F1934;
+}
+.card-footer{
+    background: #0F1934;
+}
+
+
+
+.row.justify-content-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Ocupa pelo menos a altura da viewport */
+}
+
+.card {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background: #E2E1DC;
+}
+
+
+
+.text-center{
+    color: #fff;
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: bold;
+}
+
+.green-text {
+    color: #3B5FA0;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.white-text {
+    color: white;
+    font-size: 14px;
+}
+
+.small{
+    padding: 15px;
+}
+.small a {
+    text-decoration: none; /* Remove a linha de sublinhado apenas dos links dentro da classe .small */
+}
+

@@ -1,1 +1,110 @@
-<p>login works!</p>
+<div class="bg-primary" >
+    <div id="layoutAuthentication">
+        <div id="layoutAuthentication_content">
+            <main>
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-5">
+                            <div class="card shadow-lg border-0 rounded-lg mt-5">
+                                <div class="card-header">
+                                    <div class="text-center">
+                                        <img  src="assets/imagens/logo-oftlessons.svg" alt="" class="d-inline-block align-text-top" style="padding: 20px; height: 90px;">
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="alert alert-success" *ngIf="mensagemSucesso">
+                                        {{ mensagemSucesso }}
+                                    </div>
+  
+                                    <div class="alert alert-danger" *ngFor="let erro of errors">
+                                    {{ erro }}
+                                    </div>
+
+                                    <!-- Mensagem de Atenção 
+                                    <div class="alert alert-warning">
+                                        Por usarmos uma hospedagem gratuita, o logar/cadastrar demora alguns segundos/minutos.
+                                        Agradeçemos a compreensão.💙
+                                    </div>
+                                    -->
+  
+                                    <form #loginForm="ngForm" (submit)="onSubmit();">
+
+                                        <div class="form-group">
+                                            <label class="small mb-1" style="font-size: 1.2em;">Login</label>
+                                            <input type="text" name="username" [(ngModel)]="username" autocomplete="off" class="form-control py-2" 
+                                            style=" width: 90%;
+                                            height: 50px;
+                                            margin-left: 10px;" placeholder="Digite seu login" />
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label class="small mb-1" style="font-size: 1.2em;">Senha</label>
+                                            <input type="password" name="password" [(ngModel)]="password" class="form-control py-2"
+                                            style=" width: 90%;
+                                            height: 50px;
+                                            margin-left: 10px;" placeholder="Digite sua senha" />
+                                        </div>
+                                        
+
+                                        <div class="form-group" *ngIf="cadastrando">
+                                            <label class="small mb-1">E-mail</label>
+                                            <input type="email" name="email"
+                                                [(ngModel)]="email"
+                                                class="form-control py-4"
+                                                placeholder="Digite seu e-mail" />
+                                        </div>
+
+                                        <div class="form-group" *ngIf="cadastrando">
+                                            <label class="small mb-1">Nome da Empresa</label>
+                                            <input type="nomeDaEmpresa" name="nomeDaEmpresa"
+                                                [(ngModel)]="nomeDaEmpresa"
+                                                class="form-control py-4"
+                                                placeholder="Digite o nome de sua empresa" />
+                                        </div>
+
+                                        <div class="form-group" *ngIf="cadastrando">
+                                            <label class="small mb-1">Setor de Atuação</label>
+                                            <input type="setorDaEmpresa" name="setorDaEmpresa"
+                                                [(ngModel)]="setorDaEmpresa"
+                                                class="form-control py-4"
+                                                placeholder="Digite o setor de atuação de sua empresa" />
+                                        </div>
+  
+                                        <div class="form-group align-items-center justify-content-between mt-4 mb-0">
+                                            <div class="col-sm-12 col-md-6 d-flex justify-content-center align-items-center">
+                                                <button type="submit" class="btn btn-primary btn-lg" *ngIf="!cadastrando">
+                                                    Entrar
+                                                </button>
+                                            </div>
+                                            
+                                         
+                                            <button type="button" class="btn btn-success" 
+                                                    (click)="cadastrar()"
+                                                    *ngIf="cadastrando">
+                                                Cadastrar
+                                            </button>
+  
+                                            <button type="button" (click)="cancelaCadastro()"
+                                                    class="btn btn-danger ml-1" *ngIf="cadastrando">
+                                                Cancelar
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+  
+                                <div class="card-footer text-center">
+                                    <div class="small">
+                                        <a href="#" (click)="preparaCadastrar($event)">
+                                            <span class="white-text">Ainda não possui uma conta? </span> <span class="green-text">Crie agora!</span>
+                                        </a>
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+  </div>
+  
