@@ -8,17 +8,23 @@
     color: #fff;
     background-color:#3B5FA0;
     border-color:#3B5FA0;
+    font-family: 'Nunito Sans', sans-serif;
+    margin-top: 5px;
+  
+}
+.form-control{
+    background-color:#b1afaf;
+    font-size: 13px;
+}
+.btn-lg {
+    font-size: 14px;
+    font-family: 'Nunito Sans', sans-serif;
 }
 
-.btn-lg {
-    padding: 10px 20px; /* Ajuste o padding conforme necessário */
-    font-size: 17px;
- 
-}
 
 @media screen and (min-width: 1024px) {
     .btn-lg{
-        width: 370px;
+        width: 460px;
     }
 }
 
@@ -42,16 +48,19 @@
 .card {
     margin-top: 20px;
     margin-bottom: 20px;
-    background: #E2E1DC;
+    background: rgb(226 225 220 / 94%);
 }
-
-
 
 .text-center{
     color: #fff;
     font-family: 'Nunito Sans', sans-serif;
     font-weight: bold;
 }
+
+input::placeholder {
+    color: rgb(118, 118, 118);
+}
+
 
 .green-text {
     color: #3B5FA0;
@@ -65,7 +74,7 @@
 }
 
 .small{
-    padding: 15px;
+    padding: 8px;
 }
 .small a {
     text-decoration: none; /* Remove a linha de sublinhado apenas dos links dentro da classe .small */
