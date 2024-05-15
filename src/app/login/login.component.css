@@ -28,6 +28,24 @@
     }
 }
 
+.responsive-input {
+    width: 460px;
+    height: 45px;
+    margin-left: 10px;
+}
+
+.form-group {
+     margin-bottom: 0.1rem; 
+}
+
+/* Responsive styles for smaller screens */
+@media (max-width: 767px) {
+    .responsive-input {
+        width: 310px;
+      
+    }
+}
+
 
 .card-header{
     background: #0F1934;
