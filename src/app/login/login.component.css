@@ -41,7 +41,7 @@
 /* Responsive styles for smaller screens */
 @media (max-width: 767px) {
     .responsive-input {
-        width: 310px;
+        width: 340px;
       
     }
 }
