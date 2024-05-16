@@ -1,0 +1,41 @@
+.container {
+    max-width: 1300px;
+    padding: 10px;
+    font-family: 'Nunito Sans', sans-serif;
+}
+.mt-4{
+    font-size: 28px;
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: bold;
+}
+.span{
+    font-size: 16px;
+    color: #0F1934;
+}
+.text-p{
+    font-size: 20px;
+    margin-top: 10px;
+    font-family: 'Nunito Sans', sans-serif;
+}
+.card{
+    margin-top: 10px;
+    background-color: #0F1934;
+    font-family: 'Nunito Sans', sans-serif;
+}
+.card-title{
+    color: #CDDAEF;
+    font-size:24px;
+    font-family: 'Nunito Sans', sans-serif;
+}
+.icon{
+    margin-bottom: 5px;
+    margin-top: 10px;
+}
+.btn{
+    margin-top: 10px;
+    background-color: transparent;
+    border-color: transparent;
+}
+.btn:hover{
+    color: #6be26b;
+}

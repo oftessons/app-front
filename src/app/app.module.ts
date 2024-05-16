@@ -11,6 +11,7 @@ import { LayoutComponent } from './layout/layout.component';
 import { LoginComponent } from './login/login.component';
 import { AuthService } from './services/auth.service';
 import { TokenInterceptor } from './services/token.interceptor';
+import { SistemaModule } from './sistema/sistema.module';
 
 
 @NgModule({
@@ -24,6 +25,7 @@ import { TokenInterceptor } from './services/token.interceptor';
     AppRoutingModule,
     TemplateModule,
     HttpClientModule,
+    SistemaModule,
     FormsModule,
     BrowserAnimationsModule,
     //NgxPaginationModule,

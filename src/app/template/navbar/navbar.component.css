@@ -4,14 +4,22 @@
     left: 0;
     right: 0;
     z-index: 999;
-    background-color: #eef1f6;
+    background-color: #0F1934;
     padding: 30px;
     font-family: 'Nunito Sans', sans-serif;
   }
-
+.ml-2{
+    font-size: 15px;
+    font-weight: bold;
+}
 .button-menu{
   vertical-align: middle;
-  color: #0D356A;
+  color: #E7ECF6;
+}
+
+.mat-drawer-content{
+    /* height: 100vh; */
+    background-color: #e3eaf0;
 }
 
 .link-icon{
@@ -57,7 +65,7 @@
 }
 
 .mat-list-item:hover {
-    background-color: #CDDAEF; /* Cor de destaque ao passar o mouse */
+    background-color: #e3eaf0; /* Cor de destaque ao passar o mouse */
     font-weight: bold;
 }
 
@@ -107,16 +115,17 @@
 }
 
 .heading-home{
-    font-size: 0.82rem;
+    font-size: 0.87rem;
     font-weight: bold;
     text-transform: uppercase;
     margin-left: 14px;
     margin-top: 18px;
+    color: #0F1934;
 }
 
 .mat-drawer-sidenav{
     width: 200px;
-    background-color: #eef1f6;
+    background-color: #b1b4bc;
     overflow-x: hidden;
     margin-top: 15px;
     font-family: 'Nunito Sans', sans-serif;
@@ -124,13 +133,17 @@
 
 .mat-drawer-footer{
     display: flex;
-    background-color:  #CDDAEF;
+    background-color:  #8C8E94;
     padding: 0.75rem;
     padding-left: 1rem;
     left: 0;
     bottom: 0;
     position: fixed;
     width: 200px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    align-items: center;
+    text-align: center;
 }
 
 .mat-drawer-content{
@@ -157,7 +170,7 @@
 }
 
 .cor {
-    color: black;
+    color: rgb(255, 255, 255);
     /* Defina a cor do texto como branca */
     font-weight: 400;
 }
