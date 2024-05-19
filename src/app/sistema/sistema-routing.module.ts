@@ -9,7 +9,7 @@ import { PageFiltroComponent } from './page-filtro/page-filtro.component';
 import { PageDesempenhoComponent } from './page-desempenho/page-desempenho.component';
 
 const routes: Routes = [
-  {path:'usuario', component: LayoutComponent, children:[
+  {path:'usuario', component: LayoutComponent,  canActivate: [AuthGuard], children:[
     {path:'dashboard', component: DashboardComponent},
     {path:'questoes', component:PageQuestoesComponent},
     {path:'filtro', component: PageFiltroComponent},

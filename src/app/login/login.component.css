@@ -28,6 +28,12 @@
     }
 }
 
+.alert.alert-danger{
+    background-color: #CC3939;
+    color: #fff;
+    border-color: #CC3939;
+}
+
 .responsive-input {
     width: 460px;
     height: 45px;

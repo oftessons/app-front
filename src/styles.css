@@ -4897,16 +4897,20 @@ a.badge-dark:focus, a.badge-dark.focus {
   color: #533f03;
 }
 
-.alert-danger {
-  color: #721c24;
-  background-color: #f8d7da;
-  border-color: #f5c6cb;
-}
 .alert-danger hr {
   border-top-color: #f1b0b7;
 }
 .alert-danger .alert-link {
   color: #491217;
+}
+
+
+
+.card .alert .alert-danger {
+  --bs-alert-color: #fff;
+  --bs-alert-bg: #dc182a;
+  --bs-alert-border-color: #fff;
+  --bs-alert-link-color: #cf1024;
 }
 
 .alert-light {

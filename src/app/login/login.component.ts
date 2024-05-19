@@ -84,7 +84,7 @@ onSubmit() {
         this.usuario = usuario;
         localStorage.setItem("idUser",usuario.id);
         this.router.navigate(['/usuario/dashboard']);
-        //localStorage.setItem("usuario",usuario.username);
+      localStorage.setItem("usuario",usuario.username);
       },
       (error) => {
         console.error('Erro ao obter dados do usuário:', error);

@@ -1,8 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { MatSidenav } from '@angular/material/sidenav';
-//import { AuthService } from 'src/app/service/auth.service';
+
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -12,21 +13,21 @@ import { Router } from '@angular/router';
 export class NavbarComponent {
   @ViewChild('sidenav') sidenav!: MatSidenav;
 
-  //usuarioLogado: string;
+  usuarioLogado!: string;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
-    //private authService: AuthService,
+    private authService: AuthService,
     private router: Router
     ) { }
 
   ngOnInit(): void {
-    //this.usuarioLogado = this.authService.getUsuarioAutenticado();
-    //localStorage.setItem("usuarioLogado",this.usuarioLogado);
+    this.usuarioLogado = this.authService.getUsuarioAutenticado();
+    localStorage.setItem("usuarioLogado",this.usuarioLogado);
   }
 
   logout(){
-    //this.authService.encerrarSessao();
+    this.authService.encerrarSessao();
     this.router.navigate(['/login'])
   }
 
