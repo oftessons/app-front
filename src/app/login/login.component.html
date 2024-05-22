@@ -1,4 +1,4 @@
-<div class="bg-primary" >
+<div class="bg-primary">
     <div id="layoutAuthentication">
         <div id="layoutAuthentication_content">
             <main>
@@ -8,16 +8,16 @@
                             <div class="card shadow-lg border-0 rounded-lg mt-5">
                                 <div class="card-header">
                                     <div class="text-center">
-                                        <img  src="assets/imagens/logo-oftlessons.svg" alt="" class="d-inline-block align-text-top" style="padding: 20px; height: 85px;">
+                                        <img src="assets/imagens/logo-oftlessons.svg" alt="" class="d-inline-block align-text-top" style="padding: 20px; height: 85px;">
                                     </div>
                                 </div>
                                 <div class="card-body">
                                     <div class="alert alert-success" *ngIf="mensagemSucesso">
                                         {{ mensagemSucesso }}
                                     </div>
-  
+
                                     <div class="alert alert-danger" *ngFor="let erro of errors">
-                                    {{ erro }}
+                                        {{ erro }}
                                     </div>
 
                                     <!-- Mensagem de Atenção 
@@ -26,61 +26,100 @@
                                         Agradeçemos a compreensão.💙
                                     </div>
                                     -->
-  
+
                                     <form #loginForm="ngForm" (submit)="onSubmit();">
 
                                         <div class="form-group">
                                             <label class="small mb-1" style="font-size: 1.2em;">Login</label>
                                             <input type="text" name="username" [(ngModel)]="username" autocomplete="off" class="form-control py-2 responsive-input" 
-                                           placeholder="Digite seu e-mail" />
+                                            placeholder="Digite seu username" />
                                         </div>
-                                        
-                                        
+
+
                                         <div class="form-group">
                                             <label class="small mb-1" style="font-size: 1.2em;">Senha</label>
                                             <input type="password" name="password" [(ngModel)]="password" class="form-control py-2 responsive-input"
-                                             placeholder="Digite sua senha" />
+                                            placeholder="Digite sua senha" />
                                         </div>
-                                        
 
                                         <div class="form-group" *ngIf="cadastrando">
-                                            <label class="small mb-1">E-mail</label>
+                                            <label class="small mb-1"  style="font-size: 1.2em;">E-mail</label>
                                             <input type="email" name="email"
                                                 [(ngModel)]="email"
-                                                class="form-control py-4"
+                                                class="form-control py-4 responsive-input"
                                                 placeholder="Digite seu e-mail" />
                                         </div>
 
                                         <div class="form-group" *ngIf="cadastrando">
-                                            <label class="small mb-1">Nome da Empresa</label>
-                                            <input type="nomeDaEmpresa" name="nomeDaEmpresa"
-                                                [(ngModel)]="nomeDaEmpresa"
-                                                class="form-control py-4"
+                                            <label class="small mb-1"  style="font-size: 1.2em;">Nome da Empresa</label>
+                                            <input type="text" name="nome"
+                                                [(ngModel)]="nome"
+                                                class="form-control py-4 responsive-input"
                                                 placeholder="Digite o nome de sua empresa" />
                                         </div>
 
                                         <div class="form-group" *ngIf="cadastrando">
-                                            <label class="small mb-1">Setor de Atuação</label>
-                                            <input type="setorDaEmpresa" name="setorDaEmpresa"
-                                                [(ngModel)]="setorDaEmpresa"
-                                                class="form-control py-4"
-                                                placeholder="Digite o setor de atuação de sua empresa" />
+                                            <label class="small mb-1"  style="font-size: 1.2em;">Telefone</label>
+                                            <input type="text" name="telefone"
+                                                [(ngModel)]="telefone"
+                                                class="form-control py-4 responsive-input"
+                                                placeholder="Digite o telefone de sua empresa" />
                                         </div>
-  
+
+                                        <div class="form-group" *ngIf="cadastrando">
+                                            <label class="small mb-1"  style="font-size: 1.2em;">CPF</label>
+                                            <input type="text" name="cpf"
+                                                [(ngModel)]="cpf"
+                                                class="form-control py-4 responsive-input"
+                                                placeholder="Digite o CPF de sua empresa" />
+                                        </div>
+
+                                        <div class="form-group" *ngIf="cadastrando">
+                                            <label class="small mb-1"  style="font-size: 1.2em;">Rua</label>
+                                            <input type="text" name="rua"
+                                                [(ngModel)]="rua"
+                                                class="form-control py-4 responsive-input"
+                                                placeholder="Digite a rua de sua empresa" />
+                                        </div>
+
+                                        <div class="form-group" *ngIf="cadastrando">
+                                            <label class="small mb-1"  style="font-size: 1.2em;">Número</label>
+                                            <input type="text" name="numero"
+                                                [(ngModel)]="numero"
+                                                class="form-control py-4 responsive-input"
+                                                placeholder="Digite o número de sua empresa" />
+                                        </div>
+
+                                        <div class="form-group" *ngIf="cadastrando">
+                                            <label class="small mb-1"  style="font-size: 1.2em;">Cidade</label>
+                                            <input type="text" name="cidade"
+                                                [(ngModel)]="cidade"
+                                                class="form-control py-4 responsive-input"
+                                                placeholder="Digite a cidade de sua empresa" />
+                                        </div>
+
+                                        <div class="form-group" *ngIf="cadastrando">
+                                            <label class="small mb-1"  style="font-size: 1.2em;">Estado</label>
+                                            <input type="text" name="estado"
+                                                [(ngModel)]="estado"
+                                                class="form-control py-4 responsive-input"
+                                                placeholder="Digite o estado de sua empresa" />
+                                        </div>
+
                                         <div class="form-group align-items-center justify-content-between mt-4 mb-0">
                                             <div class="col-sm-12 col-md-6"> <!-- Controla o tamanho da coluna em dispositivos pequenos e médios -->
                                                 <button type="submit" class="btn btn-primary btn-lg btn-block" *ngIf="!cadastrando">
                                                     Entrar
                                                 </button>
                                             </div>
-                                            
-                                         
+
+
                                             <button type="button" class="btn btn-success" 
                                                     (click)="cadastrar()"
                                                     *ngIf="cadastrando">
                                                 Cadastrar
                                             </button>
-  
+
                                             <button type="button" (click)="cancelaCadastro()"
                                                     class="btn btn-danger ml-1" *ngIf="cadastrando">
                                                 Cancelar
@@ -88,7 +127,7 @@
                                         </div>
                                     </form>
                                 </div>
-  
+
                                 <div class="card-footer text-center">
                                     <div class="small">
                                         <a href="#" (click)="preparaCadastrar($event)">
@@ -103,5 +142,4 @@
             </main>
         </div>
     </div>
-  </div>
-  
+</div>

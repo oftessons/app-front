@@ -40,6 +40,7 @@ export class AuthService {
      return this.http.get<Usuario>(`${this.apiURL}/perfil`);
   }
 
+
   getUsuarioAutenticado(){
     const token = this.obterToken();
     if(token){
@@ -68,6 +69,8 @@ export class AuthService {
     }
   }
 
+ 
+
   isAuthenticated() : boolean {
     const token = this.obterToken();
     if(token){
@@ -78,8 +81,8 @@ export class AuthService {
     return false;
   }
 
-  salvar(usuario: Usuario) : Observable<any> {
-    return this.http.post<any>(this.apiURL, usuario);
+  salvar(usuario: Usuario): Observable<any> {
+    return this.http.post<any>(`${this.apiURL}/cadastro`, usuario);
   }
 
   tentarLogar( username: string, password: string ) : Observable<any> {
