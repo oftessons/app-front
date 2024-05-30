@@ -40,6 +40,9 @@ export class AuthService {
      return this.http.get<Usuario>(`${this.apiURL}/perfil`);
   }
 
+  atualizarUsuario(usuario: Usuario): Observable<Usuario> {
+    return this.http.put<Usuario>(`${this.apiURL}/usuario/${usuario.id}`, usuario);
+  }
 
   getUsuarioAutenticado(){
     const token = this.obterToken();

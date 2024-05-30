@@ -1,23 +1,67 @@
 <div class="container pt-5">
-
   <div class="container mt-4">
-      <h1 class="mt-4"> <span> | </span> Meu Perfil</h1>
+    <h1 class="mt-4"><span> | </span> Meu Perfil</h1>
   </div>
 
   <div class="profile-container">
-      <h2>Meu Perfil</h2>
+    <div class="profile-header">
+      <div class="profile-photo-container">
+        <img [src]="usuario.fotoUrl || 'assets/imagens/foto.svg'" alt="Foto do Usuário" class="profile-photo">
+        <div *ngIf="editMode" class="profile-photo-upload">
+          <input type="file" (change)="onFileSelected($event)" />
+        </div>
+      </div>
       <div class="profile-info">
-        <div><strong>Nome:</strong> {{ usuario.nome }}</div>
-        <div><strong>Username:</strong> {{ usuario.username }}</div>
-        <div><strong>Email:</strong> {{ usuario.email }}</div>
-        <div><strong>Telefone:</strong> {{ usuario.telefone }}</div>
-        <div><strong>CPF:</strong> {{ usuario.cpf }}</div>
-        <div><strong>Rua:</strong> {{ usuario.rua }}</div>
-        <div><strong>Número:</strong> {{ usuario.numero }}</div>
-        <div><strong>Cidade:</strong> {{ usuario.cidade }}</div>
-        <div><strong>Estado:</strong> {{ usuario.estado }}</div>
+        <h2>Meu Perfil</h2>
+        <div>
+          <strong>Nome:</strong>
+          <span *ngIf="!editMode">{{ usuario.nome }}</span>
+          <input *ngIf="editMode" [(ngModel)]="usuario.nome" />
+        </div>
+        <div>
+          <strong>Username:</strong>
+          <span *ngIf="!editMode">{{ usuario.username }}</span>
+          <input *ngIf="editMode" [(ngModel)]="usuario.username" />
+        </div>
+        <div>
+          <strong>E-mail:</strong>
+          <span *ngIf="!editMode">{{ usuario.email }}</span>
+          <input *ngIf="editMode" [(ngModel)]="usuario.email" />
+        </div>
+        <div>
+          <strong>Telefone:</strong>
+          <span *ngIf="!editMode">{{ usuario.telefone }}</span>
+          <input *ngIf="editMode" [(ngModel)]="usuario.telefone" />
+        </div>
+        <div>
+          <strong>CPF:</strong>
+          <span *ngIf="!editMode">{{ usuario.cpf }}</span>
+          <input *ngIf="editMode" [(ngModel)]="usuario.cpf" />
+        </div>
+        <div>
+          <strong>Rua:</strong>
+          <span *ngIf="!editMode">{{ usuario.rua }}</span>
+          <input *ngIf="editMode" [(ngModel)]="usuario.rua" />
+        </div>
+        <div>
+          <strong>Número:</strong>
+          <span *ngIf="!editMode">{{ usuario.numero }}</span>
+          <input *ngIf="editMode" [(ngModel)]="usuario.numero" />
+        </div>
+        <div>
+          <strong>Cidade:</strong>
+          <span *ngIf="!editMode">{{ usuario.cidade }}</span>
+          <input *ngIf="editMode" [(ngModel)]="usuario.cidade" />
+        </div>
+        <div>
+          <strong>Estado:</strong>
+          <span *ngIf="!editMode">{{ usuario.estado }}</span>
+          <input *ngIf="editMode" [(ngModel)]="usuario.estado" />
+        </div>
       </div>
     </div>
-
+    <div class="profile-actions">
+      <button (click)="editarPerfil()" class="btn">{{ editMode ? 'Salvar' : 'Editar' }}</button>
+    </div>
+  </div>
 </div>
-  

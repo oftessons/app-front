@@ -7,6 +7,7 @@ import { PageDesempenhoComponent } from './page-desempenho/page-desempenho.compo
 import { PageMeuPerfilComponent } from './page-meu-perfil/page-meu-perfil.component';
 import { PageQuestoesComponent } from './page-questoes/page-questoes.component';
 import { PageFiltroComponent } from './page-filtro/page-filtro.component';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -19,6 +20,7 @@ import { PageFiltroComponent } from './page-filtro/page-filtro.component';
   ],
   imports: [
     CommonModule,
+    FormsModule,
     SistemaRoutingModule
   ]
 })

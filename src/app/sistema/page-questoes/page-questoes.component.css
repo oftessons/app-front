@@ -2,10 +2,120 @@
     max-width: 1300px;
     padding: 10px;
     font-family: 'Nunito Sans', sans-serif;
-}
-
-.text-p{
+  }
+  
+  .text-p {
     font-size: 20px;
     margin-top: 10px;
     font-family: 'Nunito Sans', sans-serif;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .btn-filters {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .btn-filters:hover {
+    background-color: #0056b3;
+  }
+  
+  .filters-container {
+    margin-top: 20px;
+    background: #696D79;
+    border-radius: 5px;
+    padding: 50px;
+  }
+  
+  .row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  
+  .col {
+    flex: 1;
+    margin-right: 10px;
+  }
+  
+  .col:last-child {
+    margin-right: 0;
+  }
+  
+  .form-select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .button-row {
+    display: flex;
+    justify-content: end;
+    margin-top: 20px;
+  }
+.icon{
+    margin-right: 10px;
+    width: 20px;
 }
+
+.btn-filtros{
+    margin-top: 12px;
+    padding: 10px 20px;
+    width: 200px;
+    background-color: #041E4E;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-filtrar{
+    margin-top: 12px;
+    padding: 10px 20px;
+    width: 230px;
+    background-color: #041E4E;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-salvar{
+    margin-top: 12px;
+    padding: 10px 20px;
+    width: 230px;
+    background-color: #3B5FA0;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+  .btn {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+  }
+  
+  .btn:last-child {
+    margin-right: 0;
+  }
+  
+  .btn:hover {
+    background-color: #0056b3;
+  }
+  
