@@ -2,60 +2,57 @@
     <div class="container mt-4">
       <div class="header">
         <h1 class="mt-4"><span> | </span> Questões</h1>
-        <button class="btn-filtros"  routerLink="/usuario/filtro" >
-            <img src="assets/imagens/q-f.svg" alt="Ícone do Filtro" class="icon">
-            Filtros
+        <button class="btn-filtros" routerLink="/usuario/filtro">
+          <img src="assets/imagens/q-f.svg" alt="Ícone do Filtro" class="icon">
+          Filtros
         </button>
       </div>
     </div>
   
     <div class="filters-container">
-      <div class="row">
-        <div class="col">
-          <select class="form-select">
-            <option value="">Selecione o Ano</option>
-            <!-- opções adicionais -->
-          </select>
+        <div class="row">
+          <div class="col">
+            <select class="form-select" [(ngModel)]="selectedAno">
+              <option value="">Ano</option>
+              <option *ngFor="let ano of anos" [value]="ano">{{ ano }}</option>
+            </select>
+          </div>
+          <div class="col">
+            <select class="form-select" [(ngModel)]="selectedDificuldade">
+               
+              <option *ngFor="let dificuldade of dificuldades" [value]="dificuldade">{{ getDescricaoDificuldade(dificuldade) }}</option>
+            </select>
+          </div>
         </div>
-        <div class="col">
-          <select class="form-select">
-            <option value="">Tipo de Prova</option>
-            <!-- opções adicionais -->
-          </select>
+        <div class="row">
+          <div class="col">
+            <select class="form-select" [(ngModel)]="selectedTipoDeProva">
+              <option value="">Tipo de Prova</option>
+              <option *ngFor="let tipoDeProva of tiposDeProva" [value]="tipoDeProva">{{ getDescricaoTipoDeProva(tipoDeProva) }}</option>
+            </select>
+          </div>
+          <div class="col">
+            <select class="form-select" [(ngModel)]="selectedSubtema">
+              <option *ngFor="let subtema of subtemas" [value]="subtema">{{ getDescricaoSubtema(subtema) }}</option>
+            </select>
+          </div>          
         </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <select class="form-select">
-            <option value="">Tema</option>
-            <!-- opções adicionais -->
-          </select>
-        </div>
-        <div class="col">
-          <select class="form-select">
-            <option value="">Subtema</option>
-            <!-- opções adicionais -->
-          </select>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <select class="form-select">
-            <option value="">Dificuldade</option>
-            <!-- opções adicionais -->
-          </select>
-        </div>
-        <div class="col">
-          <select class="form-select">
-            <option value="">Palavra-Chave</option>
-            <!-- opções adicionais -->
-          </select>
+        <div class="row">
+          <div class="col">
+            <select class="form-select" [(ngModel)]="selectedTema">
+              <option *ngFor="let tema of temas" [value]="tema">{{ getDescricaoTema(tema) }}</option>
+            </select>
+          </div>
+          <div class="col">
+            <input type="text" class="form-control-input" placeholder="Pesquisar por palavra-chave" [(ngModel)]="palavraChave">
+          </div>
         </div>
       </div>
-      <div class="button-row">
-        <button class="btn-salvar">Salvar Filtro</button>
-        <button class="btn-filtrar">Filtrar</button>
-      </div>
+      
+  
+    <div class="button-row">
+      <button class="btn-salvar">Salvar Filtro</button>
+      <button class="btn-filtrar" (click)="filtrarQuestoes()">Filtrar</button>
     </div>
   </div>
   
