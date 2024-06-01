@@ -12,6 +12,11 @@ import { LoginComponent } from './login/login.component';
 import { AuthService } from './services/auth.service';
 import { TokenInterceptor } from './services/token.interceptor';
 import { SistemaModule } from './sistema/sistema.module';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatRadioModule } from '@angular/material/radio';
+import { ChartsModule } from 'ng2-charts';
+
 
 
 @NgModule({
@@ -28,8 +33,11 @@ import { SistemaModule } from './sistema/sistema.module';
     SistemaModule,
     FormsModule,
     BrowserAnimationsModule,
+    MatInputModule,
+    MatSelectModule,
+    MatRadioModule,
+    ChartsModule
     //NgxPaginationModule,
-    //ChartsModule,
   ],
   providers: [
     AuthService,

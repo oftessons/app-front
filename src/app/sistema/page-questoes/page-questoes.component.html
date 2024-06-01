@@ -10,45 +10,67 @@
     </div>
   
     <div class="filters-container">
-        <div class="row">
-          <div class="col">
-            <select class="form-select" [(ngModel)]="selectedAno">
-              <option value="">Ano</option>
-              <option *ngFor="let ano of anos" [value]="ano">{{ ano }}</option>
-            </select>
-          </div>
-          <div class="col">
-            <select class="form-select" [(ngModel)]="selectedDificuldade">
-               
-              <option *ngFor="let dificuldade of dificuldades" [value]="dificuldade">{{ getDescricaoDificuldade(dificuldade) }}</option>
-            </select>
-          </div>
+      <div class="row">
+        <div class="col">
+          <mat-form-field appearance="fill">
+            <mat-label>Ano</mat-label>
+            <mat-select [(value)]="selectedAno">
+              <mat-option *ngFor="let ano of anos" [value]="ano">{{ ano }}</mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
-        <div class="row">
-          <div class="col">
-            <select class="form-select" [(ngModel)]="selectedTipoDeProva">
-              <option value="">Tipo de Prova</option>
-              <option *ngFor="let tipoDeProva of tiposDeProva" [value]="tipoDeProva">{{ getDescricaoTipoDeProva(tipoDeProva) }}</option>
-            </select>
-          </div>
-          <div class="col">
-            <select class="form-select" [(ngModel)]="selectedSubtema">
-              <option *ngFor="let subtema of subtemas" [value]="subtema">{{ getDescricaoSubtema(subtema) }}</option>
-            </select>
-          </div>          
-        </div>
-        <div class="row">
-          <div class="col">
-            <select class="form-select" [(ngModel)]="selectedTema">
-              <option *ngFor="let tema of temas" [value]="tema">{{ getDescricaoTema(tema) }}</option>
-            </select>
-          </div>
-          <div class="col">
-            <input type="text" class="form-control-input" placeholder="Pesquisar por palavra-chave" [(ngModel)]="palavraChave">
-          </div>
+        <div class="col">
+          <mat-form-field appearance="fill">
+            <mat-label>Dificuldade</mat-label>
+            <mat-select [(value)]="selectedDificuldade">
+              <mat-option *ngFor="let dificuldade of dificuldades" [value]="dificuldade">
+                {{ getDescricaoDificuldade(dificuldade) }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
       </div>
-      
+      <div class="row">
+        <div class="col">
+          <mat-form-field appearance="fill">
+            <mat-label>Tipo de Prova</mat-label>
+            <mat-select [(value)]="selectedTipoDeProva">
+              <mat-option *ngFor="let tipoDeProva of tiposDeProva" [value]="tipoDeProva">
+                {{ getDescricaoTipoDeProva(tipoDeProva) }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="fill">
+            <mat-label>Subtema</mat-label>
+            <mat-select [(value)]="selectedSubtema">
+              <mat-option *ngFor="let subtema of subtemas" [value]="subtema">
+                {{ getDescricaoSubtema(subtema) }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-form-field appearance="fill">
+            <mat-label>Tema</mat-label>
+            <mat-select [(value)]="selectedTema">
+              <mat-option *ngFor="let tema of temas" [value]="tema">
+                {{ getDescricaoTema(tema) }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="fill">
+            <mat-label>Pesquisar por palavra-chave</mat-label>
+            <input matInput placeholder="Pesquisar por palavra-chave" [(ngModel)]="palavraChave">
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
   
     <div class="button-row">
       <button class="btn-salvar">Salvar Filtro</button>

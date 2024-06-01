@@ -9,3 +9,43 @@
     margin-top: 10px;
     font-family: 'Nunito Sans', sans-serif;
 }
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+}
+  
+.col-md-6 {
+    position: relative;
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+  
+@media (min-width: 768px) {
+    .col-md-6 {
+      flex: 0 0 50%;
+      max-width: 50%;
+    }
+}
+  
+h3 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+  
+.chart-container {
+    background-color: #b1b4bc;
+    border: 2px solid #333231; 
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+canvas {
+    display: block;
+    width: 100% !important;
+    height: auto !important;
+}
