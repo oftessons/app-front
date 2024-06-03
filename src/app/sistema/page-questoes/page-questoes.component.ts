@@ -20,19 +20,20 @@ export class PageQuestoesComponent implements OnInit {
   subtemas = Object.values(Subtema);
   temas = Object.values(Tema);
 
-selectedAno!: Ano;
-selectedDificuldade!: Dificuldade;
-selectedTipoDeProva!: TipoDeProva;
-selectedSubtema!: Subtema;
-selectedTema!: Tema;
-palavraChave!: string;
+  selectedAno: Ano = Ano.ANO_2024; // Inicializando com um valor padrão
+  selectedDificuldade: Dificuldade = Dificuldade.DIFICIL;
+  selectedTipoDeProva: TipoDeProva = TipoDeProva.PRATICA; // Inicializando com um valor padrão
+  selectedSubtema: Subtema = Subtema.RETINOPATIA; // Inicializando com um valor padrão
+  selectedTema: Tema = Tema.CIRURGIA_OCULAR; // Inicializando com um valor padrão
+  palavraChave!: string;
 
-  constructor(private questoesService: QuestoesService
-  ) { }
+  questoes: Questao[] = [];
+  isFiltered = false;
+  p: number = 1; // Página inicial para a paginação
 
-  ngOnInit() {
-    this.filtrarQuestoes();
-  }
+  constructor(private questoesService: QuestoesService) { }
+
+  ngOnInit() { }
 
   getDescricaoTipoDeProva(tipoDeProva: TipoDeProva): string {
     return getDescricaoTipoDeProva(tipoDeProva);
@@ -55,10 +56,17 @@ palavraChave!: string;
   }
 
   filtrarQuestoes(): void {
-    // Chamar o serviço para buscar as questões com os filtros selecionados
-    //this.questoesService.filtrarQuestoes(this.selectedAno, this.selectedDificuldade, this.selectedTipoDeProva, this.selectedSubtema, this.selectedTema)
-     // .subscribe((questoes: Questao[]) => {
-     //   this.questoes = questoes; // Atribuir as questões retornadas pelo backend à variável do componente
-     // });
+    this.questoesService.filtrarQuestoes({
+      ano: this.selectedAno,
+      dificuldade: this.selectedDificuldade,
+      tipoDeProva: this.selectedTipoDeProva,
+      subtema: this.selectedSubtema,
+      tema: this.selectedTema,
+      palavraChave: this.palavraChave // Adicione a palavra-chave aos filtros
+    }).subscribe((questoes: Questao[]) => {
+      this.questoes = questoes;
+      this.isFiltered = true; // Marque que a filtragem foi realizada
+      this.p = 1; // Reseta a página para 1 ao realizar nova filtragem
+    });
   }
 }

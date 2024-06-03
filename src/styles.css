@@ -7523,6 +7523,19 @@ button.bg-dark:focus {
 .m-1 {
   margin: 0.25rem !important;
 }
+.mat-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-form-field-flex {
+  cursor: pointer;
+  background: aliceblue;
+  width: 500px;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.mat-form-field-appearance-fill .mat-form-field-flex {
+  border-radius: 4px 4px 0 0;
+  padding: .75em .75em 0 .75em;
+  background: aliceblue;
+}
 
 .mt-1,
 .my-1 {

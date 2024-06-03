@@ -7,7 +7,8 @@ import { Subtema } from './enums/subtema';
 export class Questao {
   id!: number;
   title!: string;
-  body!: string;
+  enunciadoDaQuestao!: string;
+  corpoDaQuestao!: string;
   ano!: Ano;
   tema!: Tema;
   dificuldade!: Dificuldade;

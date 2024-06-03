@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { ChartsModule } from 'ng2-charts';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import { ChartsModule } from 'ng2-charts';
     SistemaRoutingModule,
     MatInputModule,
     MatSelectModule,
-    ChartsModule
+    ChartsModule,
+    NgxPaginationModule
   ]
 })
 export class SistemaModule { }

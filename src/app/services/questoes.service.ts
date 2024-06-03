@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Questao } from '../sistema/page-questoes/questao';
+import { Ano } from '../sistema/page-questoes/enums/ano';
 
 @Injectable({
   providedIn: 'root'
@@ -13,9 +14,8 @@ export class QuestoesService {
   apiURLperfil: string = environment.apiURLBase + '/api/usuarios';
   constructor(private http: HttpClient) { }
 
-  getQuestoes(userId: string): Observable<Questao[]> {
-    const url = `${this.apiURL}/todos/${userId}`; // Concatena "/todos" à URL base
-    return this.http.get<Questao[]>(url);
+  getQuestoesByAno(ano: Ano): Observable<Questao[]> {
+    return this.http.get<Questao[]>(`${this.apiURL}/ano/${ano}`);
   }
 
   filtrarQuestoes(filtros: any): Observable<Questao[]> {
@@ -24,7 +24,7 @@ export class QuestoesService {
 
     // Adicione os filtros como parâmetros de consulta
     for (const filtro in filtros) {
-      if (filtros.hasOwnProperty(filtro)) {
+      if (filtros.hasOwnProperty(filtro) && filtros[filtro] !== null) {
         params = params.set(filtro, filtros[filtro]);
       }
     }

@@ -54,14 +54,14 @@
       </div>
       <div class="row">
         <div class="col">
-          <mat-form-field appearance="fill">
-            <mat-label>Tema</mat-label>
-            <mat-select [(value)]="selectedTema">
-              <mat-option *ngFor="let tema of temas" [value]="tema">
-                {{ getDescricaoTema(tema) }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
+            <mat-form-field appearance="fill" class="custom-form-field">
+                <mat-label>Tema</mat-label>
+                <mat-select [(value)]="selectedTema">
+                  <mat-option *ngFor="let tema of temas" [value]="tema">
+                    {{ getDescricaoTema(tema) }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>              
         </div>
         <div class="col">
           <mat-form-field appearance="fill">
@@ -75,6 +75,26 @@
     <div class="button-row">
       <button class="btn-salvar">Salvar Filtro</button>
       <button class="btn-filtrar" (click)="filtrarQuestoes()">Filtrar</button>
+    </div>
+  
+    <div *ngIf="isFiltered" class="container mt-4">
+      <h2>Resultados da Filtragem</h2>
+      <div *ngIf="questoes && questoes.length > 0; else noResults">
+        <div *ngFor="let questao of questoes | paginate: { itemsPerPage: 1, currentPage: p }; let i = index">
+          <div class="questao">
+            <h3>{{ questao.title }}</h3>
+            <p>{{ questao.enunciadoDaQuestao }}</p>
+            <p>{{ questao.tema }}</p>
+            <p>{{ questao.dificuldade }}</p>
+            <p>{{ questao.ano }}</p>
+          </div>
+        </div>
+       
+        <pagination-controls [previousLabel]="'Anterior'" [nextLabel]="'Próximo'" (pageChange)="p = $event" ></pagination-controls>
+      </div>
+      <ng-template #noResults>
+        <p>Nenhum resultado encontrado.</p>
+      </ng-template>
     </div>
   </div>
   
