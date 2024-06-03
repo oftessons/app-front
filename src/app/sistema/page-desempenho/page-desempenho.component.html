@@ -1,6 +1,62 @@
 <div class="container pt-5">
+    <div class="container mt-4">
+      <h1 class="mt-4"> <span> | </span> Meu Desempenho</h1>
+    </div>
 
     <div class="container mt-4">
-        <h1 class="mt-4"> <span> | </span> Meu Desempenho</h1>
+        <div class="row">
+          <div class="col-md-6">
+            <h3>Gráfico de Barras 1</h3>
+            <div class="chart-container">
+              <!-- Bar Chart 1 -->
+              <canvas baseChart 
+                      [datasets]="barChartData1"
+                      [labels]="barChartLabels"
+                      [options]="barChartOptions"
+                      [legend]="barChartLegend"
+                      [chartType]="barChartType">
+              </canvas>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <h3>Gráfico de Barras 2</h3>
+            <div class="chart-container">
+              <!-- Bar Chart 2 -->
+              <canvas baseChart 
+                      [datasets]="barChartData2"
+                      [labels]="barChartLabels"
+                      [options]="barChartOptions"
+                      [legend]="barChartLegend"
+                      [chartType]="barChartType">
+              </canvas>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-4">
+          <div class="col-md-6">
+            <h3>Gráfico de Pizza 1</h3>
+            <div class="chart-container">
+              <!-- Pie Chart 1 -->
+              <canvas baseChart 
+                      [datasets]="pieChartData1"
+                      [labels]="pieChartLabels"
+                      [options]="pieChartOptions"
+                      [chartType]="pieChartType">
+              </canvas>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <h3>Gráfico de Pizza 2</h3>
+            <div class="chart-container">
+              <!-- Pie Chart 2 -->
+              <canvas   baseChart 
+                      [datasets]="pieChartData2"
+                      [labels]="pieChartLabels"
+                      [options]="pieChartOptions"
+                      [chartType]="pieChartType">
+              </canvas>
+            </div>
+          </div>
+        </div>
     </div>
 </div>

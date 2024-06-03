@@ -8,6 +8,10 @@ import { PageMeuPerfilComponent } from './page-meu-perfil/page-meu-perfil.compon
 import { PageQuestoesComponent } from './page-questoes/page-questoes.component';
 import { PageFiltroComponent } from './page-filtro/page-filtro.component';
 import { FormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { ChartsModule } from 'ng2-charts';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 
 @NgModule({
@@ -21,7 +25,11 @@ import { FormsModule } from '@angular/forms';
   imports: [
     CommonModule,
     FormsModule,
-    SistemaRoutingModule
+    SistemaRoutingModule,
+    MatInputModule,
+    MatSelectModule,
+    ChartsModule,
+    NgxPaginationModule
   ]
 })
 export class SistemaModule { }
