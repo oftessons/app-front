@@ -31,7 +31,7 @@
   
   .filters-container {
     margin-top: 20px;
-    background: #696D79;
+    background: #909298;
     border-radius: 5px;
     padding: 50px;
   }
@@ -45,6 +45,7 @@
   .col {
     flex: 1;
     margin-right: 0 10px;
+    width: 100%;
   }
   
   .col:last-child {
@@ -63,6 +64,7 @@
     justify-content: end;
     margin-top: 20px;
   }
+
 .icon{
     margin-right: 10px;
     width: 20px;
@@ -158,4 +160,19 @@
     border-radius: 10px;
   }
 
+
+  @media (max-width: 768px) {
+    .col {
+      width: 80%;
+    }
+
+    ::ng-deep .mat-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-form-field-flex {
+      width: 100%; 
+    }
+
+    .custom-form-field, .palavra-chave {
+      width: 100%; 
+    }
+
+  }
   

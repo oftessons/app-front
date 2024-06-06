@@ -11,16 +11,16 @@
   
     <div class="filters-container">
       <div class="row">
-        <div class="col">
-          <mat-form-field appearance="fill">
+        <div class="col col-12 col-md-6">
+          <mat-form-field appearance="fill" class="custom-form-field">
             <mat-label>Ano</mat-label>
             <mat-select [(value)]="selectedAno">
               <mat-option *ngFor="let ano of anos" [value]="ano">{{ ano }}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
-        <div class="col">
-          <mat-form-field appearance="fill">
+        <div class="col col-12 col-md-6">
+          <mat-form-field appearance="fill" class="custom-form-field">
             <mat-label>Dificuldade</mat-label>
             <mat-select [(value)]="selectedDificuldade">
               <mat-option *ngFor="let dificuldade of dificuldades" [value]="dificuldade">
@@ -31,8 +31,8 @@
         </div>
       </div>
       <div class="row">
-        <div class="col">
-          <mat-form-field appearance="fill">
+        <div class=" col col-12 col-md-6">
+          <mat-form-field appearance="fill" class="custom-form-field">
             <mat-label>Tipo de Prova</mat-label>
             <mat-select [(value)]="selectedTipoDeProva">
               <mat-option *ngFor="let tipoDeProva of tiposDeProva" [value]="tipoDeProva">
@@ -41,8 +41,8 @@
             </mat-select>
           </mat-form-field>
         </div>
-        <div class="col">
-          <mat-form-field appearance="fill">
+        <div class="col col-12 col-md-6">
+          <mat-form-field appearance="fill" class="custom-form-field">
             <mat-label>Subtema</mat-label>
             <mat-select [(value)]="selectedSubtema">
               <mat-option *ngFor="let subtema of subtemas" [value]="subtema">
@@ -53,7 +53,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col">
+        <div class="col col-12 col-md-6">
             <mat-form-field appearance="fill" class="custom-form-field">
                 <mat-label>Tema</mat-label>
                 <mat-select [(value)]="selectedTema">
@@ -63,18 +63,17 @@
                 </mat-select>
               </mat-form-field>              
         </div>
-        <div class="col">
+        <div class="col col-12 col-md-6">
           <mat-form-field appearance="fill" class="palavra-chave">
             <mat-label>Pesquisar por palavra-chave</mat-label>
             <input matInput placeholder="Pesquisar por palavra-chave" [(ngModel)]="palavraChave">
           </mat-form-field>
         </div>
       </div>
-    </div>
-  
-    <div class="button-row">
-      <button class="btn-salvar">Salvar Filtro</button>
-      <button class="btn-filtrar" (click)="filtrarQuestoes()">Filtrar</button>
+      <div class="button-row">
+        <button class="btn-salvar">Salvar Filtro</button>
+        <button class="btn-filtrar" (click)="filtrarQuestoes()">Filtrar</button>
+      </div>
     </div>
   
     <div *ngIf="isFiltered" class="container mt-4">
