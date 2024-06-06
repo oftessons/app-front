@@ -14,4 +14,7 @@ export class Questao {
   dificuldade!: Dificuldade;
   tipoDeProva!: TipoDeProva;
   subtema!: Subtema;
+  fotoDaQuestao!: string;  // Use string para URL da imagem
+  fotoDaResposta!: string; // Use string para URL da imagem
+  comentarioDaQuestao!: string;
 }

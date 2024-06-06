@@ -7,6 +7,7 @@ import { Subtema } from './enums/subtema';
 import { Tema } from './enums/tema';
 import { Questao } from './questao';
 import { QuestoesService } from 'src/app/services/questoes.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-page-questoes',
@@ -62,11 +63,18 @@ export class PageQuestoesComponent implements OnInit {
       tipoDeProva: this.selectedTipoDeProva,
       subtema: this.selectedSubtema,
       tema: this.selectedTema,
-      palavraChave: this.palavraChave // Adicione a palavra-chave aos filtros
-    }).subscribe((questoes: Questao[]) => {
-      this.questoes = questoes;
-      this.isFiltered = true; // Marque que a filtragem foi realizada
-      this.p = 1; // Reseta a página para 1 ao realizar nova filtragem
-    });
+      palavraChave: this.palavraChave || '' // Adicione um valor padrão para palavraChave
+    }).subscribe(
+      (questoes: Questao[]) => {
+        this.questoes = questoes;
+        this.isFiltered = true; // Marque que a filtragem foi realizada
+        this.p = 1; // Reseta a página para 1 ao realizar nova filtragem
+      },
+      (error: HttpErrorResponse) => {
+        console.error('Erro ao filtrar questões:', error);
+      }
+    );
   }
+  
+  
 }

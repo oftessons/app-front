@@ -78,23 +78,24 @@
     </div>
   
     <div *ngIf="isFiltered" class="container mt-4">
-      <h2>Resultados da Filtragem</h2>
-      <div *ngIf="questoes && questoes.length > 0; else noResults">
-        <div *ngFor="let questao of questoes | paginate: { itemsPerPage: 1, currentPage: p }; let i = index">
-          <div class="questao">
-            <h3>{{ questao.title }}</h3>
-            <p>{{ questao.enunciadoDaQuestao }}</p>
-            <p>{{ questao.tema }}</p>
-            <p>{{ questao.dificuldade }}</p>
-            <p>{{ questao.ano }}</p>
+        <h2>Resultados da Filtragem</h2>
+        <div *ngIf="questoes && questoes.length > 0; else noResults">
+          <div *ngFor="let questao of questoes | paginate: { itemsPerPage: 1, currentPage: p }; let i = index">
+            <div class="questao">
+              <h3>{{ questao.title }}</h3>
+              <p>{{ questao.enunciadoDaQuestao }}</p>
+              <p>{{ questao.tema }}</p>
+              <p>{{ questao.dificuldade }}</p>
+              <p>{{ questao.ano }}</p>
+              <img *ngIf="questao.fotoDaQuestao" [src]="questao.fotoDaQuestao" alt="Foto da Questão" class="img-fluid"/>
+            </div>
           </div>
+          <pagination-controls [previousLabel]="'Anterior'" [nextLabel]="'Próximo'" (pageChange)="p = $event"></pagination-controls>
         </div>
-       
-        <pagination-controls [previousLabel]="'Anterior'" [nextLabel]="'Próximo'" (pageChange)="p = $event" ></pagination-controls>
+        <ng-template #noResults>
+          <p>Nenhum resultado encontrado.</p>
+        </ng-template>
       </div>
-      <ng-template #noResults>
-        <p>Nenhum resultado encontrado.</p>
-      </ng-template>
-    </div>
+      
   </div>
   
