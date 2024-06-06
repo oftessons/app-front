@@ -39,12 +39,12 @@
   .row {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 10px;
+    flex-direction: row;
   }
   
   .col {
     flex: 1;
-    margin-right: 10px;
+    margin-right: 0 10px;
   }
   
   .col:last-child {
@@ -119,7 +119,6 @@
     background-color: #0056b3;
   }
 
-
   .mat-form-field-appearance-fill .mat-form-field-flex {
     border-radius: 4px 4px 0 0;
     /* padding: .75em .75em 0 .75em; */
@@ -130,7 +129,6 @@
     cursor: pointer;
     background: aliceblue;
 }
-  
 
   .form-control-input{
     display: block;
@@ -147,4 +145,15 @@
     border: var(--bs-border-width) solid var(--bs-border-color);
     border-radius: var(--bs-border-radius);
     transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+  }
+
+  ::ng-deep .mat-form-field-underline {
+    display: none;
+  }
+
+  .palavra-chave {
+    background-color: aliceblue;
+    width: 100%;
+    height: 60px;
+    border-radius: 10px;
   }
