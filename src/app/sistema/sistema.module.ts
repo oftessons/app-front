@@ -12,6 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { ChartsModule } from 'ng2-charts';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { CadastroQuestaoComponent } from './cadastro-questao/cadastro-questao.component';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { NgxPaginationModule } from 'ngx-pagination';
     PageDesempenhoComponent,
     PageMeuPerfilComponent,
     PageQuestoesComponent,
-    PageFiltroComponent
+    PageFiltroComponent,
+    CadastroQuestaoComponent
   ],
   imports: [
     CommonModule,
