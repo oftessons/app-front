@@ -10,22 +10,22 @@
     border-color:#3B5FA0;
     font-family: 'Nunito Sans', sans-serif;
     margin-top: 5px;
-  
 }
+
 .form-control{
     background-color:#b1afaf;
     font-size: 13px;
 }
+
+.form-control,
+.btn-lg {
+  width: 100%;
+}
+
 .btn-lg {
     font-size: 14px;
     font-family: 'Nunito Sans', sans-serif;
-}
-
-
-@media screen and (min-width: 1024px) {
-    .btn-lg{
-        width: 460px;
-    }
+    width: 100%;
 }
 
 .alert.alert-danger{
@@ -35,32 +35,64 @@
 }
 
 .responsive-input {
-    width: 460px;
+    width: 100%;
     height: 45px;
-    margin-left: 10px;
 }
 
 .form-group {
-     margin-bottom: 0.1rem; 
+    margin-bottom: 0.1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    width: 100%; 
 }
 
-/* Responsive styles for smaller screens */
-@media (max-width: 767px) {
+.col-md-6 {
+    width: 100%;
+}
+
+@media screen and (min-width: 1024px) {
+    .btn-lg{
+        width: 100%;
+    }
+
     .responsive-input {
-        width: 340px;
-      
+        width: 100%;
+        padding-right: 0.75rem;
+        padding-left: 0.75rem;
+    }
+
+    .col-md-6 {
+        max-width: 100%;
     }
 }
 
+/* Responsive styles for smaller screens */
+@media (min-width: 767px) {
+    .responsive-input {
+        width: 100%;
+        padding-right: 0.75rem;
+        padding-left: 0.75rem;
+    }
+
+    .col-md-6 {
+        max-width: 100%;
+    }
+}
+
+.card-body{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
 
 .card-header{
     background: #0F1934;
 }
+
 .card-footer{
     background: #0F1934;
 }
-
-
 
 .row.justify-content-center {
     display: flex;
@@ -85,7 +117,6 @@ input::placeholder {
     color: rgb(118, 118, 118);
 }
 
-
 .green-text {
     color: #3B5FA0;
     font-weight: bold;
@@ -100,6 +131,7 @@ input::placeholder {
 .small{
     padding: 8px;
 }
+
 .small a {
     text-decoration: none; /* Remove a linha de sublinhado apenas dos links dentro da classe .small */
 }

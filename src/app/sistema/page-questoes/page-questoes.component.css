@@ -31,7 +31,7 @@
   
   .filters-container {
     margin-top: 20px;
-    background: #696D79;
+    background: #909298;
     border-radius: 5px;
     padding: 50px;
   }
@@ -39,12 +39,13 @@
   .row {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 10px;
+    flex-direction: row;
   }
   
   .col {
     flex: 1;
-    margin-right: 10px;
+    margin-right: 0 10px;
+    width: 100%;
   }
   
   .col:last-child {
@@ -63,6 +64,7 @@
     justify-content: end;
     margin-top: 20px;
   }
+
 .icon{
     margin-right: 10px;
     width: 20px;
@@ -119,7 +121,6 @@
     background-color: #0056b3;
   }
 
-
   .mat-form-field-appearance-fill .mat-form-field-flex {
     border-radius: 4px 4px 0 0;
     /* padding: .75em .75em 0 .75em; */
@@ -130,7 +131,6 @@
     cursor: pointer;
     background: aliceblue;
 }
-  
 
   .form-control-input{
     display: block;
@@ -148,3 +148,31 @@
     border-radius: var(--bs-border-radius);
     transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
   }
+
+  ::ng-deep .mat-form-field-underline {
+    display: none;
+  }
+
+  .palavra-chave {
+    background-color: aliceblue;
+    width: 450px;
+    height: 50px;
+    border-radius: 10px;
+  }
+
+
+  @media (max-width: 768px) {
+    .col {
+      width: 80%;
+    }
+
+    ::ng-deep .mat-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-form-field-flex {
+      width: 100%; 
+    }
+
+    .custom-form-field, .palavra-chave {
+      width: 100%; 
+    }
+
+  }
+  

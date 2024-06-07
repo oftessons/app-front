@@ -7526,9 +7526,8 @@ button.bg-dark:focus {
 .mat-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-form-field-flex {
   cursor: pointer;
   background: aliceblue;
-  width: 500px;
+  width: 450px;
   border-radius: 10px;
-  padding: 10px;
 }
 
 .mat-form-field-appearance-fill .mat-form-field-flex {
