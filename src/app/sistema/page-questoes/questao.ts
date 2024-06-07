@@ -14,4 +14,10 @@ export class Questao {
   dificuldade!: Dificuldade;
   tipoDeProva!: TipoDeProva;
   subtema!: Subtema;
+  fotoDaQuestao!: string;
+  alternativaUm!: string;
+  alternativaDois!: string;
+  alternativaTres!: string;
+  alternativaQuatro!: string;
+  assinale!: string;
 }

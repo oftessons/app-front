@@ -20,6 +20,9 @@ export class PageQuestoesComponent implements OnInit {
   subtemas = Object.values(Subtema);
   temas = Object.values(Tema);
 
+  favoriteSeason!: string;
+  seasons: string[] = ['A) I: V; II: V; III: V; IV: V.', 'B) I: F; II: F; III: V; IV: F.', 'C) I: F; II: F; III: F; IV: F.', 'D) I: V; II: V; III: F; IV: V.'];
+
   selectedAno: Ano = Ano.ANO_2024; // Inicializando com um valor padrão
   selectedDificuldade: Dificuldade = Dificuldade.DIFICIL;
   selectedTipoDeProva: TipoDeProva = TipoDeProva.PRATICA; // Inicializando com um valor padrão
