@@ -77,23 +77,50 @@
     </div>
   
     <div *ngIf="isFiltered" class="container mt-4">
-      <h2>Resultados da Filtragem</h2>
-      <div *ngIf="questoes && questoes.length > 0; else noResults">
-        <div *ngFor="let questao of questoes | paginate: { itemsPerPage: 1, currentPage: p }; let i = index">
-          <div class="questao">
-            <h3>{{ questao.title }}</h3>
-            <p>{{ questao.enunciadoDaQuestao }}</p>
-            <p>{{ questao.tema }}</p>
-            <p>{{ questao.dificuldade }}</p>
-            <p>{{ questao.ano }}</p>
+        <h2>Resultados da Filtragem</h2>
+        <div *ngIf="questoes && questoes.length > 0; else noResults">
+          <div *ngFor="let questao of questoes | paginate: { itemsPerPage: 1, currentPage: p }; let i = index">
+            <div class="questao">
+              <div class="identificadores-questao">
+                <h3>{{ questao.title }}</h3>
+                <h3>{{ questao.id }}</h3>
+                <h3>{{ questao.tema }}</h3>
+                <h3>{{ questao.dificuldade }}</h3>
+                <h3>{{ questao.ano }}</h3>
+              </div>
+              <div class="conteudo-questao">
+                <p>{{ questao.enunciadoDaQuestao }}</p>
+                <img *ngIf="questao.fotoDaQuestao" [src]="questao.fotoDaQuestao" alt="Foto da questão" class="questao-foto">
+                <p>{{ questao.alternativaUm }}</p>
+                <p>{{ questao.alternativaDois }}</p>
+                <p>{{ questao.alternativaTres }}</p>
+                <p>{{ questao.alternativaQuatro }}</p>
+                <p>{{ questao.assinale }}</p>
+               
+
+                <label id="example-radio-group-label"></label>
+                    <mat-radio-group
+                    aria-labelledby="example-radio-group-label"
+                    class="example-radio-group"
+                    [(ngModel)]="favoriteSeason">
+                    <mat-radio-button class="example-radio-button" *ngFor="let season of seasons" [value]="season">
+                        {{season}}
+                    </mat-radio-button>
+                    </mat-radio-group>
+
+                <div class="button-row">
+                    <button class="btn-salvar">Responder</button>
+                    <button class="btn-filtrar" (click)="filtrarQuestoes()">Próxima</button>
+                </div>
+              </div>
+            </div>
           </div>
+          <pagination-controls [previousLabel]="'Anterior'" [nextLabel]="'Próximo'" (pageChange)="p = $event"></pagination-controls>
         </div>
-       
-        <pagination-controls [previousLabel]="'Anterior'" [nextLabel]="'Próximo'" (pageChange)="p = $event" ></pagination-controls>
+        <ng-template #noResults>
+          <p>Nenhum resultado encontrado.</p>
+        </ng-template>
       </div>
-      <ng-template #noResults>
-        <p>Nenhum resultado encontrado.</p>
-      </ng-template>
-    </div>
+      
   </div>
   

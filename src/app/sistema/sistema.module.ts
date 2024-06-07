@@ -13,6 +13,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { ChartsModule } from 'ng2-charts';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { CadastroQuestaoComponent } from './cadastro-questao/cadastro-questao.component';
+import {MatRadioModule} from '@angular/material/radio';
 
 
 @NgModule({
@@ -30,6 +31,7 @@ import { CadastroQuestaoComponent } from './cadastro-questao/cadastro-questao.co
     SistemaRoutingModule,
     MatInputModule,
     MatSelectModule,
+    MatRadioModule,
     ChartsModule,
     NgxPaginationModule
   ]
