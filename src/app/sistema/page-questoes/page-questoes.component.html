@@ -77,11 +77,14 @@
     </div>
   
     <div *ngIf="isFiltered" class="container mt-4">
-        <h2>Resultados da Filtragem</h2>
+      <div class="identificadores-questao-resul">
+        <h2 class="h2">Resultados da Filtragem</h2>
+        </div>
         <div *ngIf="questoes && questoes.length > 0; else noResults">
           <div *ngFor="let questao of questoes | paginate: { itemsPerPage: 1, currentPage: p }; let i = index">
             <div class="questao">
               <div class="identificadores-questao">
+               
                 <h3>{{ questao.title }}</h3>
                 <h3>{{ questao.id }}</h3>
                 <h3>{{ questao.tema }}</h3>
