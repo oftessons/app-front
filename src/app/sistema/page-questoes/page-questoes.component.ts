@@ -27,7 +27,7 @@ export class PageQuestoesComponent implements OnInit {
   selectedDificuldade: Dificuldade = Dificuldade.DIFICIL;
   selectedTipoDeProva: TipoDeProva = TipoDeProva.PRATICA; // Inicializando com um valor padrão
   selectedSubtema: Subtema = Subtema.RETINOPATIA; // Inicializando com um valor padrão
-  selectedTema: Tema = Tema.CIRURGIA_OCULAR; // Inicializando com um valor padrão
+  selectedTema: Tema = Tema.LENTES_DE_CONTATO; // Inicializando com um valor padrão
   palavraChave!: string;
 
   questoes: Questao[] = [];
