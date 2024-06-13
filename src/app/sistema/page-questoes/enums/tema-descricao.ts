@@ -10,7 +10,7 @@ export const TemaDescricoes: Record<Tema, string> = {
   [Tema.UVEITE]: 'Uveíte',
   [Tema.NEUROFTALMOLOGIA]: 'Neuroftalmologia',
   [Tema.ESTRABISMO]: 'Estrabismo',
-  [Tema.REFRAÇÃO]: 'Refração',
+  [Tema.REFRACAO]: 'Refração',
   [Tema.OPTICA]: 'Óptica',
   [Tema.FARMACOLOGIA]: 'Farmacologia',
   [Tema.TUMORES_INTRAOCULARES]: 'Tumores Intraoculares',
