@@ -9,3 +9,175 @@
     margin-top: 10px;
     font-family: 'Nunito Sans', sans-serif;
 }
+
+.container-geral{
+    background-color: #909298;
+    display: flex;
+    flex-direction: column;
+    width: 98%;
+    margin: 16px;
+    padding: 32px;
+    gap: 24px;
+    border-radius: 8px;
+}
+
+.alt-item{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    gap: 8px;
+}
+
+.alt-item label{
+    margin: 0;
+}
+
+.text-titulo{
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.input-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+
+.input-op{
+    width: 100%;
+}
+
+input[type='radio'].input-rad {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 1px solid #0F1934;
+    border-radius: 50%;
+    outline: none;
+    transition: 0.5s;
+    background-color: #FFFFFF;
+  }
+
+  input[type='radio'].input-rad:before {
+    content: '';
+    display: block;
+    width: 80%;
+    height: 80%;
+    margin: 10% auto;
+    border-radius: 50%;    
+  }
+
+  input[type='radio'].input-rad:checked:before {
+    background: #0F1934;
+  }
+
+.button-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-img{
+    width: 35px; 
+    cursor: pointer;
+}
+
+.btn-img:hover{
+   transform: scale(1.1);
+}
+
+.btn{
+    color: #ffffff;
+    background-color: #0F1934;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.input-image {
+    position: relative;
+    width: 35px;
+}
+
+.form-control {
+    padding-right: 45px; 
+}
+
+.button-envio{
+    display: flex;
+    width: 90%;
+    margin: 16px;
+    gap: 14px;
+    justify-content: flex-end;
+}
+
+.button-envio button{
+    color: #ffffff;
+    background-color: #0F1934;
+    font-size: 14px;
+    font-weight: 700;
+    width: 100px;
+}
+
+.button-envio button:hover{
+    background-color: transparent;
+    border: 1px solid #0F1934;
+    color: #111111;
+}
+
+.button-container .btn-secondary{
+    background-color: #992b12;
+}
+
+.button-envio .btn-secondary{
+    background-color: #992b12;
+}
+
+::ng-deep .mat-form-field-underline {
+    display: none;
+    background-color: #ffffff;
+  }
+
+  .row {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+  }
+  
+  .col {
+    flex: 1;
+    margin-right: 0 10px;
+    width: 100%;
+  }
+  
+  .col:last-child {
+    margin-right: 0;
+  }
+
+@media screen and (max-width: 768px) {
+    .container-geral{
+        width: 92%;
+        padding: 16px;
+    }
+
+    .button-envio{
+        margin: 8px;
+    }
+
+    .button-envio button{
+        width: 80px;
+    }
+    
+    .col {
+        width: 80%;
+      }
+    
+      ::ng-deep .mat-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-form-field-flex {
+        width: 100%; 
+      }
+}
