@@ -7,6 +7,8 @@ import { Subtema } from './enums/subtema';
 import { Tema } from './enums/tema';
 import { Questao } from './questao';
 import { QuestoesService } from 'src/app/services/questoes.service';
+import { Filtro } from '../filtro';
+import { FiltroService } from 'src/app/services/filtro.service';
 
 @Component({
   selector: 'app-page-questoes',
@@ -20,21 +22,27 @@ export class PageQuestoesComponent implements OnInit {
   subtemas = Object.values(Subtema);
   temas = Object.values(Tema);
 
+  filtros: Filtro[] = [];
+  mostrarCardConfirmacao = false; // Variável para controlar a visibilidade do card de confirmação
+  filtroASalvar!: Filtro; // Variável para armazenar o filtro a ser salvo
+  
   favoriteSeason!: string;
   seasons: string[] = ['A) I: V; II: V; III: V; IV: V.', 'B) I: F; II: F; III: V; IV: F.', 'C) I: F; II: F; III: F; IV: F.', 'D) I: V; II: V; III: F; IV: V.'];
 
-  selectedAno!: Ano ; 
-  selectedDificuldade!: Dificuldade;
-  selectedTipoDeProva!: TipoDeProva; 
-  selectedSubtema!: Subtema; 
-  selectedTema!: Tema; 
+  selectedAno: Ano = Ano.ANO_2024; // Inicializando com um valor padrão
+  selectedDificuldade: Dificuldade = Dificuldade.DIFICIL;
+  selectedTipoDeProva: TipoDeProva = TipoDeProva.PRATICA; // Inicializando com um valor padrão
+  selectedSubtema: Subtema = Subtema.BASES_DE_CORNEA; // Inicializando com um valor padrão
+  selectedTema: Tema = Tema.CATARATA; // Inicializando com um valor padrão
   palavraChave!: string;
 
   questoes: Questao[] = [];
   isFiltered = false;
   p: number = 1; // Página inicial para a paginação
 
-  constructor(private questoesService: QuestoesService) { }
+  constructor(private questoesService: QuestoesService,
+    private filtroService: FiltroService
+  ) { }
 
   ngOnInit() { }
 
@@ -71,5 +79,31 @@ export class PageQuestoesComponent implements OnInit {
       this.isFiltered = true; // Marque que a filtragem foi realizada
       this.p = 1; // Reseta a página para 1 ao realizar nova filtragem
     });
+  }
+
+  abrirCardConfirmacao(filtro: Filtro): void {
+    this.filtroASalvar = filtro;
+    this.mostrarCardConfirmacao = true;
+  }
+
+  fecharCardConfirmacao(): void {
+    this.mostrarCardConfirmacao = false;
+  }
+
+  confirmarSalvarFiltro(): void {
+    if (this.filtroASalvar) {
+      this.filtroService.salvarFiltro(this.filtroASalvar)
+        .subscribe(
+          response => {
+            console.log('Filtro salvo com sucesso:', response);
+            // Aqui você pode adicionar lógica adicional, como atualizar a lista de filtros, etc.
+          },
+          error => {
+            console.error('Erro ao salvar filtro:', error);
+            // Tratar erro aqui se necessário
+          }
+        );
+    }
+    this.fecharCardConfirmacao(); // Fecha o card de confirmação após a ação
   }
 }

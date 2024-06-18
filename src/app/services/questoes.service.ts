@@ -1,6 +1,7 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Questao } from '../sistema/page-questoes/questao';
 import { Ano } from '../sistema/page-questoes/enums/ano';
@@ -11,7 +12,7 @@ import { Ano } from '../sistema/page-questoes/enums/ano';
 export class QuestoesService {
 
   apiURL: string = environment.apiURLBase + '/api/questoes';
-  apiURLperfil: string = environment.apiURLBase + '/api/usuarios';
+
   constructor(private http: HttpClient) { }
 
   getQuestoesByAno(ano: Ano): Observable<Questao[]> {
@@ -29,6 +30,19 @@ export class QuestoesService {
       }
     }
 
-    return this.http.get<Questao[]>(url, { params: params });
+    return this.http.get(url, { params: params, observe: 'response' })
+      .pipe(
+        map((response: HttpResponse<any>) => {
+          if (response.status === 200) {
+            return response.body as Questao[];
+          } else {
+            throw new Error('Erro na requisição.');
+          }
+        }),
+        catchError((error: any) => {
+          console.error('Ocorreu um erro:', error);
+          return throwError('Erro ao tentar obter as questões.');
+        })
+      );
   }
 }

@@ -71,10 +71,20 @@
         </div>
       </div>
       <div class="button-row">
-        <button class="btn-salvar">Salvar Filtro</button>
+        <button class="btn-salvar"  (click)="abrirCardConfirmacao(filtros[0])">Salvar Filtro</button>
         <button class="btn-filtrar" (click)="filtrarQuestoes()">Filtrar</button>
       </div>
     </div>
+
+  <!-- Card de confirmação -->
+<div class="card card-confirmacao" *ngIf="mostrarCardConfirmacao">
+  <div class="card-body">
+    <h5 class="card-title">Salvar Filtro</h5>
+    <p class="card-text">Tem certeza que deseja salvar o filtro?</p>
+    <button class="btn btn-success" (click)="confirmarSalvarFiltro()">Confirmar</button>
+    <button class="btn btn-secondary" (click)="fecharCardConfirmacao()">Cancelar</button>
+  </div>
+</div>
   
     <div *ngIf="isFiltered" class="container mt-4">
       <div class="identificadores-questao-resul">
