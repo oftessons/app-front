@@ -1,198 +1,167 @@
 <div class="container pt-5">
     <div class="container mt-4">
-        <h1 class="mt-4"> <span> | </span> Cadastro da Questão</h1>
+      <h1 class="mt-4"> <span> | </span> Cadastro da Questão</h1>
     </div>
-
+  
     <div class="container-geral">
-        <form>
-
-            <!-- <div class="row">
-                <div class="col-md-12">
-                    <div class="alert alert-success" role="alert" *ngIf="success == true">
-                        Questao salva/atualizada com sucesso!
-                    </div>
-                    <div class="alert alert-danger" role="alert" *ngFor="let erro of errors">
-                        {{ erro }}
-                    </div>
-                </div>
-            </div> -->
-
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Titulo: </label>
-                        <input type="text" class="form-control" name="TituloDaQuestao"/>
-                    </div>
-                </div>
+      <form>
+  
+        <div class="row">
+          <div class="col-md-12">
+            <div class="alert alert-success" role="alert" *ngIf="success == true">
+              Questao salva/atualizada com sucesso!
             </div>
-
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Descrição: </label>
-                        <input type="text" class="form-control"  name="Descrição"/>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Descrição: </label>
-                        <input type="text" class="form-control"  name="Descrição"/>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Descrição: </label>
-                        <input type="text" class="form-control"  name="Descrição"/>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Descrição: </label>
-                        <input type="text" class="form-control"  name="Descrição"/>
-                    </div>
-                </div>
+            <div class="alert alert-danger" role="alert" *ngFor="let erro of errors">
+              {{ erro }}
             </div>
-
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Assinale: </label>
-                        <input type="text" class="form-control" name="Setor" />
-                    </div>
-                </div>
+          </div>
+        </div>
+  
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Titulo: </label>
+              <input type="text" class="form-control" name="title" [(ngModel)]="questao.title" />
             </div>
-
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Foto 1: </label>
-                        <input type="file" class="form-control" name="Empresa" accept="image/*" />
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Foto 2: </label>
-                        <input type="file" class="form-control" name="Empresa" accept="image/*" />
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Foto 3: </label>
-                        <input type="file" class="form-control" name="Empresa" accept="image/*" />
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Foto 4: </label>
-                        <input type="file" class="form-control" name="Empresa" accept="image/*" />
-                    </div>
-                </div>
+          </div>
+        </div>
+  
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Enunciado da Questão: </label>
+              <textarea class="form-control" rows="4" name="enunciadoDaQuestao" [(ngModel)]="questao.enunciadoDaQuestao"></textarea>
             </div>
-
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Comentário: </label>
-                        <input type="text" class="form-control" name="Comentario" />
-                    </div>
-                </div>
+          </div>
+        </div>
+  
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Descrição 1: </label>
+              <textarea class="form-control" rows="2" name="descricaoUm" [(ngModel)]="questao.descricaoUm"></textarea>
             </div>
-
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Ano: </label>
-                        <div class="input-group">
-                            <select class="form-control"  name="Ano">
-                                <option></option>
-                            </select>
-                            <div class="input-group-append">
-                                <span class="input-group-text">
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Dificuldade: </label>
-                        <div class="input-group">
-                            <select class="form-control"  name="Dificuldade">
-                                <option></option>
-                            </select>
-                            <div class="input-group-append">
-                                <span class="input-group-text">
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Descrição 2: </label>
+              <textarea class="form-control" rows="2" name="descricaoDois" [(ngModel)]="questao.descricaoDois"></textarea>
             </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Tema: </label>
-                        <div class="input-group">
-                            <select class="form-control"  name="Ano">
-                                <option></option>
-                            </select>
-                            <div class="input-group-append">
-                                <span class="input-group-text">
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Subtema: </label>
-                        <div class="input-group">
-                            <select class="form-control"  name="Dificuldade">
-                                <option></option>
-                            </select>
-                            <div class="input-group-append">
-                                <span class="input-group-text">
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+          </div>
+        </div>
+  
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Descrição 3: </label>
+              <textarea class="form-control" rows="2" name="descricaoTres" [(ngModel)]="questao.descricaoTres"></textarea>
             </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Tipo de prova: </label>
-                        <div class="input-group">
-                            <select class="form-control"  name="Ano">
-                                <option></option>
-                            </select>
-                            <div class="input-group-append">
-                                <span class="input-group-text">
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Descrição 4: </label>
+              <textarea class="form-control" rows="2" name="descricaoQuatro" [(ngModel)]="questao.descricaoQuatro"></textarea>
             </div>
-
-            <div class="row">
-                <div class="col-md-3">
-                    <button type="button" class="btn btn-primary ml-1 mr-2">
-                        Voltar
-                    </button>
-
-                    <button type="submit" class="btn btn-success mr-2" data-bs-toggle="modal" data-bs-target="#confirmModal">
-                        Cadastrar
-                    </button>
-
-                </div>
+          </div>
+        </div>
+  
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Assinale: </label>
+              <input type="text" class="form-control" name="assinale" [(ngModel)]="questao.assinale" />
             </div>
-        </form>
+          </div>
+        </div>
+  
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <div class="form-group">
+                <label>Foto da Questão: </label>
+                <input type="file" class="form-control" name="fotoDaQuestao" accept="image/*" (change)="onFileChange($event)" />
+            </div>
+            </div>
+          </div>
+      
+        </div>
+  
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Comentário: </label>
+              <textarea class="form-control" rows="2" name="comentarioDaQuestao" [(ngModel)]="questao.comentarioDaQuestao"></textarea>
+            </div>
+          </div>
+        </div>
+  
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Ano: </label>
+              <select class="form-control" name="ano" [(ngModel)]="questao.ano">
+                <option *ngFor="let ano of anos" [ngValue]="ano">{{ ano }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Dificuldade: </label>
+              <select class="form-control" name="dificuldade" [(ngModel)]="questao.dificuldade">
+                <option *ngFor="let dificuldade of dificuldades" [ngValue]="dificuldade">{{ dificuldade }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+  
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Tema: </label>
+              <select class="form-control" name="tema" [(ngModel)]="questao.tema">
+                <option *ngFor="let tema of temas" [ngValue]="tema">{{ tema }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Subtema: </label>
+              <select class="form-control" name="subtema" [(ngModel)]="questao.subtema">
+                <option *ngFor="let subtema of subtemas" [ngValue]="subtema">{{ subtema }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+  
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Tipo de Prova: </label>
+              <select class="form-control" name="tipoDeProva" [(ngModel)]="questao.tipoDeProva">
+                <option *ngFor="let tipoDeProva of tiposDeProva" [ngValue]="tipoDeProva">{{ tipoDeProva }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+  
+        <div class="row">
+          <div class="col-md-3">
+            <button type="button" class="btn btn-primary ml-1 mr-2" (click)="voltar()">
+              Voltar
+            </button>
+  
+            <button type="button" class="btn btn-success mr-2" data-bs-toggle="modal" data-bs-target="#confirmModal" (click)="confirmarCadastro()">
+              Cadastrar
+            </button>
+  
+          </div>
+        </div>
+      </form>
     </div>
-</div>
-    
-    <!-- Modal -->
-<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+  </div>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">

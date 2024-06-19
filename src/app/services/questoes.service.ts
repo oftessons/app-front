@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -17,6 +17,24 @@ export class QuestoesService {
 
   getQuestoesByAno(ano: Ano): Observable<Questao[]> {
     return this.http.get<Questao[]>(`${this.apiURL}/ano/${ano}`);
+  }
+  
+  cadastrarQuestao(questao: Questao, fotoDaQuestao: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('questaoDTO', JSON.stringify(questao));
+
+    if (fotoDaQuestao) {
+      formData.append('fotoDaQuestao', fotoDaQuestao, fotoDaQuestao.name);
+    }
+
+    const headers = new HttpHeaders();
+    headers.append('Content-Type', 'multipart/form-data');
+
+    return this.http.post<any>(`${this.apiURL}/cadastro`, formData, { headers }).pipe(
+      catchError(error => {
+        throw error; // Tratar erros conforme necessário
+      })
+    );
   }
 
   filtrarQuestoes(filtros: any): Observable<Questao[]> {

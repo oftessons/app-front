@@ -3,21 +3,27 @@ import { Tema } from './enums/tema';
 import { Dificuldade } from './enums/dificuldade';
 import { TipoDeProva } from './enums/tipoDeProva';
 import { Subtema } from './enums/subtema';
+import { Alternativa } from '../alternativa';
 
 export class Questao {
   id!: number;
   title!: string;
   enunciadoDaQuestao!: string;
-  corpoDaQuestao!: string;
+  descricaoUm!: string;
+  descricaoDois!: string;
+  descricaoTres!: string;
+  descricaoQuatro!: string;
+  assinale!: string;
+  fotoDaQuestao!: string;
+  fotoDaQuestaoDois!: string;
+  fotoDaResposta!: string;
+  fotoDaRespostaDois!: string;
+  comentarioDaQuestao!: string;
   ano!: Ano;
   tema!: Tema;
   dificuldade!: Dificuldade;
   tipoDeProva!: TipoDeProva;
   subtema!: Subtema;
-  fotoDaQuestao!: string;
-  alternativaUm!: string;
-  alternativaDois!: string;
-  alternativaTres!: string;
-  alternativaQuatro!: string;
-  assinale!: string;
+  palavraChave!: string;
+  alternativas: Alternativa[] = [];
 }
