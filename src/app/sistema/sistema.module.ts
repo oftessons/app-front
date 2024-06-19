@@ -7,6 +7,13 @@ import { PageDesempenhoComponent } from './page-desempenho/page-desempenho.compo
 import { PageMeuPerfilComponent } from './page-meu-perfil/page-meu-perfil.component';
 import { PageQuestoesComponent } from './page-questoes/page-questoes.component';
 import { PageFiltroComponent } from './page-filtro/page-filtro.component';
+import { FormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { ChartsModule } from 'ng2-charts';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { CadastroQuestaoComponent } from './cadastro-questao/cadastro-questao.component';
+import {MatRadioModule} from '@angular/material/radio';
 
 
 @NgModule({
@@ -15,11 +22,18 @@ import { PageFiltroComponent } from './page-filtro/page-filtro.component';
     PageDesempenhoComponent,
     PageMeuPerfilComponent,
     PageQuestoesComponent,
-    PageFiltroComponent
+    PageFiltroComponent,
+    CadastroQuestaoComponent
   ],
   imports: [
     CommonModule,
-    SistemaRoutingModule
+    FormsModule,
+    SistemaRoutingModule,
+    MatInputModule,
+    MatSelectModule,
+    MatRadioModule,
+    ChartsModule,
+    NgxPaginationModule
   ]
 })
 export class SistemaModule { }

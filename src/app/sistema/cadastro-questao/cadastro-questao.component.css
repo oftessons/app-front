@@ -1,0 +1,11 @@
+.container {
+    max-width: 1300px;
+    padding: 10px;
+    font-family: 'Nunito Sans', sans-serif;
+}
+
+.text-p{
+    font-size: 20px;
+    margin-top: 10px;
+    font-family: 'Nunito Sans', sans-serif;
+}

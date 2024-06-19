@@ -4,30 +4,61 @@
   font-family: 'Nunito Sans', sans-serif;
 }
 
-.text-p{
+.text-p {
   font-size: 20px;
   margin-top: 10px;
   font-family: 'Nunito Sans', sans-serif;
 }
 
 .profile-container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  .profile-info {
-    margin-top: 20px;
-  }
-  
-  .profile-info div {
-    margin-bottom: 10px;
-  }
-  
-  .profile-info strong {
-    margin-right: 5px;
-    font-weight: bold;
-  }
-  
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background:  #b1b4bc;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.profile-photo {
+  margin-top: 20px;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ccc;
+  margin-left: 50px;
+}
+
+.profile-info{
+  margin-left: 60px;
+}
+
+.profile-photo-upload {
+  margin-top: 20px;
+}
+
+.btn {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.profile-actions {
+  display: flex;
+  justify-content: center; /* Centraliza o botão */
+  margin-top: 20px;
+}
+
+.btn:hover {
+  background-color: #0056b3;
+}
+
