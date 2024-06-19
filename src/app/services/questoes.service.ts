@@ -19,6 +19,10 @@ export class QuestoesService {
     return this.http.get<Questao[]>(`${this.apiURL}/ano/${ano}`);
   }
 
+  registrarQuestao(formData: FormData): Observable<any> {
+    return this.http.post(`${this.apiURL}/cadastro`, formData, { responseType: 'text' });
+  }
+
   filtrarQuestoes(filtros: any): Observable<Questao[]> {
     const url = `${this.apiURL}/filtro`;
     let params = new HttpParams();
@@ -30,15 +34,8 @@ export class QuestoesService {
       }
     }
 
-    return this.http.get(url, { params: params, observe: 'response' })
+    return this.http.get<Questao[]>(url, { params: params })
       .pipe(
-        map((response: HttpResponse<any>) => {
-          if (response.status === 200) {
-            return response.body as Questao[];
-          } else {
-            throw new Error('Erro na requisição.');
-          }
-        }),
         catchError((error: any) => {
           console.error('Ocorreu um erro:', error);
           return throwError('Erro ao tentar obter as questões.');

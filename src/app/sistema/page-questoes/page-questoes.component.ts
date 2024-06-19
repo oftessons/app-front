@@ -30,10 +30,10 @@ export class PageQuestoesComponent implements OnInit {
   seasons: string[] = ['A) I: V; II: V; III: V; IV: V.', 'B) I: F; II: F; III: V; IV: F.', 'C) I: F; II: F; III: F; IV: F.', 'D) I: V; II: V; III: F; IV: V.'];
 
   selectedAno: Ano = Ano.ANO_2024; // Inicializando com um valor padrão
-  selectedDificuldade: Dificuldade = Dificuldade.DIFICIL;
+  selectedDificuldade: Dificuldade = Dificuldade.FACIL;
   selectedTipoDeProva: TipoDeProva = TipoDeProva.PRATICA; // Inicializando com um valor padrão
   selectedSubtema: Subtema = Subtema.BASES_DE_CORNEA; // Inicializando com um valor padrão
-  selectedTema: Tema = Tema.CATARATA; // Inicializando com um valor padrão
+  selectedTema: Tema = Tema.LENTES_DE_CONTATO; // Inicializando com um valor padrão
   palavraChave!: string;
 
   questoes: Questao[] = [];
@@ -78,6 +78,9 @@ export class PageQuestoesComponent implements OnInit {
       this.questoes = questoes;
       this.isFiltered = true; // Marque que a filtragem foi realizada
       this.p = 1; // Reseta a página para 1 ao realizar nova filtragem
+    }, (error) => {
+      console.error('Erro ao filtrar questões:', error);
+      // Tratar erro aqui se necessário, como exibir uma mensagem ao usuário
     });
   }
 
