@@ -72,11 +72,6 @@ label {
     font-weight: 700;
 }
 
-.input-image {
-    position: relative;
-    width: 35px;
-}
-
 .form-control {
     padding-right: 45px; 
 }
@@ -118,10 +113,6 @@ label {
   .col:last-child {
     margin-right: 0;
   }
-
-  .modal-backdrop.show {
-    background-color: rgba(0,0,0,0.8) !important; /* Aumente este valor para tornar o fundo mais escuro */
-}
 
 @media screen and (max-width: 768px) {
     .container-geral{
