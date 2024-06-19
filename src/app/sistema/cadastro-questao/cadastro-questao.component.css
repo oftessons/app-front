@@ -11,7 +11,7 @@
 }
 
 .container-geral{
-    background-color: #909298;
+    background-color: #B1B4BC;
     display: flex;
     flex-direction: column;
     width: 98%;
@@ -19,6 +19,12 @@
     padding: 32px;
     gap: 24px;
     border-radius: 8px;
+}
+
+label {
+    color: #111111;
+    font-size: 16px;
+    font-weight: 700;
 }
 
 .alt-item{
@@ -51,45 +57,12 @@
     width: 100%;
 }
 
-input[type='radio'].input-rad {
-    appearance: none;
-    width: 20px;
-    height: 20px;
-    border: 1px solid #0F1934;
-    border-radius: 50%;
-    outline: none;
-    transition: 0.5s;
-    background-color: #FFFFFF;
-  }
-
-  input[type='radio'].input-rad:before {
-    content: '';
-    display: block;
-    width: 80%;
-    height: 80%;
-    margin: 10% auto;
-    border-radius: 50%;    
-  }
-
-  input[type='radio'].input-rad:checked:before {
-    background: #0F1934;
-  }
-
 .button-container{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     gap: 8px;
-}
-
-.btn-img{
-    width: 35px; 
-    cursor: pointer;
-}
-
-.btn-img:hover{
-   transform: scale(1.1);
 }
 
 .btn{
@@ -130,19 +103,6 @@ input[type='radio'].input-rad {
     color: #111111;
 }
 
-.button-container .btn-secondary{
-    background-color: #992b12;
-}
-
-.button-envio .btn-secondary{
-    background-color: #992b12;
-}
-
-::ng-deep .mat-form-field-underline {
-    display: none;
-    background-color: #ffffff;
-  }
-
   .row {
     display: flex;
     justify-content: space-between;
@@ -158,6 +118,10 @@ input[type='radio'].input-rad {
   .col:last-child {
     margin-right: 0;
   }
+
+  .modal-backdrop.show {
+    background-color: rgba(0,0,0,0.8) !important; /* Aumente este valor para tornar o fundo mais escuro */
+}
 
 @media screen and (max-width: 768px) {
     .container-geral{

@@ -2,115 +2,211 @@
     <div class="container mt-4">
         <h1 class="mt-4"> <span> | </span> Cadastro da Questão</h1>
     </div>
-    <div class="forms">
+
+    <div class="container-geral">
         <form>
-            <div class="form-group container-geral">
-                <div class="form-group">
-                    <label class="text-titulo" for="titulo">Título</label>
-                    <input type="text" class="form-control" id="titulo" placeholder="Digite o título da questão">
+
+            <!-- <div class="row">
+                <div class="col-md-12">
+                    <div class="alert alert-success" role="alert" *ngIf="success == true">
+                        Questao salva/atualizada com sucesso!
+                    </div>
+                    <div class="alert alert-danger" role="alert" *ngFor="let erro of errors">
+                        {{ erro }}
+                    </div>
                 </div>
-                <div class=" form-group desc">
-                    <div class="row">
-                        <div class="col">
-                            <label class="text-titulo" for="descricao">Descrição</label>
-                            <textarea class="form-control" id="descricao" rows="3" placeholder="Digite a descrição da questão"></textarea>
+            </div> -->
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Titulo: </label>
+                        <input type="text" class="form-control" name="TituloDaQuestao"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Descrição: </label>
+                        <input type="text" class="form-control"  name="Descrição"/>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Descrição: </label>
+                        <input type="text" class="form-control"  name="Descrição"/>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Descrição: </label>
+                        <input type="text" class="form-control"  name="Descrição"/>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Descrição: </label>
+                        <input type="text" class="form-control"  name="Descrição"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Assinale: </label>
+                        <input type="text" class="form-control" name="Setor" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Foto 1: </label>
+                        <input type="text" class="form-control" name="Empresa" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Foto 2: </label>
+                        <input type="text" class="form-control" name="Empresa" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Foto 3: </label>
+                        <input type="text" class="form-control" name="Empresa" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Foto 4: </label>
+                        <input type="text" class="form-control" name="Empresa" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Comentário: </label>
+                        <input type="text" class="form-control" name="Comentario" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Ano: </label>
+                        <div class="input-group">
+                            <select class="form-control"  name="Ano">
+                                <option></option>
+                            </select>
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Dificuldade: </label>
+                        <div class="input-group">
+                            <select class="form-control"  name="Dificuldade">
+                                <option></option>
+                            </select>
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Tema: </label>
+                        <div class="input-group">
+                            <select class="form-control"  name="Ano">
+                                <option></option>
+                            </select>
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Subtema: </label>
+                        <div class="input-group">
+                            <select class="form-control"  name="Dificuldade">
+                                <option></option>
+                            </select>
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Tipo de prova: </label>
+                        <div class="input-group">
+                            <select class="form-control"  name="Ano">
+                                <option></option>
+                            </select>
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="form-group container-geral">
-                <label class="text-titulo" for="tituloAlternativas">Alternativas</label>
-                <input type="text" class="form-control" id="tituloAlternativas" placeholder="Pergunta sem título">
-                <div class="alt-item" *ngFor="let option of options; let i = index">
-                    <div class="input-container">
-                        <input type="radio" class="input-rad" id="opcao{{i}}" name="respostaCorreta" value="{{option.value}}">
-                        <input type="text" class="form-control input-op" id="opcaoTexto{{i}}" placeholder="Digite a opção {{option.value}}">
-                    </div>
-                    <div class="button-container">
-                        <button class="btn btn-secondary" type="button" (click)="removeOption(i)">Remover alternativa</button>
-                    </div>
-                </div>
-                <div style="display: flex; justify-content: flex-end;">
-                    <button class="btn" type="button" (click)="addOption()" style="width: 30%;">
-                        Adicionar alternativa
+            <div class="row">
+                <div class="col-md-3">
+                    <button type="button" class="btn btn-primary ml-1 mr-2">
+                        Voltar
                     </button>
-                </div>
-            </div>
 
-            <div class="form-group container-geral">
-                <label class="text-titulo" for="gabarito">Gabarito</label>
-                <div class="row">
-                    <div class="col">
-                        <textarea class="form-control" id="gabarito" rows="3" placeholder="Digite o gabarito da questão"></textarea>
-                    </div>
-                </div>
-            </div>
+                    <button type="submit" class="btn btn-success mr-2" data-bs-toggle="modal" data-bs-target="#confirmModal">
+                        Cadastrar
+                    </button>
 
-            <div class="form-group container-geral">
-                <div class="row">
-                    <div class="col col-12 col-md-6">
-                        <mat-form-field appearance="fill" class="custom-form-field">
-                          <mat-label>Ano</mat-label>
-                          <mat-select></mat-select>
-                        </mat-form-field>
-                    </div>
-                    <div class="col col-12 col-md-6">
-                        <mat-form-field appearance="fill" class="custom-form-field">
-                          <mat-label>Dificuldade</mat-label>
-                          <mat-select></mat-select>
-                        </mat-form-field>
-                    </div> 
                 </div>
-                <div class="row">
-                    <div class="col col-12 col-md-6">
-                        <mat-form-field appearance="fill" class="custom-form-field">
-                          <mat-label>Tema</mat-label>
-                          <mat-select></mat-select>
-                        </mat-form-field>
-                    </div>
-                    <div class="col col-12 col-md-6">
-                        <mat-form-field appearance="fill" class="custom-form-field">
-                          <mat-label>Subtema</mat-label>
-                          <mat-select></mat-select>
-                        </mat-form-field>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col col-12 col-md-6">
-                        <mat-form-field appearance="fill" class="custom-form-field">
-                          <mat-label>Tipo de prova</mat-label>
-                          <mat-select></mat-select>
-                        </mat-form-field>
-                    </div>
-                </div>
-            </div>
-
-            <div class="button-envio">
-                <button type="button" class="btn btn-secondary" (click)="limparFormulario()">Limpar</button>
-                <button type="submit" class="btn btn-primary"  data-bs-toggle="modal" data-bs-target="#confirmModal">Cadastrar</button>
             </div>
         </form>
     </div>
+</div>
     
     <!-- Modal -->
-    <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-            <h5 class="modal-title" id="confirmModalLabel">Confirmação</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-            Você tem certeza que deseja cadastrar esaa questão?
-            </div>
-            <div class="modal-footer">
-            <button style="background-color:#992b12;" type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                Cancelar
-            </button>
-            <button type="button" class="btn btn-primary" (click)="confirmarCadastro()">Confirmar</button>
-            </div>
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmModalLabel">Confirmação</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
+        <div class="modal-body">
+          Você tem certeza que deseja cadastrar essa questão?
         </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" (click)="confirmarCadastro()">Confirmar</button>
+          <button style="background-color:#992b12;" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        </div>
+      </div>
     </div>
-</div>
+  </div>
+  
