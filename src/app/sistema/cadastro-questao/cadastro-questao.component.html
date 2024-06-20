@@ -1,9 +1,8 @@
 <div class="container pt-5">
     <div class="container mt-4">
-      <h1 class="mt-4"> <span> | </span> Cadastro da Questão</h1>
     </div>
   
-    <div class="container-geral">
+    <div class="container mt-4 container-geral">
       <div class="header-container">
         <h2>Cadastrar questão</h2>
       </div>
@@ -96,66 +95,83 @@
             </div>
           </div>
         </div>
-  
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group">
-              <mat-form-field appearance="fill">
-                <mat-label>Ano</mat-label>
-                <mat-select name="ano" [(value)]="questao.ano">
-                  <mat-option *ngFor="let ano of anos" [value]="ano">{{ ano }}</mat-option>
-                </mat-select>
-              </mat-form-field>
+
+        <div>
+          <hr class="line">
+          <span class="div-section">
+            Especifique as características da questão para o filtro:
+          </span>
+          <hr class="line">
+        </div>
+
+        <div class="select-input">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <mat-form-field appearance="fill">
+                  <mat-label>Ano</mat-label>
+                  <mat-select name="ano" [(value)]="questao.ano">
+                    <mat-option *ngFor="let ano of anos" [value]="ano">{{ ano }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <mat-form-field appearance="fill">
+                  <mat-label>Dificuldade</mat-label>
+                  <mat-select name="dificuldade" [(value)]="questao.dificuldade">
+                    <mat-option *ngFor="let dificuldade of dificuldades" [value]="dificuldade">{{ dificuldade }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
             </div>
           </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <mat-form-field appearance="fill">
-                <mat-label>Dificuldade</mat-label>
-                <mat-select name="dificuldade" [(value)]="questao.dificuldade">
-                  <mat-option *ngFor="let dificuldade of dificuldades" [value]="dificuldade">{{ dificuldade }}</mat-option>
-                </mat-select>
-              </mat-form-field>
+    
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <mat-form-field appearance="fill">
+                  <mat-label>Tema</mat-label>
+                  <mat-select name="tema" [(value)]="questao.tema">
+                    <mat-option *ngFor="let tema of temas" [value]="tema">{{ tema }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <mat-form-field appearance="fill">
+                  <mat-label>Subtema</mat-label>
+                  <mat-select name="subtema" [(value)]="questao.subtema">
+                    <mat-option *ngFor="let subtema of subtemas" [value]="subtema">{{ subtema }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+    
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <mat-form-field appearance="fill">
+                  <mat-label>Tipo de Prova</mat-label>
+                  <mat-select  name="tipoDeProva" [(value)]="questao.tipoDeProva">
+                    <mat-option *ngFor="let tipoDeProva of tiposDeProva" [value]="tipoDeProva">{{ tipoDeProva }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
             </div>
           </div>
         </div>
-  
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group">
-              <label>Tema: </label>
-              <select class="form-control" name="tema" [(ngModel)]="questao.tema">
-                <option *ngFor="let tema of temas" [ngValue]="tema">{{ tema }}</option>
-              </select>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label>Subtema: </label>
-              <select class="form-control" name="subtema" [(ngModel)]="questao.subtema">
-                <option *ngFor="let subtema of subtemas" [ngValue]="subtema">{{ subtema }}</option>
-              </select>
-            </div>
-          </div>
-        </div>
-  
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group">
-              <label>Tipo de Prova: </label>
-              <select class="form-control" name="tipoDeProva" [(ngModel)]="questao.tipoDeProva">
-                <option *ngFor="let tipoDeProva of tiposDeProva" [ngValue]="tipoDeProva">{{ tipoDeProva }}</option>
-              </select>
-            </div>
-          </div>
-        </div>
-  
+        
+        <hr class="line">
         <div class="row">
           <div class="col-md-6 btn-">
             <button type="button" class="btn btn-secundary ml-1 mr-2" (click)="voltar()">
               Voltar
             </button>
-            <button type="button" class="btn btn-primary btn-success mr-2" data-bs-toggle="modal" data-bs-target="#confirmModal" (click)="confirmarCadastro()">
+            <button type="button" class="btn btn-primary btn-success mr-2" (click)="confirmarCadastro()">
               Cadastrar
             </button>
           </div>
@@ -165,6 +181,7 @@
   </div>
   
   <!-- Modal -->
+   <!-- <div data-bs-toggle="modal" data-bs-target="#confirmModal"></div> -->
   <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -177,7 +194,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-primary" (click)="confirmarCadastro()">Confirmar</button>
-          <button style="background-color:#992b12;" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button style="background-color:#ad0c0c;" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
         </div>
       </div>
     </div>

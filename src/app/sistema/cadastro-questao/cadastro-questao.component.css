@@ -69,17 +69,9 @@ label {
     margin-bottom: 5px;
 }
 
-.alt-item{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    text-align: center;
-    gap: 8px;
-}
-
-.alt-item label{
-    margin: 0;
+.div-section{
+    color: #111111;
+    font-size: 14px;
 }
 
 .text-titulo{
@@ -93,6 +85,13 @@ label {
     justify-content: space-between;
     align-items: center;
     gap: 8px;
+}
+
+.select-input{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: stretch;
 }
 
 .input-op{
@@ -200,6 +199,11 @@ label {
 
     .btn-container{
         justify-content: center;
+    }
+
+    .form-group{
+        display: flex;
+        flex-direction: column;
     }
 
     .btn{
