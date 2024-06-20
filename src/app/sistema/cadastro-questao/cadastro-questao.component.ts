@@ -7,6 +7,7 @@ import { TipoDeProva } from '../page-questoes/enums/tipoDeProva';
 import { Subtema } from '../page-questoes/enums/subtema';
 import { FiltroService } from 'src/app/services/filtro.service';
 import { QuestoesService } from 'src/app/services/questoes.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cadastro-questao',
@@ -28,12 +29,12 @@ export class CadastroQuestaoComponent implements OnInit {
 
   constructor(
     private questoesService: QuestoesService,
-    private filtroService: FiltroService
+    private filtroService: FiltroService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
   }
-
   
   confirmarCadastro() {
     if (this.fotoDaQuestao !== null) {
@@ -66,7 +67,7 @@ export class CadastroQuestaoComponent implements OnInit {
   }
 
   voltar() {
-    // Implementação para voltar
+    this.router.navigate(['/usuario/dashboard']);
   }
 
 }
