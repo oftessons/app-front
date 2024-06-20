@@ -94,8 +94,10 @@ label {
     align-items: stretch;
 }
 
-.input-op{
-    width: 100%;
+textarea{
+    max-height: 200px; /* Ajuste para a altura máxima desejada */
+    overflow-y: auto;
+
 }
 
 ::ng-deep .mat-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-form-field-flex {
