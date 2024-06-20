@@ -4,8 +4,11 @@
     </div>
   
     <div class="container-geral">
-      <form>
-  
+      <div class="header-container">
+        <h2>Cadastrar questão</h2>
+      </div>
+
+      <form class="formulario">
         <div class="row">
           <div class="col-md-12">
             <div class="alert alert-success" role="alert" *ngIf="success == true">
@@ -21,7 +24,7 @@
           <div class="col-md-6">
             <div class="form-group">
               <label>Titulo: </label>
-              <input type="text" class="form-control" name="title" [(ngModel)]="questao.title" />
+              <input type="text" class="form-control" name="title" [(ngModel)]="questao.title" placeholder="Digite o título da questão" />
             </div>
           </div>
         </div>
@@ -30,7 +33,7 @@
           <div class="col-md-6">
             <div class="form-group">
               <label>Enunciado da Questão: </label>
-              <textarea class="form-control" rows="4" name="enunciadoDaQuestao" [(ngModel)]="questao.enunciadoDaQuestao"></textarea>
+              <textarea class="form-control" rows="4" name="enunciadoDaQuestao" [(ngModel)]="questao.enunciadoDaQuestao" placeholder="Digite o enunciado da questão"></textarea>
             </div>
           </div>
         </div>
@@ -39,13 +42,13 @@
           <div class="col-md-6">
             <div class="form-group">
               <label>Descrição 1: </label>
-              <textarea class="form-control" rows="2" name="descricaoUm" [(ngModel)]="questao.descricaoUm"></textarea>
+              <textarea class="form-control" rows="2" name="descricaoUm" [(ngModel)]="questao.descricaoUm" placeholder="Digite a descrição da questão"></textarea>
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
               <label>Descrição 2: </label>
-              <textarea class="form-control" rows="2" name="descricaoDois" [(ngModel)]="questao.descricaoDois"></textarea>
+              <textarea class="form-control" rows="2" name="descricaoDois" [(ngModel)]="questao.descricaoDois" placeholder="Digite a descrição da questão"></textarea>
             </div>
           </div>
         </div>
@@ -54,13 +57,13 @@
           <div class="col-md-6">
             <div class="form-group">
               <label>Descrição 3: </label>
-              <textarea class="form-control" rows="2" name="descricaoTres" [(ngModel)]="questao.descricaoTres"></textarea>
+              <textarea class="form-control" rows="2" name="descricaoTres" [(ngModel)]="questao.descricaoTres" placeholder="Digite a descrição da questão"></textarea>
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
               <label>Descrição 4: </label>
-              <textarea class="form-control" rows="2" name="descricaoQuatro" [(ngModel)]="questao.descricaoQuatro"></textarea>
+              <textarea class="form-control" rows="2" name="descricaoQuatro" [(ngModel)]="questao.descricaoQuatro" placeholder="Digite a descrição da questão"></textarea>
             </div>
           </div>
         </div>
@@ -69,7 +72,7 @@
           <div class="col-md-6">
             <div class="form-group">
               <label>Assinale: </label>
-              <input type="text" class="form-control" name="assinale" [(ngModel)]="questao.assinale" />
+              <input type="text" class="form-control" name="assinale" [(ngModel)]="questao.assinale" placeholder="Digite as alternativas aqui" />
             </div>
           </div>
         </div>
@@ -83,14 +86,13 @@
             </div>
             </div>
           </div>
-      
         </div>
   
         <div class="row">
           <div class="col-md-6">
             <div class="form-group">
               <label>Comentário: </label>
-              <textarea class="form-control" rows="2" name="comentarioDaQuestao" [(ngModel)]="questao.comentarioDaQuestao"></textarea>
+              <textarea class="form-control" rows="2" name="comentarioDaQuestao" [(ngModel)]="questao.comentarioDaQuestao" placeholder="Digite os comentários da questão"></textarea>
             </div>
           </div>
         </div>
@@ -98,18 +100,22 @@
         <div class="row">
           <div class="col-md-6">
             <div class="form-group">
-              <label>Ano: </label>
-              <select class="form-control" name="ano" [(ngModel)]="questao.ano">
-                <option *ngFor="let ano of anos" [ngValue]="ano">{{ ano }}</option>
-              </select>
+              <mat-form-field appearance="fill">
+                <mat-label>Ano</mat-label>
+                <mat-select name="ano" [(value)]="questao.ano">
+                  <mat-option *ngFor="let ano of anos" [value]="ano">{{ ano }}</mat-option>
+                </mat-select>
+              </mat-form-field>
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
-              <label>Dificuldade: </label>
-              <select class="form-control" name="dificuldade" [(ngModel)]="questao.dificuldade">
-                <option *ngFor="let dificuldade of dificuldades" [ngValue]="dificuldade">{{ dificuldade }}</option>
-              </select>
+              <mat-form-field appearance="fill">
+                <mat-label>Dificuldade</mat-label>
+                <mat-select name="dificuldade" [(value)]="questao.dificuldade">
+                  <mat-option *ngFor="let dificuldade of dificuldades" [value]="dificuldade">{{ dificuldade }}</mat-option>
+                </mat-select>
+              </mat-form-field>
             </div>
           </div>
         </div>
@@ -145,15 +151,13 @@
         </div>
   
         <div class="row">
-          <div class="col-md-3">
-            <button type="button" class="btn btn-primary ml-1 mr-2" (click)="voltar()">
+          <div class="col-md-6 btn-">
+            <button type="button" class="btn btn-secundary ml-1 mr-2" (click)="voltar()">
               Voltar
             </button>
-  
-            <button type="button" class="btn btn-success mr-2" data-bs-toggle="modal" data-bs-target="#confirmModal" (click)="confirmarCadastro()">
+            <button type="button" class="btn btn-primary btn-success mr-2" data-bs-toggle="modal" data-bs-target="#confirmModal" (click)="confirmarCadastro()">
               Cadastrar
             </button>
-  
           </div>
         </div>
       </form>
