@@ -5,9 +5,9 @@ import { Tema } from '../page-questoes/enums/tema';
 import { Dificuldade } from '../page-questoes/enums/dificuldade';
 import { TipoDeProva } from '../page-questoes/enums/tipoDeProva';
 import { Subtema } from '../page-questoes/enums/subtema';
-import { FiltroService } from 'src/app/services/filtro.service';
+import { Relevancia } from '../page-questoes/enums/relevancia';
 import { QuestoesService } from 'src/app/services/questoes.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-cadastro-questao',
@@ -19,41 +19,64 @@ export class CadastroQuestaoComponent implements OnInit {
   success: boolean = false;
   errors: string[] = [];
   fotoDaQuestao: File | null = null; 
-  
+  id!: number;
 
   anos: string[] = Object.values(Ano);
   dificuldades: string[] = Object.values(Dificuldade);
   temas: string[] = Object.values(Tema);
   subtemas: string[] = Object.values(Subtema);
   tiposDeProva: string[] = Object.values(TipoDeProva);
+  relevancias: string[] = Object.values(Relevancia);
 
   constructor(
     private questoesService: QuestoesService,
-    private filtroService: FiltroService,
-    private router: Router
+    private router: Router,
+    private activatedRoute: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
+    this.activatedRoute.params.subscribe(params => {
+      this.id = params['id'];
+      if (this.id) {
+        this.carregarQuestao(this.id);
+      }
+    });
   }
-  
-  confirmarCadastro() {
-    if (this.fotoDaQuestao !== null) {
-      this.questoesService.cadastrarQuestao(this.questao, this.fotoDaQuestao)
-        .subscribe(
-          response => {
-            console.log('Questão cadastrada com sucesso!', response);
-            this.success = true;
-            // Lógica adicional após o sucesso, como limpar o formulário ou redirecionar
-          },
-          error => {
-            console.error('Erro ao cadastrar questão:', error);
-            this.errors.push('Erro ao cadastrar a questão. Por favor, tente novamente.');
-            // Lógica para lidar com erros, como exibir mensagens para o usuário
-          }
-        );
+
+  carregarQuestao(id: number): void {
+    this.questoesService.getQuestaoById(id).subscribe(
+      questao => {
+        this.questao = questao;
+      },
+      error => {
+        console.error('Erro ao carregar questão:', error);
+      }
+    );
+  }
+
+  onSubmit(): void {
+    if (this.id) {
+      this.questoesService.atualizar(this.questao).subscribe(
+        response => {
+          this.success = true;
+          this.errors = [];
+        },
+        errorResponse => {
+          this.errors = ['Erro ao atualizar a questão.'];
+        }
+      );
     } else {
-      console.error('Nenhuma foto selecionada para cadastro.');
-      // Lógica adicional para lidar com a falta de foto selecionada, se necessário
+      this.questoesService.salvar(this.questao).subscribe(
+        response => {
+          this.success = true;
+          this.errors = [];
+          this.questao = response;
+        },
+        errorResponse => {
+          this.success = false;
+          this.errors = errorResponse.error.errors;
+        }
+      );
     }
   }
 
@@ -62,12 +85,11 @@ export class CadastroQuestaoComponent implements OnInit {
     if (files.length > 0) {
       this.fotoDaQuestao = files[0];
     } else {
-      this.fotoDaQuestao = null; // Reseta a foto da questão se nenhum arquivo for selecionado
+      this.fotoDaQuestao = null;
     }
   }
 
-  voltar() {
-    this.router.navigate(['/usuario/dashboard']);
+  voltarParaListagem(): void {
+    this.router.navigate(['/usuario/questoes']);
   }
-
 }

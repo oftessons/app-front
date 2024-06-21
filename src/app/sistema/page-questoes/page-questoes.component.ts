@@ -23,24 +23,25 @@ export class PageQuestoesComponent implements OnInit {
   temas = Object.values(Tema);
 
   filtros: Filtro[] = [];
-  mostrarCardConfirmacao = false; // Variável para controlar a visibilidade do card de confirmação
-  filtroASalvar!: Filtro; // Variável para armazenar o filtro a ser salvo
-  
+  mostrarCardConfirmacao = false;
+  filtroASalvar!: Filtro;
+
   favoriteSeason!: string;
   seasons: string[] = ['A) I: V; II: V; III: V; IV: V.', 'B) I: F; II: F; III: V; IV: F.', 'C) I: F; II: F; III: F; IV: F.', 'D) I: V; II: V; III: F; IV: V.'];
 
-  selectedAno: Ano = Ano.ANO_2024; // Inicializando com um valor padrão
-  selectedDificuldade: Dificuldade = Dificuldade.DIFICIL;
-  selectedTipoDeProva: TipoDeProva = TipoDeProva.PRATICA; // Inicializando com um valor padrão
-  selectedSubtema: Subtema = Subtema.BASES_DE_CORNEA; // Inicializando com um valor padrão
-  selectedTema: Tema = Tema.LENTES_DE_CONTATO; // Inicializando com um valor padrão
-  palavraChave!: string;
+  selectedAno!: Ano; // Inicialize com null ou com um valor padrão
+  selectedDificuldade!: Dificuldade; // Inicialize com null ou com um valor padrão
+  selectedTipoDeProva!: TipoDeProva; // Inicialize com null ou com um valor padrão
+  selectedSubtema!: Subtema; // Inicialize com null ou com um valor padrão
+  selectedTema!: Tema; // Inicialize com null ou com um valor padrão
+  palavraChave: string = '';
 
   questoes: Questao[] = [];
   isFiltered = false;
-  p: number = 1; // Página inicial para a paginação
+  p: number = 1;
 
-  constructor(private questoesService: QuestoesService,
+  constructor(
+    private questoesService: QuestoesService,
     private filtroService: FiltroService
   ) { }
 
@@ -67,18 +68,26 @@ export class PageQuestoesComponent implements OnInit {
   }
 
   filtrarQuestoes(): void {
-    this.questoesService.filtrarQuestoes({
+    const filtro: any = {
       ano: this.selectedAno,
       dificuldade: this.selectedDificuldade,
       tipoDeProva: this.selectedTipoDeProva,
       subtema: this.selectedSubtema,
       tema: this.selectedTema,
-      palavraChave: this.palavraChave // Adicione a palavra-chave aos filtros
-    }).subscribe((questoes: Questao[]) => {
-      this.questoes = questoes;
-      this.isFiltered = true; // Marque que a filtragem foi realizada
-      this.p = 1; // Reseta a página para 1 ao realizar nova filtragem
-    });
+      palavraChave: this.palavraChave
+    };
+
+    this.questoesService.filtrarQuestoes(filtro).subscribe(
+      (questoes: Questao[]) => {
+        this.questoes = questoes;
+        this.isFiltered = true;
+        this.p = 1;
+      },
+      (error) => {
+        console.error('Erro ao tentar obter as questões.', error);
+        // Adicione lógica para tratamento de erro aqui, se necessário
+      }
+    );
   }
 
   abrirCardConfirmacao(filtro: Filtro): void {
@@ -96,14 +105,14 @@ export class PageQuestoesComponent implements OnInit {
         .subscribe(
           response => {
             console.log('Filtro salvo com sucesso:', response);
-            // Aqui você pode adicionar lógica adicional, como atualizar a lista de filtros, etc.
+            // Adicione lógica adicional se necessário
           },
           error => {
             console.error('Erro ao salvar filtro:', error);
-            // Tratar erro aqui se necessário
+            // Trate o erro aqui, se necessário
           }
         );
     }
-    this.fecharCardConfirmacao(); // Fecha o card de confirmação após a ação
+    this.fecharCardConfirmacao();
   }
 }

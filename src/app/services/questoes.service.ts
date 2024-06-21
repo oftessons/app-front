@@ -10,30 +10,35 @@ import { Ano } from '../sistema/page-questoes/enums/ano';
   providedIn: 'root'
 })
 export class QuestoesService {
-
   apiURL: string = environment.apiURLBase + '/api/questoes';
 
   constructor(private http: HttpClient) { }
+  
+  salvar( questao: Questao ) : Observable<Questao> {
+    return this.http.post<Questao>( `${this.apiURL}`, questao);
+  }
+
+  atualizar(questao: Questao): Observable<any> {
+    return this.http.put<Questao>(`${this.apiURL}/${questao.id}`, questao).pipe(
+      catchError(error => throwError(error))
+    );
+  }
+
+  getQuestaoById(id: number): Observable<Questao> {
+    return this.http.get<Questao>(`${this.apiURL}/${id}`).pipe(
+      catchError(error => throwError(error))
+    );
+  }
+
+  deletar(questao: Questao): Observable<any> {
+    return this.http.delete<any>(`${this.apiURL}/${questao.id}`).pipe(
+      catchError(error => throwError(error))
+    );
+  }
 
   getQuestoesByAno(ano: Ano): Observable<Questao[]> {
-    return this.http.get<Questao[]>(`${this.apiURL}/ano/${ano}`);
-  }
-  
-  cadastrarQuestao(questao: Questao, fotoDaQuestao: File): Observable<any> {
-    const formData = new FormData();
-    formData.append('questaoDTO', JSON.stringify(questao));
-
-    if (fotoDaQuestao) {
-      formData.append('fotoDaQuestao', fotoDaQuestao, fotoDaQuestao.name);
-    }
-
-    const headers = new HttpHeaders();
-    headers.append('Content-Type', 'multipart/form-data');
-
-    return this.http.post<any>(`${this.apiURL}/cadastro`, formData, { headers }).pipe(
-      catchError(error => {
-        throw error; // Tratar erros conforme necessário
-      })
+    return this.http.get<Questao[]>(`${this.apiURL}/ano/${ano}`).pipe(
+      catchError(error => throwError(error))
     );
   }
 
@@ -48,19 +53,8 @@ export class QuestoesService {
       }
     }
 
-    return this.http.get(url, { params: params, observe: 'response' })
-      .pipe(
-        map((response: HttpResponse<any>) => {
-          if (response.status === 200) {
-            return response.body as Questao[];
-          } else {
-            throw new Error('Erro na requisição.');
-          }
-        }),
-        catchError((error: any) => {
-          console.error('Ocorreu um erro:', error);
-          return throwError('Erro ao tentar obter as questões.');
-        })
-      );
+    return this.http.get<Questao[]>(url, { params }).pipe(
+      catchError(error => throwError('Erro ao tentar obter as questões.'))
+    );
   }
 }

@@ -1,202 +1,265 @@
 <div class="container pt-5">
     <div class="container mt-4">
     </div>
-  
+
     <div class="container mt-4 container-geral">
-      <div class="header-container">
-        <h2>Cadastrar questão</h2>
-      </div>
-
-      <form class="formulario">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="alert alert-success" role="alert" *ngIf="success == true">
-              Questao salva/atualizada com sucesso!
-            </div>
-            <div class="alert alert-danger" role="alert" *ngFor="let erro of errors">
-              {{ erro }}
-            </div>
-          </div>
-        </div>
-  
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group">
-              <label>Titulo: </label>
-              <input type="text" class="form-control" name="title" [(ngModel)]="questao.title" placeholder="Digite o título da questão" />
-            </div>
-          </div>
-        </div>
-  
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group">
-              <label>Enunciado da Questão: </label>
-              <textarea class="form-control" rows="4" name="enunciadoDaQuestao" [(ngModel)]="questao.enunciadoDaQuestao" placeholder="Digite o enunciado da questão"></textarea>
-            </div>
-          </div>
-        </div>
-  
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group">
-              <label>Descrição 1: </label>
-              <textarea class="form-control" rows="2" name="descricaoUm" [(ngModel)]="questao.descricaoUm" placeholder="Digite a descrição da questão"></textarea>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label>Descrição 2: </label>
-              <textarea class="form-control" rows="2" name="descricaoDois" [(ngModel)]="questao.descricaoDois" placeholder="Digite a descrição da questão"></textarea>
-            </div>
-          </div>
-        </div>
-  
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group">
-              <label>Descrição 3: </label>
-              <textarea class="form-control" rows="2" name="descricaoTres" [(ngModel)]="questao.descricaoTres" placeholder="Digite a descrição da questão"></textarea>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label>Descrição 4: </label>
-              <textarea class="form-control" rows="2" name="descricaoQuatro" [(ngModel)]="questao.descricaoQuatro" placeholder="Digite a descrição da questão"></textarea>
-            </div>
-          </div>
-        </div>
-  
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group">
-              <label>Assinale: </label>
-              <input type="text" class="form-control" name="assinale" [(ngModel)]="questao.assinale" placeholder="Digite as alternativas aqui" />
-            </div>
-          </div>
-        </div>
-  
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group">
-              <div class="form-group">
-                <label>Foto da Questão: </label>
-                <input type="file" class="form-control" name="fotoDaQuestao" accept="image/*" (change)="onFileChange($event)" />
-            </div>
-            </div>
-          </div>
-        </div>
-  
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group">
-              <label>Comentário: </label>
-              <textarea class="form-control" rows="3" name="comentarioDaQuestao" [(ngModel)]="questao.comentarioDaQuestao" placeholder="Digite os comentários da questão"></textarea>
-            </div>
-          </div>
+        <div class="header-container">
+            <h2>{{ questao.id ? 'Edição da Questão' : 'Cadastro da Questão' }}</h2>
         </div>
 
-        <div>
-          <hr class="line">
-          <span class="div-section">
-            Especifique as características da questão para o filtro:
-          </span>
-          <hr class="line">
-        </div>
+        <form #questaoForm="ngForm" (ngSubmit)="onSubmit()">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="alert alert-success" role="alert" *ngIf="success == true">
+                        Questão salva/atualizada com sucesso!
+                    </div>
+                    <div class="alert alert-danger" role="alert" *ngFor="let erro of errors">
+                        {{ erro }}
+                    </div>
+                </div>
+            </div>
 
-        <div class="select-input">
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
-                <mat-form-field appearance="fill">
-                  <mat-label>Ano</mat-label>
-                  <mat-select name="ano" [(value)]="questao.ano">
-                    <mat-option *ngFor="let ano of anos" [value]="ano">{{ ano }}</mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
+            <div class="row" *ngIf="questao.id">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>ID:</label>
+                        <input type="text" class="form-control" name="id" [(ngModel)]="questao.id" disabled>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Data Cadastro:</label>
+                        <input type="text" class="form-control" name="diaDoCadastro" [(ngModel)]="questao.diaDoCadastro" disabled>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <mat-form-field appearance="fill">
-                  <mat-label>Dificuldade</mat-label>
-                  <mat-select name="dificuldade" [(value)]="questao.dificuldade">
-                    <mat-option *ngFor="let dificuldade of dificuldades" [value]="dificuldade">{{ dificuldade }}</mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
+
+            <div>
+                <hr class="line">
+                <span class="div-section">
+                    Especifique as características da questão para o filtro:
+                </span>
+                <hr class="line">
             </div>
-          </div>
+
+            <div class="select-input">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Ano</mat-label>
+                                <mat-select name="ano" [(value)]="questao.ano">
+                                    <mat-option *ngFor="let ano of anos" [value]="ano">{{ ano }}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Dificuldade</mat-label>
+                                <mat-select name="dificuldade" [(value)]="questao.dificuldade">
+                                    <mat-option *ngFor="let dificuldade of dificuldades" [value]="dificuldade">{{ dificuldade }}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Tema</mat-label>
+                                <mat-select name="tema" [(value)]="questao.tema">
+                                    <mat-option *ngFor="let tema of temas" [value]="tema">{{ tema }}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Subtema</mat-label>
+                                <mat-select name="subtema" [(value)]="questao.subtema">
+                                    <mat-option *ngFor="let subtema of subtemas" [value]="subtema">{{ subtema }}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Tipo de Prova</mat-label>
+                                <mat-select name="tipoDeProva" [(value)]="questao.tipoDeProva">
+                                    <mat-option *ngFor="let tipoDeProva of tiposDeProva" [value]="tipoDeProva">{{ tipoDeProva }}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Relevância</mat-label>
+                                <mat-select name="relevancia" [(value)]="questao.relevancia">
+                                    <mat-option *ngFor="let relevancia of relevancias" [value]="relevancia">{{ relevancia }}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
     
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
-                <mat-form-field appearance="fill">
-                  <mat-label>Tema</mat-label>
-                  <mat-select name="tema" [(value)]="questao.tema">
-                    <mat-option *ngFor="let tema of temas" [value]="tema">{{ tema }}</mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
             </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <mat-form-field appearance="fill">
-                  <mat-label>Subtema</mat-label>
-                  <mat-select name="subtema" [(value)]="questao.subtema">
-                    <mat-option *ngFor="let subtema of subtemas" [value]="subtema">{{ subtema }}</mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Título: </label>
+                        <input type="text" class="form-control" name="title" [(ngModel)]="questao.title" placeholder="Digite o título da questão" />
+                    </div>
+                </div>
             </div>
-          </div>
-    
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
-                <mat-form-field appearance="fill">
-                  <mat-label>Tipo de Prova</mat-label>
-                  <mat-select  name="tipoDeProva" [(value)]="questao.tipoDeProva">
-                    <mat-option *ngFor="let tipoDeProva of tiposDeProva" [value]="tipoDeProva">{{ tipoDeProva }}</mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Foto do enunciado da Questão: </label>
+                        <input type="file" class="form-control" name="fotoDaQuestao" accept="image/*" (change)="onFileChange($event)" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Foto do enunciada (Segunda foto se tiver): </label>
+                        <input type="file" class="form-control" name="fotoDaQuestaoDois" accept="image/*" (change)="onFileChange($event)" />
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-        
-        <hr class="line">
-        <div class="row">
-          <div class="col-md-6 btn-">
-            <button type="button" class="btn btn-secundary ml-1 mr-2" (click)="voltar()">
-              Voltar
-            </button>
-            <button type="button" class="btn btn-primary btn-success mr-2" (click)="confirmarCadastro()">
-              Cadastrar
-            </button>
-          </div>
-        </div>
-      </form>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Enunciado da Questão: </label>
+                        <textarea class="form-control" rows="4" name="enunciadoDaQuestao" [(ngModel)]="questao.enunciadoDaQuestao" placeholder="Digite o enunciado da questão"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Afirmativa 1: </label>
+                        <textarea class="form-control" rows="2" name="afirmacaoUm" [(ngModel)]="questao.afirmacaoUm" placeholder="Digite a afirmação da questão"></textarea>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Afirmativa 2: </label>
+                        <textarea class="form-control" rows="2" name="afirmacaoDois" [(ngModel)]="questao.afirmacaoDois" placeholder="Digite a afirmação da questão"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Afirmativa 3: </label>
+                        <textarea class="form-control" rows="2" name="afirmacaoTres" [(ngModel)]="questao.afirmacaoTres" placeholder="Digite a afirmação da questão"></textarea>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Afirmativa 4: </label>
+                        <textarea class="form-control" rows="2" name="afirmacaoQuatro" [(ngModel)]="questao.afirmacaoQuatro" placeholder="Digite a afirmação da questão"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Assinale: </label>
+                        <input type="text" class="form-control" name="assinale" [(ngModel)]="questao.assinale" placeholder="Digite o campo de assinale aqui" />
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <hr class="line">
+                <span class="div-section">
+                    Gabarito da Questão Cadastrada:
+                </span>
+                <hr class="line">
+            </div>
+            
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Comentário Geral da Questão: </label>
+                        <textarea class="form-control" rows="3" name="comentarioDaQuestaoUm" [(ngModel)]="questao.comentarioDaQuestaoUm" placeholder="Digite o comentário geral da questão"></textarea>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Comentário Específico da Questão: </label>
+                        <textarea class="form-control" rows="3" name="comentarioDaQuestaoDois" [(ngModel)]="questao.comentarioDaQuestaoDois" placeholder="Digite o comentário específico da questão"></textarea>
+                    </div>
+                </div>
+            </div>
+
+          
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Foto da Resolução da Questão: </label>
+                            <input type="file" class="form-control" name="fotoDaQuestao" accept="image/*" (change)="onFileChange($event)" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Foto da Resolução da Questão (Segunda foto se tiver): </label>
+                            <input type="file" class="form-control" name="fotoDaQuestaoDois" accept="image/*" (change)="onFileChange($event)" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Foto da Resolução da Questão (Terceira foto se tiver): </label>
+                            <input type="file" class="form-control" name="fotoDaQuestaoTres" accept="image/*" (change)="onFileChange($event)" />
+                        </div>
+                    </div>
+                </div>
+          
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Comentador da Questão: </label>
+                        <input type="text" class="form-control" name="comentadorDaQuestao" [(ngModel)]="questao.comentadorDaQuestao" placeholder="Digite o nome do comentador" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Palavra-chave da Questão: </label>
+                        <input type="text" class="form-control" name="palavraChave" [(ngModel)]="questao.palavraChave" placeholder="Digite a palavra-chave da Questão" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="container mt-4 container-btn">
+                <button type="button" class="btn btn-light" routerLink="/usuario/dashboard" *ngIf="!questao.id">Voltar</button>
+                <button type="submit" class="btn btn-primary" *ngIf="!questao.id">Salvar</button>
+                <button type="submit" class="btn btn-primary" *ngIf="questao.id">Atualizar</button>
+            </div>
+        </form>
     </div>
-  </div>
-  
-  <!-- Modal -->
-   <!-- <div data-bs-toggle="modal" data-bs-target="#confirmModal"></div> -->
-  <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="confirmModalLabel">Confirmação</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          Você tem certeza que deseja cadastrar essa questão?
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" (click)="confirmarCadastro()">Confirmar</button>
-          <button style="background-color:#ad0c0c;" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  
+</div>
