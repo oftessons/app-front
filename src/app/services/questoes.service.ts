@@ -10,8 +10,8 @@ import { Ano } from '../sistema/page-questoes/enums/ano';
   providedIn: 'root'
 })
 export class QuestoesService {
+  
   apiURL: string = environment.apiURLBase + '/api/questoes';
-
   constructor(private http: HttpClient) { }
   
   salvar( questao: Questao ) : Observable<Questao> {
@@ -41,7 +41,7 @@ export class QuestoesService {
       catchError(error => throwError(error))
     );
   }
-
+  
   filtrarQuestoes(filtros: any): Observable<Questao[]> {
     const url = `${this.apiURL}/filtro`;
     let params = new HttpParams();

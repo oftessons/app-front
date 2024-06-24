@@ -29,6 +29,7 @@ export class PageQuestoesComponent implements OnInit {
   favoriteSeason!: string;
   seasons: string[] = ['A) I: V; II: V; III: V; IV: V.', 'B) I: F; II: F; III: V; IV: F.', 'C) I: F; II: F; III: F; IV: F.', 'D) I: V; II: V; III: F; IV: V.'];
 
+
   selectedAno!: Ano; // Inicialize com null ou com um valor padrão
   selectedDificuldade!: Dificuldade; // Inicialize com null ou com um valor padrão
   selectedTipoDeProva!: TipoDeProva; // Inicialize com null ou com um valor padrão
