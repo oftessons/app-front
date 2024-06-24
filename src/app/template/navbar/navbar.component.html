@@ -4,7 +4,7 @@
     </button>
 
     <a class="navbar-brand mx-auto" routerLink="/usuario/dashboard">
-        <img  src="assets/imagens/logo-oftlessons.svg" alt="" style="padding: 20px; height: 65px;" class="d-inline-block align-text-top">
+        <img src="assets/imagens/logo-oftlessons.svg" alt="" style="padding: 20px; height: 65px;" class="d-inline-block align-text-top">
     </a>
 
     <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseLayouts" aria-expanded="false"
@@ -17,34 +17,33 @@
     </a>
 </mat-toolbar>
 
-
 <mat-drawer-container>
     <mat-drawer #sidenav [mode]="getSidenavMode()" [opened]="isSidenavOpen()" class="mat-drawer-sidenav">
         <mat-nav-list class="pt-5">
-           
-            
             <div class="heading-home">Home</div>
-            <a mat-list-item routerLink="/usuario/dashboard">
-                <img src="assets/imagens/painel.svg" alt="Ícone de Empresa de Engenharia" class="icon">
+
+            <a mat-list-item routerLink="/usuario/dashboard" [ngClass]="{'active-link': isActive('/usuario/dashboard')}">
+                <img src="assets/imagens/painel.svg" alt="Ícone de Painel de Controle" class="icon">
                 <span class="ml-2">Painel de Controle</span>
-            </a>
+            </a>            
             
             <div class="heading-home">Serviços</div>
-            <a mat-list-item routerLink="/usuario/questoes">
-                <img src="assets/imagens/caderno.svg" alt="Ícone de Usuários" class="icon">
+            <a mat-list-item routerLink="/usuario/questoes" [ngClass]="{'active-link': isActive('/usuario/questoes')}">
+                <img src="assets/imagens/caderno.svg" alt="Ícone de Questões" class="icon">
                 <span class="ml-2">Questões</span>
             </a>         
-            <a mat-list-item routerLink="/usuario/filtro">
-                <img src="assets/imagens/of-filtro.svg" alt="Ícone de Inspeções" class="icon">
+            <a mat-list-item routerLink="/usuario/filtro" [ngClass]="{'active-link': isActive('/usuario/filtro')}" >
+                <img src="assets/imagens/of-filtro.svg" alt="Ícone de Meus Filtros" class="icon">
                 <span class="ml-2">Meus Filtros</span>
             </a>
-            <a mat-list-item routerLink="/usuario/desempenho">
-                <img src="assets/imagens/garfic.svg" alt="Ícone de Inspeções" class="icon">
+            <a mat-list-item routerLink="/usuario/desempenho"  [ngClass]="{'active-link': isActive('/usuario/desempenho')}">
+                <img src="assets/imagens/garfic.svg" alt="Ícone de Desempenho" class="icon">
                 <span class="ml-2">Desempenho</span>
             </a>
+            
             <div class="heading-home">Configurações</div>
-            <a mat-list-item routerLink="/usuario/meu-perfil">
-                <img src="assets/imagens/perfil.svg" alt="Ícone de Inspeções" class="icon">
+            <a mat-list-item routerLink="/usuario/meu-perfil" routerLinkActive="active-link">
+                <img src="assets/imagens/perfil.svg" alt="Ícone de Meu Perfil" class="icon">
                 <span class="ml-2">Meu Perfil</span>
             </a>
 
@@ -56,7 +55,6 @@
             </div>
 
         </mat-nav-list>
-
     </mat-drawer>
     <mat-drawer-content>
         <div class="mat-drawer-content">

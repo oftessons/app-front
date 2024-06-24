@@ -8,6 +8,7 @@ import { PageQuestoesComponent } from './page-questoes/page-questoes.component';
 import { PageFiltroComponent } from './page-filtro/page-filtro.component';
 import { PageDesempenhoComponent } from './page-desempenho/page-desempenho.component';
 import { CadastroQuestaoComponent } from './cadastro-questao/cadastro-questao.component';
+import { ListaQuestoesComponent } from './lista-questoes/lista-questoes.component';
 
 const routes: Routes = [
   {path:'usuario', component: LayoutComponent,  canActivate: [AuthGuard], children:[
@@ -18,6 +19,7 @@ const routes: Routes = [
     {path:'meu-perfil', component: PageMeuPerfilComponent},
     {path:'cadastro-questao', component: CadastroQuestaoComponent},
     {path:'cadastro-questao/:id', component: CadastroQuestaoComponent},
+    {path:'buscar-questão', component: ListaQuestoesComponent}
   ]}
 ];
 

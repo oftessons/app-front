@@ -1,0 +1,42 @@
+.container {
+    max-width: 1300px;
+    padding: 10px;
+    font-family: 'Nunito Sans', sans-serif;
+}
+
+.text-p{
+    font-size: 20px;
+    margin-top: 10px;
+    font-family: 'Nunito Sans', sans-serif;
+}
+
+.consulta-form {
+    background-color: #f2f2f2; /* Fundo cinza claro */
+    border: 1px solid #ddd; /* Borda cinza */
+    padding: 20px; /* Espaçamento interno */
+    border-radius: 5px; /* Borda arredondada */
+}
+  
+.consulta-form .form-control {
+    width: 100%; /* Largura total */
+}
+  
+.consulta-form .btn-buscar {
+    width: 100%; /* Largura total */
+}
+  
+@media (max-width: 768px) {
+    .consulta-form .col-md-4 {
+      margin-bottom: 10px; /* Espaçamento inferior reduzido em telas menores */
+    }
+}
+
+/* Definindo a largura total e a margem superior apenas em telas maiores */
+@media (min-width: 992px) {
+    .consulta-form .btn-buscar {
+      width: 100%;
+      margin-top: 27px;
+    }
+  }
+  
+  
