@@ -7,5 +7,5 @@ export const AnoDescricoes: Record<Ano, string> = {
   [Ano.ANO_2021]: '2021',
   [Ano.ANO_2022]: '2022',
   [Ano.ANO_2023]: '2023',
-  [Ano.ANO_2024]: '2024',
+  [Ano.ANO_2024]: 'ANO_2024',
 };
