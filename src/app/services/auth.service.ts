@@ -35,6 +35,10 @@ export class AuthService {
     localStorage.removeItem('access_token')
   }
 
+  forgotPassword(email: string): Observable<any> {
+    return this.http.post(`${this.apiURL}/forgot-password`, { email });
+  }
+
 
   obterUsuarioAutenticadoDoBackend(): Observable<Usuario> {
      return this.http.get<Usuario>(`${this.apiURL}/perfil`);

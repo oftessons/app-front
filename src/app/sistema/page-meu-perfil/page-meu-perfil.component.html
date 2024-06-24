@@ -8,40 +8,49 @@
       <div class="profile-photo-container">
         <img [src]="usuario.fotoUrl || 'assets/imagens/foto.svg'" alt="Foto do Usuário" class="profile-photo">
         <div *ngIf="editMode" class="profile-photo-upload">
-          <input type="file" (change)="onFileSelected($event)" />
+          <label for="file-upload" class="custom-file-upload">
+            Escolher Foto
+          </label>
+          <input id="file-upload" type="file" (change)="onFileSelected($event)" />
         </div>
       </div>
       <div class="profile-info">
         <h2>Meu Perfil</h2>
-        <div>
-          <strong>Username:</strong>
-          <span *ngIf="!editMode">{{ usuario.username }}</span>
-          <input *ngIf="editMode" [(ngModel)]="usuario.username" />
+        <div class="input-group">
+          <strong>Username: </strong>
+          <span *ngIf="!editMode"> {{ usuario.username }}</span>
+          <input *ngIf="editMode" [(ngModel)]="usuario.username" class="form-control" />
         </div>
-        <div>
-          <strong>E-mail:</strong>
-          <span *ngIf="!editMode">{{ usuario.email }}</span>
-          <input *ngIf="editMode" [(ngModel)]="usuario.email" />
+        <div class="input-group">
+          <strong>Nome: </strong>
+          <span *ngIf="!editMode"> {{ usuario.nome }}</span>
+          <input *ngIf="editMode" [(ngModel)]="usuario.nome" class="form-control" />
         </div>
-        <div>
-          <strong>Telefone:</strong>
-          <span *ngIf="!editMode">{{ usuario.telefone }}</span>
-          <input *ngIf="editMode" [(ngModel)]="usuario.telefone" />
+        <div class="input-group">
+          <strong>E-mail: </strong>
+          <span *ngIf="!editMode"> {{ usuario.email }}</span>
+          <input *ngIf="editMode" [(ngModel)]="usuario.email" class="form-control" />
         </div>
-        <div>
-          <strong>Cidade:</strong>
-          <span *ngIf="!editMode">{{ usuario.cidade }}</span>
-          <input *ngIf="editMode" [(ngModel)]="usuario.cidade" />
+        <div class="input-group">
+          <strong>Telefone: </strong>
+          <span *ngIf="!editMode"> {{ usuario.telefone }}</span>
+          <input *ngIf="editMode" [(ngModel)]="usuario.telefone" class="form-control" />
         </div>
-        <div>
-          <strong>Estado:</strong>
-          <span *ngIf="!editMode">{{ usuario.estado }}</span>
-          <input *ngIf="editMode" [(ngModel)]="usuario.estado" />
+        <div class="input-group">
+          <strong>Cidade: </strong>
+          <span *ngIf="!editMode"> {{ usuario.cidade }}</span>
+          <input *ngIf="editMode" [(ngModel)]="usuario.cidade" class="form-control" />
+        </div>
+        <div class="input-group">
+          <strong>Estado: </strong>
+          <span *ngIf="!editMode"> {{ usuario.estado }}</span>
+          <input *ngIf="editMode" [(ngModel)]="usuario.estado" class="form-control" />
         </div>
       </div>
     </div>
     <div class="profile-actions">
-      <button (click)="editarPerfil()" class="btn">{{ editMode ? 'Salvar' : 'Editar' }}</button>
+      <button (click)="voltarPerfil()" class="btn btn-secondary btn-small">Voltar</button>
+      <button (click)="editarPerfil()" class="btn btn-primary btn-small">{{ editMode ? 'Salvar' : 'Editar' }}</button>
     </div>
   </div>
 </div>

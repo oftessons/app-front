@@ -17,6 +17,33 @@
     font-size: 13px;
 }
 
+.text-primary {
+    margin-top: 5px;
+    color: #000000; /* Cor primária desejada */
+    font-size: 13px;
+    font-weight: 200px;
+    font-weight: 700;
+}
+
+.form-group-senha {
+    margin-bottom: 20px; /* Ajuste a margem inferior conforme necessário */
+}
+
+.form-group-senha .form-control {
+    border-color: #ced4da; /* Cor da borda do campo de entrada */
+    border-radius: 10px; /* Raio do canto da borda */
+    padding: 12px; /* Ajuste do preenchimento interno */
+    font-size: 16px; /* Tamanho da fonte */
+    color: #495057; /* Cor do texto */
+    height: 50px;
+}
+
+.form-group-senha .senha {
+    font-weight: bold; /* Texto em negrito */
+    text-transform: uppercase; /* Transformação de texto para maiúsculas */
+}
+
+
 .form-control,
 .btn-lg {
   width: 100%;
@@ -41,7 +68,6 @@
 
 .form-group {
     margin-bottom: 0.1rem;
-    display: flex;
     flex-direction: column;
     align-items: start;
     width: 100%; 
@@ -108,10 +134,30 @@
 }
 
 .text-center{
-    color: #fff;
+    color: #000000;
     font-family: 'Nunito Sans', sans-serif;
     font-weight: bold;
+    font-size: 15px;
+    align-items: center;
 }
+
+.btn-success {
+    background-color: #28a745; /* Cor de fundo para o botão Enviar */
+    border-color: #28a745; /* Cor da borda para o botão Enviar */
+    color: #fff; /* Cor do texto para o botão Enviar */
+}
+
+.btn-danger {
+    background-color: #dc3545; /* Cor de fundo para o botão Cancelar */
+    border-color: #dc3545; /* Cor da borda para o botão Cancelar */
+    color: #fff; /* Cor do texto para o botão Cancelar */
+}
+
+.btn-lg {
+    padding: 10px 20px; /* Ajuste o padding conforme necessário */
+    font-size: 17px; /* Ajuste o tamanho da fonte conforme necessário */
+}
+
 
 input::placeholder {
     color: rgb(118, 118, 118);
