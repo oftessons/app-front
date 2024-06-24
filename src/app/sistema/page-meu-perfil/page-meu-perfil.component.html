@@ -14,11 +14,6 @@
       <div class="profile-info">
         <h2>Meu Perfil</h2>
         <div>
-          <strong>Nome:</strong>
-          <span *ngIf="!editMode">{{ usuario.nome }}</span>
-          <input *ngIf="editMode" [(ngModel)]="usuario.nome" />
-        </div>
-        <div>
           <strong>Username:</strong>
           <span *ngIf="!editMode">{{ usuario.username }}</span>
           <input *ngIf="editMode" [(ngModel)]="usuario.username" />
@@ -32,21 +27,6 @@
           <strong>Telefone:</strong>
           <span *ngIf="!editMode">{{ usuario.telefone }}</span>
           <input *ngIf="editMode" [(ngModel)]="usuario.telefone" />
-        </div>
-        <div>
-          <strong>CPF:</strong>
-          <span *ngIf="!editMode">{{ usuario.cpf }}</span>
-          <input *ngIf="editMode" [(ngModel)]="usuario.cpf" />
-        </div>
-        <div>
-          <strong>Rua:</strong>
-          <span *ngIf="!editMode">{{ usuario.rua }}</span>
-          <input *ngIf="editMode" [(ngModel)]="usuario.rua" />
-        </div>
-        <div>
-          <strong>Número:</strong>
-          <span *ngIf="!editMode">{{ usuario.numero }}</span>
-          <input *ngIf="editMode" [(ngModel)]="usuario.numero" />
         </div>
         <div>
           <strong>Cidade:</strong>

@@ -1,5 +1,18 @@
 <div class="container pt-5">
     <div class="container mt-4">
-        <h1 class="mt-4"> <span> | </span> Meus Filtros</h1>
+      <h1 class="mt-4">Meus Filtros</h1>
+      <div *ngIf="filtros.length > 0; else noFilters">
+        <div *ngFor="let filtro of filtros" class="card mt-3">
+          <div class="card-body">
+            <h5 class="card-title">{{ filtro.nome }}</h5>
+            <p class="card-text">Ano: {{ filtro.ano }}, Dificuldade: {{ filtro.dificuldade }}, Tipo de Prova: {{ filtro.tipoDeProva }}</p>
+            <button class="btn btn-danger" (click)="deletarFiltro(filtro.id)">Deletar</button>
+          </div>
+        </div>
+      </div>
+      <ng-template #noFilters>
+        <p>Nenhum filtro salvo.</p>
+      </ng-template>
     </div>
-</div>
+  </div>
+  

@@ -1,7 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { MatSidenav } from '@angular/material/sidenav';
-
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 
@@ -12,29 +11,25 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class NavbarComponent {
   @ViewChild('sidenav') sidenav!: MatSidenav;
-
   usuarioLogado!: string;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
     private authService: AuthService,
     private router: Router
-    ) { }
+  ) { }
 
   ngOnInit(): void {
     this.usuarioLogado = this.authService.getUsuarioAutenticado();
-    localStorage.setItem("usuarioLogado",this.usuarioLogado);
   }
 
-  logout(){
+  logout() {
     this.authService.encerrarSessao();
-    this.router.navigate(['/login'])
+    this.router.navigate(['/login']);
   }
 
-
-  toggleSidenav(){
-     this.sidenav.toggle();
-     console.log(this.sidenav.opened)
+  toggleSidenav() {
+    this.sidenav.toggle();
   }
 
   isSidenavOpen() {
@@ -43,5 +38,9 @@ export class NavbarComponent {
 
   getSidenavMode() {
     return this.breakpointObserver.isMatched('(min-width: 901px)') ? 'side' : 'over';
+  }
+
+  isActive(route: string): boolean {
+    return this.router.isActive(route, true);
   }
 }

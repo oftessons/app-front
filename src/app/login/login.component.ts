@@ -16,9 +16,6 @@ export class LoginComponent {
   email!: string;
   nome!: string;
   telefone!: string;
-  cpf!: string;
-  rua!: string;
-  numero!: string;
   cidade!: string;
   estado!: string;
   cadastrando!: boolean;

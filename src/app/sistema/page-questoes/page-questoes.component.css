@@ -228,3 +228,26 @@
     }
   }
   
+
+  /* Estilos para o card de confirmação */
+.card-confirmacao {
+  max-width: 400px;
+  margin: 20px auto;
+}
+
+.card-confirmacao .card-body {
+  padding: 20px;
+}
+
+.card-confirmacao .card-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.card-confirmacao .card-text {
+  margin-bottom: 20px;
+}
+
+.card-confirmacao .btn {
+  margin-right: 10px;
+}

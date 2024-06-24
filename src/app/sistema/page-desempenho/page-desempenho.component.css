@@ -1,6 +1,6 @@
 .container {
     max-width: 1300px;
-    padding: 10px;
+    padding: 6px;
     font-family: 'Nunito Sans', sans-serif;
 }
 
@@ -29,29 +29,27 @@
 }
 
 .chart-container {
-    align-items: center;
-    width: 80%; 
-    height: 80%;
-  }
-  
+    width: 80%; /* Alterado para 100% para garantir que o container do gráfico ocupe todo o espaço disponível */
+    padding: 10px;
+    background-color: #f2f2f2;
+    border: 2px solid #8C8E94;
+    border-radius: 5px;
+    margin-bottom: 20px; /* Ajustado para separar os containers de gráfico */
+}
+
+
 @media (min-width: 768px) {
     .col-md-6 {
       flex: 0 0 50%;
       max-width: 50%;
     }
 }
-  
-h3 {
-    text-align: center;
-    margin-bottom: 20px;
-}
-  
+
 .chart-container {
-    background-color: #b1b4bc;
-    border: 2px solid #333231; 
+    background-color: #f2f2f2;
+    border: 2px solid #8C8E94; 
     border-radius: 5px;
     padding: 10px;
-    margin-bottom: 20px;
 }
 
 canvas {

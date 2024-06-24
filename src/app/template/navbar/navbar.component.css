@@ -123,9 +123,16 @@
     color: #0F1934;
 }
 
+.active-link {
+    background-color: #cfe2ff; 
+    font-weight: bold; 
+    color: #040404; 
+}
+
+
 .mat-drawer-sidenav{
     width: 200px;
-    background-color: #b1b4bc;
+    background-color: #f2f2f2;
     overflow-x: hidden;
     margin-top: 15px;
     font-family: 'Nunito Sans', sans-serif;

@@ -14,6 +14,7 @@ import { ChartsModule } from 'ng2-charts';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { CadastroQuestaoComponent } from './cadastro-questao/cadastro-questao.component';
 import {MatRadioModule} from '@angular/material/radio';
+import { ListaQuestoesComponent } from './lista-questoes/lista-questoes.component';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import {MatRadioModule} from '@angular/material/radio';
     PageMeuPerfilComponent,
     PageQuestoesComponent,
     PageFiltroComponent,
-    CadastroQuestaoComponent
+    CadastroQuestaoComponent,
+    ListaQuestoesComponent
   ],
   imports: [
     CommonModule,
