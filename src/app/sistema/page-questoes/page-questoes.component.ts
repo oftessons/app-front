@@ -29,12 +29,11 @@ export class PageQuestoesComponent implements OnInit {
   favoriteSeason!: string;
   seasons: string[] = ['A) I: V; II: V; III: V; IV: V.', 'B) I: F; II: F; III: V; IV: F.', 'C) I: F; II: F; III: F; IV: F.', 'D) I: V; II: V; III: F; IV: V.'];
 
-
-  selectedAno!: Ano; // Inicialize com null ou com um valor padrão
-  selectedDificuldade!: Dificuldade; // Inicialize com null ou com um valor padrão
-  selectedTipoDeProva!: TipoDeProva; // Inicialize com null ou com um valor padrão
-  selectedSubtema!: Subtema; // Inicialize com null ou com um valor padrão
-  selectedTema!: Tema; // Inicialize com null ou com um valor padrão
+  selectedAno!: Ano;
+  selectedDificuldade!: Dificuldade;
+  selectedTipoDeProva!: TipoDeProva;
+  selectedSubtema!: Subtema;
+  selectedTema!: Tema;
   palavraChave: string = '';
 
   questoes: Questao[] = [];
@@ -68,6 +67,22 @@ export class PageQuestoesComponent implements OnInit {
     return getDescricaoTema(tema);
   }
 
+  filtrarGeral(): void {
+    this.questoesService.obterTodasQuestoes().subscribe(
+      (questoes: Questao[]) => {
+        console.log('Questões retornadas:', questoes); // Verifique se questoes está populado
+        this.questoes = questoes;
+        this.isFiltered = false; // Defina como false para limpar a mensagem de "Nenhum resultado encontrado."
+        this.p = 1; // Reinicia a paginação para a primeira página
+      },
+      (error) => {
+        console.error('Erro ao obter todas as questões.', error);
+        // Adicione lógica para tratamento de erro aqui, se necessário
+      }
+    );
+  }
+  
+
   filtrarQuestoes(): void {
     const filtro: any = {
       ano: this.selectedAno,
@@ -78,7 +93,7 @@ export class PageQuestoesComponent implements OnInit {
       palavraChave: this.palavraChave
     };
 
-    this.questoesService.filtrarQuestoes(filtro).subscribe(
+    this.questoesService.filtrarQuestoes(filtro, this.p - 1, 10).subscribe(
       (questoes: Questao[]) => {
         this.questoes = questoes;
         this.isFiltered = true;

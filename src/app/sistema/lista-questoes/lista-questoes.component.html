@@ -11,7 +11,7 @@
               <div class="col-md-4 mb-3">
                 <label for="selectAno">Ano:</label>
                 <select class="form-control" id="selectAno" name="selectedAno" [(ngModel)]="selectedAno">
-                  <option *ngFor="let ano of anos" [ngValue]="ano">{{ getDescricaoAno(ano) }}</option>
+                  <option *ngFor="let ano of anos" [ngValue]="ano"></option>
                 </select>
               </div>
               <div class="col-md-4 mb-3">
@@ -65,7 +65,7 @@
               </tr>
             </tbody>
           </table>
-          <pagination-controls [previousLabel]="'Anterior'" [nextLabel]="'Próximo'" (pageChange)="trocarPagina($event)"></pagination-controls>
+          <pagination-controls [previousLabel]="'Anterior'" [nextLabel]="'Próximo'" ></pagination-controls>
         </div>
       </div>
     </div>
