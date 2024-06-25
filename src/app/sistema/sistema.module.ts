@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { SistemaRoutingModule } from './sistema-routing.module';
@@ -36,6 +36,8 @@ import { ListaQuestoesComponent } from './lista-questoes/lista-questoes.componen
     MatRadioModule,
     ChartsModule,
     NgxPaginationModule
+  ] , schemas: [
+    CUSTOM_ELEMENTS_SCHEMA// Add NO_ERRORS_SCHEMA here
   ]
 })
 export class SistemaModule { }

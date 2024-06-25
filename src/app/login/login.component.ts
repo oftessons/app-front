@@ -61,6 +61,7 @@ export class LoginComponent {
     const usuario: Usuario = new Usuario();
     usuario.username = this.username;
     usuario.password = this.password;
+    usuario.nome = this.nome;
     usuario.email = this.email;
     usuario.telefone = this.telefone;
     usuario.cidade = this.cidade;
@@ -71,6 +72,7 @@ export class LoginComponent {
         this.mensagemSucesso = 'Cadastro realizado com sucesso! Efetue o login.';
         this.cadastrando = false;
         this.username = '';
+        this.nome = '';
         this.password = '';
         this.email = '';
         this.telefone = '';

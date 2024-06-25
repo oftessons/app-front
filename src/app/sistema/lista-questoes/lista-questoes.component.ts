@@ -3,6 +3,8 @@ import { QuestoesService } from 'src/app/services/questoes.service';
 import { Questao } from '../page-questoes/questao';
 import { Ano } from '../page-questoes/enums/ano';
 import { TipoDeProva } from '../page-questoes/enums/tipoDeProva';
+import { PageEvent } from '@angular/material/paginator';
+
 
 @Component({
   selector: 'app-lista-questoes',
@@ -11,7 +13,7 @@ import { TipoDeProva } from '../page-questoes/enums/tipoDeProva';
 })
 export class ListaQuestoesComponent implements OnInit {
   questoes: Questao[] = [];
-  anos: Ano[] = [Ano.ANO_2020, Ano.ANO_2019, Ano.ANO_2018]; // Exemplo de anos, substituir pelos anos reais
+  anos: Ano[] = [];// Exemplo de anos, substituir pelos anos reais
   tiposDeProva: string[] = ['Tipo 1', 'Tipo 2', 'Tipo 3']; // Exemplo de tipos de prova, substituir pelos tipos reais
   selectedAno!: Ano;
   selectedTipoDeProva!: string;
@@ -92,17 +94,5 @@ export class ListaQuestoesComponent implements OnInit {
     // }
   }
 
-  // Funções para obter descrições dos filtros selecionados (pode ser necessário ajustar dependendo da implementação real)
-  getDescricaoAno(ano: Ano): string {
-    return Ano[ano]; // Retorna a descrição do enum (exemplo)
-  }
-
-  getDescricaoTipoDeProva(tipoDeProva: string): string {
-    return tipoDeProva; // Retorna a descrição do tipo de prova (exemplo)
-  }
-
-  // Função para trocar a página da paginação
-  trocarPagina(event: number): void {
-    this.p = event;
-  }
+  
 }

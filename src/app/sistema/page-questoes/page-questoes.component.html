@@ -1,131 +1,126 @@
 <div class="container pt-5">
-    <div class="container mt-4">
-      <div class="header">
-        <h1 class="mt-4"><span> | </span> Questões</h1>
-        <button class="btn-filtros" routerLink="/usuario/filtro">
-          <img src="assets/imagens/q-f.svg" alt="Ícone do Filtro" class="icon">
-          Filtros
-        </button>
+  <div class="container mt-4">
+    <div class="header">
+      <h1 class="mt-4"><span> | </span> Questões</h1>
+      <button class="btn-filtros" routerLink="/usuario/filtro">
+        <img src="assets/imagens/q-f.svg" alt="Ícone do Filtro" class="icon">
+        Filtros
+      </button>
+    </div>
+  </div>
+
+  <div class="filters-container">
+    <div class="row">
+      <div class="col col-12 col-md-6">
+        <mat-form-field appearance="fill" class="custom-form-field">
+          <mat-label>Ano</mat-label>
+          <mat-select [(value)]="selectedAno">
+            <mat-option *ngFor="let ano of anos" [value]="ano">{{ ano }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col col-12 col-md-6">
+        <mat-form-field appearance="fill" class="custom-form-field">
+          <mat-label>Dificuldade</mat-label>
+          <mat-select [(value)]="selectedDificuldade">
+            <mat-option *ngFor="let dificuldade of dificuldades" [value]="dificuldade">
+              {{ getDescricaoDificuldade(dificuldade) }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
     </div>
-  
-    <div class="filters-container">
-      <div class="row">
-        <div class="col col-12 col-md-6">
-          <mat-form-field appearance="fill" class="custom-form-field">
-            <mat-label>Ano</mat-label>
-            <mat-select [(value)]="selectedAno">
-              <mat-option *ngFor="let ano of anos" [value]="ano">{{ ano }}</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="col col-12 col-md-6">
-          <mat-form-field appearance="fill" class="custom-form-field">
-            <mat-label>Dificuldade</mat-label>
-            <mat-select [(value)]="selectedDificuldade">
-              <mat-option *ngFor="let dificuldade of dificuldades" [value]="dificuldade">
-                {{ getDescricaoDificuldade(dificuldade) }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
+    <div class="row">
+      <div class="col col-12 col-md-6">
+        <mat-form-field appearance="fill" class="custom-form-field">
+          <mat-label>Tipo de Prova</mat-label>
+          <mat-select [(value)]="selectedTipoDeProva">
+            <mat-option *ngFor="let tipoDeProva of tiposDeProva" [value]="tipoDeProva">
+              {{ getDescricaoTipoDeProva(tipoDeProva) }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
-      <div class="row">
-        <div class=" col col-12 col-md-6">
-          <mat-form-field appearance="fill" class="custom-form-field">
-            <mat-label>Tipo de Prova</mat-label>
-            <mat-select [(value)]="selectedTipoDeProva">
-              <mat-option *ngFor="let tipoDeProva of tiposDeProva" [value]="tipoDeProva">
-                {{ getDescricaoTipoDeProva(tipoDeProva) }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="col col-12 col-md-6">
-          <mat-form-field appearance="fill" class="custom-form-field">
-            <mat-label>Subtema</mat-label>
-            <mat-select [(value)]="selectedSubtema">
-              <mat-option *ngFor="let subtema of subtemas" [value]="subtema">
-                {{ getDescricaoSubtema(subtema) }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col col-12 col-md-6">
-            <mat-form-field appearance="fill" class="custom-form-field">
-                <mat-label>Tema</mat-label>
-                <mat-select [(value)]="selectedTema">
-                  <mat-option *ngFor="let tema of temas" [value]="tema">
-                    {{ getDescricaoTema(tema) }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>              
-        </div>
-        <div class="col col-12 col-md-6">
-          <mat-form-field appearance="fill" class="palavra-chave">
-            <mat-label>Pesquisar por palavra-chave</mat-label>
-            <input matInput placeholder="Pesquisar por palavra-chave" [(ngModel)]="palavraChave">
-          </mat-form-field>
-        </div>
-      </div>
-      <div class="button-row">
-        <button class="btn-salvar"  (click)="abrirCardConfirmacao(filtros[0])">Salvar Filtro</button>
-        <button class="btn-filtrar" (click)="filtrarQuestoes()">Filtrar</button>
+      <div class="col col-12 col-md-6">
+        <mat-form-field appearance="fill" class="custom-form-field">
+          <mat-label>Subtema</mat-label>
+          <mat-select [(value)]="selectedSubtema">
+            <mat-option *ngFor="let subtema of subtemas" [value]="subtema">
+              {{ getDescricaoSubtema(subtema) }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
     </div>
+    <div class="row">
+      <div class="col col-12 col-md-6">
+        <mat-form-field appearance="fill" class="custom-form-field">
+          <mat-label>Tema</mat-label>
+          <mat-select [(value)]="selectedTema">
+            <mat-option *ngFor="let tema of temas" [value]="tema">
+              {{ getDescricaoTema(tema) }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col col-12 col-md-6">
+        <mat-form-field appearance="fill" class="palavra-chave">
+          <mat-label>Pesquisar por palavra-chave</mat-label>
+          <input matInput placeholder="Pesquisar por palavra-chave" [(ngModel)]="palavraChave">
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="button-row">
+      <button class="btn-salvar" (click)="abrirCardConfirmacao(filtros[0])">Salvar Filtro</button>
+      <button class="btn-filtrar" (click)="filtrarQuestoes()">Filtrar</button>
+      <button class="btn-filtrar" (click)="filtrarGeral()">Filtro Geral</button>
+    </div>
+  </div>
 
   <!-- Card de confirmação -->
-<div class="card card-confirmacao" *ngIf="mostrarCardConfirmacao">
-  <div class="card-body">
-    <h5 class="card-title">Salvar Filtro</h5>
-    <p class="card-text">Tem certeza que deseja salvar o filtro?</p>
-    <button class="btn btn-success" (click)="confirmarSalvarFiltro()">Confirmar</button>
-    <button class="btn btn-secondary" (click)="fecharCardConfirmacao()">Cancelar</button>
+  <div class="card card-confirmacao" *ngIf="mostrarCardConfirmacao">
+    <div class="card-body">
+      <h5 class="card-title">Salvar Filtro</h5>
+      <p class="card-text">Tem certeza que deseja salvar o filtro?</p>
+      <button class="btn btn-success" (click)="confirmarSalvarFiltro()">Confirmar</button>
+      <button class="btn btn-secondary" (click)="fecharCardConfirmacao()">Cancelar</button>
+    </div>
   </div>
-</div>
-  
-    <div *ngIf="isFiltered" class="container mt-4">
-      <div class="identificadores-questao-resul">
-        <h2 class="h2">Resultados da Filtragem</h2>
-        </div>
-        <div *ngIf="questoes && questoes.length > 0; else noResults">
-          <div *ngFor="let questao of questoes | paginate: { itemsPerPage: 1, currentPage: p }; let i = index">
-            <div class="questao">
-              <div class="identificadores-questao">
-               
-                <h3>{{ questao.title }}</h3>
-                <h3>{{ questao.id }}</h3>
-                <h3>{{ questao.tema }}</h3>
-                <h3>{{ questao.dificuldade }}</h3>
-                <h3>{{ questao.ano }}</h3>
-              </div>
-              <div class="conteudo-questao">
-                <p>{{ questao.enunciadoDaQuestao }}</p>
-                <img *ngIf="questao.fotoDaQuestao" [src]="questao.fotoDaQuestao" alt="Foto da questão" class="questao-foto">
-                <p>{{ questao.afirmacaoUm }}</p>
-                <p>{{ questao.afirmacaoDois }}</p>
-                <p>{{ questao.afirmacaoTres }}</p>
-                <p>{{ questao.afirmacaoQuatro }}</p>
-                <p>{{ questao.assinale }}</p>
-               
 
-                
-
-                <div class="button-row">
-                    <button class="btn-salvar">Responder</button>
-                    <button class="btn-filtrar" (click)="filtrarQuestoes()">Próxima</button>
-                </div>
-              </div>
+  <!-- Exibição dos Resultados -->
+  <div *ngIf="isFiltered" class="container mt-4">
+    <div class="identificadores-questao-resul">
+      <h2 class="h2">Resultados da Filtragem</h2>
+    </div>
+    <div *ngIf="questoes && questoes.length > 0; else noResults">
+      <div *ngFor="let questao of questoes; let i = index">
+        <div class="questao">
+          <div class="identificadores-questao">
+            <h3>{{ questao.title }}</h3>
+            <h3>{{ questao.id }}</h3>
+            <h3>{{ questao.tema }}</h3>
+            <h3>{{ questao.dificuldade }}</h3>
+            <h3>{{ questao.ano }}</h3>
+          </div>
+          <div class="conteudo-questao">
+            <p>{{ questao.enunciadoDaQuestao }}</p>
+            <img *ngIf="questao.fotoDaQuestao" [src]="questao.fotoDaQuestao" alt="Foto da questão" class="questao-foto">
+            <p>{{ questao.afirmacaoUm }}</p>
+            <p>{{ questao.afirmacaoDois }}</p>
+            <p>{{ questao.afirmacaoTres }}</p>
+            <p>{{ questao.afirmacaoQuatro }}</p>
+            <p>{{ questao.assinale }}</p>
+            <div class="button-row">
+              <button class="btn-salvar">Responder</button>
+              <button class="btn-filtrar" (click)="filtrarQuestoes()">Próxima</button>
             </div>
           </div>
-          <pagination-controls [previousLabel]="'Anterior'" [nextLabel]="'Próximo'" (pageChange)="p = $event"></pagination-controls>
         </div>
-        <ng-template #noResults>
-          <p>Nenhum resultado encontrado.</p>
-        </ng-template>
       </div>
-      
+      <pagination-controls [previousLabel]="'Anterior'" [nextLabel]="'Próximo'" (pageChange)="p = $event"></pagination-controls>
+    </div>
+    <ng-template #noResults>
+      <p>Nenhum resultado encontrado.</p>
+    </ng-template>
   </div>
-  
+</div>

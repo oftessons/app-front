@@ -13,21 +13,17 @@ export class QuestoesService {
   
   apiURL: string = environment.apiURLBase + '/api/questoes';
   constructor(private http: HttpClient) { }
-  
-  salvar( questao: Questao ) : Observable<Questao> {
-    return this.http.post<Questao>( `${this.apiURL}`, questao);
+   
+  salvar(formData: FormData): Observable<any> {
+    return this.http.post<any>(`${this.apiURL}/cadastro`, formData);
   }
 
-  atualizar(questao: Questao): Observable<any> {
-    return this.http.put<Questao>(`${this.apiURL}/${questao.id}`, questao).pipe(
-      catchError(error => throwError(error))
-    );
+  atualizar(formData: FormData, id: number): Observable<any> {
+    return this.http.put<any>(`${this.apiURL}/cadastro/${id}`, formData);
   }
 
   getQuestaoById(id: number): Observable<Questao> {
-    return this.http.get<Questao>(`${this.apiURL}/${id}`).pipe(
-      catchError(error => throwError(error))
-    );
+    return this.http.get<Questao>(`${this.apiURL}/questoes/${id}`);
   }
 
   deletar(questao: Questao): Observable<any> {
@@ -36,13 +32,11 @@ export class QuestoesService {
     );
   }
 
-  getQuestoesByAno(ano: Ano): Observable<Questao[]> {
-    return this.http.get<Questao[]>(`${this.apiURL}/ano/${ano}`).pipe(
-      catchError(error => throwError(error))
-    );
+  obterTodasQuestoes(): Observable<Questao[]> {
+    return this.http.get<Questao[]>(`${this.apiURL}/todas`);
   }
-  
-  filtrarQuestoes(filtros: any): Observable<Questao[]> {
+
+  filtrarQuestoes(filtros: any, page: number = 0, size: number = 10): Observable<Questao[]> {
     const url = `${this.apiURL}/filtro`;
     let params = new HttpParams();
 
@@ -52,6 +46,10 @@ export class QuestoesService {
         params = params.set(filtro, filtros[filtro]);
       }
     }
+
+    // Adicione os parâmetros de paginação
+    params = params.set('page', page.toString());
+    params = params.set('size', size.toString());
 
     return this.http.get<Questao[]>(url, { params }).pipe(
       catchError(error => throwError('Erro ao tentar obter as questões.'))

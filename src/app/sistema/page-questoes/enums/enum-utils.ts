@@ -8,7 +8,12 @@ import { Dificuldade } from "./dificuldade"
 import { DificuldadeDescricoes } from "./dificuldade-descricao" 
 import { Ano } from "./ano"
 import { AnoDescricoes } from "./ano-descricoes" 
+import { Relevancia } from "./relevancia"
+import { RelevanciaDescricao } from "./relevancia-descricao"
 
+export function getDescricaoRelevancia(relevancia: Relevancia): string{
+  return RelevanciaDescricao[relevancia];
+}
 export function getDescricaoAno(ano: Ano): string {
   return AnoDescricoes[ano];
 }

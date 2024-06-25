@@ -1,5 +1,5 @@
 export enum Relevancia {
-    Relevancia_1 = '1',
+    RELEVANCIA_1 = 'RELEVANCIA_1',
     Relevancia_2 = '2',
     Relevancia_3 = '3',
     Relevancia_4 = '4',
