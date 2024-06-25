@@ -2,7 +2,6 @@ import { Tema } from "./tema";
 
 export const TemaDescricoes: Record<Tema, string> = {
   [Tema.LENTES_DE_CONTATO]: 'Lentes de Contato',
-  [Tema.OFTALMOLOGIA_GERAL]: 'Oftalmologia Geral',
   [Tema.CORNEA_CONJUNTIVA_E_ESCLERA]: 'Córnea, Conjuntiva e Esclera',
   [Tema.RETINA]: 'Retina',
   [Tema.GLAUCOMA]: 'Glaucoma',

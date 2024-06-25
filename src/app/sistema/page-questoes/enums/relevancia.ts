@@ -1,13 +1,13 @@
 export enum Relevancia {
     RELEVANCIA_1 = 'RELEVANCIA_1',
-    Relevancia_2 = '2',
-    Relevancia_3 = '3',
-    Relevancia_4 = '4',
-    Relevancia_5 = '5',
-    Relevancia_6 = '6',
-    Relevancia_7 = '7',
-    Relevancia_8 = '8',
-    Relevancia_9 = '9',
-    Relevancia_10 = '10'
+    RELEVANCIA_2 = 'RELEVANCIA_2',
+    RELEVANCIA_3 = 'RELEVANCIA_3',
+    RELEVANCIA_4 = 'RELEVANCIA_4',
+    RELEVANCIA_5 = 'RELEVANCIA_5',
+    RELEVANCIA_6 = 'RELEVANCIA_6',
+    RELEVANCIA_7 = 'RELEVANCIA_7',
+    RELEVANCIA_8 = 'RELEVANCIA_8',
+    RELEVANCIA_9 = 'RELEVANCIA_9',
+    RELEVANCIA_10 = 'RELEVANCIA_10'
 }
   

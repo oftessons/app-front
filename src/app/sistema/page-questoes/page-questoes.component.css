@@ -145,6 +145,18 @@
     border-radius: 5px;
     cursor: pointer;
   }
+
+  .btn-filtrar-geral{
+    margin-top: 12px;
+    padding: 10px 20px;
+    width: 230px;
+    background-color: #5d7196;
+    margin-right: 10px;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
   
   .btn-salvar {
     margin-top: 12px;

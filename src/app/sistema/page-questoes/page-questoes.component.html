@@ -15,7 +15,7 @@
         <mat-form-field appearance="fill" class="custom-form-field">
           <mat-label>Ano</mat-label>
           <mat-select [(value)]="selectedAno">
-            <mat-option *ngFor="let ano of anos" [value]="ano">{{ ano }}</mat-option>
+            <mat-option *ngFor="let ano of anos" [value]="ano">{{ getDescricaoAno(ano) }}</mat-option>
           </mat-select>
         </mat-form-field>
       </div>
@@ -71,9 +71,9 @@
       </div>
     </div>
     <div class="button-row">
+      <button class="btn-filtrar-geral" (click)="filtrarGeral()">Filtro Geral</button>
       <button class="btn-salvar" (click)="abrirCardConfirmacao(filtros[0])">Salvar Filtro</button>
       <button class="btn-filtrar" (click)="filtrarQuestoes()">Filtrar</button>
-      <button class="btn-filtrar" (click)="filtrarGeral()">Filtro Geral</button>
     </div>
   </div>
 
