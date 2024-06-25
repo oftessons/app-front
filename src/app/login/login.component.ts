@@ -1,8 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { Usuario } from './usuario';
 import { AuthService } from '../services/auth.service';
-
+import { Usuario } from './usuario';
 
 @Component({
   selector: 'app-login',
@@ -10,89 +9,116 @@ import { AuthService } from '../services/auth.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-
-  username!: string;
-  password!: string;
-  email!: string;
-  nome!: string;
-  telefone!: string;
-  cidade!: string;
-  estado!: string;
-  cadastrando!: boolean;
-  mensagemSucesso!: string;
-  errors!: String[];
+  username: string = '';
+  password: string = '';
+  nome: string = '';
+  email: string = '';
+  telefone: string = '';
+  cidade: string = '';
+  estado: string = '';
+  cadastrando: boolean = false;
+  mensagemSucesso: string = '';
+  errors: string[] = [];
   usuario: any;
+  forgotEmail: string = '';
+  showForgotPassword: boolean = false;
 
   constructor(
     private router: Router,
     private authService: AuthService
   ) {}
 
-  // ...
+  onSubmit() {
+    this.authService.tentarLogar(this.username, this.password).subscribe(
+      (response: any) => {
+        const access_token = JSON.stringify(response);
+        localStorage.setItem('access_token', access_token);
 
-onSubmit() {
-  this.authService.tentarLogar(this.username, this.password).subscribe(
-    (response: any) => {
+        const userId = this.authService.getUserIdFromToken();
+        localStorage.setItem('user_id', userId || '');
+        this.salvaUserLocal();
 
-      
-      const access_token = JSON.stringify(response);
-      localStorage.setItem('access_token', access_token);
-
-      // Obtenha o ID do usuário e armazene localmente
-      const userId = this.authService.getUserIdFromToken();
-
-      localStorage.setItem('user_id', userId || '');
-      this.salvaUserLocal();
-
-     // this.router.navigate(['/gerente/dashboard']);
-    },
-    errorResponse => {
-      this.errors = ['Usuário e/ou senha incorreto(s).'];
-    }
-  );
-}
-
-
-  preparaCadastrar(event: { preventDefault: () => void; }){
-    event.preventDefault();
-    this.cadastrando = true;
+        // Redireciona para a página de dashboard após o login
+        this.router.navigate(['/gerente/dashboard']);
+      },
+      errorResponse => {
+        this.errors = ['Usuário e/ou senha incorreto(s).'];
+      }
+    );
   }
 
-  cancelaCadastro(){
+  preparaCadastrar(event: Event) {
+    event.preventDefault();
+    this.cadastrando = true;
+    this.showForgotPassword = false; // Certifique-se de que o formulário de recuperação de senha está escondido
+  }
+
+  cancelaCadastro() {
     this.cadastrando = false;
   }
 
-  cadastrar(){
+  cadastrar() {
     const usuario: Usuario = new Usuario();
     usuario.username = this.username;
     usuario.password = this.password;
-    this.authService
-        .salvar(usuario)
-        .subscribe( response => {
-            this.mensagemSucesso = "Cadastro realizado com sucesso! Efetue o login.";
-            this.cadastrando = false;
-            this.username = '';
-            this.password = '';
-            this.errors = []
-        }, errorResponse => {
-            this.mensagemSucesso = "Cadastro realizado com sucesso! Efetue o login.";
-            this.errors = errorResponse.error.errors;
-        })
+    usuario.email = this.email;
+    usuario.telefone = this.telefone;
+    usuario.cidade = this.cidade;
+    usuario.estado = this.estado;
+    
+    this.authService.salvar(usuario).subscribe(
+      response => {
+        this.mensagemSucesso = 'Cadastro realizado com sucesso! Efetue o login.';
+        this.cadastrando = false;
+        this.username = '';
+        this.password = '';
+        this.email = '';
+        this.telefone = '';
+        this.cidade = '';
+        this.estado = '';
+        this.errors = [];
+      },
+      errorResponse => {
+        this.errors = errorResponse.error.errors;
+      }
+    );
   }
 
-  salvaUserLocal(){
+  salvaUserLocal() {
     this.authService.obterUsuarioAutenticadoDoBackend().subscribe(
       (usuario: Usuario) => {
         this.usuario = usuario;
-        localStorage.setItem("idUser",usuario.id);
+        localStorage.setItem('idUser', usuario.id);
         this.router.navigate(['/usuario/dashboard']);
-      localStorage.setItem("usuario",usuario.username);
+        localStorage.setItem('usuario', usuario.username);
       },
-      (error) => {
+      error => {
         console.error('Erro ao obter dados do usuário:', error);
       }
     );
-
   }
 
+  forgotPassword(event: Event) {
+    event.preventDefault();
+    this.showForgotPassword = true;
+    this.cadastrando = false; // Certifique-se de que o formulário de cadastro está escondido
+  }
+
+  sendForgotPasswordEmail() {
+    this.authService.forgotPassword(this.forgotEmail).subscribe(
+      (response: any) => {
+        this.mensagemSucesso = 'E-mail de recuperação de senha enviado com sucesso!';
+        this.showForgotPassword = false; // Opcional: esconde o formulário após o envio do email
+        this.forgotEmail = '';
+      },
+      error => {
+        this.errors = ['Erro ao enviar e-mail de recuperação de senha.'];
+      }
+    );
+  }
+
+  cancelForgotPassword() {
+    this.showForgotPassword = false;
+    this.forgotEmail = '';
+  }
 }

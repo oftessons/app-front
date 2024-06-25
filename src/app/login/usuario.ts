@@ -7,4 +7,5 @@ export class Usuario {
     telefone!: string;
     cidade!: string;
     estado!: string;
+    nome!: string;
 }

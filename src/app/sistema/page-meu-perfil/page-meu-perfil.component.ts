@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Usuario } from 'src/app/login/usuario';
 import { AuthService } from 'src/app/services/auth.service';
 
@@ -9,8 +9,8 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./page-meu-perfil.component.css']
 })
 export class PageMeuPerfilComponent implements OnInit {
-  usuario!: Usuario; // Variável para armazenar os dados do perfil do usuário
-  editMode: boolean = false; // Variável para controlar o modo de edição
+  usuario!: Usuario; 
+  editMode: boolean = false; 
 
   constructor(
     private router: Router,
@@ -34,9 +34,7 @@ export class PageMeuPerfilComponent implements OnInit {
 
   editarPerfil() {
     this.editMode = !this.editMode; // Alternar o modo de edição
-
     if (!this.editMode) {
-      // Salvar as alterações do perfil do usuário
       this.authService.atualizarUsuario(this.usuario).subscribe(
         (data) => {
           console.log('Perfil atualizado com sucesso:', data);
@@ -57,5 +55,9 @@ export class PageMeuPerfilComponent implements OnInit {
       };
       reader.readAsDataURL(file);
     }
+  }
+  
+  voltarPerfil(): void {
+    this.router.navigate(['/usuario/dashboard']);
   }
 }
