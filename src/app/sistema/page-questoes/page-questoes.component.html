@@ -72,20 +72,29 @@
     </div>
     <div class="button-row">
       <button class="btn-filtrar-geral" (click)="filtrarGeral()">Filtro Geral</button>
-      <button class="btn-salvar" (click)="abrirCardConfirmacao(filtros[0])">Salvar Filtro</button>
+      <button class="btn-salvar" (click)="abrirModal()">Salvar Filtro</button>
       <button class="btn-filtrar" (click)="filtrarQuestoes()">Filtrar</button>
     </div>
   </div>
 
-  <!-- Card de confirmação -->
-  <div class="card card-confirmacao" *ngIf="mostrarCardConfirmacao">
-    <div class="card-body">
-      <h5 class="card-title">Salvar Filtro</h5>
-      <p class="card-text">Tem certeza que deseja salvar o filtro?</p>
-      <button class="btn btn-success" (click)="confirmarSalvarFiltro()">Confirmar</button>
-      <button class="btn btn-secondary" (click)="fecharCardConfirmacao()">Cancelar</button>
+    <!-- Modal de confirmação -->
+    <div class="modal fade" id="confirmacaoModal" tabindex="-1" aria-labelledby="confirmacaoModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="confirmacaoModalLabel">Salvar Filtro</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            Tem certeza que deseja salvar o filtro?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-success" (click)="confirmarSalvarFiltro()">Confirmar</button>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
 
   <!-- Exibição dos Resultados -->
   <div *ngIf="isFiltered" class="container mt-4">

@@ -8,6 +8,7 @@ import { Subtema } from '../page-questoes/enums/subtema';
 import { Relevancia } from '../page-questoes/enums/relevancia';
 import { QuestoesService } from 'src/app/services/questoes.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { getDescricaoAno, getDescricaoDificuldade, getDescricaoSubtema, getDescricaoTema, getDescricaoTipoDeProva } from '../page-questoes/enums/enum-utils';
 
 @Component({
   selector: 'app-cadastro-questao',
@@ -102,28 +103,62 @@ export class CadastroQuestaoComponent implements OnInit {
 
     if (this.id) {
       this.questoesService.atualizar(formData, this.id).subscribe(
-        response => {
-          this.successMessage = 'Questão atualizada com sucesso!';
+        (response: any) => {
+          console.log('Resposta de sucesso:', response);
+          this.successMessage = response.message || 'Questão atualizada com sucesso!';
           this.errorMessage = null;
         },
         errorResponse => {
-          this.errorMessage = 'Erro ao atualizar a questão.';
+          console.error('Erro na resposta:', errorResponse);
+          this.errorMessage = this.extractErrorMessage(errorResponse);
           this.successMessage = null;
         }
       );
     } else {
       this.questoesService.salvar(formData).subscribe(
-        response => {
-          this.successMessage = 'Questão salva com sucesso!';
+        (response: any) => {
+          console.log('Resposta de sucesso:', response);
+          this.successMessage = response.message || 'Questão salva com sucesso!';
           this.errorMessage = null;
           this.questao = response;
         },
         errorResponse => {
-          this.errorMessage = 'Erro ao salvar a questão.';
+          console.error('Erro na resposta:', errorResponse);
+          this.errorMessage = this.extractErrorMessage(errorResponse);
           this.successMessage = null;
         }
       );
     }
+  }
+
+  extractErrorMessage(errorResponse: any): string {
+    if (errorResponse.error instanceof ErrorEvent) {
+      return `Erro: ${errorResponse.error.message}`;
+    } else if (errorResponse.error && errorResponse.error.message) {
+      return `Erro: ${errorResponse.error.message}`;
+    } else {
+      return `Código de erro: ${errorResponse.status}\nMensagem: ${errorResponse.message}`;
+    }
+  }
+
+  getDescricaoTipoDeProva(tipoDeProva: TipoDeProva): string {
+    return getDescricaoTipoDeProva(tipoDeProva);
+  }
+
+  getDescricaoAno(ano: Ano): string {
+    return getDescricaoAno(ano);
+  }
+
+  getDescricaoDificuldade(dificuldade: Dificuldade): string {
+    return getDescricaoDificuldade(dificuldade);
+  }
+
+  getDescricaoSubtema(subtema: Subtema): string {
+    return getDescricaoSubtema(subtema);
+  }
+
+  getDescricaoTema(tema: Tema): string {
+    return getDescricaoTema(tema);
   }
 
   onFileChange(event: any, fieldName: string): void {
