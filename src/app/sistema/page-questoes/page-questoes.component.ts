@@ -10,6 +10,8 @@ import { QuestoesService } from 'src/app/services/questoes.service';
 import { Filtro } from '../filtro';
 import { FiltroService } from 'src/app/services/filtro.service';
 
+declare var bootstrap: any;
+
 @Component({
   selector: 'app-page-questoes',
   templateUrl: './page-questoes.component.html',
@@ -106,13 +108,15 @@ export class PageQuestoesComponent implements OnInit {
     );
   }
 
-  abrirCardConfirmacao(filtro: Filtro): void {
-    this.filtroASalvar = filtro;
-    this.mostrarCardConfirmacao = true;
-  }
+  abrirModal(): void {
+    const modalElement = document.getElementById('confirmacaoModal');
+    const modal = new bootstrap.Modal(modalElement!);
+    modal.show();
 
-  fecharCardConfirmacao(): void {
-    this.mostrarCardConfirmacao = false;
+    // Adiciona evento para quando o modal for fechado
+    modalElement?.addEventListener('hidden.bs.modal', () => {
+      this.fecharCardConfirmacao();
+    });
   }
 
   confirmarSalvarFiltro(): void {
@@ -129,6 +133,12 @@ export class PageQuestoesComponent implements OnInit {
           }
         );
     }
-    this.fecharCardConfirmacao();
+    const modalElement = document.getElementById('confirmacaoModal');
+    const modal = bootstrap.Modal.getInstance(modalElement!);
+    modal.hide();
+  }
+
+  fecharCardConfirmacao(): void {
+    this.mostrarCardConfirmacao = false;
   }
 }

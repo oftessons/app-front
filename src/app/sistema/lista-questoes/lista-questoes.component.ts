@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { QuestoesService } from 'src/app/services/questoes.service';
 import { Questao } from '../page-questoes/questao';
 import { Ano } from '../page-questoes/enums/ano';
 import { TipoDeProva } from '../page-questoes/enums/tipoDeProva';
-import { PageEvent } from '@angular/material/paginator';
-
+import { QuestoesService } from 'src/app/services/questoes.service';
 
 @Component({
   selector: 'app-lista-questoes',
@@ -13,86 +11,80 @@ import { PageEvent } from '@angular/material/paginator';
 })
 export class ListaQuestoesComponent implements OnInit {
   questoes: Questao[] = [];
-  anos: Ano[] = [];// Exemplo de anos, substituir pelos anos reais
-  tiposDeProva: string[] = ['Tipo 1', 'Tipo 2', 'Tipo 3']; // Exemplo de tipos de prova, substituir pelos tipos reais
+  anos: Ano[] = []; // Exemplo de anos, substituir pelos anos reais
+  tiposDeProva: TipoDeProva[] = [];
   selectedAno!: Ano;
-  selectedTipoDeProva!: string;
+  selectedTipoDeProva!: TipoDeProva;
   termoBusca: string = ''; // Propriedade para armazenar o termo de busca
   p: number = 1; // Página atual
   message: string = ''; // Propriedade para armazenar mensagens de aviso
   mensagemSucesso: string = ''; // Mensagem de sucesso
   mensagemErro: string = ''; // Mensagem de erro
 
-  constructor(private questoesService: QuestoesService) { }
+  constructor(private questoesService: QuestoesService) {}
 
   ngOnInit(): void {
-    // Inicializa os filtros com valores padrão
-    this.selectedAno = this.anos[0]; // Seleciona o primeiro ano como padrão
-    this.selectedTipoDeProva = this.tiposDeProva[0]; // Seleciona o primeiro tipo de prova como padrão
-    this.filtrarQuestoes(); // Carrega as questões ao iniciar a página
+    this.obterTodasQuestoes();
+    this.anos = Object.values(Ano);
+    this.tiposDeProva = Object.values(TipoDeProva);
   }
 
-  filtrarQuestoes(): void {
+  buscarQuestoes(): void {
     const filtros = {
       ano: this.selectedAno,
       tipoDeProva: this.selectedTipoDeProva
     };
-
+  
     this.questoesService.filtrarQuestoes(filtros).subscribe(
+      (questoes: Questao[]) => {
+        console.log('Questões recebidas:', questoes);
+        this.questoes = questoes;
+        if (questoes.length === 0) {
+          this.message = 'Nenhuma questão encontrada com os filtros aplicados.';
+        } else {
+          this.message = '';
+        }
+      },
+      (error) => {
+        console.error('Erro ao buscar questões:', error);
+        this.message = 'Erro ao buscar questões. Por favor, tente novamente.';
+      }
+    );
+  }
+  
+
+  obterTodasQuestoes(): void {
+    this.questoesService.obterTodasQuestoes().subscribe(
       (questoes: Questao[]) => {
         this.questoes = questoes;
       },
       (error) => {
-        console.error('Erro ao buscar questões:', error);
-        // Tratar erro aqui
+        console.error('Erro ao buscar todas as questões:', error);
+        this.message = 'Erro ao buscar todas as questões. Por favor, tente novamente.';
       }
     );
   }
 
-  buscarQuestoes(): void {
-    // Implemente a lógica de busca de questões com base em this.termoBusca
-    // Exemplo:
-    // this.questoesService.buscarQuestoes(this.termoBusca).subscribe(
-    //   (questoes: Questao[]) => {
-    //     this.questoes = questoes;
-    //   },
-    //   (error) => {
-    //     console.error('Erro ao buscar questões:', error);
-    //     // Tratar erro aqui
-    //   }
-    // );
-  }
-
   editarQuestao(id: number): void {
-    // Implemente a lógica para editar a questão com o ID fornecido
-    // Exemplo:
-    // this.questoesService.getQuestaoById(id).subscribe(
-    //   (questao: Questao) => {
-    //     // Lógica para abrir modal de edição ou navegar para página de edição
-    //   },
-    //   (error) => {
-    //     console.error('Erro ao buscar questão por ID:', error);
-    //     // Tratar erro aqui
-    //   }
-    // );
+    // Implementar lógica de edição
   }
 
   confirmarExclusao(id: number): void {
-    // Implemente a lógica para confirmar a exclusão da questão com o ID fornecido
-    // Exemplo:
-    // if (confirm(`Tem certeza que deseja excluir a questão com ID ${id}?`)) {
-    //   this.questoesService.deletarQuestao(id).subscribe(
-    //     () => {
-    //       // Lógica para atualizar a lista de questões após a exclusão
-    //       this.filtrarQuestoes(); // Exemplo: Atualizar a lista após a exclusão
-    //     },
-    //     (error) => {
-    //       console.error('Erro ao deletar questão:', error);
-    //       // Tratar erro aqui
-    //     }
-    //   );
-    // }
+    if (confirm('Tem certeza que deseja deletar esta questão?')) {
+      this.deletarQuestao(id);
+    }
   }
 
-  
+  deletarQuestao(id: number): void {
+    this.questoesService.deletar(id).subscribe(
+      () => {
+        this.mensagemSucesso = 'Questão deletada com sucesso!';
+        this.obterTodasQuestoes(); // Atualiza a lista de questões
+      },
+      (error) => {
+        console.error('Erro ao deletar questão:', error);
+        this.mensagemErro = 'Erro ao deletar questão.';
+      }
+    );
+  }
 }

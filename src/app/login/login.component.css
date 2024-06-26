@@ -13,8 +13,8 @@
 }
 
 .form-control{
-    background-color:#b1afaf;
-    font-size: 13px;
+   
+    font-size: 12px;
 }
 
 .text-primary {
@@ -36,6 +36,7 @@
     font-size: 16px; /* Tamanho da fonte */
     color: #495057; /* Cor do texto */
     height: 50px;
+    font-size: 13px;
 }
 
 .form-group-senha .senha {
@@ -55,6 +56,58 @@
     width: 100%;
 }
 
+.forgot-password-link {
+    color: #000; /* Cor do texto em preto */
+    font-weight: bold; /* Negrito opcional */
+    font-size: 14px; /* Tamanho da fonte opcional */
+    text-decoration: none; /* Remove sublinhado */
+    cursor: pointer; /* Adiciona cursor pointer ao passar o mouse */
+}
+
+.forgot-password-link:hover {
+    color: #333; /* Cor do texto ao passar o mouse, opcional */
+}
+
+
+.form-group.align-items-center.justify-content-between.d-flex {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.btn-lg {
+    padding: 10px 20px; 
+    font-size: 17px;
+    width: auto; 
+}
+
+.btn-custom {
+    padding: 5px 10px; 
+    font-size: 14px; 
+    height: 45px; 
+    width: auto; 
+}
+
+@media screen and (min-width: 1024px) {
+    .form-group.align-items-center.justify-content-between.d-flex {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+}
+
+@media (max-width: 767px) {
+    .form-group.align-items-center.justify-content-between.d-flex {
+        flex-direction: column;
+        padding: 10px;
+    }
+    .btn-lg{
+        padding: 10px 20px;
+        font-size: 17px;
+        margin: 5px;
+        width: 100%;
+    }
+}
+
 .alert.alert-danger{
     background-color: #CC3939;
     color: #fff;
@@ -64,6 +117,7 @@
 .responsive-input {
     width: 100%;
     height: 45px;
+    font-size: 13px;
 }
 
 .form-group {
@@ -148,9 +202,10 @@
 }
 
 .btn-danger {
-    background-color: #dc3545; /* Cor de fundo para o botão Cancelar */
-    border-color: #dc3545; /* Cor da borda para o botão Cancelar */
-    color: #fff; /* Cor do texto para o botão Cancelar */
+    color: #fff;
+    background-color: #113462;
+    border-color: #113462;
+    padding: 10px 20px; /* Ajuste o padding conforme necessário */
 }
 
 .btn-lg {
@@ -176,6 +231,7 @@ input::placeholder {
 
 .small{
     padding: 8px;
+    font-family: 'Nunito Sans';
 }
 
 .small a {
