@@ -1,37 +1,39 @@
 <div class="container pt-5">
-
     <div class="container mt-4">
-          <h1 class="mt-4"> <span> | </span> Busca e edição de questões</h1>
-     </div>
+      <h1 class="mt-4"><span> | </span>Busca e edição de questões</h1>
+    </div>
   
     <!-- Filtro de Busca -->
     <div class="container-buscar">
-        <form #consultaForm="ngForm" (submit)="buscarQuestoes()" class="consulta-form">
-            <div class="row">
-              <div class="col-md-4 mb-3">
-                <label for="selectAno">Ano:</label>
-                <select class="form-control" id="selectAno" name="selectedAno" [(ngModel)]="selectedAno">
-                  <option *ngFor="let ano of anos" [ngValue]="ano">{{ getDescricaoAno(ano) }}</option>
-                </select>
+      <form #consultaForm="ngForm" (submit)="buscarQuestoes()" class="consulta-form">
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <mat-form-field appearance="fill">
+                  <mat-label>Ano</mat-label>
+                  <mat-select name="selectedAno" [(ngModel)]="selectedAno">
+                    <mat-option *ngFor="let ano of anos" [value]="ano">{{ ano }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
               </div>
               <div class="col-md-4 mb-3">
-                <label for="selectTipo">Tipo de Prova:</label>
-                <select class="form-control" id="selectTipo" name="selectedTipoDeProva" [(ngModel)]="selectedTipoDeProva">
-                  <option *ngFor="let tipo of tiposDeProva" [ngValue]="tipo">{{ tipo }}</option>
-                </select>
-              </div>
-              <div class="col-md-4 text-center mb-3">
-                <button type="submit" class="btn btn-primary btn-buscar">
-                  <i class="fa fa-search"></i> Buscar
-                </button>
-              </div>
-            </div>
-          </form>
-          
+                <mat-form-field appearance="fill">
+                  <mat-label>Tipo de Prova</mat-label>
+                  <mat-select name="selectedTipoDeProva" [(ngModel)]="selectedTipoDeProva">
+                    <mat-option *ngFor="let tipo of tiposDeProva" [value]="tipo">{{ tipo }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>              
+          <div class="col-md-4 text-center mb-3">
+            <button type="submit" class="btn btn-primary btn-buscar">
+              <i class="fa fa-search"></i> Buscar
+            </button>
+          </div>
+        </div>
+      </form>
+  
       <div class="alert alert-warning" role="alert" *ngIf="message">
         {{ message }}
       </div>
-
     </div>
   
     <!-- Listagem de Questões -->
@@ -65,7 +67,7 @@
               </tr>
             </tbody>
           </table>
-          <pagination-controls [previousLabel]="'Anterior'" [nextLabel]="'Próximo'" (pageChange)="trocarPagina($event)"></pagination-controls>
+          <pagination-controls [previousLabel]="'Anterior'" [nextLabel]="'Próximo'"></pagination-controls>
         </div>
       </div>
     </div>
@@ -83,4 +85,46 @@
         </div>
       </div>
     </div>
-</div>  
+  </div>
+  
+
+
+  <div class="row">
+    <div class="col-md-12">
+        <div *ngIf="questoes && questoes.length > 0; else noQuestions">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Título</th>
+                        <th>Enunciado</th>
+                        <th>Ano</th>
+                        <th>Tipo de Prova</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let questao of questoes">
+                        <td>{{ questao.title }}</td>
+                        <td>{{ questao.enunciadoDaQuestao }}</td>
+                        <td>{{ questao.ano }}</td>
+                        <td>{{ questao.tipoDeProva }}</td>
+                        <td>
+                            <button class="btn btn-primary btn-sm mr-2" (click)="editarQuestao(questao.id)">
+                                <i class="fas fa-edit"></i> Editar
+                            </button>
+                            <button class="btn btn-danger btn-sm" (click)="confirmarExclusao(questao.id)">
+                                <i class="fas fa-trash-alt"></i> Deletar
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <pagination-controls [previousLabel]="'Anterior'" [nextLabel]="'Próximo'"></pagination-controls>
+        </div>
+        <ng-template #noQuestions>
+            <div class="alert alert-warning" role="alert">
+                Nenhuma questão encontrada.
+            </div>
+        </ng-template>
+    </div>
+</div>

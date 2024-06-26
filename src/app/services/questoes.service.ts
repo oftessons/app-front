@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -13,36 +13,57 @@ export class QuestoesService {
   
   apiURL: string = environment.apiURLBase + '/api/questoes';
   constructor(private http: HttpClient) { }
-  
-  salvar( questao: Questao ) : Observable<Questao> {
-    return this.http.post<Questao>( `${this.apiURL}`, questao);
+   
+  salvar(questao: any) {
+    return this.http.post(`${this.apiURL}/cadastro`, questao)
+      .pipe(
+        catchError(this.handleError)
+      );
   }
 
-  atualizar(questao: Questao): Observable<any> {
-    return this.http.put<Questao>(`${this.apiURL}/${questao.id}`, questao).pipe(
-      catchError(error => throwError(error))
-    );
+  private handleError(error: HttpErrorResponse) {
+    let errorMessage = 'Algo deu errado; por favor, tente novamente mais tarde.';
+    if (error.error instanceof ErrorEvent) {
+      // Erro no lado do cliente
+      errorMessage = `Erro: ${error.error.message}`;
+    } else if (error.error && error.error.message) {
+      // Erro no lado do servidor
+      errorMessage = `Erro: ${error.error.message}`;
+    } else {
+      // Outros tipos de erro
+      errorMessage = `Código de erro: ${error.status}\nMensagem: ${error.message}`;
+    }
+    return throwError(errorMessage);
   }
+  
+
+atualizar(formData: FormData, id: number): Observable<any> {
+    return this.http.put<any>(`${this.apiURL}/cadastro/${id}`, formData)
+        .pipe(
+            catchError(this.handleError)
+        );
+}
+
 
   getQuestaoById(id: number): Observable<Questao> {
-    return this.http.get<Questao>(`${this.apiURL}/${id}`).pipe(
-      catchError(error => throwError(error))
+    return this.http.get<Questao>(`${this.apiURL}/questoes/${id}`);
+  }
+
+
+  obterTodasQuestoes(): Observable<Questao[]> {
+    return this.http.get<Questao[]>(`${this.apiURL}/todas`).pipe(
+      catchError(this.handleError)
     );
   }
 
-  deletar(questao: Questao): Observable<any> {
-    return this.http.delete<any>(`${this.apiURL}/${questao.id}`).pipe(
-      catchError(error => throwError(error))
+
+  deletar(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiURL}/${id}`).pipe(
+      catchError(this.handleError)
     );
   }
 
-  getQuestoesByAno(ano: Ano): Observable<Questao[]> {
-    return this.http.get<Questao[]>(`${this.apiURL}/ano/${ano}`).pipe(
-      catchError(error => throwError(error))
-    );
-  }
-  
-  filtrarQuestoes(filtros: any): Observable<Questao[]> {
+  filtrarQuestoes(filtros: any, page: number = 0, size: number = 10): Observable<Questao[]> {
     const url = `${this.apiURL}/filtro`;
     let params = new HttpParams();
 
@@ -52,6 +73,10 @@ export class QuestoesService {
         params = params.set(filtro, filtros[filtro]);
       }
     }
+
+    // Adicione os parâmetros de paginação
+    params = params.set('page', page.toString());
+    params = params.set('size', size.toString());
 
     return this.http.get<Questao[]>(url, { params }).pipe(
       catchError(error => throwError('Erro ao tentar obter as questões.'))

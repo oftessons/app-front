@@ -9,7 +9,7 @@ import { Relevancia } from './enums/relevancia';
 export class Questao {
   id!: number;
   diaDoCadastro!: string;
-  idUser!:number;
+  idUser!: number;
   title!: string;
   enunciadoDaQuestao!: string;
   afirmacaoUm!: string;
@@ -19,6 +19,7 @@ export class Questao {
   assinale!: string;
   fotoDaQuestao!: string;
   fotoDaQuestaoDois!: string;
+  fotoDaQuestaoTres!: string;
   fotoDaResposta!: string;
   fotoDaRespostaDois!: string;
   fotoDaRespostaTres!: string;

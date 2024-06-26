@@ -40,8 +40,8 @@
                                         </div>
 
                                         <div class="form-group col-sm-12 col-md-6 text-center"> 
-                                            <a href="#" class="small mb-1 text-decoration-none text-primary" (click)="forgotPassword($event)">Esqueceu sua senha? Recupere aqui!</a>
-                                        </div> 
+                                            <a href="#" class="small mb-1 text-decoration-none text-primary forgot-password-link" (click)="forgotPassword($event)">Esqueceu sua senha? Recupere aqui!</a>
+                                        </div>                                        
 
                                     </form>
 
@@ -69,43 +69,40 @@
                                         </div>
 
                                         <div class="form-group col-sm-12 col-md-6">
-                                            <label class="small mb-1" style="font-size: 1.2em;">Telefone</label>
-                                            <input type="text" name="telefone" [(ngModel)]="telefone" class="form-control py-2 responsive-input" placeholder="Digite o telefone de sua empresa" required />
+                                            <label class="small mb-1" style="font-size: 1.2em;">Celular</label>
+                                            <input type="text" name="telefone" [(ngModel)]="telefone" class="form-control py-2 responsive-input" placeholder="Digite o Celular (XX) XXXX-XXX" required />
                                         </div>
 
                                         <div class="form-group col-sm-12 col-md-6">
                                             <label class="small mb-1" style="font-size: 1.2em;">Cidade</label>
-                                            <input type="text" name="cidade" [(ngModel)]="cidade" class="form-control py-2 responsive-input" placeholder="Digite a cidade de sua empresa" required />
+                                            <input type="text" name="cidade" [(ngModel)]="cidade" class="form-control py-2 responsive-input" placeholder="Digite sua cidade" required />
                                         </div>
 
                                         <div class="form-group col-sm-12 col-md-6">
                                             <label class="small mb-1" style="font-size: 1.2em;">Estado</label>
-                                            <input type="text" name="estado" [(ngModel)]="estado" class="form-control py-2 responsive-input" placeholder="Digite o estado de sua empresa" required />
+                                            <input type="text" name="estado" [(ngModel)]="estado" class="form-control py-2 responsive-input" placeholder="Digite seu Estado" required />
                                         </div>
 
-                                        <div class="form-group align-items-center justify-content-between mt-4 mb-0">
-                                            <div class="col-sm-12 col-md-6">
-                                                <button type="submit" class="btn btn-success btn-lg btn-block">Cadastrar</button>
-                                            </div>
-                                            <div class="col-sm-12 col-md-6">
-                                                <button type="button" class="btn btn-danger btn-lg btn-block" (click)="cancelaCadastro()">Cancelar</button>
-                                            </div>
+                                        <div class="form-group align-items-center justify-content-between mt-4 mb-0 d-flex">
+                                            <button type="button" class="btn btn-danger btn-lg me-2  btn-custom" (click)="cancelaCadastro()">Voltar</button>
+                                            <button type="submit" class="btn btn-success btn-lg me-2  btn-custom">Cadastrar</button>
                                         </div>
 
                                     </form>
+
 
                                     <!-- Forgot Password Form -->
                                     <form *ngIf="showForgotPassword" (submit)="sendForgotPasswordEmail()">
 
                                         <div class="form-group-senha text-center">
-                                            <label class="small mb-1 senha">E-mail para recuperação de senha</label>
+                                            <label class="small mb-1 senha">E-mail para recuperação de senha da plataforma</label>
                                             <input type="email" name="forgotEmail" [(ngModel)]="forgotEmail" class="form-control" placeholder="Digite seu e-mail cadastrado para recuperar sua senha" required />
                                         </div>
                                     
                                         <div class="form-group align-items-center justify-content-between mt-4 mb-0 d-flex">
-                                            <button type="submit" class="btn btn-success btn-lg me-2">Enviar</button>
-                                            <button type="button" class="btn btn-danger btn-lg" (click)="cancelForgotPassword()">Cancelar</button>
-                                        </div>
+                                            <button type="button" class="btn btn-danger btn-lg me-2 editar btn-custom" (click)="cancelForgotPassword()">Voltar</button>
+                                            <button type="submit" class="btn btn-success btn-lg me-2 editar btn-custom">Enviar</button>
+                                        </div>                                        
                                     
                                     </form>
                                     
