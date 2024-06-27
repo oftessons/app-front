@@ -57,8 +57,8 @@
 }
 
 .forgot-password-link {
-    color: #000; /* Cor do texto em preto */
-    font-weight: bold; /* Negrito opcional */
+    color: #3B5FA0 !important;
+    font-weight: 700; /* Negrito opcional */
     font-size: 14px; /* Tamanho da fonte opcional */
     text-decoration: none; /* Remove sublinhado */
     cursor: pointer; /* Adiciona cursor pointer ao passar o mouse */
@@ -66,6 +66,10 @@
 
 .forgot-password-link:hover {
     color: #333; /* Cor do texto ao passar o mouse, opcional */
+}
+
+.forgot-password-link span{
+    color: #111111;
 }
 
 

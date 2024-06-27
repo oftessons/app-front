@@ -7,7 +7,7 @@
     <div class="container-buscar">
       <form #consultaForm="ngForm" (submit)="buscarQuestoes()" class="consulta-form">
         <div class="row">
-            <div class="col-md-4 mb-3">
+            <div class="col-md-4">
                 <mat-form-field appearance="fill">
                   <mat-label>Ano</mat-label>
                   <mat-select name="selectedAno" [(ngModel)]="selectedAno">
@@ -15,7 +15,7 @@
                   </mat-select>
                 </mat-form-field>
               </div>
-              <div class="col-md-4 mb-3">
+              <div class="col-md-4">
                 <mat-form-field appearance="fill">
                   <mat-label>Tipo de Prova</mat-label>
                   <mat-select name="selectedTipoDeProva" [(ngModel)]="selectedTipoDeProva">
@@ -23,7 +23,7 @@
                   </mat-select>
                 </mat-form-field>
               </div>              
-          <div class="col-md-4 text-center mb-3">
+          <div class="col-md-4 text-center">
             <button type="submit" class="btn btn-primary btn-buscar">
               <i class="fa fa-search"></i> Buscar
             </button>
