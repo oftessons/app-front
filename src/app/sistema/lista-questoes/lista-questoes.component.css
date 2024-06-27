@@ -23,11 +23,17 @@
   
 .consulta-form .btn-buscar {
     width: 100%; /* Largura total */
+    height: 75%;
+    margin-top: 15.5px;
+    background-color: #3B5FA0;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
 }
 
 ::ng-deep .mat-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-form-field-flex {
     cursor: pointer;
-    width: 152%;
+    width: 125%;
     border-radius: 8px;
     background-color: #c1c0bf3d;
     background-clip: padding-box;
@@ -52,6 +58,11 @@
       margin-bottom: 10px; /* Espaçamento inferior reduzido em telas menores */
     }
 
+    .consulta-form .btn-buscar {
+        width: 100%;
+        margin-top: 24px;
+      }
+
     ::ng-deep .mat-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-form-field-flex {
         width: 172%; 
       }
@@ -61,7 +72,8 @@
 @media (min-width: 992px) {
     .consulta-form .btn-buscar {
       width: 100%;
-      margin-top: 27px;
+      height: 75%;
+      margin-top: 15.5px;
     }
   }
   
