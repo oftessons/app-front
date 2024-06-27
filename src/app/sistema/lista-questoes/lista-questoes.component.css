@@ -24,11 +24,37 @@
 .consulta-form .btn-buscar {
     width: 100%; /* Largura total */
 }
+
+::ng-deep .mat-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-form-field-flex {
+    cursor: pointer;
+    width: 152%;
+    border-radius: 8px;
+    background-color: #c1c0bf3d;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+}
+
+::ng-deep .mat-form-field-infix {
+    max-width: 100% !important;
+}
+
+::ng-deep .mat-form-field-wrapper {
+    padding-bottom: 0;
+    padding-top: 14px;
+}
+
+::ng-deep .mat-form-field-underline {
+    display: none;
+  }
   
 @media (max-width: 768px) {
     .consulta-form .col-md-4 {
       margin-bottom: 10px; /* Espaçamento inferior reduzido em telas menores */
     }
+
+    ::ng-deep .mat-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-form-field-flex {
+        width: 172%; 
+      }
 }
 
 /* Definindo a largura total e a margem superior apenas em telas maiores */
