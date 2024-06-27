@@ -5427,11 +5427,25 @@ a.close.disabled {
   width: auto;
   margin: 0.5rem;
   pointer-events: none;
+  z-index: 1100;
 }
+
 .modal.fade .modal-dialog {
   transition: transform 0.3s ease-out;
   transform: translate(0, -50px);
 }
+
+.mr-box-save-lista-overlay {
+  z-index: 1060;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000000;
+  opacity: 0.8;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .modal.fade .modal-dialog {
     transition: none;
@@ -5458,6 +5472,17 @@ a.close.disabled {
 }
 .modal-dialog-scrollable .modal-body {
   overflow-y: auto;
+}
+
+.modal-body .form-control {
+  border-radius: 8px;
+  background-color: #c1c0bf3d;
+  border: 1px solid #ced4da;
+}
+
+.modal-body label {
+  font-weight: 500;
+  color: #000;
 }
 
 .modal-dialog-centered {
@@ -5497,6 +5522,7 @@ a.close.disabled {
 
 
 .modal-header {
+  background-color: #002752;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -5508,6 +5534,15 @@ a.close.disabled {
 .modal-header .close {
   padding: 1rem 1rem;
   margin: -1rem -1rem -1rem auto;
+}
+.btn-close-white {
+  color: #fff;
+  border: none; /* Opcional: remove a borda, se houver */
+}
+.mat-h5, .mat-typography h5 {
+  font: 400 16px / 20px Roboto, "Helvetica Neue", sans-serif !important;
+  margin: 0 !important;
+  color: #fff;
 }
 
 .modal-title {
@@ -5527,7 +5562,7 @@ a.close.disabled {
   align-items: center;
   justify-content: flex-end;
   padding: 0.75rem;
-  border-top: 1px solid #dee2e6;
+  border-top: none !important;
   border-bottom-right-radius: calc(0.3rem - 1px);
   border-bottom-left-radius: calc(0.3rem - 1px);
 }
