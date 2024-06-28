@@ -232,6 +232,11 @@ textarea{
     margin: 0 auto;
   }
 
+  .mat-radio-button {
+    display: block;
+    margin-bottom: 8px;
+  }
+  
   .image-preview span {
     font-size: 14px;
     font-weight: 200;

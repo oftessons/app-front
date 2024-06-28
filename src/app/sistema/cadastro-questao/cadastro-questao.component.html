@@ -247,6 +247,24 @@
           </span>
           <hr class="line">
         </div>
+
+        
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Alternativa Correta:</label>
+                    <mat-radio-group [(ngModel)]="questao.alternativaCorreta" (change)="markCorrect($event.value)">
+                        <mat-radio-button value="0">A </mat-radio-button>
+                        <mat-radio-button value="1">B </mat-radio-button>
+                        <mat-radio-button value="2">C </mat-radio-button>
+                        <mat-radio-button value="3">D </mat-radio-button>
+                    </mat-radio-group>
+                </div>
+            </div>
+        </div>
+        
+          
         <div class="row">
           <div class="col-md-6">
             <div class="form-group">
