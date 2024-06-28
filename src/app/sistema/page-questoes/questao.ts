@@ -34,5 +34,9 @@ export class Questao {
   tipoDeProva!: TipoDeProva;
   subtema!: Subtema;
   palavraChave!: string;
-  alternativas: Alternativa[] = [];
+  alternativas!: { texto: string, correta: boolean }[];
+  alternativaCorreta!: number;
 }
+
+
+

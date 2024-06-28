@@ -26,6 +26,7 @@ export class CadastroQuestaoComponent implements OnInit {
   fotoDaResposta: File | null = null;
   fotoDaRespostaDois: File | null = null;
   fotoDaRespostaTres: File | null = null;
+  imagePreviews: { [key: string]: string | ArrayBuffer | null } = {};
   id!: number;
 
   anos: string[] = Object.values(Ano);
@@ -61,14 +62,43 @@ export class CadastroQuestaoComponent implements OnInit {
     );
   }
 
+  onFileSelected(event: any, field: string) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreviews[field] = reader.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  onDrop(event: DragEvent, field: string) {
+    event.preventDefault();
+    const file = event.dataTransfer?.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreviews[field] = reader.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  onDragOver(event: DragEvent) {
+    event.preventDefault();
+  }
+
+  markCorrect(index: number): void {
+    this.questao.alternativas.forEach((alt, i) => {
+      alt.correta = (i === index);
+    });
+  }
+
   onSubmit(): void {
     const formData = new FormData();
     formData.append('title', this.questao.title);
     formData.append('enunciadoDaQuestao', this.questao.enunciadoDaQuestao);
-    formData.append('afirmacaoUm', this.questao.afirmacaoUm);
-    formData.append('afirmacaoDois', this.questao.afirmacaoDois);
-    formData.append('afirmacaoTres', this.questao.afirmacaoTres);
-    formData.append('afirmacaoQuatro', this.questao.afirmacaoQuatro);
     formData.append('assinale', this.questao.assinale);
     formData.append('comentarioDaQuestaoUm', this.questao.comentarioDaQuestaoUm);
     formData.append('comentarioDaQuestaoDois', this.questao.comentarioDaQuestaoDois);
@@ -81,6 +111,11 @@ export class CadastroQuestaoComponent implements OnInit {
     formData.append('subtema', this.questao.subtema);
     formData.append('relevancia', this.questao.relevancia);
     formData.append('palavraChave', this.questao.palavraChave);
+
+    this.questao.alternativas.forEach((alternativa, index) => {
+      formData.append(`alternativas[${index}].texto`, alternativa.texto);
+      formData.append(`alternativas[${index}].correta`, alternativa.correta.toString());
+    });
 
     if (this.fotoDaQuestao) {
       formData.append('fotoDaQuestao', this.fotoDaQuestao);
@@ -101,34 +136,16 @@ export class CadastroQuestaoComponent implements OnInit {
       formData.append('fotoDaRespostaTres', this.fotoDaRespostaTres);
     }
 
-    if (this.id) {
-      this.questoesService.atualizar(formData, this.id).subscribe(
-        (response: any) => {
-          console.log('Resposta de sucesso:', response);
-          this.successMessage = response.message || 'Questão atualizada com sucesso!';
-          this.errorMessage = null;
-        },
-        errorResponse => {
-          console.error('Erro na resposta:', errorResponse);
-          this.errorMessage = this.extractErrorMessage(errorResponse);
-          this.successMessage = null;
-        }
-      );
-    } else {
-      this.questoesService.salvar(formData).subscribe(
-        (response: any) => {
-          console.log('Resposta de sucesso:', response);
-          this.successMessage = response.message || 'Questão salva com sucesso!';
-          this.errorMessage = null;
-          this.questao = response;
-        },
-        errorResponse => {
-          console.error('Erro na resposta:', errorResponse);
-          this.errorMessage = this.extractErrorMessage(errorResponse);
-          this.successMessage = null;
-        }
-      );
-    }
+    this.questoesService.salvar(formData).subscribe(
+      response => {
+        this.successMessage = 'Questão salva com sucesso!';
+        this.errorMessage = null;
+      },
+      error => {
+        this.errorMessage = 'Erro ao salvar a questão.';
+        this.successMessage = null;
+      }
+    );
   }
 
   extractErrorMessage(errorResponse: any): string {
