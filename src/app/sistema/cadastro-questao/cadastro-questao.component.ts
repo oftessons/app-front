@@ -26,6 +26,8 @@ export class CadastroQuestaoComponent implements OnInit {
   fotoDaResposta: File | null = null;
   fotoDaRespostaDois: File | null = null;
   fotoDaRespostaTres: File | null = null;
+  // selectedImage: string | ArrayBuffer | null = null;
+  imagePreviews: { [key: string]: string | ArrayBuffer | null } = {};
   id!: number;
 
   anos: string[] = Object.values(Ano);
@@ -59,6 +61,33 @@ export class CadastroQuestaoComponent implements OnInit {
         console.error('Erro ao carregar questão:', error);
       }
     );
+  }
+
+  onFileSelected(event: any, field: string) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreviews[field] = reader.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  onDrop(event: DragEvent, field: string) {
+    event.preventDefault();
+    const file = event.dataTransfer?.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreviews[field] = reader.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  onDragOver(event: DragEvent) {
+    event.preventDefault();
   }
 
   onSubmit(): void {
