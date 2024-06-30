@@ -16,36 +16,30 @@
       </div>
       <div class="profile-info">
         <h2>Meu Perfil</h2>
-        <div class="input-group">
-          <strong>Username: </strong>
+        <p><strong>Username: </strong>
           <span *ngIf="!editMode"> {{ usuario.username }}</span>
           <input *ngIf="editMode" [(ngModel)]="usuario.username" class="form-control" />
-        </div>
-        <div class="input-group">
-          <strong>Nome: </strong>
+        </p>
+        <p><strong>Nome: </strong>
           <span *ngIf="!editMode"> {{ usuario.nome }}</span>
           <input *ngIf="editMode" [(ngModel)]="usuario.nome" class="form-control" />
-        </div>
-        <div class="input-group">
-          <strong>E-mail: </strong>
+        </p>
+        <p><strong>E-mail: </strong>
           <span *ngIf="!editMode"> {{ usuario.email }}</span>
           <input *ngIf="editMode" [(ngModel)]="usuario.email" class="form-control" />
-        </div>
-        <div class="input-group">
-          <strong>Telefone: </strong>
+        </p>
+        <p><strong>Telefone: </strong>
           <span *ngIf="!editMode"> {{ usuario.telefone }}</span>
           <input *ngIf="editMode" [(ngModel)]="usuario.telefone" class="form-control" />
-        </div>
-        <div class="input-group">
-          <strong>Cidade: </strong>
+        </p>
+        <p><strong>Cidade: </strong>
           <span *ngIf="!editMode"> {{ usuario.cidade }}</span>
           <input *ngIf="editMode" [(ngModel)]="usuario.cidade" class="form-control" />
-        </div>
-        <div class="input-group">
-          <strong>Estado: </strong>
+        </p>
+        <p><strong>Estado: </strong>
           <span *ngIf="!editMode"> {{ usuario.estado }}</span>
           <input *ngIf="editMode" [(ngModel)]="usuario.estado" class="form-control" />
-        </div>
+        </p>
       </div>
     </div>
     <div class="profile-actions">
