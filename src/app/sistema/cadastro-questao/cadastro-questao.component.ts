@@ -28,7 +28,7 @@ export class CadastroQuestaoComponent implements OnInit {
   fotoDaRespostaTres: File | null = null;
   imagePreviews: { [key: string]: string | ArrayBuffer | null } = {};
   id!: number;
- 
+
   selectedAlternativeIndex: number = -3;
 
   anos: string[] = Object.values(Ano);
@@ -45,6 +45,12 @@ export class CadastroQuestaoComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.questao.alternativas = [
+  { id: 1, texto: 'Alternativa 1', correta: false, questoes: this.questao }, // Adicione id e questoes
+  { id: 2, texto: 'Alternativa 2', correta: true, questoes: this.questao }, // Adicione id e questoes
+  // Adicione mais alternativas aqui
+ ];
+
     this.activatedRoute.params.subscribe(params => {
       this.id = params['id'];
       if (this.id) {
@@ -110,7 +116,7 @@ export class CadastroQuestaoComponent implements OnInit {
       });
     }
   }
-  
+
 
   onSubmit(): void {
     if (!this.questao.alternativas) {
