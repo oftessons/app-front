@@ -46,10 +46,11 @@ export class CadastroQuestaoComponent implements OnInit {
 
   ngOnInit(): void {
     this.questao.alternativas = [
-  { id: 1, texto: 'Alternativa 1', correta: false, questoes: this.questao }, // Adicione id e questoes
-  { id: 2, texto: 'Alternativa 2', correta: true, questoes: this.questao }, // Adicione id e questoes
-  // Adicione mais alternativas aqui
- ];
+      { id: 1, texto: 'A', correta: false, questoes: this.questao },
+      { id: 2, texto: 'B', correta: false, questoes: this.questao },
+      { id: 3, texto: 'C', correta: false, questoes: this.questao },
+      { id: 4, texto: 'D', correta: false, questoes: this.questao }
+    ];
 
     this.activatedRoute.params.subscribe(params => {
       this.id = params['id'];
@@ -110,12 +111,13 @@ export class CadastroQuestaoComponent implements OnInit {
 
 
   markCorrect(index: number): void {
-    if (this.questao.alternativas) {
-      this.questao.alternativas.forEach((alt, i) => {
-        alt.correta = (i === index);
-      });
-    }
+    // Reset all alternativas to false
+    this.questao.alternativas.forEach(alt => alt.correta = false);
+  
+    // Set the clicked alternativa to true
+    this.questao.alternativas[index].correta = true;
   }
+  
 
 
   onSubmit(): void {
