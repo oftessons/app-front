@@ -8,7 +8,7 @@ import { Subtema } from '../page-questoes/enums/subtema';
 import { Relevancia } from '../page-questoes/enums/relevancia';
 import { QuestoesService } from 'src/app/services/questoes.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { getDescricaoAno, getDescricaoDificuldade, getDescricaoSubtema, getDescricaoTema, getDescricaoTipoDeProva } from '../page-questoes/enums/enum-utils';
+import { Alternativa } from '../alternativa';
 
 @Component({
   selector: 'app-cadastro-questao',
@@ -28,6 +28,8 @@ export class CadastroQuestaoComponent implements OnInit {
   fotoDaRespostaTres: File | null = null;
   imagePreviews: { [key: string]: string | ArrayBuffer | null } = {};
   id!: number;
+ 
+  selectedAlternativeIndex: number = -3;
 
   anos: string[] = Object.values(Ano);
   dificuldades: string[] = Object.values(Dificuldade);
@@ -55,6 +57,8 @@ export class CadastroQuestaoComponent implements OnInit {
     this.questoesService.getQuestaoById(id).subscribe(
       questao => {
         this.questao = questao;
+        this.questao.alternativas = this.questao.alternativas || [];  // Inicializa alternativas se for undefined
+        this.selectedAlternativeIndex = this.questao.alternativas.findIndex(alt => alt.correta);
       },
       error => {
         console.error('Erro ao carregar questão:', error);
@@ -85,31 +89,52 @@ export class CadastroQuestaoComponent implements OnInit {
     }
   }
 
+  updateCorrectAlternative(): void {
+    if (this.selectedAlternativeIndex !== null) {
+      this.questao.alternativas.forEach((alt, index) => {
+        alt.correta = index === this.selectedAlternativeIndex;
+      });
+    }
+  }
+
   onDragOver(event: DragEvent) {
     event.preventDefault();
   }
 
+
+
   markCorrect(index: number): void {
-    this.questao.alternativas.forEach((alt, i) => {
-      alt.correta = (i === index);
-    });
+    if (this.questao.alternativas) {
+      this.questao.alternativas.forEach((alt, i) => {
+        alt.correta = (i === index);
+      });
+    }
   }
+  
 
   onSubmit(): void {
+    if (!this.questao.alternativas) {
+      this.questao.alternativas = [];
+    }
+
     const formData = new FormData();
     formData.append('title', this.questao.title);
     formData.append('enunciadoDaQuestao', this.questao.enunciadoDaQuestao);
+    formData.append('afirmacaoUm', this.questao.afirmacaoUm);
+    formData.append('afirmacaoDois', this.questao.afirmacaoDois);
+    formData.append('afirmacaoTres', this.questao.afirmacaoTres);
+    formData.append('afirmacaoQuatro', this.questao.afirmacaoQuatro);
     formData.append('assinale', this.questao.assinale);
     formData.append('comentarioDaQuestaoUm', this.questao.comentarioDaQuestaoUm);
     formData.append('comentarioDaQuestaoDois', this.questao.comentarioDaQuestaoDois);
     formData.append('referenciaBi', this.questao.referenciaBi);
     formData.append('comentadorDaQuestao', this.questao.comentadorDaQuestao);
-    formData.append('ano', this.questao.ano);
-    formData.append('tema', this.questao.tema);
-    formData.append('dificuldade', this.questao.dificuldade);
-    formData.append('tipoDeProva', this.questao.tipoDeProva);
-    formData.append('subtema', this.questao.subtema);
-    formData.append('relevancia', this.questao.relevancia);
+    formData.append('ano', this.questao.ano.toString());  // Converte enum para string
+    formData.append('tema', this.questao.tema.toString());
+    formData.append('dificuldade', this.questao.dificuldade.toString());
+    formData.append('tipoDeProva', this.questao.tipoDeProva.toString());
+    formData.append('subtema', this.questao.subtema.toString());
+    formData.append('relevancia', this.questao.relevancia.toString());
     formData.append('palavraChave', this.questao.palavraChave);
 
     this.questao.alternativas.forEach((alternativa, index) => {
@@ -158,36 +183,7 @@ export class CadastroQuestaoComponent implements OnInit {
     }
   }
 
-  getDescricaoTipoDeProva(tipoDeProva: TipoDeProva): string {
-    return getDescricaoTipoDeProva(tipoDeProva);
-  }
-
-  getDescricaoAno(ano: Ano): string {
-    return getDescricaoAno(ano);
-  }
-
-  getDescricaoDificuldade(dificuldade: Dificuldade): string {
-    return getDescricaoDificuldade(dificuldade);
-  }
-
-  getDescricaoSubtema(subtema: Subtema): string {
-    return getDescricaoSubtema(subtema);
-  }
-
-  getDescricaoTema(tema: Tema): string {
-    return getDescricaoTema(tema);
-  }
-
-  onFileChange(event: any, fieldName: string): void {
-    const files = event.target.files;
-    if (files.length > 0) {
-      (this as any)[fieldName] = files[0];
-    } else {
-      (this as any)[fieldName] = null;
-    }
-  }
-
-  voltarParaListagem(): void {
-    this.router.navigate(['/usuario/questoes']);
+  getAlternativaLabel(index: number): string {
+    return String.fromCharCode(65 + index); // A = 65 na tabela ASCII
   }
 }

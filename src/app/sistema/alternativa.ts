@@ -1,7 +1,8 @@
 import { Questao } from "./page-questoes/questao";
 
 export class Alternativa {
-    id!: number;
-    descricao!: string;
-    questoes!: Questao;
+  id!: number;
+  texto!: string;
+  correta!: boolean;
+  questoes!: Questao;
 }
