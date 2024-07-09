@@ -13,35 +13,32 @@ export class QuestoesService {
   
   apiURL: string = environment.apiURLBase + '/api/questoes';
   constructor(private http: HttpClient) { }
-   
-  salvar(questao: any) {
-    return this.http.post(`${this.apiURL}/cadastro`, questao)
-      .pipe(
-        catchError(this.handleError)
-      );
-  }
 
-  private handleError(error: HttpErrorResponse) {
-    let errorMessage = 'Algo deu errado; por favor, tente novamente mais tarde.';
-    if (error.error instanceof ErrorEvent) {
-      // Erro no lado do cliente
-      errorMessage = `Erro: ${error.error.message}`;
-    } else if (error.error && error.error.message) {
-      // Erro no lado do servidor
-      errorMessage = `Erro: ${error.error.message}`;
-    } else {
-      // Outros tipos de erro
-      errorMessage = `Código de erro: ${error.status}\nMensagem: ${error.message}`;
-    }
-    return throwError(errorMessage);
+
+  salvar(formData: FormData): Observable<any> {
+    const headers = new HttpHeaders();
+    // Adicione headers se necessário, como Content-Type: multipart/form-data
+    // headers.set('Content-Type', 'multipart/form-data'); // Uncomment this if needed
+
+    return this.http.post<any>(`${this.apiURL}/cadastro`, formData, { headers }).pipe(
+      catchError(error => {
+        let errorMessage = '';
+        if (error.error instanceof ErrorEvent) {
+          // Erro no lado do cliente
+          errorMessage = `Erro: ${error.error.message}`;
+        } else {
+          // Erro no lado do servidor
+          errorMessage = `Erro no servidor: ${error.status}, ${error.error}`;
+        }
+        console.error(errorMessage);
+        return throwError(errorMessage);
+      })
+    );
   }
-  
 
 atualizar(formData: FormData, id: number): Observable<any> {
     return this.http.put<any>(`${this.apiURL}/cadastro/${id}`, formData)
-        .pipe(
-            catchError(this.handleError)
-        );
+
 }
 
 
@@ -51,16 +48,12 @@ atualizar(formData: FormData, id: number): Observable<any> {
 
 
   obterTodasQuestoes(): Observable<Questao[]> {
-    return this.http.get<Questao[]>(`${this.apiURL}/todas`).pipe(
-      catchError(this.handleError)
-    );
+    return this.http.get<Questao[]>(`${this.apiURL}/todas`);
   }
 
 
   deletar(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiURL}/${id}`).pipe(
-      catchError(this.handleError)
-    );
+    return this.http.delete<void>(`${this.apiURL}/${id}`);
   }
 
   filtrarQuestoes(filtros: any, page: number = 0, size: number = 10): Observable<Questao[]> {

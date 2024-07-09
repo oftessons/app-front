@@ -266,19 +266,15 @@
         <div class="col-md-6">
           <div class="form-group">
             <label>Marque a Alternativa Correta da Questão:</label>
-            <!-- <mat-radio-group [(ngModel)]="selectedAlternativeIndex" (change)="markCorrect(selectedAlternativeIndex)">
-                  <mat-radio-button *ngFor="let alt of questao.alternativas; let i = index" [value]="i">
-                  {{ getAlternativaLabel(i) }}. {{ alt.texto }}
-                  </mat-radio-button>
-                </mat-radio-group> -->
-            <div *ngIf="questao.alternativas && questao.alternativas.length > 0">
-              <mat-radio-button *ngFor="let alt of questao.alternativas; let i = index" [value]="i">
-                {{ getAlternativaLabel(i) }}. {{ alt.texto }}
-              </mat-radio-button>
-            </div>
+            <!-- Exemplo de como vincular o evento click ao método markCorrect -->
+            <div *ngFor="let alternativa of questao.alternativas; let i = index">
+                <input type="radio" name="alternativa" (click)="markCorrect(i)" [checked]="alternativa.correta">
+                {{ alternativa.texto }}
+            </div>       
           </div>
         </div>
       </div>
+      
 
       <div class="row">
         <div class="col-md-6">

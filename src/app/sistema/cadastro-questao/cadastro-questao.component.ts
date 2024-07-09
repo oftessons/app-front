@@ -51,21 +51,16 @@ export class CadastroQuestaoComponent implements OnInit {
       { id: 3, texto: 'C', correta: false, questoes: this.questao },
       { id: 4, texto: 'D', correta: false, questoes: this.questao }
     ];
-
-    this.activatedRoute.params.subscribe(params => {
-      this.id = params['id'];
-      if (this.id) {
-        this.carregarQuestao(this.id);
-      }
-    });
   }
 
   carregarQuestao(id: number): void {
+    console.log('Carregando questão com ID:', id);
     this.questoesService.getQuestaoById(id).subscribe(
       questao => {
         this.questao = questao;
         this.questao.alternativas = this.questao.alternativas || [];  // Inicializa alternativas se for undefined
         this.selectedAlternativeIndex = this.questao.alternativas.findIndex(alt => alt.correta);
+        console.log('Questão carregada:', this.questao);
       },
       error => {
         console.error('Erro ao carregar questão:', error);
@@ -79,6 +74,7 @@ export class CadastroQuestaoComponent implements OnInit {
       const reader = new FileReader();
       reader.onload = () => {
         this.imagePreviews[field] = reader.result;
+        console.log(`Imagem carregada para o campo ${field}.`);
       };
       reader.readAsDataURL(file);
     }
@@ -91,16 +87,9 @@ export class CadastroQuestaoComponent implements OnInit {
       const reader = new FileReader();
       reader.onload = () => {
         this.imagePreviews[field] = reader.result;
+        console.debug(`Imagem arrastada para o campo ${field}.`);
       };
       reader.readAsDataURL(file);
-    }
-  }
-
-  updateCorrectAlternative(): void {
-    if (this.selectedAlternativeIndex !== null) {
-      this.questao.alternativas.forEach((alt, index) => {
-        alt.correta = index === this.selectedAlternativeIndex;
-      });
     }
   }
 
@@ -108,22 +97,21 @@ export class CadastroQuestaoComponent implements OnInit {
     event.preventDefault();
   }
 
-
+  updateCorrectAlternative(index: number): void {
+    this.questao.alternativas.forEach((alt, i) => {
+      alt.correta = i === index;
+    });
+    console.log('Alternativa correta atualizada:', this.questao.alternativas);
+  }
 
   markCorrect(index: number): void {
-    // Reset all alternativas to false
-    this.questao.alternativas.forEach(alt => alt.correta = false);
-  
-    // Set the clicked alternativa to true
-    this.questao.alternativas[index].correta = true;
+    this.updateCorrectAlternative(index);
+    console.log('Alternativa correta marcada:', this.questao.alternativas);
+    console.log('Alternativa correta selecionada:', index);
   }
   
-
-
   onSubmit(): void {
-    if (!this.questao.alternativas) {
-      this.questao.alternativas = [];
-    }
+    this.updateCorrectAlternative(this.selectedAlternativeIndex);
 
     const formData = new FormData();
     formData.append('title', this.questao.title);
@@ -137,7 +125,7 @@ export class CadastroQuestaoComponent implements OnInit {
     formData.append('comentarioDaQuestaoDois', this.questao.comentarioDaQuestaoDois);
     formData.append('referenciaBi', this.questao.referenciaBi);
     formData.append('comentadorDaQuestao', this.questao.comentadorDaQuestao);
-    formData.append('ano', this.questao.ano.toString());  // Converte enum para string
+    formData.append('ano', this.questao.ano.toString());
     formData.append('tema', this.questao.tema.toString());
     formData.append('dificuldade', this.questao.dificuldade.toString());
     formData.append('tipoDeProva', this.questao.tipoDeProva.toString());
@@ -145,41 +133,57 @@ export class CadastroQuestaoComponent implements OnInit {
     formData.append('relevancia', this.questao.relevancia.toString());
     formData.append('palavraChave', this.questao.palavraChave);
 
-    this.questao.alternativas.forEach((alternativa, index) => {
-      formData.append(`alternativas[${index}].texto`, alternativa.texto);
-      formData.append(`alternativas[${index}].correta`, alternativa.correta.toString());
-    });
+      // Adiciona cada alternativa individualmente ao FormData
+      if (this.questao.alternativas) {
+        this.questao.alternativas.forEach((alternativa, index) => {
+            formData.append(`alternativas[${index}].texto`, alternativa.texto);
+            formData.append(`alternativas[${index}].correta`, alternativa.correta.toString());
+            // Adicione outros campos da alternativa conforme necessário
+        });
+    }
 
     if (this.fotoDaQuestao) {
-      formData.append('fotoDaQuestao', this.fotoDaQuestao);
+        formData.append('fotoDaQuestao', this.fotoDaQuestao);
     }
     if (this.fotoDaQuestaoDois) {
-      formData.append('fotoDaQuestaoDois', this.fotoDaQuestaoDois);
+        formData.append('fotoDaQuestaoDois', this.fotoDaQuestaoDois);
     }
     if (this.fotoDaQuestaoTres) {
-      formData.append('fotoDaQuestaoTres', this.fotoDaQuestaoTres);
+        formData.append('fotoDaQuestaoTres', this.fotoDaQuestaoTres);
     }
     if (this.fotoDaResposta) {
-      formData.append('fotoDaResposta', this.fotoDaResposta);
+        formData.append('fotoDaResposta', this.fotoDaResposta);
     }
     if (this.fotoDaRespostaDois) {
-      formData.append('fotoDaRespostaDois', this.fotoDaRespostaDois);
+        formData.append('fotoDaRespostaDois', this.fotoDaRespostaDois);
     }
     if (this.fotoDaRespostaTres) {
-      formData.append('fotoDaRespostaTres', this.fotoDaRespostaTres);
+        formData.append('fotoDaRespostaTres', this.fotoDaRespostaTres);
     }
 
+    console.debug('Enviando formulário com dados da questão:', this.questao);
+
     this.questoesService.salvar(formData).subscribe(
-      response => {
-        this.successMessage = 'Questão salva com sucesso!';
-        this.errorMessage = null;
-      },
-      error => {
-        this.errorMessage = 'Erro ao salvar a questão.';
-        this.successMessage = null;
-      }
+        response => {
+            this.successMessage = 'Questão salva com sucesso!';
+            this.errorMessage = null;
+            console.debug('Questão salva com sucesso:', response);
+        },
+        error => {
+            this.errorMessage = 'Erro ao salvar a questão.';
+            this.successMessage = null;
+            console.error('Erro ao salvar a questão:', error);
+        }
     );
-  }
+
+    console.log('Dados da questão antes de enviar:', {
+        title: this.questao.title,
+        alternativas: this.questao.alternativas
+    });
+}
+
+
+  
 
   extractErrorMessage(errorResponse: any): string {
     if (errorResponse.error instanceof ErrorEvent) {
@@ -191,7 +195,5 @@ export class CadastroQuestaoComponent implements OnInit {
     }
   }
 
-  getAlternativaLabel(index: number): string {
-    return String.fromCharCode(65 + index); // A = 65 na tabela ASCII
-  }
+  
 }
