@@ -3,8 +3,9 @@ import { Tema } from './enums/tema';
 import { Dificuldade } from './enums/dificuldade';
 import { TipoDeProva } from './enums/tipoDeProva';
 import { Subtema } from './enums/subtema';
-import { Alternativa } from '../alternativa';
 import { Relevancia } from './enums/relevancia';
+import { Alternativa } from '../alternativa';
+
 
 export class Questao {
   id!: number;
@@ -34,9 +35,6 @@ export class Questao {
   tipoDeProva!: TipoDeProva;
   subtema!: Subtema;
   palavraChave!: string;
-  alternativas!: { texto: string, correta: boolean }[];
-  alternativaCorreta!: number;
+  alternativas!: Alternativa[];
+  alternativaCorreta: Alternativa | null = null; // Agora guarda a Alternativa correta diretamente
 }
-
-
-
