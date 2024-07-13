@@ -4,7 +4,8 @@ import { Dificuldade } from './enums/dificuldade';
 import { TipoDeProva } from './enums/tipoDeProva';
 import { Subtema } from './enums/subtema';
 import { Relevancia } from './enums/relevancia';
-import { Alternativa } from '../alternativa'; 
+import { Alternativa } from '../alternativa';
+
 
 export class Questao {
   id!: number;
