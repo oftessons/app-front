@@ -17,26 +17,35 @@ export class QuestoesService {
 
   salvar(formData: FormData ): Observable<any> {
     const headers = new HttpHeaders();
-    // Adicione headers se necessário, como Content-Type: multipart/form-data
-    headers.set('Content-Type', 'multipart/form-data'); // Uncomment this if needed
+    // Não defina o Content-Type, o navegador cuidará disso
 
-
-    return this.http.post<any>(`${this.apiURL}/cadastro`, formData, { headers }).pipe(
+    return this.http.post<any>(`${this.apiURL}/cadastro`, formData, { headers, responseType: 'text' as 'json' }).pipe(
+      map(response => {
+        // Sucesso
+        try {
+          const jsonResponse = JSON.parse(response);
+          return jsonResponse || { message: 'Questão salva com sucesso!' };
+        } catch (e) {
+          return { message: 'Questão salva com sucesso!' };
+        }
+      }),
       catchError(error => {
         let errorMessage = '';
-        
+
         if (error.error instanceof ErrorEvent) {
           // Erro no lado do cliente
           errorMessage = `Erro: ${error.error.message}`;
         } else {
           // Erro no lado do servidor
-          errorMessage = `Erro no servidor: ${error.status}, ${error.error}`;
+          errorMessage = `Erro no servidor: ${error.status}, ${error.message}`;
         }
         console.error(errorMessage);
         return throwError(errorMessage);
       })
     );
   }
+
+
 
 atualizar(formData: FormData, id: number): Observable<any> {
     return this.http.put<any>(`${this.apiURL}/cadastro/${id}`, formData)

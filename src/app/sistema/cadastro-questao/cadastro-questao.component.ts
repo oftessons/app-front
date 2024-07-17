@@ -39,8 +39,6 @@ export class CadastroQuestaoComponent implements OnInit {
   tiposDeProva: string[] = Object.values(TipoDeProva);
   relevancias: string[] = Object.values(Relevancia);
 
-
-
   constructor(
     private questoesService: QuestoesService,
     private router: Router,
@@ -49,7 +47,7 @@ export class CadastroQuestaoComponent implements OnInit {
 
   ngOnInit(): void {
     this.questaoDTO.alternativas = [
-      { id: 1, texto: 'A', correta: false},
+      { id: 1, texto: 'A', correta: false },
       { id: 2, texto: 'B', correta: false },
       { id: 3, texto: 'C', correta: false },
       { id: 4, texto: 'D', correta: false }
@@ -73,23 +71,28 @@ export class CadastroQuestaoComponent implements OnInit {
 
   onFileSelected(event: any, field: string) {
     const file = event.target.files[0];
-
-
-
     if (file) {
-      if(field=='fotoDaQuestao'){
-        this.fotoDaQuestao=file;
-
-      }else if(field== 'fotoDaQuestaoDois'){
-        this.fotoDaQuestaoDois=file;
-      }else if(field=='fotoDaQuestaoTres'){
-        this.fotoDaQuestaoTres=file;
-      }else if(field=='fotoDaResposta'){
-        this.fotoDaResposta=file;
-      }else if(field=='fotoDaRespostaDois'){
-        this.fotoDaRespostaDois=file;
-      }else if(field=='fotoDaRespostaTres'){
-        this.fotoDaRespostaTres=file;
+      switch (field) {
+        case 'fotoDaQuestao':
+          this.fotoDaQuestao = file;
+          break;
+        case 'fotoDaQuestaoDois':
+          this.fotoDaQuestaoDois = file;
+          break;
+        case 'fotoDaQuestaoTres':
+          this.fotoDaQuestaoTres = file;
+          break;
+        case 'fotoDaResposta':
+          this.fotoDaResposta = file;
+          break;
+        case 'fotoDaRespostaDois':
+          this.fotoDaRespostaDois = file;
+          break;
+        case 'fotoDaRespostaTres':
+          this.fotoDaRespostaTres = file;
+          break;
+        default:
+          break;
       }
 
       const reader = new FileReader();
@@ -129,97 +132,53 @@ export class CadastroQuestaoComponent implements OnInit {
     this.updateCorrectAlternative(index);
     console.log('Alternativa correta marcada:', this.questaoDTO.alternativas);
     console.log('Alternativa correta selecionada:', index);
-    this.questaoDTO.alternativaCorreta=[]
-    this.questaoDTO.alternativaCorreta.push(this.questaoDTO.alternativas[index]);
+    this.questaoDTO.alternativaCorreta = [this.questaoDTO.alternativas[index]];
   }
 
   onSubmit(): void {
-    const onjetojson=this.questaoDTO.toJson();
-
-
-
-    //this.updateCorrectAlternative(this.selectedAlternativeIndex);
-    //const formData = new FormData();
-    // this.formData.append('title', this.questaoDTO.title);
-    // this.formData.append('enunciadoDaQuestao', this.questaoDTO.enunciadoDaQuestao);
-    // this.formData.append('afirmacaoUm', this.questaoDTO.afirmacaoUm);
-    // this.formData.append('afirmacaoDois', this.questaoDTO.afirmacaoDois);
-    // this.formData.append('afirmacaoTres', this.questaoDTO.afirmacaoTres);
-    // this.formData.append('afirmacaoQuatro', this.questaoDTO.afirmacaoQuatro);
-    // this.formData.append('assinale', this.questaoDTO.assinale);
-    // this.formData.append('comentarioDaQuestaoUm', this.questaoDTO.comentarioDaQuestaoUm);
-    // this.formData.append('comentarioDaQuestaoDois', this.questaoDTO.comentarioDaQuestaoDois);
-    // this.formData.append('referenciaBi', this.questaoDTO.referenciaBi);
-    // this.formData.append('comentadorDaQuestao', this.questaoDTO.comentadorDaQuestao);
-    // this.formData.append('ano', this.questaoDTO.ano.toString());
-    // this.formData.append('tema', this.questaoDTO.tema.toString());
-    // this.formData.append('dificuldade', this.questaoDTO.dificuldade.toString());
-    // this.formData.append('tipoDeProva', this.questaoDTO.tipoDeProva.toString());
-    // this.formData.append('subtema', this.questaoDTO.subtema.toString());
-    // this.formData.append('relevancia', this.questaoDTO.relevancia.toString());
-    // this.formData.append('palavraChave', this.questaoDTO.palavraChave);
-
-    // Adiciona cada alternativa individualmente ao FormData
-    //   if (this.questaoDTO.alternativas) {
-    //     this.questaoDTO.alternativas.forEach((alternativa, index) => {
-    //         this.formData.append(`alternativas[${index}].texto`, alternativa.texto);
-    //         this.formData.append(`alternativas[${index}].correta`, alternativa.correta.toString());
-    //         // Adicione outros campos da alternativa conforme necessário
-    //     });
-    // }
-
+    const onjetojson = this.questaoDTO.toJson();
 
     if (this.fotoDaQuestao) {
-       this.formData.append('fotoDaQuestaoArquivo', this.fotoDaQuestao);
-
-
+      this.formData.append('fotoDaQuestaoArquivo', this.fotoDaQuestao);
     }
     if (this.fotoDaQuestaoDois) {
-        this.formData.append('fotoDaQuestaoDoisArquivo', this.fotoDaQuestaoDois);
+      this.formData.append('fotoDaQuestaoDoisArquivo', this.fotoDaQuestaoDois);
     }
     if (this.fotoDaQuestaoTres) {
-        this.formData.append('fotoDaQuestaoTres', this.fotoDaQuestaoTres);
-
+      this.formData.append('fotoDaQuestaoTres', this.fotoDaQuestaoTres);
     }
     if (this.fotoDaResposta) {
-        this.formData.append('fotoDaRespostaArquivo', this.fotoDaResposta);
-
+      this.formData.append('fotoDaRespostaArquivo', this.fotoDaResposta);
     }
     if (this.fotoDaRespostaDois) {
-        this.formData.append('fotoDaRespostaDoisArquivo', this.fotoDaRespostaDois);
-
+      this.formData.append('fotoDaRespostaDoisArquivo', this.fotoDaRespostaDois);
     }
     if (this.fotoDaRespostaTres) {
-        this.formData.append('fotoDaRespostaTresArquivo', this.fotoDaRespostaTres);
-
+      this.formData.append('fotoDaRespostaTresArquivo', this.fotoDaRespostaTres);
     }
 
-
     console.debug('Enviando formulário com dados da questão:', this.formData);
-    console.log("CLASSE ",JSON.stringify(this.questaoDTO))
-    this.formData.append('questaoDTO',onjetojson);
+    console.log('CLASSE ', JSON.stringify(this.questaoDTO));
+    this.formData.append('questaoDTO', onjetojson);
 
     this.questoesService.salvar(this.formData).subscribe(
-        response => {
-            this.successMessage = 'Questão salva com sucesso!';
-            this.errorMessage = null;
-            console.debug('Questão salva com sucesso:', response);
-        },
-        error => {
-            this.errorMessage = 'Erro ao salvar a questão.';
-            this.successMessage = null;
-            console.error('Erro ao salvar a questão:', error);
-        }
+      response => {
+        this.successMessage = 'Questão salva com sucesso!';
+        this.errorMessage = null;
+        console.debug('Questão salva com sucesso:', response);
+      },
+      error => {
+        this.errorMessage = error;
+        this.successMessage = null;
+        console.error('Erro ao salvar a questão:', error);
+      }
     );
 
     console.log('Dados da questão antes de enviar:', {
-        title: this.questaoDTO.title,
-        alternativas: this.questaoDTO.alternativas
+      title: this.questaoDTO.title,
+      alternativas: this.questaoDTO.alternativas
     });
-}
-
-
-
+  }
 
   extractErrorMessage(errorResponse: any): string {
     if (errorResponse.error instanceof ErrorEvent) {
@@ -230,6 +189,4 @@ export class CadastroQuestaoComponent implements OnInit {
       return `Código de erro: ${errorResponse.status}\nMensagem: ${errorResponse.message}`;
     }
   }
-
-
 }
