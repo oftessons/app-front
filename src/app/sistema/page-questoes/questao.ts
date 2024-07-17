@@ -6,7 +6,6 @@ import { Subtema } from './enums/subtema';
 import { Relevancia } from './enums/relevancia';
 import { Alternativa } from '../alternativa';
 
-
 export class Questao {
   id!: number;
   diaDoCadastro!: string;
@@ -18,12 +17,12 @@ export class Questao {
   afirmacaoTres!: string;
   afirmacaoQuatro!: string;
   assinale!: string;
-  fotoDaQuestao!: string;
-  fotoDaQuestaoDois!: string;
-  fotoDaQuestaoTres!: string;
-  fotoDaResposta!: string;
-  fotoDaRespostaDois!: string;
-  fotoDaRespostaTres!: string;
+  fotoDaQuestao!:File;
+  fotoDaQuestaoDois!:File ;
+  fotoDaQuestaoTres!: File;
+  fotoDaResposta!: File;
+  fotoDaRespostaDois!: File;
+  fotoDaRespostaTres!: File;
   comentarioDaQuestaoUm!: string;
   comentarioDaQuestaoDois!: string;
   referenciaBi!: string;
@@ -36,5 +35,40 @@ export class Questao {
   subtema!: Subtema;
   palavraChave!: string;
   alternativas!: Alternativa[];
-  alternativaCorreta: Alternativa | null = null; // Agora guarda a Alternativa correta diretamente
+  alternativaCorreta?: Alternativa[];
+
+  toJson(): string {
+    return JSON.stringify({
+      id: this.id,
+      diaDoCadastro: this.diaDoCadastro,
+      idUser: this.idUser,
+      title: this.title,
+      enunciadoDaQuestao: this.enunciadoDaQuestao,
+      afirmacaoUm: this.afirmacaoUm,
+      afirmacaoDois: this.afirmacaoDois,
+      afirmacaoTres: this.afirmacaoTres,
+      afirmacaoQuatro: this.afirmacaoQuatro,
+      assinale: this.assinale,
+      fotoDaQuestao: this.fotoDaQuestao,
+      fotoDaQuestaoDois: this.fotoDaQuestaoDois,
+      fotoDaQuestaoTres: this.fotoDaQuestaoTres,
+      fotoDaResposta: this.fotoDaResposta,
+      fotoDaRespostaDois: this.fotoDaRespostaDois,
+      fotoDaRespostaTres: this.fotoDaRespostaTres,
+      comentarioDaQuestaoUm: this.comentarioDaQuestaoUm,
+      comentarioDaQuestaoDois: this.comentarioDaQuestaoDois,
+      referenciaBi: this.referenciaBi,
+      comentadorDaQuestao: this.comentadorDaQuestao,
+      ano: this.ano,
+      tema: this.tema,
+      dificuldade: this.dificuldade,
+      relevancia: this.relevancia,
+      tipoDeProva: this.tipoDeProva,
+      subtema: this.subtema,
+      palavraChave: this.palavraChave,
+      alternativas: this.alternativas,
+      alternativaCorreta: this.alternativaCorreta
+    });
+  }
 }
+

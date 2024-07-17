@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Filtro } from '../filtro';
 import { FiltroService } from 'src/app/services/filtro.service';
+import { Router, ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -12,7 +13,10 @@ export class PageFiltroComponent implements OnInit {
 
   filtros: Filtro[] = [];
 
-  constructor(private filtroService: FiltroService) { }
+  constructor(private filtroService: FiltroService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute
+  ) { }
 
   ngOnInit(): void {
     this.carregarFiltros();
@@ -45,4 +49,7 @@ export class PageFiltroComponent implements OnInit {
       );
   }
 
+  editarFiltro(id: number): void {
+    this.router.navigate(['/editar-filtro', id]); // Navega para a rota de edição
+  }
 }
