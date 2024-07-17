@@ -10,15 +10,16 @@ import { Ano } from '../sistema/page-questoes/enums/ano';
   providedIn: 'root'
 })
 export class QuestoesService {
-  
+
   apiURL: string = environment.apiURLBase + '/api/questoes';
   constructor(private http: HttpClient) { }
 
 
-  salvar(formData: FormData): Observable<any> {
+  salvar(formData: FormData ): Observable<any> {
     const headers = new HttpHeaders();
     // Adicione headers se necessário, como Content-Type: multipart/form-data
-    // headers.set('Content-Type', 'multipart/form-data'); // Uncomment this if needed
+    headers.set('Content-Type', 'multipart/form-data'); // Uncomment this if needed
+
 
     return this.http.post<any>(`${this.apiURL}/cadastro`, formData, { headers }).pipe(
       catchError(error => {

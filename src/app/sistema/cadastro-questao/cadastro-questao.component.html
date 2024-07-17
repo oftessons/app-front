@@ -1,7 +1,7 @@
 <div class="container pt-5">
   <div class="container mt-4 container-geral">
     <div class="header-container">
-      <h2>{{ questao.id ? 'Edição da Questão' : 'Cadastro da Questão' }}</h2>
+      <h2>{{ questaoDTO.id ? 'Edição da Questão' : 'Cadastro da Questão' }}</h2>
     </div>
     <form class="form-cad" #questaoForm="ngForm" (ngSubmit)="onSubmit()">
       <div class="row">
@@ -14,17 +14,17 @@
           </div>
         </div>
       </div>
-      <div class="row" *ngIf="questao.id">
+      <div class="row" *ngIf="questaoDTO.id">
         <div class="col-md-6">
           <div class="form-group">
             <label>ID:</label>
-            <input type="text" class="form-control" name="id" [(ngModel)]="questao.id" disabled>
+            <input type="text" class="form-control" name="id" [(ngModel)]="questaoDTO.id" disabled>
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-group">
             <label>Data Cadastro:</label>
-            <input type="text" class="form-control" name="diaDoCadastro" [(ngModel)]="questao.diaDoCadastro" disabled>
+            <input type="text" class="form-control" name="diaDoCadastro" [(ngModel)]="questaoDTO.diaDoCadastro" disabled>
           </div>
         </div>
       </div>
@@ -40,7 +40,7 @@
             <div class="form-group">
               <mat-form-field appearance="fill">
                 <mat-label>Ano</mat-label>
-                <mat-select name="ano" [(value)]="questao.ano">
+                <mat-select name="ano" [(value)]="questaoDTO.ano">
                   <mat-option *ngFor="let ano of anos" [value]="ano">{{ ano }}</mat-option>
                 </mat-select>
               </mat-form-field>
@@ -50,7 +50,7 @@
             <div class="form-group">
               <mat-form-field appearance="fill">
                 <mat-label>Dificuldade</mat-label>
-                <mat-select name="dificuldade" [(value)]="questao.dificuldade">
+                <mat-select name="dificuldade" [(value)]="questaoDTO.dificuldade">
                   <mat-option *ngFor="let dificuldade of dificuldades" [value]="dificuldade">{{ dificuldade
                     }}</mat-option>
                 </mat-select>
@@ -63,7 +63,7 @@
             <div class="form-group">
               <mat-form-field appearance="fill">
                 <mat-label>Tema</mat-label>
-                <mat-select name="tema" [(value)]="questao.tema">
+                <mat-select name="tema" [(value)]="questaoDTO.tema">
                   <mat-option *ngFor="let tema of temas" [value]="tema">{{ tema }}</mat-option>
                 </mat-select>
               </mat-form-field>
@@ -73,7 +73,7 @@
             <div class="form-group">
               <mat-form-field appearance="fill">
                 <mat-label>Subtema</mat-label>
-                <mat-select name="subtema" [(value)]="questao.subtema">
+                <mat-select name="subtema" [(value)]="questaoDTO.subtema">
                   <mat-option *ngFor="let subtema of subtemas" [value]="subtema">{{ subtema }}</mat-option>
                 </mat-select>
               </mat-form-field>
@@ -85,7 +85,7 @@
             <div class="form-group">
               <mat-form-field appearance="fill">
                 <mat-label>Tipo de Prova</mat-label>
-                <mat-select name="tipoDeProva" [(value)]="questao.tipoDeProva">
+                <mat-select name="tipoDeProva" [(value)]="questaoDTO.tipoDeProva">
                   <mat-option *ngFor="let tipoDeProva of tiposDeProva" [value]="tipoDeProva">{{ tipoDeProva
                     }}</mat-option>
                 </mat-select>
@@ -96,7 +96,7 @@
             <div class="form-group">
               <mat-form-field appearance="fill">
                 <mat-label>Relevância</mat-label>
-                <mat-select name="relevancia" [(value)]="questao.relevancia">
+                <mat-select name="relevancia" [(value)]="questaoDTO.relevancia">
                   <mat-option *ngFor="let relevancia of relevancias" [value]="relevancia">{{ relevancia }}</mat-option>
                 </mat-select>
               </mat-form-field>
@@ -115,14 +115,14 @@
         <div class="col-md-6">
           <div class="form-group">
             <label>Título: </label>
-            <input type="text" class="form-control" name="title" [(ngModel)]="questao.title"
+            <input type="text" class="form-control" name="title" [(ngModel)]="questaoDTO.title"
               placeholder="Digite o título da questão" />
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-group">
             <label>Palavra-chave da Questão: </label>
-            <input type="text" class="form-control" name="palavraChave" [(ngModel)]="questao.palavraChave"
+            <input type="text" class="form-control" name="palavraChave" [(ngModel)]="questaoDTO.palavraChave"
               placeholder="Digite a palavra-chave da Questão" />
           </div>
         </div>
@@ -131,7 +131,7 @@
         <div class="col-md-6">
           <div class="form-group">
             <label>Enunciado da Questão: </label>
-            <textarea class="form-control" rows="4" name="enunciadoDaQuestao" [(ngModel)]="questao.enunciadoDaQuestao"
+            <textarea class="form-control" rows="4" name="enunciadoDaQuestao" [(ngModel)]="questaoDTO.enunciadoDaQuestao"
               placeholder="Digite o enunciado da questão"></textarea>
           </div>
         </div>
@@ -140,14 +140,14 @@
         <div class="col-md-6">
           <div class="form-group">
             <label>Afirmativa 1: </label>
-            <textarea class="form-control" rows="2" name="afirmacaoUm" [(ngModel)]="questao.afirmacaoUm"
+            <textarea class="form-control" rows="2" name="afirmacaoUm" [(ngModel)]="questaoDTO.afirmacaoUm"
               placeholder="Digite a afirmação da questão"></textarea>
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-group">
             <label>Afirmativa 2: </label>
-            <textarea class="form-control" rows="2" name="afirmacaoDois" [(ngModel)]="questao.afirmacaoDois"
+            <textarea class="form-control" rows="2" name="afirmacaoDois" [(ngModel)]="questaoDTO.afirmacaoDois"
               placeholder="Digite a afirmação da questão"></textarea>
           </div>
         </div>
@@ -156,14 +156,14 @@
         <div class="col-md-6">
           <div class="form-group">
             <label>Afirmativa 3: </label>
-            <textarea class="form-control" rows="2" name="afirmacaoTres" [(ngModel)]="questao.afirmacaoTres"
+            <textarea class="form-control" rows="2" name="afirmacaoTres" [(ngModel)]="questaoDTO.afirmacaoTres"
               placeholder="Digite a afirmação da questão"></textarea>
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-group">
             <label>Afirmativa 4: </label>
-            <textarea class="form-control" rows="2" name="afirmacaoQuatro" [(ngModel)]="questao.afirmacaoQuatro"
+            <textarea class="form-control" rows="2" name="afirmacaoQuatro" [(ngModel)]="questaoDTO.afirmacaoQuatro"
               placeholder="Digite a afirmação da questão"></textarea>
           </div>
         </div>
@@ -172,7 +172,7 @@
         <div class="col-md-6">
           <div class="form-group">
             <label>Assinale: </label>
-            <input type="text" class="form-control" name="assinale" [(ngModel)]="questao.assinale"
+            <input type="text" class="form-control" name="assinale" [(ngModel)]="questaoDTO.assinale"
               placeholder="Digite o campo de assinale aqui" />
           </div>
         </div>
@@ -267,20 +267,20 @@
           <div class="form-group">
             <label>Marque a Alternativa Correta da Questão:</label>
             <!-- Exemplo de como vincular o evento click ao método markCorrect -->
-            <div *ngFor="let alternativa of questao.alternativas; let i = index">
+            <div *ngFor="let alternativa of questaoDTO.alternativas; let i = index">
                 <input type="radio" name="alternativa" (click)="markCorrect(i)" [checked]="alternativa.correta">
                 {{ alternativa.texto }}
-            </div>       
+            </div>
           </div>
         </div>
       </div>
-      
+
 
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
             <label>Comentador da Questão: </label>
-            <input type="text" class="form-control" name="comentadorDaQuestao" [(ngModel)]="questao.comentadorDaQuestao"
+            <input type="text" class="form-control" name="comentadorDaQuestao" [(ngModel)]="questaoDTO.comentadorDaQuestao"
               placeholder="Digite o nome do comentador" />
           </div>
         </div>
@@ -290,14 +290,14 @@
           <div class="form-group">
             <label>Comentário Geral da Questão: </label>
             <textarea class="form-control" rows="3" name="comentarioDaQuestaoUm"
-              [(ngModel)]="questao.comentarioDaQuestaoUm" placeholder="Digite o comentário geral da questão"></textarea>
+              [(ngModel)]="questaoDTO.comentarioDaQuestaoUm" placeholder="Digite o comentário geral da questão"></textarea>
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-group">
             <label>Comentário Específico da Questão: </label>
             <textarea class="form-control" rows="3" name="comentarioDaQuestaoDois"
-              [(ngModel)]="questao.comentarioDaQuestaoDois"
+              [(ngModel)]="questaoDTO.comentarioDaQuestaoDois"
               placeholder="Digite o comentário específico da questão"></textarea>
           </div>
         </div>
@@ -374,9 +374,9 @@
 
       <div class="container mt-4 container-btn">
         <button type="button" class="btn btn-secundary" routerLink="/usuario/dashboard"
-          *ngIf="!questao.id">Voltar</button>
-        <button type="submit" class="btn btn-primary" *ngIf="!questao.id">Salvar</button>
-        <button type="submit" class="btn btn-primary" *ngIf="questao.id">Atualizar</button>
+          *ngIf="!questaoDTO.id">Voltar</button>
+        <button type="submit" class="btn btn-primary" *ngIf="!questaoDTO.id">Salvar</button>
+        <button type="submit" class="btn btn-primary" *ngIf="questaoDTO.id">Atualizar</button>
       </div>
     </form>
   </div>

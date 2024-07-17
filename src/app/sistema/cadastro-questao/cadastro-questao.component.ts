@@ -16,8 +16,9 @@ import { Alternativa } from '../alternativa';
   styleUrls: ['./cadastro-questao.component.css']
 })
 export class CadastroQuestaoComponent implements OnInit {
+  formData = new FormData();
 
-  questao: Questao = new Questao();
+  questaoDTO = new Questao();
   successMessage: string | null = null;
   errorMessage: string | null = null;
   fotoDaQuestao: File | null = null;
@@ -38,6 +39,8 @@ export class CadastroQuestaoComponent implements OnInit {
   tiposDeProva: string[] = Object.values(TipoDeProva);
   relevancias: string[] = Object.values(Relevancia);
 
+
+
   constructor(
     private questoesService: QuestoesService,
     private router: Router,
@@ -45,11 +48,11 @@ export class CadastroQuestaoComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.questao.alternativas = [
-      { id: 1, texto: 'A', correta: false, questoes: this.questao },
-      { id: 2, texto: 'B', correta: false, questoes: this.questao },
-      { id: 3, texto: 'C', correta: false, questoes: this.questao },
-      { id: 4, texto: 'D', correta: false, questoes: this.questao }
+    this.questaoDTO.alternativas = [
+      { id: 1, texto: 'A', correta: false},
+      { id: 2, texto: 'B', correta: false },
+      { id: 3, texto: 'C', correta: false },
+      { id: 4, texto: 'D', correta: false }
     ];
   }
 
@@ -57,10 +60,10 @@ export class CadastroQuestaoComponent implements OnInit {
     console.log('Carregando questão com ID:', id);
     this.questoesService.getQuestaoById(id).subscribe(
       questao => {
-        this.questao = questao;
-        this.questao.alternativas = this.questao.alternativas || [];  // Inicializa alternativas se for undefined
-        this.selectedAlternativeIndex = this.questao.alternativas.findIndex(alt => alt.correta);
-        console.log('Questão carregada:', this.questao);
+        this.questaoDTO = questao;
+        this.questaoDTO.alternativas = this.questaoDTO.alternativas || [];  // Inicializa alternativas se for undefined
+        this.selectedAlternativeIndex = this.questaoDTO.alternativas.findIndex(alt => alt.correta);
+        console.log('Questão carregada:', this.questaoDTO);
       },
       error => {
         console.error('Erro ao carregar questão:', error);
@@ -70,7 +73,25 @@ export class CadastroQuestaoComponent implements OnInit {
 
   onFileSelected(event: any, field: string) {
     const file = event.target.files[0];
+
+
+
     if (file) {
+      if(field=='fotoDaQuestao'){
+        this.fotoDaQuestao=file;
+
+      }else if(field== 'fotoDaQuestaoDois'){
+        this.fotoDaQuestaoDois=file;
+      }else if(field=='fotoDaQuestaoTres'){
+        this.fotoDaQuestaoTres=file;
+      }else if(field=='fotoDaResposta'){
+        this.fotoDaResposta=file;
+      }else if(field=='fotoDaRespostaDois'){
+        this.fotoDaRespostaDois=file;
+      }else if(field=='fotoDaRespostaTres'){
+        this.fotoDaRespostaTres=file;
+      }
+
       const reader = new FileReader();
       reader.onload = () => {
         this.imagePreviews[field] = reader.result;
@@ -98,72 +119,87 @@ export class CadastroQuestaoComponent implements OnInit {
   }
 
   updateCorrectAlternative(index: number): void {
-    this.questao.alternativas.forEach((alt, i) => {
+    this.questaoDTO.alternativas.forEach((alt, i) => {
       alt.correta = i === index;
     });
-    console.log('Alternativa correta atualizada:', this.questao.alternativas);
+    console.log('Alternativa correta atualizada:', this.questaoDTO.alternativas);
   }
 
   markCorrect(index: number): void {
     this.updateCorrectAlternative(index);
-    console.log('Alternativa correta marcada:', this.questao.alternativas);
+    console.log('Alternativa correta marcada:', this.questaoDTO.alternativas);
     console.log('Alternativa correta selecionada:', index);
+    this.questaoDTO.alternativaCorreta=[]
+    this.questaoDTO.alternativaCorreta.push(this.questaoDTO.alternativas[index]);
   }
-  
+
   onSubmit(): void {
-    this.updateCorrectAlternative(this.selectedAlternativeIndex);
+    const onjetojson=this.questaoDTO.toJson();
 
-    const formData = new FormData();
-    formData.append('title', this.questao.title);
-    formData.append('enunciadoDaQuestao', this.questao.enunciadoDaQuestao);
-    formData.append('afirmacaoUm', this.questao.afirmacaoUm);
-    formData.append('afirmacaoDois', this.questao.afirmacaoDois);
-    formData.append('afirmacaoTres', this.questao.afirmacaoTres);
-    formData.append('afirmacaoQuatro', this.questao.afirmacaoQuatro);
-    formData.append('assinale', this.questao.assinale);
-    formData.append('comentarioDaQuestaoUm', this.questao.comentarioDaQuestaoUm);
-    formData.append('comentarioDaQuestaoDois', this.questao.comentarioDaQuestaoDois);
-    formData.append('referenciaBi', this.questao.referenciaBi);
-    formData.append('comentadorDaQuestao', this.questao.comentadorDaQuestao);
-    formData.append('ano', this.questao.ano.toString());
-    formData.append('tema', this.questao.tema.toString());
-    formData.append('dificuldade', this.questao.dificuldade.toString());
-    formData.append('tipoDeProva', this.questao.tipoDeProva.toString());
-    formData.append('subtema', this.questao.subtema.toString());
-    formData.append('relevancia', this.questao.relevancia.toString());
-    formData.append('palavraChave', this.questao.palavraChave);
 
-      // Adiciona cada alternativa individualmente ao FormData
-      if (this.questao.alternativas) {
-        this.questao.alternativas.forEach((alternativa, index) => {
-            formData.append(`alternativas[${index}].texto`, alternativa.texto);
-            formData.append(`alternativas[${index}].correta`, alternativa.correta.toString());
-            // Adicione outros campos da alternativa conforme necessário
-        });
-    }
+
+    //this.updateCorrectAlternative(this.selectedAlternativeIndex);
+    //const formData = new FormData();
+    // this.formData.append('title', this.questaoDTO.title);
+    // this.formData.append('enunciadoDaQuestao', this.questaoDTO.enunciadoDaQuestao);
+    // this.formData.append('afirmacaoUm', this.questaoDTO.afirmacaoUm);
+    // this.formData.append('afirmacaoDois', this.questaoDTO.afirmacaoDois);
+    // this.formData.append('afirmacaoTres', this.questaoDTO.afirmacaoTres);
+    // this.formData.append('afirmacaoQuatro', this.questaoDTO.afirmacaoQuatro);
+    // this.formData.append('assinale', this.questaoDTO.assinale);
+    // this.formData.append('comentarioDaQuestaoUm', this.questaoDTO.comentarioDaQuestaoUm);
+    // this.formData.append('comentarioDaQuestaoDois', this.questaoDTO.comentarioDaQuestaoDois);
+    // this.formData.append('referenciaBi', this.questaoDTO.referenciaBi);
+    // this.formData.append('comentadorDaQuestao', this.questaoDTO.comentadorDaQuestao);
+    // this.formData.append('ano', this.questaoDTO.ano.toString());
+    // this.formData.append('tema', this.questaoDTO.tema.toString());
+    // this.formData.append('dificuldade', this.questaoDTO.dificuldade.toString());
+    // this.formData.append('tipoDeProva', this.questaoDTO.tipoDeProva.toString());
+    // this.formData.append('subtema', this.questaoDTO.subtema.toString());
+    // this.formData.append('relevancia', this.questaoDTO.relevancia.toString());
+    // this.formData.append('palavraChave', this.questaoDTO.palavraChave);
+
+    // Adiciona cada alternativa individualmente ao FormData
+    //   if (this.questaoDTO.alternativas) {
+    //     this.questaoDTO.alternativas.forEach((alternativa, index) => {
+    //         this.formData.append(`alternativas[${index}].texto`, alternativa.texto);
+    //         this.formData.append(`alternativas[${index}].correta`, alternativa.correta.toString());
+    //         // Adicione outros campos da alternativa conforme necessário
+    //     });
+    // }
+
 
     if (this.fotoDaQuestao) {
-        formData.append('fotoDaQuestao', this.fotoDaQuestao);
+       this.formData.append('fotoDaQuestaoArquivo', this.fotoDaQuestao);
+
+
     }
     if (this.fotoDaQuestaoDois) {
-        formData.append('fotoDaQuestaoDois', this.fotoDaQuestaoDois);
+        this.formData.append('fotoDaQuestaoDoisArquivo', this.fotoDaQuestaoDois);
     }
     if (this.fotoDaQuestaoTres) {
-        formData.append('fotoDaQuestaoTres', this.fotoDaQuestaoTres);
+        this.formData.append('fotoDaQuestaoTres', this.fotoDaQuestaoTres);
+
     }
     if (this.fotoDaResposta) {
-        formData.append('fotoDaResposta', this.fotoDaResposta);
+        this.formData.append('fotoDaRespostaArquivo', this.fotoDaResposta);
+
     }
     if (this.fotoDaRespostaDois) {
-        formData.append('fotoDaRespostaDois', this.fotoDaRespostaDois);
+        this.formData.append('fotoDaRespostaDoisArquivo', this.fotoDaRespostaDois);
+
     }
     if (this.fotoDaRespostaTres) {
-        formData.append('fotoDaRespostaTres', this.fotoDaRespostaTres);
+        this.formData.append('fotoDaRespostaTresArquivo', this.fotoDaRespostaTres);
+
     }
 
-    console.debug('Enviando formulário com dados da questão:', this.questao);
 
-    this.questoesService.salvar(formData).subscribe(
+    console.debug('Enviando formulário com dados da questão:', this.formData);
+    console.log("CLASSE ",JSON.stringify(this.questaoDTO))
+    this.formData.append('questaoDTO',onjetojson);
+
+    this.questoesService.salvar(this.formData).subscribe(
         response => {
             this.successMessage = 'Questão salva com sucesso!';
             this.errorMessage = null;
@@ -177,13 +213,13 @@ export class CadastroQuestaoComponent implements OnInit {
     );
 
     console.log('Dados da questão antes de enviar:', {
-        title: this.questao.title,
-        alternativas: this.questao.alternativas
+        title: this.questaoDTO.title,
+        alternativas: this.questaoDTO.alternativas
     });
 }
 
 
-  
+
 
   extractErrorMessage(errorResponse: any): string {
     if (errorResponse.error instanceof ErrorEvent) {
@@ -195,5 +231,5 @@ export class CadastroQuestaoComponent implements OnInit {
     }
   }
 
-  
+
 }
