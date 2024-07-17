@@ -24,6 +24,7 @@ export class QuestoesService {
     return this.http.post<any>(`${this.apiURL}/cadastro`, formData, { headers }).pipe(
       catchError(error => {
         let errorMessage = '';
+        
         if (error.error instanceof ErrorEvent) {
           // Erro no lado do cliente
           errorMessage = `Erro: ${error.error.message}`;
