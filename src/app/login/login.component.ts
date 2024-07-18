@@ -57,34 +57,28 @@ export class LoginComponent {
     this.cadastrando = false;
   }
 
-  cadastrar() {
+  cadastrar(){
     const usuario: Usuario = new Usuario();
     usuario.username = this.username;
     usuario.password = this.password;
-    usuario.nome = this.nome;
     usuario.email = this.email;
-    usuario.telefone = this.telefone;
-    usuario.cidade = this.cidade;
-    usuario.estado = this.estado;
-    
-    this.authService.salvar(usuario).subscribe(
-      response => {
-        this.mensagemSucesso = 'Cadastro realizado com sucesso! Efetue o login.';
-        this.cadastrando = false;
-        this.username = '';
-        this.nome = '';
-        this.password = '';
-        this.email = '';
-        this.telefone = '';
-        this.cidade = '';
-        this.estado = '';
-        this.errors = [];
-      },
-      errorResponse => {
-        this.errors = errorResponse.error.errors;
-      }
-    );
+    this.authService
+        .salvar(usuario)
+        .subscribe( response => {
+            this.mensagemSucesso = "Cadastro realizado com sucesso! Efetue o login.";
+            this.cadastrando = false;
+            this.username = '';
+            this.password = '';
+            this.email = '';
+            this.errors = []
+        }, errorResponse => {
+            this.mensagemSucesso = "Cadastro realizado com sucesso! Efetue o login.";
+            this.errors = errorResponse.error.errors;
+        })
   }
+
+
+  // mudança aqui no login
 
   salvaUserLocal() {
     this.authService.obterUsuarioAutenticadoDoBackend().subscribe(
