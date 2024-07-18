@@ -78,6 +78,8 @@ export class LoginComponent {
   }
 
 
+  // mudança aqui no login
+
   salvaUserLocal() {
     this.authService.obterUsuarioAutenticadoDoBackend().subscribe(
       (usuario: Usuario) => {
