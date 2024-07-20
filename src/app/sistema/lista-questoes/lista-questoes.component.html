@@ -1,130 +1,237 @@
 <div class="container pt-5">
-    <div class="container mt-4">
-      <h1 class="mt-4"><span> | </span>Busca e edição de questões</h1>
+  <div class="container mt-4">
+    <h1 class="mt-4"><span> | </span>Busca e edição de questões</h1>
+  </div>
+
+<!-- Filtro de Busca -->
+<div class="container-buscar">
+  <form #consultaForm="ngForm" (submit)="buscarQuestoes()" class="consulta-form">
+    <div class="row align-items-center">
+      <div class="col-md-4">
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Ano</mat-label>
+          <mat-select name="selectedAno" [(ngModel)]="selectedAno">
+            <mat-option *ngFor="let ano of anos" [value]="ano">{{ ano }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-md-4">
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Tipo de Prova</mat-label>
+          <mat-select name="selectedTipoDeProva" [(ngModel)]="selectedTipoDeProva">
+            <mat-option *ngFor="let tipo of tiposDeProva" [value]="tipo">{{ tipo }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-md-4 text-center">
+        <button type="submit" class="btn btn-primary btn-buscar">
+          <i class="fa fa-search"></i> Buscar
+        </button>
+      </div>
     </div>
-  
-    <!-- Filtro de Busca -->
-    <div class="container-buscar">
-      <form #consultaForm="ngForm" (submit)="buscarQuestoes()" class="consulta-form">
-        <div class="row">
-            <div class="col-md-4">
-                <mat-form-field appearance="fill">
-                  <mat-label>Ano</mat-label>
-                  <mat-select name="selectedAno" [(ngModel)]="selectedAno">
-                    <mat-option *ngFor="let ano of anos" [value]="ano">{{ ano }}</mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-              <div class="col-md-4">
-                <mat-form-field appearance="fill">
-                  <mat-label>Tipo de Prova</mat-label>
-                  <mat-select name="selectedTipoDeProva" [(ngModel)]="selectedTipoDeProva">
-                    <mat-option *ngFor="let tipo of tiposDeProva" [value]="tipo">{{ tipo }}</mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>              
-          <div class="col-md-4 text-center">
-            <button type="submit" class="btn btn-primary btn-buscar">
-              <i class="fa fa-search"></i> Buscar
+  </form>
+
+  <!-- Mensagem de Atenção -->
+  <div class="alert alert-warning" role="alert" *ngIf="message">
+    {{ message }}
+  </div>
+
+  <!-- Tabela de Resultados -->
+  <div class="row">
+    <div class="col-md-12">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Título</th>
+            <th>Enunciado</th>
+            <th>Ano</th>
+            <th>Tipo de Prova</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let c of listaDasQuestoes">
+            <td>{{ c.title }}</td>
+            <td>{{ c.enunciadoDaQuestao }}</td>
+            <td>{{ c.ano }}</td>
+            <td>{{ c.tipoDeProva }}</td>
+            <td>
+              <button
+                class="btn btn-primary btn-custom-editar-buscar"
+                [routerLink]="['/usuario/cadastro-questao', c.id]"
+              >
+                <img
+                  src="assets/icones/edit-2.svg"
+                  alt="Ícone de Editar"
+                  class="icon"
+                />
+                Editar
+              </button>
+
+              <button
+                class="btn btn-danger btn-custom-deletar"
+                (click)="preparaDelecao(c)"
+                data-toggle="modal"
+                data-target="#modalDelecaoQuestao"
+              >
+                <img
+                  src="assets/icones/delete.svg"
+                  alt="Ícone de Deletar"
+                  class="icon"
+                />
+                Deletar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Mensagens de Sucesso ou Erro -->
+<div class="container-mensagens">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="alert alert-success" role="alert" *ngIf="mensagemSucesso">
+        {{ mensagemSucesso }}
+      </div>
+
+      <div class="alert alert-danger" role="alert" *ngIf="mensagemErro">
+        {{ mensagemErro }}
+      </div>
+    </div>
+  </div>
+  <br />
+</div>
+
+
+<!-- Mensagens de Sucesso ou Erro -->
+<div class="container-mensagens">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="alert alert-success" role="alert" *ngIf="mensagemSucesso">
+        {{ mensagemSucesso }}
+      </div>
+
+      <div class="alert alert-danger" role="alert" *ngIf="mensagemErro">
+        {{ mensagemErro }}
+      </div>
+    </div>
+  </div>
+  <br />
+</div>
+
+
+  <!-- TABELA DE CRUD -->
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Título</th>
+          <th>Enunciado</th>
+          <th>Ano</th>
+          <th>Tipo de Prova</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="
+            let questao of questoes
+              | paginate : { itemsPerPage: pageSize, currentPage: page }
+          "
+        >
+          <td>{{ questao.title }}</td>
+          <td>{{ questao.enunciadoDaQuestao }}</td>
+          <td>{{ questao.ano }}</td>
+          <td>{{ questao.tipoDeProva }}</td>
+          <td>
+            <button
+              class="btn btn-primary btn-custom-editar"
+              [routerLink]="['/usuario/cadastro-questao', questao.id]"
+            >
+              <img
+                src="assets/icones/edit-2.svg"
+                alt="Ícone de Editar"
+                class="icon"
+              />
+              Editar
             </button>
-          </div>
-        </div>
-      </form>
-  
-      <div class="alert alert-warning" role="alert" *ngIf="message">
-        {{ message }}
-      </div>
+
+            <button
+              class="btn btn-danger btn-custom-deletar"
+              (click)="preparaDelecao(questao)"
+              data-toggle="modal"
+              data-target="#modalDelecaoQuestao"
+            >
+              <img
+                src="assets/icones/delete.svg"
+                alt="Ícone de Deletar"
+                class="icon"
+              />
+              Deletar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="page" style="text-align: center; margin-top: 10px">
+      <pagination-controls
+        [previousLabel]="'Anterior'"
+        [nextLabel]="'Próximo'"
+        (pageChange)="page = $event"
+      ></pagination-controls>
     </div>
-  
-    <!-- Listagem de Questões -->
-    <div class="row">
-      <div class="col-md-12">
-        <div *ngIf="questoes && questoes.length > 0">
-          <table class="table">
-            <thead>
-              <tr>
-                <th>Título</th>
-                <th>Enunciado</th>
-                <th>Ano</th>
-                <th>Tipo de Prova</th>
-                <th>Ações</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let questao of questoes">
-                <td>{{ questao.title }}</td>
-                <td>{{ questao.enunciadoDaQuestao }}</td>
-                <td>{{ questao.ano }}</td>
-                <td>{{ questao.tipoDeProva }}</td>
-                <td>
-                  <button class="btn btn-primary btn-sm mr-2" (click)="editarQuestao(questao.id)">
-                    <i class="fas fa-edit"></i> Editar
-                  </button>
-                  <button class="btn btn-danger btn-sm" (click)="confirmarExclusao(questao.id)">
-                    <i class="fas fa-trash-alt"></i> Deletar
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <pagination-controls [previousLabel]="'Anterior'" [nextLabel]="'Próximo'"></pagination-controls>
+  </div>
+
+  <!-- Modal de Deleção -->
+  <div
+    id="modalDelecaoQuestao"
+    class="modal fade"
+    role="dialog"
+    data-backdrop="static"
+    data-keyboard="false"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4>Confirmação</h4>
+          <button
+            type="button"
+            (click)="fecharModal()"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Fechar"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
-      </div>
-    </div>
-  
-    <!-- Mensagens de Sucesso e Erro -->
-    <div class="container-mensagens">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="alert alert-success" role="alert" *ngIf="mensagemSucesso">
-            {{ mensagemSucesso }}
-          </div>
-          <div class="alert alert-danger" role="alert" *ngIf="mensagemErro">
-            {{ mensagemErro }}
-          </div>
+
+        <div class="modal-body" *ngIf="questaoSelecionada">
+          Deseja realmente excluir a questão
+          {{ questaoSelecionada.title }}?
+        </div>
+
+        <div class="modal-footer">
+          <button
+            class="btn btn-success"
+            (click)="deletarQuestao()"
+            data-dismiss="modal"
+          >
+            Confirmar
+          </button>
+          <button
+            class="btn btn-danger"
+            (click)="fecharModal()"
+            data-dismiss="modal"
+          >
+            Cancelar
+          </button>
         </div>
       </div>
     </div>
   </div>
-  
 
-
-  <div class="row">
-    <div class="col-md-12">
-        <div *ngIf="questoes && questoes.length > 0; else noQuestions">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Título</th>
-                        <th>Enunciado</th>
-                        <th>Ano</th>
-                        <th>Tipo de Prova</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let questao of questoes">
-                        <td>{{ questao.title }}</td>
-                        <td>{{ questao.enunciadoDaQuestao }}</td>
-                        <td>{{ questao.ano }}</td>
-                        <td>{{ questao.tipoDeProva }}</td>
-                        <td>
-                            <button class="btn btn-primary btn-sm mr-2" (click)="editarQuestao(questao.id)">
-                                <i class="fas fa-edit"></i> Editar
-                            </button>
-                            <button class="btn btn-danger btn-sm" (click)="confirmarExclusao(questao.id)">
-                                <i class="fas fa-trash-alt"></i> Deletar
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <pagination-controls [previousLabel]="'Anterior'" [nextLabel]="'Próximo'"></pagination-controls>
-        </div>
-        <ng-template #noQuestions>
-            <div class="alert alert-warning" role="alert">
-                Nenhuma questão encontrada.
-            </div>
-        </ng-template>
-    </div>
+  <div class="overlay" *ngIf="modalAberto"></div>
 </div>

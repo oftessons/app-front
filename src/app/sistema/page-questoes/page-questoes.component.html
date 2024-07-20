@@ -71,7 +71,7 @@
       </div>
     </div>
     <div class="button-row">
-      <button class="btn-filtrar-geral" (click)="filtrarGeral()">Filtro Geral</button>
+      <button class="btn-filtrar-geral" (click)="LimparFiltro()">Limpar Filtro</button>
       <button class="btn-salvar" (click)="abrirModal()">Salvar Filtro</button>
       <button class="btn-filtrar" (click)="filtrarQuestoes()">Filtrar</button>
     </div>
@@ -116,7 +116,7 @@
     <div *ngIf="questoes && questoes.length > 0; else noResults">
       <div *ngFor="let questao of questoes; let i = index">
         <div class="questao">
-          <div class="identificadores-questao">
+          <div class="identificadores-questao" *ngIf="questaoAtual">
             <h3>{{ questao.title }}</h3>
             <h3>{{ questao.id }}</h3>
             <h3>{{ questao.tema }}</h3>
@@ -132,8 +132,8 @@
             <p>{{ questao.afirmacaoQuatro }}</p>
             <p>{{ questao.assinale }}</p>
             <div class="button-row">
-              <button class="btn-salvar">Responder</button>
-              <button class="btn-filtrar" (click)="filtrarQuestoes()">Próxima</button>
+              <button (click)="anteriorQuestao()" [disabled]="paginaAtual === 0">Anterior</button>
+              <button (click)="proximaQuestao()">Próxima</button>
             </div>
           </div>
         </div>

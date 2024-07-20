@@ -3,6 +3,13 @@ import { Questao } from '../page-questoes/questao';
 import { Ano } from '../page-questoes/enums/ano';
 import { TipoDeProva } from '../page-questoes/enums/tipoDeProva';
 import { QuestoesService } from 'src/app/services/questoes.service';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
+import { QuestaoBusca } from '../questaoBusca';
+import { Dificuldade } from '../page-questoes/enums/dificuldade';
+import { getDescricaoTipoDeProva, getDescricaoAno, getDescricaoDificuldade, getDescricaoSubtema, getDescricaoTema } from '../page-questoes/enums/enum-utils';
+import { Subtema } from '../page-questoes/enums/subtema';
+import { Tema } from '../page-questoes/enums/tema';
 
 @Component({
   selector: 'app-lista-questoes',
@@ -10,18 +17,33 @@ import { QuestoesService } from 'src/app/services/questoes.service';
   styleUrls: ['./lista-questoes.component.css']
 })
 export class ListaQuestoesComponent implements OnInit {
+
+  tiposDeProva = Object.values(TipoDeProva);
+  anos = Object.values(Ano);
+  dificuldades = Object.values(Dificuldade);
+  subtemas = Object.values(Subtema);
+  temas = Object.values(Tema);
+  
   questoes: Questao[] = [];
-  anos: Ano[] = []; // Exemplo de anos, substituir pelos anos reais
-  tiposDeProva: TipoDeProva[] = [];
+ // anos!: Ano[] = [];
+  //tiposDeProva!: TipoDeProva[] = [];
   selectedAno!: Ano;
   selectedTipoDeProva!: TipoDeProva;
-  termoBusca: string = ''; // Propriedade para armazenar o termo de busca
-  p: number = 1; // Página atual
-  message: string = ''; // Propriedade para armazenar mensagens de aviso
-  mensagemSucesso: string = ''; // Mensagem de sucesso
-  mensagemErro: string = ''; // Mensagem de erro
+  listaDasQuestoes!: QuestaoBusca[];
+  projetoSelecionado!: QuestaoBusca[];
+  page: number = 1;
+  pageSize: number = 10;
+  message: string = '';
+  mensagemSucesso: string = '';
+  mensagemErro: string = '';
+  questaoSelecionada!: Questao;
+  modalAberto: boolean = false;
 
-  constructor(private questoesService: QuestoesService) {}
+  constructor(
+    private questoesService: QuestoesService,
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.obterTodasQuestoes();
@@ -29,21 +51,36 @@ export class ListaQuestoesComponent implements OnInit {
     this.tiposDeProva = Object.values(TipoDeProva);
   }
 
+  getDescricaoTipoDeProva(tipoDeProva: TipoDeProva): string {
+    return getDescricaoTipoDeProva(tipoDeProva);
+  }
+
+  getDescricaoAno(ano: Ano): string {
+    return getDescricaoAno(ano);
+  }
+
+  getDescricaoDificuldade(dificuldade: Dificuldade): string {
+    return getDescricaoDificuldade(dificuldade);
+  }
+
+  getDescricaoSubtema(subtema: Subtema): string {
+    return getDescricaoSubtema(subtema);
+  }
+
+  getDescricaoTema(tema: Tema): string {
+    return getDescricaoTema(tema);
+  }
+
   buscarQuestoes(): void {
     const filtros = {
       ano: this.selectedAno,
       tipoDeProva: this.selectedTipoDeProva
     };
-  
+
     this.questoesService.filtrarQuestoes(filtros).subscribe(
       (questoes: Questao[]) => {
-        console.log('Questões recebidas:', questoes);
         this.questoes = questoes;
-        if (questoes.length === 0) {
-          this.message = 'Nenhuma questão encontrada com os filtros aplicados.';
-        } else {
-          this.message = '';
-        }
+        this.message = questoes.length === 0 ? 'Nenhuma questão encontrada com os filtros aplicados.' : '';
       },
       (error) => {
         console.error('Erro ao buscar questões:', error);
@@ -51,8 +88,10 @@ export class ListaQuestoesComponent implements OnInit {
       }
     );
   }
-  
 
+  consultarProjeto(){
+
+  }
   obterTodasQuestoes(): void {
     this.questoesService.obterTodasQuestoes().subscribe(
       (questoes: Questao[]) => {
@@ -65,26 +104,26 @@ export class ListaQuestoesComponent implements OnInit {
     );
   }
 
-  editarQuestao(id: number): void {
-    // Implementar lógica de edição
+  deletarProjeto(){
+
+  }
+  preparaDelecao(questao: QuestaoBusca) {
+    this.questaoSelecionada = { ...questao } as Questao;
+    this.modalAberto = true; // Abre o modal
   }
 
-  confirmarExclusao(id: number): void {
-    if (confirm('Tem certeza que deseja deletar esta questão?')) {
-      this.deletarQuestao(id);
-    }
+  fecharModal() {
+    this.modalAberto = false; // Fecha o modal
   }
 
-  deletarQuestao(id: number): void {
-    this.questoesService.deletar(id).subscribe(
-      () => {
+  deletarQuestao() {
+    this.questoesService.deletar(this.questaoSelecionada).subscribe(
+      (response) => {
         this.mensagemSucesso = 'Questão deletada com sucesso!';
-        this.obterTodasQuestoes(); // Atualiza a lista de questões
+        this.ngOnInit();
+        this.fecharModal();
       },
-      (error) => {
-        console.error('Erro ao deletar questão:', error);
-        this.mensagemErro = 'Erro ao deletar questão.';
-      }
+      (erro) => (this.mensagemErro = 'Ocorreu um erro ao deletar a questão.')
     );
   }
 }

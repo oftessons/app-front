@@ -18,11 +18,7 @@ export class Questao {
   afirmacaoQuatro!: string;
   assinale!: string;
   fotoDaQuestao!:File;
-  fotoDaQuestaoDois!:File ;
-  fotoDaQuestaoTres!: File;
   fotoDaResposta!: File;
-  fotoDaRespostaDois!: File;
-  fotoDaRespostaTres!: File;
   comentarioDaQuestaoUm!: string;
   comentarioDaQuestaoDois!: string;
   referenciaBi!: string;
@@ -50,11 +46,7 @@ export class Questao {
       afirmacaoQuatro: this.afirmacaoQuatro,
       assinale: this.assinale,
       fotoDaQuestao: this.fotoDaQuestao,
-      fotoDaQuestaoDois: this.fotoDaQuestaoDois,
-      fotoDaQuestaoTres: this.fotoDaQuestaoTres,
       fotoDaResposta: this.fotoDaResposta,
-      fotoDaRespostaDois: this.fotoDaRespostaDois,
-      fotoDaRespostaTres: this.fotoDaRespostaTres,
       comentarioDaQuestaoUm: this.comentarioDaQuestaoUm,
       comentarioDaQuestaoDois: this.comentarioDaQuestaoDois,
       referenciaBi: this.referenciaBi,
