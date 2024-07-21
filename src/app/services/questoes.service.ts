@@ -63,9 +63,10 @@ atualizar(formData: FormData, id: number): Observable<any> {
   }
 
 
-  deletar(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiURL}/${id}`);
+  deletar(questao: Questao) : Observable<any> {
+    return this.http.delete<any>(`${this.apiURL}/${questao.id}`);
   }
+
 
   filtrarQuestoes(filtros: any, page: number = 0, size: number = 10): Observable<Questao[]> {
     const url = `${this.apiURL}/filtro`;

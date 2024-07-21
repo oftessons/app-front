@@ -24,18 +24,28 @@ export class PageQuestoesComponent implements OnInit {
   subtemas = Object.values(Subtema);
   temas = Object.values(Tema);
 
-  filtros: Filtro[] = [];
+  questaoAtual: Questao | null = null;
+  paginaAtual: number = 0;
+  filtros: any = {
+    ano: null,
+    dificuldade: null,
+    tipoDeProva: null,
+    subtema: null,
+    tema: null,
+    palavraChave: null
+  };
+
   mostrarCardConfirmacao = false;
   filtroASalvar!: Filtro;
 
   favoriteSeason!: string;
   seasons: string[] = ['A) I: V; II: V; III: V; IV: V.', 'B) I: F; II: F; III: V; IV: F.', 'C) I: F; II: F; III: F; IV: F.', 'D) I: V; II: V; III: F; IV: V.'];
 
-  selectedAno!: Ano;
-  selectedDificuldade!: Dificuldade;
-  selectedTipoDeProva!: TipoDeProva;
-  selectedSubtema!: Subtema;
-  selectedTema!: Tema;
+  selectedAno: Ano | null = null;
+  selectedDificuldade: Dificuldade | null = null;
+  selectedTipoDeProva: TipoDeProva | null = null;
+  selectedSubtema: Subtema | null = null;
+  selectedTema: Tema | null = null;
   palavraChave: string = '';
 
   questoes: Questao[] = [];
@@ -69,6 +79,26 @@ export class PageQuestoesComponent implements OnInit {
     return getDescricaoTema(tema);
   }
 
+  // -OK
+  LimparFiltro() {
+    this.selectedAno = null;
+    this.selectedDificuldade = null;
+    this.selectedTipoDeProva = null;
+    this.selectedSubtema = null;
+    this.selectedTema = null;
+    this.palavraChave = '';
+    this.filtros = {
+      ano: null,
+      dificuldade: null,
+      tipoDeProva: null,
+      subtema: null,
+      tema: null,
+      palavraChave: null
+    };
+    this.paginaAtual = 0;
+    this.filtrarGeral();
+  }
+
   filtrarGeral(): void {
     this.questoesService.obterTodasQuestoes().subscribe(
       (questoes: Questao[]) => {
@@ -86,26 +116,28 @@ export class PageQuestoesComponent implements OnInit {
   
 
   filtrarQuestoes(): void {
-    const filtro: any = {
-      ano: this.selectedAno,
-      dificuldade: this.selectedDificuldade,
-      tipoDeProva: this.selectedTipoDeProva,
-      subtema: this.selectedSubtema,
-      tema: this.selectedTema,
-      palavraChave: this.palavraChave
-    };
-
-    this.questoesService.filtrarQuestoes(filtro, this.p - 1, 10).subscribe(
+    this.questoesService.filtrarQuestoes(this.filtros, this.paginaAtual, 1).subscribe(
       (questoes: Questao[]) => {
-        this.questoes = questoes;
-        this.isFiltered = true;
-        this.p = 1;
+        if (questoes.length > 0) {
+          this.questaoAtual = questoes[0];
+        }
       },
       (error) => {
         console.error('Erro ao tentar obter as questões.', error);
-        // Adicione lógica para tratamento de erro aqui, se necessário
       }
     );
+  }
+
+  anteriorQuestao(): void {
+    if (this.paginaAtual > 0) {
+      this.paginaAtual--;
+      this.filtrarQuestoes();
+    }
+  }
+
+  proximaQuestao(): void {
+    this.paginaAtual++;
+    this.filtrarQuestoes();
   }
 
   abrirModal(): void {

@@ -1,27 +1,28 @@
+/* lista-questoes.component.css */
 .container {
     max-width: 1300px;
     padding: 10px;
     font-family: 'Nunito Sans', sans-serif;
-}
-
-.text-p{
+  }
+  
+  .text-p {
     font-size: 20px;
     margin-top: 10px;
     font-family: 'Nunito Sans', sans-serif;
-}
-
-.consulta-form {
+  }
+  
+  .consulta-form {
     background-color: #f2f2f2; /* Fundo cinza claro */
     border: 1px solid #ddd; /* Borda cinza */
     padding: 20px; /* Espaçamento interno */
     border-radius: 5px; /* Borda arredondada */
-}
+  }
   
-.consulta-form .form-control {
+  .consulta-form .form-control {
     width: 100%; /* Largura total */
-}
+  }
   
-.consulta-form .btn-buscar {
+  .consulta-form .btn-buscar {
     width: 100%; /* Largura total */
     height: 75%;
     margin-top: 15.5px;
@@ -29,52 +30,121 @@
     font-size: 14px;
     font-weight: 600;
     border: none;
-}
-
-::ng-deep .mat-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-form-field-flex {
+  }
+  
+  ::ng-deep .mat-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-form-field-flex {
     cursor: pointer;
     width: 125%;
     border-radius: 8px;
-    background-color: #c1c0bf3d;
+    background-color: #fff;
+    color: #041E4E;
     background-clip: padding-box;
     border: 1px solid #ced4da;
-}
-
-::ng-deep .mat-form-field-infix {
+  }
+  
+  ::ng-deep .mat-form-field-infix {
     max-width: 100% !important;
-}
-
-::ng-deep .mat-form-field-wrapper {
+  }
+  
+  ::ng-deep .mat-form-field-wrapper {
     padding-bottom: 0;
     padding-top: 14px;
-}
-
-::ng-deep .mat-form-field-underline {
+  }
+  
+  ::ng-deep .mat-form-field-underline {
     display: none;
   }
   
-@media (max-width: 768px) {
+  @media (max-width: 768px) {
     .consulta-form .col-md-4 {
       margin-bottom: 10px; /* Espaçamento inferior reduzido em telas menores */
     }
-
-    .consulta-form .btn-buscar {
-        width: 100%;
-        margin-top: 24px;
-      }
-
-    ::ng-deep .mat-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-form-field-flex {
-        width: 172%; 
-      }
-}
-
-/* Definindo a largura total e a margem superior apenas em telas maiores */
-@media (min-width: 992px) {
+  
     .consulta-form .btn-buscar {
       width: 100%;
-      height: 75%;
+      margin-top: 24px;
+      font-size: 15px;
+      height: 50px;
+    }
+  
+    ::ng-deep .mat-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-form-field-flex {
+      width: 172%;
+    }
+  }
+  
+  @media (min-width: 992px) {
+    .consulta-form .btn-buscar {
+      width: 100%;
+      font-size: 15px;
+      height: 50px;
       margin-top: 15.5px;
     }
   }
   
+  .crud-container {
+    background-color: #e6e6e6; /* Fundo cinza para o contêiner CRUD */
+    padding: 20px;
+    border-radius: 5px;
+    margin-top: 20px;
+  }
+  
+  .table-todas-questoes-do-bd {
+    width: 100%;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-top: 20px;
+  }
+  
+  .table-todas-questoes-do-bd th,
+  .table-todas-questoes-do-bd td {
+    padding: 15px;
+  }
+  
+  .table-todas-questoes-do-bd th {
+    background-color: #041E4E;
+    font-weight: bold;
+    color: #fff;;
+  }
+  
+  .table-todas-questoes-do-bd tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .table-todas-questoes-do-bd tr:hover {
+    background-color: #f1f1f1;
+  }
+
+  .icon {
+    width: 20px; /* Ajuste conforme necessário */
+    height: 20px; /* Ajuste conforme necessário */
+    margin-right: 5px; /* Espaçamento entre o ícone e o texto */
+    margin-bottom: 10px;
+    margin-top: 6px;
+}
+  .btn-danger {
+    margin-right: 10px;
+  }
+  .btn-primary{
+    margin-right: 10px;
+    border: #5c8be2;
+    background-color: #5c8be2;
+  }
+  
+  .page {
+    background-color: #f2f2f2;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .pagination-controls {
+    display: inline-block;
+  }
+  
+  .alert {
+    margin-top: 20px;
+  }
   

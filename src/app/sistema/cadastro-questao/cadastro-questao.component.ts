@@ -137,26 +137,12 @@ export class CadastroQuestaoComponent implements OnInit {
 
   onSubmit(): void {
     const onjetojson = this.questaoDTO.toJson();
-
     if (this.fotoDaQuestao) {
       this.formData.append('fotoDaQuestaoArquivo', this.fotoDaQuestao);
-    }
-    if (this.fotoDaQuestaoDois) {
-      this.formData.append('fotoDaQuestaoDoisArquivo', this.fotoDaQuestaoDois);
-    }
-    if (this.fotoDaQuestaoTres) {
-      this.formData.append('fotoDaQuestaoTres', this.fotoDaQuestaoTres);
     }
     if (this.fotoDaResposta) {
       this.formData.append('fotoDaRespostaArquivo', this.fotoDaResposta);
     }
-    if (this.fotoDaRespostaDois) {
-      this.formData.append('fotoDaRespostaDoisArquivo', this.fotoDaRespostaDois);
-    }
-    if (this.fotoDaRespostaTres) {
-      this.formData.append('fotoDaRespostaTresArquivo', this.fotoDaRespostaTres);
-    }
-
     console.debug('Enviando formulário com dados da questão:', this.formData);
     console.log('CLASSE ', JSON.stringify(this.questaoDTO));
     this.formData.append('questaoDTO', onjetojson);
