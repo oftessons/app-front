@@ -10,6 +10,8 @@ import { Dificuldade } from '../page-questoes/enums/dificuldade';
 import { getDescricaoTipoDeProva, getDescricaoAno, getDescricaoDificuldade, getDescricaoSubtema, getDescricaoTema } from '../page-questoes/enums/enum-utils';
 import { Subtema } from '../page-questoes/enums/subtema';
 import { Tema } from '../page-questoes/enums/tema';
+import { Filtro } from '../filtro';
+import { FiltroService } from 'src/app/services/filtro.service';
 
 @Component({
   selector: 'app-lista-questoes',
@@ -18,6 +20,8 @@ import { Tema } from '../page-questoes/enums/tema';
 })
 export class ListaQuestoesComponent implements OnInit {
 
+  filtros: Filtro[] = [];
+
   tiposDeProva = Object.values(TipoDeProva);
   anos = Object.values(Ano);
   dificuldades = Object.values(Dificuldade);
@@ -25,14 +29,12 @@ export class ListaQuestoesComponent implements OnInit {
   temas = Object.values(Tema);
   
   questoes: Questao[] = [];
- // anos!: Ano[] = [];
-  //tiposDeProva!: TipoDeProva[] = [];
   selectedAno!: Ano;
   selectedTipoDeProva!: TipoDeProva;
   listaDasQuestoes!: QuestaoBusca[];
   projetoSelecionado!: QuestaoBusca[];
   page: number = 1;
-  pageSize: number = 10;
+  pageSize: number = 5;
   message: string = '';
   mensagemSucesso: string = '';
   mensagemErro: string = '';
@@ -41,6 +43,7 @@ export class ListaQuestoesComponent implements OnInit {
 
   constructor(
     private questoesService: QuestoesService,
+    private filtroService: FiltroService,
     private authService: AuthService,
     private router: Router
   ) {}
@@ -49,6 +52,38 @@ export class ListaQuestoesComponent implements OnInit {
     this.obterTodasQuestoes();
     this.anos = Object.values(Ano);
     this.tiposDeProva = Object.values(TipoDeProva);
+    this.carregarFiltros();
+  }
+
+  carregarFiltros(): void {
+    this.filtroService.getFiltros()
+      .subscribe(
+        filtros => {
+          this.filtros = filtros;
+        },
+        error => {
+          console.error('Erro ao carregar filtros:', error);
+          // Tratar erro aqui se necessário
+        }
+      );
+  }
+
+  deletarFiltro(id: number): void {
+    this.filtroService.deletarFiltro(id)
+      .subscribe(
+        () => {
+          // Após deletar com sucesso, recarregar os filtros
+          this.carregarFiltros();
+        },
+        error => {
+          console.error('Erro ao deletar filtro:', error);
+          // Tratar erro aqui se necessário
+        }
+      );
+  }
+
+  editarFiltro(id: number): void {
+    this.router.navigate(['/editar-filtro', id]); // Navega para a rota de edição
   }
 
   getDescricaoTipoDeProva(tipoDeProva: TipoDeProva): string {

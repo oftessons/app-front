@@ -4,7 +4,7 @@
     </button>
 
     <a class="navbar-brand mx-auto" routerLink="/usuario/dashboard">
-        <img src="assets/imagens/logoq-bank.svg" alt="" style="padding: 20px; height: 65px;" class="d-inline-block align-text-top">
+        <img src="assets/imagens/logoq-bank.svg" alt="" style="padding: 10px; height: 65px;" class="d-inline-block align-text-top">
     </a>
 
     <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseLayouts" aria-expanded="false"
@@ -31,7 +31,11 @@
             <a mat-list-item routerLink="/usuario/questoes" [ngClass]="{'active-link': isActive('/usuario/questoes')}">
                 <img src="assets/imagens/caderno.svg" alt="Ícone de Questões" class="icon">
                 <span class="ml-2">Questões</span>
-            </a>         
+            </a>
+            <a mat-list-item routerLink="/usuario/simulados" [ngClass]="{'active-link': isActive('/usuario/simulados')}">
+                <img src="assets/imagens/simu.svg" alt="Ícone do Simulado" class="icon">
+                <span class="ml-2">Simulados</span>
+            </a>           
             <a mat-list-item routerLink="/usuario/filtro" [ngClass]="{'active-link': isActive('/usuario/filtro')}" >
                 <img src="assets/imagens/fi-a.svg" alt="Ícone de Meus Filtros" class="icon">
                 <span class="ml-2">Meus Filtros</span>

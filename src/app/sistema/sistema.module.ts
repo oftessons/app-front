@@ -15,6 +15,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { CadastroQuestaoComponent } from './cadastro-questao/cadastro-questao.component';
 import {MatRadioModule} from '@angular/material/radio';
 import { ListaQuestoesComponent } from './lista-questoes/lista-questoes.component';
+import { PageSimuladoComponent } from './page-simulado/page-simulado.component';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { ListaQuestoesComponent } from './lista-questoes/lista-questoes.componen
     PageQuestoesComponent,
     PageFiltroComponent,
     CadastroQuestaoComponent,
-    ListaQuestoesComponent
+    ListaQuestoesComponent,
+    PageSimuladoComponent
   ],
   imports: [
     CommonModule,
