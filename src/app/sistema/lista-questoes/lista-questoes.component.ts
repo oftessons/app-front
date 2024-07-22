@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { QuestaoBusca } from '../questaoBusca';
 import { Dificuldade } from '../page-questoes/enums/dificuldade';
-import { getDescricaoTipoDeProva, getDescricaoAno, getDescricaoDificuldade, getDescricaoSubtema, getDescricaoTema } from '../page-questoes/enums/enum-utils';
+import { getDescricaoTipoDeProva, getDescricaoAno } from '../page-questoes/enums/enum-utils';
 import { Subtema } from '../page-questoes/enums/subtema';
 import { Tema } from '../page-questoes/enums/tema';
 import { Filtro } from '../filtro';
@@ -21,7 +21,6 @@ import { FiltroService } from 'src/app/services/filtro.service';
 export class ListaQuestoesComponent implements OnInit {
 
   filtros: Filtro[] = [];
-
   tiposDeProva = Object.values(TipoDeProva);
   anos = Object.values(Ano);
   dificuldades = Object.values(Dificuldade);
@@ -29,8 +28,8 @@ export class ListaQuestoesComponent implements OnInit {
   temas = Object.values(Tema);
   
   questoes: Questao[] = [];
-  selectedAno!: Ano;
-  selectedTipoDeProva!: TipoDeProva;
+  selectedAno?: Ano;
+  selectedTipoDeProva?: TipoDeProva;
   listaDasQuestoes!: QuestaoBusca[];
   projetoSelecionado!: QuestaoBusca[];
   page: number = 1;
@@ -40,6 +39,7 @@ export class ListaQuestoesComponent implements OnInit {
   mensagemErro: string = '';
   questaoSelecionada!: Questao;
   modalAberto: boolean = false;
+  paginaAtual: number = 0;
 
   constructor(
     private questoesService: QuestoesService,
@@ -49,9 +49,6 @@ export class ListaQuestoesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.obterTodasQuestoes();
-    this.anos = Object.values(Ano);
-    this.tiposDeProva = Object.values(TipoDeProva);
     this.carregarFiltros();
   }
 
@@ -63,7 +60,6 @@ export class ListaQuestoesComponent implements OnInit {
         },
         error => {
           console.error('Erro ao carregar filtros:', error);
-          // Tratar erro aqui se necessário
         }
       );
   }
@@ -94,28 +90,36 @@ export class ListaQuestoesComponent implements OnInit {
     return getDescricaoAno(ano);
   }
 
-  getDescricaoDificuldade(dificuldade: Dificuldade): string {
-    return getDescricaoDificuldade(dificuldade);
-  }
-
-  getDescricaoSubtema(subtema: Subtema): string {
-    return getDescricaoSubtema(subtema);
-  }
-
-  getDescricaoTema(tema: Tema): string {
-    return getDescricaoTema(tema);
-  }
-
   buscarQuestoes(): void {
-    const filtros = {
-      ano: this.selectedAno,
-      tipoDeProva: this.selectedTipoDeProva
-    };
+    const filtros: any = {};
 
-    this.questoesService.filtrarQuestoes(filtros).subscribe(
+    if (this.selectedAno) {
+      filtros.ano = this.selectedAno;
+    }
+    if (this.selectedTipoDeProva) {
+      filtros.tipoDeProva = this.selectedTipoDeProva;
+    }
+
+    if (Object.keys(filtros).length === 0) {
+      this.message = 'Por favor, selecione pelo menos um filtro.';
+      return;
+    }
+
+    this.questoesService.consultarQuestao(filtros).subscribe(
       (questoes: Questao[]) => {
         this.questoes = questoes;
-        this.message = questoes.length === 0 ? 'Nenhuma questão encontrada com os filtros aplicados.' : '';
+
+        if (questoes.length === 0) {
+          if (filtros.ano && !filtros.tipoDeProva) {
+            this.message = 'Nenhuma questão encontrada para o ano selecionado.';
+          } else if (filtros.tipoDeProva && !filtros.ano) {
+            this.message = 'Nenhuma questão encontrada para o tipo de prova selecionado.';
+          } else {
+            this.message = 'Nenhuma questão encontrada com os filtros aplicados.';
+          }
+        } else {
+          this.message = '';
+        }
       },
       (error) => {
         console.error('Erro ao buscar questões:', error);
@@ -127,28 +131,19 @@ export class ListaQuestoesComponent implements OnInit {
   consultarProjeto(){
 
   }
-  obterTodasQuestoes(): void {
-    this.questoesService.obterTodasQuestoes().subscribe(
-      (questoes: Questao[]) => {
-        this.questoes = questoes;
-      },
-      (error) => {
-        console.error('Erro ao buscar todas as questões:', error);
-        this.message = 'Erro ao buscar todas as questões. Por favor, tente novamente.';
-      }
-    );
-  }
+
 
   deletarProjeto(){
 
   }
+
   preparaDelecao(questao: QuestaoBusca) {
     this.questaoSelecionada = { ...questao } as Questao;
     this.modalAberto = true; // Abre o modal
   }
 
   fecharModal() {
-    this.modalAberto = false; // Fecha o modal
+    this.modalAberto = false; 
   }
 
   deletarQuestao() {
@@ -160,5 +155,12 @@ export class ListaQuestoesComponent implements OnInit {
       },
       (erro) => (this.mensagemErro = 'Ocorreu um erro ao deletar a questão.')
     );
+  }
+
+  limparFiltros() {
+    this.selectedAno = undefined;
+    this.selectedTipoDeProva = undefined;
+    this.questoes = [];
+    this.message = '';
   }
 }
