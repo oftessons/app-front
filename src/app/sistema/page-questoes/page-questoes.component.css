@@ -307,3 +307,53 @@
     font-weight: bold;
   }
 }
+
+.mat-form-field {
+  width: 100%;
+  margin-bottom: 16px; /* Ajuste a margem conforme necessário */
+}
+
+.mat-form-field-appearance-fill .mat-form-field-flex {
+  background-color: aliceblue;
+  border-radius: 4px;
+}
+
+.mat-form-field .mat-form-field-infix {
+  background-color: aliceblue;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.mat-form-field .mat-form-field-label {
+  color: #000;
+}
+
+.custom-form-field {
+  width: 100%;
+}
+
+.custom-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: aliceblue;
+}
+
+.mat-select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: aliceblue;
+}
+
+
+
+::ng-deep .mat-form-field .mat-form-field-flex {
+  background-color: aliceblue;
+  border: 1px solid #ccc;
+}
+
+
+
