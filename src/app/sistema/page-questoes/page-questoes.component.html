@@ -71,6 +71,11 @@
             </mat-form-field>
           </div>
         </div>
+
+        <div *ngIf="message" class="alert alert-info mt-3 alert-custom" role="alert">
+          {{ message }}
+        </div>
+      
         <div class="button-row">
           <button type="submit" class="btn-filtrar">Filtrar</button>
           <button type="button" class="btn-filtrar-geral" (click)="LimparFiltro()">Limpar Filtro</button>
