@@ -8,74 +8,78 @@
       </button>
     </div>
   </div>
-
-  <div class="filters-container">
-    <div class="row">
-      <div class="col col-12 col-md-6">
-        <mat-form-field appearance="fill" class="custom-form-field">
-          <mat-label>Ano</mat-label>
-          <mat-select [(value)]="selectedAno">
-            <mat-option *ngFor="let ano of anos" [value]="ano">{{ getDescricaoAno(ano) }}</mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-      <div class="col col-12 col-md-6">
-        <mat-form-field appearance="fill" class="custom-form-field">
-          <mat-label>Dificuldade</mat-label>
-          <mat-select [(value)]="selectedDificuldade">
-            <mat-option *ngFor="let dificuldade of dificuldades" [value]="dificuldade">
-              {{ getDescricaoDificuldade(dificuldade) }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col col-12 col-md-6">
-        <mat-form-field appearance="fill" class="custom-form-field">
-          <mat-label>Tipo de Prova</mat-label>
-          <mat-select [(value)]="selectedTipoDeProva">
-            <mat-option *ngFor="let tipoDeProva of tiposDeProva" [value]="tipoDeProva">
-              {{ getDescricaoTipoDeProva(tipoDeProva) }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-      <div class="col col-12 col-md-6">
-        <mat-form-field appearance="fill" class="custom-form-field">
-          <mat-label>Subtema</mat-label>
-          <mat-select [(value)]="selectedSubtema">
-            <mat-option *ngFor="let subtema of subtemas" [value]="subtema">
-              {{ getDescricaoSubtema(subtema) }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col col-12 col-md-6">
-        <mat-form-field appearance="fill" class="custom-form-field">
-          <mat-label>Tema</mat-label>
-          <mat-select [(value)]="selectedTema">
-            <mat-option *ngFor="let tema of temas" [value]="tema">
-              {{ getDescricaoTema(tema) }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-      <div class="col col-12 col-md-6">
-        <mat-form-field appearance="fill" class="palavra-chave">
-          <mat-label>Pesquisar por palavra-chave</mat-label>
-          <input matInput placeholder="Pesquisar por palavra-chave" [(ngModel)]="palavraChave">
-        </mat-form-field>
-      </div>
-    </div>
-    <div class="button-row">
-      <button class="btn-filtrar-geral" (click)="LimparFiltro()">Limpar Filtro</button>
-      <button class="btn-salvar" (click)="abrirModal()">Salvar Filtro</button>
-      <button class="btn-filtrar" (click)="filtrarQuestoes()">Filtrar</button>
+  <div class="container">
+    <div class="filters-container">
+      <form #filtroForm="ngForm" (ngSubmit)="filtrarQuestoes()" class="consulta-form">
+        <div class="row">
+          <div class="col col-12 col-md-6">
+            <mat-form-field appearance="fill" class="custom-form-field">
+              <mat-label>Ano</mat-label>
+              <mat-select name="selectedAno" [(ngModel)]="selectedAno">
+                <mat-option *ngFor="let ano of anos" [value]="ano">{{ getDescricaoAno(ano) }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col col-12 col-md-6">
+            <mat-form-field appearance="fill" class="custom-form-field">
+              <mat-label>Dificuldade</mat-label>
+              <mat-select name="selectedDificuldade" [(ngModel)]="selectedDificuldade">
+                <mat-option *ngFor="let dificuldade of dificuldades" [value]="dificuldade">
+                  {{ getDescricaoDificuldade(dificuldade) }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col col-12 col-md-6">
+            <mat-form-field appearance="fill" class="custom-form-field">
+              <mat-label>Tipo de Prova</mat-label>
+              <mat-select name="selectedTipoDeProva" [(ngModel)]="selectedTipoDeProva">
+                <mat-option *ngFor="let tipoDeProva of tiposDeProva" [value]="tipoDeProva">
+                  {{ getDescricaoTipoDeProva(tipoDeProva) }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col col-12 col-md-6">
+            <mat-form-field appearance="fill" class="custom-form-field">
+              <mat-label>Subtema</mat-label>
+              <mat-select name="selectedSubtema" [(ngModel)]="selectedSubtema">
+                <mat-option *ngFor="let subtema of subtemas" [value]="subtema">
+                  {{ getDescricaoSubtema(subtema) }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col col-12 col-md-6">
+            <mat-form-field appearance="fill" class="custom-form-field">
+              <mat-label>Tema</mat-label>
+              <mat-select name="selectedTema" [(ngModel)]="selectedTema">
+                <mat-option *ngFor="let tema of temas" [value]="tema">
+                  {{ getDescricaoTema(tema) }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col col-12 col-md-6">
+            <mat-form-field appearance="fill" class="custom-form-field">
+              <mat-label>Pesquisar por palavra-chave</mat-label>
+              <input matInput placeholder="Pesquisar por palavra-chave" name="palavraChave" [(ngModel)]="palavraChave">
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="button-row">
+          <button type="submit" class="btn-filtrar">Filtrar</button>
+          <button type="button" class="btn-filtrar-geral" (click)="LimparFiltro()">Limpar Filtro</button>
+          <button type="button" class="btn-salvar" (click)="abrirModal()">Salvar Filtro</button>
+        </div>
+      </form>
     </div>
   </div>
+  
 
     <!-- Modal de confirmação -->
     <div>

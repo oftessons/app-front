@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { QuestaoBusca } from '../questaoBusca';
 import { Dificuldade } from '../page-questoes/enums/dificuldade';
-import { getDescricaoTipoDeProva, getDescricaoAno, getDescricaoDificuldade, getDescricaoSubtema, getDescricaoTema } from '../page-questoes/enums/enum-utils';
+import { getDescricaoTipoDeProva, getDescricaoAno } from '../page-questoes/enums/enum-utils';
 import { Subtema } from '../page-questoes/enums/subtema';
 import { Tema } from '../page-questoes/enums/tema';
 import { Filtro } from '../filtro';
@@ -49,7 +49,6 @@ export class ListaQuestoesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.obterTodasQuestoes();
     this.carregarFiltros();
   }
 
@@ -61,7 +60,6 @@ export class ListaQuestoesComponent implements OnInit {
         },
         error => {
           console.error('Erro ao carregar filtros:', error);
-          // Tratar erro aqui se necessário
         }
       );
   }
@@ -90,18 +88,6 @@ export class ListaQuestoesComponent implements OnInit {
 
   getDescricaoAno(ano: Ano): string {
     return getDescricaoAno(ano);
-  }
-
-  getDescricaoDificuldade(dificuldade: Dificuldade): string {
-    return getDescricaoDificuldade(dificuldade);
-  }
-
-  getDescricaoSubtema(subtema: Subtema): string {
-    return getDescricaoSubtema(subtema);
-  }
-
-  getDescricaoTema(tema: Tema): string {
-    return getDescricaoTema(tema);
   }
 
   buscarQuestoes(): void {
@@ -146,17 +132,6 @@ export class ListaQuestoesComponent implements OnInit {
 
   }
 
-  obterTodasQuestoes(): void {
-    this.questoesService.obterTodasQuestoes().subscribe(
-      (questoes: Questao[]) => {
-        this.questoes = questoes;
-      },
-      (error) => {
-        console.error('Erro ao buscar todas as questões:', error);
-        this.message = 'Erro ao buscar todas as questões. Por favor, tente novamente.';
-      }
-    );
-  }
 
   deletarProjeto(){
 
@@ -168,7 +143,7 @@ export class ListaQuestoesComponent implements OnInit {
   }
 
   fecharModal() {
-    this.modalAberto = false; // Fecha o modal
+    this.modalAberto = false; 
   }
 
   deletarQuestao() {
