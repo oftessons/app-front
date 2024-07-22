@@ -87,4 +87,25 @@ atualizar(formData: FormData, id: number): Observable<any> {
       catchError(error => throwError('Erro ao tentar obter as questões.'))
     );
   }
+
+  consultarQuestao(filtros: any, page: number = 0, size: number = 10): Observable<Questao[]> {
+    const url = `${this.apiURL}/consultarQuestao`;
+    let params = new HttpParams();
+
+    // Adicione os filtros como parâmetros de consulta
+    for (const filtro in filtros) {
+      if (filtros.hasOwnProperty(filtro) && filtros[filtro] !== null) {
+        params = params.set(filtro, filtros[filtro]);
+      }
+    }
+
+    // Adicione os parâmetros de paginação
+    params = params.set('page', page.toString());
+    params = params.set('size', size.toString());
+
+    return this.http.get<Questao[]>(url, { params }).pipe(
+      catchError(error => throwError('Erro ao tentar obter as questões.'))
+    );
+}
+
 }

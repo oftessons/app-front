@@ -148,3 +148,19 @@
     margin-top: 20px;
   }
   
+/* Ajuste para alinhar os botões horizontalmente com espaçamento */
+.btn-container {
+    display: flex;
+    justify-content: center; /* Centraliza os botões horizontalmente */
+    gap: 10px; /* Espaçamento entre os botões */
+}
+
+.btn-primary {
+    background-color: #3B5FA0;
+    border: none;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border: none;
+}
