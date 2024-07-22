@@ -159,6 +159,7 @@
   
   .btn-filtrar {
     margin-top: 12px;
+    margin-right: 10px;
     padding: 10px 20px;
     width: 230px;
     background-color: #041E4E;
@@ -212,6 +213,7 @@
   .mat-form-field-appearance-fill .mat-form-field-flex {
     border-radius: 4px 4px 0 0;
     width: 280px;
+    background: aliceblue;
   }
   
   .mat-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-form-field-flex {
@@ -253,6 +255,7 @@
     }
   
     ::ng-deep .mat-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-form-field-flex {
+      background: aliceblue;
       width: 100%; 
     }
   
@@ -284,3 +287,73 @@
 .card-confirmacao .btn {
   margin-right: 10px;
 }
+
+.alert {
+  padding: 14px;
+  margin: 10px 0;
+  border: 1px solid  #F4A261;
+  border-radius: 5px;
+
+  &.alert-info {
+    background-color: #f0f8ff;
+    color: #000000;
+    font-size: 14px;
+  }
+
+  &.alert-custom {
+    background-color: #F4A261;
+    color: #000000;
+    font-size: 14px;
+    font-weight: bold;
+  }
+}
+
+.mat-form-field {
+  width: 100%;
+  margin-bottom: 16px; /* Ajuste a margem conforme necessário */
+}
+
+.mat-form-field-appearance-fill .mat-form-field-flex {
+  background-color: aliceblue;
+  border-radius: 4px;
+}
+
+.mat-form-field .mat-form-field-infix {
+  background-color: aliceblue;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.mat-form-field .mat-form-field-label {
+  color: #000;
+}
+
+.custom-form-field {
+  width: 100%;
+}
+
+.custom-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: aliceblue;
+}
+
+.mat-select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: aliceblue;
+}
+
+
+
+::ng-deep .mat-form-field .mat-form-field-flex {
+  background-color: aliceblue;
+  border: 1px solid #ccc;
+}
+
+
+
