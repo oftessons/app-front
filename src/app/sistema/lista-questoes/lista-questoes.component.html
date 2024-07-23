@@ -62,7 +62,7 @@
               <td>{{ questao.tipoDeProva }}</td>
               <td>{{ questao.comentadorDaQuestao }}</td>
               <td>
-                <button class="btn btn-primary btn-custom-editar" [routerLink]="['/usuario/cadastro-questao', questao.id]">
+                <button class="btn btn-primary btn-custom-editar" routerLink="/usuario/cadastro-questao/ {{questao.id}} ">
                 Editar <img src="assets/imagens/pencil.svg" alt="Ícone de Editar" class="icon" /> 
                 </button>
                 <button class="btn btn-danger btn-custom-deletar" (click)="preparaDelecao(questao)" data-toggle="modal" data-target="#modalDelecaoQuestao">
