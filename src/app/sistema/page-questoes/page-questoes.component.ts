@@ -126,28 +126,14 @@ export class PageQuestoesComponent implements OnInit {
   
     if (Object.keys(filtros).length === 0) {
       this.message = 'Por favor, selecione pelo menos um filtro.';
+      this.questoes = [];
       return;
     }
   
     this.questoesService.filtrarQuestoes(filtros, this.paginaAtual, 1).subscribe(
       (questoes: Questao[]) => {
         if (questoes.length === 0) {
-          // Mensagens baseadas nos filtros aplicados
-          if (filtros.ano && !filtros.tipoDeProva && !filtros.dificuldade && !filtros.subtema && !filtros.tema && !filtros.palavraChave) {
-            this.message = 'Nenhuma questão encontrada para o ano selecionado.';
-          } else if (filtros.tipoDeProva && !filtros.ano && !filtros.dificuldade && !filtros.subtema && !filtros.tema && !filtros.palavraChave) {
-            this.message = 'Nenhuma questão encontrada para o tipo de prova selecionado.';
-          } else if (filtros.dificuldade && !filtros.ano && !filtros.tipoDeProva && !filtros.subtema && !filtros.tema && !filtros.palavraChave) {
-            this.message = 'Nenhuma questão encontrada para a dificuldade selecionada.';
-          } else if (filtros.subtema && !filtros.ano && !filtros.tipoDeProva && !filtros.dificuldade && !filtros.tema && !filtros.palavraChave) {
-            this.message = 'Nenhuma questão encontrada para o subtema selecionado.';
-          } else if (filtros.tema && !filtros.ano && !filtros.tipoDeProva && !filtros.dificuldade && !filtros.subtema && !filtros.palavraChave) {
-            this.message = 'Nenhuma questão encontrada para o tema selecionado.';
-          } else if (filtros.palavraChave) {
-            this.message = 'Nenhuma questão encontrada com a palavra-chave pesquisada.';
-          } else {
-            this.message = 'Nenhuma questão encontrada com os filtros aplicados.';
-          }
+          this.message = 'Nenhuma questão encontrada com os filtros aplicados.';
           this.questoes = [];
         } else {
           this.message = '';
@@ -157,9 +143,11 @@ export class PageQuestoesComponent implements OnInit {
       (error) => {
         console.error('Erro ao tentar obter as questões.', error);
         this.message = 'Erro ao tentar obter as questões. Por favor, tente novamente.';
+        this.questoes = [];
       }
     );
   }
+  
     
 
   anteriorQuestao(): void {

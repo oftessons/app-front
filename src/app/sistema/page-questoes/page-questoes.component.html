@@ -117,13 +117,27 @@
       </div>
     </div>
 
+    <div *ngIf="message">{{ message }}</div>
+
+<div *ngIf="questoes.length > 0">
+  <div *ngFor="let questao of questoes">
+    <!-- Exiba os detalhes da questão aqui -->
+    <h3>{{ questao.id }}</h3>
+    <p>{{ questao.title }}</p>
+    <!-- Adicione mais campos conforme necessário -->
+  </div>
+</div>
+
+<button (click)="anteriorQuestao()">Anterior</button>
+<button (click)="proximaQuestao()">Próxima</button>
+
   <!-- Exibição dos Resultados -->
-  <div *ngIf="isFiltered" class="container mt-4">
+
     <div class="identificadores-questao-resul">
       <h2 class="h2">Resultados da Filtragem</h2>
     </div>
-    <div *ngIf="questoes && questoes.length > 0; else noResults">
-      <div *ngFor="let questao of questoes; let i = index">
+    <div *ngIf="questoes.length > 0">
+      <div *ngFor="let questao of questoes">
         <div class="questao">
           <div class="identificadores-questao" *ngIf="questaoAtual">
             <h3>{{ questao.title }}</h3>
@@ -152,5 +166,5 @@
     <ng-template #noResults>
       <p>Nenhum resultado encontrado.</p>
     </ng-template>
-  </div>
+  
 </div>
