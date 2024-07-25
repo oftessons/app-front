@@ -299,3 +299,33 @@
     font-weight: bold;
   }
 }
+
+.button-row {
+  margin-top: 12px;
+}
+
+.btn-anterior,
+.btn-proxima {
+  padding: 10px 20px;
+  width: 130px; /* Ajuste o width conforme necessário */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 10px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #3b5fa0; /* Cor de fundo padrão */
+}
+
+.btn-anterior {
+  background-color: #2a4d7b; /* Cor de fundo específica para o botão Anterior */
+}
+
+.btn-proxima {
+  background-color: #3b5fa0; /* Cor de fundo específica para o botão Próxima */
+}
+
+.btn-anterior:disabled {
+  background-color: #9a9a9a; /* Cor de fundo para botão desabilitado */
+  cursor: not-allowed;
+}
