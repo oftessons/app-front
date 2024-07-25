@@ -118,12 +118,12 @@
     </div>
 
   <!-- Exibição dos Resultados -->
-  <div *ngIf="isFiltered" class="container mt-4">
-    <div class="identificadores-questao-resul">
-      <h2 class="h2">Resultados da Filtragem</h2>
-    </div>
-    <div *ngIf="questoes && questoes.length > 0; else noResults">
-      <div *ngFor="let questao of questoes; let i = index">
+
+    <div *ngIf="questoes.length > 0">
+      <div class="identificadores-questao-resul">
+        <h2 class="h2">Resultados da Filtragem</h2>
+      </div>
+      <div *ngFor="let questao of questoes">
         <div class="questao">
           <div class="identificadores-questao" *ngIf="questaoAtual">
             <h3>{{ questao.title }}</h3>
@@ -141,16 +141,12 @@
             <p>{{ questao.afirmacaoQuatro }}</p>
             <p>{{ questao.assinale }}</p>
             <div class="button-row">
-              <button (click)="anteriorQuestao()" [disabled]="paginaAtual === 0">Anterior</button>
-              <button (click)="proximaQuestao()">Próxima</button>
-            </div>
+              <button class="btn-anterior" (click)="anteriorQuestao()" [disabled]="paginaAtual === 0">Anterior</button>
+              <button class="btn-proxima" (click)="proximaQuestao()">Próxima</button>
+            </div>            
           </div>
         </div>
       </div>
-      <pagination-controls [previousLabel]="'Anterior'" [nextLabel]="'Próximo'" (pageChange)="p = $event"></pagination-controls>
     </div>
-    <ng-template #noResults>
-      <p>Nenhum resultado encontrado.</p>
-    </ng-template>
-  </div>
+
 </div>

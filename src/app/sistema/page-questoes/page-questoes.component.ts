@@ -126,6 +126,7 @@ export class PageQuestoesComponent implements OnInit {
   
     if (Object.keys(filtros).length === 0) {
       this.message = 'Por favor, selecione pelo menos um filtro.';
+      this.questoes = [];
       return;
     }
   
@@ -157,9 +158,11 @@ export class PageQuestoesComponent implements OnInit {
       (error) => {
         console.error('Erro ao tentar obter as questões.', error);
         this.message = 'Erro ao tentar obter as questões. Por favor, tente novamente.';
+        this.questoes = [];
       }
     );
   }
+  
     
 
   anteriorQuestao(): void {
