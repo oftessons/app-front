@@ -9,6 +9,8 @@ import { Questao } from './questao';
 import { QuestoesService } from 'src/app/services/questoes.service';
 import { Filtro } from '../filtro';
 import { FiltroService } from 'src/app/services/filtro.service';
+import { RespostaDTO } from '../RespostaDTO';  // Adicione esta importação
+import { Resposta } from '../Resposta';  // Adicione esta importação
 
 declare var bootstrap: any;
 
@@ -18,6 +20,11 @@ declare var bootstrap: any;
   styleUrls: ['./page-questoes.component.css']
 })
 export class PageQuestoesComponent implements OnInit {
+
+  questao: Questao = new Questao();
+  selectedOption: string = '';
+  //resposta: string | null = null;
+
   tiposDeProva = Object.values(TipoDeProva);
   anos = Object.values(Ano);
   dificuldades = Object.values(Dificuldade);
@@ -25,6 +32,7 @@ export class PageQuestoesComponent implements OnInit {
   temas = Object.values(Tema);
 
   message: string = '';
+  resposta: string = ''; // Adiciona esta variável para armazenar a resposta
 
   questaoAtual: Questao | null = null;
   paginaAtual: number = 0;
@@ -40,8 +48,7 @@ export class PageQuestoesComponent implements OnInit {
   mostrarCardConfirmacao = false;
   filtroASalvar!: Filtro;
 
-  favoriteSeason!: string;
-  seasons: string[] = ['A) I: V; II: V; III: V; IV: V.', 'B) I: F; II: F; III: V; IV: F.', 'C) I: F; II: F; III: F; IV: F.', 'D) I: V; II: V; III: F; IV: V.'];
+  //selectedOption: string = ''; // Adiciona esta variável para armazenar a opção selecionada
 
   selectedAno: Ano | null = null;
   selectedDificuldade: Dificuldade | null = null;
@@ -54,12 +61,52 @@ export class PageQuestoesComponent implements OnInit {
   isFiltered = false;
   p: number = 1;
 
+  questaoDTO = new Questao();
+  selectedAlternativeIndex: number = -3;
+
   constructor(
     private questoesService: QuestoesService,
     private filtroService: FiltroService
   ) { }
 
-  ngOnInit() { }
+  ngOnInit(): void {
+    this.questaoDTO.alternativas = [
+      { id: 1, texto: 'A', correta: false },
+      { id: 2, texto: 'B', correta: false },
+      { id: 3, texto: 'C', correta: false },
+      { id: 4, texto: 'D', correta: false }
+    ];
+  }
+
+
+  updateCorrectAlternative(index: number): void {
+    this.questaoDTO.alternativas.forEach((alt, i) => {
+      alt.correta = i === index;
+    });
+    console.log('Alternativa correta atualizada:', this.questaoDTO.alternativas);
+  }
+
+  onOptionChange(texto: string): void {
+    this.selectedOption = texto;
+    console.log('Alternativa selecionada:', texto);
+  }
+
+  responderQuestao(questao: Questao): void {
+    const respostaDTO: RespostaDTO = {
+      questaoId: questao.id,
+      selecionarOpcao: this.selectedOption
+    };
+
+    this.questoesService.checkAnswer(questao.id, respostaDTO).subscribe(
+      (resposta: Resposta) => {
+        this.resposta = resposta.isCorrect ? 'Resposta correta!' : 'Resposta incorreta. Tente novamente.';
+      },
+      (error) => {
+        console.error('Erro ao verificar resposta:', error);
+        this.resposta = 'Ocorreu um erro ao verificar a resposta. Por favor, tente novamente mais tarde.';
+      }
+    );
+  }
 
   getDescricaoTipoDeProva(tipoDeProva: TipoDeProva): string {
     return getDescricaoTipoDeProva(tipoDeProva);
@@ -81,7 +128,6 @@ export class PageQuestoesComponent implements OnInit {
     return getDescricaoTema(tema);
   }
 
-  // -OK
   LimparFiltro() {
     this.selectedAno = null;
     this.selectedDificuldade = null;
@@ -99,12 +145,10 @@ export class PageQuestoesComponent implements OnInit {
     };
     this.paginaAtual = 0;
   }
-  
 
   filtrarQuestoes(): void {
     const filtros: any = {};
   
-    // Adiciona filtros apenas se estiverem definidos
     if (this.selectedAno) {
       filtros.ano = this.selectedAno;
     }
@@ -133,7 +177,6 @@ export class PageQuestoesComponent implements OnInit {
     this.questoesService.filtrarQuestoes(filtros, this.paginaAtual, 1).subscribe(
       (questoes: Questao[]) => {
         if (questoes.length === 0) {
-          // Mensagens baseadas nos filtros aplicados
           if (filtros.ano && !filtros.tipoDeProva && !filtros.dificuldade && !filtros.subtema && !filtros.tema && !filtros.palavraChave) {
             this.message = 'Nenhuma questão encontrada para o ano selecionado.';
           } else if (filtros.tipoDeProva && !filtros.ano && !filtros.dificuldade && !filtros.subtema && !filtros.tema && !filtros.palavraChave) {
@@ -144,70 +187,40 @@ export class PageQuestoesComponent implements OnInit {
             this.message = 'Nenhuma questão encontrada para o subtema selecionado.';
           } else if (filtros.tema && !filtros.ano && !filtros.tipoDeProva && !filtros.dificuldade && !filtros.subtema && !filtros.palavraChave) {
             this.message = 'Nenhuma questão encontrada para o tema selecionado.';
-          } else if (filtros.palavraChave) {
-            this.message = 'Nenhuma questão encontrada com a palavra-chave pesquisada.';
+          } else if (filtros.palavraChave && !filtros.ano && !filtros.tipoDeProva && !filtros.dificuldade && !filtros.subtema && !filtros.tema) {
+            this.message = 'Nenhuma questão encontrada para a palavra-chave informada.';
           } else {
-            this.message = 'Nenhuma questão encontrada com os filtros aplicados.';
+            this.message = 'Nenhuma questão encontrada para os filtros selecionados.';
           }
-          this.questoes = [];
         } else {
           this.message = '';
-          this.questoes = questoes;
+        }
+  
+        this.questoes = questoes;
+  
+        if (this.questoes.length > 0) {
+          this.questaoAtual = this.questoes[0];
         }
       },
       (error) => {
-        console.error('Erro ao tentar obter as questões.', error);
-        this.message = 'Erro ao tentar obter as questões. Por favor, tente novamente.';
-        this.questoes = [];
+        console.error('Erro ao filtrar questões:', error);
+        this.message = 'Ocorreu um erro ao filtrar questões. Por favor, tente novamente mais tarde.';
       }
     );
   }
-  
-    
 
-  anteriorQuestao(): void {
+  anteriorQuestao() {
     if (this.paginaAtual > 0) {
       this.paginaAtual--;
       this.filtrarQuestoes();
     }
   }
 
-  proximaQuestao(): void {
-    this.paginaAtual++;
-    this.filtrarQuestoes();
-  }
-
-  abrirModal(): void {
-    const modalElement = document.getElementById('confirmacaoModal');
-    const modal = new bootstrap.Modal(modalElement!);
-    modal.show();
-
-    // Adiciona evento para quando o modal for fechado
-    modalElement?.addEventListener('hidden.bs.modal', () => {
-      this.fecharCardConfirmacao();
-    });
-  }
-
-  confirmarSalvarFiltro(): void {
-    if (this.filtroASalvar) {
-      this.filtroService.salvarFiltro(this.filtroASalvar)
-        .subscribe(
-          response => {
-            console.log('Filtro salvo com sucesso:', response);
-            // Adicione lógica adicional se necessário
-          },
-          error => {
-            console.error('Erro ao salvar filtro:', error);
-            // Trate o erro aqui, se necessário
-          }
-        );
+  proximaQuestao() {
+    if (this.questoes.length > 0) {
+      this.paginaAtual++;
+      this.filtrarQuestoes();
     }
-    const modalElement = document.getElementById('confirmacaoModal');
-    const modal = bootstrap.Modal.getInstance(modalElement!);
-    modal.hide();
   }
 
-  fecharCardConfirmacao(): void {
-    this.mostrarCardConfirmacao = false;
-  }
 }

@@ -75,78 +75,59 @@
         <div *ngIf="message" class="alert alert-info mt-3 alert-custom" role="alert">
           {{ message }}
         </div>
-      
+
         <div class="button-row">
           <button type="submit" class="btn-filtrar">Filtrar</button>
           <button type="button" class="btn-filtrar-geral" (click)="LimparFiltro()">Limpar Filtro</button>
-          <button type="button" class="btn-salvar" (click)="abrirModal()">Salvar Filtro</button>
         </div>
       </form>
     </div>
   </div>
-  
-
-    <!-- Modal de confirmação -->
-    <div>
-      <div class="modal fade" id="confirmacaoModal" tabindex="-1" aria-labelledby="confirmacaoModalLabel" aria-hidden="true">
-        <div class="mr-box-save-lista-overlay"></div>
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="confirmacaoModalLabel">Salvar Filtro</h5>
-              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <form class="form-group">
-                <div class="mb-3">
-                  <label for="nomeFiltro" class="form-label">Nome <span>*</span></label>
-                  <input type="text" class="form-control" id="nomeFiltro" placeholder="Ex. Óptica" required>
-                </div>
-                <div class="mb-3">
-                  <label for="descricaoFiltro" class="form-label">Assunto</label>
-                  <input type="text" class="form-control" id="descricaoFiltro" placeholder="Ex. Vergência, objeto e imagem">
-                </div>
-              </form>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-              <button type="button" class="btn btn-success" (click)="confirmarSalvarFiltro()">Confirmar</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
 
   <!-- Exibição dos Resultados -->
-
-    <div *ngIf="questoes.length > 0">
-      <div class="identificadores-questao-resul">
-        <h2 class="h2">Resultados da Filtragem</h2>
-      </div>
-      <div *ngFor="let questao of questoes">
-        <div class="questao">
-          <div class="identificadores-questao" *ngIf="questaoAtual">
-            <h3>{{ questao.title }}</h3>
-            <h3>{{ questao.id }}</h3>
-            <h3>{{ questao.tema }}</h3>
-            <h3>{{ questao.dificuldade }}</h3>
-            <h3>{{ questao.ano }}</h3>
-          </div>
-          <div class="conteudo-questao">
-            <p>{{ questao.enunciadoDaQuestao }}</p>
+  <div *ngIf="questoes.length > 0">
+    <div class="identificadores-questao-resul">
+      <h2 class="h2">Resultados da Filtragem</h2>
+    </div>
+    <div *ngFor="let questao of questoes">
+      <div class="questao">
+        <div class="identificadores-questao" *ngIf="questaoAtual">
+          <h3>{{ questao.title }}</h3>
+          <h3>{{ questao.id }}</h3>
+          <h3>{{ questao.tema }}</h3>
+          <h3>{{ questao.dificuldade }}</h3>
+          <h3>{{ questao.ano }}</h3>
+        </div>
+        <div class="conteudo-questao">
+          <p>{{ questao.enunciadoDaQuestao }}</p>
             <img *ngIf="questao.fotoDaQuestao" [src]="questao.fotoDaQuestao" alt="Foto da questão" class="questao-foto">
-            <p>{{ questao.afirmacaoUm }}</p>
-            <p>{{ questao.afirmacaoDois }}</p>
-            <p>{{ questao.afirmacaoTres }}</p>
-            <p>{{ questao.afirmacaoQuatro }}</p>
-            <p>{{ questao.assinale }}</p>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label>Selecione a Alternativa:</label>
+                  <div *ngFor="let alternativa of questao.alternativas; let i = index">
+                    <input 
+                      type="radio" 
+                      name="alternativa" 
+                      [value]="alternativa.texto"
+                      [(ngModel)]="selectedOption" 
+                      (change)="onOptionChange(alternativa.texto)"
+                      [checked]="alternativa.texto === selectedOption">
+                    {{ alternativa.texto }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="resposta" class="alert alert-info mt-3 alert-custom" role="alert">
+              {{ resposta }}
+            </div>
             <div class="button-row">
               <button class="btn-anterior" (click)="anteriorQuestao()" [disabled]="paginaAtual === 0">Anterior</button>
+              <button class="btn-responder" (click)="responderQuestao(questao)">Responder</button>
               <button class="btn-proxima" (click)="proximaQuestao()">Próxima</button>
-            </div>            
-          </div>
+            </div>
         </div>
       </div>
     </div>
-
+  </div>
 </div>
