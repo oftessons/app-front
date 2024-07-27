@@ -1,7 +1,7 @@
 export class Resposta {
-    isCorrect: boolean;
+    correct: boolean;
   
-    constructor(isCorrect: boolean) {
-      this.isCorrect = isCorrect;
+    constructor(correct: boolean) {
+      this.correct = correct;
     }
 }

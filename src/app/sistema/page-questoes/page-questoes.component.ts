@@ -70,21 +70,8 @@ export class PageQuestoesComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.questaoDTO.alternativas = [
-      { id: 1, texto: 'A', correta: false },
-      { id: 2, texto: 'B', correta: false },
-      { id: 3, texto: 'C', correta: false },
-      { id: 4, texto: 'D', correta: false }
-    ];
   }
 
-
-  updateCorrectAlternative(index: number): void {
-    this.questaoDTO.alternativas.forEach((alt, i) => {
-      alt.correta = i === index;
-    });
-    console.log('Alternativa correta atualizada:', this.questaoDTO.alternativas);
-  }
 
   onOptionChange(texto: string): void {
     this.selectedOption = texto;
@@ -96,10 +83,19 @@ export class PageQuestoesComponent implements OnInit {
       questaoId: questao.id,
       selecionarOpcao: this.selectedOption
     };
-
+  
     this.questoesService.checkAnswer(questao.id, respostaDTO).subscribe(
       (resposta: Resposta) => {
-        this.resposta = resposta.isCorrect ? 'Resposta correta!' : 'Resposta incorreta. Tente novamente.';
+        console.log('Resposta do backend:', resposta); // Log completo
+        console.log('correct:', resposta.correct); // Verificar a propriedade correct
+  
+        // Verificar explicitamente a propriedade correct
+        if (resposta.hasOwnProperty('correct')) {
+          this.resposta = resposta.correct ? 'Resposta correta!' : 'Resposta incorreta. Tente novamente.';
+        } else {
+          console.error('Resposta do backend não contém a propriedade correct.');
+          this.resposta = 'Ocorreu um erro ao verificar a resposta. Por favor, tente novamente mais tarde.';
+        }
       },
       (error) => {
         console.error('Erro ao verificar resposta:', error);
@@ -107,6 +103,9 @@ export class PageQuestoesComponent implements OnInit {
       }
     );
   }
+  
+  
+  
 
   getDescricaoTipoDeProva(tipoDeProva: TipoDeProva): string {
     return getDescricaoTipoDeProva(tipoDeProva);

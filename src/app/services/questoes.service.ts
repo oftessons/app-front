@@ -62,25 +62,23 @@ export class QuestoesService {
     return this.http.delete<any>(`${this.apiURL}/${questao.id}`);
   }
 
-  filtrarQuestoes(filtros: any, page: number = 0, size: number = 10): Observable<Questao[]> {
+  filtrarQuestoes(filtros: any, page: number = 0, size: number = 10): Observable<any[]> {
     const url = `${this.apiURL}/filtro`;
     let params = new HttpParams();
-
+  
     // Adicione os filtros como parâmetros de consulta
     for (const filtro in filtros) {
       if (filtros.hasOwnProperty(filtro) && filtros[filtro] !== null) {
         params = params.set(filtro, filtros[filtro]);
       }
     }
-
+  
     // Adicione os parâmetros de paginação
     params = params.set('page', page.toString());
     params = params.set('size', size.toString());
-
-    return this.http.get<Questao[]>(url, { params }).pipe(
-      catchError(error => throwError('Erro ao tentar obter as questões.'))
-    );
-  }
+  
+    return this.http.get<Questao[]>(url, { params });
+  }  
 
   consultarQuestao(filtros: any, page: number = 0, size: number = 10): Observable<Questao[]> {
     const url = `${this.apiURL}/consultarQuestao`;
@@ -108,6 +106,4 @@ export class QuestoesService {
       catchError(error => throwError('Erro ao verificar a resposta.'))
     );
   }
-
-
 }

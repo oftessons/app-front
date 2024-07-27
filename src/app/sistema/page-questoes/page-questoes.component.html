@@ -86,10 +86,10 @@
 
   <!-- Exibição dos Resultados -->
   <div *ngIf="questoes.length > 0">
-    <div class="identificadores-questao-resul">
-      <h2 class="h2">Resultados da Filtragem</h2>
-    </div>
     <div *ngFor="let questao of questoes">
+      <div class="identificadores-questao-resul">
+        <h2 class="h2">Resultado da Filtragem</h2>
+      </div>
       <div class="questao">
         <div class="identificadores-questao" *ngIf="questaoAtual">
           <h3>{{ questao.title }}</h3>
