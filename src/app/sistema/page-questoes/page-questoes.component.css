@@ -300,12 +300,9 @@
   }
 }
 
-.button-row {
-  margin-top: 12px;
-}
-
 .btn-anterior,
-.btn-proxima {
+.btn-proxima,
+.btn-responder {
   padding: 10px 20px;
   width: 130px; /* Ajuste o width conforme necessário */
   border: none;
@@ -314,7 +311,6 @@
   margin-right: 10px;
   font-size: 16px;
   color: #fff;
-  background-color: #3b5fa0; /* Cor de fundo padrão */
 }
 
 .btn-anterior {
@@ -325,7 +321,18 @@
   background-color: #3b5fa0; /* Cor de fundo específica para o botão Próxima */
 }
 
+.btn-responder {
+  background-color: #28a745; /* Cor de fundo específica para o botão Responder */
+}
+
 .btn-anterior:disabled {
   background-color: #9a9a9a; /* Cor de fundo para botão desabilitado */
   cursor: not-allowed;
 }
+
+.button-row {
+  display: flex;
+  justify-content: end;
+  margin-top: 20px;
+}
+

@@ -4,5 +4,5 @@ export class Alternativa {
   id?: number;
   texto!: string;
   correta!: boolean;
- //questoes?: Questao;
+  questao?: Questao; // Adiciona a relação com Questao
 }

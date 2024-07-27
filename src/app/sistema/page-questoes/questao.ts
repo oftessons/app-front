@@ -1,10 +1,10 @@
+import { Alternativa } from '../alternativa';
 import { Ano } from './enums/ano';
 import { Tema } from './enums/tema';
 import { Dificuldade } from './enums/dificuldade';
 import { TipoDeProva } from './enums/tipoDeProva';
 import { Subtema } from './enums/subtema';
 import { Relevancia } from './enums/relevancia';
-import { Alternativa } from '../alternativa';
 
 export class Questao {
   id!: number;
@@ -17,7 +17,7 @@ export class Questao {
   afirmacaoTres!: string;
   afirmacaoQuatro!: string;
   assinale!: string;
-  fotoDaQuestao!:File;
+  fotoDaQuestao!: File;
   fotoDaResposta!: File;
   comentarioDaQuestaoUm!: string;
   comentarioDaQuestaoDois!: string;
@@ -63,4 +63,3 @@ export class Questao {
     });
   }
 }
-
