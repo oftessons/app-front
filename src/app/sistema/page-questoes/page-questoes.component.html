@@ -95,12 +95,14 @@
           <h3>{{ questao.title }}</h3>
           <h3>{{ questao.id }}</h3>
           <h3>{{ questao.tema }}</h3>
-          <h3>{{ questao.dificuldade }}</h3>
           <h3>{{ questao.ano }}</h3>
         </div>
         <div class="conteudo-questao">
           <p>{{ questao.enunciadoDaQuestao }}</p>
             <img *ngIf="questao.fotoDaQuestao" [src]="questao.fotoDaQuestao" alt="Foto da questão" class="questao-foto">
+            <p>{{ questao.afirmacaoUm }}</p>
+            <p>{{ questao.afirmacaoDois }}</p>
+            <p>{{ questao.afirmacaoTres }}</p>
             <div class="row">
               <div class="col-md-12">
                 <div class="form-group">
@@ -118,14 +120,24 @@
                 </div>
               </div>
             </div>
-            <div *ngIf="resposta" class="alert alert-info mt-3 alert-custom" role="alert">
+            <div *ngIf="resposta" class="alert mt-3" [ngClass]="{'alert-success': isRespostaCorreta, 'alert-danger': !isRespostaCorreta}" role="alert">
               {{ resposta }}
             </div>
+            <div *ngIf="mostrarGabarito">
+              <h2 style="margin-top: 10px;">Comentário da Questão</h2>
+              <img *ngIf="questao.fotoDaResposta" [src]="questao.fotoDaResposta" alt="Foto do Comentário" class="questao-foto">
+              <p>{{ questao.comentarioDaQuestaoUm }}</p>
+              <p>{{ questao.comentarioDaQuestaoDois }}</p>
+              <p>{{ questao.referenciaBi }}</p>
+              <p>{{ questao.comentadorDaQuestao }}</p>
+              <div class="row"></div>
+            </div>
             <div class="button-row">
+              <button *ngIf="resposta" class="btn-gabarito" (click)="exibirGabarito()">Gabarito</button>
               <button class="btn-anterior" (click)="anteriorQuestao()" [disabled]="paginaAtual === 0">Anterior</button>
               <button class="btn-responder" (click)="responderQuestao(questao)">Responder</button>
               <button class="btn-proxima" (click)="proximaQuestao()">Próxima</button>
-            </div>
+            </div>            
         </div>
       </div>
     </div>
