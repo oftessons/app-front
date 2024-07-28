@@ -336,3 +336,34 @@
   margin-top: 20px;
 }
 
+.alert-success {
+  background-color: #399918;
+  color: #020202;
+  font-size: 16px;
+  border-color: #399918;
+}
+
+.alert-danger {
+  background-color: #F5004F;
+  color: #ffffff;
+  font-size: 16px;
+  border-color: #F5004F;
+}
+
+.btn-gabarito {
+  padding: 10px 20px;
+  width: 130px; /* Ajuste o width conforme necessário */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 10px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #FF8225;
+}
+
+.btn-gabarito:hover {
+  background-color: #0056b3;
+}
+
+

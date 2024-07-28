@@ -48,6 +48,8 @@ export class PageQuestoesComponent implements OnInit {
   mostrarCardConfirmacao = false;
   filtroASalvar!: Filtro;
 
+  mostrarGabarito: boolean = false; // Adiciona esta variável para controlar a exibição do gabarito
+
   //selectedOption: string = ''; // Adiciona esta variável para armazenar a opção selecionada
 
   selectedAno: Ano | null = null;
@@ -60,6 +62,9 @@ export class PageQuestoesComponent implements OnInit {
   questoes: Questao[] = [];
   isFiltered = false;
   p: number = 1;
+
+  //resposta: string;
+  isRespostaCorreta: boolean = false;
 
   questaoDTO = new Questao();
   selectedAlternativeIndex: number = -3;
@@ -78,34 +83,37 @@ export class PageQuestoesComponent implements OnInit {
     console.log('Alternativa selecionada:', texto);
   }
 
-  responderQuestao(questao: Questao): void {
-    const respostaDTO: RespostaDTO = {
-      questaoId: questao.id,
-      selecionarOpcao: this.selectedOption
-    };
-  
-    this.questoesService.checkAnswer(questao.id, respostaDTO).subscribe(
-      (resposta: Resposta) => {
-        console.log('Resposta do backend:', resposta); // Log completo
-        console.log('correct:', resposta.correct); // Verificar a propriedade correct
-  
-        // Verificar explicitamente a propriedade correct
-        if (resposta.hasOwnProperty('correct')) {
-          this.resposta = resposta.correct ? 'Resposta correta!' : 'Resposta incorreta. Tente novamente.';
-        } else {
-          console.error('Resposta do backend não contém a propriedade correct.');
-          this.resposta = 'Ocorreu um erro ao verificar a resposta. Por favor, tente novamente mais tarde.';
-        }
-      },
-      (error) => {
-        console.error('Erro ao verificar resposta:', error);
+
+responderQuestao(questao: Questao): void {
+  const respostaDTO: RespostaDTO = {
+    questaoId: questao.id,
+    selecionarOpcao: this.selectedOption
+  };
+
+  this.questoesService.checkAnswer(questao.id, respostaDTO).subscribe(
+    (resposta: Resposta) => {
+      console.log('Resposta do backend:', resposta); // Log completo
+      console.log('correct:', resposta.correct); // Verificar a propriedade correct
+
+      // Verificar explicitamente a propriedade correct
+      if (resposta.hasOwnProperty('correct')) {
+        this.isRespostaCorreta = resposta.correct;
+        this.resposta = resposta.correct ? 'Resposta correta!' : 'Resposta incorreta. Tente novamente.';
+      } else {
+        console.error('Resposta do backend não contém a propriedade correct.');
         this.resposta = 'Ocorreu um erro ao verificar a resposta. Por favor, tente novamente mais tarde.';
       }
-    );
-  }
-  
-  
-  
+    },
+    (error) => {
+      console.error('Erro ao verificar resposta:', error);
+      this.resposta = 'Ocorreu um erro ao verificar a resposta. Por favor, tente novamente mais tarde.';
+    }
+  );
+}
+
+exibirGabarito() {
+  this.mostrarGabarito = true; // Define a variável para exibir o gabarito
+}
 
   getDescricaoTipoDeProva(tipoDeProva: TipoDeProva): string {
     return getDescricaoTipoDeProva(tipoDeProva);
@@ -211,15 +219,21 @@ export class PageQuestoesComponent implements OnInit {
   anteriorQuestao() {
     if (this.paginaAtual > 0) {
       this.paginaAtual--;
+      this.questaoAtual = this.questoes[this.paginaAtual];
+      this.mostrarGabarito = false; // Reseta a exibição do gabarito ao mudar de questão
       this.filtrarQuestoes();
     }
   }
 
   proximaQuestao() {
-    if (this.questoes.length > 0) {
+    if (this.paginaAtual < this.questoes.length - 1) {
       this.paginaAtual++;
+      this.questaoAtual = this.questoes[this.paginaAtual];
+      this.mostrarGabarito = false; 
       this.filtrarQuestoes();
     }
   }
+
+
 
 }
