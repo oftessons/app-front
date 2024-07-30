@@ -84,33 +84,38 @@ export class PageQuestoesComponent implements OnInit {
   }
 
 
-responderQuestao(questao: Questao): void {
-  const respostaDTO: RespostaDTO = {
-    questaoId: questao.id,
-    selecionarOpcao: this.selectedOption
-  };
-
-  this.questoesService.checkAnswer(questao.id, respostaDTO).subscribe(
-    (resposta: Resposta) => {
-      console.log('Resposta do backend:', resposta); // Log completo
-      console.log('correct:', resposta.correct); // Verificar a propriedade correct
-
-      // Verificar explicitamente a propriedade correct
-      if (resposta.hasOwnProperty('correct')) {
-        this.isRespostaCorreta = resposta.correct;
-        this.resposta = resposta.correct ? 'Resposta correta!' : 'Resposta incorreta. Tente novamente.';
-      } else {
-        console.error('Resposta do backend não contém a propriedade correct.');
+  responderQuestao(questao: Questao | null): void {
+    if (!questao) {
+      console.error('Questão atual é nula.');
+      this.resposta = 'Nenhuma questão selecionada.';
+      return;
+    }
+  
+    const respostaDTO: RespostaDTO = {
+      questaoId: questao.id,
+      selecionarOpcao: this.selectedOption
+    };
+  
+    this.questoesService.checkAnswer(questao.id, respostaDTO).subscribe(
+      (resposta: Resposta) => {
+        console.log('Resposta do backend:', resposta);
+        console.log('correct:', resposta.correct);
+  
+        if (resposta.hasOwnProperty('correct')) {
+          this.isRespostaCorreta = resposta.correct;
+          this.resposta = resposta.correct ? 'Resposta correta!' : 'Resposta incorreta. Tente novamente.';
+        } else {
+          console.error('Resposta do backend não contém a propriedade correct.');
+          this.resposta = 'Ocorreu um erro ao verificar a resposta. Por favor, tente novamente mais tarde.';
+        }
+      },
+      (error) => {
+        console.error('Erro ao verificar resposta:', error);
         this.resposta = 'Ocorreu um erro ao verificar a resposta. Por favor, tente novamente mais tarde.';
       }
-    },
-    (error) => {
-      console.error('Erro ao verificar resposta:', error);
-      this.resposta = 'Ocorreu um erro ao verificar a resposta. Por favor, tente novamente mais tarde.';
-    }
-  );
-}
-
+    );
+  }
+  
 exibirGabarito() {
   this.mostrarGabarito = true; // Define a variável para exibir o gabarito
 }
@@ -181,7 +186,7 @@ exibirGabarito() {
       return;
     }
   
-    this.questoesService.filtrarQuestoes(filtros, this.paginaAtual, 1).subscribe(
+    this.questoesService.filtrarQuestoes(filtros, 0, 100).subscribe(
       (questoes: Questao[]) => {
         if (questoes.length === 0) {
           if (filtros.ano && !filtros.tipoDeProva && !filtros.dificuldade && !filtros.subtema && !filtros.tema && !filtros.palavraChave) {
@@ -199,15 +204,17 @@ exibirGabarito() {
           } else {
             this.message = 'Nenhuma questão encontrada para os filtros selecionados.';
           }
+          this.questoes = [];
+          this.questaoAtual = null;
         } else {
           this.message = '';
+          this.questoes = questoes;
+          this.paginaAtual = 0;
+          this.questaoAtual = this.questoes[this.paginaAtual];
         }
   
-        this.questoes = questoes;
-  
-        if (this.questoes.length > 0) {
-          this.questaoAtual = this.questoes[0];
-        }
+        this.resposta = '';
+        this.mostrarGabarito = false;
       },
       (error) => {
         console.error('Erro ao filtrar questões:', error);
@@ -215,25 +222,32 @@ exibirGabarito() {
       }
     );
   }
+  
+  
+  
 
   anteriorQuestao() {
     if (this.paginaAtual > 0) {
       this.paginaAtual--;
       this.questaoAtual = this.questoes[this.paginaAtual];
-      this.mostrarGabarito = false; // Reseta a exibição do gabarito ao mudar de questão
-      this.filtrarQuestoes();
+      this.mostrarGabarito = false;
+      this.resposta = '';
     }
   }
+  
+  
 
   proximaQuestao() {
     if (this.paginaAtual < this.questoes.length - 1) {
       this.paginaAtual++;
       this.questaoAtual = this.questoes[this.paginaAtual];
       this.mostrarGabarito = false; 
-      this.filtrarQuestoes();
+      this.resposta = ''; 
+    } else {
+      this.message = 'Não há mais questões disponíveis.';
     }
   }
-
-
-
+  
+  
+  
 }
