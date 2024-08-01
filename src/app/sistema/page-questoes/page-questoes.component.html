@@ -76,7 +76,7 @@
           {{ message }}
         </div>
 
-        <div class="button-row">
+        <div class="button-row-filtro">
           <button type="submit" class="btn-filtrar">Filtrar</button>
           <button type="button" class="btn-filtrar-geral" (click)="LimparFiltro()">Limpar Filtro</button>
         </div>
@@ -91,10 +91,10 @@
     </div>
     <div class="questao">
       <div class="identificadores-questao">
-        <h3>{{ questaoAtual.title }}</h3>
-        <h3>{{ questaoAtual.id }}</h3>
-        <h3>{{ questaoAtual.tema }}</h3>
-        <h3>{{ questaoAtual.ano }}</h3>
+        <h3>Título: {{ questaoAtual.title }}</h3>
+        <h3>ID: {{ questaoAtual.id }}</h3>
+        <h3>Tema: {{ questaoAtual.tema }}</h3>
+        <h3>Ano: {{ questaoAtual.ano }}</h3>
       </div>
       <div class="conteudo-questao">
         <p>{{ questaoAtual.enunciadoDaQuestao }}</p>
@@ -135,12 +135,15 @@
           <div class="row"></div>
         </div>
         <div class="button-row">
-          <button *ngIf="resposta" class="btn-gabarito" (click)="exibirGabarito()">Gabarito</button>
-          <button class="btn-anterior" (click)="anteriorQuestao()" [disabled]="paginaAtual === 0">Anterior</button>
-          <button class="btn-responder" (click)="questaoAtual && responderQuestao(questaoAtual)">Responder</button>
-          <button class="btn-proxima" (click)="proximaQuestao()">Próxima</button>
-        </div>                       
-      </div>
+          <div class="left-buttons">
+            <button *ngIf="resposta" class="btn-gabarito" (click)="exibirGabarito()">Gabarito</button>
+          </div>
+          <div class="right-buttons">
+            <button class="btn-anterior" (click)="anteriorQuestao()" [disabled]="paginaAtual === 0">Anterior</button>
+            <button class="btn-responder" (click)="questaoAtual && responderQuestao(questaoAtual)">Responder</button>
+            <button class="btn-proxima" (click)="proximaQuestao()">Próxima</button>
+          </div>
+        </div>        
     </div>
   </div>
 </div>

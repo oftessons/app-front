@@ -15,10 +15,11 @@
 }
 
 .questao-foto {
-  max-width: 200px;
+  max-width: 350px;
   height: auto;
   display: block;
   margin: 20px auto 0 auto; /* Centraliza a imagem horizontalmente com espaçamento superior */
+  margin-bottom: 10px;
 }
 
 .identificadores-questao {
@@ -300,42 +301,75 @@
   }
 }
 
-.btn-anterior,
-.btn-proxima,
-.btn-responder {
-  padding: 10px 20px;
-  width: 130px; /* Ajuste o width conforme necessário */
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-right: 10px;
-  font-size: 16px;
-  color: #fff;
-}
-
-.btn-anterior {
-  background-color: #2a4d7b; /* Cor de fundo específica para o botão Anterior */
-}
-
-.btn-proxima {
-  background-color: #3b5fa0; /* Cor de fundo específica para o botão Próxima */
-}
-
-.btn-responder {
-  background-color: #28a745; /* Cor de fundo específica para o botão Responder */
-}
-
-.btn-anterior:disabled {
-  background-color: #9a9a9a; /* Cor de fundo para botão desabilitado */
-  cursor: not-allowed;
-}
-
-.button-row {
+.button-row-filtro {
   display: flex;
   justify-content: end;
   margin-top: 20px;
 }
 
+.button-row {
+  display: flex;
+  justify-content: space-between; /* Espaça os botões entre as extremidades */
+  align-items: center;
+  margin-top: 20px;
+}
+
+.left-buttons {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.right-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px; /* Espaço entre os botões da direita */
+}
+
+.btn-gabarito {
+  padding: 10px 20px;
+  width: 130px;
+  border: 2px solid #3B5FA0; /* Borda da cor especificada */
+  border-radius: 5px;
+  background-color: transparent; /* Background transparente */
+  color: #000; /* Cor do texto preto */
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.btn-gabarito:hover {
+  background-color: #0056b3;
+  color: #ccc;
+}
+
+.btn-anterior,
+.btn-proxima,
+.btn-responder {
+  padding: 10px 20px;
+  width: 130px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  color: #fff;
+}
+
+.btn-anterior {
+  background-color: #2a4d7b;
+}
+
+.btn-proxima {
+  background-color: #3b5fa0;
+}
+
+.btn-responder {
+  background-color: #28a745;
+}
+
+.btn-anterior:disabled {
+  background-color: #9a9a9a;
+  cursor: not-allowed;
+}
 .alert-success {
   background-color: #399918;
   color: #020202;
@@ -350,20 +384,5 @@
   border-color: #F5004F;
 }
 
-.btn-gabarito {
-  padding: 10px 20px;
-  width: 130px; /* Ajuste o width conforme necessário */
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-right: 10px;
-  font-size: 16px;
-  color: #fff;
-  background-color: #FF8225;
-}
-
-.btn-gabarito:hover {
-  background-color: #0056b3;
-}
 
 
