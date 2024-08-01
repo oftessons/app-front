@@ -248,16 +248,41 @@
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-            <label>Comentário Geral da Questão: </label>
+            <label>Referencial Bibliografico: </label>
+            <input type="text" class="form-control" name="referenciaBi" [(ngModel)]="questaoDTO.referenciaBi"
+              placeholder="Digite a referencia" />
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Comentário Geral da Questão (1): </label>
             <textarea class="form-control" rows="3" name="comentarioDaQuestaoUm"
               [(ngModel)]="questaoDTO.comentarioDaQuestaoUm" placeholder="Digite o comentário geral da questão"></textarea>
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-group">
-            <label>Comentário Específico da Questão: </label>
+            <label>Comentário Específico da Questão(2): </label>
             <textarea class="form-control" rows="3" name="comentarioDaQuestaoDois"
               [(ngModel)]="questaoDTO.comentarioDaQuestaoDois"
+              placeholder="Digite o comentário específico da questão"></textarea>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Comentário Específico da Questão(3): </label>
+            <textarea class="form-control" rows="3" name="comentarioDaQuestaoTres"
+              [(ngModel)]="questaoDTO.comentarioDaQuestaoTres"
+              placeholder="Digite o comentário específico da questão"></textarea>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Comentário Específico da Questão(4): </label>
+            <textarea class="form-control" rows="3" name="comentarioDaQuestaoQuatro"
+              [(ngModel)]="questaoDTO.comentarioDaQuestaoQuatro"
               placeholder="Digite o comentário específico da questão"></textarea>
           </div>
         </div>
