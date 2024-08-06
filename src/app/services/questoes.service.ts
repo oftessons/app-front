@@ -16,6 +16,12 @@ export class QuestoesService {
   apiURL: string = environment.apiURLBase + '/api/questoes';
   constructor(private http: HttpClient) { }
 
+  getAcertosEErrosPorTipoDeProva(): Observable<any> {
+    return this.http.get<any>(`${this.apiURL}/acertos-erros`).pipe(
+      catchError(error => throwError('Erro ao tentar obter acertos e erros.'))
+    );
+  }
+
   salvar(formData: FormData ): Observable<any> {
     const headers = new HttpHeaders();
     // Não defina o Content-Type, o navegador cuidará disso
