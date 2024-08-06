@@ -28,14 +28,18 @@
     align-items: center;
 }
 
+
+
 .chart-container {
-    width: 80%; /* Alterado para 100% para garantir que o container do gráfico ocupe todo o espaço disponível */
+    width: 100%; /* Ajusta o container para ocupar toda a largura disponível */
+    max-width: 100%; /* Garante que o container não exceda 100% da largura */
     padding: 10px;
     background-color: #f2f2f2;
     border: 2px solid #8C8E94;
     border-radius: 5px;
-    margin-bottom: 20px; /* Ajustado para separar os containers de gráfico */
+    margin-bottom: 20px;
 }
+
 
 
 @media (min-width: 768px) {
@@ -57,3 +61,4 @@ canvas {
     width: 100% !important;
     height: auto !important;
 }
+

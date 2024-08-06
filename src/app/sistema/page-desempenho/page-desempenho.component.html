@@ -6,49 +6,34 @@
           <div class="col-md-6">
             <div class="chart-container">
               <!-- Bar Chart 1 -->
-              <canvas baseChart 
-                      [datasets]="barChartData1"
-                      [labels]="barChartLabels"
-                      [options]="barChartOptions"
-                      [legend]="barChartLegend"
-                      [chartType]="barChartType">
-              </canvas>
+              <div style="display: block;">
+                <canvas baseChart
+                        [datasets]="barChartData"
+                        [labels]="barChartLabels"
+                        [options]="barChartOptions"
+                        [legend]="barChartLegend"
+                        [chartType]="barChartType">
+                </canvas>
+              </div>
+              
             </div>
           </div>
           <div class="col-md-6">
             <div class="chart-container">
               <!-- Bar Chart 2 -->
-              <canvas baseChart 
-                      [datasets]="barChartData2"
-                      [labels]="barChartLabels"
-                      [options]="barChartOptions"
-                      [legend]="barChartLegend"
-                      [chartType]="barChartType">
-              </canvas>
+             
             </div>
           </div>
         </div>
         <div class="row mt-4">
           <div class="col-md-6">
             <div class="chart-container">
-              <!-- Pie Chart 1 -->
-              <canvas baseChart 
-                      [datasets]="pieChartData1"
-                      [labels]="pieChartLabels"
-                      [options]="pieChartOptions"
-                      [chartType]="pieChartType">
-              </canvas>
+            
             </div>
           </div>
           <div class="col-md-6">
             <div class="chart-container">
-              <!-- Pie Chart 2 -->
-              <canvas   baseChart 
-                      [datasets]="pieChartData2"
-                      [labels]="pieChartLabels"
-                      [options]="pieChartOptions"
-                      [chartType]="pieChartType">
-              </canvas>
+            
             </div>
           </div>
         </div>
