@@ -40,20 +40,24 @@
     margin-bottom: 20px;
 }
 
+.chart-container-small {
+    height: 300px; /* Ajuste a altura conforme necessário */
+    position: relative;
+}
 
+.chart-container-small canvas {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+}
 
 @media (min-width: 768px) {
     .col-md-6 {
       flex: 0 0 50%;
       max-width: 50%;
     }
-}
-
-.chart-container {
-    background-color: #f2f2f2;
-    border: 2px solid #8C8E94; 
-    border-radius: 5px;
-    padding: 10px;
 }
 
 canvas {

@@ -22,6 +22,18 @@ export class QuestoesService {
     );
   }
 
+  getAcertosEErrosPorMes(usuarioId: number): Observable<Map<string, Map<string, number>>> {
+    return this.http.get<Map<string, Map<string, number>>>(`${this.apiURL}/acertos-erros-mes/${usuarioId}`).pipe(
+      catchError(error => throwError('Erro ao tentar obter acertos e erros por mês.'))
+    );
+  }
+
+  getQuestoesFeitasPorTema(usuarioId: number): Observable<Map<string, number>> {
+    return this.http.get<Map<string, number>>(`${this.apiURL}/questoes-feitas-tema/${usuarioId}`).pipe(
+      catchError(error => throwError('Erro ao tentar obter as questões feitas por tema.'))
+    );
+  }
+
   salvar(formData: FormData ): Observable<any> {
     const headers = new HttpHeaders();
     // Não defina o Content-Type, o navegador cuidará disso

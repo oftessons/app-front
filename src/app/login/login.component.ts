@@ -31,15 +31,18 @@ export class LoginComponent {
   onSubmit() {
     this.authService.tentarLogar(this.username, this.password).subscribe(
       (response: any) => {
+  
+        
         const access_token = JSON.stringify(response);
         localStorage.setItem('access_token', access_token);
-
+  
+        // Obtenha o ID do usuário e armazene localmente
         const userId = this.authService.getUserIdFromToken();
+  
         localStorage.setItem('user_id', userId || '');
         this.salvaUserLocal();
-
-        // Redireciona para a página de dashboard após o login
-        this.router.navigate(['/gerente/dashboard']);
+  
+       // this.router.navigate(['/gerente/dashboard']);
       },
       errorResponse => {
         this.errors = ['Usuário e/ou senha incorreto(s).'];
@@ -77,23 +80,6 @@ export class LoginComponent {
         })
   }
 
-
-  // mudança aqui no login
-
-  salvaUserLocal() {
-    this.authService.obterUsuarioAutenticadoDoBackend().subscribe(
-      (usuario: Usuario) => {
-        this.usuario = usuario;
-        localStorage.setItem('idUser', usuario.id);
-        this.router.navigate(['/usuario/dashboard']);
-        localStorage.setItem('usuario', usuario.username);
-      },
-      error => {
-        console.error('Erro ao obter dados do usuário:', error);
-      }
-    );
-  }
-
   forgotPassword(event: Event) {
     event.preventDefault();
     this.showForgotPassword = true;
@@ -111,6 +97,21 @@ export class LoginComponent {
         this.errors = ['Erro ao enviar e-mail de recuperação de senha.'];
       }
     );
+  }
+
+  salvaUserLocal(){
+    this.authService.obterUsuarioAutenticadoDoBackend().subscribe(
+      (usuario: Usuario) => {
+        this.usuario = usuario;
+        localStorage.setItem("idUser",usuario.id);
+        this.router.navigate(['/usuario/dashboard']);
+        //localStorage.setItem("usuario",usuario.username);
+      },
+      (error) => {
+        console.error('Erro ao obter dados do usuário:', error);
+      }
+    );
+
   }
 
   cancelForgotPassword() {
