@@ -133,7 +133,7 @@ export class PageDesempenhoComponent implements OnInit {
     });
 
     this.barChartData3 = [
-      { data: acertosData, label: 'Acertos', backgroundColor: '#A2CA71', borderColor: '#A2CA71' },
+      { data: acertosData, label: 'Acertos', backgroundColor: '#387F39', borderColor: '#387F39' },
       { data: errosData, label: 'Erros', backgroundColor: '#F5004F', borderColor: '#F5004F' }
     ];
   }
