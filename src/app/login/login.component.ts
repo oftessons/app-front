@@ -65,6 +65,9 @@ export class LoginComponent {
     usuario.username = this.username;
     usuario.password = this.password;
     usuario.email = this.email;
+    usuario.telefone = this.telefone;
+    usuario.cidade = this.cidade;
+    usuario.estado = this.estado;
     this.authService
         .salvar(usuario)
         .subscribe( response => {
@@ -73,6 +76,9 @@ export class LoginComponent {
             this.username = '';
             this.password = '';
             this.email = '';
+            this.telefone ='';
+            this.cidade = '';
+            this.estado = '';
             this.errors = []
         }, errorResponse => {
             this.mensagemSucesso = "Cadastro realizado com sucesso! Efetue o login.";
