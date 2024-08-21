@@ -26,7 +26,7 @@ export class PageQuestoesComponent implements OnInit {
   questao: Questao = new Questao();
   selectedOption: string = '';
   //resposta: string | null = null;
-  usuario!: Usuario; 
+  usuario!: Usuario;
 
   tiposDeProva = Object.values(TipoDeProva);
   anos = Object.values(Ano);
@@ -114,7 +114,7 @@ export class PageQuestoesComponent implements OnInit {
 
     const idUser = parseInt(this.usuario.id);
   
-    this.questoesService.checkAnswer(questao.id, idUser ,respostaDTO).subscribe(
+    this.questoesService.checkAnswer(questao.id, idUser, respostaDTO).subscribe(
       (resposta: Resposta) => {
         console.log('Resposta do backend:', resposta);
         console.log('correct:', resposta.correct);
