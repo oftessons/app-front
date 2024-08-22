@@ -16,8 +16,8 @@ export class QuestoesService {
   apiURL: string = environment.apiURLBase + '/api/questoes';
   constructor(private http: HttpClient) { }
 
-  getAcertosEErrosPorTipoDeProva(): Observable<any> {
-    return this.http.get<any>(`${this.apiURL}/acertos-erros`).pipe(
+  getAcertosEErrosPorTipoDeProva(usuarioId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiURL}/acertos-erros/${usuarioId}`).pipe(
       catchError(error => throwError('Erro ao tentar obter acertos e erros.'))
     );
   }
