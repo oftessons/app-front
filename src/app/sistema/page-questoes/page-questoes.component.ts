@@ -11,6 +11,8 @@ import { Filtro } from '../filtro';
 import { FiltroService } from 'src/app/services/filtro.service';
 import { RespostaDTO } from '../RespostaDTO';  // Adicione esta importação
 import { Resposta } from '../Resposta';  // Adicione esta importação
+import { AuthService } from 'src/app/services/auth.service';
+import { Usuario } from 'src/app/login/usuario';
 
 declare var bootstrap: any;
 
@@ -24,6 +26,7 @@ export class PageQuestoesComponent implements OnInit {
   questao: Questao = new Questao();
   selectedOption: string = '';
   //resposta: string | null = null;
+  usuario!: Usuario;
 
   tiposDeProva = Object.values(TipoDeProva);
   anos = Object.values(Ano);
@@ -71,16 +74,29 @@ export class PageQuestoesComponent implements OnInit {
 
   constructor(
     private questoesService: QuestoesService,
-    private filtroService: FiltroService
+    private filtroService: FiltroService,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
+    this.obterPerfilUsuario();
   }
 
 
   onOptionChange(texto: string): void {
     this.selectedOption = texto;
     console.log('Alternativa selecionada:', texto);
+  }
+
+  obterPerfilUsuario() {
+    this.authService.obterUsuarioAutenticadoDoBackend().subscribe(
+      (data) => {
+        this.usuario = data; // Armazenar os dados do perfil do usuário na variável 'usuario'
+      },
+      (error) => {
+        console.error('Erro ao obter perfil do usuário:', error);
+      }
+    );
   }
 
 
@@ -95,8 +111,10 @@ export class PageQuestoesComponent implements OnInit {
       questaoId: questao.id,
       selecionarOpcao: this.selectedOption
     };
+
+    const idUser = parseInt(this.usuario.id);
   
-    this.questoesService.checkAnswer(questao.id, respostaDTO).subscribe(
+    this.questoesService.checkAnswer(questao.id, idUser, respostaDTO).subscribe(
       (resposta: Resposta) => {
         console.log('Resposta do backend:', resposta);
         console.log('correct:', resposta.correct);
