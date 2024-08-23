@@ -135,6 +135,33 @@
     width: 100%;
 }
 
+.password-errors {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .error-tooltip {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  
+  .password-errors:hover .error-tooltip {
+    visibility: visible;
+    opacity: 1;
+  }
+
 @media screen and (min-width: 1024px) {
     .btn-lg{
         width: 100%;
@@ -241,4 +268,3 @@ input::placeholder {
 .small a {
     text-decoration: none; /* Remove a linha de sublinhado apenas dos links dentro da classe .small */
 }
-
