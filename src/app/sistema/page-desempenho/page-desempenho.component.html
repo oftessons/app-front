@@ -19,23 +19,6 @@
       </div>
       <div class="col-md-6">
         <div class="chart-container">
-          <!-- Gráfico 2: Quantidade de Questões Feitas por Tema -->
-          <div style="display: block;">
-            <canvas baseChart
-                    [datasets]="barChartData2"
-                    [labels]="barChartLabels2"
-                    [options]="barChartOptions2"
-                    [legend]="barChartLegend"
-                    [chartType]="barChartType">
-            </canvas>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-md-6">
-        <div class="chart-container chart-container-small">
           <!-- Gráfico 3: Acertos e Erros por Mês -->
           <div style="display: block;">
             <canvas baseChart
@@ -45,6 +28,24 @@
                     [legend]="barChartLegend"
                     [chartType]="barChartType">
             </canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="chart-container chart-container-large">
+          <!-- Gráfico 2: Quantidade de Questões Feitas por Tema -->
+          <div style="display: block;">
+            <canvas baseChart
+          style="height: 250px;" 
+          [datasets]="barChartData2"
+          [labels]="barChartLabels2"
+          [options]="barChartOptions2"
+          [legend]="barChartLegend"
+          [chartType]="barChartType">
+          </canvas>
           </div>
         </div>
       </div>
