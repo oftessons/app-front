@@ -137,6 +137,8 @@
         <div class="button-row">
           <div class="left-buttons">
             <button *ngIf="resposta" class="btn-gabarito" (click)="exibirGabarito()">Gabarito</button>
+            <mat-form-field><mat-label>Avaliação</mat-label><mat-star-rating [(ngModel)]="avaliacao.nota"></mat-star-rating></mat-form-field><textarea [(ngModel)]="avaliacao.comentario" placeholder="Deixe um comentário"></textarea><button (click)="salvarAvaliacao()">Enviar Avaliação</button>
+            <p>Média de avaliações: {{mediaAvaliacao | number:'1.1-1'}} / 5</p>
           </div>
           <div class="right-buttons">
             <button class="btn-anterior" (click)="anteriorQuestao()" [disabled]="paginaAtual === 0">Anterior</button>
