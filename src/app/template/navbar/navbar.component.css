@@ -3,7 +3,7 @@
     top: 0;
     left: 0;
     right: 0;
-    z-index: 999;
+    z-index: 2;
     background-color: #0F1934;
     padding: 30px;
     font-family: 'Nunito Sans', sans-serif;
@@ -180,6 +180,10 @@
     color: rgb(255, 255, 255);
     /* Defina a cor do texto como branca */
     font-weight: 400;
+}
+
+::ng-deep .mat-drawer.mat-drawer-side {
+    z-index: 0 !important; /* ou 0, dependendo do comportamento desejado */
 }
 
 /* Estilo para dispositivos móveis e tablets */
