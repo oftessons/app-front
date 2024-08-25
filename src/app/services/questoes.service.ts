@@ -99,7 +99,7 @@ export class QuestoesService {
   }  
 
   consultarQuestao(filtros: any, page: number = 0, size: number = 10): Observable<Questao[]> {
-    const url = `${this.apiURL}/consultarQuestao`;
+    const url = `${this.apiURL}/consultar`;
     let params = new HttpParams();
 
     // Adicione os filtros como parâmetros de consulta

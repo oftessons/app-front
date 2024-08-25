@@ -11,7 +11,7 @@
             <mat-form-field appearance="fill" class="full-width">
               <mat-label>Ano</mat-label>
               <mat-select name="selectedAno" [(ngModel)]="selectedAno">
-                <mat-option *ngFor="let ano of anos" [value]="ano">{{ getDescricaoAno(ano) }}</mat-option>
+                <mat-option *ngFor="let ano of anos" [value]="ano">{{ ano }}</mat-option>
               </mat-select>
             </mat-form-field>
           </div>
