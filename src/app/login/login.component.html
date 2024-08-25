@@ -74,11 +74,26 @@
                                             <div *ngIf="showTooltip" class="password-tooltip">
                                                 <p class="tooltip-title">A senha precisa ter:</p>
                                                 <ul>
-                                                <li [class.valid]="passwordValidations.minLength">✔ Ao menos 8 caracteres</li>
-                                                <li [class.valid]="passwordValidations.uppercase">✔ 1 letra maiúscula</li>
-                                                <li [class.valid]="passwordValidations.lowercase">✔ 1 letra minúscula</li>
-                                                <li [class.valid]="passwordValidations.number">✔ 1 número</li>
-                                                <li [class.valid]="passwordValidations.specialChar">✔ 1 caractere especial</li>
+                                                <li [class.valid]="passwordValidations.minLength">
+                                                    <i class="fas fa-exclamation-circle"></i>
+                                                    Ao menos 8 caracteres
+                                                </li>
+                                                <li [class.valid]="passwordValidations.uppercase">
+                                                    <i class="fas fa-exclamation-circle"></i>
+                                                    1 letra maiúscula
+                                                </li>
+                                                <li [class.valid]="passwordValidations.lowercase">
+                                                    <i class="fas fa-exclamation-circle"></i>
+                                                    1 letra minúscula
+                                                </li>
+                                                <li [class.valid]="passwordValidations.number">
+                                                    <i class="fas fa-exclamation-circle"></i>
+                                                    1 número
+                                                </li>
+                                                <li [class.valid]="passwordValidations.specialChar">
+                                                    <i class="fas fa-exclamation-circle"></i>
+                                                    1 caractere especial
+                                                </li>
                                                 </ul>
                                             </div>
                                         </div>

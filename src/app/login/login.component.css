@@ -272,14 +272,20 @@ input::placeholder {
 
 .password-tooltip {
     position: absolute;
-    background-color: white;
-    border: 1px solid #ddd;
+    background-color: #FFFFFF;
+    border: 1px solid #a0a0a0;
+    border-radius: 8px;
     padding: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 250px;
-    margin-top: 5px;
+    width: 200px;
+    margin-top: 6px;
     z-index: 10;
-    font-size: 0.9em;
+    font-size: 0.9rem;
+  }
+
+  .password-tooltip p{
+    font-size: 1rem;
+    color: #a0a0a0;
   }
   
   .password-tooltip ul {
@@ -288,13 +294,13 @@ input::placeholder {
   }
   
   .password-tooltip li {
-    color: red;
+    color: #c60404;
     margin: 5px 0;
   }
   
   .password-tooltip li.valid {
-    color: green;
-    font-weight: bold;
+    color: #027902;
+    font-weight: 400;
   }
 
   .input-group-append .btn {
