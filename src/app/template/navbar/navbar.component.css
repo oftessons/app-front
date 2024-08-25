@@ -3,7 +3,7 @@
     top: 0;
     left: 0;
     right: 0;
-    z-index: 999;
+    z-index: 2;
     background-color: #0F1934;
     padding: 30px;
     font-family: 'Nunito Sans', sans-serif;
@@ -36,6 +36,19 @@
 .logo {
     width: 100px; /* Ajuste o valor conforme necessário para diminuir o tamanho */
   
+}
+
+.btn-logout{
+    color: #FFFFFF;
+    border-radius: 8px;
+}
+
+.btn-logout:hover {
+    color: #FFFFFF;
+    background-color: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px); 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+    border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 /* SIDEBAR CSS */
@@ -180,6 +193,10 @@
     color: rgb(255, 255, 255);
     /* Defina a cor do texto como branca */
     font-weight: 400;
+}
+
+::ng-deep .mat-drawer.mat-drawer-side {
+    z-index: 0 !important; /* ou 0, dependendo do comportamento desejado */
 }
 
 /* Estilo para dispositivos móveis e tablets */

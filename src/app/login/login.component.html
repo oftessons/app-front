@@ -30,8 +30,16 @@
 
                                         <div class="form-group col-sm-12 col-md-6">
                                             <label class="small mb-1" style="font-size: 1.2em;">Senha</label>
-                                            <input type="password" name="password" [(ngModel)]="password" class="form-control py-2 responsive-input" placeholder="Digite sua senha" required />
-                                        </div>                                       
+                                            <div class="input-group">
+                                              <input type="password" name="password" [(ngModel)]="password" class="form-control py-2 responsive-input" placeholder="Digite sua senha" required />
+                                              <div class="input-group-append">
+                                                <div class="btn btn-outline-secondary" type="button" (click)="togglePasswordVisibility()">
+                                                  <img *ngIf="!passwordVisible" src="assets/imagens/view.svg" alt="Mostrar senha" width="16" height="16">
+                                                  <img *ngIf="passwordVisible" src="assets/imagens/view-off.svg" alt="Ocultar senha" width="16" height="16">
+                                                </div>
+                                              </div>
+                                            </div>
+                                        </div>                               
 
                                         <div class="form-group align-items-center justify-content-between mt-4 mb-0">
                                             <div class="col-sm-12 col-md-6">
@@ -51,13 +59,48 @@
                                     <form *ngIf="cadastrando" (submit)="cadastrar()">
 
                                         <div class="form-group col-sm-12 col-md-6">
-                                            <label class="small mb-1" style="font-size: 1.2em;">Login</label>
+                                            <label class="small mb-1" style="font-size: 1.2em;">Login *</label>
                                             <input type="text" name="username" [(ngModel)]="username" autocomplete="off" class="form-control py-2 responsive-input" placeholder="Digite seu username" required />
                                         </div>
 
                                         <div class="form-group col-sm-12 col-md-6">
-                                            <label class="small mb-1" style="font-size: 1.2em;">Senha</label>
-                                            <input type="password" name="password" [(ngModel)]="password" class="form-control py-2 responsive-input" placeholder="Digite sua senha" required />
+                                            <label for="password" class="small mb-1" style="font-size: 1.2em;">Senha *</label>
+                                            <input type="password" id="password" name="password" [(ngModel)]="password" class="form-control py-2 responsive-input" placeholder="Digite sua senha" required 
+                                            (input)="validatePassword()" (focus)="showTooltip = true" (blur)="showTooltip = false"/>
+                                            <div *ngIf="errors.length > 0" class="password-errors">
+                                                <div *ngFor="let error of errors" class="error-tooltip">{{error}}</div>
+                                            </div>
+                                            <!-- Tooltip para Regras de Senha -->
+                                            <div *ngIf="showTooltip" class="password-tooltip">
+                                                <p class="tooltip-title">A senha precisa ter:</p>
+                                                <ul>
+                                                <li [class.valid]="passwordValidations.minLength">
+                                                    <i class="fas fa-exclamation-circle"></i>
+                                                    Ao menos 8 caracteres
+                                                </li>
+                                                <li [class.valid]="passwordValidations.uppercase">
+                                                    <i class="fas fa-exclamation-circle"></i>
+                                                    1 letra maiúscula
+                                                </li>
+                                                <li [class.valid]="passwordValidations.lowercase">
+                                                    <i class="fas fa-exclamation-circle"></i>
+                                                    1 letra minúscula
+                                                </li>
+                                                <li [class.valid]="passwordValidations.number">
+                                                    <i class="fas fa-exclamation-circle"></i>
+                                                    1 número
+                                                </li>
+                                                <li [class.valid]="passwordValidations.specialChar">
+                                                    <i class="fas fa-exclamation-circle"></i>
+                                                    1 caractere especial
+                                                </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group col-sm-12 col-md-6">
+                                            <label for="confirmPassword" class="small mb-1" style="font-size: 1.2em;">Confirme a Senha</label>
+                                            <input type="password" id="confirmPassword" name="confirmPassword" [(ngModel)]="confirmPassword" class="form-control py-2 responsive-input" placeholder="Confirme sua senha" required />
                                         </div>
 
                                         <div class="form-group col-sm-12 col-md-6">

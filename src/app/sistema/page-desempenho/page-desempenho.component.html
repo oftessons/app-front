@@ -35,16 +35,15 @@
 
     <div class="row">
       <div class="col-md-12">
-        <div class="chart-container chart-container-large">
+        <div class="chart-container chart-container-large container-height">
           <!-- Gráfico 2: Quantidade de Questões Feitas por Tema -->
-          <div style="display: block;">
+          <div style="display: block;" class="container-height">
             <canvas baseChart
-          style="height: 250px;" 
-          [datasets]="barChartData2"
-          [labels]="barChartLabels2"
-          [options]="barChartOptions2"
-          [legend]="barChartLegend"
-          [chartType]="barChartType">
+              [datasets]="barChartData2"
+              [labels]="barChartLabels2"
+              [options]="barChartOptions2"
+              [legend]="barChartLegend"
+              [chartType]="barChartType">
           </canvas>
           </div>
         </div>

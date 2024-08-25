@@ -16,17 +16,16 @@ import { FiltroService } from 'src/app/services/filtro.service';
 @Component({
   selector: 'app-lista-questoes',
   templateUrl: './lista-questoes.component.html',
-  styleUrls: ['./lista-questoes.component.css']
+  styleUrls: ['./lista-questoes.component.css'],
 })
 export class ListaQuestoesComponent implements OnInit {
-
   filtros: Filtro[] = [];
   tiposDeProva = Object.values(TipoDeProva);
   anos = Object.values(Ano);
   dificuldades = Object.values(Dificuldade);
   subtemas = Object.values(Subtema);
   temas = Object.values(Tema);
-  
+
   questoes: Questao[] = [];
   selectedAno?: Ano;
   selectedTipoDeProva?: TipoDeProva;
@@ -37,9 +36,14 @@ export class ListaQuestoesComponent implements OnInit {
   message: string = '';
   mensagemSucesso: string = '';
   mensagemErro: string = '';
-  questaoSelecionada!: Questao;
-  modalAberto: boolean = false;
   paginaAtual: number = 0;
+
+  questaoSelecionada!: Questao;
+  filtroSelecionado!: Filtro;
+  modalAberto: boolean = false;
+
+  modalTitle: string = '';
+  modalType: string = '';
 
   constructor(
     private questoesService: QuestoesService,
@@ -53,33 +57,18 @@ export class ListaQuestoesComponent implements OnInit {
   }
 
   carregarFiltros(): void {
-    this.filtroService.getFiltros()
-      .subscribe(
-        filtros => {
-          this.filtros = filtros;
-        },
-        error => {
-          console.error('Erro ao carregar filtros:', error);
-        }
-      );
-  }
-
-  deletarFiltro(id: number): void {
-    this.filtroService.deletarFiltro(id)
-      .subscribe(
-        () => {
-          // Após deletar com sucesso, recarregar os filtros
-          this.carregarFiltros();
-        },
-        error => {
-          console.error('Erro ao deletar filtro:', error);
-          // Tratar erro aqui se necessário
-        }
-      );
+    this.filtroService.getFiltros().subscribe(
+      (filtros) => {
+        this.filtros = filtros;
+      },
+      (error) => {
+        console.error('Erro ao carregar filtros:', error);
+      }
+    );
   }
 
   editarFiltro(id: number): void {
-    this.router.navigate(['/editar-filtro', id]); // Navega para a rota de edição
+    this.router.navigate(['/editar-filtro', id]);
   }
 
   getDescricaoTipoDeProva(tipoDeProva: TipoDeProva): string {
@@ -92,30 +81,32 @@ export class ListaQuestoesComponent implements OnInit {
 
   buscarQuestoes(): void {
     const filtros: any = {};
-
+  
     if (this.selectedAno) {
-      filtros.ano = this.selectedAno;
+      filtros.ano = this.selectedAno; // Enviar a string do ano
     }
     if (this.selectedTipoDeProva) {
       filtros.tipoDeProva = this.selectedTipoDeProva;
     }
-
+  
     if (Object.keys(filtros).length === 0) {
       this.message = 'Por favor, selecione pelo menos um filtro.';
       return;
     }
-
+  
     this.questoesService.consultarQuestao(filtros).subscribe(
       (questoes: Questao[]) => {
         this.questoes = questoes;
-
+  
         if (questoes.length === 0) {
           if (filtros.ano && !filtros.tipoDeProva) {
             this.message = 'Nenhuma questão encontrada para o ano selecionado.';
           } else if (filtros.tipoDeProva && !filtros.ano) {
-            this.message = 'Nenhuma questão encontrada para o tipo de prova selecionado.';
+            this.message =
+              'Nenhuma questão encontrada para o tipo de prova selecionado.';
           } else {
-            this.message = 'Nenhuma questão encontrada com os filtros aplicados.';
+            this.message =
+              'Nenhuma questão encontrada com os filtros aplicados.';
           }
         } else {
           this.message = '';
@@ -127,23 +118,43 @@ export class ListaQuestoesComponent implements OnInit {
       }
     );
   }
+  
+  
 
-  consultarProjeto(){
+  consultarProjeto() {}
 
+  deletarProjeto() {}
+
+  // Métodos para abrir e fechar o modal
+  preparaDelecao(questao: Questao): void {
+    console.log('Preparando deleção da questão:', questao);
+    this.questaoSelecionada = questao;
+    this.modalTitle = 'Confirmação de Exclusão';
+    this.modalType = 'deleteQuestao';
+    this.modalAberto = true;
+    console.log('Modal aberto:', this.modalAberto);
   }
 
-
-  deletarProjeto(){
-
-  }
-
-  preparaDelecao(questao: QuestaoBusca) {
-    this.questaoSelecionada = { ...questao } as Questao;
-    this.modalAberto = true; // Abre o modal
+  preparaDelecaoFiltro(filtro: Filtro): void {
+    console.log('Preparando deleção do filtro:', filtro);
+    this.filtroSelecionado = filtro;
+    this.modalTitle = 'Confirmação de Exclusão';
+    this.modalType = 'deleteFiltro';
+    this.modalAberto = true;
+    console.log('Modal aberto:', this.modalAberto);
   }
 
   fecharModal() {
-    this.modalAberto = false; 
+    this.modalAberto = false;
+  }
+
+  confirmarAcao(): void {
+    console.log('Confirmando ação para o tipo:', this.modalType);
+    if (this.modalType === 'deleteQuestao') {
+      this.deletarQuestao();
+    } else if (this.modalType === 'deleteFiltro') {
+      this.deletarFiltro(this.filtroSelecionado.id);
+    }
   }
 
   deletarQuestao() {
@@ -155,6 +166,19 @@ export class ListaQuestoesComponent implements OnInit {
       },
       (erro) => (this.mensagemErro = 'Ocorreu um erro ao deletar a questão.')
     );
+  }
+
+  deletarFiltro(id: number): void {
+    this.filtroService.deletarFiltro(id)
+      .subscribe(
+        () => {
+          this.carregarFiltros();
+          this.fecharModal();
+        },
+        error => {
+          console.error('Erro ao deletar filtro:', error);
+        }
+      );
   }
 
   limparFiltros() {

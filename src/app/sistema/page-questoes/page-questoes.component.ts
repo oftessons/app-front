@@ -265,7 +265,40 @@ exibirGabarito() {
       this.message = 'Não há mais questões disponíveis.';
     }
   }
-  
-  
+
+  abrirModal(): void {
+    const modalElement = document.getElementById('confirmacaoModal');
+    const modal = new bootstrap.Modal(modalElement!);
+    modal.show();
+
+    // Adiciona evento para quando o modal for fechado
+    modalElement?.addEventListener('hidden.bs.modal', () => {
+      this.fecharCardConfirmacao();
+    });
+  }
+
+  confirmarSalvarFiltro(): void {
+    if (this.filtroASalvar) {
+      this.filtroService.salvarFiltro(this.filtroASalvar)
+        .subscribe(
+          response => {
+            console.log('Filtro salvo com sucesso:', response);
+            // Adicione lógica adicional se necessário
+          },
+          error => {
+            console.error('Erro ao salvar filtro:', error);
+            // Trate o erro aqui, se necessário
+          }
+        );
+    }
+    const modalElement = document.getElementById('confirmacaoModal');
+    const modal = bootstrap.Modal.getInstance(modalElement!);
+    modal.hide();
+  }
+
+  fecharCardConfirmacao(): void {
+    this.mostrarCardConfirmacao = false;
+  }
+
   
 }

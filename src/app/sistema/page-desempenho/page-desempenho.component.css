@@ -53,7 +53,10 @@
     border: 2px solid #8C8E94;
     border-radius: 5px;
     margin-bottom: 20px;
-    
+}
+
+.container-height{
+    height: 400px !important;
 }
 
 @media (min-width: 768px) {
@@ -65,10 +68,18 @@
       flex: 0 0 100%;
       max-width: 100%;
     }
+
+    .container-height{
+        height: auto;
+    }
+
+    canvas {
+        height: auto !important;
+    }
 }
 
 canvas {
     display: block;
     width: 100% !important;
-    height: auto !important;
+    height: 100% !important;
 }

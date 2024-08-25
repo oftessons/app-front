@@ -11,7 +11,7 @@
             <mat-form-field appearance="fill" class="full-width">
               <mat-label>Ano</mat-label>
               <mat-select name="selectedAno" [(ngModel)]="selectedAno">
-                <mat-option *ngFor="let ano of anos" [value]="ano">{{ getDescricaoAno(ano) }}</mat-option>
+                <mat-option *ngFor="let ano of anos" [value]="ano">{{ ano }}</mat-option>
               </mat-select>
             </mat-form-field>
           </div>
@@ -77,26 +77,6 @@
       <div *ngIf="message" class="alert alert-info" role="alert">
         {{ message }}
       </div>
-
-      <div id="modalDelecaoQuestao" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h4>Confirmação</h4>
-              <button type="button" (click)="fecharModal()" class="close" data-dismiss="modal" aria-label="Fechar">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body" *ngIf="questaoSelecionada">
-              Deseja realmente excluir a questão {{ questaoSelecionada.title }}?
-            </div>
-            <div class="modal-footer">
-              <button class="btn btn-success" (click)="deletarQuestao()" data-dismiss="modal">Confirmar</button>
-              <button class="btn btn-danger" (click)="fecharModal()" data-dismiss="modal">Cancelar</button>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 
@@ -126,7 +106,7 @@
                 <button class="btn btn-primary"  (click)="editarFiltro(filtro.id)">
                   Editar <img src="assets/imagens/pencil.svg" alt="Ícone de Editar" class="icon" /> 
                 </button>
-                <button class="btn btn-danger" (click)="deletarFiltro(filtro.id)">
+                <button class="btn btn-danger" (click)="preparaDelecaoFiltro(filtro)">
                   Deletar <img src="assets/imagens/de.svg" alt="Ícone de Deletar" class="icon" /> 
                 </button>
               </td>
@@ -148,4 +128,33 @@
   </div>
 
   <div class="overlay" *ngIf="modalAberto"></div>
+</div>
+
+ <!-- Modal Container -->
+ <div class="modal" [ngClass]="{'open': modalAberto}">
+  <div class="modal-overlay" (click)="fecharModal()"></div>
+  <div class="modal-container">
+    <div class="modal-header">
+      <h2>{{ modalTitle }}</h2>
+      <button type="button" (click)="fecharModal()" class="btn-close btn-close-white"></button>
+    </div>
+    <div class="modal-content">
+      <div class="modal-body">
+        <ng-container [ngSwitch]="modalType">
+          <ng-container *ngSwitchCase="'deleteQuestao'">
+            <ng-container *ngIf="questaoSelecionada">
+              Deseja realmente excluir a questão {{ questaoSelecionada.title }}?
+            </ng-container>
+          </ng-container>
+          <ng-container *ngSwitchCase="'deleteFiltro'">
+            Deseja realmente excluir a questão {{ filtroSelecionado?.id }}?
+          </ng-container>
+        </ng-container>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-cancel" (click)="fecharModal()">Cancelar</button>
+        <button class="btn btn-success" (click)="confirmarAcao()">Confirmar</button>
+      </div>
+    </div>
+  </div>
 </div>
