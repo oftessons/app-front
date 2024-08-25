@@ -96,9 +96,7 @@ export class ListaQuestoesComponent implements OnInit {
   
     this.questoesService.consultarQuestao(filtros).subscribe(
       (questoes: Questao[]) => {
-        this.questoes = questoes;
-  
-        if (questoes.length === 0) {
+        if (!questoes || questoes.length === 0) {
           if (filtros.ano && !filtros.tipoDeProva) {
             this.message = 'Nenhuma questão encontrada para o ano selecionado.';
           } else if (filtros.tipoDeProva && !filtros.ano) {
@@ -108,7 +106,9 @@ export class ListaQuestoesComponent implements OnInit {
             this.message =
               'Nenhuma questão encontrada com os filtros aplicados.';
           }
+          this.questoes = [];
         } else {
+          this.questoes = questoes;
           this.message = '';
         }
       },
