@@ -23,6 +23,15 @@ export class LoginComponent {
   forgotEmail: string = '';
   showForgotPassword: boolean = false;
 
+  showTooltip: boolean = false;
+  passwordValidations = {
+    minLength: false,
+    uppercase: false,
+    lowercase: false,
+    number: false,
+    specialChar: false,
+  };
+
   constructor(
     private router: Router,
     private authService: AuthService
@@ -70,6 +79,9 @@ export class LoginComponent {
   }
   if (!/[a-z]/.test(this.password)) {
     passwordValidationErrors.push("A senha deve conter pelo menos uma letra minúscula.");
+  }
+  if (!/[0-9]/.test(this.password)) {
+    passwordValidationErrors.push("A senha deve conter pelo menos um número.");
   }
   if (!/[!@#$%^&*]/.test(this.password)) {
     passwordValidationErrors.push("A senha deve conter pelo menos um caractere especial (por exemplo, !@#$%^&*).");
@@ -139,5 +151,13 @@ export class LoginComponent {
   cancelForgotPassword() {
     this.showForgotPassword = false;
     this.forgotEmail = '';
+  }
+
+  validatePassword() {
+    this.passwordValidations.minLength = this.password.length >= 8;
+    this.passwordValidations.uppercase = /[A-Z]/.test(this.password);
+    this.passwordValidations.lowercase = /[a-z]/.test(this.password);
+    this.passwordValidations.number = /\d/.test(this.password);
+    this.passwordValidations.specialChar = /[!@#$%^&*]/.test(this.password);
   }
 }

@@ -268,3 +268,32 @@ input::placeholder {
 .small a {
     text-decoration: none; /* Remove a linha de sublinhado apenas dos links dentro da classe .small */
 }
+
+
+.password-tooltip {
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ddd;
+    padding: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 250px;
+    margin-top: 5px;
+    z-index: 10;
+    font-size: 0.9em;
+  }
+  
+  .password-tooltip ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .password-tooltip li {
+    color: red;
+    margin: 5px 0;
+  }
+  
+  .password-tooltip li.valid {
+    color: green;
+    font-weight: bold;
+  }
+  

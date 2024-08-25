@@ -57,9 +57,21 @@
 
                                         <div class="form-group col-sm-12 col-md-6">
                                             <label for="password" class="small mb-1" style="font-size: 1.2em;">Senha</label>
-                                            <input type="password" id="password" name="password" [(ngModel)]="password" class="form-control py-2 responsive-input" placeholder="Digite sua senha" required />
+                                            <input type="password" id="password" name="password" [(ngModel)]="password" class="form-control py-2 responsive-input" placeholder="Digite sua senha" required 
+                                            (input)="validatePassword()" (focus)="showTooltip = true" (blur)="showTooltip = false"/>
                                             <div *ngIf="errors.length > 0" class="password-errors">
                                                 <div *ngFor="let error of errors" class="error-tooltip">{{error}}</div>
+                                            </div>
+                                            <!-- Tooltip para Regras de Senha -->
+                                            <div *ngIf="showTooltip" class="password-tooltip">
+                                                <p class="tooltip-title">A senha precisa ter:</p>
+                                                <ul>
+                                                <li [class.valid]="passwordValidations.minLength">✔ Ao menos 8 caracteres</li>
+                                                <li [class.valid]="passwordValidations.uppercase">✔ 1 letra maiúscula</li>
+                                                <li [class.valid]="passwordValidations.lowercase">✔ 1 letra minúscula</li>
+                                                <li [class.valid]="passwordValidations.number">✔ 1 número</li>
+                                                <li [class.valid]="passwordValidations.specialChar">✔ 1 caractere especial</li>
+                                                </ul>
                                             </div>
                                         </div>
 
