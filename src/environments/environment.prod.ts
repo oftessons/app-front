@@ -5,4 +5,5 @@ export const environment = {
   clientId: 'oftlessons',
   clientSecret: '@321',
   obterTokenUrl: '/oauth/token'
+  //teste
 };
