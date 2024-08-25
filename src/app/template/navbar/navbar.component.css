@@ -38,6 +38,19 @@
   
 }
 
+.btn-logout{
+    color: #FFFFFF;
+    border-radius: 8px;
+}
+
+.btn-logout:hover {
+    color: #FFFFFF;
+    background-color: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px); 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
 /* SIDEBAR CSS */
 
 .mat-list-item {
