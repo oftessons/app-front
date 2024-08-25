@@ -30,8 +30,16 @@
 
                                         <div class="form-group col-sm-12 col-md-6">
                                             <label class="small mb-1" style="font-size: 1.2em;">Senha</label>
-                                            <input type="password" name="password" [(ngModel)]="password" class="form-control py-2 responsive-input" placeholder="Digite sua senha" required />
-                                        </div>                                       
+                                            <div class="input-group">
+                                              <input type="password" name="password" [(ngModel)]="password" class="form-control py-2 responsive-input" placeholder="Digite sua senha" required />
+                                              <div class="input-group-append">
+                                                <div class="btn btn-outline-secondary" type="button" (click)="togglePasswordVisibility()">
+                                                  <img *ngIf="!passwordVisible" src="assets/imagens/view.svg" alt="Mostrar senha" width="16" height="16">
+                                                  <img *ngIf="passwordVisible" src="assets/imagens/view-off.svg" alt="Ocultar senha" width="16" height="16">
+                                                </div>
+                                              </div>
+                                            </div>
+                                        </div>                               
 
                                         <div class="form-group align-items-center justify-content-between mt-4 mb-0">
                                             <div class="col-sm-12 col-md-6">

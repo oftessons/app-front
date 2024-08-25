@@ -23,6 +23,7 @@ export class LoginComponent {
   forgotEmail: string = '';
   showForgotPassword: boolean = false;
 
+  passwordVisible: boolean = false;
   showTooltip: boolean = false;
   passwordValidations = {
     minLength: false,
@@ -159,5 +160,13 @@ export class LoginComponent {
     this.passwordValidations.lowercase = /[a-z]/.test(this.password);
     this.passwordValidations.number = /\d/.test(this.password);
     this.passwordValidations.specialChar = /[!@#$%^&*]/.test(this.password);
+  }
+
+  togglePasswordVisibility() {
+    this.passwordVisible = !this.passwordVisible;
+    const passwordInput = document.querySelector('input[name="password"]');
+    if (passwordInput) {
+      passwordInput.setAttribute('type', this.passwordVisible ? 'text' : 'password');
+    }
   }
 }

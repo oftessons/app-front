@@ -296,4 +296,31 @@ input::placeholder {
     color: green;
     font-weight: bold;
   }
+
+  .input-group-append .btn {
+    background: none;
+    border: none !important;
+    padding: 0;
+    margin-left: -40px;
+    z-index: 2;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
   
+  .input-group-append .btn svg {
+    width: 20px;
+    height: 20px;
+  }
+  
+  /* Garante que o botão permaneça visível quando o input estiver em foco */
+  .input-group .form-control:focus {
+    z-index: 1;
+  }
+
+  /* Remove o arredondamento dos cantos direitos do input, exceto o último filho */
+.input-group:not(.has-validation) > :not(:last-child):not(.dropdown-toggle):not(.dropdown-menu):not(.form-floating) {
+    border-radius: 8px;
+  }
