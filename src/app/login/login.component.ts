@@ -23,6 +23,8 @@ export class LoginComponent {
   forgotEmail: string = '';
   showForgotPassword: boolean = false;
 
+  confirmPasswordError: string | null = null;
+  confirmPassword: string = '';
   passwordVisible: boolean = false;
   showTooltip: boolean = false;
   passwordValidations = {
@@ -88,9 +90,20 @@ export class LoginComponent {
     passwordValidationErrors.push("A senha deve conter pelo menos um caractere especial (por exemplo, !@#$%^&*).");
   }
 
+  // Validação de campo de login
+  if (!this.username) {
+    passwordValidationErrors.push("O campo de login é obrigatório.");
+  }
+
   // Se houver erros de validação, armazene-os em this.errors e não prossiga
   if (passwordValidationErrors.length > 0) {
     this.errors = passwordValidationErrors;
+    return; // Interrompe a execução do método
+  }
+
+  // Validação de confirmação de senha
+  if (this.password !== this.confirmPassword) {
+    this.errors.push("As senhas não coincidem.");
     return; // Interrompe a execução do método
   }
 
@@ -167,6 +180,14 @@ export class LoginComponent {
     const passwordInput = document.querySelector('input[name="password"]');
     if (passwordInput) {
       passwordInput.setAttribute('type', this.passwordVisible ? 'text' : 'password');
+    }
+  }
+
+  validateConfirmPassword() {
+    if (this.password !== this.confirmPassword) {
+      this.confirmPasswordError = 'As senhas não coincidem';
+    } else {
+      this.confirmPasswordError = null;
     }
   }
 }
