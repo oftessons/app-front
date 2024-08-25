@@ -81,23 +81,23 @@ export class ListaQuestoesComponent implements OnInit {
 
   buscarQuestoes(): void {
     const filtros: any = {};
-  
+
     if (this.selectedAno) {
-      filtros.ano = this.selectedAno; // Enviar a string do ano
+      filtros.ano = this.selectedAno;
     }
     if (this.selectedTipoDeProva) {
       filtros.tipoDeProva = this.selectedTipoDeProva;
     }
-  
+
     if (Object.keys(filtros).length === 0) {
       this.message = 'Por favor, selecione pelo menos um filtro.';
       return;
     }
-  
+
     this.questoesService.consultarQuestao(filtros).subscribe(
       (questoes: Questao[]) => {
         this.questoes = questoes;
-  
+
         if (questoes.length === 0) {
           if (filtros.ano && !filtros.tipoDeProva) {
             this.message = 'Nenhuma questão encontrada para o ano selecionado.';
@@ -118,8 +118,6 @@ export class ListaQuestoesComponent implements OnInit {
       }
     );
   }
-  
-  
 
   consultarProjeto() {}
 
