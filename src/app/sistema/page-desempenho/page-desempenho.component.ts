@@ -16,8 +16,12 @@ export class PageDesempenhoComponent implements OnInit {
   // Gráfico 1: Acertos e Erros por Tipo de Prova
   public barChartOptions1: ChartOptions = {
     responsive: true,
+    title: {
+      display: true,
+      text: 'Acertos e Erros por Tipo de Prova'
+    },
     scales: {
-      yAxes: [
+      xAxes: [
         {
           ticks: {
             beginAtZero: true,
@@ -28,28 +32,32 @@ export class PageDesempenhoComponent implements OnInit {
     },
   };
   public barChartLabels1: Label[] = [];
-  public barChartType: ChartType = 'bar';
+  public barChartType: ChartType = 'horizontalBar';
   public barChartLegend = true;
   public barChartData1: ChartDataSets[] = [
     {
       data: [],
       label: 'Acertos',
-      backgroundColor: '#387F39',
-      borderColor: '#387F39',
+      backgroundColor: '#1C9212',
+      borderColor: '#1C9212',
     },
     {
       data: [],
       label: 'Erros',
-      backgroundColor: '#F5004F',
-      borderColor: '#F5004F',
+      backgroundColor: '#3B5FA0',
+      borderColor: '#3B5FA0',
     },
   ];
 
   // Gráfico 2: Quantidade de Questões Feitas por Tema
   public barChartOptions2: ChartOptions = {
     responsive: true,
+    title: {
+      display: true,
+      text: 'Quantidade de Questões Feitas por Tema'
+    },
     scales: {
-      yAxes: [
+      xAxes: [
         {
           ticks: {
             beginAtZero: true,
@@ -72,6 +80,10 @@ export class PageDesempenhoComponent implements OnInit {
   // Gráfico 3: Acertos e Erros por Mês
   public barChartOptions3: ChartOptions = {
     responsive: true,
+    title: {
+      display: true,
+      text: 'Acertos e Erros por Mês'
+    },
     scales: {
       yAxes: [
         {
@@ -83,6 +95,7 @@ export class PageDesempenhoComponent implements OnInit {
       ],
     },
   };
+  public barChartType3: ChartType = 'bar';
   public barChartLabels3: string[] = [
     'Janeiro',
     'Fevereiro',
@@ -101,14 +114,14 @@ export class PageDesempenhoComponent implements OnInit {
     {
       data: [],
       label: 'Acertos',
-      backgroundColor: '#A2CA71',
-      borderColor: '#A2CA71',
+      backgroundColor: '#1C9212',
+      borderColor: '#1C9212',
     },
     {
       data: [],
       label: 'Erros',
-      backgroundColor: '#F5004F',
-      borderColor: '#F5004F',
+      backgroundColor: '#3B5FA0',
+      borderColor: '#3B5FA0',
     },
   ];
 
@@ -169,14 +182,18 @@ export class PageDesempenhoComponent implements OnInit {
       {
         data: acertosData,
         label: 'Acertos',
-        backgroundColor: '#387F39',
-        borderColor: '#387F39',
+        backgroundColor: '#0A275E',
+        borderColor: '#0A275E',
+        hoverBackgroundColor: '#0A275E',
+        hoverBorderColor: '#0A275E',
       },
       {
         data: errosData,
         label: 'Erros',
-        backgroundColor: '#F5004F',
-        borderColor: '#F5004F',
+        backgroundColor: '#4E5E7B',
+        borderColor: '#4E5E7B',
+        hoverBackgroundColor: '#4E5E7B',
+        hoverBorderColor: '#4E5E7B',
       },
     ];
   }
@@ -194,8 +211,10 @@ export class PageDesempenhoComponent implements OnInit {
       {
         data: questoesFeitasData,
         label: 'Questões Feitas',
-        backgroundColor: '#FFA500',
-        borderColor: '#FFA500',
+        backgroundColor: '#D69C11',
+        borderColor: '#D69C11',
+        hoverBackgroundColor: '#FFBF23',
+        hoverBorderColor: '#FFBF23',
       },
     ];
   }
@@ -218,14 +237,18 @@ export class PageDesempenhoComponent implements OnInit {
       {
         data: acertosData,
         label: 'Acertos',
-        backgroundColor: '#387F39',
-        borderColor: '#387F39',
+        backgroundColor: '#0A275E',
+        borderColor: '#0A275E',
+        hoverBackgroundColor: '#0A275E',
+        hoverBorderColor: '#0A275E',
       },
       {
         data: errosData,
         label: 'Erros',
-        backgroundColor: '#F5004F',
-        borderColor: '#F5004F',
+        backgroundColor: '#4E5E7B',
+        borderColor: '#4E5E7B',
+        hoverBackgroundColor: '#4E5E7B',
+        hoverBorderColor: '#4E5E7B',
       },
     ];
   }
