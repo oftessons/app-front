@@ -55,9 +55,9 @@
     margin-bottom: 20px;
 }
 
-.container-height{
-    height: 450px !important;
-}
+/* .container-height{
+    height: auto !important;
+} */
 
 @media (min-width: 768px) {
     .col-md-6 {
@@ -68,22 +68,11 @@
       flex: 0 0 100%;
       max-width: 100%;
     }
-
-    .container-height{
-        height: auto;
-        margin-bottom: 16px;
-    }
-
-    canvas {
-        height: auto !important;
-        width: auto !important;
-        max-height: 400px;
-    }
 }
 
-canvas {
-    display: block;
+.container-height canvas {
+    display: block !important;
     width: 100% !important;
     height: 100% !important;
-    max-height: 430px;
+    max-height: 450px !important;
 }

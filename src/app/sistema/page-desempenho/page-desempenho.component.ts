@@ -16,6 +16,10 @@ export class PageDesempenhoComponent implements OnInit {
   // Gráfico 1: Acertos e Erros por Tipo de Prova
   public barChartOptions1: ChartOptions = {
     responsive: true,
+    title: {
+      display: true,
+      text: 'Acertos e Erros por Tipo de Prova'
+    },
     scales: {
       xAxes: [
         {
@@ -48,6 +52,10 @@ export class PageDesempenhoComponent implements OnInit {
   // Gráfico 2: Quantidade de Questões Feitas por Tema
   public barChartOptions2: ChartOptions = {
     responsive: true,
+    title: {
+      display: true,
+      text: 'Quantidade de Questões Feitas por Tema'
+    },
     scales: {
       xAxes: [
         {
@@ -72,6 +80,10 @@ export class PageDesempenhoComponent implements OnInit {
   // Gráfico 3: Acertos e Erros por Mês
   public barChartOptions3: ChartOptions = {
     responsive: true,
+    title: {
+      display: true,
+      text: 'Acertos e Erros por Mês'
+    },
     scales: {
       xAxes: [
         {
