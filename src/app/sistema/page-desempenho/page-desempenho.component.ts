@@ -85,7 +85,7 @@ export class PageDesempenhoComponent implements OnInit {
       text: 'Acertos e Erros por Mês'
     },
     scales: {
-      xAxes: [
+      yAxes: [
         {
           ticks: {
             beginAtZero: true,
@@ -95,6 +95,7 @@ export class PageDesempenhoComponent implements OnInit {
       ],
     },
   };
+  public barChartType3: ChartType = 'bar';
   public barChartLabels3: string[] = [
     'Janeiro',
     'Fevereiro',
