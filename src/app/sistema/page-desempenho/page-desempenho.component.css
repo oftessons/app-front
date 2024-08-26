@@ -55,10 +55,6 @@
     margin-bottom: 20px;
 }
 
-/* .container-height{
-    height: auto !important;
-} */
-
 @media (min-width: 768px) {
     .col-md-6 {
       flex: 0 0 50%;
@@ -70,9 +66,13 @@
     }
 }
 
+.container-height{
+    height: auto !important;
+}
+
 .container-height canvas {
     display: block !important;
     width: 100% !important;
     height: 100% !important;
-    max-height: 450px !important;
+    max-height: 470px !important;
 }
