@@ -17,7 +17,7 @@ export class PageDesempenhoComponent implements OnInit {
   public barChartOptions1: ChartOptions = {
     responsive: true,
     scales: {
-      yAxes: [
+      xAxes: [
         {
           ticks: {
             beginAtZero: true,
@@ -49,7 +49,7 @@ export class PageDesempenhoComponent implements OnInit {
   public barChartOptions2: ChartOptions = {
     responsive: true,
     scales: {
-      yAxes: [
+      xAxes: [
         {
           ticks: {
             beginAtZero: true,
@@ -73,7 +73,7 @@ export class PageDesempenhoComponent implements OnInit {
   public barChartOptions3: ChartOptions = {
     responsive: true,
     scales: {
-      yAxes: [
+      xAxes: [
         {
           ticks: {
             beginAtZero: true,
