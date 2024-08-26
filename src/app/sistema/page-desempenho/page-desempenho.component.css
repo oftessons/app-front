@@ -56,7 +56,7 @@
 }
 
 .container-height{
-    height: 400px !important;
+    height: 450px !important;
 }
 
 @media (min-width: 768px) {
@@ -71,10 +71,13 @@
 
     .container-height{
         height: auto;
+        margin-bottom: 16px;
     }
 
     canvas {
         height: auto !important;
+        width: auto !important;
+        max-height: 400px;
     }
 }
 
@@ -82,4 +85,5 @@ canvas {
     display: block;
     width: 100% !important;
     height: 100% !important;
+    max-height: 430px;
 }
