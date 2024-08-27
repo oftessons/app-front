@@ -184,16 +184,16 @@ export class PageDesempenhoComponent implements OnInit {
         label: 'Acertos',
         backgroundColor: '#0A275E',
         borderColor: '#0A275E',
-        hoverBackgroundColor: '#0A275E',
-        hoverBorderColor: '#0A275E',
+        hoverBackgroundColor: '#113A87',
+        hoverBorderColor: '#113A87',
       },
       {
         data: errosData,
         label: 'Erros',
         backgroundColor: '#4E5E7B',
         borderColor: '#4E5E7B',
-        hoverBackgroundColor: '#4E5E7B',
-        hoverBorderColor: '#4E5E7B',
+        hoverBackgroundColor: '#667A9F',
+        hoverBorderColor: '#667A9F',
       },
     ];
   }
@@ -239,16 +239,16 @@ export class PageDesempenhoComponent implements OnInit {
         label: 'Acertos',
         backgroundColor: '#0A275E',
         borderColor: '#0A275E',
-        hoverBackgroundColor: '#0A275E',
-        hoverBorderColor: '#0A275E',
+        hoverBackgroundColor: '#113A87',
+        hoverBorderColor: '#113A87',
       },
       {
         data: errosData,
         label: 'Erros',
         backgroundColor: '#4E5E7B',
         borderColor: '#4E5E7B',
-        hoverBackgroundColor: '#4E5E7B',
-        hoverBorderColor: '#4E5E7B',
+        hoverBackgroundColor: '#667A9F',
+        hoverBorderColor: '#667A9F',
       },
     ];
   }
