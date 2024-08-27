@@ -45,7 +45,7 @@ export class AuthService {
   }
 
   atualizarUsuario(usuario: Usuario): Observable<Usuario> {
-    return this.http.put<Usuario>(`${this.apiURL}/usuario/${usuario.id}`, usuario);
+    return this.http.put<Usuario>(`${this.apiURL}/update/${usuario.id}`, usuario);
   }
 
   getUsuarioAutenticado(){
