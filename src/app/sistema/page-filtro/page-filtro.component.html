@@ -1,13 +1,28 @@
 <div class="container pt-5">
   <div class="container mt-4">
-    <h1 class="mt-4">Meus Filtros</h1>
+    <h1 class="mt-4"> <span> | </span> Meus Filtros</h1>
     <div *ngIf="filtros.length > 0; else noFilters">
       <div *ngFor="let filtro of filtros" class="card mt-3">
-        <div class="card-body">
-          <h5 class="card-title">{{ filtro.nome }}</h5>
-          <p class="card-text">Ano: {{ filtro.ano }}, Dificuldade: {{ filtro.dificuldade }}, Tipo de Prova: {{ filtro.tipoDeProva }}</p>
-          <button class="btn btn-danger" (click)="deletarFiltro(filtro.id)">Deletar</button>
-          <button class="btn btn-primary" (click)="editarFiltro(filtro.id)">Editar</button>
+        <div class="card-body d-flex justify-content-between align-items-center">
+          <div>
+            <h5 class="card-title d-flex align-items-center">
+              <img src="assets/imagens/notas.svg" alt="Ícone de Filtro" class="icon-lista me-1">
+              {{ filtro.nome }}
+            </h5>
+            <p class="card-text">
+              Ano: {{ filtro.ano }}, Dificuldade: {{ filtro.dificuldade }}, Tipo de Prova: {{ filtro.tipoDeProva }}
+            </p>
+          </div>
+          <div>
+            <button class="btn btn-transparent-primary me-2" (click)="editarFiltro(filtro.id)">
+              Visualizar Filtro
+              <img src="assets/imagens/fil.svg" alt="Ícone de Visualizar" class="icon me-1">
+            </button>
+            <button class="btn btn-transparent-danger" (click)="deletarFiltro(filtro.id)">
+              Deletar
+              <img src="assets/imagens/excluir.svg" alt="Ícone de Deletar" class="icon me-1">
+            </button>            
+          </div>
         </div>
       </div>
     </div>
