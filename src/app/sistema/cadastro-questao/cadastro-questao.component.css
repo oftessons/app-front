@@ -154,7 +154,7 @@ textarea{
 }
 
 .form-control {
-    padding-right: 45px; 
+    padding-right: 45px;
 }
 
 .button-envio{
@@ -184,13 +184,13 @@ textarea{
     justify-content: space-between;
     flex-direction: row;
   }
-  
+
   .col {
     flex: 1;
     margin-right: 0 10px;
     width: 100%;
   }
-  
+
   .col:last-child {
     margin-right: 0;
   }
@@ -209,7 +209,7 @@ textarea{
     padding: 20px;
     cursor: pointer;
   }
-  
+
   .image-upload input[type="file"] {
     opacity: 0;
     position: absolute;
@@ -219,12 +219,12 @@ textarea{
     left: 0;
     cursor: pointer;
   }
-  
+
   .image-preview {
     position: relative;
     cursor: pointer;
   }
-  
+
   .image-preview img {
     max-width: 100%;
     max-height: 200px;
@@ -236,7 +236,7 @@ textarea{
     display: block;
     margin-bottom: 8px;
   }
-  
+
   .image-preview span {
     font-size: 14px;
     font-weight: 200;
@@ -247,7 +247,7 @@ textarea{
     display: flex;
     width: 100%;
   }
-  
+
 
 @media screen and (max-width: 768px) {
     .container-geral{
@@ -274,13 +274,13 @@ textarea{
     .button-envio button{
         width: 80px;
     }
-    
+
     .col {
         width: 80%;
       }
-    
+
       ::ng-deep .mat-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-form-field-flex {
-        width: 100%; 
+        width: 100%;
       }
 
       .cont-imgs{
@@ -288,4 +288,34 @@ textarea{
         width: 100%;
         flex-direction: column;
       }
+}
+
+.image-container {
+  display: flex;
+  align-items: center;
+}
+
+.checkbox {
+  margin-right: 10px;
+}
+
+.image-upload {
+  flex: 1;
+}
+
+.image-preview {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px; /* ajuste o tamanho da imagem */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.image-preview img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+  border-radius: 5px;
 }

@@ -29,6 +29,7 @@ export class CadastroQuestaoComponent implements OnInit {
   fotoDaRespostaTres: File | null = null;
   imagePreviews: { [key: string]: string | ArrayBuffer | null } = {};
   id!: number;
+  selectedAlternativa: number | undefined;
 
   selectedAlternativeIndex: number = -3;
 
@@ -38,6 +39,10 @@ export class CadastroQuestaoComponent implements OnInit {
   subtemas: string[] = Object.values(Subtema);
   tiposDeProva: string[] = Object.values(TipoDeProva);
   relevancias: string[] = Object.values(Relevancia);
+
+  selectedImage: string='';
+  uploadedImage: string='';
+
 
   constructor(
     private questoesService: QuestoesService,
@@ -52,6 +57,23 @@ export class CadastroQuestaoComponent implements OnInit {
       { id: 3, texto: 'C', correta: false },
       { id: 4, texto: 'D', correta: false }
     ];
+
+    this.questaoDTO.alternativaImagems = [
+      { id: 1, texto: '1', correta: false },
+      { id: 2, texto: '2', correta: false },
+      { id: 3, texto: '3', correta: false },
+      { id: 4, texto: '4', correta: false }
+    ];
+
+
+    //Selecion o tem texto por defaault
+    this.questaoDTO.tipoItemQuestao='texto'
+    this.questaoDTO.tipoItemQuestaoImagem='texto'
+
+  }
+
+   onAlternativaChange(index: number) {
+    this.selectedAlternativa = index;
   }
 
   carregarQuestao(id: number): void {
@@ -135,6 +157,13 @@ export class CadastroQuestaoComponent implements OnInit {
     this.questaoDTO.alternativaCorreta = [this.questaoDTO.alternativas[index]];
   }
 
+    markCorrectImage(index: number): void {
+    this.updateCorrectAlternative(index);
+    console.log('Alternativa correta marcada:', this.questaoDTO.alternativas);
+    console.log('Alternativa correta selecionada:', index);
+    this.questaoDTO.alternativaCorreta = [this.questaoDTO.alternativas[index]];
+  }
+
   onSubmit(): void {
     const onjetojson = this.questaoDTO.toJson();
     if (this.fotoDaQuestao) {
@@ -175,4 +204,41 @@ export class CadastroQuestaoComponent implements OnInit {
       return `Código de erro: ${errorResponse.status}\nMensagem: ${errorResponse.message}`;
     }
   }
+
+  // handleImageChange(event: any, index: number) {
+  // const file = event.target.files[0];
+  //   const reader = new FileReader();
+  //   reader.onload = () => {
+  //     this.questaoDTO.alternativas[index].imagemUrl = reader.result as string;
+  //   };
+  //   reader.readAsDataURL(file);
+  // }
+
+  handleImageChange(event: any, index: number) {
+  const file = event.target.files[0];
+  const reader = new FileReader();
+  reader.onload = () => {
+    this.uploadedImage = reader.result as string;
+    this.questaoDTO.alternativas[index].imagemUrl = this.uploadedImage;
+  };
+  reader.readAsDataURL(file);
+}
+
+
+updateTipoItemQuestaoImagem(tipo: string) {
+  this.questaoDTO.tipoItemQuestaoImagem = tipo;
+}
+
+
+onFileSelectedImage(event: any, identifier: string) {
+  const file = event.target.files[0];
+  const reader = new FileReader();
+  reader.onload = () => {
+    this.imagePreviews[identifier] = reader.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+
+
 }
