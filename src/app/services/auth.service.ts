@@ -44,9 +44,17 @@ export class AuthService {
      return this.http.get<Usuario>(`${this.apiURL}/perfil`);
   }
 
-  atualizarUsuario(usuario: Usuario): Observable<Usuario> {
-    return this.http.put<Usuario>(`${this.apiURL}/usuario/${usuario.id}`, usuario);
+  atualizarUsuario(usuario: Usuario, fotoDoPerfil?: File): Observable<Usuario> {
+    const formData: FormData = new FormData();
+    formData.append('usuario', new Blob([JSON.stringify(usuario)], { type: 'application/json' }));
+  
+    if (fotoDoPerfil) {
+      formData.append('fotoDoPerfil', fotoDoPerfil);
+    }
+  
+    return this.http.put<Usuario>(`${this.apiURL}/update/${usuario.id}`, formData);
   }
+  
 
   getUsuarioAutenticado(){
     const token = this.obterToken();
