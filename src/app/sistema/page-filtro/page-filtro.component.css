@@ -9,3 +9,36 @@
     margin-top: 10px;
     font-family: 'Nunito Sans', sans-serif;
 }
+
+.icon {
+    width: 20px; /* Define a largura do ícone */
+    height: 20px; /* Define a altura do ícone */
+    vertical-align: middle; /* Alinha o ícone verticalmente com o texto */
+}
+
+.icon-lista {
+    width: 30px; /* Define a largura do ícone */
+    height: 30px; /* Define a altura do ícone */
+    vertical-align: middle; /* Alinha o ícone verticalmente com o texto */
+}
+  
+.btn-transparent-primary {
+    background-color: transparent;
+    color: #1E1E1E; /* Cor do texto (azul padrão) */
+    border: 1px solid #1E1E1E; /* Cor da borda (azul padrão) */
+  }
+  
+  .btn-transparent-primary:hover {
+    background-color: rgba(13, 110, 253, 0.1); /* Efeito hover leve com azul transparente */
+  }
+  
+  .btn-transparent-danger {
+    background-color: transparent;
+    color: #7E1313; /* Cor do texto (vermelho) */
+    border: 1px solid #7E1313; /* Cor da borda (vermelho) */
+  }
+  
+  .btn-transparent-danger:hover {
+    background-color: rgba(220, 53, 69, 0.1); /* Efeito hover leve com vermelho transparente */
+  }
+  
