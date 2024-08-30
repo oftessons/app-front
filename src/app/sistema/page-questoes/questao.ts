@@ -10,7 +10,6 @@ export class Questao {
   id!: number;
   diaDoCadastro!: string;
   idUser!: number;
-  title!: string;
   enunciadoDaQuestao!: string;
   afirmacaoUm!: string;
   afirmacaoDois!: string;
@@ -20,7 +19,6 @@ export class Questao {
   fotoAfirmacaoDois!: string;
   fotoAfirmacaoTres!: string;
   fotoAfirmacaoQuatro!: string;
-  assinale!: string;
   fotoDaQuestao!: File;
   fotoDaResposta!: File;
   comentarioDaQuestaoUm!: string;
@@ -35,7 +33,6 @@ export class Questao {
   relevancia!: Relevancia;
   tipoDeProva!: TipoDeProva;
   subtema!: Subtema;
-  palavraChave!: string;
   alternativas!: Alternativa[];
   alternativaCorreta?: Alternativa[];
   alternativaImagems?:AlternativaImagen[];
@@ -46,7 +43,6 @@ export class Questao {
       id: this.id,
       diaDoCadastro: this.diaDoCadastro,
       idUser: this.idUser,
-      title: this.title,
       enunciadoDaQuestao: this.enunciadoDaQuestao,
       afirmacaoUm: this.afirmacaoUm,
       afirmacaoDois: this.afirmacaoDois,
@@ -56,7 +52,6 @@ export class Questao {
       fotoAfirmacaoDois: this.fotoAfirmacaoDois,
       fotoAfirmacaoTres: this.fotoAfirmacaoTres,
       fotoAfirmacaoQuatro: this.fotoAfirmacaoQuatro,
-      assinale: this.assinale,
       fotoDaQuestao: this.fotoDaQuestao,
       fotoDaResposta: this.fotoDaResposta,
       comentarioDaQuestaoUm: this.comentarioDaQuestaoUm,
@@ -71,7 +66,6 @@ export class Questao {
       relevancia: this.relevancia,
       tipoDeProva: this.tipoDeProva,
       subtema: this.subtema,
-      palavraChave: this.palavraChave,
       alternativas: this.alternativas,
       alternativaCorreta: this.alternativaCorreta,
       tipoQuestao:this.tipoItemQuestao,

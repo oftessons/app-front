@@ -57,7 +57,7 @@ export class CadastroQuestaoComponent implements OnInit {
       { id: 3, texto: 'C', correta: false, comentario: '' },
       { id: 4, texto: 'D', correta: false, comentario: '' }
     ];
-    
+
     this.questaoDTO.alternativaImagems = [
       { id: 1, texto: '1', correta: false },
       { id: 2, texto: '2', correta: false },
@@ -190,7 +190,7 @@ export class CadastroQuestaoComponent implements OnInit {
     );
 
     console.log('Dados da questão antes de enviar:', {
-      title: this.questaoDTO.title,
+      title: this.questaoDTO.id,
       alternativas: this.questaoDTO.alternativas
     });
   }
