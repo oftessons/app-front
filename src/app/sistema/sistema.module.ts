@@ -16,6 +16,7 @@ import { CadastroQuestaoComponent } from './cadastro-questao/cadastro-questao.co
 import {MatRadioModule} from '@angular/material/radio';
 import { ListaQuestoesComponent } from './lista-questoes/lista-questoes.component';
 import { PageSimuladoComponent } from './page-simulado/page-simulado.component';
+import { MeusSimuladosComponent } from './meus-simulados/meus-simulados.component';
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import { PageSimuladoComponent } from './page-simulado/page-simulado.component';
     PageFiltroComponent,
     CadastroQuestaoComponent,
     ListaQuestoesComponent,
-    PageSimuladoComponent
+    PageSimuladoComponent,
+    MeusSimuladosComponent
   ],
   imports: [
     CommonModule,
