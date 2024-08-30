@@ -49,5 +49,22 @@
         </div>
       </div>
     </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="chart-container chart-container-large container-height">
+          <!-- Gráfico 4:  Acertos e Erros por Tema -->
+          <div style="display: block;" class="container-height">
+            <canvas baseChart
+              [datasets]="barChartData4"
+              [labels]="barChartLabels4"
+              [options]="barChartOptions4"
+              [legend]="barChartLegend"
+              [chartType]="barChartType">
+          </canvas>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
