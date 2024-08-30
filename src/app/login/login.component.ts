@@ -23,6 +23,18 @@ export class LoginComponent {
   forgotEmail: string = '';
   showForgotPassword: boolean = false;
 
+  confirmPasswordError: string | null = null;
+  confirmPassword: string = '';
+  passwordVisible: boolean = false;
+  showTooltip: boolean = false;
+  passwordValidations = {
+    minLength: false,
+    uppercase: false,
+    lowercase: false,
+    number: false,
+    specialChar: false,
+  };
+
   constructor(
     private router: Router,
     private authService: AuthService
@@ -31,18 +43,15 @@ export class LoginComponent {
   onSubmit() {
     this.authService.tentarLogar(this.username, this.password).subscribe(
       (response: any) => {
-  
-        
         const access_token = JSON.stringify(response);
         localStorage.setItem('access_token', access_token);
-  
-        // Obtenha o ID do usuário e armazene localmente
+
         const userId = this.authService.getUserIdFromToken();
-  
         localStorage.setItem('user_id', userId || '');
         this.salvaUserLocal();
-  
-       // this.router.navigate(['/gerente/dashboard']);
+
+        // Redireciona para a página de dashboard após o login
+        this.router.navigate(['/gerente/dashboard']);
       },
       errorResponse => {
         this.errors = ['Usuário e/ou senha incorreto(s).'];
@@ -61,13 +70,47 @@ export class LoginComponent {
   }
 
   cadastrar(){
+  this.errors = []; // Limpa os erros anteriores
+  const passwordValidationErrors: string[] = [];
+
+  // Validações de senha
+  if (this.password.length < 8) {
+    passwordValidationErrors.push("A senha deve ter pelo menos 8 caracteres.");
+  }
+  if (!/[A-Z]/.test(this.password)) {
+    passwordValidationErrors.push("A senha deve conter pelo menos uma letra maiúscula.");
+  }
+  if (!/[a-z]/.test(this.password)) {
+    passwordValidationErrors.push("A senha deve conter pelo menos uma letra minúscula.");
+  }
+  if (!/[0-9]/.test(this.password)) {
+    passwordValidationErrors.push("A senha deve conter pelo menos um número.");
+  }
+  if (!/[!@#$%^&*]/.test(this.password)) {
+    passwordValidationErrors.push("A senha deve conter pelo menos um caractere especial (por exemplo, !@#$%^&*).");
+  }
+
+  // Validação de campo de login
+  if (!this.username) {
+    passwordValidationErrors.push("O campo de login é obrigatório.");
+  }
+
+  // Se houver erros de validação, armazene-os em this.errors e não prossiga
+  if (passwordValidationErrors.length > 0) {
+    this.errors = passwordValidationErrors;
+    return; // Interrompe a execução do método
+  }
+
+  // Validação de confirmação de senha
+  if (this.password !== this.confirmPassword) {
+    this.errors.push("As senhas não coincidem.");
+    return; // Interrompe a execução do método
+  }
+
     const usuario: Usuario = new Usuario();
     usuario.username = this.username;
     usuario.password = this.password;
     usuario.email = this.email;
-    usuario.telefone = this.telefone;
-    usuario.cidade = this.cidade;
-    usuario.estado = this.estado;
     this.authService
         .salvar(usuario)
         .subscribe( response => {
@@ -76,14 +119,28 @@ export class LoginComponent {
             this.username = '';
             this.password = '';
             this.email = '';
-            this.telefone ='';
-            this.cidade = '';
-            this.estado = '';
             this.errors = []
         }, errorResponse => {
-            this.mensagemSucesso = "Cadastro realizado com sucesso! Efetue o login.";
+            // this.mensagemSucesso = "Cadastro realizado com sucesso! Efetue o login.";
             this.errors = errorResponse.error.errors;
         })
+  }
+
+
+  // mudança aqui no login
+
+  salvaUserLocal() {
+    this.authService.obterUsuarioAutenticadoDoBackend().subscribe(
+      (usuario: Usuario) => {
+        this.usuario = usuario;
+        localStorage.setItem('idUser', usuario.id);
+        this.router.navigate(['/usuario/dashboard']);
+        localStorage.setItem('usuario', usuario.username);
+      },
+      error => {
+        console.error('Erro ao obter dados do usuário:', error);
+      }
+    );
   }
 
   forgotPassword(event: Event) {
@@ -105,23 +162,32 @@ export class LoginComponent {
     );
   }
 
-  salvaUserLocal(){
-    this.authService.obterUsuarioAutenticadoDoBackend().subscribe(
-      (usuario: Usuario) => {
-        this.usuario = usuario;
-        localStorage.setItem("idUser",usuario.id);
-        this.router.navigate(['/usuario/dashboard']);
-        //localStorage.setItem("usuario",usuario.username);
-      },
-      (error) => {
-        console.error('Erro ao obter dados do usuário:', error);
-      }
-    );
-
-  }
-
   cancelForgotPassword() {
     this.showForgotPassword = false;
     this.forgotEmail = '';
+  }
+
+  validatePassword() {
+    this.passwordValidations.minLength = this.password.length >= 8;
+    this.passwordValidations.uppercase = /[A-Z]/.test(this.password);
+    this.passwordValidations.lowercase = /[a-z]/.test(this.password);
+    this.passwordValidations.number = /\d/.test(this.password);
+    this.passwordValidations.specialChar = /[!@#$%^&*]/.test(this.password);
+  }
+
+  togglePasswordVisibility() {
+    this.passwordVisible = !this.passwordVisible;
+    const passwordInput = document.querySelector('input[name="password"]');
+    if (passwordInput) {
+      passwordInput.setAttribute('type', this.passwordVisible ? 'text' : 'password');
+    }
+  }
+
+  validateConfirmPassword() {
+    if (this.password !== this.confirmPassword) {
+      this.confirmPasswordError = 'As senhas não coincidem';
+    } else {
+      this.confirmPasswordError = null;
+    }
   }
 }

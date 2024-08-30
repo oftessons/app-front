@@ -16,8 +16,8 @@ export class QuestoesService {
   apiURL: string = environment.apiURLBase + '/api/questoes';
   constructor(private http: HttpClient) { }
 
-  getAcertosEErrosPorTipoDeProva(): Observable<any> {
-    return this.http.get<any>(`${this.apiURL}/acertos-erros`).pipe(
+  getAcertosEErrosPorTipoDeProva(usuarioId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiURL}/acertos-erros/${usuarioId}`).pipe(
       catchError(error => throwError('Erro ao tentar obter acertos e erros.'))
     );
   }
@@ -99,7 +99,7 @@ export class QuestoesService {
   }  
 
   consultarQuestao(filtros: any, page: number = 0, size: number = 10): Observable<Questao[]> {
-    const url = `${this.apiURL}/consultarQuestao`;
+    const url = `${this.apiURL}/consultar`;
     let params = new HttpParams();
 
     // Adicione os filtros como parâmetros de consulta
@@ -118,8 +118,8 @@ export class QuestoesService {
     );
   }
 
-  checkAnswer(id: number, resposta: RespostaDTO): Observable<Resposta> {
-    const url = `${this.apiURL}/${id}/check-questao`;
+  checkAnswer(id: number, userId: number, resposta: RespostaDTO): Observable<Resposta> {
+    const url = `${this.apiURL}/${id}/check-questao/${userId}`;
     return this.http.post<Resposta>(url, resposta).pipe(
       catchError(error => throwError('Erro ao verificar a resposta.'))
     );

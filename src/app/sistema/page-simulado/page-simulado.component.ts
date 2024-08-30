@@ -10,7 +10,9 @@ import { QuestoesService } from 'src/app/services/questoes.service';
 import { Filtro } from '../filtro';
 import { FiltroService } from 'src/app/services/filtro.service';
 import { RespostaDTO } from '../RespostaDTO';  
-import { Resposta } from '../Resposta';  
+import { Resposta } from '../Resposta';
+import { AuthService } from 'src/app/services/auth.service';
+import { Usuario } from 'src/app/login/usuario';  
 
 declare var bootstrap: any;
 
@@ -23,6 +25,8 @@ export class PageSimuladoComponent implements OnInit {
 
   questao: Questao = new Questao();
   selectedOption: string = '';
+
+  usuario!: Usuario;
 
   tiposDeProva = Object.values(TipoDeProva);
   anos = Object.values(Ano);
@@ -69,7 +73,8 @@ export class PageSimuladoComponent implements OnInit {
 
   constructor(
     private questoesService: QuestoesService,
-    private filtroService: FiltroService
+    private filtroService: FiltroService,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
@@ -86,6 +91,17 @@ export class PageSimuladoComponent implements OnInit {
     console.log('Alternativa selecionada:', texto);
   }
 
+  obterPerfilUsuario() {
+    this.authService.obterUsuarioAutenticadoDoBackend().subscribe(
+      (data) => {
+        this.usuario = data; // Armazenar os dados do perfil do usuário na variável 'usuario'
+      },
+      (error) => {
+        console.error('Erro ao obter perfil do usuário:', error);
+      }
+    );
+  }
+
 
   responderQuestao(questao: Questao | null): void {
     if (!questao) {
@@ -98,8 +114,10 @@ export class PageSimuladoComponent implements OnInit {
       questaoId: questao.id,
       selecionarOpcao: this.selectedOption
     };
+
+    const idUser = parseInt(this.usuario.id);
   
-    this.questoesService.checkAnswer(questao.id, respostaDTO).subscribe(
+    this.questoesService.checkAnswer(questao.id, idUser, respostaDTO).subscribe(
       (resposta: Resposta) => {
         console.log('Resposta do backend:', resposta);
         console.log('correct:', resposta.correct);
@@ -242,6 +260,38 @@ export class PageSimuladoComponent implements OnInit {
       this.mostrarGabarito = false;
       this.resposta = '';
     }
-  }  
+  }
+  
+  abrirModal(): void {
+    const modalElement = document.getElementById('confirmacaoModal');
+    const modal = new bootstrap.Modal(modalElement!);
+    modal.show();
+
+    // Adiciona evento para quando o modal for fechado
+    modalElement?.addEventListener('hidden.bs.modal', () => {
+      this.fecharCardConfirmacao();
+    });
+  }
+
+  confirmarSalvarSimulado(): void {
+    if (this.filtroASalvar) {
+      this.filtroService.salvarFiltro(this.filtroASalvar)
+        .subscribe(
+          response => {
+            console.log('Simulado salvo com sucesso:', response);
+          },
+          error => {
+            console.error('Erro ao salvar simulado:', error);
+          }
+        );
+    }
+    const modalElement = document.getElementById('confirmacaoModal');
+    const modal = bootstrap.Modal.getInstance(modalElement!);
+    modal.hide();
+  }
+
+  fecharCardConfirmacao(): void {
+    this.mostrarCardConfirmacao = false;
+  }
 
 }

@@ -26,19 +26,19 @@
     background-color: transparent;
     color: #1E1E1E; /* Cor do texto (azul padrão) */
     border: 1px solid #1E1E1E; /* Cor da borda (azul padrão) */
-  }
+}
   
-  .btn-transparent-primary:hover {
+.btn-transparent-primary:hover {
     background-color: rgba(13, 110, 253, 0.1); /* Efeito hover leve com azul transparente */
-  }
+}
   
-  .btn-transparent-danger {
+.btn-transparent-danger {
     background-color: transparent;
     color: #7E1313; /* Cor do texto (vermelho) */
     border: 1px solid #7E1313; /* Cor da borda (vermelho) */
-  }
+}
   
-  .btn-transparent-danger:hover {
+.btn-transparent-danger:hover {
     background-color: rgba(220, 53, 69, 0.1); /* Efeito hover leve com vermelho transparente */
-  }
+}
   

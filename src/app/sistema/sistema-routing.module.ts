@@ -10,6 +10,7 @@ import { PageDesempenhoComponent } from './page-desempenho/page-desempenho.compo
 import { CadastroQuestaoComponent } from './cadastro-questao/cadastro-questao.component';
 import { ListaQuestoesComponent } from './lista-questoes/lista-questoes.component';
 import { PageSimuladoComponent } from './page-simulado/page-simulado.component';
+import { MeusSimuladosComponent } from './meus-simulados/meus-simulados.component';
 
 const routes: Routes = [
   {path:'usuario', component: LayoutComponent,  canActivate: [AuthGuard], children:[
@@ -19,6 +20,7 @@ const routes: Routes = [
     {path:'desempenho', component: PageDesempenhoComponent},
     {path:'meu-perfil', component: PageMeuPerfilComponent},
     {path:'simulados', component: PageSimuladoComponent},
+    {path:'meus-simulados', component: MeusSimuladosComponent},
     {path:'cadastro-questao', component: CadastroQuestaoComponent},
     {path:'cadastro-questao/:id', component: CadastroQuestaoComponent},
     {path:'buscar-questão', component: ListaQuestoesComponent}
