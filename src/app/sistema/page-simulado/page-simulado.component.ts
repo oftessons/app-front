@@ -256,6 +256,38 @@ export class PageSimuladoComponent implements OnInit {
       this.mostrarGabarito = false;
       this.resposta = '';
     }
-  }  
+  }
+  
+  abrirModal(): void {
+    const modalElement = document.getElementById('confirmacaoModal');
+    const modal = new bootstrap.Modal(modalElement!);
+    modal.show();
+
+    // Adiciona evento para quando o modal for fechado
+    modalElement?.addEventListener('hidden.bs.modal', () => {
+      this.fecharCardConfirmacao();
+    });
+  }
+
+  confirmarSalvarSimulado(): void {
+    if (this.filtroASalvar) {
+      this.filtroService.salvarFiltro(this.filtroASalvar)
+        .subscribe(
+          response => {
+            console.log('Simulado salvo com sucesso:', response);
+          },
+          error => {
+            console.error('Erro ao salvar simulado:', error);
+          }
+        );
+    }
+    const modalElement = document.getElementById('confirmacaoModal');
+    const modal = bootstrap.Modal.getInstance(modalElement!);
+    modal.hide();
+  }
+
+  fecharCardConfirmacao(): void {
+    this.mostrarCardConfirmacao = false;
+  }
 
 }
