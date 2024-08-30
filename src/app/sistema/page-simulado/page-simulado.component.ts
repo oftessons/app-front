@@ -73,6 +73,11 @@ export class PageSimuladoComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    // Verificar se o CSS foi carregado
+    const cssFile = document.querySelector('link[href="styles.css"]');
+    if (!cssFile) {
+      window.location.reload();
+    }
   }
 
 

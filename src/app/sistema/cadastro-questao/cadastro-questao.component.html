@@ -105,29 +105,15 @@
           </div>
         </div>
       </div>
+      
       <div>
         <hr class="line">
         <span class="div-section">
-          Especifique os textos e itens da questão:
+          Tipo de ENUNCIADO DA QUESTÃO:
         </span>
         <hr class="line">
       </div>
-      <div class="row">
-        <div class="col-md-6">
-          <div class="form-group">
-            <label>Título: </label>
-            <input type="text" class="form-control" name="title" [(ngModel)]="questaoDTO.title"
-              placeholder="Digite o título da questão" />
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="form-group">
-            <label>Palavra-chave da Questão: </label>
-            <input type="text" class="form-control" name="palavraChave" [(ngModel)]="questaoDTO.palavraChave"
-              placeholder="Digite a palavra-chave da Questão" />
-          </div>
-        </div>
-      </div>
+
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
@@ -137,13 +123,7 @@
           </div>
         </div>
       </div>
-      <div>
-        <hr class="line">
-        <span class="div-section">
-          Tipo de Item da Questão:
-        </span>
-        <hr class="line">
-      </div>
+
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
@@ -159,14 +139,14 @@
         <div class="row">
           <div class="col-md-6">
             <div class="form-group">
-              <label>Afirmativa 1: </label>
+              <label>Enunciado 1: </label>
               <textarea class="form-control" rows="2" name="afirmacaoUm" [(ngModel)]="questaoDTO.afirmacaoUm"
                 placeholder="Digite a afirmação da questão"></textarea>
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
-              <label>Afirmativa 2: </label>
+              <label>Enunciado 2: </label>
               <textarea class="form-control" rows="2" name="afirmacaoDois" [(ngModel)]="questaoDTO.afirmacaoDois"
                 placeholder="Digite a afirmação da questão"></textarea>
             </div>
@@ -175,29 +155,21 @@
         <div class="row">
           <div class="col-md-6">
             <div class="form-group">
-              <label>Afirmativa 3: </label>
+              <label>Enunciado 3: </label>
               <textarea class="form-control" rows="2" name="afirmacaoTres" [(ngModel)]="questaoDTO.afirmacaoTres"
                 placeholder="Digite a afirmação da questão"></textarea>
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
-              <label>Afirmativa 4: </label>
+              <label>Enunciado 4: </label>
               <textarea class="form-control" rows="2" name="afirmacaoQuatro" [(ngModel)]="questaoDTO.afirmacaoQuatro"
                 placeholder="Digite a afirmação da questão"></textarea>
             </div>
           </div>
         </div>
 
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group">
-              <label>Assinale: </label>
-              <input type="text" class="form-control" name="assinale" [(ngModel)]="questaoDTO.assinale"
-                placeholder="Digite o campo de assinale aqui" />
-            </div>
-          </div>
-        </div>
+    
       </div>
       <div *ngIf="questaoDTO.tipoItemQuestao === 'imagem'">
         <div class="row">
@@ -322,13 +294,7 @@
         </div>
       </div>
 
-      <div>
-        <hr class="line">
-        <span class="div-section">
-          Comentário da Questão
-        </span>
-        <hr class="line">
-      </div>
+  
 
       <div>
         <span class="div-section">
@@ -352,16 +318,16 @@
             <div *ngFor="let alternativa of questaoDTO.alternativas; let i = index">
               <input type="radio" [name]="questaoDTO.tipoItemQuestaoImagem + 'Alternativa'" (click)="markCorrect(i)"
                 [checked]="alternativa.correta">
-              <!-- {{ alternativa.id }} -->
               <div class="col-md-12">
                 <div class="form-group">
-                  <label>Questao {{alternativa.texto}} </label>
-                  <input type="text" class="form-control" name="comentadorDaQuestao"
-                    [(ngModel)]="questaoDTO.comentadorDaQuestao" placeholder="Digite o nome do comentador" />
+                  <label>Alternativa {{ alternativa.texto }}</label>
+                  <input type="text" class="form-control" name="comentario{{i}}"
+                    [(ngModel)]="alternativa.comentario" placeholder="Digite o enunciado da alternativa" />
                 </div>
               </div>
             </div>
           </div>
+          
 
           <div *ngIf="questaoDTO.tipoItemQuestaoImagem=== 'imagem'">
             <div *ngFor="let alternativa of questaoDTO.alternativas; let i = index">
@@ -390,60 +356,70 @@
       </div>
 
 
-      <div class="row">
-        <div class="col-md-6">
-          <div class="form-group">
-            <label>Comentador da Questão: </label>
-            <input type="text" class="form-control" name="comentadorDaQuestao"
-              [(ngModel)]="questaoDTO.comentadorDaQuestao" placeholder="Digite o nome do comentador" />
-          </div>
-        </div>
+      <div>
+        <hr class="line">
+        <span class="div-section">
+          Comentário da Questão
+        </span>
+        <hr class="line">
       </div>
+
+    
+
+  
 
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-            <label>Referencial Bibliografico: </label>
-            <input type="text" class="form-control" name="referenciaBi" [(ngModel)]="questaoDTO.referenciaBi"
-              placeholder="Digite a referencia" />
-          </div>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-6">
-          <div class="form-group">
-            <label>Comentário Geral da Questão (1): </label>
+            <label>Comentário da Alternativa (A): </label>
             <textarea class="form-control" rows="3" name="comentarioDaQuestaoUm"
               [(ngModel)]="questaoDTO.comentarioDaQuestaoUm"
-              placeholder="Digite o comentário geral da questão"></textarea>
+              placeholder="Digite o comentário da alternativa A"></textarea>
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-group">
-            <label>Comentário Específico da Questão(2): </label>
+            <label>Comentário da Alternativa (B): </label>
             <textarea class="form-control" rows="3" name="comentarioDaQuestaoDois"
               [(ngModel)]="questaoDTO.comentarioDaQuestaoDois"
-              placeholder="Digite o comentário específico da questão"></textarea>
+              placeholder="Digite o comentário da alternativa B"></textarea>
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-group">
-            <label>Comentário Específico da Questão(3): </label>
+            <label>Comentário da Alternativa (C): </label>
             <textarea class="form-control" rows="3" name="comentarioDaQuestaoTres"
               [(ngModel)]="questaoDTO.comentarioDaQuestaoTres"
-              placeholder="Digite o comentário específico da questão"></textarea>
+              placeholder="Digite o comentário da alternativa C"></textarea>
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-group">
-            <label>Comentário Específico da Questão(4): </label>
+            <label>Comentário da Alternativa (D): </label>
             <textarea class="form-control" rows="3" name="comentarioDaQuestaoQuatro"
               [(ngModel)]="questaoDTO.comentarioDaQuestaoQuatro"
-              placeholder="Digite o comentário específico da questão"></textarea>
+              placeholder="Digite o comentário da alternativa D"></textarea>
           </div>
         </div>
       </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Referência: </label>
+            <input type="text" class="form-control" name="referenciaBi" [(ngModel)]="questaoDTO.referenciaBi"
+              placeholder="Digite a referência" />
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Nome do Professor Comentador da Questão: </label>
+            <input type="text" class="form-control" name="comentadorDaQuestao"
+              [(ngModel)]="questaoDTO.comentadorDaQuestao" placeholder="Digite o nome do professor comentador" />
+          </div>
+        </div>
+      </div>
+
       <div *ngIf="questaoDTO.tipoItemQuestao === 'imagem'">
         <div>
           <hr class="line">

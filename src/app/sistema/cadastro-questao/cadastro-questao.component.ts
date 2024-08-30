@@ -52,12 +52,12 @@ export class CadastroQuestaoComponent implements OnInit {
 
   ngOnInit(): void {
     this.questaoDTO.alternativas = [
-      { id: 1, texto: 'A', correta: false },
-      { id: 2, texto: 'B', correta: false },
-      { id: 3, texto: 'C', correta: false },
-      { id: 4, texto: 'D', correta: false }
+      { id: 1, texto: 'A', correta: false, comentario: '' },
+      { id: 2, texto: 'B', correta: false, comentario: '' },
+      { id: 3, texto: 'C', correta: false, comentario: '' },
+      { id: 4, texto: 'D', correta: false, comentario: '' }
     ];
-
+    
     this.questaoDTO.alternativaImagems = [
       { id: 1, texto: '1', correta: false },
       { id: 2, texto: '2', correta: false },
@@ -238,7 +238,4 @@ onFileSelectedImage(event: any, identifier: string) {
   };
   reader.readAsDataURL(file);
 }
-
-
-
 }
