@@ -125,6 +125,40 @@ export class PageDesempenhoComponent implements OnInit {
     },
   ];
 
+  // Gráfico 4: Acertos e Erros por Tema
+  public barChartOptions4: ChartOptions = {
+    responsive: true,
+    title: {
+      display: true,
+      text: 'Acertos e Erros por Tema'
+    },
+    scales: {
+      xAxes: [
+        {
+          ticks: {
+            beginAtZero: true,
+            stepSize: 1,
+          },
+        },
+      ],
+    },
+  };
+  public barChartLabels4: Label[] = [];
+  public barChartData4: ChartDataSets[] = [
+    {
+      data: [],
+      label: 'Acertos',
+      backgroundColor: '#1C9212',
+      borderColor: '#1C9212',
+    },
+    {
+      data: [],
+      label: 'Erros',
+      backgroundColor: '#3B5FA0',
+      borderColor: '#3B5FA0',
+    },
+  ];
+
   constructor(
     private questoesService: QuestoesService,
     private authService: AuthService
@@ -208,6 +242,27 @@ export class PageDesempenhoComponent implements OnInit {
     const questoesFeitasData = temas.map((tema) => data[tema] || 0);
 
     this.barChartData2 = [
+      {
+        data: questoesFeitasData,
+        label: 'Questões Feitas',
+        backgroundColor: '#D69C11',
+        borderColor: '#D69C11',
+        hoverBackgroundColor: '#FFBF23',
+        hoverBorderColor: '#FFBF23',
+      },
+    ];
+  }
+
+  private processChartData4(data: any): void {
+    console.log('ProcessChartData4:', data);
+    // Mapear os temas para exibição no gráfico
+    const temas = Object.values(TemaDescricoes);
+    this.barChartLabels2 = temas;
+
+    // Garantir que a ordem dos dados corresponda à ordem dos temas
+    const questoesFeitasData = temas.map((tema) => data[tema] || 0);
+
+    this.barChartData4 = [
       {
         data: questoesFeitasData,
         label: 'Questões Feitas',
