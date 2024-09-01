@@ -312,7 +312,7 @@ export class PageSimuladoComponent implements OnInit {
     if (this.isSimuladoIniciado) {
       clearInterval(this.intervalId); // Para o contador
       this.isSimuladoIniciado = false;
-      alert(`Simulado finalizado! Tempo total: ${this.formatarTempo(this.tempo)}`);
+      //alert(`Simulado finalizado! Tempo total: ${this.formatarTempo(this.tempo)}`);
     }
   }
 
