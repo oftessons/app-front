@@ -72,6 +72,7 @@ export class PageSimuladoComponent implements OnInit {
 
   isRespostaCorreta: boolean = false;
 
+  dados: any;
   questaoDTO = new Questao();
   selectedAlternativeIndex: number = -3;
 
@@ -81,13 +82,17 @@ export class PageSimuladoComponent implements OnInit {
     private authService: AuthService
   ) { }
 
-  ngOnInit(): void {
-    // Verificar se o CSS foi carregado
-    const cssFile = document.querySelector('link[href="styles.css"]');
-    if (!cssFile) {
-      window.location.reload();
-    }
+  ngOnInit() {
+    console.log('Componente inicializado');
+    this.dados = this.obterDados();
+    console.log('Dados:', this.dados);
   }
+
+  obterDados() {
+    // Simula a obtenção de dados
+    return { exemplo: 'valor' };
+  }
+  
 
 
   onOptionChange(texto: string): void {
