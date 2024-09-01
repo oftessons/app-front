@@ -23,6 +23,10 @@ declare var bootstrap: any;
 })
 export class PageSimuladoComponent implements OnInit {
 
+  tempo: number = 0; // Contador de tempo em segundos
+  intervalId: any; // Armazena o ID do intervalo para controlar o timer
+  isSimuladoIniciado: boolean = false; // Controla se o simulado foi iniciado ou não
+
   questao: Questao = new Questao();
   selectedOption: string = '';
 
@@ -294,4 +298,34 @@ export class PageSimuladoComponent implements OnInit {
     this.mostrarCardConfirmacao = false;
   }
 
+  iniciarSimulado(): void {
+    if (!this.isSimuladoIniciado) {
+      this.isSimuladoIniciado = true;
+      this.tempo = 0;
+      this.intervalId = setInterval(() => {
+        this.tempo++;
+      }, 1000); // Atualiza o tempo a cada segundo
+    }
+  }
+
+  finalizarSimulado(): void {
+    if (this.isSimuladoIniciado) {
+      clearInterval(this.intervalId); // Para o contador
+      this.isSimuladoIniciado = false;
+      alert(`Simulado finalizado! Tempo total: ${this.formatarTempo(this.tempo)}`);
+    }
+  }
+
+  // Função para formatar o tempo decorrido (opcional)
+  formatarTempo(segundos: number): string {
+    const horas = Math.floor(segundos / 3600);
+    const minutos = Math.floor((segundos % 3600) / 60);
+    const segs = segundos % 60;
+    return `${this.formatarNumero(horas)}:${this.formatarNumero(minutos)}:${this.formatarNumero(segs)}`;
+  }
+
+  // Função auxiliar para formatar com dois dígitos
+  formatarNumero(numero: number): string {
+    return numero < 10 ? `0${numero}` : `${numero}`;
+  }
 }

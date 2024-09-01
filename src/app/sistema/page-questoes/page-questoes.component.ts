@@ -300,5 +300,7 @@ exibirGabarito() {
     this.mostrarCardConfirmacao = false;
   }
 
+
+
   
 }

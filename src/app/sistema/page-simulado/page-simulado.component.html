@@ -131,6 +131,16 @@
     <h3>Ano: {{ questaoAtual.ano }}</h3>
   </div>
   <div class="conteudo-questao">
+    <div class="timer-container">
+      <div class="buttons-simulado">
+          <button (click)="iniciarSimulado()" class="btn-iniciar">Iniciar Simulado</button>
+          <button (click)="finalizarSimulado()" class="btn-finalizar" [disabled]="!isSimuladoIniciado">Finalizar Simulado</button>
+      </div>
+      <div class="tempo">
+        <h3>Tempo: {{ formatarTempo(tempo) }}</h3>
+      </div> <!-- Temporizador centralizado -->
+  </div>
+
     <p>{{ questaoAtual.enunciadoDaQuestao }}</p>
     <img *ngIf="questaoAtual.fotoDaQuestao" [src]="questaoAtual.fotoDaQuestao" alt="Foto da questão" class="questao-foto">
     <p>{{ questaoAtual.afirmacaoUm }}</p>
@@ -154,9 +164,7 @@
         </div>
       </div>
     </div>
-    <div *ngIf="resposta" class="alert mt-3" [ngClass]="{'alert-success': isRespostaCorreta, 'alert-danger': !isRespostaCorreta}" role="alert">
-      {{ resposta }}
-    </div>
+    
     <div class="button-row">
       <div class="right-buttons">
         <button class="btn-anterior" (click)="anteriorQuestao()" [disabled]="paginaAtual === 0">Anterior</button>
