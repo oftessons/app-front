@@ -117,7 +117,7 @@
 
 .right-buttons {
     display: flex;
-    justify-content: flex-end; /* Alinha os botões à direita */
+    justify-content: flex-end;
     gap: 10px;
 }
 
@@ -324,7 +324,7 @@
 
 .button-row-filtro {
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
     margin-top: 20px;
 }
 
