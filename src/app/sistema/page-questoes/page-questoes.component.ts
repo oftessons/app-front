@@ -13,6 +13,7 @@ import { RespostaDTO } from '../RespostaDTO';  // Adicione esta importação
 import { Resposta } from '../Resposta';  // Adicione esta importação
 import { AuthService } from 'src/app/services/auth.service';
 import { Usuario } from 'src/app/login/usuario';
+import { FiltroDTO } from '../filtroDTO';
 
 declare var bootstrap: any;
 
@@ -49,7 +50,7 @@ export class PageQuestoesComponent implements OnInit {
   };
 
   mostrarCardConfirmacao = false;
-  filtroASalvar!: Filtro;
+  filtroASalvar!: FiltroDTO;
 
   mostrarGabarito: boolean = false; // Adiciona esta variável para controlar a exibição do gabarito
 

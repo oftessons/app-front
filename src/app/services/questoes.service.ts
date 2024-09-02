@@ -34,6 +34,10 @@ export class QuestoesService {
     );
   }
 
+  getAcertosErrosPorTema(idUser: number): Observable<any> {
+    return this.http.get(`${this.apiURL}/acertos-erros-tema/${idUser}`);
+  }
+
   salvar(formData: FormData ): Observable<any> {
     const headers = new HttpHeaders();
     // Não defina o Content-Type, o navegador cuidará disso

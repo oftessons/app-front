@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Filtro } from '../filtro';
+import { FiltroDTO } from '../filtroDTO'; // Atualize o caminho conforme necessário
 import { FiltroService } from 'src/app/services/filtro.service';
-import { Router, ActivatedRoute } from '@angular/router';
-
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-page-filtro',
@@ -10,12 +9,11 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./page-filtro.component.css']
 })
 export class PageFiltroComponent implements OnInit {
+  filtros: FiltroDTO[] = [];
 
-  filtros: Filtro[] = [];
-
-  constructor(private filtroService: FiltroService,
-    private router: Router,
-    private activatedRoute: ActivatedRoute
+  constructor(
+    private filtroService: FiltroService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -30,7 +28,6 @@ export class PageFiltroComponent implements OnInit {
         },
         error => {
           console.error('Erro ao carregar filtros:', error);
-          // Tratar erro aqui se necessário
         }
       );
   }
@@ -39,12 +36,10 @@ export class PageFiltroComponent implements OnInit {
     this.filtroService.deletarFiltro(id)
       .subscribe(
         () => {
-          // Após deletar com sucesso, recarregar os filtros
           this.carregarFiltros();
         },
         error => {
           console.error('Erro ao deletar filtro:', error);
-          // Tratar erro aqui se necessário
         }
       );
   }

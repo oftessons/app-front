@@ -13,6 +13,8 @@ import { RespostaDTO } from '../RespostaDTO';
 import { Resposta } from '../Resposta';
 import { AuthService } from 'src/app/services/auth.service';
 import { Usuario } from 'src/app/login/usuario';  
+import { Simulado } from '../simulado';
+import { SimuladoService } from 'src/app/services/simulado.service';
 
 declare var bootstrap: any;
 
@@ -22,6 +24,10 @@ declare var bootstrap: any;
   styleUrls: ['./page-simulado.component.css']
 })
 export class PageSimuladoComponent implements OnInit {
+
+  nomeSimulado: string = '';
+  descricaoSimulado: string = '';
+
 
   tempo: number = 0; // Contador de tempo em segundos
   intervalId: any; // Armazena o ID do intervalo para controlar o timer
@@ -79,6 +85,7 @@ export class PageSimuladoComponent implements OnInit {
   constructor(
     private questoesService: QuestoesService,
     private filtroService: FiltroService,
+    private simuladoService: SimuladoService,
     private authService: AuthService
   ) { }
 
@@ -271,33 +278,44 @@ export class PageSimuladoComponent implements OnInit {
     }
   }
   
+  confirmarSalvarSimulado(): void {
+    // const simulado = {
+    //   nomeSimulado: this.nomeSimulado,
+    //   assunto: this.descricaoSimulado,
+    //   qtdQuestoes: this.quantidadeQuestoesSelecionada,
+    //   ano: this.selectedAno,
+    //   tema: this.selectedTema,
+    //   dificuldade: this.selectedDificuldade,
+    //   tipoDeProva: this.selectedTipoDeProva,
+    //   subtema: this.selectedSubtema
+    // };
+  
+    // this.simuladoService.cadastrarSimulado(simulado).subscribe(
+    //   (response) => {
+    //     alert('Simulado cadastrado com sucesso!');
+    //   },
+    //   (error) => {
+    //     alert('Erro ao cadastrar o simulado. Por favor, tente novamente.');
+    //     console.error(error);
+    //   }
+    // );
+  }
+  
+  
+  
+
+
   abrirModal(): void {
     const modalElement = document.getElementById('confirmacaoModal');
     const modal = new bootstrap.Modal(modalElement!);
     modal.show();
 
-    // Adiciona evento para quando o modal for fechado
     modalElement?.addEventListener('hidden.bs.modal', () => {
       this.fecharCardConfirmacao();
     });
   }
 
-  confirmarSalvarSimulado(): void {
-    if (this.filtroASalvar) {
-      this.filtroService.salvarFiltro(this.filtroASalvar)
-        .subscribe(
-          response => {
-            console.log('Simulado salvo com sucesso:', response);
-          },
-          error => {
-            console.error('Erro ao salvar simulado:', error);
-          }
-        );
-    }
-    const modalElement = document.getElementById('confirmacaoModal');
-    const modal = bootstrap.Modal.getInstance(modalElement!);
-    modal.hide();
-  }
+ 
 
   fecharCardConfirmacao(): void {
     this.mostrarCardConfirmacao = false;
