@@ -10,6 +10,10 @@
     font-family: 'Nunito Sans', sans-serif;
 }
 
+h5{
+    color: #7E1313;
+}
+
 .icon {
     width: 20px; /* Define a largura do ícone */
     height: 20px; /* Define a altura do ícone */

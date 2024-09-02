@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { SimuladoService } from 'src/app/services/simulado.service'; 
+import { Simulado } from '../simulado'; 
+import { Router } from '@angular/router'; // Para navegação após visualizar ou editar
 
 @Component({
   selector: 'app-meus-simulados',
@@ -6,10 +9,38 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./meus-simulados.component.css']
 })
 export class MeusSimuladosComponent implements OnInit {
+  simulados: Simulado[] = [];
 
-  constructor() { }
+  constructor(
+    private simuladoService: SimuladoService,
+    private router: Router 
+  ) {}
 
   ngOnInit(): void {
+    this.simuladoService.obterSimulados().subscribe(
+      (data: Simulado[]) => {
+        this.simulados = data;
+      },
+      (error) => {
+        console.error('Erro ao carregar simulados', error);
+      }
+    );
   }
 
+  editarSimulado(id: number): void {
+    // Redireciona para a rota correta com o ID do simulado
+    this.router.navigate([`/simulados`, id]);
+  }
+  
+  deletarSimulado(id: number): void {
+    this.simuladoService.deletarSimulado(id).subscribe(
+      () => {
+        // Remover o simulado da lista após deletar
+        this.simulados = this.simulados.filter(simulado => simulado.id !== id);
+      },
+      (error) => {
+        console.error('Erro ao deletar o simulado', error);
+      }
+    );
+  }
 }

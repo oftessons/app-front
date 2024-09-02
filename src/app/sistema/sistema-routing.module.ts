@@ -20,6 +20,7 @@ const routes: Routes = [
     {path:'desempenho', component: PageDesempenhoComponent},
     {path:'meu-perfil', component: PageMeuPerfilComponent},
     {path:'simulados', component: PageSimuladoComponent},
+    {path:'simulados/:id', component: PageSimuladoComponent},
     {path:'meus-simulados', component: MeusSimuladosComponent},
     {path:'cadastro-questao', component: CadastroQuestaoComponent},
     {path:'cadastro-questao/:id', component: CadastroQuestaoComponent},
