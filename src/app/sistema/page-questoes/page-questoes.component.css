@@ -386,3 +386,46 @@
 
 
 
+.alternativa {
+  border-radius: 5px; /* Border radius for rounded corners */
+  padding: 10px; /* Padding for better spacing */
+  transition: background-color 0.3s, border-color 0.3s; /* Smooth transitions for background and border color */
+}
+
+.alternativa-certa {
+  background-color: #84d469; /* Light green background */
+  color: #080808; /* Dark green text */
+  border-color: #c3e6cb; /* Light green border */
+}
+
+.alternativa-errada {
+  background-color: #d73c54; /* Light red background */
+  color: #d0d0d0; /* Dark red text */
+  border-color: #f5c6cb; /* Light red border */
+}
+
+.alternativa-certa:hover,
+.alternativa-errada:hover {
+  cursor: pointer; /* Change cursor on hover */
+  background-color: #e2e6ea; /* Light grey background on hover for better UX */
+}
+
+.alternativa-input-group {
+  display: flex;
+  align-items: center;
+}
+
+.alternativa-input-group input[type="radio"] {
+  margin-right: 10px;
+}
+
+.alternativa-texto {
+  font-weight: bold;
+  font-size: 14px;
+  margin-right: 10px;
+}
+
+.alternativa-comentario {
+  font-size: 14px;
+  color: #000000;
+}

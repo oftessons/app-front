@@ -28,12 +28,18 @@ export class PageQuestoesComponent implements OnInit {
   //resposta: string | null = null;
   usuario!: Usuario;
 
+  respostaFoiSubmetida: boolean = false; 
+
   tiposDeProva = Object.values(TipoDeProva);
   anos = Object.values(Ano);
   dificuldades = Object.values(Dificuldade);
   subtemas = Object.values(Subtema);
   temas = Object.values(Tema);
 
+  respostaCorreta: string | null = null;
+  respostaErrada: string | null = null;
+  isRespostaCorreta: boolean = false;
+  
   message: string = '';
   resposta: string = ''; // Adiciona esta variável para armazenar a resposta
 
@@ -48,6 +54,7 @@ export class PageQuestoesComponent implements OnInit {
     palavraChave: null
   };
 
+  
   mostrarCardConfirmacao = false;
   filtroASalvar!: Filtro;
 
@@ -67,7 +74,7 @@ export class PageQuestoesComponent implements OnInit {
   p: number = 1;
 
   //resposta: string;
-  isRespostaCorreta: boolean = false;
+  //isRespostaCorreta: boolean = false;
 
   questaoDTO = new Questao();
   selectedAlternativeIndex: number = -3;
@@ -88,6 +95,8 @@ export class PageQuestoesComponent implements OnInit {
     console.log('Alternativa selecionada:', texto);
   }
 
+ 
+
   obterPerfilUsuario() {
     this.authService.obterUsuarioAutenticadoDoBackend().subscribe(
       (data) => {
@@ -100,28 +109,40 @@ export class PageQuestoesComponent implements OnInit {
   }
 
 
+
   responderQuestao(questao: Questao | null): void {
     if (!questao) {
       console.error('Questão atual é nula.');
       this.resposta = 'Nenhuma questão selecionada.';
       return;
     }
-  
+
     const respostaDTO: RespostaDTO = {
       questaoId: questao.id,
       selecionarOpcao: this.selectedOption
     };
 
     const idUser = parseInt(this.usuario.id);
-  
+
     this.questoesService.checkAnswer(questao.id, idUser, respostaDTO).subscribe(
       (resposta: Resposta) => {
         console.log('Resposta do backend:', resposta);
         console.log('correct:', resposta.correct);
-  
+
+        // Resetar a resposta anterior
+        this.respostaCorreta = null;
+        this.respostaErrada = null;
+
         if (resposta.hasOwnProperty('correct')) {
           this.isRespostaCorreta = resposta.correct;
           this.resposta = resposta.correct ? 'Resposta correta!' : 'Resposta incorreta. Tente novamente.';
+          
+          // Armazenar a alternativa correta ou errada
+          if (resposta.correct) {
+            this.respostaCorreta = this.selectedOption;
+          } else {
+            this.respostaErrada = this.selectedOption;
+          }
         } else {
           console.error('Resposta do backend não contém a propriedade correct.');
           this.resposta = 'Ocorreu um erro ao verificar a resposta. Por favor, tente novamente mais tarde.';
@@ -133,6 +154,11 @@ export class PageQuestoesComponent implements OnInit {
       }
     );
   }
+  
+  
+  
+  
+  
   
 exibirGabarito() {
   this.mostrarGabarito = true; // Define a variável para exibir o gabarito
@@ -253,6 +279,7 @@ exibirGabarito() {
     }
   }
   
+
   
 
   proximaQuestao() {
@@ -265,6 +292,7 @@ exibirGabarito() {
       this.message = 'Não há mais questões disponíveis.';
     }
   }
+
 
   abrirModal(): void {
     const modalElement = document.getElementById('confirmacaoModal');

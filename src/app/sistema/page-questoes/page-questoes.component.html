@@ -136,24 +136,28 @@
         <p>{{ questaoAtual.afirmacaoQuatro }}</p>
         <div class="row">
           <div class="col-md-12">
-            <div class="form-group">
+            <div class="alternativas-container">
               <label>Selecione a Alternativa:</label>
-              <div *ngFor="let alternativa of questaoAtual.alternativas; let i = index">
-                <input 
-                  type="radio" 
-                  name="alternativa" 
-                  [value]="alternativa.texto"
-                  [(ngModel)]="selectedOption" 
-                  (change)="onOptionChange(alternativa.texto)"
-                  [checked]="alternativa.texto === selectedOption">
-                {{ alternativa.texto }}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div *ngIf="resposta" class="alert mt-3" [ngClass]="{'alert-success': isRespostaCorreta, 'alert-danger': !isRespostaCorreta}" role="alert">
-          {{ resposta }}
-        </div>
+              <div *ngFor="let alternativa of questaoAtual.alternativas; let i = index" class="alternativa"
+              [ngClass]="{
+                'alternativa-certa': respostaCorreta === alternativa.texto,
+                'alternativa-errada': respostaErrada === alternativa.texto
+              }">
+           <div class="alternativa-input-group">
+             <input 
+               type="radio" 
+               name="alternativa" 
+               [value]="alternativa.texto"
+               [(ngModel)]="selectedOption" 
+               (change)="onOptionChange(alternativa.texto)"
+               [checked]="alternativa.texto === selectedOption">
+             <span class="alternativa-texto">{{ alternativa.texto }} ) </span>
+             <span class="alternativa-comentario">{{ alternativa.comentario }}</span>
+           </div>
+         </div>
+         
+
+
         <div *ngIf="mostrarGabarito">
           <h2 style="margin-top: 10px;">Comentário da Questão</h2>
           <img *ngIf="questaoAtual.fotoDaResposta" [src]="questaoAtual.fotoDaResposta" alt="Foto do Comentário" class="questao-foto">
