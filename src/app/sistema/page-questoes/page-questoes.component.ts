@@ -27,6 +27,7 @@ export class PageQuestoesComponent implements OnInit {
   selectedOption: string = '';
   //resposta: string | null = null;
   usuario!: Usuario;
+  respostaVerificada: boolean = false;
 
   respostaFoiSubmetida: boolean = false; 
 
@@ -116,43 +117,31 @@ export class PageQuestoesComponent implements OnInit {
       this.resposta = 'Nenhuma questão selecionada.';
       return;
     }
-
-    const respostaDTO: RespostaDTO = {
-      questaoId: questao.id,
-      selecionarOpcao: this.selectedOption
-    };
-
-    const idUser = parseInt(this.usuario.id);
-
-    this.questoesService.checkAnswer(questao.id, idUser, respostaDTO).subscribe(
-      (resposta: Resposta) => {
-        console.log('Resposta do backend:', resposta);
-        console.log('correct:', resposta.correct);
-
-        // Resetar a resposta anterior
-        this.respostaCorreta = null;
-        this.respostaErrada = null;
-
-        if (resposta.hasOwnProperty('correct')) {
-          this.isRespostaCorreta = resposta.correct;
-          this.resposta = resposta.correct ? 'Resposta correta!' : 'Resposta incorreta. Tente novamente.';
-          
-          // Armazenar a alternativa correta ou errada
-          if (resposta.correct) {
-            this.respostaCorreta = this.selectedOption;
-          } else {
-            this.respostaErrada = this.selectedOption;
+  
+    if (this.selectedOption) {
+      const alternativaSelecionada = questao.alternativas.find(a => a.texto === this.selectedOption);
+  
+      if (alternativaSelecionada) {
+        const respostaDTO: RespostaDTO = {
+          questaoId: questao.id,
+          selecionarOpcao: this.selectedOption
+        };
+  
+        const idUser = parseInt(this.usuario.id);
+  
+        this.questoesService.checkAnswer(questao.id, idUser, respostaDTO).subscribe(
+          (resposta: Resposta) => {
+            this.isRespostaCorreta = resposta.correct;
+            this.respostaVerificada = true; // Só permite mostrar o fundo após verificar a resposta
+            this.resposta = resposta.correct ? 'Resposta correta!' : 'Resposta incorreta. Tente novamente.';
+          },
+          (error) => {
+            console.error('Erro ao verificar resposta:', error);
+            this.resposta = 'Ocorreu um erro ao verificar a resposta. Por favor, tente novamente mais tarde.';
           }
-        } else {
-          console.error('Resposta do backend não contém a propriedade correct.');
-          this.resposta = 'Ocorreu um erro ao verificar a resposta. Por favor, tente novamente mais tarde.';
-        }
-      },
-      (error) => {
-        console.error('Erro ao verificar resposta:', error);
-        this.resposta = 'Ocorreu um erro ao verificar a resposta. Por favor, tente novamente mais tarde.';
+        );
       }
-    );
+    }
   }
   
   
@@ -160,9 +149,24 @@ export class PageQuestoesComponent implements OnInit {
   
   
   
-exibirGabarito() {
-  this.mostrarGabarito = true; // Define a variável para exibir o gabarito
-}
+  
+  
+  
+  
+  
+  
+
+  exibirGabarito() {
+    this.mostrarGabarito = true;
+  
+    // Atualizar o estado das respostas corretas e erradas
+    if (this.questaoAtual) {
+      this.respostaCorreta = this.questaoAtual.alternativas.find(a => a.texto === this.respostaCorreta)?.texto || '';
+      this.respostaErrada = this.questaoAtual.alternativas.find(a => a.texto === this.respostaErrada)?.texto || '';
+    }
+  }
+  
+  
 
   getDescricaoTipoDeProva(tipoDeProva: TipoDeProva): string {
     return getDescricaoTipoDeProva(tipoDeProva);
@@ -274,10 +278,21 @@ exibirGabarito() {
     if (this.paginaAtual > 0) {
       this.paginaAtual--;
       this.questaoAtual = this.questoes[this.paginaAtual];
-      this.mostrarGabarito = false;
-      this.resposta = '';
+      
+      // Resetar o estado para evitar fundo nas alternativas
+      this.selectedOption = '';  // Limpar a seleção atual
+      this.resposta = ''; // Limpar a resposta exibida
+      this.respostaCorreta = ''; // Limpar a alternativa correta
+      this.respostaErrada = ''; // Limpar a alternativa errada
+      this.mostrarGabarito = false; // Resetar a exibição do gabarito
+      this.isRespostaCorreta = false; // Limpar o estado da resposta correta
+      this.respostaVerificada = false; // Limpar o estado da resposta verificada
+  
+    } else {
+      this.message = 'Não há mais questões disponíveis.';
     }
   }
+  
   
 
   
@@ -286,12 +301,22 @@ exibirGabarito() {
     if (this.paginaAtual < this.questoes.length - 1) {
       this.paginaAtual++;
       this.questaoAtual = this.questoes[this.paginaAtual];
-      this.mostrarGabarito = false; 
-      this.resposta = ''; 
+      
+      // Resetar o estado para evitar fundo nas alternativas
+      this.selectedOption = '';  // Limpar a seleção atual
+      this.resposta = ''; // Limpar a resposta exibida
+      this.respostaCorreta = ''; // Limpar a alternativa correta
+      this.respostaErrada = ''; // Limpar a alternativa errada
+      this.mostrarGabarito = false; // Resetar a exibição do gabarito
+      this.isRespostaCorreta = false; // Limpar o estado da resposta correta
+      this.respostaVerificada = false; // Limpar o estado da resposta verificada
+  
     } else {
       this.message = 'Não há mais questões disponíveis.';
     }
   }
+  
+  
 
 
   abrirModal(): void {

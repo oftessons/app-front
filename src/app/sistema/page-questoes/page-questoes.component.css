@@ -111,7 +111,7 @@
 
 .button-row {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   margin-top: 20px;
 }
 
@@ -303,7 +303,7 @@
 
 .button-row-filtro {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   margin-top: 20px;
 }
 
@@ -328,9 +328,9 @@
 .btn-gabarito {
   padding: 10px 20px;
   width: 130px;
-  border: 2px solid #3B5FA0; /* Borda da cor especificada */
+  border: 2px solid #f4a261; /* Borda da cor especificada */
   border-radius: 5px;
-  background-color: transparent; /* Background transparente */
+  background-color: #f4a261; /* Background transparente */
   color: #000; /* Cor do texto preto */
   cursor: pointer;
   font-size: 16px;
@@ -338,8 +338,8 @@
 }
 
 .btn-gabarito:hover {
-  background-color: #0056b3;
-  color: #ccc;
+  background-color: #f4a261;
+  color: #464545;
 }
 
 .btn-anterior,
@@ -391,6 +391,16 @@
   padding: 10px; /* Padding for better spacing */
   transition: background-color 0.3s, border-color 0.3s; /* Smooth transitions for background and border color */
 }
+
+
+.alternativa-certa {
+  background-color: #c8e6c9; /* Cor de fundo para alternativa correta */
+}
+
+.alternativa-errada {
+  background-color: #ffcdd2; /* Cor de fundo para alternativa errada */
+}
+
 
 .alternativa-certa {
   background-color: #84d469; /* Light green background */
