@@ -87,7 +87,7 @@
 
    <!-- Modal de confirmação -->
    <div>
-    <div class="modal fade" id="confirmacaoModal" tabindex="-1" aria-labelledby="confirmacaoModalLabel" aria-hidden="true">
+    <div class="modal fade" id="confirmacaoModal" #confirmacaoModalRef tabindex="-1" aria-labelledby="confirmacaoModalLabel" aria-hidden="true">
       <div class="mr-box-save-lista-overlay"></div>
       <div class="modal-dialog">
         <div class="modal-content">
@@ -99,22 +99,22 @@
             <form class="form-group">
               <div class="mb-3">
                 <label for="nomeFiltro" class="form-label">Nome <span>*</span></label>
-                <input type="text" class="form-control" id="nomeFiltro" placeholder="Ex. Óptica" required>
+                <input type="text" class="form-control" id="nomeFiltro" #nomeFiltroInput placeholder="Ex. Óptica" required>
               </div>
               <div class="mb-3">
                 <label for="descricaoFiltro" class="form-label">Assunto</label>
-                <input type="text" class="form-control" id="descricaoFiltro" placeholder="Ex. Vergência, objeto e imagem">
+                <input type="text" class="form-control" id="descricaoFiltro" #descricaoFiltroInput placeholder="Ex. Vergência, objeto e imagem">
               </div>
             </form>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-            <button type="button" class="btn btn-success" (click)="confirmarSalvarFiltro()">Confirmar</button>
+            <button type="button" class="btn btn-success" (click)="confirmarSalvarFiltro(nomeFiltroInput.value, descricaoFiltroInput.value)">Confirmar</button>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </div>  
 
   <!-- Exibição dos Resultados -->
   <div *ngIf="questaoAtual">

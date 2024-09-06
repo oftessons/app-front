@@ -1,6 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { TipoDeProva } from './enums/tipoDeProva';
-import { getDescricaoAno, getDescricaoDificuldade, getDescricaoSubtema, getDescricaoTema, getDescricaoTipoDeProva } from './enums/enum-utils';
+import {
+  getDescricaoAno,
+  getDescricaoDificuldade,
+  getDescricaoSubtema,
+  getDescricaoTema,
+  getDescricaoTipoDeProva,
+} from './enums/enum-utils';
 import { Ano } from './enums/ano';
 import { Dificuldade } from './enums/dificuldade';
 import { Subtema } from './enums/subtema';
@@ -9,8 +15,8 @@ import { Questao } from './questao';
 import { QuestoesService } from 'src/app/services/questoes.service';
 import { Filtro } from '../filtro';
 import { FiltroService } from 'src/app/services/filtro.service';
-import { RespostaDTO } from '../RespostaDTO';  // Adicione esta importação
-import { Resposta } from '../Resposta';  // Adicione esta importação
+import { RespostaDTO } from '../RespostaDTO'; // Adicione esta importação
+import { Resposta } from '../Resposta'; // Adicione esta importação
 import { AuthService } from 'src/app/services/auth.service';
 import { Usuario } from 'src/app/login/usuario';
 import { FiltroDTO } from '../filtroDTO';
@@ -20,10 +26,9 @@ declare var bootstrap: any;
 @Component({
   selector: 'app-page-questoes',
   templateUrl: './page-questoes.component.html',
-  styleUrls: ['./page-questoes.component.css']
+  styleUrls: ['./page-questoes.component.css'],
 })
 export class PageQuestoesComponent implements OnInit {
-
   questao: Questao = new Questao();
   selectedOption: string = '';
   //resposta: string | null = null;
@@ -46,7 +51,7 @@ export class PageQuestoesComponent implements OnInit {
     tipoDeProva: null,
     subtema: null,
     tema: null,
-    palavraChave: null
+    palavraChave: null,
   };
 
   mostrarCardConfirmacao = false;
@@ -55,7 +60,11 @@ export class PageQuestoesComponent implements OnInit {
   mostrarGabarito: boolean = false; // Adiciona esta variável para controlar a exibição do gabarito
 
   //selectedOption: string = ''; // Adiciona esta variável para armazenar a opção selecionada
+  @ViewChild('confirmacaoModalRef', { static: false })
+  confirmacaoModal!: ElementRef;
 
+  nomeFiltro: string = '';
+  descricaoFiltro: string = '';
   selectedAno: Ano | null = null;
   selectedDificuldade: Dificuldade | null = null;
   selectedTipoDeProva: TipoDeProva | null = null;
@@ -77,12 +86,11 @@ export class PageQuestoesComponent implements OnInit {
     private questoesService: QuestoesService,
     private filtroService: FiltroService,
     private authService: AuthService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.obterPerfilUsuario();
   }
-
 
   onOptionChange(texto: string): void {
     this.selectedOption = texto;
@@ -100,44 +108,49 @@ export class PageQuestoesComponent implements OnInit {
     );
   }
 
-
   responderQuestao(questao: Questao | null): void {
     if (!questao) {
       console.error('Questão atual é nula.');
       this.resposta = 'Nenhuma questão selecionada.';
       return;
     }
-  
+
     const respostaDTO: RespostaDTO = {
       questaoId: questao.id,
-      selecionarOpcao: this.selectedOption
+      selecionarOpcao: this.selectedOption,
     };
 
     const idUser = parseInt(this.usuario.id);
-  
+
     this.questoesService.checkAnswer(questao.id, idUser, respostaDTO).subscribe(
       (resposta: Resposta) => {
         console.log('Resposta do backend:', resposta);
         console.log('correct:', resposta.correct);
-  
+
         if (resposta.hasOwnProperty('correct')) {
           this.isRespostaCorreta = resposta.correct;
-          this.resposta = resposta.correct ? 'Resposta correta!' : 'Resposta incorreta. Tente novamente.';
+          this.resposta = resposta.correct
+            ? 'Resposta correta!'
+            : 'Resposta incorreta. Tente novamente.';
         } else {
-          console.error('Resposta do backend não contém a propriedade correct.');
-          this.resposta = 'Ocorreu um erro ao verificar a resposta. Por favor, tente novamente mais tarde.';
+          console.error(
+            'Resposta do backend não contém a propriedade correct.'
+          );
+          this.resposta =
+            'Ocorreu um erro ao verificar a resposta. Por favor, tente novamente mais tarde.';
         }
       },
       (error) => {
         console.error('Erro ao verificar resposta:', error);
-        this.resposta = 'Ocorreu um erro ao verificar a resposta. Por favor, tente novamente mais tarde.';
+        this.resposta =
+          'Ocorreu um erro ao verificar a resposta. Por favor, tente novamente mais tarde.';
       }
     );
   }
-  
-exibirGabarito() {
-  this.mostrarGabarito = true; // Define a variável para exibir o gabarito
-}
+
+  exibirGabarito() {
+    this.mostrarGabarito = true; // Define a variável para exibir o gabarito
+  }
 
   getDescricaoTipoDeProva(tipoDeProva: TipoDeProva): string {
     return getDescricaoTipoDeProva(tipoDeProva);
@@ -172,14 +185,14 @@ exibirGabarito() {
       tipoDeProva: null,
       subtema: null,
       tema: null,
-      palavraChave: null
+      palavraChave: null,
     };
     this.paginaAtual = 0;
   }
 
   filtrarQuestoes(): void {
     const filtros: any = {};
-  
+
     if (this.selectedAno) {
       filtros.ano = this.selectedAno;
     }
@@ -198,30 +211,78 @@ exibirGabarito() {
     if (this.palavraChave) {
       filtros.palavraChave = this.palavraChave;
     }
-  
+
     if (Object.keys(filtros).length === 0) {
       this.message = 'Por favor, selecione pelo menos um filtro.';
       this.questoes = [];
       return;
     }
-  
+
     this.questoesService.filtrarQuestoes(filtros, 0, 100).subscribe(
       (questoes: Questao[]) => {
         if (questoes.length === 0) {
-          if (filtros.ano && !filtros.tipoDeProva && !filtros.dificuldade && !filtros.subtema && !filtros.tema && !filtros.palavraChave) {
+          if (
+            filtros.ano &&
+            !filtros.tipoDeProva &&
+            !filtros.dificuldade &&
+            !filtros.subtema &&
+            !filtros.tema &&
+            !filtros.palavraChave
+          ) {
             this.message = 'Nenhuma questão encontrada para o ano selecionado.';
-          } else if (filtros.tipoDeProva && !filtros.ano && !filtros.dificuldade && !filtros.subtema && !filtros.tema && !filtros.palavraChave) {
-            this.message = 'Nenhuma questão encontrada para o tipo de prova selecionado.';
-          } else if (filtros.dificuldade && !filtros.ano && !filtros.tipoDeProva && !filtros.subtema && !filtros.tema && !filtros.palavraChave) {
-            this.message = 'Nenhuma questão encontrada para a dificuldade selecionada.';
-          } else if (filtros.subtema && !filtros.ano && !filtros.tipoDeProva && !filtros.dificuldade && !filtros.tema && !filtros.palavraChave) {
-            this.message = 'Nenhuma questão encontrada para o subtema selecionado.';
-          } else if (filtros.tema && !filtros.ano && !filtros.tipoDeProva && !filtros.dificuldade && !filtros.subtema && !filtros.palavraChave) {
-            this.message = 'Nenhuma questão encontrada para o tema selecionado.';
-          } else if (filtros.palavraChave && !filtros.ano && !filtros.tipoDeProva && !filtros.dificuldade && !filtros.subtema && !filtros.tema) {
-            this.message = 'Nenhuma questão encontrada para a palavra-chave informada.';
+          } else if (
+            filtros.tipoDeProva &&
+            !filtros.ano &&
+            !filtros.dificuldade &&
+            !filtros.subtema &&
+            !filtros.tema &&
+            !filtros.palavraChave
+          ) {
+            this.message =
+              'Nenhuma questão encontrada para o tipo de prova selecionado.';
+          } else if (
+            filtros.dificuldade &&
+            !filtros.ano &&
+            !filtros.tipoDeProva &&
+            !filtros.subtema &&
+            !filtros.tema &&
+            !filtros.palavraChave
+          ) {
+            this.message =
+              'Nenhuma questão encontrada para a dificuldade selecionada.';
+          } else if (
+            filtros.subtema &&
+            !filtros.ano &&
+            !filtros.tipoDeProva &&
+            !filtros.dificuldade &&
+            !filtros.tema &&
+            !filtros.palavraChave
+          ) {
+            this.message =
+              'Nenhuma questão encontrada para o subtema selecionado.';
+          } else if (
+            filtros.tema &&
+            !filtros.ano &&
+            !filtros.tipoDeProva &&
+            !filtros.dificuldade &&
+            !filtros.subtema &&
+            !filtros.palavraChave
+          ) {
+            this.message =
+              'Nenhuma questão encontrada para o tema selecionado.';
+          } else if (
+            filtros.palavraChave &&
+            !filtros.ano &&
+            !filtros.tipoDeProva &&
+            !filtros.dificuldade &&
+            !filtros.subtema &&
+            !filtros.tema
+          ) {
+            this.message =
+              'Nenhuma questão encontrada para a palavra-chave informada.';
           } else {
-            this.message = 'Nenhuma questão encontrada para os filtros selecionados.';
+            this.message =
+              'Nenhuma questão encontrada para os filtros selecionados.';
           }
           this.questoes = [];
           this.questaoAtual = null;
@@ -231,19 +292,17 @@ exibirGabarito() {
           this.paginaAtual = 0;
           this.questaoAtual = this.questoes[this.paginaAtual];
         }
-  
+
         this.resposta = '';
         this.mostrarGabarito = false;
       },
       (error) => {
         console.error('Erro ao filtrar questões:', error);
-        this.message = 'Ocorreu um erro ao filtrar questões. Por favor, tente novamente mais tarde.';
+        this.message =
+          'Ocorreu um erro ao filtrar questões. Por favor, tente novamente mais tarde.';
       }
     );
   }
-  
-  
-  
 
   anteriorQuestao() {
     if (this.paginaAtual > 0) {
@@ -253,15 +312,13 @@ exibirGabarito() {
       this.resposta = '';
     }
   }
-  
-  
 
   proximaQuestao() {
     if (this.paginaAtual < this.questoes.length - 1) {
       this.paginaAtual++;
       this.questaoAtual = this.questoes[this.paginaAtual];
-      this.mostrarGabarito = false; 
-      this.resposta = ''; 
+      this.mostrarGabarito = false;
+      this.resposta = '';
     } else {
       this.message = 'Não há mais questões disponíveis.';
     }
@@ -278,19 +335,46 @@ exibirGabarito() {
     });
   }
 
-  confirmarSalvarFiltro(): void {
+  confirmarSalvarFiltro(nomeFiltro: string, descricaoFiltro: string): void {
+    if (!this.filtroASalvar) {
+      this.filtroASalvar = {} as FiltroDTO;
+    }
+
+    if (this.selectedAno) {
+      this.filtroASalvar.ano = this.selectedAno;
+    }
+    if (this.selectedDificuldade) {
+      this.filtroASalvar.dificuldade = this.selectedDificuldade;
+    }
+    if (this.selectedTipoDeProva) {
+      this.filtroASalvar.tipoDeProva = this.selectedTipoDeProva;
+    }
+    if (this.selectedSubtema) {
+      this.filtroASalvar.subtema = this.selectedSubtema;
+    }
+    if (this.selectedTema) {
+      this.filtroASalvar.tema = this.selectedTema;
+    }
+    if (nomeFiltro) {
+      this.filtroASalvar.nome = nomeFiltro;
+    }
+    if (descricaoFiltro) {
+      this.filtroASalvar.assunto = descricaoFiltro;
+    }
+
     if (this.filtroASalvar) {
-      this.filtroService.salvarFiltro(this.filtroASalvar)
-        .subscribe(
-          response => {
-            console.log('Filtro salvo com sucesso:', response);
-            // Adicione lógica adicional se necessário
-          },
-          error => {
-            console.error('Erro ao salvar filtro:', error);
-            // Trate o erro aqui, se necessário
-          }
-        );
+      const idUser = parseInt(this.usuario.id);
+
+      this.filtroService.salvarFiltro(this.filtroASalvar, idUser).subscribe(
+        (response) => {
+          console.log('Filtro salvo com sucesso:', response);
+          // Adicione lógica adicional se necessário
+        },
+        (error) => {
+          console.error('Erro ao salvar filtro:', error);
+          // Trate o erro aqui, se necessário
+        }
+      );
     }
     const modalElement = document.getElementById('confirmacaoModal');
     const modal = bootstrap.Modal.getInstance(modalElement!);
@@ -300,6 +384,4 @@ exibirGabarito() {
   fecharCardConfirmacao(): void {
     this.mostrarCardConfirmacao = false;
   }
-
-  
 }
