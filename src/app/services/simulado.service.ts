@@ -5,21 +5,20 @@ import { environment } from 'src/environments/environment';
 import { Simulado } from '../sistema/simulado';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SimuladoService {
-
   apiURL: string = environment.apiURLBase + '/api/simulado';
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   // Método para cadastrar um novo simulado
-  cadastrarSimulado(simulado: Simulado): Observable<string> {
-    return this.http.post<string>(`${this.apiURL}/cadastro`, simulado);
+  cadastrarSimulado(idUser: number, simulado: Simulado): Observable<string> {
+    return this.http.post<string>(`${this.apiURL}/${idUser}`, simulado);
   }
 
   // Método para obter todos os simulados
-  obterSimulados(): Observable<Simulado[]> {
-    return this.http.get<Simulado[]>(this.apiURL);
+  obterSimulados(idUser: number): Observable<Simulado[]> {
+    return this.http.get<Simulado[]>(`${this.apiURL}/user/${idUser}`);
   }
 
   // Método para obter um simulado por ID

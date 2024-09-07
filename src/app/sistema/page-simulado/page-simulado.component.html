@@ -88,7 +88,7 @@
 </div>
 </div>
 
-<div class="modal fade" id="confirmacaoModal" tabindex="-1" aria-labelledby="confirmacaoModalLabel" aria-hidden="true">
+<div class="modal fade" id="confirmacaoModal" #confirmacaoModalRef tabindex="-1" aria-labelledby="confirmacaoModalLabel" aria-hidden="true">
   <div class="mr-box-save-lista-overlay"></div>
   <div class="modal-dialog">
     <div class="modal-content">
@@ -99,18 +99,18 @@
       <div class="modal-body">
         <form class="form-group">
           <div class="mb-3">
-            <label for="nomeSimulado" class="form-label">Nome <span>*</span></label>
-            <input type="text" class="form-control" id="nomeSimulado" [(ngModel)]="nomeSimulado" placeholder="Ex. Simulado de Óptica" required>
+            <label for="nomeFiltro" class="form-label">Nome <span>*</span></label>
+            <input type="text" class="form-control" id="nomeFiltro" #nomeFiltroInput placeholder="Ex. Simulado de Óptica" required>
           </div>
           <div class="mb-3">
-            <label for="descricaoSimulado" class="form-label">Assunto</label>
-            <input type="text" class="form-control" id="descricaoSimulado" [(ngModel)]="descricaoSimulado" placeholder="Ex. Vergência, objeto e imagem">
+            <label for="descricaoFiltro" class="form-label">Assunto</label>
+            <input type="text" class="form-control" id="descricaoFiltro" #descricaoFiltroInput placeholder="Ex. Vergência, objeto e imagem">
           </div>
         </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-success" (click)="confirmarSalvarSimulado()">Confirmar</button>
+        <button type="button" class="btn btn-success" (click)="confirmarSalvarSimulado(nomeFiltroInput.value, descricaoFiltroInput.value)">Confirmar</button>
       </div>
     </div>
   </div>

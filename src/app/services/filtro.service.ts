@@ -23,7 +23,6 @@ export class FiltroService {
 
   // Método para obter todos os filtros
   getFiltros(userId: number): Observable<FiltroDTO[]> {
-    console.log('userId: ' + userId);
     return this.http
       .get<FiltroDTO[]>(`${this.apiURL}/user/${userId}`)
       .pipe(catchError(this.handleError<FiltroDTO[]>('getFiltros', [])));

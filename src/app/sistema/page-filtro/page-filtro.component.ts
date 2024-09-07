@@ -13,6 +13,7 @@ import { Usuario } from 'src/app/login/usuario';
 export class PageFiltroComponent implements OnInit {
   filtros: FiltroDTO[] = [];
   usuario!: Usuario;
+  usuarioId!: number;
 
   constructor(
     private filtroService: FiltroService,
@@ -28,6 +29,7 @@ export class PageFiltroComponent implements OnInit {
     this.authService.obterUsuarioAutenticadoDoBackend().subscribe(
       (data) => {
         this.usuario = data;
+        this.usuarioId = parseInt(this.usuario.id);
         this.carregarFiltros();
       },
       (error) => {
@@ -37,9 +39,7 @@ export class PageFiltroComponent implements OnInit {
   }
 
   carregarFiltros(): void {
-    const idUser = parseInt(this.usuario.id);
-    console.log('idUser: ' + idUser);
-    this.filtroService.getFiltros(idUser).subscribe(
+    this.filtroService.getFiltros(this.usuarioId).subscribe(
       (filtros) => {
         this.filtros = filtros;
       },
