@@ -1,18 +1,24 @@
-import { Component, OnInit } from '@angular/core';
-import { TipoDeProva } from '../page-questoes/enums/tipoDeProva'; 
-import { getDescricaoAno, getDescricaoDificuldade, getDescricaoSubtema, getDescricaoTema, getDescricaoTipoDeProva } from '../page-questoes/enums/enum-utils';
-import { Ano } from '../page-questoes/enums/ano'; 
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { TipoDeProva } from '../page-questoes/enums/tipoDeProva';
+import {
+  getDescricaoAno,
+  getDescricaoDificuldade,
+  getDescricaoSubtema,
+  getDescricaoTema,
+  getDescricaoTipoDeProva,
+} from '../page-questoes/enums/enum-utils';
+import { Ano } from '../page-questoes/enums/ano';
 import { Dificuldade } from '../page-questoes/enums/dificuldade';
 import { Subtema } from '../page-questoes/enums/subtema';
 import { Tema } from '../page-questoes/enums/tema';
-import { Questao } from '../page-questoes/questao'; 
+import { Questao } from '../page-questoes/questao';
 import { QuestoesService } from 'src/app/services/questoes.service';
 import { Filtro } from '../filtro';
 import { FiltroService } from 'src/app/services/filtro.service';
-import { RespostaDTO } from '../RespostaDTO';  
+import { RespostaDTO } from '../RespostaDTO';
 import { Resposta } from '../Resposta';
 import { AuthService } from 'src/app/services/auth.service';
-import { Usuario } from 'src/app/login/usuario';  
+import { Usuario } from 'src/app/login/usuario';
 import { Simulado } from '../simulado';
 import { SimuladoService } from 'src/app/services/simulado.service';
 
@@ -21,22 +27,28 @@ declare var bootstrap: any;
 @Component({
   selector: 'app-page-simulado',
   templateUrl: './page-simulado.component.html',
-  styleUrls: ['./page-simulado.component.css']
+  styleUrls: ['./page-simulado.component.css'],
 })
 export class PageSimuladoComponent implements OnInit {
-
   nomeSimulado: string = '';
   descricaoSimulado: string = '';
-
 
   tempo: number = 0; // Contador de tempo em segundos
   intervalId: any; // Armazena o ID do intervalo para controlar o timer
   isSimuladoIniciado: boolean = false; // Controla se o simulado foi iniciado ou não
 
   questao: Questao = new Questao();
+  idsQuestoes: number[] = [];
   selectedOption: string = '';
 
   usuario!: Usuario;
+  usuarioId!: number;
+
+  @ViewChild('confirmacaoModalRef', { static: false })
+  confirmacaoModal!: ElementRef;
+
+  nomeFiltro: string = '';
+  descricaoFiltro: string = '';
 
   tiposDeProva = Object.values(TipoDeProva);
   anos = Object.values(Ano);
@@ -45,7 +57,7 @@ export class PageSimuladoComponent implements OnInit {
   temas = Object.values(Tema);
 
   message: string = '';
-  resposta: string = ''; 
+  resposta: string = '';
 
   quantidadeQuestoesSelecionada: number | null = null;
 
@@ -57,13 +69,13 @@ export class PageSimuladoComponent implements OnInit {
     tipoDeProva: null,
     subtema: null,
     tema: null,
-    palavraChave: null
+    palavraChave: null,
   };
 
   mostrarCardConfirmacao = false;
   filtroASalvar!: Filtro;
 
-  mostrarGabarito: boolean = false; 
+  mostrarGabarito: boolean = false;
 
   selectedAno: Ano | null = null;
   selectedDificuldade: Dificuldade | null = null;
@@ -87,20 +99,19 @@ export class PageSimuladoComponent implements OnInit {
     private filtroService: FiltroService,
     private simuladoService: SimuladoService,
     private authService: AuthService
-  ) { }
+  ) {}
 
   ngOnInit() {
     console.log('Componente inicializado');
     this.dados = this.obterDados();
     console.log('Dados:', this.dados);
+    this.obterPerfilUsuario();
   }
 
   obterDados() {
     // Simula a obtenção de dados
     return { exemplo: 'valor' };
   }
-  
-
 
   onOptionChange(texto: string): void {
     this.selectedOption = texto;
@@ -111,6 +122,7 @@ export class PageSimuladoComponent implements OnInit {
     this.authService.obterUsuarioAutenticadoDoBackend().subscribe(
       (data) => {
         this.usuario = data; // Armazenar os dados do perfil do usuário na variável 'usuario'
+        this.usuarioId = parseInt(this.usuario.id);
       },
       (error) => {
         console.error('Erro ao obter perfil do usuário:', error);
@@ -118,43 +130,48 @@ export class PageSimuladoComponent implements OnInit {
     );
   }
 
-
   responderQuestao(questao: Questao | null): void {
     if (!questao) {
       console.error('Questão atual é nula.');
       this.resposta = 'Nenhuma questão selecionada.';
       return;
     }
-  
+
     const respostaDTO: RespostaDTO = {
       questaoId: questao.id,
-      selecionarOpcao: this.selectedOption
+      selecionarOpcao: this.selectedOption,
     };
 
-    const idUser = parseInt(this.usuario.id);
-  
-    this.questoesService.checkAnswer(questao.id, idUser, respostaDTO).subscribe(
-      (resposta: Resposta) => {
-        console.log('Resposta do backend:', resposta);
-        console.log('correct:', resposta.correct);
-  
-        if (resposta.hasOwnProperty('correct')) {
-          this.isRespostaCorreta = resposta.correct;
-          this.resposta = resposta.correct ? 'Resposta correta!' : 'Resposta incorreta. Tente novamente.';
-        } else {
-          console.error('Resposta do backend não contém a propriedade correct.');
-          this.resposta = 'Ocorreu um erro ao verificar a resposta. Por favor, tente novamente mais tarde.';
+    this.questoesService
+      .checkAnswer(questao.id, this.usuarioId, respostaDTO)
+      .subscribe(
+        (resposta: Resposta) => {
+          console.log('Resposta do backend:', resposta);
+          console.log('correct:', resposta.correct);
+
+          if (resposta.hasOwnProperty('correct')) {
+            this.isRespostaCorreta = resposta.correct;
+            this.resposta = resposta.correct
+              ? 'Resposta correta!'
+              : 'Resposta incorreta. Tente novamente.';
+          } else {
+            console.error(
+              'Resposta do backend não contém a propriedade correct.'
+            );
+            this.resposta =
+              'Ocorreu um erro ao verificar a resposta. Por favor, tente novamente mais tarde.';
+          }
+        },
+        (error) => {
+          console.error('Erro ao verificar resposta:', error);
+          this.resposta =
+            'Ocorreu um erro ao verificar a resposta. Por favor, tente novamente mais tarde.';
         }
-      },
-      (error) => {
-        console.error('Erro ao verificar resposta:', error);
-        this.resposta = 'Ocorreu um erro ao verificar a resposta. Por favor, tente novamente mais tarde.';
-      }
-    );
+      );
   }
-  
+
   exibirGabarito() {
-    this.mostrarGabarito = true; 
+    this.mostrarGabarito = true;
   }
 
   getDescricaoTipoDeProva(tipoDeProva: TipoDeProva): string {
@@ -190,14 +207,14 @@ export class PageSimuladoComponent implements OnInit {
       tipoDeProva: null,
       subtema: null,
       tema: null,
-      palavraChave: null
+      palavraChave: null,
     };
     this.paginaAtual = 0;
   }
 
   filtrarQuestoes(): void {
     const filtros: any = {};
-  
+
     if (this.selectedAno) {
       filtros.ano = this.selectedAno;
     }
@@ -216,50 +233,44 @@ export class PageSimuladoComponent implements OnInit {
     if (this.palavraChave) {
       filtros.palavraChave = this.palavraChave;
     }
-  
+    if (this.quantidadeQuestoesSelecionada) {
+      filtros.qtdQuestoes = this.quantidadeQuestoesSelecionada;
+    }
+
     if (Object.keys(filtros).length === 0) {
       this.message = 'Por favor, selecione pelo menos um filtro.';
       this.questoes = [];
+      this.idsQuestoes = [];
       return;
     }
-  
-    this.questoesService.filtrarQuestoes(filtros, 0, 100).subscribe(
+
+    this.questoesService.filtrarSimulados(filtros, 0, 100).subscribe(
       (questoes: Questao[]) => {
         if (questoes.length === 0) {
-          if (filtros.ano && !filtros.tipoDeProva && !filtros.dificuldade && !filtros.subtema && !filtros.tema && !filtros.palavraChave) {
-            this.message = 'Nenhuma questão encontrada para o ano selecionado.';
-          } else if (filtros.tipoDeProva && !filtros.ano && !filtros.dificuldade && !filtros.subtema && !filtros.tema && !filtros.palavraChave) {
-            this.message = 'Nenhuma questão encontrada para o tipo de prova selecionado.';
-          } else if (filtros.dificuldade && !filtros.ano && !filtros.tipoDeProva && !filtros.subtema && !filtros.tema && !filtros.palavraChave) {
-            this.message = 'Nenhuma questão encontrada para a dificuldade selecionada.';
-          } else if (filtros.subtema && !filtros.ano && !filtros.tipoDeProva && !filtros.dificuldade && !filtros.tema && !filtros.palavraChave) {
-            this.message = 'Nenhuma questão encontrada para o subtema selecionado.';
-          } else if (filtros.tema && !filtros.ano && !filtros.tipoDeProva && !filtros.dificuldade && !filtros.subtema && !filtros.palavraChave) {
-            this.message = 'Nenhuma questão encontrada para o tema selecionado.';
-          } else if (filtros.palavraChave && !filtros.ano && !filtros.tipoDeProva && !filtros.dificuldade && !filtros.subtema && !filtros.tema) {
-            this.message = 'Nenhuma questão encontrada para a palavra-chave informada.';
-          } else {
-            this.message = 'Nenhuma questão encontrada para os filtros selecionados.';
-          }
+          this.message =
+            'Nenhuma questão encontrada para os filtros selecionados.';
           this.questoes = [];
+          this.idsQuestoes = [];
           this.questaoAtual = null;
         } else {
           this.message = '';
           this.questoes = questoes;
+          this.idsQuestoes = questoes.map((q) => q.id);
           this.paginaAtual = 0;
           this.questaoAtual = this.questoes[this.paginaAtual];
         }
-  
         this.resposta = '';
         this.mostrarGabarito = false;
       },
       (error) => {
         console.error('Erro ao filtrar questões:', error);
-        this.message = 'Ocorreu um erro ao filtrar questões. Por favor, tente novamente mais tarde.';
+        this.message =
+          'Ocorreu um erro ao filtrar questões. Por favor, tente novamente mais tarde.';
+        this.idsQuestoes = [];
       }
     );
   }
-  
+
   anteriorQuestao() {
     if (this.paginaAtual > 0) {
       this.paginaAtual--;
@@ -277,33 +288,33 @@ export class PageSimuladoComponent implements OnInit {
       this.resposta = '';
     }
   }
-  
-  confirmarSalvarSimulado(): void {
-    // const simulado = {
-    //   nomeSimulado: this.nomeSimulado,
-    //   assunto: this.descricaoSimulado,
-    //   qtdQuestoes: this.quantidadeQuestoesSelecionada,
-    //   ano: this.selectedAno,
-    //   tema: this.selectedTema,
-    //   dificuldade: this.selectedDificuldade,
-    //   tipoDeProva: this.selectedTipoDeProva,
-    //   subtema: this.selectedSubtema
-    // };
-  
-    // this.simuladoService.cadastrarSimulado(simulado).subscribe(
-    //   (response) => {
-    //     alert('Simulado cadastrado com sucesso!');
-    //   },
-    //   (error) => {
-    //     alert('Erro ao cadastrar o simulado. Por favor, tente novamente.');
-    //     console.error(error);
-    //   }
-    // );
-  }
-  
-  
-  
 
+  confirmarSalvarSimulado(
+    nomeSimulado: string,
+    descricaoSimulado: string
+  ): void {
+    const simulado: Simulado = {
+      nomeSimulado: nomeSimulado,
+      assunto: descricaoSimulado,
+      qtdQuestoes: this.quantidadeQuestoesSelecionada,
+      ano: this.selectedAno,
+      tema: this.selectedTema,
+      dificuldade: this.selectedDificuldade,
+      tipoDeProva: this.selectedTipoDeProva,
+      subtema: this.selectedSubtema,
+      questaoIds: this.idsQuestoes,
+    };
+
+    this.simuladoService.cadastrarSimulado(this.usuarioId, simulado).subscribe(
+      (response) => {
+        alert('Simulado cadastrado com sucesso!');
+      },
+      (error) => {
+        alert('Erro ao cadastrar o simulado. Por favor, tente novamente.');
+        console.error('Erro ao cadastrar o simulado:', error);
+      }
+    );
+  }
 
   abrirModal(): void {
     const modalElement = document.getElementById('confirmacaoModal');
@@ -314,8 +325,6 @@ export class PageSimuladoComponent implements OnInit {
       this.fecharCardConfirmacao();
     });
   }
-
- 
 
   fecharCardConfirmacao(): void {
     this.mostrarCardConfirmacao = false;
@@ -344,7 +353,9 @@ export class PageSimuladoComponent implements OnInit {
     const horas = Math.floor(segundos / 3600);
     const minutos = Math.floor((segundos % 3600) / 60);
     const segs = segundos % 60;
-    return `${this.formatarNumero(horas)}:${this.formatarNumero(minutos)}:${this.formatarNumero(segs)}`;
+    return `${this.formatarNumero(horas)}:${this.formatarNumero(
+      minutos
+    )}:${this.formatarNumero(segs)}`;
   }
 
   // Função auxiliar para formatar com dois dígitos
