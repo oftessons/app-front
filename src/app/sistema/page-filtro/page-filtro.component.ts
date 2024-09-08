@@ -1,52 +1,63 @@
 import { Component, OnInit } from '@angular/core';
-import { Filtro } from '../filtro';
+import { FiltroDTO } from '../filtroDTO'; // Atualize o caminho conforme necessário
 import { FiltroService } from 'src/app/services/filtro.service';
-import { Router, ActivatedRoute } from '@angular/router';
-
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
+import { Usuario } from 'src/app/login/usuario';
 
 @Component({
   selector: 'app-page-filtro',
   templateUrl: './page-filtro.component.html',
-  styleUrls: ['./page-filtro.component.css']
+  styleUrls: ['./page-filtro.component.css'],
 })
 export class PageFiltroComponent implements OnInit {
+  filtros: FiltroDTO[] = [];
+  usuario!: Usuario;
+  usuarioId!: number;
 
-  filtros: Filtro[] = [];
-
-  constructor(private filtroService: FiltroService,
+  constructor(
+    private filtroService: FiltroService,
     private router: Router,
-    private activatedRoute: ActivatedRoute
-  ) { }
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
-    this.carregarFiltros();
+    this.obterPerfilUsuario();
+  }
+
+  obterPerfilUsuario() {
+    this.authService.obterUsuarioAutenticadoDoBackend().subscribe(
+      (data) => {
+        this.usuario = data;
+        this.usuarioId = parseInt(this.usuario.id);
+        this.carregarFiltros();
+      },
+      (error) => {
+        console.error('Erro ao obter perfil do usuário:', error);
+      }
+    );
   }
 
   carregarFiltros(): void {
-    this.filtroService.getFiltros()
-      .subscribe(
-        filtros => {
-          this.filtros = filtros;
-        },
-        error => {
-          console.error('Erro ao carregar filtros:', error);
-          // Tratar erro aqui se necessário
-        }
-      );
+    this.filtroService.getFiltros(this.usuarioId).subscribe(
+      (filtros) => {
+        this.filtros = filtros;
+      },
+      (error) => {
+        console.error('Erro ao carregar filtros:', error);
+      }
+    );
   }
 
   deletarFiltro(id: number): void {
-    this.filtroService.deletarFiltro(id)
-      .subscribe(
-        () => {
-          // Após deletar com sucesso, recarregar os filtros
-          this.carregarFiltros();
-        },
-        error => {
-          console.error('Erro ao deletar filtro:', error);
-          // Tratar erro aqui se necessário
-        }
-      );
+    this.filtroService.deletarFiltro(id).subscribe(
+      () => {
+        this.carregarFiltros();
+      },
+      (error) => {
+        console.error('Erro ao deletar filtro:', error);
+      }
+    );
   }
 
   editarFiltro(id: number): void {

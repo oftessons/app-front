@@ -13,11 +13,10 @@ import { MatSelectModule } from '@angular/material/select';
 import { ChartsModule } from 'ng2-charts';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { CadastroQuestaoComponent } from './cadastro-questao/cadastro-questao.component';
-import {MatRadioModule} from '@angular/material/radio';
+import { MatRadioModule } from '@angular/material/radio';
 import { ListaQuestoesComponent } from './lista-questoes/lista-questoes.component';
 import { PageSimuladoComponent } from './page-simulado/page-simulado.component';
 import { MeusSimuladosComponent } from './meus-simulados/meus-simulados.component';
-
 
 @NgModule({
   declarations: [
@@ -29,7 +28,7 @@ import { MeusSimuladosComponent } from './meus-simulados/meus-simulados.componen
     CadastroQuestaoComponent,
     ListaQuestoesComponent,
     PageSimuladoComponent,
-    MeusSimuladosComponent
+    MeusSimuladosComponent,
   ],
   imports: [
     CommonModule,
@@ -39,9 +38,10 @@ import { MeusSimuladosComponent } from './meus-simulados/meus-simulados.componen
     MatSelectModule,
     MatRadioModule,
     ChartsModule,
-    NgxPaginationModule
-  ] , schemas: [
-    CUSTOM_ELEMENTS_SCHEMA// Add NO_ERRORS_SCHEMA here
-  ]
+    NgxPaginationModule,
+  ],
+  schemas: [
+    CUSTOM_ELEMENTS_SCHEMA, // Permite o uso de elementos personalizados
+  ],
 })
-export class SistemaModule { }
+export class SistemaModule {}

@@ -13,6 +13,7 @@ import { Usuario } from 'src/app/login/usuario';
 })
 export class PageDesempenhoComponent implements OnInit {
   usuario!: Usuario;
+  
   // Gráfico 1: Acertos e Erros por Tipo de Prova
   public barChartOptions1: ChartOptions = {
     responsive: true,
@@ -188,6 +189,12 @@ export class PageDesempenhoComponent implements OnInit {
             const dataMap = this.convertBackendDataToMap(data3);
             this.processChartData3(dataMap);
           });
+
+        this.questoesService
+          .getAcertosErrosPorTema(idUser)
+          .subscribe((data4) => {
+            this.processChartData4(data4);
+          });
       },
       (error) => {
         console.error('Erro ao obter perfil do usuário:', error);
@@ -234,11 +241,9 @@ export class PageDesempenhoComponent implements OnInit {
 
   private processChartData2(data: any): void {
     console.log('ProcessChartData2:', data);
-    // Mapear os temas para exibição no gráfico
     const temas = Object.values(TemaDescricoes);
     this.barChartLabels2 = temas;
 
-    // Garantir que a ordem dos dados corresponda à ordem dos temas
     const questoesFeitasData = temas.map((tema) => data[tema] || 0);
 
     this.barChartData2 = [
@@ -255,21 +260,28 @@ export class PageDesempenhoComponent implements OnInit {
 
   private processChartData4(data: any): void {
     console.log('ProcessChartData4:', data);
-    // Mapear os temas para exibição no gráfico
     const temas = Object.values(TemaDescricoes);
-    this.barChartLabels2 = temas;
+    this.barChartLabels4 = temas;
 
-    // Garantir que a ordem dos dados corresponda à ordem dos temas
-    const questoesFeitasData = temas.map((tema) => data[tema] || 0);
+    const acertosData = temas.map((tema) => data[tema]?.acertos || 0);
+    const errosData = temas.map((tema) => data[tema]?.erros || 0);
 
     this.barChartData4 = [
       {
-        data: questoesFeitasData,
-        label: 'Questões Feitas',
-        backgroundColor: '#D69C11',
-        borderColor: '#D69C11',
-        hoverBackgroundColor: '#FFBF23',
-        hoverBorderColor: '#FFBF23',
+        data: acertosData,
+        label: 'Acertos',
+        backgroundColor: '#1C9212',
+        borderColor: '#1C9212',
+        hoverBackgroundColor: '#113A87',
+        hoverBorderColor: '#113A87',
+      },
+      {
+        data: errosData,
+        label: 'Erros',
+        backgroundColor: '#3B5FA0',
+        borderColor: '#3B5FA0',
+        hoverBackgroundColor: '#667A9F',
+        hoverBorderColor: '#667A9F',
       },
     ];
   }
@@ -280,7 +292,6 @@ export class PageDesempenhoComponent implements OnInit {
     const errosData: number[] = new Array(12).fill(0);
 
     this.barChartLabels3.forEach((mes, index) => {
-      // Procurar o mês no formato MM/YYYY
       const mesData = data.get(this.getMonthYearString(index));
       if (mesData) {
         acertosData[index] = mesData.get('acertos') || 0;

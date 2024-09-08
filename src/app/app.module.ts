@@ -18,7 +18,6 @@ import { MatRadioModule } from '@angular/material/radio';
 import { ChartsModule } from 'ng2-charts';
 import { NgxPaginationModule } from 'ngx-pagination';
 
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -37,16 +36,16 @@ import { NgxPaginationModule } from 'ngx-pagination';
     MatSelectModule,
     MatRadioModule,
     ChartsModule,
-    NgxPaginationModule
+    NgxPaginationModule,
   ],
   providers: [
     AuthService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
-      multi: true
-    }
+      multi: true,
+    },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

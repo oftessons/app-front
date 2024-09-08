@@ -34,6 +34,10 @@ export class QuestoesService {
     );
   }
 
+  getAcertosErrosPorTema(idUser: number): Observable<any> {
+    return this.http.get(`${this.apiURL}/acertos-erros-tema/${idUser}`);
+  }
+
   salvar(formData: FormData ): Observable<any> {
     const headers = new HttpHeaders();
     // Não defina o Content-Type, o navegador cuidará disso
@@ -96,7 +100,23 @@ export class QuestoesService {
     params = params.set('size', size.toString());
   
     return this.http.get<Questao[]>(url, { params });
-  }  
+  }
+  
+  filtrarSimulados(filtros: any, page: number = 0, size: number = 10): Observable<Questao[]> {
+    const url = `${this.apiURL}/filtroSimulados`;
+    let params = new HttpParams();
+
+    for (const filtro in filtros) {
+      if (filtros.hasOwnProperty(filtro) && filtros[filtro] !== null) {
+        params = params.set(filtro, filtros[filtro]);
+      }
+    }
+
+    params = params.set('page', page.toString());
+    params = params.set('size', size.toString());
+
+    return this.http.get<Questao[]>(url, { params });
+  }
 
   consultarQuestao(filtros: any, page: number = 0, size: number = 10): Observable<Questao[]> {
     const url = `${this.apiURL}/consultar`;
