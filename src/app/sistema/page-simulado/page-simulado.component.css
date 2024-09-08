@@ -110,8 +110,44 @@
 
 .button-row {
     display: flex;
-    justify-content: end;
+    justify-content: flex-end; /* Alinha os botões à direita */
+    align-items: center;
     margin-top: 20px;
+}
+
+.right-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.btn-anterior,
+.btn-responder,
+.btn-proxima {
+    padding: 10px 20px;
+    width: 130px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    color: #fff;
+}
+
+.btn-anterior {
+    background-color: #2a4d7b;
+}
+
+.btn-proxima {
+    background-color: #3b5fa0;
+}
+
+.btn-responder {
+    background-color: #28a745;
+}
+
+.btn-anterior:disabled {
+    background-color: #9a9a9a;
+    cursor: not-allowed;
 }
 
 .icon {
@@ -288,14 +324,7 @@
 
 .button-row-filtro {
     display: flex;
-    justify-content: end;
-    margin-top: 20px;
-}
-
-.button-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    justify-content: flex-end;
     margin-top: 20px;
 }
 
@@ -306,7 +335,7 @@
 
 .right-buttons {
     display: flex;
-    justify-content: flex-end;
+    justify-content: flex-end; /* Alinha os botões à direita */
     gap: 10px;
 }
 
@@ -379,4 +408,56 @@
 
 .select-questoes {
     text-align: center;
+}
+
+.timer-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 10px;
+}
+
+.btn-iniciar,
+.btn-finalizar {
+    margin-right: 10px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    color: #fff;
+}
+
+.btn-iniciar {
+    background-color: #4CAF50;
+}
+
+.btn-finalizar {
+    background-color: #A02334;
+    color: #ffffff;
+}
+
+.btn-finalizar:disabled {
+    background-color: #9a9a9a;
+    cursor: not-allowed;
+}
+
+.buttons-simulado {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.tempo h3{
+    border: 2px solid #041e4e; /* Borda preta */
+    border-radius: 10px; /* Borda arredondada */
+    background-color: #041e4e; /* Fundo transparente */
+    color: #fff;
+    padding: 10px; /* Espaçamento interno para dar um pouco de respiro ao conteúdo */
+    text-align: center; /* Centralizar o texto */
+    display: inline-block; /* Para que o tamanho se ajuste ao conteúdo */
+    font-size: 15px;
 }

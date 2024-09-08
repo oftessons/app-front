@@ -23,8 +23,8 @@ export class LoginComponent {
   forgotEmail: string = '';
   showForgotPassword: boolean = false;
 
-  confirmPasswordError: string | null = null;
-  confirmPassword: string = '';
+  //confirmPasswordError: string | null = null;
+  //confirmPassword: string = '';
   passwordVisible: boolean = false;
   showTooltip: boolean = false;
   passwordValidations = {
@@ -102,10 +102,10 @@ export class LoginComponent {
   }
 
   // Validação de confirmação de senha
-  if (this.password !== this.confirmPassword) {
-    this.errors.push("As senhas não coincidem.");
-    return; // Interrompe a execução do método
-  }
+  //if (this.password !== this.confirmPassword) {
+  //  this.errors.push("As senhas não coincidem.");
+  //  return; // Interrompe a execução do método
+  //}
 
     const usuario: Usuario = new Usuario();
     usuario.username = this.username;
@@ -183,11 +183,11 @@ export class LoginComponent {
     }
   }
 
-  validateConfirmPassword() {
-    if (this.password !== this.confirmPassword) {
-      this.confirmPasswordError = 'As senhas não coincidem';
-    } else {
-      this.confirmPasswordError = null;
-    }
-  }
+  //validateConfirmPassword() {
+  //  if (this.password !== this.confirmPassword) {
+   //   this.confirmPasswordError = 'As senhas não coincidem';
+   // } else {
+    //  this.confirmPasswordError = null;
+   // }
+  //}
 }

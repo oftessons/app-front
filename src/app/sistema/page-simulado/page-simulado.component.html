@@ -88,9 +88,7 @@
 </div>
 </div>
 
-<!-- Modal de confirmação -->
-<div>
-<div class="modal fade" id="confirmacaoModal" tabindex="-1" aria-labelledby="confirmacaoModalLabel" aria-hidden="true">
+<div class="modal fade" id="confirmacaoModal" #confirmacaoModalRef tabindex="-1" aria-labelledby="confirmacaoModalLabel" aria-hidden="true">
   <div class="mr-box-save-lista-overlay"></div>
   <div class="modal-dialog">
     <div class="modal-content">
@@ -102,22 +100,22 @@
         <form class="form-group">
           <div class="mb-3">
             <label for="nomeFiltro" class="form-label">Nome <span>*</span></label>
-            <input type="text" class="form-control" id="nomeFiltro" placeholder="Ex. Óptica" required>
+            <input type="text" class="form-control" id="nomeFiltro" #nomeFiltroInput placeholder="Ex. Simulado de Óptica" required>
           </div>
           <div class="mb-3">
             <label for="descricaoFiltro" class="form-label">Assunto</label>
-            <input type="text" class="form-control" id="descricaoFiltro" placeholder="Ex. Vergência, objeto e imagem">
+            <input type="text" class="form-control" id="descricaoFiltro" #descricaoFiltroInput placeholder="Ex. Vergência, objeto e imagem">
           </div>
         </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-success" (click)="confirmarSalvarSimulado()">Confirmar</button>
+        <button type="button" class="btn btn-success" (click)="confirmarSalvarSimulado(nomeFiltroInput.value, descricaoFiltroInput.value)">Confirmar</button>
       </div>
     </div>
   </div>
 </div>
-</div>
+
 
 <!-- Exibição dos Resultados -->
 <div *ngIf="questaoAtual">
@@ -131,6 +129,16 @@
     <h3>Ano: {{ questaoAtual.ano }}</h3>
   </div>
   <div class="conteudo-questao">
+    <div class="timer-container">
+      <div class="buttons-simulado">
+          <button (click)="iniciarSimulado()" class="btn-iniciar">Iniciar Simulado</button>
+          <button (click)="finalizarSimulado()" class="btn-finalizar" [disabled]="!isSimuladoIniciado">Finalizar Simulado</button>
+      </div>
+      <div class="tempo">
+        <h3>Tempo: {{ formatarTempo(tempo) }}</h3>
+      </div> <!-- Temporizador centralizado -->
+  </div>
+
     <p>{{ questaoAtual.enunciadoDaQuestao }}</p>
     <img *ngIf="questaoAtual.fotoDaQuestao" [src]="questaoAtual.fotoDaQuestao" alt="Foto da questão" class="questao-foto">
     <p>{{ questaoAtual.afirmacaoUm }}</p>
@@ -154,9 +162,7 @@
         </div>
       </div>
     </div>
-    <div *ngIf="resposta" class="alert mt-3" [ngClass]="{'alert-success': isRespostaCorreta, 'alert-danger': !isRespostaCorreta}" role="alert">
-      {{ resposta }}
-    </div>
+    
     <div class="button-row">
       <div class="right-buttons">
         <button class="btn-anterior" (click)="anteriorQuestao()" [disabled]="paginaAtual === 0">Anterior</button>

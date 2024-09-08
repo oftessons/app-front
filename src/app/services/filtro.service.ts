@@ -1,47 +1,59 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
-import { Filtro } from '../sistema/filtro';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+
+// Importar a interface para o DTO Filtro
+import { FiltroDTO } from '../sistema/filtroDTO';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class FiltroService {
+  apiURL: string = environment.apiURLBase + '/api/filtro';
+  constructor(private http: HttpClient) {}
 
- 
-  apiURL: string = environment.apiURLBase + '/api/questoes';
-
-  constructor(private http: HttpClient) { }
-
-  salvarFiltro(filtro: Filtro): Observable<any> {
-    return this.http.post<any>(`${this.apiURL}`, filtro)
-      .pipe(
-        catchError(error => {
-          console.error('Erro ao salvar filtro:', error);
-          return throwError(error);
-        })
-      );
+  // Método para cadastrar um novo filtro
+  salvarFiltro(filtro: FiltroDTO, userId: number): Observable<string> {
+    return this.http
+      .post<string>(`${this.apiURL}/${userId}`, filtro)
+      .pipe(catchError(this.handleError<string>('salvarFiltro')));
   }
 
-  getFiltros(): Observable<Filtro[]> {
-    return this.http.get<Filtro[]>(`${this.apiURL}`)
-      .pipe(
-        catchError(error => {
-          console.error('Erro ao obter filtros:', error);
-          return throwError(error);
-        })
-      );
+  // Método para obter todos os filtros
+  getFiltros(userId: number): Observable<FiltroDTO[]> {
+    return this.http
+      .get<FiltroDTO[]>(`${this.apiURL}/user/${userId}`)
+      .pipe(catchError(this.handleError<FiltroDTO[]>('getFiltros', [])));
   }
 
-  deletarFiltro(id: number): Observable<any> {
-    return this.http.delete<any>(`${this.apiURL}/${id}`)
-      .pipe(
-        catchError(error => {
-          console.error('Erro ao deletar filtro:', error);
-          return throwError(error);
-        })
-      );
+  // Método para obter um filtro por ID
+  getFiltroById(id: number): Observable<FiltroDTO> {
+    return this.http
+      .get<FiltroDTO>(`${this.apiURL}/${id}`)
+      .pipe(catchError(this.handleError<FiltroDTO>('getFiltroById')));
+  }
+
+  // Método para deletar um filtro por ID
+  deletarFiltro(id: number): Observable<void> {
+    return this.http
+      .delete<void>(`${this.apiURL}/${id}`)
+      .pipe(catchError(this.handleError<void>('deletarFiltro')));
+  }
+
+  // Método para editar um filtro existente
+  editarFiltro(id: number, filtro: FiltroDTO): Observable<void> {
+    return this.http
+      .put<void>(`${this.apiURL}/${id}`, filtro)
+      .pipe(catchError(this.handleError<void>('editarFiltro')));
+  }
+
+  // Função para tratamento de erros
+  private handleError<T>(operation = 'operation', result?: T) {
+    return (error: any): Observable<T> => {
+      console.error(`${operation} failed: ${error.message}`);
+      return of(result as T);
+    };
   }
 }

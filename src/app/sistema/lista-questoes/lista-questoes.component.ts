@@ -57,14 +57,14 @@ export class ListaQuestoesComponent implements OnInit {
   }
 
   carregarFiltros(): void {
-    this.filtroService.getFiltros().subscribe(
-      (filtros) => {
-        this.filtros = filtros;
-      },
-      (error) => {
-        console.error('Erro ao carregar filtros:', error);
-      }
-    );
+    // this.filtroService.getFiltros().subscribe(
+    //   (filtros) => {
+    //     this.filtros = filtros;
+    //   },
+    //   (error) => {
+    //     console.error('Erro ao carregar filtros:', error);
+    //   }
+    // );
   }
 
   editarFiltro(id: number): void {
