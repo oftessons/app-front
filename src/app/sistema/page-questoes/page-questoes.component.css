@@ -111,7 +111,7 @@
 
 .button-row {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   margin-top: 20px;
 }
 
@@ -303,7 +303,7 @@
 
 .button-row-filtro {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   margin-top: 20px;
 }
 
@@ -328,9 +328,9 @@
 .btn-gabarito {
   padding: 10px 20px;
   width: 130px;
-  border: 2px solid #3B5FA0; /* Borda da cor especificada */
+  border: 2px solid #f4a261; /* Borda da cor especificada */
   border-radius: 5px;
-  background-color: transparent; /* Background transparente */
+  background-color: #f4a261; /* Background transparente */
   color: #000; /* Cor do texto preto */
   cursor: pointer;
   font-size: 16px;
@@ -338,8 +338,8 @@
 }
 
 .btn-gabarito:hover {
-  background-color: #0056b3;
-  color: #ccc;
+  background-color: #f4a261;
+  color: #464545;
 }
 
 .btn-anterior,
@@ -386,3 +386,56 @@
 
 
 
+.alternativa {
+  border-radius: 5px; /* Border radius for rounded corners */
+  padding: 10px; /* Padding for better spacing */
+  transition: background-color 0.3s, border-color 0.3s; /* Smooth transitions for background and border color */
+}
+
+
+.alternativa-certa {
+  background-color: #c8e6c9; /* Cor de fundo para alternativa correta */
+}
+
+.alternativa-errada {
+  background-color: #ffcdd2; /* Cor de fundo para alternativa errada */
+}
+
+
+.alternativa-certa {
+  background-color: #84d469; /* Light green background */
+  color: #080808; /* Dark green text */
+  border-color: #c3e6cb; /* Light green border */
+}
+
+.alternativa-errada {
+  background-color: #d73c54; /* Light red background */
+  color: #d0d0d0; /* Dark red text */
+  border-color: #f5c6cb; /* Light red border */
+}
+
+.alternativa-certa:hover,
+.alternativa-errada:hover {
+  cursor: pointer; /* Change cursor on hover */
+  background-color: #e2e6ea; /* Light grey background on hover for better UX */
+}
+
+.alternativa-input-group {
+  display: flex;
+  align-items: center;
+}
+
+.alternativa-input-group input[type="radio"] {
+  margin-right: 10px;
+}
+
+.alternativa-texto {
+  font-weight: bold;
+  font-size: 14px;
+  margin-right: 10px;
+}
+
+.alternativa-comentario {
+  font-size: 14px;
+  color: #000000;
+}

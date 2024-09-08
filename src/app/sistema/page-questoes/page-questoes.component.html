@@ -79,42 +79,13 @@
         <div class="button-row-filtro">
           <button type="submit" class="btn-filtrar">Filtrar</button>
           <button type="button" class="btn-filtrar-geral" (click)="LimparFiltro()">Limpar Filtro</button>
-          <button type="button" class="btn-salvar" (click)="abrirModal()">Salvar Filtro</button>
+         
         </div>
       </form>
     </div>
   </div>
 
-   <!-- Modal de confirmação -->
-   <div>
-    <div class="modal fade" id="confirmacaoModal" #confirmacaoModalRef tabindex="-1" aria-labelledby="confirmacaoModalLabel" aria-hidden="true">
-      <div class="mr-box-save-lista-overlay"></div>
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="confirmacaoModalLabel">Salvar Filtro</h5>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <form class="form-group">
-              <div class="mb-3">
-                <label for="nomeFiltro" class="form-label">Nome <span>*</span></label>
-                <input type="text" class="form-control" id="nomeFiltro" #nomeFiltroInput placeholder="Ex. Óptica" required>
-              </div>
-              <div class="mb-3">
-                <label for="descricaoFiltro" class="form-label">Assunto</label>
-                <input type="text" class="form-control" id="descricaoFiltro" #descricaoFiltroInput placeholder="Ex. Vergência, objeto e imagem">
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-            <button type="button" class="btn btn-success" (click)="confirmarSalvarFiltro(nomeFiltroInput.value, descricaoFiltroInput.value)">Confirmar</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>  
+
 
   <!-- Exibição dos Resultados -->
   <div *ngIf="questaoAtual">
@@ -123,7 +94,6 @@
     </div>
     <div class="questao">
       <div class="identificadores-questao">
-        <h3>Título: {{ questaoAtual.title }}</h3>
         <h3>ID: {{ questaoAtual.id }}</h3>
         <h3>Tema: {{ questaoAtual.tema }}</h3>
         <h3>Ano: {{ questaoAtual.ano }}</h3>
@@ -137,45 +107,51 @@
         <p>{{ questaoAtual.afirmacaoQuatro }}</p>
         <div class="row">
           <div class="col-md-12">
-            <div class="form-group">
+            <div class="alternativas-container">
               <label>Selecione a Alternativa:</label>
-              <div *ngFor="let alternativa of questaoAtual.alternativas; let i = index">
-                <input 
-                  type="radio" 
-                  name="alternativa" 
-                  [value]="alternativa.texto"
-                  [(ngModel)]="selectedOption" 
-                  (change)="onOptionChange(alternativa.texto)"
-                  [checked]="alternativa.texto === selectedOption">
-                {{ alternativa.texto }}
+              <div *ngFor="let alternativa of questaoAtual.alternativas; let i = index" class="alternativa"
+                [ngClass]="{
+                  'alternativa-certa': respostaVerificada && isRespostaCorreta && alternativa.texto === selectedOption,
+                  'alternativa-errada': respostaVerificada && !isRespostaCorreta && alternativa.texto === selectedOption
+                }">
+        
+                <div class="alternativa-input-group">
+                  <input 
+                    type="radio" 
+                    name="alternativa" 
+                    [value]="alternativa.texto"
+                    [(ngModel)]="selectedOption" 
+                    (change)="onOptionChange(alternativa.texto)"
+                    [checked]="alternativa.texto === selectedOption">
+                  <span class="alternativa-texto">{{ alternativa.texto }} ) </span>
+                  <span class="alternativa-comentario">{{ alternativa.comentario }}</span>
+                </div>
+              </div>
+        
+              <div *ngIf="mostrarGabarito">
+                <h2 style="margin-top: 10px;">Comentário da Questão</h2>
+                <img *ngIf="questaoAtual.fotoDaResposta" [src]="questaoAtual.fotoDaResposta" alt="Foto do Comentário" class="questao-foto">
+                <p>{{ questaoAtual.comentarioDaQuestaoUm }}</p>
+                <p>{{ questaoAtual.comentarioDaQuestaoDois }}</p>
+                <p>{{ questaoAtual.comentarioDaQuestaoTres }}</p>
+                <p>{{ questaoAtual.comentarioDaQuestaoQuatro }}</p>
+                <p>Referência: {{ questaoAtual.referenciaBi }}</p>
+                <p>Comentado por: {{ questaoAtual.comentadorDaQuestao }}</p>
+                <div class="row"></div>
+              </div>
+        
+              <div class="button-row">
+                <div class="left-buttons">
+                  <button *ngIf="resposta" class="btn-gabarito" (click)="exibirGabarito()">Gabarito</button>
+                </div>
+                <div class="right-buttons">
+                  <button class="btn-anterior" (click)="anteriorQuestao()" [disabled]="paginaAtual === 0">Anterior</button>
+                  <button class="btn-responder" (click)="questaoAtual && responderQuestao(questaoAtual)">Responder</button>
+                  <button class="btn-proxima" (click)="proximaQuestao()">Próxima</button>
+                </div>
               </div>
             </div>
           </div>
         </div>
-        <div *ngIf="resposta" class="alert mt-3" [ngClass]="{'alert-success': isRespostaCorreta, 'alert-danger': !isRespostaCorreta}" role="alert">
-          {{ resposta }}
-        </div>
-        <div *ngIf="mostrarGabarito">
-          <h2 style="margin-top: 10px;">Comentário da Questão</h2>
-          <img *ngIf="questaoAtual.fotoDaResposta" [src]="questaoAtual.fotoDaResposta" alt="Foto do Comentário" class="questao-foto">
-          <p>{{ questaoAtual.comentarioDaQuestaoUm }}</p>
-          <p>{{ questaoAtual.comentarioDaQuestaoDois }}</p>
-          <p>{{ questaoAtual.comentarioDaQuestaoTres }}</p>
-          <p>{{ questaoAtual.comentarioDaQuestaoQuatro }}</p>
-          <p>Referência: {{ questaoAtual.referenciaBi }}</p>
-          <p>Comentado por: {{ questaoAtual.comentadorDaQuestao }}</p>
-          <div class="row"></div>
-        </div>
-        <div class="button-row">
-          <div class="left-buttons">
-            <button *ngIf="resposta" class="btn-gabarito" (click)="exibirGabarito()">Gabarito</button>
-          </div>
-          <div class="right-buttons">
-            <button class="btn-anterior" (click)="anteriorQuestao()" [disabled]="paginaAtual === 0">Anterior</button>
-            <button class="btn-responder" (click)="questaoAtual && responderQuestao(questaoAtual)">Responder</button>
-            <button class="btn-proxima" (click)="proximaQuestao()">Próxima</button>
-          </div>
-        </div>        
-    </div>
-  </div>
+        
 </div>
