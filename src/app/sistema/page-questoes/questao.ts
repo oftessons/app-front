@@ -1,4 +1,4 @@
-import { Alternativa } from '../alternativa';
+import { Alternativa, AlternativaImagen } from '../alternativa';
 import { Ano } from './enums/ano';
 import { Tema } from './enums/tema';
 import { Dificuldade } from './enums/dificuldade';
@@ -10,13 +10,15 @@ export class Questao {
   id!: number;
   diaDoCadastro!: string;
   idUser!: number;
-  title!: string;
   enunciadoDaQuestao!: string;
   afirmacaoUm!: string;
   afirmacaoDois!: string;
   afirmacaoTres!: string;
   afirmacaoQuatro!: string;
-  assinale!: string;
+  fotoAfirmacaoUm!: string;
+  fotoAfirmacaoDois!: string;
+  fotoAfirmacaoTres!: string;
+  fotoAfirmacaoQuatro!: string;
   fotoDaQuestao!: File;
   fotoDaResposta!: File;
   comentarioDaQuestaoUm!: string;
@@ -31,22 +33,25 @@ export class Questao {
   relevancia!: Relevancia;
   tipoDeProva!: TipoDeProva;
   subtema!: Subtema;
-  palavraChave!: string;
   alternativas!: Alternativa[];
   alternativaCorreta?: Alternativa[];
-
+  alternativaImagems?:AlternativaImagen[];
+  tipoItemQuestao!:string;
+  tipoItemQuestaoImagem!: string;
   toJson(): string {
     return JSON.stringify({
       id: this.id,
       diaDoCadastro: this.diaDoCadastro,
       idUser: this.idUser,
-      title: this.title,
       enunciadoDaQuestao: this.enunciadoDaQuestao,
       afirmacaoUm: this.afirmacaoUm,
       afirmacaoDois: this.afirmacaoDois,
       afirmacaoTres: this.afirmacaoTres,
       afirmacaoQuatro: this.afirmacaoQuatro,
-      assinale: this.assinale,
+      fotoAfirmacaoUm: this.fotoAfirmacaoUm,
+      fotoAfirmacaoDois: this.fotoAfirmacaoDois,
+      fotoAfirmacaoTres: this.fotoAfirmacaoTres,
+      fotoAfirmacaoQuatro: this.fotoAfirmacaoQuatro,
       fotoDaQuestao: this.fotoDaQuestao,
       fotoDaResposta: this.fotoDaResposta,
       comentarioDaQuestaoUm: this.comentarioDaQuestaoUm,
@@ -61,9 +66,11 @@ export class Questao {
       relevancia: this.relevancia,
       tipoDeProva: this.tipoDeProva,
       subtema: this.subtema,
-      palavraChave: this.palavraChave,
       alternativas: this.alternativas,
-      alternativaCorreta: this.alternativaCorreta
+      alternativaCorreta: this.alternativaCorreta,
+      tipoQuestao:this.tipoItemQuestao,
+      tipoIntemQestaoImagem:this.tipoItemQuestaoImagem,
+      alternativaImagems:this.alternativaImagems
     });
   }
 }
