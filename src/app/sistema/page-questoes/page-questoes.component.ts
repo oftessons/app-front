@@ -39,6 +39,7 @@ export class PageQuestoesComponent implements OnInit {
   dificuldades = Object.values(Dificuldade);
   subtemas = Object.values(Subtema);
   temas = Object.values(Tema);
+  mensagemSucesso: string = '';
 
   message: string = '';
   resposta: string = ''; // Adiciona esta variável para armazenar a resposta
@@ -339,7 +340,7 @@ export class PageQuestoesComponent implements OnInit {
     if (!this.filtroASalvar) {
       this.filtroASalvar = {} as FiltroDTO;
     }
-
+  
     if (this.selectedAno) {
       this.filtroASalvar.ano = this.selectedAno;
     }
@@ -361,25 +362,34 @@ export class PageQuestoesComponent implements OnInit {
     if (descricaoFiltro) {
       this.filtroASalvar.assunto = descricaoFiltro;
     }
-
+  
     if (this.filtroASalvar) {
       const idUser = parseInt(this.usuario.id);
-
+  
       this.filtroService.salvarFiltro(this.filtroASalvar, idUser).subscribe(
         (response) => {
-          console.log('Filtro salvo com sucesso:', response);
-          // Adicione lógica adicional se necessário
+          // Exibir mensagem de sucesso
+          this.mensagemSucesso = 'Seu filtro foi salvo com sucesso!';
+  
+          // Esconder a mensagem após 5 segundos
+          setTimeout(() => {
+            this.mensagemSucesso = '';
+          }, 5000);
+  
+          // Fecha o modal automaticamente após sucesso
+          const modalElement = document.getElementById('confirmacaoModal');
+          const modalInstance = bootstrap.Modal.getInstance(modalElement!);
+          modalInstance.hide(); // Fecha o modal
         },
         (error) => {
+          // Exibir mensagem de erro
+          alert('Erro ao salvar o filtro. Por favor, tente novamente.');
           console.error('Erro ao salvar filtro:', error);
-          // Trate o erro aqui, se necessário
         }
       );
     }
-    const modalElement = document.getElementById('confirmacaoModal');
-    const modal = bootstrap.Modal.getInstance(modalElement!);
-    modal.hide();
   }
+  
 
   fecharCardConfirmacao(): void {
     this.mostrarCardConfirmacao = false;

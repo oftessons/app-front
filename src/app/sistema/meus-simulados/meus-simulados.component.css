@@ -13,6 +13,9 @@
 h5{
     color: #7E1313;
 }
+p.card-text{
+    margin-top: 5px;
+}
 
 .icon {
     width: 20px; /* Define a largura do ícone */

@@ -10,6 +10,14 @@
     font-family: 'Nunito Sans', sans-serif;
 }
 
+h5{
+  color: #7E1313;
+}
+p.card-text{
+  margin-top: 5px;
+}
+
+
 .icon {
     width: 20px; /* Define a largura do ícone */
     height: 20px; /* Define a altura do ícone */
