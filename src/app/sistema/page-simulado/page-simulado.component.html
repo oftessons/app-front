@@ -79,6 +79,11 @@
       {{ message }}
     </div>
 
+    <div *ngIf="mensagemSucesso" class="alert alert-success mt-3">
+      {{ mensagemSucesso }}
+    </div>
+    
+
     <div class="button-row-filtro">
       <button type="submit" class="btn-filtrar">Filtrar</button>
       <button type="button" class="btn-filtrar-geral" (click)="LimparFiltro()">Limpar Filtro</button>

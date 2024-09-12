@@ -87,6 +87,8 @@ export class PageSimuladoComponent implements OnInit {
   questoes: Questao[] = [];
   isFiltered = false;
   p: number = 1;
+  mensagemSucesso: string = '';
+
 
   isRespostaCorreta: boolean = false;
 
@@ -290,10 +292,7 @@ export class PageSimuladoComponent implements OnInit {
     }
   }
 
-  confirmarSalvarSimulado(
-    nomeSimulado: string,
-    descricaoSimulado: string
-  ): void {
+  confirmarSalvarSimulado(nomeSimulado: string, descricaoSimulado: string): void {
     const simulado: Simulado = {
       nomeSimulado: nomeSimulado,
       assunto: descricaoSimulado,
@@ -305,17 +304,32 @@ export class PageSimuladoComponent implements OnInit {
       subtema: this.selectedSubtema,
       questaoIds: this.idsQuestoes,
     };
-
+  
     this.simuladoService.cadastrarSimulado(this.usuarioId, simulado).subscribe(
       (response) => {
-        alert('Simulado cadastrado com sucesso!');
+        // Exibir mensagem de sucesso
+        this.mensagemSucesso = 'Seu simulado foi cadastrado com sucesso!';
+  
+        // Esconder a mensagem após 5 segundos
+        setTimeout(() => {
+          this.mensagemSucesso = '';
+        }, 5000);
+  
+        // Fecha o modal automaticamente após sucesso
+        const modalElement = document.getElementById('confirmacaoModal');
+        const modalInstance = bootstrap.Modal.getInstance(modalElement!);
+        modalInstance.hide(); // Fecha o modal
       },
       (error) => {
+        // Exibir mensagem de erro
         alert('Erro ao cadastrar o simulado. Por favor, tente novamente.');
         console.error('Erro ao cadastrar o simulado:', error);
       }
     );
   }
+  
+  
+  
 
   abrirModal(): void {
     const modalElement = document.getElementById('confirmacaoModal');

@@ -4,5 +4,5 @@ export const environment = {
   apiURLBase: 'https://back-api-y4kr.onrender.com',
   clientId: 'oftlessons',
   clientSecret: '@321',
-  obterTokenUrl: '/oauth/token'
+  obterTokenUrl: '/oauth/token',
 };
