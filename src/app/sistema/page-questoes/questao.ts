@@ -1,11 +1,10 @@
-import { Alternativa } from '../alternativa';
+import { Alternativa, AlternativaImagen } from '../alternativa';
 import { Ano } from './enums/ano';
 import { Tema } from './enums/tema';
 import { Dificuldade } from './enums/dificuldade';
 import { TipoDeProva } from './enums/tipoDeProva';
 import { Subtema } from './enums/subtema';
 import { Relevancia } from './enums/relevancia';
-
 export class Questao {
   id!: number;
   diaDoCadastro!: string;
@@ -16,6 +15,10 @@ export class Questao {
   afirmacaoDois!: string;
   afirmacaoTres!: string;
   afirmacaoQuatro!: string;
+  fotoAfirmacaoUm!: string;
+  fotoAfirmacaoDois!: string;
+  fotoAfirmacaoTres!: string;
+  fotoAfirmacaoQuatro!: string;
   assinale!: string;
   fotoDaQuestao!: File;
   fotoDaResposta!: File;
@@ -34,7 +37,9 @@ export class Questao {
   palavraChave!: string;
   alternativas!: Alternativa[];
   alternativaCorreta?: Alternativa[];
-
+  alternativaImagems?:AlternativaImagen[];
+  tipoItemQuestao!:string;
+  tipoItemQuestaoImagem!: string;
   toJson(): string {
     return JSON.stringify({
       id: this.id,
@@ -46,6 +51,10 @@ export class Questao {
       afirmacaoDois: this.afirmacaoDois,
       afirmacaoTres: this.afirmacaoTres,
       afirmacaoQuatro: this.afirmacaoQuatro,
+      fotoAfirmacaoUm: this.fotoAfirmacaoUm,
+      fotoAfirmacaoDois: this.fotoAfirmacaoDois,
+      fotoAfirmacaoTres: this.fotoAfirmacaoTres,
+      fotoAfirmacaoQuatro: this.fotoAfirmacaoQuatro,
       assinale: this.assinale,
       fotoDaQuestao: this.fotoDaQuestao,
       fotoDaResposta: this.fotoDaResposta,
@@ -63,7 +72,10 @@ export class Questao {
       subtema: this.subtema,
       palavraChave: this.palavraChave,
       alternativas: this.alternativas,
-      alternativaCorreta: this.alternativaCorreta
+      alternativaCorreta: this.alternativaCorreta,
+      tipoQuestao:this.tipoItemQuestao,
+      tipoIntemQestaoImagem:this.tipoItemQuestaoImagem,
+      alternativaImagems:this.alternativaImagems
     });
   }
 }

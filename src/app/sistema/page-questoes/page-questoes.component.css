@@ -7,13 +7,11 @@
   padding: 20px; /* Adicionei padding para espaçamento interno */
   margin-bottom: 10px;
 }
-
 .conteudo-questao p {
   padding: 10px; /* Espaçamento para o parágrafo */
   margin: 0; /* Remover margens padrão */
   font-size: 16px;
 }
-
 .questao-foto {
   max-width: 350px;
   height: auto;
@@ -21,7 +19,6 @@
   margin: 20px auto 0 auto; /* Centraliza a imagem horizontalmente com espaçamento superior */
   margin-bottom: 10px;
 }
-
 .identificadores-questao {
   display: flex;
   color: #101010;
@@ -31,41 +28,34 @@
   margin-bottom: 10px;
   align-items: center; /* Alinha os itens verticalmente no centro */
 }
-
 .identificadores-questao h3 {
   font-size: 14px;
   margin: 0 14px 0 22px;
 }
-
 .example-radio-group {
   display: flex;
   flex-direction: column;
   margin: 15px 0;
 }
-
 .example-radio-button {
   margin: 5px;
 }
-
 /* Restante do seu CSS */
 .container {
   max-width: 1300px;
   padding: 10px;
   font-family: "Nunito Sans", sans-serif;
 }
-
 .text-p {
   font-size: 20px;
   margin-top: 10px;
   font-family: "Nunito Sans", sans-serif;
 }
-
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-
 .btn-filters {
   padding: 10px 20px;
   background-color: #007bff;
@@ -74,34 +64,28 @@
   border-radius: 5px;
   cursor: pointer;
 }
-
 .btn-filters:hover {
   background-color: #0056b3;
 }
-
 .filters-container {
   margin-top: 20px;
   background: #909298;
   border-radius: 5px;
   padding: 50px;
 }
-
 .row {
   display: flex;
   justify-content: space-between;
   flex-direction: row;
 }
-
 .col {
   flex: 1;
   margin-right: 10px;
   width: 100%;
 }
-
 .col:last-child {
   margin-right: 0;
 }
-
 .form-select {
   width: 100%;
   padding: 10px;
@@ -111,7 +95,7 @@
 
 .button-row {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   margin-top: 20px;
 }
 
@@ -119,25 +103,20 @@
   margin-right: 10px;
   width: 20px;
 }
-
 .btn-secondary {
   background-color: #6c757d; /* Cor de fundo do botão Cancelar */
   color: #fff; /* Cor do texto do botão Cancelar */
 }
-
 .btn-secondary:hover {
   background-color: #5a6268; /* Cor de fundo do botão Cancelar no hover */
 }
-
 .btn-success {
   background-color: #28a745; /* Cor de fundo do botão Confirmar */
   color: #fff; /* Cor do texto do botão Confirmar */
 }
-
 .btn-success:hover {
   background-color: #218838; /* Cor de fundo do botão Confirmar no hover */
 }
-
 .btn-filtros {
   margin-top: 12px;
   padding: 10px 20px;
@@ -148,7 +127,6 @@
   border-radius: 5px;
   cursor: pointer;
 }
-
 .btn-filtrar {
   margin-top: 12px;
   margin-right: 10px;
@@ -160,7 +138,6 @@
   border-radius: 5px;
   cursor: pointer;
 }
-
 .btn-filtrar-geral {
   margin-top: 12px;
   padding: 10px 20px;
@@ -172,7 +149,6 @@
   border-radius: 5px;
   cursor: pointer;
 }
-
 .btn-salvar {
   margin-top: 12px;
   padding: 10px 20px;
@@ -184,7 +160,6 @@
   cursor: pointer;
   margin-right: 10px;
 }
-
 .btn {
   padding: 10px 20px;
   color: #fff;
@@ -193,26 +168,21 @@
   cursor: pointer;
   margin-right: 10px;
 }
-
 .btn:last-child {
   margin-right: 0;
 }
-
 .btn:hover {
   background-color: #0056b3;
 }
-
 .mat-form-field-appearance-fill .mat-form-field-flex {
   border-radius: 4px 4px 0 0;
   width: 280px;
 }
-
 .mat-form-field-type-mat-select:not(.mat-form-field-disabled)
   .mat-form-field-flex {
   cursor: pointer;
   background: aliceblue;
 }
-
 .form-control-input {
   display: block;
   width: 100%;
@@ -229,70 +199,57 @@
   border-radius: var(--bs-border-radius);
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
-
 ::ng-deep .mat-form-field-underline {
   display: none;
 }
-
 .palavra-chave {
   background-color: aliceblue;
   width: 450px;
   height: 50px;
   border-radius: 10px;
 }
-
 @media (max-width: 768px) {
   .col {
     width: 80%;
   }
-
   ::ng-deep
     .mat-form-field-type-mat-select:not(.mat-form-field-disabled)
     .mat-form-field-flex {
     width: 100%;
   }
-
   .custom-form-field,
   .palavra-chave {
     width: 100%;
   }
 }
-
 /* Estilos para o card de confirmação */
 .card-confirmacao {
   max-width: 400px;
   margin: 20px auto;
 }
-
 .card-confirmacao .card-body {
   padding: 20px;
 }
-
 .card-confirmacao .card-title {
   font-size: 1.25rem;
   font-weight: bold;
 }
-
 .card-confirmacao .card-text {
   margin-bottom: 20px;
 }
-
 .card-confirmacao .btn {
   margin-right: 10px;
 }
-
 .alert {
   padding: 14px;
   margin: 10px 0;
   border: 1px solid #f4a261;
   border-radius: 5px;
-
   &.alert-info {
     background-color: #f0f8ff;
     color: #000000;
     font-size: 14px;
   }
-
   &.alert-custom {
     background-color: #f4a261;
     color: #000000;
@@ -303,7 +260,7 @@
 
 .button-row-filtro {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   margin-top: 20px;
 }
 
@@ -313,24 +270,21 @@
   align-items: center;
   margin-top: 20px;
 }
-
 .left-buttons {
   display: flex;
   justify-content: flex-start;
 }
-
 .right-buttons {
   display: flex;
   justify-content: flex-end;
   gap: 10px; /* Espaço entre os botões da direita */
 }
-
 .btn-gabarito {
   padding: 10px 20px;
   width: 130px;
-  border: 2px solid #3B5FA0; /* Borda da cor especificada */
+  border: 2px solid #f4a261; /* Borda da cor especificada */
   border-radius: 5px;
-  background-color: transparent; /* Background transparente */
+  background-color: #f4a261; /* Background transparente */
   color: #000; /* Cor do texto preto */
   cursor: pointer;
   font-size: 16px;
@@ -338,8 +292,8 @@
 }
 
 .btn-gabarito:hover {
-  background-color: #0056b3;
-  color: #ccc;
+  background-color: #f4a261;
+  color: #464545;
 }
 
 .btn-anterior,
@@ -353,19 +307,15 @@
   font-size: 16px;
   color: #fff;
 }
-
 .btn-anterior {
   background-color: #2a4d7b;
 }
-
 .btn-proxima {
   background-color: #3b5fa0;
 }
-
 .btn-responder {
   background-color: #28a745;
 }
-
 .btn-anterior:disabled {
   background-color: #9a9a9a;
   cursor: not-allowed;
@@ -376,13 +326,56 @@
   font-size: 16px;
   border-color: #399918;
 }
-
 .alert-danger {
   background-color: #F5004F;
   color: #ffffff;
   font-size: 16px;
   border-color: #F5004F;
 }
+.alternativa {
+  border-radius: 5px; /* Border radius for rounded corners */
+  padding: 10px; /* Padding for better spacing */
+  transition: background-color 0.3s, border-color 0.3s; /* Smooth transitions for background and border color */
+}
 
 
+.alternativa-certa {
+  background-color: #c8e6c9; /* Cor de fundo para alternativa correta */
+}
 
+.alternativa-errada {
+  background-color: #ffcdd2; /* Cor de fundo para alternativa errada */
+}
+
+
+.alternativa-certa {
+  background-color: #84d469; /* Light green background */
+  color: #080808; /* Dark green text */
+  border-color: #c3e6cb; /* Light green border */
+}
+.alternativa-errada {
+  background-color: #d73c54; /* Light red background */
+  color: #d0d0d0; /* Dark red text */
+  border-color: #f5c6cb; /* Light red border */
+}
+.alternativa-certa:hover,
+.alternativa-errada:hover {
+  cursor: pointer; /* Change cursor on hover */
+  background-color: #e2e6ea; /* Light grey background on hover for better UX */
+}
+.alternativa-input-group {
+  display: flex;
+  align-items: center;
+}
+.alternativa-input-group input[type="radio"] {
+  margin-right: 10px;
+}
+.alternativa-texto {
+  font-weight: bold;
+  font-size: 14px;
+  margin-right: 10px;
+}
+.alternativa-comentario {
+  font-size: 14px;
+  color: #000000;
+}

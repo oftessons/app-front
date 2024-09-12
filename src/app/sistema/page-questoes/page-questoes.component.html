@@ -144,43 +144,49 @@
           <div class="col-md-12">
             <div class="form-group">
               <label>Selecione a Alternativa:</label>
-              <div *ngFor="let alternativa of questaoAtual.alternativas; let i = index">
-                <input 
-                  type="radio" 
-                  name="alternativa" 
-                  [value]="alternativa.texto"
-                  [(ngModel)]="selectedOption" 
-                  (change)="onOptionChange(alternativa.texto)"
-                  [checked]="alternativa.texto === selectedOption">
-                {{ alternativa.texto }}
+
+                <div *ngFor="let alternativa of questaoAtual.alternativas; let i = index" class="alternativa"
+                [ngClass]="{
+                  'alternativa-certa': respostaVerificada && isRespostaCorreta && alternativa.texto === selectedOption,
+                  'alternativa-errada': respostaVerificada && !isRespostaCorreta && alternativa.texto === selectedOption
+                }">
+
+                <div class="alternativa-input-group">
+                  <input 
+                    type="radio" 
+                    name="alternativa" 
+                    [value]="alternativa.texto"
+                    [(ngModel)]="selectedOption" 
+                    (change)="onOptionChange(alternativa.texto)"
+                    [checked]="alternativa.texto === selectedOption">
+                  <span class="alternativa-texto">{{ alternativa.texto }} ) </span>
+                  <span class="alternativa-comentario">{{ alternativa.comentario }}</span>
+                </div>
+              </div>
+
+              <div *ngIf="mostrarGabarito">
+                <h2 style="margin-top: 10px;">Comentário da Questão</h2>
+                <img *ngIf="questaoAtual.fotoDaResposta" [src]="questaoAtual.fotoDaResposta" alt="Foto do Comentário" class="questao-foto">
+                <p>{{ questaoAtual.comentarioDaQuestaoUm }}</p>
+                <p>{{ questaoAtual.comentarioDaQuestaoDois }}</p>
+                <p>{{ questaoAtual.comentarioDaQuestaoTres }}</p>
+                <p>{{ questaoAtual.comentarioDaQuestaoQuatro }}</p>
+                <p>Referência: {{ questaoAtual.referenciaBi }}</p>
+                <p>Comentado por: {{ questaoAtual.comentadorDaQuestao }}</p>
+                <div class="row"></div>
+              </div>
+
+              <div class="button-row">
+                <div class="left-buttons">
+                  <button *ngIf="resposta" class="btn-gabarito" (click)="exibirGabarito()">Gabarito</button>
+                </div>
+                <div class="right-buttons">
+                  <button class="btn-anterior" (click)="anteriorQuestao()" [disabled]="paginaAtual === 0">Anterior</button>
+                  <button class="btn-responder" (click)="questaoAtual && responderQuestao(questaoAtual)">Responder</button>
+                  <button class="btn-proxima" (click)="proximaQuestao()">Próxima</button>
+                </div>
               </div>
             </div>
           </div>
         </div>
-        <div *ngIf="resposta" class="alert mt-3" [ngClass]="{'alert-success': isRespostaCorreta, 'alert-danger': !isRespostaCorreta}" role="alert">
-          {{ resposta }}
-        </div>
-        <div *ngIf="mostrarGabarito">
-          <h2 style="margin-top: 10px;">Comentário da Questão</h2>
-          <img *ngIf="questaoAtual.fotoDaResposta" [src]="questaoAtual.fotoDaResposta" alt="Foto do Comentário" class="questao-foto">
-          <p>{{ questaoAtual.comentarioDaQuestaoUm }}</p>
-          <p>{{ questaoAtual.comentarioDaQuestaoDois }}</p>
-          <p>{{ questaoAtual.comentarioDaQuestaoTres }}</p>
-          <p>{{ questaoAtual.comentarioDaQuestaoQuatro }}</p>
-          <p>Referência: {{ questaoAtual.referenciaBi }}</p>
-          <p>Comentado por: {{ questaoAtual.comentadorDaQuestao }}</p>
-          <div class="row"></div>
-        </div>
-        <div class="button-row">
-          <div class="left-buttons">
-            <button *ngIf="resposta" class="btn-gabarito" (click)="exibirGabarito()">Gabarito</button>
-          </div>
-          <div class="right-buttons">
-            <button class="btn-anterior" (click)="anteriorQuestao()" [disabled]="paginaAtual === 0">Anterior</button>
-            <button class="btn-responder" (click)="questaoAtual && responderQuestao(questaoAtual)">Responder</button>
-            <button class="btn-proxima" (click)="proximaQuestao()">Próxima</button>
-          </div>
-        </div>        
-    </div>
-  </div>
 </div>

@@ -9,7 +9,6 @@ import { Relevancia } from '../page-questoes/enums/relevancia';
 import { QuestoesService } from 'src/app/services/questoes.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Alternativa } from '../alternativa';
-
 @Component({
   selector: 'app-cadastro-questao',
   templateUrl: './cadastro-questao.component.html',
@@ -17,7 +16,6 @@ import { Alternativa } from '../alternativa';
 })
 export class CadastroQuestaoComponent implements OnInit {
   formData = new FormData();
-
   questaoDTO = new Questao();
   successMessage: string | null = null;
   errorMessage: string | null = null;
@@ -29,6 +27,7 @@ export class CadastroQuestaoComponent implements OnInit {
   fotoDaRespostaTres: File | null = null;
   imagePreviews: { [key: string]: string | ArrayBuffer | null } = {};
   id!: number;
+  selectedAlternativa: number | undefined;
 
   selectedAlternativeIndex: number = -3;
 
@@ -39,19 +38,51 @@ export class CadastroQuestaoComponent implements OnInit {
   tiposDeProva: string[] = Object.values(TipoDeProva);
   relevancias: string[] = Object.values(Relevancia);
 
+  selectedImage: string='';
+  uploadedImage: string='';
+
+
   constructor(
     private questoesService: QuestoesService,
     private router: Router,
     private activatedRoute: ActivatedRoute
   ) { }
-
   ngOnInit(): void {
     this.questaoDTO.alternativas = [
-      { id: 1, texto: 'A', correta: false },
-      { id: 2, texto: 'B', correta: false },
-      { id: 3, texto: 'C', correta: false },
-      { id: 4, texto: 'D', correta: false }
+      {
+        id: 1, texto: 'A', correta: false,
+        comentario: ''
+      },
+      {
+        id: 2, texto: 'B', correta: false,
+        comentario: ''
+      },
+      {
+        id: 3, texto: 'C', correta: false,
+        comentario: ''
+      },
+      {
+        id: 4, texto: 'D', correta: false,
+        comentario: ''
+      }
     ];
+
+    this.questaoDTO.alternativaImagems = [
+      { id: 1, texto: '1', correta: false },
+      { id: 2, texto: '2', correta: false },
+      { id: 3, texto: '3', correta: false },
+      { id: 4, texto: '4', correta: false }
+    ];
+
+
+    //Selecion o tem texto por defaault
+    this.questaoDTO.tipoItemQuestao='texto'
+    this.questaoDTO.tipoItemQuestaoImagem='texto'
+
+  }
+
+   onAlternativaChange(index: number) {
+    this.selectedAlternativa = index;
   }
 
   carregarQuestao(id: number): void {
@@ -68,7 +99,6 @@ export class CadastroQuestaoComponent implements OnInit {
       }
     );
   }
-
   onFileSelected(event: any, field: string) {
     const file = event.target.files[0];
     if (file) {
@@ -94,7 +124,6 @@ export class CadastroQuestaoComponent implements OnInit {
         default:
           break;
       }
-
       const reader = new FileReader();
       reader.onload = () => {
         this.imagePreviews[field] = reader.result;
@@ -103,7 +132,6 @@ export class CadastroQuestaoComponent implements OnInit {
       reader.readAsDataURL(file);
     }
   }
-
   onDrop(event: DragEvent, field: string) {
     event.preventDefault();
     const file = event.dataTransfer?.files[0];
@@ -116,19 +144,23 @@ export class CadastroQuestaoComponent implements OnInit {
       reader.readAsDataURL(file);
     }
   }
-
   onDragOver(event: DragEvent) {
     event.preventDefault();
   }
-
   updateCorrectAlternative(index: number): void {
     this.questaoDTO.alternativas.forEach((alt, i) => {
       alt.correta = i === index;
     });
     console.log('Alternativa correta atualizada:', this.questaoDTO.alternativas);
   }
-
   markCorrect(index: number): void {
+    this.updateCorrectAlternative(index);
+    console.log('Alternativa correta marcada:', this.questaoDTO.alternativas);
+    console.log('Alternativa correta selecionada:', index);
+    this.questaoDTO.alternativaCorreta = [this.questaoDTO.alternativas[index]];
+  }
+
+    markCorrectImage(index: number): void {
     this.updateCorrectAlternative(index);
     console.log('Alternativa correta marcada:', this.questaoDTO.alternativas);
     console.log('Alternativa correta selecionada:', index);
@@ -146,7 +178,6 @@ export class CadastroQuestaoComponent implements OnInit {
     console.debug('Enviando formulário com dados da questão:', this.formData);
     console.log('CLASSE ', JSON.stringify(this.questaoDTO));
     this.formData.append('questaoDTO', onjetojson);
-
     this.questoesService.salvar(this.formData).subscribe(
       response => {
         this.successMessage = 'Questão salva com sucesso!';
@@ -159,13 +190,11 @@ export class CadastroQuestaoComponent implements OnInit {
         console.error('Erro ao salvar a questão:', error);
       }
     );
-
     console.log('Dados da questão antes de enviar:', {
       title: this.questaoDTO.title,
       alternativas: this.questaoDTO.alternativas
     });
   }
-
   extractErrorMessage(errorResponse: any): string {
     if (errorResponse.error instanceof ErrorEvent) {
       return `Erro: ${errorResponse.error.message}`;
@@ -175,4 +204,41 @@ export class CadastroQuestaoComponent implements OnInit {
       return `Código de erro: ${errorResponse.status}\nMensagem: ${errorResponse.message}`;
     }
   }
+
+  // handleImageChange(event: any, index: number) {
+  // const file = event.target.files[0];
+  //   const reader = new FileReader();
+  //   reader.onload = () => {
+  //     this.questaoDTO.alternativas[index].imagemUrl = reader.result as string;
+  //   };
+  //   reader.readAsDataURL(file);
+  // }
+
+  handleImageChange(event: any, index: number) {
+  const file = event.target.files[0];
+  const reader = new FileReader();
+  reader.onload = () => {
+    this.uploadedImage = reader.result as string;
+    this.questaoDTO.alternativas[index].imagemUrl = this.uploadedImage;
+  };
+  reader.readAsDataURL(file);
+}
+
+
+updateTipoItemQuestaoImagem(tipo: string) {
+  this.questaoDTO.tipoItemQuestaoImagem = tipo;
+}
+
+
+onFileSelectedImage(event: any, identifier: string) {
+  const file = event.target.files[0];
+  const reader = new FileReader();
+  reader.onload = () => {
+    this.imagePreviews[identifier] = reader.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+
+
 }
