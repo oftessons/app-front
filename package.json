@@ -27,6 +27,7 @@
     "jquery": "^3.5.0",
     "ng2-charts": "^2.4.0",
     "ngx-pagination": "^5.0.0",
+    "oftlessons-app": "file:",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
     "zone.js": "~0.11.4"
