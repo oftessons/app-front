@@ -103,6 +103,7 @@ export class PageSimuladoComponent implements OnInit {
     private authService: AuthService
   ) {}
 
+
   ngOnInit() {
     console.log('Componente inicializado');
     this.dados = this.obterDados();

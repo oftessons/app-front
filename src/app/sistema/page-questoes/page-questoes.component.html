@@ -144,13 +144,11 @@
           <div class="col-md-12">
             <div class="form-group">
               <label>Selecione a Alternativa:</label>
-
                 <div *ngFor="let alternativa of questaoAtual.alternativas; let i = index" class="alternativa"
                 [ngClass]="{
                   'alternativa-certa': respostaVerificada && isRespostaCorreta && alternativa.texto === selectedOption,
                   'alternativa-errada': respostaVerificada && !isRespostaCorreta && alternativa.texto === selectedOption
                 }">
-
                 <div class="alternativa-input-group">
                   <input 
                     type="radio" 

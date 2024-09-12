@@ -47,7 +47,6 @@
           <thead>
             <tr>
               <th>ID</th>
-              <th>Título</th>
               <th>Ano</th>
               <th>Tipo de Prova</th>
               <th>Comentador da Questão</th>
@@ -57,7 +56,6 @@
           <tbody>
             <tr *ngFor="let questao of questoes | paginate: { itemsPerPage: pageSize, currentPage: page }">
               <td>{{ questao.id }}</td>
-              <td>{{ questao.title }}</td>
               <td>{{ questao.ano }}</td>
               <td>{{ questao.tipoDeProva }}</td>
               <td>{{ questao.comentadorDaQuestao }}</td>
@@ -143,7 +141,7 @@
         <ng-container [ngSwitch]="modalType">
           <ng-container *ngSwitchCase="'deleteQuestao'">
             <ng-container *ngIf="questaoSelecionada">
-              Deseja realmente excluir a questão {{ questaoSelecionada.title }}?
+              Deseja realmente excluir a questão {{ questaoSelecionada.id }}?
             </ng-container>
           </ng-container>
           <ng-container *ngSwitchCase="'deleteFiltro'">
