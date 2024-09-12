@@ -1,5 +1,4 @@
 import { Questao } from "./page-questoes/questao";
-
 export class Alternativa {
   id?: number;
   texto!: string;
@@ -17,4 +16,3 @@ export class AlternativaImagen {
   imagemUrl?: string;
   comentario?: string;  // Adiciona o campo para armazenar o comentário de cada alternativa com imagem
 }
-

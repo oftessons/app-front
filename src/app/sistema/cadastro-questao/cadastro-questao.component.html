@@ -105,7 +105,7 @@
           </div>
         </div>
       </div>
-      
+
       <div>
         <hr class="line">
         <span class="div-section">
@@ -169,7 +169,7 @@
           </div>
         </div>
 
-    
+
       </div>
       <div *ngIf="questaoDTO.tipoItemQuestao === 'imagem'">
         <div class="row">
@@ -252,7 +252,15 @@
             </div>
           </div>
         </div>
-    
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Assinale: </label>
+              <input type="text" class="form-control" name="assinale" [(ngModel)]="questaoDTO.assinale"
+                placeholder="Digite o campo de assinale aqui" />
+            </div>
+          </div>
+        </div>
       </div>
       <div>
         <hr class="line">
@@ -261,13 +269,11 @@
         </span>
         <hr class="line">
       </div>
-
       <div class="cont-imgs">
         <div class="row">
           <div class="col-md-10">
             <div class="form-group">
               <div class="image-upload" (drop)="onDrop($event, 'fotoDaQuestao')" (dragover)="onDragOver($event)">
-
                 <input type="file" id="fotoDaQuestao" name="fotoDaQuestao"
                   (change)="onFileSelected($event, 'fotoDaQuestao')" accept="image/*" style="display: none;" />
                 <label for="fotoDaQuestao">
@@ -286,7 +292,7 @@
         </div>
       </div>
 
-  
+
 
       <div>
         <span class="div-section">
@@ -294,7 +300,6 @@
         </span>
         <hr class="line">
       </div>
-
       <div class="row">
         <div class="col-md-6">
           <label>Marque a Alternativa Correta da Questão:</label>
@@ -319,7 +324,7 @@
               </div>
             </div>
           </div>
-          
+
 
           <div *ngIf="questaoDTO.tipoItemQuestaoImagem=== 'imagem'">
             <div *ngFor="let alternativa of questaoDTO.alternativas; let i = index">
@@ -343,7 +348,6 @@
               </div>
             </div>
           </div>
-
         </div>
       </div>
 
@@ -356,9 +360,9 @@
         <hr class="line">
       </div>
 
-    
 
-  
+
+
 
       <div class="row">
         <div class="col-md-6">
