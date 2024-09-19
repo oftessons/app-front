@@ -95,6 +95,16 @@ export class LoginComponent {
     passwordValidationErrors.push("O campo de login é obrigatório.");
   }
 
+  // Validação de campo de email
+  if (!this.email) {
+    passwordValidationErrors.push("O campo de email é obrigatório.");
+  }
+
+  // Validação de campo de nome
+  if (!this.nome) {
+    passwordValidationErrors.push("O campo de nome é obrigatório.");
+  }
+
   // Se houver erros de validação, armazene-os em this.errors e não prossiga
   if (passwordValidationErrors.length > 0) {
     this.errors = passwordValidationErrors;
