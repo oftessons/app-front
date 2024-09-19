@@ -113,6 +113,9 @@ export class LoginComponent {
     usuario.email = this.email;
     usuario.nome = this.nome;
     usuario.confirmPassword = this.confirmPassword;
+    usuario.telefone = this.telefone;
+    usuario.cidade = this.cidade;
+    usuario.estado = this.estado;
     this.authService
         .salvar(usuario)
         .subscribe( response => {
@@ -124,6 +127,9 @@ export class LoginComponent {
           this.email = '';
           this.nome = '';
           this.confirmPassword = '';
+          this.telefone = '';
+          this.cidade = '';
+          this.estado = '';
           this.errors = []
         },  errorResponse => {
           if (errorResponse.status === 401) {
