@@ -137,7 +137,10 @@ export class LoginComponent {
               this.errors = ['Sessão expirada. Por favor, faça login novamente.'];
               localStorage.removeItem('access_token'); // Remove o token expirado
               this.router.navigate(['/login']); // Redireciona para a página de login
-          } else {
+          }else if (errorResponse.status === 400) {
+            // Exibe a mensagem de erro vinda do back-end
+            this.errors = [errorResponse.error];
+          }else {
               this.errors = ['Erro ao cadastrar o usuário.'];
           }
       }
