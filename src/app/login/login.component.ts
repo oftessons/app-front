@@ -23,8 +23,8 @@ export class LoginComponent {
   forgotEmail: string = '';
   showForgotPassword: boolean = false;
 
-  //confirmPasswordError: string | null = null;
-  //confirmPassword: string = '';
+  confirmPasswordError: string | null = null;
+  confirmPassword: string = '';
   passwordVisible: boolean = false;
   showTooltip: boolean = false;
   passwordValidations = {
@@ -102,28 +102,40 @@ export class LoginComponent {
   }
 
   // Validação de confirmação de senha
-  //if (this.password !== this.confirmPassword) {
-  //  this.errors.push("As senhas não coincidem.");
-  //  return; // Interrompe a execução do método
-  //}
+  if (this.password !== this.confirmPassword) {
+      this.errors.push("As senhas não coincidem.");
+      return; // Interrompe a execução do método
+  }
 
     const usuario: Usuario = new Usuario();
     usuario.username = this.username;
     usuario.password = this.password;
     usuario.email = this.email;
+    usuario.nome = this.nome;
+    usuario.confirmPassword = this.confirmPassword;
     this.authService
         .salvar(usuario)
         .subscribe( response => {
-            this.mensagemSucesso = "Cadastro realizado com sucesso! Efetue o login.";
-            this.cadastrando = false;
-            this.username = '';
-            this.password = '';
-            this.email = '';
-            this.errors = []
-        }, errorResponse => {
-            // this.mensagemSucesso = "Cadastro realizado com sucesso! Efetue o login.";
-            this.errors = errorResponse.error.errors;
-        })
+          console.log('Resposta da API:', response);
+          this.mensagemSucesso = "Cadastro realizado com sucesso! Efetue o login.";
+          this.cadastrando = false;
+          this.username = '';
+          this.password = '';
+          this.email = '';
+          this.nome = '';
+          this.confirmPassword = '';
+          this.errors = []
+        },  errorResponse => {
+          if (errorResponse.status === 401) {
+              // Trata o erro de token expirado
+              this.errors = ['Sessão expirada. Por favor, faça login novamente.'];
+              localStorage.removeItem('access_token'); // Remove o token expirado
+              this.router.navigate(['/login']); // Redireciona para a página de login
+          } else {
+              this.errors = ['Erro ao cadastrar o usuário.'];
+          }
+      }
+    );
   }
 
 
@@ -183,11 +195,11 @@ export class LoginComponent {
     }
   }
 
-  //validateConfirmPassword() {
-  //  if (this.password !== this.confirmPassword) {
-   //   this.confirmPasswordError = 'As senhas não coincidem';
-   // } else {
-    //  this.confirmPasswordError = null;
-   // }
-  //}
+  validateConfirmPassword() {
+    if (this.password !== this.confirmPassword) {
+      this.confirmPasswordError = 'As senhas não coincidem';
+    } else {
+      this.confirmPasswordError = null;
+    }
+  }
 }

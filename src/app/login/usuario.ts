@@ -8,4 +8,5 @@ export class Usuario {
     cidade!: string;
     estado!: string;
     nome!: string;
+    confirmPassword!: string;
 }

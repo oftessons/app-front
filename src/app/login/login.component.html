@@ -67,7 +67,7 @@
                                             <label for="password" class="small mb-1" style="font-size: 1.2em;">Senha *</label>
                                             <input type="password" id="password" name="password" [(ngModel)]="password" class="form-control py-2 responsive-input" placeholder="Digite sua senha" required 
                                             (input)="validatePassword()" (focus)="showTooltip = true" (blur)="showTooltip = false"/>
-                                            <div *ngIf="errors.length > 0" class="password-errors">
+                                            <div class="password-errors">
                                                 <div *ngFor="let error of errors" class="error-tooltip">{{error}}</div>
                                             </div>
                                             <!-- Tooltip para Regras de Senha -->
@@ -98,6 +98,10 @@
                                             </div>
                                         </div>
 
+                                        <div class="form-group col-sm-12 col-md-6">
+                                            <label class="small mb-1" style="font-size: 1.2em;">Confirmar senha</label>
+                                            <input type="password" name="confirmPassword" [(ngModel)]="confirmPassword" class="form-control py-2 responsive-input" placeholder="Confirme sua senha"  />
+                                        </div>
 
                                         <div class="form-group col-sm-12 col-md-6">
                                             <label class="small mb-1" style="font-size: 1.2em;">Nome</label>
