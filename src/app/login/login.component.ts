@@ -119,7 +119,6 @@ export class LoginComponent {
     this.authService
         .salvar(usuario)
         .subscribe( response => {
-          console.log('Resposta da API:', response);
           this.mensagemSucesso = "Cadastro realizado com sucesso! Efetue o login.";
           this.cadastrando = false;
           this.username = '';
