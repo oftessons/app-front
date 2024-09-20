@@ -25,7 +25,7 @@ export class LoginComponent {
 
   confirmPasswordError: string | null = null;
   confirmPassword: string = '';
-  passwordVisible: boolean = false;
+  // passwordVisible: boolean = false;
   showTooltip: boolean = false;
   passwordValidations = {
     minLength: false,
@@ -33,6 +33,11 @@ export class LoginComponent {
     lowercase: false,
     number: false,
     specialChar: false,
+  };
+
+  passwordVisible: { [key: string]: boolean } = {
+    password: false,
+    confirmPassword: false
   };
 
   constructor(
@@ -205,11 +210,11 @@ export class LoginComponent {
     this.passwordValidations.specialChar = /[!@#$%^&*]/.test(this.password);
   }
 
-  togglePasswordVisibility() {
-    this.passwordVisible = !this.passwordVisible;
-    const passwordInput = document.querySelector('input[name="password"]');
+  togglePasswordVisibility(field: string) {
+    this.passwordVisible[field] = !this.passwordVisible[field];
+    const passwordInput = document.querySelector(`input[name="${field}"]`);
     if (passwordInput) {
-      passwordInput.setAttribute('type', this.passwordVisible ? 'text' : 'password');
+      passwordInput.setAttribute('type', this.passwordVisible[field] ? 'text' : 'password');
     }
   }
 

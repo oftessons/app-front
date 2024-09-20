@@ -33,9 +33,9 @@
                                             <div class="input-group">
                                               <input type="password" name="password" [(ngModel)]="password" class="form-control py-2 responsive-input" placeholder="Digite sua senha" required />
                                               <div class="input-group-append">
-                                                <div class="btn btn-outline-secondary" type="button" (click)="togglePasswordVisibility()">
-                                                  <img *ngIf="!passwordVisible" src="assets/imagens/view.svg" alt="Mostrar senha" width="16" height="16">
-                                                  <img *ngIf="passwordVisible" src="assets/imagens/view-off.svg" alt="Ocultar senha" width="16" height="16">
+                                                <div class="btn btn-outline-secondary" type="button" (click)="togglePasswordVisibility('password')">
+                                                  <img *ngIf="!passwordVisible.password" src="assets/imagens/view.svg" alt="Mostrar senha" width="16" height="16">
+                                                  <img *ngIf="passwordVisible.password" src="assets/imagens/view-off.svg" alt="Ocultar senha" width="16" height="16">
                                                 </div>
                                               </div>
                                             </div>
@@ -65,11 +65,19 @@
 
                                         <div class="form-group col-sm-12 col-md-6">
                                             <label for="password" class="small mb-1" style="font-size: 1.2em;">Senha *</label>
-                                            <input type="password" id="password" name="password" [(ngModel)]="password" class="form-control py-2 responsive-input" placeholder="Digite sua senha" required 
-                                            (input)="validatePassword()" (focus)="showTooltip = true" (blur)="showTooltip = false"/>
-                                            <div class="password-errors">
-                                                <div *ngFor="let error of errors" class="error-tooltip">{{error}}</div>
+                                            <div class="input-group">
+                                                <input type="password" id="password" name="password" [(ngModel)]="password" class="form-control py-2 responsive-input" placeholder="Digite sua senha" required 
+                                                (input)="validatePassword()" (focus)="showTooltip = true" (blur)="showTooltip = false"/>
+                                                <div class="input-group-append">
+                                                    <div class="btn btn-outline-secondary" type="button" (click)="togglePasswordVisibility('password')">
+                                                    <img *ngIf="!passwordVisible.password" src="assets/imagens/view.svg" alt="Mostrar senha" width="16" height="16">
+                                                    <img *ngIf="passwordVisible.password" src="assets/imagens/view-off.svg" alt="Ocultar senha" width="16" height="16">
+                                                    </div>
+                                                </div>
                                             </div>
+                                            <!-- <div class="password-errors">
+                                                <div *ngFor="let error of errors" class="error-tooltip">{{error}}</div>
+                                            </div> -->
                                             <!-- Tooltip para Regras de Senha -->
                                             <div *ngIf="showTooltip" class="password-tooltip">
                                                 <p class="tooltip-title">A senha precisa ter:</p>
@@ -100,7 +108,15 @@
 
                                         <div class="form-group col-sm-12 col-md-6">
                                             <label class="small mb-1" style="font-size: 1.2em;">Confirmar senha</label>
-                                            <input type="password" name="confirmPassword" [(ngModel)]="confirmPassword" class="form-control py-2 responsive-input" placeholder="Confirme sua senha"  />
+                                            <div class="input-group">
+                                                <input type="password" name="confirmPassword" [(ngModel)]="confirmPassword" class="form-control py-2 responsive-input" placeholder="Confirme sua senha" />
+                                                <div class="input-group-append">
+                                                    <div class="btn btn-outline-secondary" type="button" (click)="togglePasswordVisibility('confirmPassword')">
+                                                    <img *ngIf="!passwordVisible.confirmPassword" src="assets/imagens/view.svg" alt="Mostrar senha" width="16" height="16">
+                                                    <img *ngIf="passwordVisible.confirmPassword" src="assets/imagens/view-off.svg" alt="Ocultar senha" width="16" height="16">
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
 
                                         <div class="form-group col-sm-12 col-md-6">
