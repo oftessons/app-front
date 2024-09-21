@@ -18,6 +18,8 @@ import { ListaQuestoesComponent } from './lista-questoes/lista-questoes.componen
 import { PageSimuladoComponent } from './page-simulado/page-simulado.component';
 import { MeusSimuladosComponent } from './meus-simulados/meus-simulados.component';
 
+import { EditorModule } from '@tinymce/tinymce-angular';
+
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -39,6 +41,7 @@ import { MeusSimuladosComponent } from './meus-simulados/meus-simulados.componen
     MatRadioModule,
     ChartsModule,
     NgxPaginationModule,
+    EditorModule
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA, // Permite o uso de elementos personalizados

@@ -17,6 +17,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
 import { ChartsModule } from 'ng2-charts';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { EditorModule } from '@tinymce/tinymce-angular';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,8 @@ import { NgxPaginationModule } from 'ngx-pagination';
     MatRadioModule,
     ChartsModule,
     NgxPaginationModule,
+    EditorModule
+
   ],
   providers: [
     AuthService,

@@ -9,6 +9,7 @@ import { Relevancia } from '../page-questoes/enums/relevancia';
 import { QuestoesService } from 'src/app/services/questoes.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Alternativa } from '../alternativa';
+import { TinymceService } from 'src/app/services/tinymce.service';
 @Component({
   selector: 'app-cadastro-questao',
   templateUrl: './cadastro-questao.component.html',
@@ -41,13 +42,17 @@ export class CadastroQuestaoComponent implements OnInit {
   selectedImage: string='';
   uploadedImage: string='';
 
+  editorConfig: any;
 
   constructor(
     private questoesService: QuestoesService,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    public tinymceService: TinymceService
   ) { }
   ngOnInit(): void {
+    this.editorConfig = this.tinymceService.getEditorConfig();
+
     this.questaoDTO.alternativas = [
       {
         id: 1, texto: 'A', correta: false,
