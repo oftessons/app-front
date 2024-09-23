@@ -108,7 +108,7 @@
       <div>
         <hr class="line">
         <span class="div-section">
-          Tipo de ENUNCIADO DA QUESTÃO:
+          Digite todas as informações do enunciado da questão:
         </span>
         <hr class="line">
       </div>
@@ -263,7 +263,7 @@
       <div>
         <hr class="line">
         <span class="div-section">
-          Imagens da Questão:
+          Imagem para o enunciado da questão:
         </span>
         <hr class="line">
       </div>
@@ -299,7 +299,7 @@
   <form class="form-cad" #questaoForm="ngForm" (ngSubmit)="onSubmit()">
     <div>
       <span class="div-section">
-        Gabarito da Questão Cadastrada:
+        Gabarito da questão a ser cadastrada:
       </span>
       <hr class="line">
     </div>
@@ -315,7 +315,7 @@
           </mat-radio-group>
         </div>
         <div *ngIf="questaoDTO.tipoItemQuestaoImagem === 'texto'">
-          <div *ngFor="let alternativa of questaoDTO.alternativas; let i = index">
+          <div *ngFor="let alternativa of questaoDTO.alternativas; let i = index" class="container-alternativa">
             <input type="radio" [name]="questaoDTO.tipoItemQuestaoImagem + 'Alternativa'" (click)="markCorrect(i)"
               [checked]="alternativa.correta">
             <div class="col-md-12">
@@ -358,12 +358,12 @@
 
 <div class="container mt-4 container-geral">
   <div class="header-container"> 
-    <h2>Gabarito da Questão</h2>
+    <h2>Gabarito Comentado da Questão</h2>
   </div>
   <form class="form-cad" #questaoForm="ngForm" (ngSubmit)="onSubmit()">
     <div>
       <span class="div-section">
-        Comentário da Questão
+        Descreva os comentário da questão:
       </span>
       <hr class="line">
     </div>
