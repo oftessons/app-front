@@ -86,6 +86,12 @@ export class PageQuestoesComponent implements OnInit {
   questaoDTO = new Questao();
   selectedAlternativeIndex: number = -3;
 
+  tiposDeProvaDescricoes: string[] = [];
+  anosDescricoes: string[] = [];
+  dificuldadesDescricoes: string[] = [];
+  subtemasDescricoes: string[] = [];
+  temasDescricoes: string[] = [];
+
   constructor(
     private questoesService: QuestoesService,
     private filtroService: FiltroService,
@@ -94,6 +100,11 @@ export class PageQuestoesComponent implements OnInit {
 
   ngOnInit(): void {
     this.obterPerfilUsuario();
+    this.tiposDeProvaDescricoes = this.tiposDeProva.map(tipoDeProva => this.getDescricaoTipoDeProva(tipoDeProva));
+    this.anosDescricoes = this.anos.map(ano => this.getDescricaoAno(ano));
+    this.dificuldadesDescricoes = this.dificuldades.map(dificuldade => this.getDescricaoDificuldade(dificuldade));
+    this.subtemasDescricoes = this.subtemas.map(subtema => this.getDescricaoSubtema(subtema));
+    this.temasDescricoes = this.temas.map(tema => this.getDescricaoTema(tema));
   }
 
   onOptionChange(texto: string): void {
