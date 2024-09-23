@@ -206,98 +206,53 @@ export class PageQuestoesComponent implements OnInit {
 
   filtrarQuestoes(): void {
     const filtros: any = {};
-
+  
     if (this.selectedAno) {
-      filtros.ano = this.selectedAno;
+      const anoSelecionado = this.anos.find(ano => this.getDescricaoAno(ano) === this.selectedAno);
+      if (anoSelecionado) {
+        filtros.ano = anoSelecionado;
+      }
     }
     if (this.selectedDificuldade) {
-      filtros.dificuldade = this.selectedDificuldade;
+      const dificuldadeSelecionada = this.dificuldades.find(dificuldade => this.getDescricaoDificuldade(dificuldade) === this.selectedDificuldade);
+      if (dificuldadeSelecionada) {
+        filtros.dificuldade = dificuldadeSelecionada;
+      }
     }
     if (this.selectedTipoDeProva) {
-      filtros.tipoDeProva = this.selectedTipoDeProva;
+      const tipoDeProvaSelecionado = this.tiposDeProva.find(tipoDeProva => this.getDescricaoTipoDeProva(tipoDeProva) === this.selectedTipoDeProva);
+      if (tipoDeProvaSelecionado) {
+        filtros.tipoDeProva = tipoDeProvaSelecionado;
+      }
     }
     if (this.selectedSubtema) {
-      filtros.subtema = this.selectedSubtema;
+      const subtemaSelecionado = this.subtemas.find(subtema => this.getDescricaoSubtema(subtema) === this.selectedSubtema);
+      if (subtemaSelecionado) {
+        filtros.subtema = subtemaSelecionado;
+      }
     }
     if (this.selectedTema) {
-      filtros.tema = this.selectedTema;
+      const temaSelecionado = this.temas.find(tema => this.getDescricaoTema(tema) === this.selectedTema);
+      if (temaSelecionado) {
+        filtros.tema = temaSelecionado;
+      }
     }
     if (this.palavraChave) {
       filtros.palavraChave = this.palavraChave;
     }
-
+  
+    console.log('Filtros aplicados:', filtros);
+  
     if (Object.keys(filtros).length === 0) {
       this.message = 'Por favor, selecione pelo menos um filtro.';
       this.questoes = [];
       return;
     }
-
+  
     this.questoesService.filtrarQuestoes(filtros, 0, 100).subscribe(
       (questoes: Questao[]) => {
         if (questoes.length === 0) {
-          if (
-            filtros.ano &&
-            !filtros.tipoDeProva &&
-            !filtros.dificuldade &&
-            !filtros.subtema &&
-            !filtros.tema &&
-            !filtros.palavraChave
-          ) {
-            this.message = 'Nenhuma questão encontrada para o ano selecionado.';
-          } else if (
-            filtros.tipoDeProva &&
-            !filtros.ano &&
-            !filtros.dificuldade &&
-            !filtros.subtema &&
-            !filtros.tema &&
-            !filtros.palavraChave
-          ) {
-            this.message =
-              'Nenhuma questão encontrada para o tipo de prova selecionado.';
-          } else if (
-            filtros.dificuldade &&
-            !filtros.ano &&
-            !filtros.tipoDeProva &&
-            !filtros.subtema &&
-            !filtros.tema &&
-            !filtros.palavraChave
-          ) {
-            this.message =
-              'Nenhuma questão encontrada para a dificuldade selecionada.';
-          } else if (
-            filtros.subtema &&
-            !filtros.ano &&
-            !filtros.tipoDeProva &&
-            !filtros.dificuldade &&
-            !filtros.tema &&
-            !filtros.palavraChave
-          ) {
-            this.message =
-              'Nenhuma questão encontrada para o subtema selecionado.';
-          } else if (
-            filtros.tema &&
-            !filtros.ano &&
-            !filtros.tipoDeProva &&
-            !filtros.dificuldade &&
-            !filtros.subtema &&
-            !filtros.palavraChave
-          ) {
-            this.message =
-              'Nenhuma questão encontrada para o tema selecionado.';
-          } else if (
-            filtros.palavraChave &&
-            !filtros.ano &&
-            !filtros.tipoDeProva &&
-            !filtros.dificuldade &&
-            !filtros.subtema &&
-            !filtros.tema
-          ) {
-            this.message =
-              'Nenhuma questão encontrada para a palavra-chave informada.';
-          } else {
-            this.message =
-              'Nenhuma questão encontrada para os filtros selecionados.';
-          }
+          this.message = this.getMensagemNenhumaQuestaoEncontrada(filtros);
           this.questoes = [];
           this.questaoAtual = null;
         } else {
@@ -306,16 +261,33 @@ export class PageQuestoesComponent implements OnInit {
           this.paginaAtual = 0;
           this.questaoAtual = this.questoes[this.paginaAtual];
         }
-
+  
         this.resposta = '';
         this.mostrarGabarito = false;
       },
       (error) => {
         console.error('Erro ao filtrar questões:', error);
-        this.message =
-          'Ocorreu um erro ao filtrar questões. Por favor, tente novamente mais tarde.';
+        this.message = 'Ocorreu um erro ao filtrar questões. Por favor, tente novamente mais tarde.';
       }
     );
+  }
+  
+  getMensagemNenhumaQuestaoEncontrada(filtros: any): string {
+    if (filtros.ano && !filtros.tipoDeProva && !filtros.dificuldade && !filtros.subtema && !filtros.tema && !filtros.palavraChave) {
+      return 'Nenhuma questão encontrada para o ano selecionado.';
+    } else if (filtros.tipoDeProva && !filtros.ano && !filtros.dificuldade && !filtros.subtema && !filtros.tema && !filtros.palavraChave) {
+      return 'Nenhuma questão encontrada para o tipo de prova selecionado.';
+    } else if (filtros.dificuldade && !filtros.ano && !filtros.tipoDeProva && !filtros.subtema && !filtros.tema && !filtros.palavraChave) {
+      return 'Nenhuma questão encontrada para a dificuldade selecionada.';
+    } else if (filtros.subtema && !filtros.ano && !filtros.tipoDeProva && !filtros.dificuldade && !filtros.tema && !filtros.palavraChave) {
+      return 'Nenhuma questão encontrada para o subtema selecionado.';
+    } else if (filtros.tema && !filtros.ano && !filtros.tipoDeProva && !filtros.dificuldade && !filtros.subtema && !filtros.palavraChave) {
+      return 'Nenhuma questão encontrada para o tema selecionado.';
+    } else if (filtros.palavraChave && !filtros.ano && !filtros.tipoDeProva && !filtros.dificuldade && !filtros.subtema && !filtros.tema) {
+      return 'Nenhuma questão encontrada para a palavra-chave informada.';
+    } else {
+      return 'Nenhuma questão encontrada para os filtros selecionados.';
+    }
   }
 
   anteriorQuestao() {
