@@ -16,6 +16,10 @@
   border-radius: 8px;
 }
 
+.form-cad{
+  margin: 16px;
+}
+
 /* Header */
 .header-container {
   background-color: #0F1934;
@@ -209,6 +213,10 @@ textarea {
 
 .checkbox {
   margin-right: 10px;
+}
+
+.container-alternativa{
+  display: flex;
 }
 
 /* Layout Responsivo */
