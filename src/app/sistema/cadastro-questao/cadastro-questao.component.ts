@@ -10,6 +10,9 @@ import { QuestoesService } from 'src/app/services/questoes.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Alternativa } from '../alternativa';
 import { TinymceService } from 'src/app/services/tinymce.service';
+
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+
 @Component({
   selector: 'app-cadastro-questao',
   templateUrl: './cadastro-questao.component.html',
@@ -48,7 +51,8 @@ export class CadastroQuestaoComponent implements OnInit {
     private questoesService: QuestoesService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    public tinymceService: TinymceService
+    public tinymceService: TinymceService,
+    private sanitizer: DomSanitizer
   ) { }
   ngOnInit(): void {
     this.editorConfig = this.tinymceService.getEditorConfig();

@@ -21,6 +21,8 @@ import { AuthService } from 'src/app/services/auth.service';
 import { Usuario } from 'src/app/login/usuario';
 import { FiltroDTO } from '../filtroDTO';
 
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+
 declare var bootstrap: any;
 
 @Component({
@@ -92,14 +94,18 @@ export class PageQuestoesComponent implements OnInit {
   subtemasDescricoes: string[] = [];
   temasDescricoes: string[] = [];
 
+  comentarioDaQuestaoDoisSanitizado: SafeHtml = '';
+
   constructor(
     private questoesService: QuestoesService,
     private filtroService: FiltroService,
-    private authService: AuthService
+    private authService: AuthService,
+    private sanitizer: DomSanitizer
   ) {}
 
   ngOnInit(): void {
     this.obterPerfilUsuario();
+    this.loadQuestao();
     this.tiposDeProvaDescricoes = this.tiposDeProva.map(tipoDeProva => this.getDescricaoTipoDeProva(tipoDeProva));
     this.anosDescricoes = this.anos.map(ano => this.getDescricaoAno(ano));
     this.dificuldadesDescricoes = this.dificuldades.map(dificuldade => this.getDescricaoDificuldade(dificuldade));
@@ -397,4 +403,21 @@ export class PageQuestoesComponent implements OnInit {
   fecharCardConfirmacao(): void {
     this.mostrarCardConfirmacao = false;
   }
-}
+
+  loadQuestao(): void {
+    this.questoesService.getQuestaoById(this.paginaAtual).subscribe(
+      (data: Questao) => {
+        this.questaoAtual = data;
+
+        // Sanitizar o conteúdo
+        this.comentarioDaQuestaoDoisSanitizado = this.sanitizer.bypassSecurityTrustHtml(
+          this.questaoAtual.comentarioDaQuestaoDois || ''
+        );
+      },
+      (error) => {
+        console.error('Erro ao carregar cometario:', error);
+      }
+    );
+  }
+  
+}  

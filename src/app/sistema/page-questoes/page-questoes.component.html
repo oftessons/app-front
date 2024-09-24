@@ -149,11 +149,14 @@
                 </div>
               </div>
 
-              <div *ngIf="mostrarGabarito">
+              <div *ngIf="mostrarGabarito && questaoAtual">
                 <h2 style="margin-top: 10px;">Comentário da Questão</h2>
                 <img *ngIf="questaoAtual.fotoDaResposta" [src]="questaoAtual.fotoDaResposta" alt="Foto do Comentário" class="questao-foto">
                 <p>{{ questaoAtual.comentarioDaQuestaoUm }}</p>
-                <p>{{ questaoAtual.comentarioDaQuestaoDois }}</p>
+
+                <!-- Exibe o comentário da Questão Dois com HTML Sanitizado -->
+                <div [innerHTML]="questaoAtual.comentarioDaQuestaoDois"></div>
+                <!-- <p>{{ questaoAtual.comentarioDaQuestaoDois }}</p> -->
                 <p>{{ questaoAtual.comentarioDaQuestaoTres }}</p>
                 <p>{{ questaoAtual.comentarioDaQuestaoQuatro }}</p>
                 <p>Referência: {{ questaoAtual.referenciaBi }}</p>

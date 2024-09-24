@@ -16,9 +16,10 @@
   max-width: 350px;
   height: auto;
   display: block;
-  margin: 20px auto 0 auto; /* Centraliza a imagem horizontalmente com espaçamento superior */
+  margin: 20px auto 0 auto;
   margin-bottom: 10px;
 }
+
 .identificadores-questao {
   display: flex;
   color: #101010;
