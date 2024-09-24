@@ -89,7 +89,6 @@ export class PageSimuladoComponent implements OnInit {
   p: number = 1;
   mensagemSucesso: string = '';
 
-
   isRespostaCorreta: boolean = false;
 
   dados: any;
@@ -102,7 +101,6 @@ export class PageSimuladoComponent implements OnInit {
     private simuladoService: SimuladoService,
     private authService: AuthService
   ) {}
-
 
   ngOnInit() {
     console.log('Componente inicializado');
@@ -247,31 +245,33 @@ export class PageSimuladoComponent implements OnInit {
       return;
     }
 
-    this.questoesService.filtrarSimulados(filtros, 0, 100).subscribe(
-      (questoes: Questao[]) => {
-        if (questoes.length === 0) {
+    this.questoesService
+      .filtrarSimulados(this.usuarioId, filtros, 0, 100)
+      .subscribe(
+        (questoes: Questao[]) => {
+          if (questoes.length === 0) {
+            this.message =
+              'Nenhuma questão encontrada para os filtros selecionados.';
+            this.questoes = [];
+            this.idsQuestoes = [];
+            this.questaoAtual = null;
+          } else {
+            this.message = '';
+            this.questoes = questoes;
+            this.idsQuestoes = questoes.map((q) => q.id);
+            this.paginaAtual = 0;
+            this.questaoAtual = this.questoes[this.paginaAtual];
+          }
+          this.resposta = '';
+          this.mostrarGabarito = false;
+        },
+        (error) => {
+          console.error('Erro ao filtrar questões:', error);
           this.message =
-            'Nenhuma questão encontrada para os filtros selecionados.';
-          this.questoes = [];
+            'Ocorreu um erro ao filtrar questões. Por favor, tente novamente mais tarde.';
           this.idsQuestoes = [];
-          this.questaoAtual = null;
-        } else {
-          this.message = '';
-          this.questoes = questoes;
-          this.idsQuestoes = questoes.map((q) => q.id);
-          this.paginaAtual = 0;
-          this.questaoAtual = this.questoes[this.paginaAtual];
         }
-        this.resposta = '';
-        this.mostrarGabarito = false;
-      },
-      (error) => {
-        console.error('Erro ao filtrar questões:', error);
-        this.message =
-          'Ocorreu um erro ao filtrar questões. Por favor, tente novamente mais tarde.';
-        this.idsQuestoes = [];
-      }
-    );
+      );
   }
 
   anteriorQuestao() {
@@ -292,7 +292,10 @@ export class PageSimuladoComponent implements OnInit {
     }
   }
 
-  confirmarSalvarSimulado(nomeSimulado: string, descricaoSimulado: string): void {
+  confirmarSalvarSimulado(
+    nomeSimulado: string,
+    descricaoSimulado: string
+  ): void {
     const simulado: Simulado = {
       nomeSimulado: nomeSimulado,
       assunto: descricaoSimulado,
@@ -304,17 +307,17 @@ export class PageSimuladoComponent implements OnInit {
       subtema: this.selectedSubtema,
       questaoIds: this.idsQuestoes,
     };
-  
+
     this.simuladoService.cadastrarSimulado(this.usuarioId, simulado).subscribe(
       (response) => {
         // Exibir mensagem de sucesso
         this.mensagemSucesso = 'Seu simulado foi cadastrado com sucesso!';
-  
+
         // Esconder a mensagem após 5 segundos
         setTimeout(() => {
           this.mensagemSucesso = '';
         }, 5000);
-  
+
         // Fecha o modal automaticamente após sucesso
         const modalElement = document.getElementById('confirmacaoModal');
         const modalInstance = bootstrap.Modal.getInstance(modalElement!);
@@ -327,9 +330,6 @@ export class PageSimuladoComponent implements OnInit {
       }
     );
   }
-  
-  
-  
 
   abrirModal(): void {
     const modalElement = document.getElementById('confirmacaoModal');

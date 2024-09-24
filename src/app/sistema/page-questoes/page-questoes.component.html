@@ -12,59 +12,46 @@
     <div class="filters-container">
       <form #filtroForm="ngForm" (ngSubmit)="filtrarQuestoes()" class="consulta-form">
         <div class="row">
-          <div class="col col-12 col-md-6">
-            <mat-form-field appearance="fill" class="custom-form-field">
-              <mat-label>Ano</mat-label>
-              <mat-select name="selectedAno" [(ngModel)]="selectedAno">
-                <mat-option *ngFor="let ano of anos" [value]="ano">{{ getDescricaoAno(ano) }}</mat-option>
-              </mat-select>
-            </mat-form-field>
+          <div class="col col-12 col-md-6 espaco-select">
+            <app-select-padrao
+              label="Ano"
+              [options]="anosDescricoes"
+              [(selectedValue)]="selectedAno">
+            </app-select-padrao>
           </div>
-          <div class="col col-12 col-md-6">
-            <mat-form-field appearance="fill" class="custom-form-field">
-              <mat-label>Dificuldade</mat-label>
-              <mat-select name="selectedDificuldade" [(ngModel)]="selectedDificuldade">
-                <mat-option *ngFor="let dificuldade of dificuldades" [value]="dificuldade">
-                  {{ getDescricaoDificuldade(dificuldade) }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
+          <div class="col col-12 col-md-6 espaco-select">
+            <app-select-padrao
+              label="Dificuldade"
+              [options]="dificuldadesDescricoes"
+              [(selectedValue)]="selectedDificuldade">
+            </app-select-padrao>
           </div>
         </div>
         <div class="row">
-          <div class="col col-12 col-md-6">
-            <mat-form-field appearance="fill" class="custom-form-field">
-              <mat-label>Tipo de Prova</mat-label>
-              <mat-select name="selectedTipoDeProva" [(ngModel)]="selectedTipoDeProva">
-                <mat-option *ngFor="let tipoDeProva of tiposDeProva" [value]="tipoDeProva">
-                  {{ getDescricaoTipoDeProva(tipoDeProva) }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
+          <div class="col col-12 col-md-6 espaco-select">
+            <app-select-padrao
+              label="Tipo de Prova"
+              [options]="tiposDeProvaDescricoes"
+              [(selectedValue)]="selectedTipoDeProva">
+            </app-select-padrao>
           </div>
-          <div class="col col-12 col-md-6">
-            <mat-form-field appearance="fill" class="custom-form-field">
-              <mat-label>Subtema</mat-label>
-              <mat-select name="selectedSubtema" [(ngModel)]="selectedSubtema">
-                <mat-option *ngFor="let subtema of subtemas" [value]="subtema">
-                  {{ getDescricaoSubtema(subtema) }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
+          <div class="col col-12 col-md-6 espaco-select">
+            <app-select-padrao
+              label="Subtema"
+              [options]="subtemasDescricoes"
+              [(selectedValue)]="selectedSubtema">
+            </app-select-padrao>
           </div>
         </div>
-        <div class="row">
-          <div class="col col-12 col-md-6">
-            <mat-form-field appearance="fill" class="custom-form-field">
-              <mat-label>Tema</mat-label>
-              <mat-select name="selectedTema" [(ngModel)]="selectedTema">
-                <mat-option *ngFor="let tema of temas" [value]="tema">
-                  {{ getDescricaoTema(tema) }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
+        <div class="row rol-col">
+          <div class="col col-12 col-md-6 espaco-select">
+            <app-select-padrao
+              label="Tema"
+              [options]="temasDescricoes"
+              [(selectedValue)]="selectedTema">
+            </app-select-padrao>
           </div>
-          <div class="col col-12 col-md-6">
+          <div class="col col-12 col-md-6 espaco-select">
             <mat-form-field appearance="fill" class="palavra-chave">
               <mat-label>Pesquisar por palavra-chave</mat-label>
               <input matInput placeholder="Pesquisar por palavra-chave" name="palavraChave" [(ngModel)]="palavraChave" class="custom-input">
@@ -162,11 +149,14 @@
                 </div>
               </div>
 
-              <div *ngIf="mostrarGabarito">
+              <div *ngIf="mostrarGabarito && questaoAtual">
                 <h2 style="margin-top: 10px;">Comentário da Questão</h2>
                 <img *ngIf="questaoAtual.fotoDaResposta" [src]="questaoAtual.fotoDaResposta" alt="Foto do Comentário" class="questao-foto">
                 <p>{{ questaoAtual.comentarioDaQuestaoUm }}</p>
-                <p>{{ questaoAtual.comentarioDaQuestaoDois }}</p>
+
+                <!-- Exibe o comentário da Questão Dois com HTML Sanitizado -->
+                <div [innerHTML]="questaoAtual.comentarioDaQuestaoDois"></div>
+                <!-- <p>{{ questaoAtual.comentarioDaQuestaoDois }}</p> -->
                 <p>{{ questaoAtual.comentarioDaQuestaoTres }}</p>
                 <p>{{ questaoAtual.comentarioDaQuestaoQuatro }}</p>
                 <p>Referência: {{ questaoAtual.referenciaBi }}</p>

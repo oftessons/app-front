@@ -1,4 +1,10 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+  HttpParams,
+  HttpResponse,
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -9,63 +15,85 @@ import { Resposta } from '../sistema/Resposta';
 import { RespostaDTO } from '../sistema/RespostaDTO';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class QuestoesService {
-
   apiURL: string = environment.apiURLBase + '/api/questoes';
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getAcertosEErrosPorTipoDeProva(usuarioId: number): Observable<any> {
-    return this.http.get<any>(`${this.apiURL}/acertos-erros/${usuarioId}`).pipe(
-      catchError(error => throwError('Erro ao tentar obter acertos e erros.'))
-    );
+    return this.http
+      .get<any>(`${this.apiURL}/acertos-erros/${usuarioId}`)
+      .pipe(
+        catchError((error) =>
+          throwError('Erro ao tentar obter acertos e erros.')
+        )
+      );
   }
 
-  getAcertosEErrosPorMes(usuarioId: number): Observable<Map<string, Map<string, number>>> {
-    return this.http.get<Map<string, Map<string, number>>>(`${this.apiURL}/acertos-erros-mes/${usuarioId}`).pipe(
-      catchError(error => throwError('Erro ao tentar obter acertos e erros por mês.'))
-    );
+  getAcertosEErrosPorMes(
+    usuarioId: number
+  ): Observable<Map<string, Map<string, number>>> {
+    return this.http
+      .get<Map<string, Map<string, number>>>(
+        `${this.apiURL}/acertos-erros-mes/${usuarioId}`
+      )
+      .pipe(
+        catchError((error) =>
+          throwError('Erro ao tentar obter acertos e erros por mês.')
+        )
+      );
   }
 
   getQuestoesFeitasPorTema(usuarioId: number): Observable<Map<string, number>> {
-    return this.http.get<Map<string, number>>(`${this.apiURL}/questoes-feitas-tema/${usuarioId}`).pipe(
-      catchError(error => throwError('Erro ao tentar obter as questões feitas por tema.'))
-    );
+    return this.http
+      .get<Map<string, number>>(
+        `${this.apiURL}/questoes-feitas-tema/${usuarioId}`
+      )
+      .pipe(
+        catchError((error) =>
+          throwError('Erro ao tentar obter as questões feitas por tema.')
+        )
+      );
   }
 
   getAcertosErrosPorTema(idUser: number): Observable<any> {
     return this.http.get(`${this.apiURL}/acertos-erros-tema/${idUser}`);
   }
 
-  salvar(formData: FormData ): Observable<any> {
+  salvar(formData: FormData): Observable<any> {
     const headers = new HttpHeaders();
     // Não defina o Content-Type, o navegador cuidará disso
 
-    return this.http.post<any>(`${this.apiURL}/cadastro`, formData, { headers, responseType: 'text' as 'json' }).pipe(
-      map(response => {
-        // Sucesso
-        try {
-          const jsonResponse = JSON.parse(response);
-          return jsonResponse || { message: 'Questão salva com sucesso!' };
-        } catch (e) {
-          return { message: 'Questão salva com sucesso!' };
-        }
-      }),
-      catchError(error => {
-        let errorMessage = '';
-
-        if (error.error instanceof ErrorEvent) {
-          // Erro no lado do cliente
-          errorMessage = `Erro: ${error.error.message}`;
-        } else {
-          // Erro no lado do servidor
-          errorMessage = `Erro no servidor: ${error.status}, ${error.message}`;
-        }
-        console.error(errorMessage);
-        return throwError(errorMessage);
+    return this.http
+      .post<any>(`${this.apiURL}/cadastro`, formData, {
+        headers,
+        responseType: 'text' as 'json',
       })
-    );
+      .pipe(
+        map((response) => {
+          // Sucesso
+          try {
+            const jsonResponse = JSON.parse(response);
+            return jsonResponse || { message: 'Questão salva com sucesso!' };
+          } catch (e) {
+            return { message: 'Questão salva com sucesso!' };
+          }
+        }),
+        catchError((error) => {
+          let errorMessage = '';
+
+          if (error.error instanceof ErrorEvent) {
+            // Erro no lado do cliente
+            errorMessage = `Erro: ${error.error.message}`;
+          } else {
+            // Erro no lado do servidor
+            errorMessage = `Erro no servidor: ${error.status}, ${error.message}`;
+          }
+          console.error(errorMessage);
+          return throwError(errorMessage);
+        })
+      );
   }
 
   atualizar(formData: FormData, id: number): Observable<any> {
@@ -80,30 +108,40 @@ export class QuestoesService {
     return this.http.get<Questao[]>(`${this.apiURL}/todas`);
   }
 
-  deletar(questao: Questao) : Observable<any> {
+  deletar(questao: Questao): Observable<any> {
     return this.http.delete<any>(`${this.apiURL}/${questao.id}`);
   }
 
-  filtrarQuestoes(filtros: any, page: number = 0, size: number = 10): Observable<any[]> {
-    const url = `${this.apiURL}/filtro`;
+  filtrarQuestoes(
+    userId: number,
+    filtros: any,
+    page: number = 0,
+    size: number = 10
+  ): Observable<any[]> {
+    const url = `${this.apiURL}/filtro/${userId}`;
     let params = new HttpParams();
-  
+
     // Adicione os filtros como parâmetros de consulta
     for (const filtro in filtros) {
       if (filtros.hasOwnProperty(filtro) && filtros[filtro] !== null) {
         params = params.set(filtro, filtros[filtro]);
       }
     }
-  
+
     // Adicione os parâmetros de paginação
     params = params.set('page', page.toString());
     params = params.set('size', size.toString());
-  
+
     return this.http.get<Questao[]>(url, { params });
   }
-  
-  filtrarSimulados(filtros: any, page: number = 0, size: number = 10): Observable<Questao[]> {
-    const url = `${this.apiURL}/filtroSimulados`;
+
+  filtrarSimulados(
+    userId: number,
+    filtros: any,
+    page: number = 0,
+    size: number = 10
+  ): Observable<Questao[]> {
+    const url = `${this.apiURL}/filtroSimulados/${userId}`;
     let params = new HttpParams();
 
     for (const filtro in filtros) {
@@ -118,7 +156,11 @@ export class QuestoesService {
     return this.http.get<Questao[]>(url, { params });
   }
 
-  consultarQuestao(filtros: any, page: number = 0, size: number = 10): Observable<Questao[]> {
+  consultarQuestao(
+    filtros: any,
+    page: number = 0,
+    size: number = 10
+  ): Observable<Questao[]> {
     const url = `${this.apiURL}/consultar`;
     let params = new HttpParams();
 
@@ -133,15 +175,21 @@ export class QuestoesService {
     params = params.set('page', page.toString());
     params = params.set('size', size.toString());
 
-    return this.http.get<Questao[]>(url, { params }).pipe(
-      catchError(error => throwError('Erro ao tentar obter as questões.'))
-    );
+    return this.http
+      .get<Questao[]>(url, { params })
+      .pipe(
+        catchError((error) => throwError('Erro ao tentar obter as questões.'))
+      );
   }
 
-  checkAnswer(id: number, userId: number, resposta: RespostaDTO): Observable<Resposta> {
+  checkAnswer(
+    id: number,
+    userId: number,
+    resposta: RespostaDTO
+  ): Observable<Resposta> {
     const url = `${this.apiURL}/${id}/check-questao/${userId}`;
-    return this.http.post<Resposta>(url, resposta).pipe(
-      catchError(error => throwError('Erro ao verificar a resposta.'))
-    );
+    return this.http
+      .post<Resposta>(url, resposta)
+      .pipe(catchError((error) => throwError('Erro ao verificar a resposta.')));
   }
 }

@@ -1,0 +1,17 @@
+<!-- select.component.html -->
+<div class="select-container">
+  <label [class.active]="selectedValue">{{ label }}</label>
+  <div class="select-dropdown" (click)="isOpen = !isOpen">
+    <div class="selected-value">{{ selectedValue || '' }}</div>
+    <div class="arrow-down"></div>
+  </div>
+
+  <div class="options-container" *ngIf="isOpen">
+    <div class="option"
+         *ngFor="let option of options"
+         (click)="onSelect(option)"
+         [class.selected]="option === selectedValue">
+      {{ option }}
+    </div>
+  </div>
+</div>
