@@ -23,9 +23,9 @@ export class LoginComponent {
   forgotEmail: string = '';
   showForgotPassword: boolean = false;
 
-  //confirmPasswordError: string | null = null;
-  //confirmPassword: string = '';
-  passwordVisible: boolean = false;
+  confirmPasswordError: string | null = null;
+  confirmPassword: string = '';
+  // passwordVisible: boolean = false;
   showTooltip: boolean = false;
   passwordValidations = {
     minLength: false,
@@ -33,6 +33,11 @@ export class LoginComponent {
     lowercase: false,
     number: false,
     specialChar: false,
+  };
+
+  passwordVisible: { [key: string]: boolean } = {
+    password: false,
+    confirmPassword: false
   };
 
   constructor(
@@ -95,6 +100,16 @@ export class LoginComponent {
     passwordValidationErrors.push("O campo de login é obrigatório.");
   }
 
+  // Validação de campo de email
+  if (!this.email) {
+    passwordValidationErrors.push("O campo de email é obrigatório.");
+  }
+
+  // Validação de campo de nome
+  if (!this.nome) {
+    passwordValidationErrors.push("O campo de nome é obrigatório.");
+  }
+
   // Se houver erros de validação, armazene-os em this.errors e não prossiga
   if (passwordValidationErrors.length > 0) {
     this.errors = passwordValidationErrors;
@@ -102,28 +117,48 @@ export class LoginComponent {
   }
 
   // Validação de confirmação de senha
-  //if (this.password !== this.confirmPassword) {
-  //  this.errors.push("As senhas não coincidem.");
-  //  return; // Interrompe a execução do método
-  //}
+  if (this.password !== this.confirmPassword) {
+      this.errors.push("As senhas não coincidem.");
+      return; // Interrompe a execução do método
+  }
 
     const usuario: Usuario = new Usuario();
     usuario.username = this.username;
     usuario.password = this.password;
     usuario.email = this.email;
+    usuario.nome = this.nome;
+    usuario.confirmPassword = this.confirmPassword;
+    usuario.telefone = this.telefone;
+    usuario.cidade = this.cidade;
+    usuario.estado = this.estado;
     this.authService
         .salvar(usuario)
         .subscribe( response => {
-            this.mensagemSucesso = "Cadastro realizado com sucesso! Efetue o login.";
-            this.cadastrando = false;
-            this.username = '';
-            this.password = '';
-            this.email = '';
-            this.errors = []
-        }, errorResponse => {
-            // this.mensagemSucesso = "Cadastro realizado com sucesso! Efetue o login.";
-            this.errors = errorResponse.error.errors;
-        })
+          this.mensagemSucesso = "Cadastro realizado com sucesso! Efetue o login.";
+          this.cadastrando = false;
+          this.username = '';
+          this.password = '';
+          this.email = '';
+          this.nome = '';
+          this.confirmPassword = '';
+          this.telefone = '';
+          this.cidade = '';
+          this.estado = '';
+          this.errors = []
+        },  errorResponse => {
+          if (errorResponse.status === 401) {
+              // Trata o erro de token expirado
+              this.errors = ['Sessão expirada. Por favor, faça login novamente.'];
+              localStorage.removeItem('access_token'); // Remove o token expirado
+              this.router.navigate(['/login']); // Redireciona para a página de login
+          }else if (errorResponse.status === 400) {
+            // Exibe a mensagem de erro vinda do back-end
+            this.errors = [errorResponse.error];
+          }else {
+              this.errors = ['Erro ao cadastrar o usuário.'];
+          }
+      }
+    );
   }
 
 
@@ -175,19 +210,19 @@ export class LoginComponent {
     this.passwordValidations.specialChar = /[!@#$%^&*]/.test(this.password);
   }
 
-  togglePasswordVisibility() {
-    this.passwordVisible = !this.passwordVisible;
-    const passwordInput = document.querySelector('input[name="password"]');
+  togglePasswordVisibility(field: string) {
+    this.passwordVisible[field] = !this.passwordVisible[field];
+    const passwordInput = document.querySelector(`input[name="${field}"]`);
     if (passwordInput) {
-      passwordInput.setAttribute('type', this.passwordVisible ? 'text' : 'password');
+      passwordInput.setAttribute('type', this.passwordVisible[field] ? 'text' : 'password');
     }
   }
 
-  //validateConfirmPassword() {
-  //  if (this.password !== this.confirmPassword) {
-   //   this.confirmPasswordError = 'As senhas não coincidem';
-   // } else {
-    //  this.confirmPasswordError = null;
-   // }
-  //}
+  validateConfirmPassword() {
+    if (this.password !== this.confirmPassword) {
+      this.confirmPasswordError = 'As senhas não coincidem';
+    } else {
+      this.confirmPasswordError = null;
+    }
+  }
 }

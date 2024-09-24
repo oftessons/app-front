@@ -21,6 +21,8 @@ import { AuthService } from 'src/app/services/auth.service';
 import { Usuario } from 'src/app/login/usuario';
 import { FiltroDTO } from '../filtroDTO';
 
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+
 declare var bootstrap: any;
 
 @Component({
@@ -33,6 +35,7 @@ export class PageQuestoesComponent implements OnInit {
   selectedOption: string = '';
   //resposta: string | null = null;
   usuario!: Usuario;
+  usuarioId!: number;
 
   tiposDeProva = Object.values(TipoDeProva);
   anos = Object.values(Ano);
@@ -86,14 +89,42 @@ export class PageQuestoesComponent implements OnInit {
   questaoDTO = new Questao();
   selectedAlternativeIndex: number = -3;
 
+  tiposDeProvaDescricoes: string[] = [];
+  anosDescricoes: string[] = [];
+  dificuldadesDescricoes: string[] = [];
+  subtemasDescricoes: string[] = [];
+  temasDescricoes: string[] = [];
+
+  comentarioDaQuestaoDoisSanitizado: SafeHtml = '';
+
   constructor(
     private questoesService: QuestoesService,
     private filtroService: FiltroService,
-    private authService: AuthService
+    private authService: AuthService,
+    private sanitizer: DomSanitizer
   ) {}
 
   ngOnInit(): void {
     this.obterPerfilUsuario();
+    this.tiposDeProvaDescricoes = this.tiposDeProva.map((tipoDeProva) =>
+      this.getDescricaoTipoDeProva(tipoDeProva)
+    );
+    this.anosDescricoes = this.anos.map((ano) => this.getDescricaoAno(ano));
+    this.dificuldadesDescricoes = this.dificuldades.map((dificuldade) =>
+      this.getDescricaoDificuldade(dificuldade)
+    );
+    this.subtemasDescricoes = this.subtemas.map((subtema) =>
+      this.getDescricaoSubtema(subtema)
+    );
+    this.temasDescricoes = this.temas.map((tema) =>
+      this.getDescricaoTema(tema)
+    );
+    this.loadQuestao();
+    this.tiposDeProvaDescricoes = this.tiposDeProva.map(tipoDeProva => this.getDescricaoTipoDeProva(tipoDeProva));
+    this.anosDescricoes = this.anos.map(ano => this.getDescricaoAno(ano));
+    this.dificuldadesDescricoes = this.dificuldades.map(dificuldade => this.getDescricaoDificuldade(dificuldade));
+    this.subtemasDescricoes = this.subtemas.map(subtema => this.getDescricaoSubtema(subtema));
+    this.temasDescricoes = this.temas.map(tema => this.getDescricaoTema(tema));
   }
 
   onOptionChange(texto: string): void {
@@ -105,6 +136,7 @@ export class PageQuestoesComponent implements OnInit {
     this.authService.obterUsuarioAutenticadoDoBackend().subscribe(
       (data) => {
         this.usuario = data; // Armazenar os dados do perfil do usuário na variável 'usuario'
+        this.usuarioId = parseInt(this.usuario.id);
       },
       (error) => {
         console.error('Erro ao obter perfil do usuário:', error);
@@ -120,27 +152,34 @@ export class PageQuestoesComponent implements OnInit {
     }
 
     if (this.selectedOption) {
-      const alternativaSelecionada = questao.alternativas.find(a => a.texto === this.selectedOption);
+      const alternativaSelecionada = questao.alternativas.find(
+        (a) => a.texto === this.selectedOption
+      );
 
       if (alternativaSelecionada) {
         const respostaDTO: RespostaDTO = {
           questaoId: questao.id,
-          selecionarOpcao: this.selectedOption
+          selecionarOpcao: this.selectedOption,
         };
 
         const idUser = parseInt(this.usuario.id);
 
-        this.questoesService.checkAnswer(questao.id, idUser, respostaDTO).subscribe(
-          (resposta: Resposta) => {
-            this.isRespostaCorreta = resposta.correct;
-            this.respostaVerificada = true; // Só permite mostrar o fundo após verificar a resposta
-            this.resposta = resposta.correct ? 'Resposta correta!' : 'Resposta incorreta. Tente novamente.';
-          },
-          (error) => {
-            console.error('Erro ao verificar resposta:', error);
-            this.resposta = 'Ocorreu um erro ao verificar a resposta. Por favor, tente novamente mais tarde.';
-          }
-        );
+        this.questoesService
+          .checkAnswer(questao.id, idUser, respostaDTO)
+          .subscribe(
+            (resposta: Resposta) => {
+              this.isRespostaCorreta = resposta.correct;
+              this.respostaVerificada = true; // Só permite mostrar o fundo após verificar a resposta
+              this.resposta = resposta.correct
+                ? 'Resposta correta!'
+                : 'Resposta incorreta. Tente novamente.';
+            },
+            (error) => {
+              console.error('Erro ao verificar resposta:', error);
+              this.resposta =
+                'Ocorreu um erro ao verificar a resposta. Por favor, tente novamente mais tarde.';
+            }
+          );
       }
     }
   }
@@ -150,8 +189,14 @@ export class PageQuestoesComponent implements OnInit {
 
     // Atualizar o estado das respostas corretas e erradas
     if (this.questaoAtual) {
-      this.respostaCorreta = this.questaoAtual.alternativas.find(a => a.texto === this.respostaCorreta)?.texto || '';
-      this.respostaErrada = this.questaoAtual.alternativas.find(a => a.texto === this.respostaErrada)?.texto || '';
+      this.respostaCorreta =
+        this.questaoAtual.alternativas.find(
+          (a) => a.texto === this.respostaCorreta
+        )?.texto || '';
+      this.respostaErrada =
+        this.questaoAtual.alternativas.find(
+          (a) => a.texto === this.respostaErrada
+        )?.texto || '';
     }
   }
 
@@ -197,23 +242,52 @@ export class PageQuestoesComponent implements OnInit {
     const filtros: any = {};
 
     if (this.selectedAno) {
-      filtros.ano = this.selectedAno;
+      const anoSelecionado = this.anos.find(
+        (ano) => this.getDescricaoAno(ano) === this.selectedAno
+      );
+      if (anoSelecionado) {
+        filtros.ano = anoSelecionado;
+      }
     }
     if (this.selectedDificuldade) {
-      filtros.dificuldade = this.selectedDificuldade;
+      const dificuldadeSelecionada = this.dificuldades.find(
+        (dificuldade) =>
+          this.getDescricaoDificuldade(dificuldade) === this.selectedDificuldade
+      );
+      if (dificuldadeSelecionada) {
+        filtros.dificuldade = dificuldadeSelecionada;
+      }
     }
     if (this.selectedTipoDeProva) {
-      filtros.tipoDeProva = this.selectedTipoDeProva;
+      const tipoDeProvaSelecionado = this.tiposDeProva.find(
+        (tipoDeProva) =>
+          this.getDescricaoTipoDeProva(tipoDeProva) === this.selectedTipoDeProva
+      );
+      if (tipoDeProvaSelecionado) {
+        filtros.tipoDeProva = tipoDeProvaSelecionado;
+      }
     }
     if (this.selectedSubtema) {
-      filtros.subtema = this.selectedSubtema;
+      const subtemaSelecionado = this.subtemas.find(
+        (subtema) => this.getDescricaoSubtema(subtema) === this.selectedSubtema
+      );
+      if (subtemaSelecionado) {
+        filtros.subtema = subtemaSelecionado;
+      }
     }
     if (this.selectedTema) {
-      filtros.tema = this.selectedTema;
+      const temaSelecionado = this.temas.find(
+        (tema) => this.getDescricaoTema(tema) === this.selectedTema
+      );
+      if (temaSelecionado) {
+        filtros.tema = temaSelecionado;
+      }
     }
     if (this.palavraChave) {
       filtros.palavraChave = this.palavraChave;
     }
+
+    console.log('Filtros aplicados:', filtros);
 
     if (Object.keys(filtros).length === 0) {
       this.message = 'Por favor, selecione pelo menos um filtro.';
@@ -221,90 +295,91 @@ export class PageQuestoesComponent implements OnInit {
       return;
     }
 
-    this.questoesService.filtrarQuestoes(filtros, 0, 100).subscribe(
-      (questoes: Questao[]) => {
-        if (questoes.length === 0) {
-          if (
-            filtros.ano &&
-            !filtros.tipoDeProva &&
-            !filtros.dificuldade &&
-            !filtros.subtema &&
-            !filtros.tema &&
-            !filtros.palavraChave
-          ) {
-            this.message = 'Nenhuma questão encontrada para o ano selecionado.';
-          } else if (
-            filtros.tipoDeProva &&
-            !filtros.ano &&
-            !filtros.dificuldade &&
-            !filtros.subtema &&
-            !filtros.tema &&
-            !filtros.palavraChave
-          ) {
-            this.message =
-              'Nenhuma questão encontrada para o tipo de prova selecionado.';
-          } else if (
-            filtros.dificuldade &&
-            !filtros.ano &&
-            !filtros.tipoDeProva &&
-            !filtros.subtema &&
-            !filtros.tema &&
-            !filtros.palavraChave
-          ) {
-            this.message =
-              'Nenhuma questão encontrada para a dificuldade selecionada.';
-          } else if (
-            filtros.subtema &&
-            !filtros.ano &&
-            !filtros.tipoDeProva &&
-            !filtros.dificuldade &&
-            !filtros.tema &&
-            !filtros.palavraChave
-          ) {
-            this.message =
-              'Nenhuma questão encontrada para o subtema selecionado.';
-          } else if (
-            filtros.tema &&
-            !filtros.ano &&
-            !filtros.tipoDeProva &&
-            !filtros.dificuldade &&
-            !filtros.subtema &&
-            !filtros.palavraChave
-          ) {
-            this.message =
-              'Nenhuma questão encontrada para o tema selecionado.';
-          } else if (
-            filtros.palavraChave &&
-            !filtros.ano &&
-            !filtros.tipoDeProva &&
-            !filtros.dificuldade &&
-            !filtros.subtema &&
-            !filtros.tema
-          ) {
-            this.message =
-              'Nenhuma questão encontrada para a palavra-chave informada.';
+    this.questoesService
+      .filtrarQuestoes(this.usuarioId, filtros, 0, 100)
+      .subscribe(
+        (questoes: Questao[]) => {
+          console.log(questoes);
+          if (questoes.length === 0) {
+            this.message = this.getMensagemNenhumaQuestaoEncontrada(filtros);
+            this.questoes = [];
+            this.questaoAtual = null;
           } else {
-            this.message =
-              'Nenhuma questão encontrada para os filtros selecionados.';
+            this.message = '';
+            this.questoes = questoes;
+            this.paginaAtual = 0;
+            this.questaoAtual = this.questoes[this.paginaAtual];
           }
-          this.questoes = [];
-          this.questaoAtual = null;
-        } else {
-          this.message = '';
-          this.questoes = questoes;
-          this.paginaAtual = 0;
-          this.questaoAtual = this.questoes[this.paginaAtual];
-        }
 
-        this.resposta = '';
-        this.mostrarGabarito = false;
-      },
-      (error) => {
-        console.error('Erro ao filtrar questões:', error);
-        this.message =
-          'Ocorreu um erro ao filtrar questões. Por favor, tente novamente mais tarde.';
-      }
-    );
+          this.resposta = '';
+          this.mostrarGabarito = false;
+        },
+        (error) => {
+          console.error('Erro ao filtrar questões:', error);
+          this.message =
+            'Ocorreu um erro ao filtrar questões. Por favor, tente novamente mais tarde.';
+        }
+      );
+  }
+
+  getMensagemNenhumaQuestaoEncontrada(filtros: any): string {
+    if (
+      filtros.ano &&
+      !filtros.tipoDeProva &&
+      !filtros.dificuldade &&
+      !filtros.subtema &&
+      !filtros.tema &&
+      !filtros.palavraChave
+    ) {
+      return 'Nenhuma questão encontrada para o ano selecionado.';
+    } else if (
+      filtros.tipoDeProva &&
+      !filtros.ano &&
+      !filtros.dificuldade &&
+      !filtros.subtema &&
+      !filtros.tema &&
+      !filtros.palavraChave
+    ) {
+      return 'Nenhuma questão encontrada para o tipo de prova selecionado.';
+    } else if (
+      filtros.dificuldade &&
+      !filtros.ano &&
+      !filtros.tipoDeProva &&
+      !filtros.subtema &&
+      !filtros.tema &&
+      !filtros.palavraChave
+    ) {
+      return 'Nenhuma questão encontrada para a dificuldade selecionada.';
+    } else if (
+      filtros.subtema &&
+      !filtros.ano &&
+      !filtros.tipoDeProva &&
+      !filtros.dificuldade &&
+      !filtros.tema &&
+      !filtros.palavraChave
+    ) {
+      return 'Nenhuma questão encontrada para o subtema selecionado.';
+    } else if (
+      filtros.tema &&
+      !filtros.ano &&
+      !filtros.tipoDeProva &&
+      !filtros.dificuldade &&
+      !filtros.subtema &&
+      !filtros.palavraChave
+    ) {
+      return 'Nenhuma questão encontrada para o tema selecionado.';
+    } else if (
+      filtros.palavraChave &&
+      !filtros.ano &&
+      !filtros.tipoDeProva &&
+      !filtros.dificuldade &&
+      !filtros.subtema &&
+      !filtros.tema
+    ) {
+      return 'Nenhuma questão encontrada para a palavra-chave informada.';
+    } else {
+      return 'Nenhuma questão encontrada para os filtros selecionados.';
+    }
   }
 
   anteriorQuestao() {
@@ -313,14 +388,13 @@ export class PageQuestoesComponent implements OnInit {
       this.questaoAtual = this.questoes[this.paginaAtual];
 
       // Resetar o estado para evitar fundo nas alternativas
-      this.selectedOption = '';  // Limpar a seleção atual
+      this.selectedOption = ''; // Limpar a seleção atual
       this.resposta = ''; // Limpar a resposta exibida
       this.respostaCorreta = ''; // Limpar a alternativa correta
       this.respostaErrada = ''; // Limpar a alternativa errada
       this.mostrarGabarito = false; // Resetar a exibição do gabarito
       this.isRespostaCorreta = false; // Limpar o estado da resposta correta
       this.respostaVerificada = false; // Limpar o estado da resposta verificada
-
     } else {
       this.message = 'Não há mais questões disponíveis.';
     }
@@ -332,14 +406,13 @@ export class PageQuestoesComponent implements OnInit {
       this.questaoAtual = this.questoes[this.paginaAtual];
 
       // Resetar o estado para evitar fundo nas alternativas
-      this.selectedOption = '';  // Limpar a seleção atual
+      this.selectedOption = ''; // Limpar a seleção atual
       this.resposta = ''; // Limpar a resposta exibida
       this.respostaCorreta = ''; // Limpar a alternativa correta
       this.respostaErrada = ''; // Limpar a alternativa errada
       this.mostrarGabarito = false; // Resetar a exibição do gabarito
       this.isRespostaCorreta = false; // Limpar o estado da resposta correta
       this.respostaVerificada = false; // Limpar o estado da resposta verificada
-
     } else {
       this.message = 'Não há mais questões disponíveis.';
     }
@@ -360,7 +433,7 @@ export class PageQuestoesComponent implements OnInit {
     if (!this.filtroASalvar) {
       this.filtroASalvar = {} as FiltroDTO;
     }
-  
+
     if (this.selectedAno) {
       this.filtroASalvar.ano = this.selectedAno;
     }
@@ -382,20 +455,20 @@ export class PageQuestoesComponent implements OnInit {
     if (descricaoFiltro) {
       this.filtroASalvar.assunto = descricaoFiltro;
     }
-  
+
     if (this.filtroASalvar) {
       const idUser = parseInt(this.usuario.id);
-  
+
       this.filtroService.salvarFiltro(this.filtroASalvar, idUser).subscribe(
         (response) => {
           // Exibir mensagem de sucesso
           this.mensagemSucesso = 'Seu filtro foi salvo com sucesso!';
-  
+
           // Esconder a mensagem após 5 segundos
           setTimeout(() => {
             this.mensagemSucesso = '';
           }, 5000);
-  
+
           // Fecha o modal automaticamente após sucesso
           const modalElement = document.getElementById('confirmacaoModal');
           const modalInstance = bootstrap.Modal.getInstance(modalElement!);
@@ -409,9 +482,25 @@ export class PageQuestoesComponent implements OnInit {
       );
     }
   }
-  
 
   fecharCardConfirmacao(): void {
     this.mostrarCardConfirmacao = false;
   }
-}
+
+  loadQuestao(): void {
+    this.questoesService.getQuestaoById(this.paginaAtual).subscribe(
+      (data: Questao) => {
+        this.questaoAtual = data;
+
+        // Sanitizar o conteúdo
+        this.comentarioDaQuestaoDoisSanitizado = this.sanitizer.bypassSecurityTrustHtml(
+          this.questaoAtual.comentarioDaQuestaoDois || ''
+        );
+      },
+      (error) => {
+        console.error('Erro ao carregar cometario:', error);
+      }
+    );
+  }
+  
+}  
