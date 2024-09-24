@@ -6,5 +6,5 @@ export const environment = {
   clientSecret: '@321',
   obterTokenUrl: '/oauth/token',
 
-  tinymceApiKey: 'f6eb0n61ploi518j08cp3htisfrhn0yhyjfr2pk8l2bewri7'
+  tinymceApiKey: 'f6eb0n61ploi518j08cp3htisfrhn0yhyjfr2pk8l2bewri7',
 };
