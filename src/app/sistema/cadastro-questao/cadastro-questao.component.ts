@@ -12,6 +12,9 @@ import { Alternativa } from '../alternativa';
 import { TinymceService } from 'src/app/services/tinymce.service';
 
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { Usuario } from 'src/app/login/usuario';
+import { Permissao } from 'src/app/login/Permissao';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-cadastro-questao',
@@ -19,6 +22,10 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
   styleUrls: ['./cadastro-questao.component.css']
 })
 export class CadastroQuestaoComponent implements OnInit {
+
+  usuario: Usuario | null = null;
+  Permissao = Permissao; // Adicione esta linha
+  
   formData = new FormData();
   questaoDTO = new Questao();
   successMessage: string | null = null;
@@ -49,11 +56,13 @@ export class CadastroQuestaoComponent implements OnInit {
 
   constructor(
     private questoesService: QuestoesService,
+    private authService: AuthService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
     public tinymceService: TinymceService,
     private sanitizer: DomSanitizer
   ) { }
+
   ngOnInit(): void {
     this.editorConfig = this.tinymceService.getEditorConfig();
 
@@ -82,7 +91,8 @@ export class CadastroQuestaoComponent implements OnInit {
       { id: 3, texto: '3', correta: false },
       { id: 4, texto: '4', correta: false }
     ];
-
+    
+    this.usuario = this.authService.getUsuarioAutenticado();
 
     //Selecion o tem texto por defaault
     this.questaoDTO.tipoItemQuestao='texto'

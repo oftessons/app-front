@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt'
 import { environment } from 'src/environments/environment';
 import { Usuario } from '../login/usuario';
+import { map } from 'rxjs/internal/operators/map';
 
 @Injectable({
   providedIn: 'root'
@@ -41,8 +42,15 @@ export class AuthService {
 
 
   obterUsuarioAutenticadoDoBackend(): Observable<Usuario> {
-     return this.http.get<Usuario>(`${this.apiURL}/perfil`);
+    return this.http.get<Usuario>(`${this.apiURL}/perfil`).pipe(
+      map(usuario => {
+        // Presumindo que o backend retorne o role do usuário
+        usuario.permissao = this.jwtHelper.decodeToken(this.obterToken()).role;
+        return usuario;
+      })
+    );
   }
+  
 
   atualizarUsuario(usuario: Usuario, fotoDoPerfil?: File): Observable<Usuario> {
     const formData: FormData = new FormData();
@@ -56,15 +64,19 @@ export class AuthService {
   }
   
 
-  getUsuarioAutenticado(){
+  getUsuarioAutenticado(): Usuario | null {
     const token = this.obterToken();
-    if(token){
-      const usuario = this.jwtHelper.decodeToken(token).user_name
-      return usuario;
+    if (token) {
+      const decodedToken = this.jwtHelper.decodeToken(token);
+      return { 
+        id: decodedToken.id,
+        username: decodedToken.username, 
+        permissao: decodedToken.permissao // Captura o papel do usuário
+      } as Usuario;  // Fazemos um cast para o tipo Usuario
     }
     return null;
   }
-
+  
 
 
   getUserIdFromToken(): string | null {

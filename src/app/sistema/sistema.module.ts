@@ -20,6 +20,7 @@ import { MeusSimuladosComponent } from './meus-simulados/meus-simulados.componen
 
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { SharedModule } from '../shared/shared.module';
+import { ForbiddenComponent } from './forbidden/forbidden.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { SharedModule } from '../shared/shared.module';
     ListaQuestoesComponent,
     PageSimuladoComponent,
     MeusSimuladosComponent,
+    ForbiddenComponent,
   ],
   imports: [
     CommonModule,

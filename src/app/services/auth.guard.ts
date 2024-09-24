@@ -8,24 +8,22 @@ import { AuthService } from './auth.service';
 })
 export class AuthGuard implements CanActivate {
 
-  constructor(
-    private authService: AuthService,
-    private router: Router
-  ){}
+  constructor(private authService: AuthService, private router: Router) {}
 
   canActivate(
-    next: ActivatedRouteSnapshot,
+    route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): boolean {
+    
+    const usuario = this.authService.getUsuarioAutenticado();
 
-    const authenticated =  this.authService.isAuthenticated();
-
-    if(authenticated){
+    // Verifica se o usuário está autenticado e se a permissão está correta
+    if (usuario && usuario.permissao === route.data.role) {
       return true;
-    }else{
-      this.router.navigate(['/login'])
-      return false;
     }
 
+    // Redireciona para uma página de "forbidden" se a permissão não for correta
+    this.router.navigate(['/forbidden']);
+    return false;
   }
   
 }

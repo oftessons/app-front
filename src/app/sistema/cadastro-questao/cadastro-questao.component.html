@@ -1,3 +1,4 @@
+<div *ngIf="usuario && usuario.permissao === Permissao.ADMIN">
 <div class="container pt-5">
   <div class="container mt-4 container-geral">
     <div class="header-container">
@@ -465,4 +466,5 @@
       <button type="submit" class="btn btn-primary" *ngIf="questaoDTO.id">Atualizar</button>
     </div>
   </form>
+</div>
 </div>
