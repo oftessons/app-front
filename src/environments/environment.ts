@@ -5,6 +5,6 @@ export const environment = {
   clientId: 'oftlessons',
   clientSecret: '@321',
   obterTokenUrl: '/oauth/token',
-  // denise
+  // denise teste vercel
   tinymceApiKey: 'f6eb0n61ploi518j08cp3htisfrhn0yhyjfr2pk8l2bewri7',
 };
