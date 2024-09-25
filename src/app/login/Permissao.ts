@@ -1,5 +1,4 @@
 export enum Permissao {
-    ADMIN = 'ADMIN',
-    USER = 'USER'
+    ADMIN = 'ROLE_ADMIN',  // Altere 'ADMIN' para corresponder ao que vem do backend
+    USER = 'ROLE_USER'     // Se houver outros tipos de usuário, adicione-os também
 }
-  

@@ -10,11 +10,8 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-
   
   usuarioLogado: Usuario | null = null;
-  Permissao = Permissao; // Adicione esta linha
-  usuario!: Usuario | null;
 
   constructor(
     private authService: AuthService,
@@ -23,9 +20,10 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.usuarioLogado = this.authService.getUsuarioAutenticado();
-  }
-  isAdmin(): boolean {
-    return this.usuario?.permissao === 'ADMIN'; // Verifica se o usuário é admin
+    console.log(this.usuarioLogado); // Verifica se o usuário está sendo carregado corretamente
   }
 
+  isAdmin(): boolean {
+    return this.usuarioLogado?.permissao === 'ROLE_ADMIN'; // Verifica se o usuário é admin
+  }
 }

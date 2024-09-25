@@ -64,29 +64,27 @@ export class AuthService {
   }
   
 
+  
+
   getUsuarioAutenticado(): Usuario | null {
+    const userJson = localStorage.getItem('usuario'); // Assumindo que o usuário está salvo no localStorage
+    if (userJson) {
+        return JSON.parse(userJson); // Retorna o usuário como objeto
+    }
+    return null; // Retorna null se não houver usuário
+}
+
+  
+
+  getUserIdFromToken(): string | null {
     const token = this.obterToken();
     if (token) {
       const decodedToken = this.jwtHelper.decodeToken(token);
-      return { 
-        id: decodedToken.id,
-        username: decodedToken.username, 
-        permissao: decodedToken.permissao // Captura o papel do usuário
-      } as Usuario;  // Fazemos um cast para o tipo Usuario
+      return decodedToken?.sub || null; // Assume que o campo 'sub' contém o ID do usuário
     }
     return null;
   }
   
-
-
-  getUserIdFromToken(): string | null {
-    const token = localStorage.getItem('access_token');
-    if (token) {
-      const decodedToken = JSON.parse(atob(token.split('.')[1]));
-      return decodedToken.sub; // Isso assume que o ID do usuário está no campo 'sub' do token
-    }
-    return null;
-  }
 
   salvarUsuarioAutenticado(usuario: Usuario) {
     const token = this.obterToken();

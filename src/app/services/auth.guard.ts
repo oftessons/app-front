@@ -12,18 +12,25 @@ export class AuthGuard implements CanActivate {
 
   canActivate(
     route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): boolean {
-    
+    state: RouterStateSnapshot
+  ): boolean {
     const usuario = this.authService.getUsuarioAutenticado();
-
-    // Verifica se o usuário está autenticado e se a permissão está correta
-    if (usuario && usuario.permissao === route.data.role) {
-      return true;
+  
+    // Verifica se o usuário está autenticado
+    if (usuario) {
+      const role = usuario.permissao;
+  
+      // Verifica se o usuário tem a permissão necessária
+      if (role === 'ROLE_ADMIN' || role === 'ROLE_USER') {
+        return true;
+      }
     }
-
-    // Redireciona para uma página de "forbidden" se a permissão não for correta
+  
+    // Caso não tenha permissão, redireciona para "forbidden"
     this.router.navigate(['/forbidden']);
     return false;
   }
+  
+  
   
 }

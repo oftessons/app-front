@@ -27,7 +27,7 @@ export class NavbarComponent {
   }
   
   isAdmin(): boolean {
-    return this.usuario?.permissao === 'ADMIN'; // Verifica se o usuário é admin
+    return this.usuario?.permissao === 'ROLE_ADMIN'; // Verifica se o usuário é admin
   }
 
   logout() {
