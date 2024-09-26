@@ -95,6 +95,12 @@ export class PageSimuladoComponent implements OnInit {
   questaoDTO = new Questao();
   selectedAlternativeIndex: number = -3;
 
+  tiposDeProvaDescricoes: string[] = [];
+  anosDescricoes: string[] = [];
+  dificuldadesDescricoes: string[] = [];
+  subtemasDescricoes: string[] = [];
+  temasDescricoes: string[] = [];
+
   constructor(
     private questoesService: QuestoesService,
     private filtroService: FiltroService,
@@ -107,6 +113,11 @@ export class PageSimuladoComponent implements OnInit {
     this.dados = this.obterDados();
     console.log('Dados:', this.dados);
     this.obterPerfilUsuario();
+    this.tiposDeProvaDescricoes = this.tiposDeProva.map(tipoDeProva => this.getDescricaoTipoDeProva(tipoDeProva));
+    this.anosDescricoes = this.anos.map(ano => this.getDescricaoAno(ano));
+    this.dificuldadesDescricoes = this.dificuldades.map(dificuldade => this.getDescricaoDificuldade(dificuldade));
+    this.subtemasDescricoes = this.subtemas.map(subtema => this.getDescricaoSubtema(subtema));
+    this.temasDescricoes = this.temas.map(tema => this.getDescricaoTema(tema));
   }
 
   obterDados() {
@@ -217,25 +228,54 @@ export class PageSimuladoComponent implements OnInit {
     const filtros: any = {};
 
     if (this.selectedAno) {
-      filtros.ano = this.selectedAno;
+      const anoSelecionado = this.anos.find(
+        (ano) => this.getDescricaoAno(ano) === this.selectedAno
+      );
+      if (anoSelecionado) {
+        filtros.ano = anoSelecionado;
+      }
     }
     if (this.selectedDificuldade) {
-      filtros.dificuldade = this.selectedDificuldade;
+      const dificuldadeSelecionada = this.dificuldades.find(
+        (dificuldade) =>
+          this.getDescricaoDificuldade(dificuldade) === this.selectedDificuldade
+      );
+      if (dificuldadeSelecionada) {
+        filtros.dificuldade = dificuldadeSelecionada;
+      }
     }
     if (this.selectedTipoDeProva) {
-      filtros.tipoDeProva = this.selectedTipoDeProva;
+      const tipoDeProvaSelecionado = this.tiposDeProva.find(
+        (tipoDeProva) =>
+          this.getDescricaoTipoDeProva(tipoDeProva) === this.selectedTipoDeProva
+      );
+      if (tipoDeProvaSelecionado) {
+        filtros.tipoDeProva = tipoDeProvaSelecionado;
+      }
     }
     if (this.selectedSubtema) {
-      filtros.subtema = this.selectedSubtema;
+      const subtemaSelecionado = this.subtemas.find(
+        (subtema) => this.getDescricaoSubtema(subtema) === this.selectedSubtema
+      );
+      if (subtemaSelecionado) {
+        filtros.subtema = subtemaSelecionado;
+      }
     }
     if (this.selectedTema) {
-      filtros.tema = this.selectedTema;
+      const temaSelecionado = this.temas.find(
+        (tema) => this.getDescricaoTema(tema) === this.selectedTema
+      );
+      if (temaSelecionado) {
+        filtros.tema = temaSelecionado;
+      }
     }
     if (this.palavraChave) {
       filtros.palavraChave = this.palavraChave;
     }
     if (this.quantidadeQuestoesSelecionada) {
       filtros.qtdQuestoes = this.quantidadeQuestoesSelecionada;
+    } else {
+      console.error('Quantidade de questões selecionada é inválida:', this.quantidadeQuestoesSelecionada);
     }
 
     if (Object.keys(filtros).length === 0) {
