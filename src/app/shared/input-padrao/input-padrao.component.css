@@ -1,0 +1,61 @@
+/* input-padrao.component.css */
+.input-container {
+  position: relative;
+  margin: 10px 0;
+  width: 100%;
+  height: 48px;
+}
+
+.input-container input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.input-container input:focus {
+  border-color: #3f51b5;
+}
+
+.input-container label {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  transition: all 0.3s ease;
+  pointer-events: none;
+  color: #999;
+}
+
+.input-container label.active {
+  top: 12px;
+  left: 10px;
+  font-size: 10px;
+  color: #3f51b5;
+  font-weight: 700;
+  margin: 0;
+}
+
+.input-container input:focus + label,
+.input-container input:not(:placeholder-shown) + label,
+.input-container input.ng-dirty + label {
+  top: 12px;
+  left: 10px;
+  font-size: 10px;
+  color: #3f51b5;
+  font-weight: 700;
+  margin: 0;
+}
+
+.input-container input:focus + label {
+  color: #3f51b5;
+}
+
+.selected-value {
+  font-size: 14px;
+  font-weight: 600;
+  flex-grow: 1;
+  padding-top: 8px;
+}

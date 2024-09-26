@@ -1,23 +1,29 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SelectPadraoComponent } from './select-padrao/select-padrao.component';
+import { InputPadraoComponent } from './input-padrao/input-padrao.component';
 
 
 // material imports
 import { MatIconModule } from "@angular/material/icon";
 
+import { FormsModule } from '@angular/forms';
+
 
 
 @NgModule({
   declarations: [
-    SelectPadraoComponent
+    SelectPadraoComponent,
+    InputPadraoComponent
   ],
   imports: [
     CommonModule,
-    MatIconModule
+    MatIconModule,
+    FormsModule,
   ],
   exports: [
-    SelectPadraoComponent
+    SelectPadraoComponent,
+    InputPadraoComponent
   ]
 })
 export class SharedModule { }
