@@ -115,7 +115,6 @@
     </div>
     <div class="questao">
       <div class="identificadores-questao">
-        <h3>Título: {{ questaoAtual.title }}</h3>
         <h3>ID: {{ questaoAtual.id }}</h3>
         <h3>Tema: {{ questaoAtual.tema }}</h3>
         <h3>Ano: {{ questaoAtual.ano }}</h3>
@@ -170,10 +169,12 @@
                 </div>
                 <div class="right-buttons">
                   <button class="btn-anterior" (click)="anteriorQuestao()" [disabled]="paginaAtual === 0">Anterior</button>
-                  <button class="btn-responder" (click)="questaoAtual && responderQuestao(questaoAtual)">Responder</button>
+                  <button class="btn-responder" (click)="questaoAtual && responderQuestao(questaoAtual)" [disabled]="jaRespondeu">
+                    Responder
+                </button>                
                   <button class="btn-proxima" (click)="proximaQuestao()">Próxima</button>
                 </div>
-              </div>
+              </div>              
             </div>
           </div>
         </div>

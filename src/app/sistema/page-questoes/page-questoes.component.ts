@@ -31,6 +31,7 @@ declare var bootstrap: any;
   styleUrls: ['./page-questoes.component.css'],
 })
 export class PageQuestoesComponent implements OnInit {
+  
   questao: Questao = new Questao();
   selectedOption: string = '';
   //resposta: string | null = null;
@@ -43,6 +44,8 @@ export class PageQuestoesComponent implements OnInit {
   subtemas = Object.values(Subtema);
   temas = Object.values(Tema);
   mensagemSucesso: string = '';
+
+  jaRespondeu: boolean = false;
 
   respostaVerificada: boolean = false;
   respostaFoiSubmetida: boolean = false;
@@ -153,34 +156,40 @@ export class PageQuestoesComponent implements OnInit {
   }
 
   responderQuestao(questao: Questao | null): void {
-    if (!questao) {
-      console.error('Questão atual é nula.');
-      this.resposta = 'Nenhuma questão selecionada.';
-      return;
-    }
-
-    if (this.selectedOption) {
-      const alternativaSelecionada = questao.alternativas.find(
-        (a) => a.texto === this.selectedOption
-      );
-
-      if (alternativaSelecionada) {
-        const respostaDTO: RespostaDTO = {
-          questaoId: questao.id,
-          selecionarOpcao: this.selectedOption,
-        };
-
-        const idUser = parseInt(this.usuario.id);
-
-        this.questoesService
-          .checkAnswer(questao.id, idUser, respostaDTO)
-          .subscribe(
+    if (!this.jaRespondeu) {  // Verificar se o usuário já respondeu
+      if (!questao) {
+        console.error('Questão atual é nula.');
+        this.resposta = 'Nenhuma questão selecionada.';
+        return;
+      }
+  
+      if (this.selectedOption) {
+        const alternativaSelecionada = questao.alternativas.find(
+          (a) => a.texto === this.selectedOption
+        );
+  
+        if (alternativaSelecionada) {
+          const respostaDTO: RespostaDTO = {
+            questaoId: questao.id,
+            selecionarOpcao: this.selectedOption,
+          };
+  
+          const idUser = parseInt(this.usuario.id);
+  
+          // Chamamos o serviço para verificar a resposta
+          this.questoesService.checkAnswer(questao.id, idUser, respostaDTO).subscribe(
             (resposta: Resposta) => {
               this.isRespostaCorreta = resposta.correct;
-              this.respostaVerificada = true; // Só permite mostrar o fundo após verificar a resposta
+              this.respostaVerificada = true; // Verificação foi realizada
               this.resposta = resposta.correct
                 ? 'Resposta correta!'
                 : 'Resposta incorreta. Tente novamente.';
+  
+              // Marque que o usuário já respondeu para desativar o botão
+              this.jaRespondeu = true;
+  
+              // Verificar a resposta do usuário e exibir o resultado
+              this.verificarRespostaUsuario(resposta);
             },
             (error) => {
               console.error('Erro ao verificar resposta:', error);
@@ -188,14 +197,34 @@ export class PageQuestoesComponent implements OnInit {
                 'Ocorreu um erro ao verificar a resposta. Por favor, tente novamente mais tarde.';
             }
           );
+        }
       }
     }
   }
+  
+
+
+
+  // Método para verificar a resposta do usuário e exibir gabarito
+verificarRespostaUsuario(resposta: Resposta) {
+  this.selectedOption = resposta.opcaoSelecionada;
+  this.isRespostaCorreta = resposta.correct;
+
+  if (resposta.correct) {
+    this.respostaCorreta = this.selectedOption;
+    this.respostaErrada = '';
+  } else {
+    this.respostaErrada = this.selectedOption;
+    this.respostaCorreta = resposta.opcaoCorreta;
+  }
+  this.respostaVerificada = true;
+}
+
+  
 
   exibirGabarito() {
     this.mostrarGabarito = true;
-
-    // Atualizar o estado das respostas corretas e erradas
+  
     if (this.questaoAtual) {
       this.respostaCorreta =
         this.questaoAtual.alternativas.find(
@@ -207,6 +236,7 @@ export class PageQuestoesComponent implements OnInit {
         )?.texto || '';
     }
   }
+  
 
   getDescricaoTipoDeProva(tipoDeProva: TipoDeProva): string {
     return getDescricaoTipoDeProva(tipoDeProva);
@@ -390,100 +420,69 @@ export class PageQuestoesComponent implements OnInit {
   }
 
   anteriorQuestao() {
+    this.jaRespondeu = false; 
     if (this.paginaAtual > 0) {
       this.paginaAtual--;
       this.questaoAtual = this.questoes[this.paginaAtual];
-
+  
       this.selectedOption = '';
       this.isRespostaCorreta = false;
       this.mostrarGabarito = false;
       this.respostaCorreta = '';
       this.respostaErrada = '';
       this.respostaVerificada = false;
-
-      this.questoesService
-        .questaoRespondida(this.usuarioId, this.questaoAtual.id)
-        .subscribe({
-          next: (resposta) => {
-            if (resposta) {
-              console.log('Resposta recebida:', resposta);
-              this.selectedOption = resposta.opcaoSelecionada;
-              this.isRespostaCorreta = resposta.correct;
-
-              this.mostrarGabarito = true;
-              if (resposta.correct) {
-                this.respostaCorreta = this.selectedOption;
-                this.respostaErrada = '';
-              } else {
-                this.respostaErrada = this.selectedOption;
-                this.respostaCorreta = resposta.opcaoCorreta;
-              }
-              this.respostaVerificada = true;
-            } else {
-              this.selectedOption = '';
-              this.isRespostaCorreta = false;
-              this.mostrarGabarito = false;
-              this.respostaCorreta = '';
-              this.respostaErrada = '';
-              this.respostaVerificada = false;
-            }
-          },
-          error: (erro) => {
-            console.error('Erro ao verificar a resposta:', erro);
-          },
-        });
+  
+      this.questoesService.questaoRespondida(this.usuarioId, this.questaoAtual.id).subscribe({
+        next: (resposta) => {
+          if (resposta) {
+            this.verificarRespostaUsuario(resposta);
+            this.mostrarGabarito = true;
+          } else {
+            this.selectedOption = '';
+            this.isRespostaCorreta = false;
+            this.mostrarGabarito = false;
+            this.respostaCorreta = '';
+            this.respostaErrada = '';
+            this.respostaVerificada = false;
+          }
+        },
+        error: (erro) => {
+          console.error('Erro ao verificar a resposta:', erro);
+        },
+      });
     } else {
       this.message = 'Não há mais questões disponíveis.';
     }
   }
 
   proximaQuestao() {
+    this.jaRespondeu = false;
     if (this.paginaAtual < this.questoes.length - 1) {
       this.paginaAtual++;
       this.questaoAtual = this.questoes[this.paginaAtual];
-
+  
       this.selectedOption = '';
       this.isRespostaCorreta = false;
-      this.mostrarGabarito = false;
+      this.mostrarGabarito = false; // Gabarito desativado
       this.respostaCorreta = '';
       this.respostaErrada = '';
       this.respostaVerificada = false;
-
-      this.questoesService
-        .questaoRespondida(this.usuarioId, this.questaoAtual.id)
-        .subscribe({
-          next: (resposta) => {
-            if (resposta) {
-              console.log('Resposta recebida:', resposta);
-              this.selectedOption = resposta.opcaoSelecionada;
-              this.isRespostaCorreta = resposta.correct;
-
-              this.mostrarGabarito = true;
-              if (resposta.correct) {
-                this.respostaCorreta = this.selectedOption;
-                this.respostaErrada = '';
-              } else {
-                this.respostaErrada = this.selectedOption;
-                this.respostaCorreta = resposta.opcaoCorreta;
-              }
-              this.respostaVerificada = true;
-            } else {
-              this.selectedOption = '';
-              this.isRespostaCorreta = false;
-              this.mostrarGabarito = false;
-              this.respostaCorreta = '';
-              this.respostaErrada = '';
-              this.respostaVerificada = false;
-            }
-          },
-          error: (erro) => {
-            console.error('Erro ao verificar a resposta:', erro);
-          },
-        });
+  
+      this.questoesService.questaoRespondida(this.usuarioId, this.questaoAtual.id).subscribe({
+        next: (resposta) => {
+          if (resposta) {
+            this.verificarRespostaUsuario(resposta);
+          }
+        },
+        error: (erro) => {
+          console.error('Erro ao verificar a resposta:', erro);
+        },
+      });
     } else {
       this.message = 'Não há mais questões disponíveis.';
     }
   }
+  
 
   abrirModal(): void {
     const modalElement = document.getElementById('confirmacaoModal');
