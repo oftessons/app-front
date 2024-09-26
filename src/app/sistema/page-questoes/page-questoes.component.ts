@@ -120,11 +120,19 @@ export class PageQuestoesComponent implements OnInit {
       this.getDescricaoTema(tema)
     );
     this.loadQuestao();
-    this.tiposDeProvaDescricoes = this.tiposDeProva.map(tipoDeProva => this.getDescricaoTipoDeProva(tipoDeProva));
-    this.anosDescricoes = this.anos.map(ano => this.getDescricaoAno(ano));
-    this.dificuldadesDescricoes = this.dificuldades.map(dificuldade => this.getDescricaoDificuldade(dificuldade));
-    this.subtemasDescricoes = this.subtemas.map(subtema => this.getDescricaoSubtema(subtema));
-    this.temasDescricoes = this.temas.map(tema => this.getDescricaoTema(tema));
+    this.tiposDeProvaDescricoes = this.tiposDeProva.map((tipoDeProva) =>
+      this.getDescricaoTipoDeProva(tipoDeProva)
+    );
+    this.anosDescricoes = this.anos.map((ano) => this.getDescricaoAno(ano));
+    this.dificuldadesDescricoes = this.dificuldades.map((dificuldade) =>
+      this.getDescricaoDificuldade(dificuldade)
+    );
+    this.subtemasDescricoes = this.subtemas.map((subtema) =>
+      this.getDescricaoSubtema(subtema)
+    );
+    this.temasDescricoes = this.temas.map((tema) =>
+      this.getDescricaoTema(tema)
+    );
   }
 
   onOptionChange(texto: string): void {
@@ -299,7 +307,6 @@ export class PageQuestoesComponent implements OnInit {
       .filtrarQuestoes(this.usuarioId, filtros, 0, 100)
       .subscribe(
         (questoes: Questao[]) => {
-          console.log(questoes);
           if (questoes.length === 0) {
             this.message = this.getMensagemNenhumaQuestaoEncontrada(filtros);
             this.questoes = [];
@@ -387,14 +394,44 @@ export class PageQuestoesComponent implements OnInit {
       this.paginaAtual--;
       this.questaoAtual = this.questoes[this.paginaAtual];
 
-      // Resetar o estado para evitar fundo nas alternativas
-      this.selectedOption = ''; // Limpar a seleção atual
-      this.resposta = ''; // Limpar a resposta exibida
-      this.respostaCorreta = ''; // Limpar a alternativa correta
-      this.respostaErrada = ''; // Limpar a alternativa errada
-      this.mostrarGabarito = false; // Resetar a exibição do gabarito
-      this.isRespostaCorreta = false; // Limpar o estado da resposta correta
-      this.respostaVerificada = false; // Limpar o estado da resposta verificada
+      this.selectedOption = '';
+      this.isRespostaCorreta = false;
+      this.mostrarGabarito = false;
+      this.respostaCorreta = '';
+      this.respostaErrada = '';
+      this.respostaVerificada = false;
+
+      this.questoesService
+        .questaoRespondida(this.usuarioId, this.questaoAtual.id)
+        .subscribe({
+          next: (resposta) => {
+            if (resposta) {
+              console.log('Resposta recebida:', resposta);
+              this.selectedOption = resposta.opcaoSelecionada;
+              this.isRespostaCorreta = resposta.correct;
+
+              this.mostrarGabarito = true;
+              if (resposta.correct) {
+                this.respostaCorreta = this.selectedOption;
+                this.respostaErrada = '';
+              } else {
+                this.respostaErrada = this.selectedOption;
+                this.respostaCorreta = resposta.opcaoCorreta;
+              }
+              this.respostaVerificada = true;
+            } else {
+              this.selectedOption = '';
+              this.isRespostaCorreta = false;
+              this.mostrarGabarito = false;
+              this.respostaCorreta = '';
+              this.respostaErrada = '';
+              this.respostaVerificada = false;
+            }
+          },
+          error: (erro) => {
+            console.error('Erro ao verificar a resposta:', erro);
+          },
+        });
     } else {
       this.message = 'Não há mais questões disponíveis.';
     }
@@ -405,14 +442,44 @@ export class PageQuestoesComponent implements OnInit {
       this.paginaAtual++;
       this.questaoAtual = this.questoes[this.paginaAtual];
 
-      // Resetar o estado para evitar fundo nas alternativas
-      this.selectedOption = ''; // Limpar a seleção atual
-      this.resposta = ''; // Limpar a resposta exibida
-      this.respostaCorreta = ''; // Limpar a alternativa correta
-      this.respostaErrada = ''; // Limpar a alternativa errada
-      this.mostrarGabarito = false; // Resetar a exibição do gabarito
-      this.isRespostaCorreta = false; // Limpar o estado da resposta correta
-      this.respostaVerificada = false; // Limpar o estado da resposta verificada
+      this.selectedOption = '';
+      this.isRespostaCorreta = false;
+      this.mostrarGabarito = false;
+      this.respostaCorreta = '';
+      this.respostaErrada = '';
+      this.respostaVerificada = false;
+
+      this.questoesService
+        .questaoRespondida(this.usuarioId, this.questaoAtual.id)
+        .subscribe({
+          next: (resposta) => {
+            if (resposta) {
+              console.log('Resposta recebida:', resposta);
+              this.selectedOption = resposta.opcaoSelecionada;
+              this.isRespostaCorreta = resposta.correct;
+
+              this.mostrarGabarito = true;
+              if (resposta.correct) {
+                this.respostaCorreta = this.selectedOption;
+                this.respostaErrada = '';
+              } else {
+                this.respostaErrada = this.selectedOption;
+                this.respostaCorreta = resposta.opcaoCorreta;
+              }
+              this.respostaVerificada = true;
+            } else {
+              this.selectedOption = '';
+              this.isRespostaCorreta = false;
+              this.mostrarGabarito = false;
+              this.respostaCorreta = '';
+              this.respostaErrada = '';
+              this.respostaVerificada = false;
+            }
+          },
+          error: (erro) => {
+            console.error('Erro ao verificar a resposta:', erro);
+          },
+        });
     } else {
       this.message = 'Não há mais questões disponíveis.';
     }
@@ -493,14 +560,14 @@ export class PageQuestoesComponent implements OnInit {
         this.questaoAtual = data;
 
         // Sanitizar o conteúdo
-        this.comentarioDaQuestaoDoisSanitizado = this.sanitizer.bypassSecurityTrustHtml(
-          this.questaoAtual.comentarioDaQuestaoDois || ''
-        );
+        this.comentarioDaQuestaoDoisSanitizado =
+          this.sanitizer.bypassSecurityTrustHtml(
+            this.questaoAtual.comentarioDaQuestaoDois || ''
+          );
       },
       (error) => {
         console.error('Erro ao carregar cometario:', error);
       }
     );
   }
-  
-}  
+}
