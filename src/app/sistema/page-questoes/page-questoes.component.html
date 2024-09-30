@@ -59,9 +59,7 @@
           </div>
         </div>
 
-        <div *ngIf="message" class="alert alert-info mt-3 alert-custom" role="alert">
-          {{ message }}
-        </div>
+       
 
         <div *ngIf="mensagemSucesso" class="alert alert-success mt-3">
           {{ mensagemSucesso }}
@@ -148,6 +146,10 @@
                 </div>
               </div>
 
+              <div *ngIf="message" class="alert alert-info mt-3 alert-custom" role="alert">
+                {{ message }}
+              </div>   
+
               <div *ngIf="mostrarGabarito && questaoAtual">
                 <h2 style="margin-top: 10px;">Comentário da Questão</h2>
                 <img *ngIf="questaoAtual.fotoDaResposta" [src]="questaoAtual.fotoDaResposta" alt="Foto do Comentário" class="questao-foto">
@@ -171,7 +173,7 @@
                   <button class="btn-anterior" (click)="anteriorQuestao()" [disabled]="paginaAtual === 0">Anterior</button>
                   <button class="btn-responder" (click)="questaoAtual && responderQuestao(questaoAtual)" [disabled]="jaRespondeu">
                     Responder
-                </button>                
+                </button>             
                   <button class="btn-proxima" (click)="proximaQuestao()">Próxima</button>
                 </div>
               </div>              
