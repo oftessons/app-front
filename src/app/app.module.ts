@@ -19,6 +19,7 @@ import { ChartsModule } from 'ng2-charts';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { SharedModule } from './shared/shared.module';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @NgModule({
   declarations: [
@@ -40,8 +41,8 @@ import { SharedModule } from './shared/shared.module';
     ChartsModule,
     NgxPaginationModule,
     EditorModule,
-    SharedModule
-
+    SharedModule,
+    MatProgressBarModule
   ],
   providers: [
     AuthService,
