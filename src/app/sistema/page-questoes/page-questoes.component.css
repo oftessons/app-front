@@ -70,7 +70,7 @@
 }
 .filters-container {
   margin-top: 20px;
-  background: #909298;
+  background: #0F1934;
   border-radius: 5px;
   padding: 50px;
 }
@@ -132,8 +132,8 @@
   margin-right: 10px;
   padding: 10px 20px;
   width: 230px;
-  background-color: #041e4e;
-  color: #fff;
+  background-color: #f9ca4b;
+  color: #000;
   border: none;
   border-radius: 5px;
   cursor: pointer;
