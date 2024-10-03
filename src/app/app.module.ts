@@ -21,6 +21,9 @@ import { EditorModule } from '@tinymce/tinymce-angular';
 import { SharedModule } from './shared/shared.module';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 
+// Importando o módulo Quill
+import { QuillModule } from 'ngx-quill';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -42,7 +45,8 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     NgxPaginationModule,
     EditorModule,
     SharedModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    QuillModule.forRoot()
   ],
   providers: [
     AuthService,

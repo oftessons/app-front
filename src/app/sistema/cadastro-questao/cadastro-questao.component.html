@@ -381,7 +381,7 @@
         </div>
       </div> -->
 
-      <div class="form-group">
+      <!-- <div class="form-group">
         <label>Comentário da Alternativa (B): </label>
         <editor
           apiKey="{{ tinymceService.apiKey }}"
@@ -390,6 +390,58 @@
           name="comentarioDaQuestaoDois"
           placeholder="Digite o comentário da alternativa B"
         ></editor>
+      </div> -->
+
+      <div class="form-group">
+        <label>Comentário do Gabarito:</label>
+        <div id="toolbar">
+          <!-- Add font size dropdown -->
+          <select class="ql-header">
+            <option value="1"></option>
+            <option value="2"></option>
+            <option value="3"></option>
+            <option value="4"></option>
+            <option value="5"></option>
+            <option value="6"></option>
+            <option selected></option>
+          </select>
+            <!-- Add a bold button -->
+            <button class="ql-bold"></button>
+            <!-- Add an italic button -->
+            <button class="ql-italic"></button>
+            <!-- Add an underline button -->
+            <button class="ql-underline"></button>
+            <!-- Add a color picker -->
+            <select class="ql-color"></select>
+            <!-- Add a background color picker -->
+            <select class="ql-background"></select>
+            <!-- Add subscript and superscript buttons -->
+            <button class="ql-script" value="sub"></button>
+            <button class="ql-script" value="super"></button>
+            <!-- Add a blockquote button -->
+            <button class="ql-blockquote"></button>
+            <!-- Add a code block button -->
+            <button class="ql-code-block"></button>
+            <!-- Add a list button -->
+            <button class="ql-list" value="ordered"></button>
+            <button class="ql-list" value="bullet"></button>
+            <!-- Add an indent button -->
+            <button class="ql-indent" value="-1"></button>
+            <button class="ql-indent" value="+1"></button>
+            <!-- Add a link button -->
+            <button class="ql-link"></button>
+            <!-- Add an image button -->
+            <button class="ql-image"></button>
+            <!-- Add a video button -->
+            <button class="ql-video"></button>
+            <!-- Add a clean button -->
+            <button class="ql-clean"></button>
+          </div>
+        
+        <!-- Quill Editor Container -->
+        <div id="editor" class="form-control" name="comentarioDaQuestaoDois"
+          [(ngModel)]="questaoDTO.comentarioDaQuestaoDois">
+        </div>
       </div>
       
       <div class="col-md-6">
