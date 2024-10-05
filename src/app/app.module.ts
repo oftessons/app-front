@@ -46,7 +46,7 @@ import { QuillModule } from 'ngx-quill';
     EditorModule,
     SharedModule,
     MatProgressBarModule,
-    QuillModule.forRoot()
+    QuillModule
   ],
   providers: [
     AuthService,
