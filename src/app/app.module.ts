@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule } from '@angular/core'; 
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -20,8 +20,6 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { SharedModule } from './shared/shared.module';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-
-// Importando o módulo Quill
 import { QuillModule } from 'ngx-quill';
 
 @NgModule({
@@ -46,7 +44,12 @@ import { QuillModule } from 'ngx-quill';
     EditorModule,
     SharedModule,
     MatProgressBarModule,
-    QuillModule
+    QuillModule.forRoot({
+      customOptions: [{
+        import: 'formats/font',
+        whitelist: ['mirza', 'roboto', 'aref', 'serif', 'sansserif', 'monospace']
+      }]
+    })
   ],
   providers: [
     AuthService,
