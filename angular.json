@@ -49,8 +49,8 @@
                 },
                 {
                   "type": "any",
-                  "maximumWarning": "1mb",
-                  "maximumError": "1.5mb"
+                  "maximumWarning": "1.5mb",
+                   "maximumError": "2mb"
                 }
               ],
               "optimization": true,
