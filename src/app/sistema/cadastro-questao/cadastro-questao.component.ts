@@ -113,7 +113,7 @@ editorConfig1 = {
     });
 
     quill.on('text-change', () => {
-      this.questaoDTO.comentarioDaQuestaoDois = quill.root.innerHTML;
+      this.questaoDTO.comentarioDaQuestao = quill.root.innerHTML;
     });
 
     const quill1 = new Quill('#editor1', {
@@ -232,7 +232,7 @@ editorConfig1 = {
     // Ensure the editor content is up-to-date
     const quillEditor = document.querySelector('#editor .ql-editor');
     if (quillEditor) {
-      this.questaoDTO.comentarioDaQuestaoDois = quillEditor.innerHTML;
+      this.questaoDTO.comentarioDaQuestao = quillEditor.innerHTML;
     }
 
     const quillEditor1 = document.querySelector('#editor1 .ql-editor');
@@ -247,10 +247,10 @@ editorConfig1 = {
       this.formData.append('fotoDaQuestaoArquivo', this.fotoDaQuestao);
     }
     if (this.fotoDaRespostaUm) {
-      this.formData.append('fotoDaRespostaArquivo', this.fotoDaRespostaUm);
+      this.formData.append('fotoDaRespostaUmArquivo', this.fotoDaRespostaUm);
     }
     if (this.fotoDaRespostaDois) {
-      this.formData.append('fotoDaRespostaArquivo', this.fotoDaRespostaDois);
+      this.formData.append('fotoDaRespostaDoisArquivo', this.fotoDaRespostaDois);
     }
   
     console.debug('Enviando formulário com dados da questão:', this.formData);

@@ -24,6 +24,7 @@ export class Questao {
   fotoDaResposta!: File;
   fotoDaRespostaUm!: File;
   fotoDaRespostaDois!: File;
+  comentarioDaQuestao!: string;
   comentarioDaQuestaoUm!: string;
   comentarioDaQuestaoDois!: string;
   comentarioDaQuestaoTres!: string;
@@ -64,6 +65,7 @@ export class Questao {
       fotoDaRespostaDois: this.fotoDaRespostaDois,
 
       fotoDaResposta: this.fotoDaResposta,
+      comentarioDaQuestao: this.comentadorDaQuestao,
       comentarioDaQuestaoUm: this.comentarioDaQuestaoUm,
       comentarioDaQuestaoDois: this.comentarioDaQuestaoDois,
       comentarioDaQuestaoTres: this.comentarioDaQuestaoTres,
