@@ -392,6 +392,7 @@ input[type="checkbox"] {
 .image-container {
   display: flex;
   align-items: center;
+  padding-bottom: 16px;
 }
 
 .checkbox {
@@ -450,7 +451,7 @@ input[type="checkbox"] {
 .col-imagens{
   display: flex;
   flex-direction: row;
-  gap: 16px;
+  gap: 24px;
   align-items: center;
   width: 100%;
 }
