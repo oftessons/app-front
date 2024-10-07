@@ -21,6 +21,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { Usuario } from 'src/app/login/usuario';
 import { Simulado } from '../simulado';
 import { SimuladoService } from 'src/app/services/simulado.service';
+import * as Chart from 'chart.js';
 
 declare var bootstrap: any;
 
@@ -59,6 +60,9 @@ export class PageSimuladoComponent implements OnInit {
   message: string = '';
   resposta: string = '';
 
+  respostas: any[] = []; // Array que armazena as respostas do usuário
+  chart: any;
+
   quantidadeQuestoesSelecionada: number | null = null;
 
   questaoAtual: Questao | null = null;
@@ -95,6 +99,10 @@ export class PageSimuladoComponent implements OnInit {
   questaoDTO = new Questao();
   selectedAlternativeIndex: number = -3;
 
+  simuladoIniciado = false;
+  simuladoFinalizado = false;
+  tempoTotal: number = 0;
+
   constructor(
     private questoesService: QuestoesService,
     private filtroService: FiltroService,
@@ -108,6 +116,16 @@ export class PageSimuladoComponent implements OnInit {
     console.log('Dados:', this.dados);
     this.obterPerfilUsuario();
   }
+
+  finalizarSimulado() {
+    
+  }
+
+  gerarGrafico(acertos: number, erros: number) {
+    
+  }
+  
+  
 
   obterDados() {
     // Simula a obtenção de dados
@@ -137,31 +155,30 @@ export class PageSimuladoComponent implements OnInit {
       this.resposta = 'Nenhuma questão selecionada.';
       return;
     }
-
+  
     const respostaDTO: RespostaDTO = {
       questaoId: questao.id,
       selecionarOpcao: this.selectedOption,
     };
-
+  
     this.questoesService
       .checkAnswer(questao.id, this.usuarioId, respostaDTO)
       .subscribe(
         (resposta: Resposta) => {
           console.log('Resposta do backend:', resposta);
-          console.log('correct:', resposta.correct);
-
-          if (resposta.hasOwnProperty('correct')) {
+          if (resposta.correct) {
             this.isRespostaCorreta = resposta.correct;
-            this.resposta = resposta.correct
-              ? 'Resposta correta!'
-              : 'Resposta incorreta. Tente novamente.';
+            this.resposta = 'Resposta correta!';
           } else {
-            console.error(
-              'Resposta do backend não contém a propriedade correct.'
-            );
-            this.resposta =
-              'Ocorreu um erro ao verificar a resposta. Por favor, tente novamente mais tarde.';
+            this.resposta = 'Resposta incorreta. Tente novamente.';
           }
+  
+          // Adicionar a resposta à lista de respostas do simulado
+          this.respostas.push({
+            questaoId: questao.id,
+            selecionarOpcao: this.selectedOption,
+            correta: resposta.correct
+          });
         },
         (error) => {
           console.error('Erro ao verificar resposta:', error);
@@ -170,6 +187,7 @@ export class PageSimuladoComponent implements OnInit {
         }
       );
   }
+  
 
   exibirGabarito() {
     this.mostrarGabarito = true;
@@ -353,15 +371,17 @@ export class PageSimuladoComponent implements OnInit {
         this.tempo++;
       }, 1000); // Atualiza o tempo a cada segundo
     }
+    this.simuladoIniciado = true;
+    this.simuladoFinalizado = false;
   }
 
-  finalizarSimulado(): void {
-    if (this.isSimuladoIniciado) {
-      clearInterval(this.intervalId); // Para o contador
-      this.isSimuladoIniciado = false;
+  //finalizarSimulado(): void {
+   // if (this.isSimuladoIniciado) {
+   //   clearInterval(this.intervalId); // Para o contador
+   //   this.isSimuladoIniciado = false;
       //alert(`Simulado finalizado! Tempo total: ${this.formatarTempo(this.tempo)}`);
-    }
-  }
+  //  }
+  //}
 
   // Função para formatar o tempo decorrido (opcional)
   formatarTempo(segundos: number): string {

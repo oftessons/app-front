@@ -106,153 +106,60 @@
         <hr class="line">
       </div>
 
-      <div class="row">
-        <div class="col-md-6">
-          <div class="form-group">
-            <label>Enunciado da Questão: </label>
-            <textarea class="form-control" rows="4" name="enunciadoDaQuestao"
-              [(ngModel)]="questaoDTO.enunciadoDaQuestao" placeholder="Digite o enunciado da questão"></textarea>
+      <div class="form-group">
+        <label>Enunciado da Questão:</label>
+        <div id="toolbar1">
+          <!-- Add font size dropdown -->
+          <select class="ql-header">
+            <option value="1"></option>
+            <option value="2"></option>
+            <option value="3"></option>
+            <option value="4"></option>
+            <option value="5"></option>
+            <option value="6"></option>
+            <option selected></option>
+          </select>
+          <!-- Add font family dropdown -->
+          <select class="ql-font">
+            <option selected></option>
+            <option value="serif"></option>
+            <option value="monospace"></option>
+          </select>
+            <!-- Add a bold button -->
+            <button class="ql-bold"></button>
+            <!-- Add an italic button -->
+            <button class="ql-italic"></button>
+            <!-- Add an underline button -->
+            <button class="ql-underline"></button>
+            <!-- Add a color picker -->
+            <select class="ql-color"></select>
+            <!-- Add alignment buttons -->
+            <select class="ql-align">
+              <option selected></option>
+              <option value="center"></option>
+              <option value="right"></option>
+              <option value="justify"></option>
+            </select>
+            <!-- Add a list button -->
+            <button class="ql-list" value="ordered"></button>
+            <button class="ql-list" value="bullet"></button>
+            <!-- Add an indent button -->
+            <button class="ql-indent" value="-1"></button>
+            <button class="ql-indent" value="+1"></button>
+            <!-- Add a link button -->
+            <button class="ql-link"></button>
+            <!-- Add an image button -->
+            <button class="ql-image"></button>
+            <!-- Add a clean button -->
+            <button class="ql-clean"></button>
           </div>
+        
+        <!-- Quill Editor Container -->
+        <div id="editor1" class="form-control" name="enunciadoDaQuestao"
+          [(ngModel)]="questaoDTO.enunciadoDaQuestao">
         </div>
       </div>
 
-      <div class="row">
-        <div class="col-md-6">
-          <div class="form-group">
-            <mat-radio-group [(ngModel)]="questaoDTO.tipoItemQuestao" name="tipoItemQuestao">
-              <mat-radio-button value="texto"
-                style="display: inline-block; margin-right: 10px;">Texto</mat-radio-button>
-              <mat-radio-button value="imagem" style="display: inline-block;">Imagem</mat-radio-button>
-            </mat-radio-group>
-          </div>
-        </div>
-      </div>
-      <div *ngIf="questaoDTO.tipoItemQuestao === 'texto'">
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group">
-              <label>Enunciado 1: </label>
-              <textarea class="form-control" rows="2" name="afirmacaoUm" [(ngModel)]="questaoDTO.afirmacaoUm"
-                placeholder="Digite a afirmação da questão"></textarea>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label>Enunciado 2: </label>
-              <textarea class="form-control" rows="2" name="afirmacaoDois" [(ngModel)]="questaoDTO.afirmacaoDois"
-                placeholder="Digite a afirmação da questão"></textarea>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group">
-              <label>Enunciado 3: </label>
-              <textarea class="form-control" rows="2" name="afirmacaoTres" [(ngModel)]="questaoDTO.afirmacaoTres"
-                placeholder="Digite a afirmação da questão"></textarea>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label>Enunciado 4: </label>
-              <textarea class="form-control" rows="2" name="afirmacaoQuatro" [(ngModel)]="questaoDTO.afirmacaoQuatro"
-                placeholder="Digite a afirmação da questão"></textarea>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <div *ngIf="questaoDTO.tipoItemQuestao === 'imagem'">
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group">
-              <label>Afirmativa 1: </label>
-              <div class="image-upload" (drop)="onDrop($event, 'afirmacaoUm')" (dragover)="onDragOver($event)">
-                <input type="file" id="afirmacaoUm" name="afirmacaoUm" (change)="onFileSelected($event, 'afirmacaoUm')"
-                  accept="image/*" style="display: none;" />
-                <label for="afirmacaoUm">
-                  <div class="image-preview" id="imagePreview">
-                    <img *ngIf="imagePreviews['afirmacaoUm']" [src]="imagePreviews['afirmacaoUm']"
-                      alt="Image Preview" />
-                    <span *ngIf="!imagePreviews['afirmacaoUm']">
-                      <img src="assets/imagens/img-foto.svg" style="width: 50px; opacity: 0.5;">
-                      clique ou arraste a imagem para fazer upload
-                    </span>
-                  </div>
-                </label>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label>Afirmativa 2: </label>
-              <div class="image-upload" (drop)="onDrop($event, 'afirmacaoDois')" (dragover)="onDragOver($event)">
-                <input type="file" id="afirmacaoDois" name="afirmacaoDois"
-                  (change)="onFileSelected($event, 'afirmacaoDois')" accept="image/*" style="display: none;" />
-                <label for="afirmacaoDois">
-                  <div class="image-preview" id="imagePreview">
-                    <img *ngIf="imagePreviews['afirmacaoDois']" [src]="imagePreviews['afirmacaoDois']"
-                      alt="Image Preview" />
-                    <span *ngIf="!imagePreviews['afirmacaoDois']">
-                      <img src="assets/imagens/img-foto.svg" style="width: 50px; opacity: 0.5;">
-                      clique ou arraste a imagem para fazer upload
-                    </span>
-                  </div>
-                </label>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group">
-              <label>Afirmativa 3: </label>
-              <div class="image-upload" (drop)="onDrop($event, 'afirmacaoTres')" (dragover)="onDragOver($event)">
-                <input type="file" id="afirmacaoTres" name="afirmacaoTres"
-                  (change)="onFileSelected($event, 'afirmacaoTres')" accept="image/*" style="display: none;" />
-                <label for="afirmacaoTres">
-                  <div class="image-preview" id="imagePreview">
-                    <img *ngIf="imagePreviews['afirmacaoTres']" [src]="imagePreviews['afirmacaoTres']"
-                      alt="Image Preview" />
-                    <span *ngIf="!imagePreviews['afirmacaoTres']">
-                      <img src="assets/imagens/img-foto.svg" style="width: 50px; opacity: 0.5;">
-                      clique ou arraste a imagem para fazer upload
-                    </span>
-                  </div>
-                </label>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label>Afirmativa 4: </label>
-              <div class="image-upload" (drop)="onDrop($event, 'afirmacaoQuatro')" (dragover)="onDragOver($event)">
-                <input type="file" id="afirmacaoQuatro" name="afirmacaoQuatro"
-                  (change)="onFileSelected($event, 'afirmacaoQuatro')" accept="image/*" style="display: none;" />
-                <label for="afirmacaoQuatro">
-                  <div class="image-preview" id="imagePreview">
-                    <img *ngIf="imagePreviews['afirmacaoQuatro']" [src]="imagePreviews['afirmacaoQuatro']"
-                      alt="Image Preview" />
-                    <span *ngIf="!imagePreviews['afirmacaoQuatro']">
-                      <img src="assets/imagens/img-foto.svg" style="width: 50px; opacity: 0.5;">
-                      clique ou arraste a imagem para fazer upload
-                    </span>
-                  </div>
-                </label>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group">
-              <label>Assinale: </label>
-              <input type="text" class="form-control" name="assinale" [(ngModel)]="questaoDTO.assinale"
-                placeholder="Digite o campo de assinale aqui" />
-            </div>
-          </div>
-        </div>
-      </div>
       <div>
         <hr class="line">
         <span class="div-section">
@@ -321,7 +228,6 @@
           </div>
         </div>
   
-  
         <div *ngIf="questaoDTO.tipoItemQuestaoImagem=== 'imagem'">
           <div *ngFor="let alternativa of questaoDTO.alternativas; let i = index">
             <div class="image-container">
@@ -356,58 +262,122 @@
   <form class="form-cad" #questaoForm="ngForm" (ngSubmit)="onSubmit()">
     <div>
       <span class="div-section">
-        Descreva os comentário da questão:
+        Descreva os comentários da questão:
       </span>
       <hr class="line">
     </div>
     <div class="row">
-      <div class="col-md-6">
-        <div class="form-group">
-          <label>Comentário da Alternativa (A): </label>
-          <textarea class="form-control" rows="3" name="comentarioDaQuestaoUm"
-            [(ngModel)]="questaoDTO.comentarioDaQuestaoUm"
-            placeholder="Digite o comentário da alternativa A"></textarea>
-        </div>
-      </div>
-
-      <!-- <editor apiKey="f6eb0n61ploi518j08cp3htisfrhn0yhyjfr2pk8l2bewri7" [init]="editorConfig"></editor> -->
-
-      <!-- <div class="col-md-6">
-        <div class="form-group">
-          <label>Comentário da Alternativa (B): </label>
-          <textarea class="form-control" rows="3" name="comentarioDaQuestaoDois"
-            [(ngModel)]="questaoDTO.comentarioDaQuestaoDois"
-            placeholder="Digite o comentário da alternativa B"></textarea>
-        </div>
-      </div> -->
-
       <div class="form-group">
-        <label>Comentário da Alternativa (B): </label>
-        <editor
-          apiKey="{{ tinymceService.apiKey }}"
-          [init]="tinymceService.getEditorConfig()"
-          [(ngModel)]="questaoDTO.comentarioDaQuestaoDois"
-          name="comentarioDaQuestaoDois"
-          placeholder="Digite o comentário da alternativa B"
-        ></editor>
-      </div>
-      
-      <div class="col-md-6">
-        <div class="form-group">
-          <label>Comentário da Alternativa (C): </label>
-          <textarea class="form-control" rows="3" name="comentarioDaQuestaoTres"
-            [(ngModel)]="questaoDTO.comentarioDaQuestaoTres"
-            placeholder="Digite o comentário da alternativa C"></textarea>
+        <label>Comentário do Gabarito:</label>
+        <div id="toolbar">
+          <!-- Add font size dropdown -->
+          <select class="ql-header">
+            <option value="1"></option>
+            <option value="2"></option>
+            <option value="3"></option>
+            <option value="4"></option>
+            <option value="5"></option>
+            <option value="6"></option>
+            <option selected></option>
+          </select>
+          <!-- Add font family dropdown -->
+          <select class="ql-font">
+            <option selected></option>
+            <option value="serif"></option>
+            <option value="monospace"></option>
+          </select>
+            <!-- Add a bold button -->
+            <button class="ql-bold"></button>
+            <!-- Add an italic button -->
+            <button class="ql-italic"></button>
+            <!-- Add an underline button -->
+            <button class="ql-underline"></button>
+            <!-- Add a color picker -->
+            <select class="ql-color"></select>
+            <!-- Add alignment buttons -->
+            <select class="ql-align">
+              <option selected></option>
+              <option value="center"></option>
+              <option value="right"></option>
+              <option value="justify"></option>
+            </select>
+            <!-- Add a list button -->
+            <button class="ql-list" value="ordered"></button>
+            <button class="ql-list" value="bullet"></button>
+            <!-- Add an indent button -->
+            <button class="ql-indent" value="-1"></button>
+            <button class="ql-indent" value="+1"></button>
+            <!-- Add a link button -->
+            <button class="ql-link"></button>
+            <!-- Add an image button -->
+            <button class="ql-image"></button>
+            <!-- Add a video button -->
+            <button class="ql-video"></button>
+            <!-- Add a clean button -->
+            <button class="ql-clean"></button>
+          </div>
+        
+        <!-- Quill Editor Container -->
+        <div id="editor" class="form-control" name="comentarioDaQuestao"
+          [(ngModel)]="questaoDTO.comentarioDaQuestao">
         </div>
       </div>
-      <div class="col-md-6">
-        <div class="form-group">
-          <label>Comentário da Alternativa (D): </label>
-          <textarea class="form-control" rows="3" name="comentarioDaQuestaoQuatro"
-            [(ngModel)]="questaoDTO.comentarioDaQuestaoQuatro"
-            placeholder="Digite o comentário da alternativa D"></textarea>
+    </div>
+
+    <div>
+      <div>
+        <hr class="line">
+        <span class="div-section">
+          Imagens da Resolução da Questão:
+        </span>
+        <hr class="line">
+      </div>
+      <div class="row">
+        <div class="col-imagens">
+          <div class="form-group">
+            <label>Imagem do gabarito 1:</label>
+            <div class="image-upload" (drop)="onDrop($event, 'fotoDaRespostaUm')" (dragover)="onDragOver($event)">
+              <input type="file" id="fotoDaRespostaUm" name="fotoDaRespostaUm"
+                (change)="onFileSelected($event, 'fotoDaRespostaUm')" accept="image/*" style="display: none;" />
+              <label for="fotoDaRespostaUm">
+                <div class="image-preview" id="imagePreview">
+                  <img *ngIf="imagePreviews['ffotoDaRespostaUm']" [src]="imagePreviews['fotoDaRespostaUm']"
+                    alt="Image Preview" />
+                  <span *ngIf="!imagePreviews['fotoDaRespostaUm']">
+                    <img src="assets/imagens/img-foto.svg" style="width: 50px; opacity: 0.5;">
+                    clique ou arraste a imagem para fazer upload
+                  </span>
+                </div>
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Imagem do gabarito 2:</label>
+            <div class="image-upload" (drop)="onDrop($event, 'fotoDaRespostaDois')" (dragover)="onDragOver($event)">
+              <input type="file" id="fotoDaRespostaDois" name="fotoDaRespostaDois"
+                (change)="onFileSelected($event, 'fotoDaRespostaDois')" accept="image/*" style="display: none;" />
+              <label for="fotoDaRespostaDois">
+                <div class="image-preview" id="imagePreview">
+                  <img *ngIf="imagePreviews['fotoDaRespostaDois']" [src]="imagePreviews['fotoDaRespostaDois']"
+                    alt="Image Preview" />
+                  <span *ngIf="!imagePreviews['fotoDaRespostaDois']">
+                    <img src="assets/imagens/img-foto.svg" style="width: 50px; opacity: 0.5;">
+                    clique ou arraste a imagem para fazer upload
+                  </span>
+                </div>
+              </label>
+            </div>
+          </div>
         </div>
       </div>
+    </div>
+
+    <div>
+      <hr class="line">
+      <span class="div-section">
+        Autor e referências:
+      </span>
+      <hr class="line">
     </div>
   
     <div class="row">
@@ -427,37 +397,6 @@
       </div>
     </div>
   
-    <div *ngIf="questaoDTO.tipoItemQuestao === 'imagem'">
-      <div>
-        <hr class="line">
-        <span class="div-section">
-          Imagens da Resolução da Questão:
-        </span>
-        <hr class="line">
-      </div>
-      <div class="cont-imgs">
-        <div class="row">
-          <div class="col-md-10">
-            <div class="form-group">
-              <div class="image-upload" (drop)="onDrop($event, 'fotoDaResposta')" (dragover)="onDragOver($event)">
-                <input type="file" id="fotoDaResposta" name="fotoDaResposta"
-                  (change)="onFileSelected($event, 'fotoDaResposta')" accept="image/*" style="display: none;" />
-                <label for="fotoDaResposta">
-                  <div class="image-preview" id="imagePreview">
-                    <img *ngIf="imagePreviews['fotoDaResposta']" [src]="imagePreviews['fotoDaResposta']"
-                      alt="Image Preview" />
-                    <span *ngIf="!imagePreviews['fotoDaResposta']">
-                      <img src="assets/imagens/img-foto.svg" style="width: 50px; opacity: 0.5;">
-                      clique ou arraste a imagem para fazer upload
-                    </span>
-                  </div>
-                </label>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
     <div class="container mt-4 container-btn">
       <button type="button" class="btn btn-secundary" routerLink="/usuario/dashboard"
         *ngIf="!questaoDTO.id">Voltar</button>

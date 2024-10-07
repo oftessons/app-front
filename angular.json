@@ -32,7 +32,8 @@
             "styles": [
               "src/styles.css",
               "src/custom-theme.scss",
-              "node_modules/bootstrap/dist/css/bootstrap.min.css"
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "node_modules/quill/dist/quill.snow.css"
             ],
             "scripts": [
               "node_modules/bootstrap/dist/js/bootstrap.bundle.js"
@@ -48,8 +49,8 @@
                 },
                 {
                   "type": "any",
-                  "maximumWarning": "1mb",
-                  "maximumError": "1.5mb"
+                  "maximumWarning": "1.5mb",
+                   "maximumError": "2mb"
                 }
               ],
               "optimization": true,
@@ -109,6 +110,9 @@
               "src/assets"
             ],
             "styles": [
+              "./node_modules/quill/dist/quill.core.css",
+              "./node_modules/quill/dist/quill.bubble.css",
+              "./node_modules/quill/dist/quill.snow.css",
               "src/styles.css"
             ],
             "scripts": []

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,  AfterViewInit } from '@angular/core';
 import { Questao } from '../page-questoes/questao';
 import { Ano } from '../page-questoes/enums/ano';
 import { Tema } from '../page-questoes/enums/tema';
@@ -13,12 +13,14 @@ import { TinymceService } from 'src/app/services/tinymce.service';
 
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
+import Quill from 'quill';
+
 @Component({
   selector: 'app-cadastro-questao',
   templateUrl: './cadastro-questao.component.html',
   styleUrls: ['./cadastro-questao.component.css']
 })
-export class CadastroQuestaoComponent implements OnInit {
+export class CadastroQuestaoComponent implements OnInit,  AfterViewInit {
   formData = new FormData();
   questaoDTO = new Questao();
   successMessage: string | null = null;
@@ -26,9 +28,10 @@ export class CadastroQuestaoComponent implements OnInit {
   fotoDaQuestao: File | null = null;
   fotoDaQuestaoDois: File | null = null;
   fotoDaQuestaoTres: File | null = null;
-  fotoDaResposta: File | null = null;
+  fotoDaRespostaUm: File | null = null;
   fotoDaRespostaDois: File | null = null;
-  fotoDaRespostaTres: File | null = null;
+  // fotoDaRespostaDois: File | null = null;
+  // fotoDaRespostaTres: File | null = null;
   imagePreviews: { [key: string]: string | ArrayBuffer | null } = {};
   id!: number;
   selectedAlternativa: number | undefined;
@@ -45,7 +48,18 @@ export class CadastroQuestaoComponent implements OnInit {
   selectedImage: string='';
   uploadedImage: string='';
 
-  editorConfig: any;
+  // editorConfig: any;
+
+  editorContent: string = '';
+  // Configuração da barra de ferramentas
+  editorConfig = {
+  toolbar: '#toolbar'
+};
+
+editorConfig1 = {
+  toolbar: '#toolbar1'
+};
+
 
   constructor(
     private questoesService: QuestoesService,
@@ -55,7 +69,7 @@ export class CadastroQuestaoComponent implements OnInit {
     private sanitizer: DomSanitizer
   ) { }
   ngOnInit(): void {
-    this.editorConfig = this.tinymceService.getEditorConfig();
+    // this.editorConfig = this.tinymceService.getEditorConfig();
 
     this.questaoDTO.alternativas = [
       {
@@ -90,6 +104,36 @@ export class CadastroQuestaoComponent implements OnInit {
 
   }
 
+  ngAfterViewInit(): void {
+    const quill = new Quill('#editor', {
+      modules: {
+        toolbar: this.editorConfig.toolbar
+      },
+      theme: 'snow'
+    });
+
+    quill.on('text-change', () => {
+      this.questaoDTO.comentarioDaQuestao = quill.root.innerHTML;
+    });
+
+    const quill1 = new Quill('#editor1', {
+      modules: {
+        toolbar: this.editorConfig1.toolbar
+      },
+      theme: 'snow'
+    });
+
+    quill1.on('text-change', () => {
+      this.questaoDTO.enunciadoDaQuestao = quill1.root.innerHTML;
+    });
+  }
+
+    // Função para obter o conteúdo do editor
+    getEditorContent() {
+      console.log(this.editorContent);
+    }
+  
+
    onAlternativaChange(index: number) {
     this.selectedAlternativa = index;
   }
@@ -121,15 +165,18 @@ export class CadastroQuestaoComponent implements OnInit {
         case 'fotoDaQuestaoTres':
           this.fotoDaQuestaoTres = file;
           break;
-        case 'fotoDaResposta':
-          this.fotoDaResposta = file;
+        case 'fotoDaResposta1':
+          this.fotoDaRespostaUm = file;
           break;
-        case 'fotoDaRespostaDois':
+          case 'fotoDaResposta2':
           this.fotoDaRespostaDois = file;
           break;
-        case 'fotoDaRespostaTres':
-          this.fotoDaRespostaTres = file;
-          break;
+        // case 'fotoDaRespostaDois':
+        //   this.fotoDaRespostaDois = file;
+        //   break;
+        // case 'fotoDaRespostaTres':
+        //   this.fotoDaRespostaTres = file;
+        //   break;
         default:
           break;
       }
@@ -153,15 +200,18 @@ export class CadastroQuestaoComponent implements OnInit {
       reader.readAsDataURL(file);
     }
   }
+
   onDragOver(event: DragEvent) {
     event.preventDefault();
   }
+
   updateCorrectAlternative(index: number): void {
     this.questaoDTO.alternativas.forEach((alt, i) => {
       alt.correta = i === index;
     });
     console.log('Alternativa correta atualizada:', this.questaoDTO.alternativas);
   }
+
   markCorrect(index: number): void {
     this.updateCorrectAlternative(index);
     console.log('Alternativa correta marcada:', this.questaoDTO.alternativas);
@@ -177,16 +227,36 @@ export class CadastroQuestaoComponent implements OnInit {
   }
 
   onSubmit(): void {
-    const onjetojson = this.questaoDTO.toJson();
+    console.log('Form data:', this.questaoDTO);
+  
+    // Ensure the editor content is up-to-date
+    const quillEditor = document.querySelector('#editor .ql-editor');
+    if (quillEditor) {
+      this.questaoDTO.comentarioDaQuestao = quillEditor.innerHTML;
+    }
+
+    const quillEditor1 = document.querySelector('#editor1 .ql-editor');
+    if (quillEditor1) {
+      this.questaoDTO.enunciadoDaQuestao = quillEditor1.innerHTML;
+    }
+  
+    const objetoJson = JSON.stringify(this.questaoDTO);
+    this.formData = new FormData();
+  
     if (this.fotoDaQuestao) {
       this.formData.append('fotoDaQuestaoArquivo', this.fotoDaQuestao);
     }
-    if (this.fotoDaResposta) {
-      this.formData.append('fotoDaRespostaArquivo', this.fotoDaResposta);
+    if (this.fotoDaRespostaUm) {
+      this.formData.append('fotoDaRespostaUmArquivo', this.fotoDaRespostaUm);
     }
+    if (this.fotoDaRespostaDois) {
+      this.formData.append('fotoDaRespostaDoisArquivo', this.fotoDaRespostaDois);
+    }
+  
     console.debug('Enviando formulário com dados da questão:', this.formData);
-    console.log('CLASSE ', JSON.stringify(this.questaoDTO));
-    this.formData.append('questaoDTO', onjetojson);
+    console.log('CLASSE ', objetoJson);
+    this.formData.append('questaoDTO', objetoJson);
+  
     this.questoesService.salvar(this.formData).subscribe(
       response => {
         this.successMessage = 'Questão salva com sucesso!';
@@ -199,11 +269,13 @@ export class CadastroQuestaoComponent implements OnInit {
         console.error('Erro ao salvar a questão:', error);
       }
     );
+  
     console.log('Dados da questão antes de enviar:', {
       title: this.questaoDTO.title,
       alternativas: this.questaoDTO.alternativas
     });
   }
+
   extractErrorMessage(errorResponse: any): string {
     if (errorResponse.error instanceof ErrorEvent) {
       return `Erro: ${errorResponse.error.message}`;

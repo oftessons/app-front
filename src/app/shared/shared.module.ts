@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SelectPadraoComponent } from './select-padrao/select-padrao.component';
+import { ImageResizeModule } from './image-resize/image-resize.module';
 
 
 // material imports
@@ -14,10 +15,12 @@ import { MatIconModule } from "@angular/material/icon";
   ],
   imports: [
     CommonModule,
-    MatIconModule
+    MatIconModule,
+    ImageResizeModule
   ],
   exports: [
-    SelectPadraoComponent
+    SelectPadraoComponent,
+    ImageResizeModule
   ]
 })
 export class SharedModule { }

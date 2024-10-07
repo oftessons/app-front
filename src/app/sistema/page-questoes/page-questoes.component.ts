@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, AfterViewChecked } from '@angular/core';
 import { TipoDeProva } from './enums/tipoDeProva';
 import {
   getDescricaoAno,
@@ -30,7 +30,7 @@ declare var bootstrap: any;
   templateUrl: './page-questoes.component.html',
   styleUrls: ['./page-questoes.component.css'],
 })
-export class PageQuestoesComponent implements OnInit {
+export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   
   questao: Questao = new Questao();
   selectedOption: string = '';
@@ -98,7 +98,8 @@ export class PageQuestoesComponent implements OnInit {
   subtemasDescricoes: string[] = [];
   temasDescricoes: string[] = [];
 
-  comentarioDaQuestaoDoisSanitizado: SafeHtml = '';
+  comentarioDaQuestaoSanitizado: SafeHtml = '';
+  sanitizerEnunciado: SafeHtml = '';
 
   constructor(
     private questoesService: QuestoesService,
@@ -136,6 +137,39 @@ export class PageQuestoesComponent implements OnInit {
     this.temasDescricoes = this.temas.map((tema) =>
       this.getDescricaoTema(tema)
     );
+  }
+
+  ngAfterViewChecked(): void {
+    this.resizeImages();
+  }
+
+  resizeImages(): void {
+    const imgElements = document.querySelectorAll('.img-comentario img');
+    imgElements.forEach((img) => {
+      const imageElement = img as HTMLImageElement;
+      imageElement.style.width = '300px'; // Defina o tamanho desejado
+      imageElement.style.height = 'auto';
+    });
+  }
+
+  applyClassesToEnunciado(content: string): SafeHtml {
+    const div = document.createElement('div');
+    div.innerHTML = content;
+
+    // Apply classes to elements
+    const elementsWithClasses = div.querySelectorAll('[class]');
+    elementsWithClasses.forEach((element) => {
+      const classList = element.className.split(' ');
+      classList.forEach((className) => {
+        element.classList.add(className);
+      });
+    });
+
+    return this.sanitizeContent(div.innerHTML);
+  }
+
+  sanitizeContent(content: string): SafeHtml {
+    return this.sanitizer.bypassSecurityTrustHtml(content);
   }
 
   onOptionChange(texto: string): void {
@@ -559,10 +593,11 @@ verificarRespostaUsuario(resposta: Resposta) {
         this.questaoAtual = data;
 
         // Sanitizar o conteúdo
-        this.comentarioDaQuestaoDoisSanitizado =
+        this.comentarioDaQuestaoSanitizado =
           this.sanitizer.bypassSecurityTrustHtml(
-            this.questaoAtual.comentarioDaQuestaoDois || ''
+            this.questaoAtual.comentarioDaQuestao || ''
           );
+          this.sanitizerEnunciado = this.applyClassesToEnunciado(this.questaoAtual.enunciadoDaQuestao || '');
       },
       (error) => {
         console.error('Erro ao carregar cometario:', error);
