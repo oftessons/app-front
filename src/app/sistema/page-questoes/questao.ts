@@ -22,10 +22,13 @@ export class Questao {
   assinale!: string;
   fotoDaQuestao!: File;
   fotoDaResposta!: File;
+  fotoDaRespostaUm!: File;
+  fotoDaRespostaDois!: File;
   comentarioDaQuestaoUm!: string;
   comentarioDaQuestaoDois!: string;
   comentarioDaQuestaoTres!: string;
   comentarioDaQuestaoQuatro!: string;
+  comentarioDaQuestaoGeral!: string;
   referenciaBi!: string;
   comentadorDaQuestao!: string;
   ano!: Ano;
@@ -57,11 +60,15 @@ export class Questao {
       fotoAfirmacaoQuatro: this.fotoAfirmacaoQuatro,
       assinale: this.assinale,
       fotoDaQuestao: this.fotoDaQuestao,
+      fotoDaRespostaUm: this.fotoDaRespostaUm,
+      fotoDaRespostaDois: this.fotoDaRespostaDois,
+
       fotoDaResposta: this.fotoDaResposta,
       comentarioDaQuestaoUm: this.comentarioDaQuestaoUm,
       comentarioDaQuestaoDois: this.comentarioDaQuestaoDois,
       comentarioDaQuestaoTres: this.comentarioDaQuestaoTres,
       comentarioDaQuestaoQuatro: this.comentarioDaQuestaoQuatro,
+      comentarioDaQuestaoGeral: this.comentarioDaQuestaoGeral,
       referenciaBi: this.referenciaBi,
       comentadorDaQuestao: this.comentadorDaQuestao,
       ano: this.ano,
