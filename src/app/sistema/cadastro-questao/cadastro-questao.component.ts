@@ -159,16 +159,16 @@ editorConfig1 = {
         case 'fotoDaQuestao':
           this.fotoDaQuestao = file;
           break;
-        case 'fotoDaQuestaoDois':
-          this.fotoDaQuestaoDois = file;
-          break;
-        case 'fotoDaQuestaoTres':
-          this.fotoDaQuestaoTres = file;
-          break;
-        case 'fotoDaResposta1':
+        // case 'fotoDaQuestaoDois':
+        //   this.fotoDaQuestaoDois = file;
+        //   break;
+        // case 'fotoDaQuestaoTres':
+        //   this.fotoDaQuestaoTres = file;
+        //   break;
+        case 'fotoDaRespostaUm':
           this.fotoDaRespostaUm = file;
           break;
-          case 'fotoDaResposta2':
+          case 'fotoDaRespostaDois':
           this.fotoDaRespostaDois = file;
           break;
         // case 'fotoDaRespostaDois':
