@@ -323,24 +323,7 @@
         </div>
       </div>
     </div>
-  
-    <div class="row">
-      <div class="col-md-6">
-        <div class="form-group">
-          <label>Referência: </label>
-          <input type="text" class="form-control" name="referenciaBi" [(ngModel)]="questaoDTO.referenciaBi"
-            placeholder="Digite a referência" />
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="form-group">
-          <label>Nome do Professor Comentador da Questão: </label>
-          <input type="text" class="form-control" name="comentadorDaQuestao"
-            [(ngModel)]="questaoDTO.comentadorDaQuestao" placeholder="Digite o nome do professor comentador" />
-        </div>
-      </div>
-    </div>
-  
+
     <div>
       <div>
         <hr class="line">
@@ -388,6 +371,32 @@
         </div>
       </div>
     </div>
+
+    <div>
+      <hr class="line">
+      <span class="div-section">
+        Autor e referências:
+      </span>
+      <hr class="line">
+    </div>
+  
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>Referência: </label>
+          <input type="text" class="form-control" name="referenciaBi" [(ngModel)]="questaoDTO.referenciaBi"
+            placeholder="Digite a referência" />
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>Nome do Professor Comentador da Questão: </label>
+          <input type="text" class="form-control" name="comentadorDaQuestao"
+            [(ngModel)]="questaoDTO.comentadorDaQuestao" placeholder="Digite o nome do professor comentador" />
+        </div>
+      </div>
+    </div>
+  
     <div class="container mt-4 container-btn">
       <button type="button" class="btn btn-secundary" routerLink="/usuario/dashboard"
         *ngIf="!questaoDTO.id">Voltar</button>
