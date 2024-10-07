@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, AfterViewChecked } from '@angular/core';
 import { TipoDeProva } from './enums/tipoDeProva';
 import {
   getDescricaoAno,
@@ -30,7 +30,7 @@ declare var bootstrap: any;
   templateUrl: './page-questoes.component.html',
   styleUrls: ['./page-questoes.component.css'],
 })
-export class PageQuestoesComponent implements OnInit {
+export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   
   questao: Questao = new Questao();
   selectedOption: string = '';
@@ -136,6 +136,19 @@ export class PageQuestoesComponent implements OnInit {
     this.temasDescricoes = this.temas.map((tema) =>
       this.getDescricaoTema(tema)
     );
+  }
+
+  ngAfterViewChecked(): void {
+    this.resizeImages();
+  }
+
+  resizeImages(): void {
+    const imgElements = document.querySelectorAll('.img-comentario img');
+    imgElements.forEach((img) => {
+      const imageElement = img as HTMLImageElement;
+      imageElement.style.width = '300px'; // Defina o tamanho desejado
+      imageElement.style.height = 'auto';
+    });
   }
 
   onOptionChange(texto: string): void {

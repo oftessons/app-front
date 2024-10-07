@@ -181,15 +181,18 @@ export class CadastroQuestaoComponent implements OnInit,  AfterViewInit {
       reader.readAsDataURL(file);
     }
   }
+
   onDragOver(event: DragEvent) {
     event.preventDefault();
   }
+
   updateCorrectAlternative(index: number): void {
     this.questaoDTO.alternativas.forEach((alt, i) => {
       alt.correta = i === index;
     });
     console.log('Alternativa correta atualizada:', this.questaoDTO.alternativas);
   }
+  
   markCorrect(index: number): void {
     this.updateCorrectAlternative(index);
     console.log('Alternativa correta marcada:', this.questaoDTO.alternativas);
