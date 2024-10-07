@@ -28,8 +28,8 @@ export class CadastroQuestaoComponent implements OnInit,  AfterViewInit {
   fotoDaQuestao: File | null = null;
   fotoDaQuestaoDois: File | null = null;
   fotoDaQuestaoTres: File | null = null;
-  fotoDaResposta1: File | null = null;
-  fotoDaResposta2: File | null = null;
+  fotoDaRespostaUm: File | null = null;
+  fotoDaRespostaDois: File | null = null;
   // fotoDaRespostaDois: File | null = null;
   // fotoDaRespostaTres: File | null = null;
   imagePreviews: { [key: string]: string | ArrayBuffer | null } = {};
@@ -166,10 +166,10 @@ editorConfig1 = {
           this.fotoDaQuestaoTres = file;
           break;
         case 'fotoDaResposta1':
-          this.fotoDaResposta1 = file;
+          this.fotoDaRespostaUm = file;
           break;
           case 'fotoDaResposta2':
-          this.fotoDaResposta2 = file;
+          this.fotoDaRespostaDois = file;
           break;
         // case 'fotoDaRespostaDois':
         //   this.fotoDaRespostaDois = file;
@@ -246,11 +246,11 @@ editorConfig1 = {
     if (this.fotoDaQuestao) {
       this.formData.append('fotoDaQuestaoArquivo', this.fotoDaQuestao);
     }
-    if (this.fotoDaResposta1) {
-      this.formData.append('fotoDaRespostaArquivo', this.fotoDaResposta1);
+    if (this.fotoDaRespostaUm) {
+      this.formData.append('fotoDaRespostaArquivo', this.fotoDaRespostaUm);
     }
-    if (this.fotoDaResposta2) {
-      this.formData.append('fotoDaRespostaArquivo', this.fotoDaResposta2);
+    if (this.fotoDaRespostaDois) {
+      this.formData.append('fotoDaRespostaArquivo', this.fotoDaRespostaDois);
     }
   
     console.debug('Enviando formulário com dados da questão:', this.formData);
