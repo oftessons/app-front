@@ -28,9 +28,10 @@ export class CadastroQuestaoComponent implements OnInit,  AfterViewInit {
   fotoDaQuestao: File | null = null;
   fotoDaQuestaoDois: File | null = null;
   fotoDaQuestaoTres: File | null = null;
-  fotoDaResposta: File | null = null;
-  fotoDaRespostaDois: File | null = null;
-  fotoDaRespostaTres: File | null = null;
+  fotoDaResposta1: File | null = null;
+  fotoDaResposta2: File | null = null;
+  // fotoDaRespostaDois: File | null = null;
+  // fotoDaRespostaTres: File | null = null;
   imagePreviews: { [key: string]: string | ArrayBuffer | null } = {};
   id!: number;
   selectedAlternativa: number | undefined;
@@ -164,15 +165,18 @@ editorConfig1 = {
         case 'fotoDaQuestaoTres':
           this.fotoDaQuestaoTres = file;
           break;
-        case 'fotoDaResposta':
-          this.fotoDaResposta = file;
+        case 'fotoDaResposta1':
+          this.fotoDaResposta1 = file;
           break;
-        case 'fotoDaRespostaDois':
-          this.fotoDaRespostaDois = file;
+          case 'fotoDaResposta2':
+          this.fotoDaResposta2 = file;
           break;
-        case 'fotoDaRespostaTres':
-          this.fotoDaRespostaTres = file;
-          break;
+        // case 'fotoDaRespostaDois':
+        //   this.fotoDaRespostaDois = file;
+        //   break;
+        // case 'fotoDaRespostaTres':
+        //   this.fotoDaRespostaTres = file;
+        //   break;
         default:
           break;
       }
@@ -242,8 +246,11 @@ editorConfig1 = {
     if (this.fotoDaQuestao) {
       this.formData.append('fotoDaQuestaoArquivo', this.fotoDaQuestao);
     }
-    if (this.fotoDaResposta) {
-      this.formData.append('fotoDaRespostaArquivo', this.fotoDaResposta);
+    if (this.fotoDaResposta1) {
+      this.formData.append('fotoDaRespostaArquivo', this.fotoDaResposta1);
+    }
+    if (this.fotoDaResposta2) {
+      this.formData.append('fotoDaRespostaArquivo', this.fotoDaResposta2);
     }
   
     console.debug('Enviando formulário com dados da questão:', this.formData);

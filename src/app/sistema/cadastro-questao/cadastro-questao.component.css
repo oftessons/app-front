@@ -253,6 +253,11 @@ textarea {
   .cont-imgs {
     flex-direction: column;
   }
+
+  .col-imagens{
+    display: flex;
+    flex-direction: column !important;
+  }
 }
 
 /* Bloco do Enunciado da Questão */
@@ -440,4 +445,12 @@ input[type="checkbox"] {
 .ql-editor img {
   max-width: 100%;
   height: auto;
+}
+
+.col-imagens{
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  align-items: center;
+  width: 100%;
 }
