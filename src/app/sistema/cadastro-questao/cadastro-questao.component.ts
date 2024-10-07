@@ -168,7 +168,7 @@ editorConfig1 = {
         case 'fotoDaRespostaUm':
           this.fotoDaRespostaUm = file;
           break;
-          case 'fotoDaRespostaDois':
+        case 'fotoDaRespostaDois':
           this.fotoDaRespostaDois = file;
           break;
         // case 'fotoDaRespostaDois':
@@ -247,9 +247,11 @@ editorConfig1 = {
       this.formData.append('fotoDaQuestaoArquivo', this.fotoDaQuestao);
     }
     if (this.fotoDaRespostaUm) {
+      console.log("fotoDaRespostaUm: passo");
       this.formData.append('fotoDaRespostaUmArquivo', this.fotoDaRespostaUm);
     }
     if (this.fotoDaRespostaDois) {
+      console.log("fotoDaRespostaDois: passo");
       this.formData.append('fotoDaRespostaDoisArquivo', this.fotoDaRespostaDois);
     }
   
