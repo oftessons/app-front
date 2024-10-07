@@ -1,6 +1,6 @@
 <div class="container pt-5">
   <div class="container mt-4">
-    <h1 class="mt-4"><span> | </span>Busca e edição de questões</h1>
+    <h1 class="mt-4"><span> | </span>Busca por ID da Questão</h1>
   </div>
 
   <div class="container">
@@ -9,19 +9,8 @@
         <div class="row align-items-center">
           <div class="col-md-4">
             <mat-form-field appearance="fill" class="full-width">
-              <mat-label>Ano</mat-label>
-              <mat-select name="selectedAno" [(ngModel)]="selectedAno">
-                <mat-option *ngFor="let ano of anos" [value]="ano">{{ ano }}</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-          <div class="col-md-4">
-            <mat-form-field appearance="fill" class="full-width">
-              <mat-label>Tipo de Prova</mat-label>
-              <mat-select name="selectedTipoDeProva" [(ngModel)]="selectedTipoDeProva">
-                <mat-option *ngFor="let tipo of tiposDeProva" [value]="tipo">
-                  {{ getDescricaoTipoDeProva(tipo) }}</mat-option>
-              </mat-select>
+              <mat-label>ID da Questão</mat-label>
+              <input matInput name="questaoId" [(ngModel)]="questaoId" placeholder="Digite o ID da questão" />
             </mat-form-field>
           </div>
           <div class="col-md-4 text-center btn-container">
@@ -36,10 +25,10 @@
       </form>
     </div>
 
-  
-    <div *ngIf="message" class="alert alert-info mt-3" role="alert">
+    <div *ngIf="message" class="alert alert-warning alert-laranja mt-3" role="alert">
       {{ message }}
     </div>
+    
 
     <div *ngIf="questoes.length > 0" class="crud-container mt-3">
       <div class="table-responsive">
@@ -47,8 +36,6 @@
           <thead>
             <tr>
               <th>ID</th>
-              <th>Ano</th>
-              <th>Tipo de Prova</th>
               <th>Comentador da Questão</th>
               <th>Ações</th>
             </tr>
@@ -56,74 +43,64 @@
           <tbody>
             <tr *ngFor="let questao of questoes | paginate: { itemsPerPage: pageSize, currentPage: page }">
               <td>{{ questao.id }}</td>
-              <td>{{ questao.ano }}</td>
-              <td>{{ questao.tipoDeProva }}</td>
               <td>{{ questao.comentadorDaQuestao }}</td>
               <td>
-                <button class="btn btn-primary btn-custom-editar" routerLink="/usuario/cadastro-questao/ {{questao.id}} ">
-                Editar <img src="assets/imagens/pencil.svg" alt="Ícone de Editar" class="icon" /> 
+                <button class="btn btn-primary btn-custom-editar" routerLink="/usuario/cadastro-questao/{{ questao.id }}">
+                Editar <img src="assets/imagens/pencil.svg" alt="Ícone de Editar" class="icon" />
                 </button>
                 <button class="btn btn-danger btn-custom-deletar" (click)="preparaDelecao(questao)" data-toggle="modal" data-target="#modalDelecaoQuestao">
-                  Deletar <img src="assets/imagens/de.svg" alt="Ícone de Deletar" class="icon" /> 
+                  Deletar <img src="assets/imagens/de.svg" alt="Ícone de Deletar" class="icon" />
                 </button>
               </td>
             </tr>
           </tbody>
         </table>
-      </div>
-      
-      <div *ngIf="message" class="alert alert-info" role="alert">
-        {{ message }}
       </div>
     </div>
   </div>
 
+
+
   <div class="container mt-4">
     <h1 class="mt-4">
-      <span> | </span>Todas as questões do Banco de Questões
+        <span> | </span>Todas as Questões
     </h1>
-    <div class="table-responsive" *ngIf="filtros.length > 0; else noFilters">
-      <div class="page">
+    <div class="table-responsive" *ngIf="questoes.length > 0; else noQuestions">
         <table class="table-todas-questoes-do-bd">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Ano</th>
-              <th>Dificuldade</th>
-              <th>Tipo de Prova</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let filtro of filtros | paginate: { itemsPerPage: 5, currentPage: page }">
-              <td>{{ filtro.id }}</td>
-              <td>{{ filtro.ano }}</td>
-              <td>{{ filtro.dificuldade }}</td>
-              <td>{{ filtro.tipoDeProva }}</td>
-              <td>
-                <button class="btn btn-primary"  (click)="editarFiltro(filtro.id)">
-                  Editar <img src="assets/imagens/pencil.svg" alt="Ícone de Editar" class="icon" /> 
-                </button>
-                <button class="btn btn-danger" (click)="preparaDelecaoFiltro(filtro)">
-                  Deletar <img src="assets/imagens/de.svg" alt="Ícone de Deletar" class="icon" /> 
-                </button>
-              </td>
-            </tr>
-          </tbody>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Ano</th>
+                    <th>Dificuldade</th>
+                    <th>Tipo de Prova</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let questao of questoes | paginate: { itemsPerPage: pageSize, currentPage: page }">
+                    <td>{{ questao.id }}</td>
+                    <td>{{ questao.ano }}</td>
+                    <td>{{ questao.dificuldade }}</td>
+                    <td>{{ questao.tipoDeProva }}</td>
+                    <td>
+                        <button class="btn btn-primary" (click)="editarFiltro(questao.id)">
+                            Editar <img src="assets/imagens/pencil.svg" alt="Ícone de Editar" class="icon" /> 
+                        </button>
+                        <button class="btn btn-danger" (click)="preparaDelecao(questao)">
+                            Deletar <img src="assets/imagens/de.svg" alt="Ícone de Deletar" class="icon" /> 
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
         </table>
-        <div style="text-align: center; margin-top: 10px">
-          <pagination-controls
-            [previousLabel]="'Anterior'"
-            [nextLabel]="'Próximo'"
-            (pageChange)="page = $event"
-          ></pagination-controls>
-        </div>
-      </div>
+        <pagination-controls (pageChange)="page = $event"></pagination-controls>
     </div>
-    <ng-template #noFilters>
-      <p>Nenhuma questão encontrada.</p>
+    <ng-template #noQuestions>
+        <p>Nenhuma questão encontrada.</p>
     </ng-template>
-  </div>
+</div>
+
+
 
   <div class="overlay" *ngIf="modalAberto"></div>
 </div>

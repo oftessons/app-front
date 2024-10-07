@@ -215,5 +215,24 @@ export class QuestoesService {
         catchError((error) => throwError('Erro ao verificar a resposta.'))
       );
   }
+
+
+  // Função para buscar questão pelo ID
+  buscarQuestaoPorId(idUser: number, questaoId: number): Observable<Questao | null> {
+    const url = `${this.apiURL}/buscar-questao/${idUser}?questaoId=${questaoId}`;
+    
+    return this.http.get<Questao>(url, { observe: 'response' }).pipe(
+      map(response => {
+        if (response.status === 204) {
+          return null; // Retorna null caso a resposta seja vazia
+        }
+        return response.body; // Retorna a questão se encontrada
+      }),
+      catchError((error: HttpErrorResponse) => {
+        console.error('Erro ao buscar questão:', error);
+        return throwError('Erro ao buscar questão. Por favor, tente novamente.');
+      })
+    );
+  }
   
 }

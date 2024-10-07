@@ -19,6 +19,7 @@ import { FiltroService } from 'src/app/services/filtro.service';
   styleUrls: ['./lista-questoes.component.css'],
 })
 export class ListaQuestoesComponent implements OnInit {
+  questaoId!: number;  // Adiciona a variável questaoId
   filtros: Filtro[] = [];
   tiposDeProva = Object.values(TipoDeProva);
   anos = Object.values(Ano);
@@ -54,71 +55,57 @@ export class ListaQuestoesComponent implements OnInit {
 
   ngOnInit(): void {
     this.carregarFiltros();
+    this.obterTodasQuestoes();
   }
 
+  obterTodasQuestoes(): void {
+    this.questoesService.obterTodasQuestoes().subscribe(
+        (questoes: Questao[]) => {
+            this.questoes = questoes; // Armazena as questões no componente
+        },
+        (error) => {
+            console.error('Erro ao obter todas as questões:', error);
+            this.message = 'Erro ao carregar as questões. Tente novamente mais tarde.';
+        }
+    );
+}
+
   carregarFiltros(): void {
-    // this.filtroService.getFiltros().subscribe(
-    //   (filtros) => {
-    //     this.filtros = filtros;
-    //   },
-    //   (error) => {
-    //     console.error('Erro ao carregar filtros:', error);
-    //   }
-    // );
   }
 
   editarFiltro(id: number): void {
     this.router.navigate(['/editar-filtro', id]);
   }
 
-  getDescricaoTipoDeProva(tipoDeProva: TipoDeProva): string {
-    return getDescricaoTipoDeProva(tipoDeProva);
-  }
-
-  getDescricaoAno(ano: Ano): string {
-    return getDescricaoAno(ano);
-  }
-
   buscarQuestoes(): void {
-    const filtros: any = {};
-  
-    if (this.selectedAno) {
-      filtros.ano = this.selectedAno; // Enviar a string do ano
-    }
-    if (this.selectedTipoDeProva) {
-      filtros.tipoDeProva = this.selectedTipoDeProva;
-    }
-  
-    if (Object.keys(filtros).length === 0) {
-      this.message = 'Por favor, selecione pelo menos um filtro.';
-      return;
-    }
-  
-    this.questoesService.consultarQuestao(filtros).subscribe(
-      (questoes: Questao[]) => {
-        if (!questoes || questoes.length === 0) {
-          if (filtros.ano && !filtros.tipoDeProva) {
-            this.message = 'Nenhuma questão encontrada para o ano selecionado.';
-          } else if (filtros.tipoDeProva && !filtros.ano) {
-            this.message =
-              'Nenhuma questão encontrada para o tipo de prova selecionado.';
-          } else {
-            this.message =
-              'Nenhuma questão encontrada com os filtros aplicados.';
-          }
-          this.questoes = [];
+    this.authService.obterUsuarioAutenticadoDoBackend().subscribe(
+      (usuario) => {
+        const idUser = parseInt(usuario.id); // Aqui pegamos o ID do usuário
+        if (this.questaoId) {
+          this.questoesService.buscarQuestaoPorId(idUser, this.questaoId).subscribe(
+            (questao: Questao | null) => {
+              if (!questao) {
+                this.message = 'Nenhuma questão encontrada com o ID informado.';
+                this.questoes = [];
+              } else {
+                this.questoes = [questao];
+                this.message = '';
+              }
+            },
+            (error) => {
+              console.error('Erro ao buscar questões:', error);
+              this.message = 'Erro ao buscar questão. Por favor, tente novamente.';
+            }
+          );
         } else {
-          this.questoes = questoes;
-          this.message = '';
+          this.message = 'Por favor, insira o ID da questão.';
         }
       },
       (error) => {
-        console.error('Erro ao buscar questões:', error);
-        this.message = 'Erro ao buscar questões. Por favor, tente novamente.';
+        console.error('Erro ao obter usuário autenticado:', error);
       }
     );
   }
-  
   
 
   consultarProjeto() {}
