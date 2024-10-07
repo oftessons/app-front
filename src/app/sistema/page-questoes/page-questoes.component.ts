@@ -151,6 +151,10 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     });
   }
 
+  sanitizeContent(content: string): SafeHtml {
+    return this.sanitizer.bypassSecurityTrustHtml(content);
+  }
+
   onOptionChange(texto: string): void {
     this.selectedOption = texto;
     console.log('Alternativa selecionada:', texto);

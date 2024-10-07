@@ -55,6 +55,10 @@ export class CadastroQuestaoComponent implements OnInit,  AfterViewInit {
   toolbar: '#toolbar'
 };
 
+editorConfig1 = {
+  toolbar: '#toolbar1'
+};
+
 
   constructor(
     private questoesService: QuestoesService,
@@ -109,6 +113,17 @@ export class CadastroQuestaoComponent implements OnInit,  AfterViewInit {
 
     quill.on('text-change', () => {
       this.questaoDTO.comentarioDaQuestaoDois = quill.root.innerHTML;
+    });
+
+    const quill1 = new Quill('#editor1', {
+      modules: {
+        toolbar: this.editorConfig1.toolbar
+      },
+      theme: 'snow'
+    });
+
+    quill1.on('text-change', () => {
+      this.questaoDTO.enunciadoDaQuestao = quill1.root.innerHTML;
     });
   }
 
@@ -192,7 +207,7 @@ export class CadastroQuestaoComponent implements OnInit,  AfterViewInit {
     });
     console.log('Alternativa correta atualizada:', this.questaoDTO.alternativas);
   }
-  
+
   markCorrect(index: number): void {
     this.updateCorrectAlternative(index);
     console.log('Alternativa correta marcada:', this.questaoDTO.alternativas);
@@ -214,6 +229,11 @@ export class CadastroQuestaoComponent implements OnInit,  AfterViewInit {
     const quillEditor = document.querySelector('#editor .ql-editor');
     if (quillEditor) {
       this.questaoDTO.comentarioDaQuestaoDois = quillEditor.innerHTML;
+    }
+
+    const quillEditor1 = document.querySelector('#editor1 .ql-editor');
+    if (quillEditor1) {
+      this.questaoDTO.enunciadoDaQuestao = quillEditor1.innerHTML;
     }
   
     const objetoJson = JSON.stringify(this.questaoDTO);

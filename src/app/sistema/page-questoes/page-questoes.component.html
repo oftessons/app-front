@@ -118,7 +118,8 @@
         <h3>Ano: {{ questaoAtual.ano }}</h3>
       </div>
       <div class="conteudo-questao">
-        <p>{{ questaoAtual.enunciadoDaQuestao }}</p>
+        <!-- <p>{{ questaoAtual.enunciadoDaQuestao }}</p> -->
+        <div class="img-comentario" [innerHTML]="questaoAtual.enunciadoDaQuestao"></div>
         <img *ngIf="questaoAtual.fotoDaQuestao" [src]="questaoAtual.fotoDaQuestao" alt="Foto da questão" class="questao-foto">
         <p>{{ questaoAtual.afirmacaoUm }}</p>
         <p>{{ questaoAtual.afirmacaoDois }}</p>
