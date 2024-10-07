@@ -25,11 +25,11 @@ export class Questao {
   fotoDaRespostaUm!: File;
   fotoDaRespostaDois!: File;
   comentarioDaQuestao!: string;
-  comentarioDaQuestaoUm!: string;
-  comentarioDaQuestaoDois!: string;
-  comentarioDaQuestaoTres!: string;
-  comentarioDaQuestaoQuatro!: string;
-  comentarioDaQuestaoGeral!: string;
+  // comentarioDaQuestaoUm!: string;
+  // comentarioDaQuestaoDois!: string;
+  // comentarioDaQuestaoTres!: string;
+  // comentarioDaQuestaoQuatro!: string;
+  // comentarioDaQuestaoGeral!: string;
   referenciaBi!: string;
   comentadorDaQuestao!: string;
   ano!: Ano;
@@ -66,11 +66,11 @@ export class Questao {
 
       // fotoDaResposta: this.fotoDaResposta,
       comentarioDaQuestao: this.comentadorDaQuestao,
-      comentarioDaQuestaoUm: this.comentarioDaQuestaoUm,
-      comentarioDaQuestaoDois: this.comentarioDaQuestaoDois,
-      comentarioDaQuestaoTres: this.comentarioDaQuestaoTres,
-      comentarioDaQuestaoQuatro: this.comentarioDaQuestaoQuatro,
-      comentarioDaQuestaoGeral: this.comentarioDaQuestaoGeral,
+      // comentarioDaQuestaoUm: this.comentarioDaQuestaoUm,
+      // comentarioDaQuestaoDois: this.comentarioDaQuestaoDois,
+      // comentarioDaQuestaoTres: this.comentarioDaQuestaoTres,
+      // comentarioDaQuestaoQuatro: this.comentarioDaQuestaoQuatro,
+      // comentarioDaQuestaoGeral: this.comentarioDaQuestaoGeral,
       referenciaBi: this.referenciaBi,
       comentadorDaQuestao: this.comentadorDaQuestao,
       ano: this.ano,

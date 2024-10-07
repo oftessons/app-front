@@ -98,7 +98,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   subtemasDescricoes: string[] = [];
   temasDescricoes: string[] = [];
 
-  comentarioDaQuestaoDoisSanitizado: SafeHtml = '';
+  comentarioDaQuestaoSanitizado: SafeHtml = '';
   sanitizerEnunciado: SafeHtml = '';
 
   constructor(
@@ -593,9 +593,9 @@ verificarRespostaUsuario(resposta: Resposta) {
         this.questaoAtual = data;
 
         // Sanitizar o conteúdo
-        this.comentarioDaQuestaoDoisSanitizado =
+        this.comentarioDaQuestaoSanitizado =
           this.sanitizer.bypassSecurityTrustHtml(
-            this.questaoAtual.comentarioDaQuestaoDois || ''
+            this.questaoAtual.comentarioDaQuestao || ''
           );
           this.sanitizerEnunciado = this.applyClassesToEnunciado(this.questaoAtual.enunciadoDaQuestao || '');
       },
