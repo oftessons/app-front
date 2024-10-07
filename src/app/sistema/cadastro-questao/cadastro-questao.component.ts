@@ -132,6 +132,8 @@ editorConfig1 = {
     getEditorContent() {
       console.log(this.editorContent);
     }
+
+
   
 
    onAlternativaChange(index: number) {
