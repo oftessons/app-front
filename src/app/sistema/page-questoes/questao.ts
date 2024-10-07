@@ -21,7 +21,7 @@ export class Questao {
   fotoAfirmacaoQuatro!: string;
   assinale!: string;
   fotoDaQuestao!: File;
-  fotoDaResposta!: File;
+  // fotoDaResposta!: File;
   fotoDaRespostaUm!: File;
   fotoDaRespostaDois!: File;
   comentarioDaQuestao!: string;
@@ -64,7 +64,7 @@ export class Questao {
       fotoDaRespostaUm: this.fotoDaRespostaUm,
       fotoDaRespostaDois: this.fotoDaRespostaDois,
 
-      fotoDaResposta: this.fotoDaResposta,
+      // fotoDaResposta: this.fotoDaResposta,
       comentarioDaQuestao: this.comentadorDaQuestao,
       comentarioDaQuestaoUm: this.comentarioDaQuestaoUm,
       comentarioDaQuestaoDois: this.comentarioDaQuestaoDois,
