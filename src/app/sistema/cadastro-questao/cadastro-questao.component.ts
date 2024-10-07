@@ -159,24 +159,12 @@ editorConfig1 = {
         case 'fotoDaQuestao':
           this.fotoDaQuestao = file;
           break;
-        case 'fotoDaQuestaoDois':
-          this.fotoDaQuestaoDois = file;
-          break;
-        case 'fotoDaQuestaoTres':
-          this.fotoDaQuestaoTres = file;
-          break;
-        case 'fotoDaResposta1':
+        case 'fotoDaRespostaUm':
           this.fotoDaRespostaUm = file;
           break;
-          case 'fotoDaResposta2':
+        case 'fotoDaRespostaDois':
           this.fotoDaRespostaDois = file;
           break;
-        // case 'fotoDaRespostaDois':
-        //   this.fotoDaRespostaDois = file;
-        //   break;
-        // case 'fotoDaRespostaTres':
-        //   this.fotoDaRespostaTres = file;
-        //   break;
         default:
           break;
       }
@@ -247,9 +235,11 @@ editorConfig1 = {
       this.formData.append('fotoDaQuestaoArquivo', this.fotoDaQuestao);
     }
     if (this.fotoDaRespostaUm) {
+      console.log("fotoDaRespostaUm: passo");
       this.formData.append('fotoDaRespostaUmArquivo', this.fotoDaRespostaUm);
     }
     if (this.fotoDaRespostaDois) {
+      console.log("fotoDaRespostaDois: passo");
       this.formData.append('fotoDaRespostaDoisArquivo', this.fotoDaRespostaDois);
     }
   
