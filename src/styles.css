@@ -65,6 +65,22 @@ body {
     background: #fefefe;
 }
 
+/* QUILL */
+.ql-align-center {
+  text-align: center;
+}
+
+.ql-align-right {
+  text-align: right;
+}
+
+.ql-align-justify {
+  text-align: justify;
+}
+
+.ql-align-left {
+  text-align: left;
+}
 
 ::-webkit-scrollbar {
   width: 8px;

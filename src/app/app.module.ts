@@ -48,7 +48,16 @@ import { QuillModule } from 'ngx-quill';
       customOptions: [{
         import: 'formats/font',
         whitelist: ['mirza', 'roboto', 'aref', 'serif', 'sansserif', 'monospace']
-      }]
+      }],
+      modules: {
+        toolbar: [
+          [{ 'color': [] }],
+          ['bold', 'italic', 'underline', 'strike'],
+          [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+          ['clean'],
+          [{ 'align': [] }],
+        ]
+      }
     })
   ],
   providers: [

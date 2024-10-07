@@ -99,6 +99,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   temasDescricoes: string[] = [];
 
   comentarioDaQuestaoDoisSanitizado: SafeHtml = '';
+  sanitizerEnunciado: SafeHtml = '';
 
   constructor(
     private questoesService: QuestoesService,
@@ -149,6 +150,22 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       imageElement.style.width = '300px'; // Defina o tamanho desejado
       imageElement.style.height = 'auto';
     });
+  }
+
+  applyClassesToEnunciado(content: string): SafeHtml {
+    const div = document.createElement('div');
+    div.innerHTML = content;
+
+    // Apply classes to elements
+    const elementsWithClasses = div.querySelectorAll('[class]');
+    elementsWithClasses.forEach((element) => {
+      const classList = element.className.split(' ');
+      classList.forEach((className) => {
+        element.classList.add(className);
+      });
+    });
+
+    return this.sanitizeContent(div.innerHTML);
   }
 
   sanitizeContent(content: string): SafeHtml {
@@ -580,6 +597,7 @@ verificarRespostaUsuario(resposta: Resposta) {
           this.sanitizer.bypassSecurityTrustHtml(
             this.questaoAtual.comentarioDaQuestaoDois || ''
           );
+          this.sanitizerEnunciado = this.applyClassesToEnunciado(this.questaoAtual.enunciadoDaQuestao || '');
       },
       (error) => {
         console.error('Erro ao carregar cometario:', error);
