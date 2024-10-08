@@ -3,6 +3,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import { Usuario } from 'src/app/login/usuario';
 
 @Component({
   selector: 'app-navbar',
@@ -11,7 +12,9 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class NavbarComponent {
   @ViewChild('sidenav') sidenav!: MatSidenav;
-  usuarioLogado!: string;
+  //usuarioLogado!: string;
+  usuarioLogado: Usuario | null = null; 
+  usuario!: Usuario | null;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -19,8 +22,12 @@ export class NavbarComponent {
     private router: Router
   ) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.usuarioLogado = this.authService.getUsuarioAutenticado();
+  }
+  
+  isAdmin(): boolean {
+    return this.usuario?.permissao === 'ROLE_ADMIN'; // Verifica se o usuário é admin
   }
 
   logout() {

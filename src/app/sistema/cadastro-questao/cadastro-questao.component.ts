@@ -12,6 +12,9 @@ import { Alternativa } from '../alternativa';
 import { TinymceService } from 'src/app/services/tinymce.service';
 
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { Usuario } from 'src/app/login/usuario';
+import { Permissao } from 'src/app/login/Permissao';
+import { AuthService } from 'src/app/services/auth.service';
 
 import Quill from 'quill';
 
@@ -20,7 +23,10 @@ import Quill from 'quill';
   templateUrl: './cadastro-questao.component.html',
   styleUrls: ['./cadastro-questao.component.css']
 })
+
 export class CadastroQuestaoComponent implements OnInit,  AfterViewInit {
+  usuario: Usuario | null = null;
+  Permissao = Permissao; // Adicione esta linha
   formData = new FormData();
   questaoDTO = new Questao();
   successMessage: string | null = null;
@@ -63,11 +69,13 @@ editorConfig1 = {
 
   constructor(
     private questoesService: QuestoesService,
+    private authService: AuthService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
     public tinymceService: TinymceService,
     private sanitizer: DomSanitizer
   ) { }
+
   ngOnInit(): void {
     // this.editorConfig = this.tinymceService.getEditorConfig();
 
@@ -96,7 +104,8 @@ editorConfig1 = {
       { id: 3, texto: '3', correta: false },
       { id: 4, texto: '4', correta: false }
     ];
-
+    
+    this.usuario = this.authService.getUsuarioAutenticado();
 
     //Selecion o tem texto por defaault
     this.questaoDTO.tipoItemQuestao='texto'
@@ -216,7 +225,7 @@ editorConfig1 = {
     this.questaoDTO.alternativaCorreta = [this.questaoDTO.alternativas[index]];
   }
 
-  onSubmit(): void {
+onSubmit(): void {
     console.log('Form data:', this.questaoDTO);
   
     // Ensure the editor content is up-to-date

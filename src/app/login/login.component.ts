@@ -19,9 +19,10 @@ export class LoginComponent {
   cadastrando: boolean = false;
   mensagemSucesso: string = '';
   errors: string[] = [];
-  usuario: any;
   forgotEmail: string = '';
   showForgotPassword: boolean = false;
+  usuario!: Usuario | null;
+
 
   confirmPasswordError: string | null = null;
   confirmPassword: string = '';
@@ -47,22 +48,50 @@ export class LoginComponent {
 
   onSubmit() {
     this.authService.tentarLogar(this.username, this.password).subscribe(
-      (response: any) => {
-        const access_token = JSON.stringify(response);
-        localStorage.setItem('access_token', access_token);
+        (response: any) => {
+            console.log(response); // Inspecione a resposta aqui
 
-        const userId = this.authService.getUserIdFromToken();
-        localStorage.setItem('user_id', userId || '');
-        this.salvaUserLocal();
+            // Salva o token de acesso no localStorage
+            const access_token = response.access_token;
+            localStorage.setItem('access_token', access_token);
 
-        // Redireciona para a página de dashboard após o login
-        this.router.navigate(['/gerente/dashboard']);
-      },
-      errorResponse => {
-        this.errors = ['Usuário e/ou senha incorreto(s).'];
-      }
+            console.log(access_token);
+
+            // Obtém e salva o ID do usuário
+            const userId = this.authService.getUserIdFromToken() ?? ''; // Garante que será uma string vazia se for null
+            localStorage.setItem('user_id', userId || '');
+
+            // Cria o objeto usuário
+            const usuario: Usuario = {
+                id: userId,  // Supondo que você tenha o userId
+                fotoUrl: null, // Se você tiver uma URL de foto, adicione aqui
+                username: response.username, // Supondo que username esteja na resposta
+                password: '',  // Não armazene a senha
+                email: response.email || '',
+                telefone: response.telefone || '',
+                cidade: response.cidade || '',
+                estado: response.estado || '',
+                nome: response.nome || '',
+                confirmPassword: '', // Não armazene
+                permissao: response.authorities.length > 0 ? response.authorities[0] : null // Atribui a primeira autoridade
+            };
+            localStorage.setItem('usuario', JSON.stringify(usuario));
+            
+            // Redireciona com base na permissão do usuário
+            if (usuario.permissao === 'ROLE_ADMIN' || usuario.permissao === 'ROLE_USER') {
+              this.router.navigate(['/usuario/dashboard']);
+            } else {
+              this.router.navigate(['/forbidden']); // Caso não tenha permissão
+            }
+
+        },
+        errorResponse => {
+            this.errors = ['Usuário e/ou senha incorreto(s).'];
+        }
     );
-  }
+}
+
+
 
   preparaCadastrar(event: Event) {
     event.preventDefault();

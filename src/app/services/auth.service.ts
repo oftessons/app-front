@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt'
 import { environment } from 'src/environments/environment';
 import { Usuario } from '../login/usuario';
+import { map } from 'rxjs/internal/operators/map';
 
 @Injectable({
   providedIn: 'root'
@@ -23,12 +24,7 @@ export class AuthService {
   ) { }
 
   obterToken(){
-    const tokenString = localStorage.getItem('access_token')
-    if(tokenString){
-      const token = JSON.parse(tokenString).access_token
-      return token;
-    }
-    return null;
+    return localStorage.getItem('access_token');
   }
 
   encerrarSessao(){
@@ -41,8 +37,15 @@ export class AuthService {
 
 
   obterUsuarioAutenticadoDoBackend(): Observable<Usuario> {
-     return this.http.get<Usuario>(`${this.apiURL}/perfil`);
+    return this.http.get<Usuario>(`${this.apiURL}/perfil`).pipe(
+      map(usuario => {
+        // Presumindo que o backend retorne o role do usuário
+        usuario.permissao = this.jwtHelper.decodeToken(JSON.stringify(this.obterToken())).role;
+        return usuario;
+      })
+    );
   }
+  
 
   atualizarUsuario(usuario: Usuario, fotoDoPerfil?: File): Observable<Usuario> {
     const formData: FormData = new FormData();
@@ -56,25 +59,27 @@ export class AuthService {
   }
   
 
-  getUsuarioAutenticado(){
-    const token = this.obterToken();
-    if(token){
-      const usuario = this.jwtHelper.decodeToken(token).user_name
-      return usuario;
+  
+
+  getUsuarioAutenticado(): Usuario | null {
+    const userJson = localStorage.getItem('usuario'); // Assumindo que o usuário está salvo no localStorage
+    if (userJson) {
+        return JSON.parse(userJson); // Retorna o usuário como objeto
     }
-    return null;
-  }
+    return null; // Retorna null se não houver usuário
+}
 
-
+  
 
   getUserIdFromToken(): string | null {
-    const token = localStorage.getItem('access_token');
+    const token = this.obterToken();
     if (token) {
-      const decodedToken = JSON.parse(atob(token.split('.')[1]));
-      return decodedToken.sub; // Isso assume que o ID do usuário está no campo 'sub' do token
+      const decodedToken = this.jwtHelper.decodeToken(token);
+      return decodedToken?.sub || null; // Assume que o campo 'sub' contém o ID do usuário
     }
     return null;
   }
+  
 
   salvarUsuarioAutenticado(usuario: Usuario) {
     const token = this.obterToken();
