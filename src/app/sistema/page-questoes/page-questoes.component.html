@@ -116,13 +116,8 @@
         <h3>Ano: {{ questaoAtual.ano }}</h3>
       </div>
       <div class="conteudo-questao">
-        <!-- <p>{{ questaoAtual.enunciadoDaQuestao }}</p> -->
         <div class="img-comentario" [innerHTML]="questaoAtual.enunciadoDaQuestao"></div>
-        <img *ngIf="questaoAtual.fotoDaQuestao" [src]="questaoAtual.fotoDaQuestao" alt="Foto da questão" class="questao-foto">
-        <p>{{ questaoAtual.afirmacaoUm }}</p>
-        <p>{{ questaoAtual.afirmacaoDois }}</p>
-        <p>{{ questaoAtual.afirmacaoTres }}</p>
-        <p>{{ questaoAtual.afirmacaoQuatro }}</p>
+        <img [src]="questaoAtual?.fotoDaQuestaoUrl" alt="Foto da questão" class="questao-foto">
         <div class="row">
           <div class="col-md-12">
             <div class="form-group">
@@ -151,13 +146,10 @@
 
               <div *ngIf="mostrarGabarito && questaoAtual">
                 <h2 style="margin-top: 10px;">Comentário da Questão</h2>
-                <img *ngIf="questaoAtual.fotoDaRespostaUm" [src]="questaoAtual.fotoDaRespostaUm" alt="Foto do Comentário" class="questao-foto">
-                <!-- <p>{{ questaoAtual.comentarioDaQuestaoUm }}</p> -->
-
+                <img [src]="questaoAtual?.fotoDaRespostaUmUrl" alt="Foto do Comentário" class="questao-foto">
                 <!-- Exibe o comentário da Questão Dois com HTML Sanitizado -->
                 <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestao"></div>
-                
-                <img *ngIf="questaoAtual.fotoDaRespostaDois" [src]="questaoAtual.fotoDaRespostaDois" alt="Foto do Comentário" class="questao-foto">
+                <img [src]="questaoAtual?.fotoDaRespostaDoisUrl" alt="Foto do Comentário" class="questao-foto">
                 <p>Referência: {{ questaoAtual.referenciaBi }}</p>
                 <p>Comentado por: {{ questaoAtual.comentadorDaQuestao }}</p>
               </div>

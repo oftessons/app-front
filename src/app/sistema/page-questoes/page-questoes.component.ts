@@ -111,6 +111,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
   ngOnInit(): void {
     this.obterPerfilUsuario();
+    this.loadQuestao();
     this.tiposDeProvaDescricoes = this.tiposDeProva.map((tipoDeProva) =>
       this.getDescricaoTipoDeProva(tipoDeProva)
     );
