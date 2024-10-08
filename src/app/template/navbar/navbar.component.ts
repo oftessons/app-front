@@ -3,7 +3,6 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
-import { Usuario } from 'src/app/login/usuario';
 
 @Component({
   selector: 'app-navbar',
@@ -12,9 +11,7 @@ import { Usuario } from 'src/app/login/usuario';
 })
 export class NavbarComponent {
   @ViewChild('sidenav') sidenav!: MatSidenav;
-  //usuarioLogado!: string;
-  usuarioLogado: Usuario | null = null; 
-  usuario!: Usuario | null;
+  nomeUsuario: string = ''; // Variável para armazenar o nome do usuário
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -23,11 +20,11 @@ export class NavbarComponent {
   ) { }
 
   ngOnInit() {
-    this.usuarioLogado = this.authService.getUsuarioAutenticado();
-  }
-  
-  isAdmin(): boolean {
-    return this.usuario?.permissao === 'ROLE_ADMIN'; // Verifica se o usuário é admin
+    // Chama o serviço para buscar o nome do usuário autenticado
+    this.authService.obterNomeUsuario().subscribe(
+      nome => this.nomeUsuario = nome, // Armazena o nome do usuário
+      err => console.error('Erro ao buscar nome do usuário', err)
+    );
   }
 
   logout() {
