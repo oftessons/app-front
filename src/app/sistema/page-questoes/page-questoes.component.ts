@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, AfterViewChecked } from '@angular/core';
 import { TipoDeProva } from './enums/tipoDeProva';
 import {
   getDescricaoAno,
@@ -30,7 +30,8 @@ declare var bootstrap: any;
   templateUrl: './page-questoes.component.html',
   styleUrls: ['./page-questoes.component.css'],
 })
-export class PageQuestoesComponent implements OnInit {
+export class PageQuestoesComponent implements OnInit, AfterViewChecked {
+  
   questao: Questao = new Questao();
   selectedOption: string = '';
   //resposta: string | null = null;
@@ -43,6 +44,8 @@ export class PageQuestoesComponent implements OnInit {
   subtemas = Object.values(Subtema);
   temas = Object.values(Tema);
   mensagemSucesso: string = '';
+
+  jaRespondeu: boolean = false;
 
   respostaVerificada: boolean = false;
   respostaFoiSubmetida: boolean = false;
@@ -95,7 +98,8 @@ export class PageQuestoesComponent implements OnInit {
   subtemasDescricoes: string[] = [];
   temasDescricoes: string[] = [];
 
-  comentarioDaQuestaoDoisSanitizado: SafeHtml = '';
+  comentarioDaQuestaoSanitizado: SafeHtml = '';
+  sanitizerEnunciado: SafeHtml = '';
 
   constructor(
     private questoesService: QuestoesService,
@@ -120,11 +124,52 @@ export class PageQuestoesComponent implements OnInit {
       this.getDescricaoTema(tema)
     );
     this.loadQuestao();
-    this.tiposDeProvaDescricoes = this.tiposDeProva.map(tipoDeProva => this.getDescricaoTipoDeProva(tipoDeProva));
-    this.anosDescricoes = this.anos.map(ano => this.getDescricaoAno(ano));
-    this.dificuldadesDescricoes = this.dificuldades.map(dificuldade => this.getDescricaoDificuldade(dificuldade));
-    this.subtemasDescricoes = this.subtemas.map(subtema => this.getDescricaoSubtema(subtema));
-    this.temasDescricoes = this.temas.map(tema => this.getDescricaoTema(tema));
+    this.tiposDeProvaDescricoes = this.tiposDeProva.map((tipoDeProva) =>
+      this.getDescricaoTipoDeProva(tipoDeProva)
+    );
+    this.anosDescricoes = this.anos.map((ano) => this.getDescricaoAno(ano));
+    this.dificuldadesDescricoes = this.dificuldades.map((dificuldade) =>
+      this.getDescricaoDificuldade(dificuldade)
+    );
+    this.subtemasDescricoes = this.subtemas.map((subtema) =>
+      this.getDescricaoSubtema(subtema)
+    );
+    this.temasDescricoes = this.temas.map((tema) =>
+      this.getDescricaoTema(tema)
+    );
+  }
+
+  ngAfterViewChecked(): void {
+    this.resizeImages();
+  }
+
+  resizeImages(): void {
+    const imgElements = document.querySelectorAll('.img-comentario img');
+    imgElements.forEach((img) => {
+      const imageElement = img as HTMLImageElement;
+      imageElement.style.width = '300px'; // Defina o tamanho desejado
+      imageElement.style.height = 'auto';
+    });
+  }
+
+  applyClassesToEnunciado(content: string): SafeHtml {
+    const div = document.createElement('div');
+    div.innerHTML = content;
+
+    // Apply classes to elements
+    const elementsWithClasses = div.querySelectorAll('[class]');
+    elementsWithClasses.forEach((element) => {
+      const classList = element.className.split(' ');
+      classList.forEach((className) => {
+        element.classList.add(className);
+      });
+    });
+
+    return this.sanitizeContent(div.innerHTML);
+  }
+
+  sanitizeContent(content: string): SafeHtml {
+    return this.sanitizer.bypassSecurityTrustHtml(content);
   }
 
   onOptionChange(texto: string): void {
@@ -145,34 +190,40 @@ export class PageQuestoesComponent implements OnInit {
   }
 
   responderQuestao(questao: Questao | null): void {
-    if (!questao) {
-      console.error('Questão atual é nula.');
-      this.resposta = 'Nenhuma questão selecionada.';
-      return;
-    }
-
-    if (this.selectedOption) {
-      const alternativaSelecionada = questao.alternativas.find(
-        (a) => a.texto === this.selectedOption
-      );
-
-      if (alternativaSelecionada) {
-        const respostaDTO: RespostaDTO = {
-          questaoId: questao.id,
-          selecionarOpcao: this.selectedOption,
-        };
-
-        const idUser = parseInt(this.usuario.id);
-
-        this.questoesService
-          .checkAnswer(questao.id, idUser, respostaDTO)
-          .subscribe(
+    if (!this.jaRespondeu) {  // Verificar se o usuário já respondeu
+      if (!questao) {
+        console.error('Questão atual é nula.');
+        this.resposta = 'Nenhuma questão selecionada.';
+        return;
+      }
+  
+      if (this.selectedOption) {
+        const alternativaSelecionada = questao.alternativas.find(
+          (a) => a.texto === this.selectedOption
+        );
+  
+        if (alternativaSelecionada) {
+          const respostaDTO: RespostaDTO = {
+            questaoId: questao.id,
+            selecionarOpcao: this.selectedOption,
+          };
+  
+          const idUser = parseInt(this.usuario.id);
+  
+          // Chamamos o serviço para verificar a resposta
+          this.questoesService.checkAnswer(questao.id, idUser, respostaDTO).subscribe(
             (resposta: Resposta) => {
               this.isRespostaCorreta = resposta.correct;
-              this.respostaVerificada = true; // Só permite mostrar o fundo após verificar a resposta
+              this.respostaVerificada = true; // Verificação foi realizada
               this.resposta = resposta.correct
                 ? 'Resposta correta!'
                 : 'Resposta incorreta. Tente novamente.';
+  
+              // Marque que o usuário já respondeu para desativar o botão
+              this.jaRespondeu = true;
+  
+              // Verificar a resposta do usuário e exibir o resultado
+              this.verificarRespostaUsuario(resposta);
             },
             (error) => {
               console.error('Erro ao verificar resposta:', error);
@@ -180,14 +231,34 @@ export class PageQuestoesComponent implements OnInit {
                 'Ocorreu um erro ao verificar a resposta. Por favor, tente novamente mais tarde.';
             }
           );
+        }
       }
     }
   }
+  
+
+
+
+  // Método para verificar a resposta do usuário e exibir gabarito
+verificarRespostaUsuario(resposta: Resposta) {
+  this.selectedOption = resposta.opcaoSelecionada;
+  this.isRespostaCorreta = resposta.correct;
+
+  if (resposta.correct) {
+    this.respostaCorreta = this.selectedOption;
+    this.respostaErrada = '';
+  } else {
+    this.respostaErrada = this.selectedOption;
+    this.respostaCorreta = resposta.opcaoCorreta;
+  }
+  this.respostaVerificada = true;
+}
+
+  
 
   exibirGabarito() {
     this.mostrarGabarito = true;
-
-    // Atualizar o estado das respostas corretas e erradas
+  
     if (this.questaoAtual) {
       this.respostaCorreta =
         this.questaoAtual.alternativas.find(
@@ -199,6 +270,7 @@ export class PageQuestoesComponent implements OnInit {
         )?.texto || '';
     }
   }
+  
 
   getDescricaoTipoDeProva(tipoDeProva: TipoDeProva): string {
     return getDescricaoTipoDeProva(tipoDeProva);
@@ -299,7 +371,6 @@ export class PageQuestoesComponent implements OnInit {
       .filtrarQuestoes(this.usuarioId, filtros, 0, 100)
       .subscribe(
         (questoes: Questao[]) => {
-          console.log(questoes);
           if (questoes.length === 0) {
             this.message = this.getMensagemNenhumaQuestaoEncontrada(filtros);
             this.questoes = [];
@@ -383,40 +454,69 @@ export class PageQuestoesComponent implements OnInit {
   }
 
   anteriorQuestao() {
+    this.jaRespondeu = false; 
     if (this.paginaAtual > 0) {
       this.paginaAtual--;
       this.questaoAtual = this.questoes[this.paginaAtual];
-
-      // Resetar o estado para evitar fundo nas alternativas
-      this.selectedOption = ''; // Limpar a seleção atual
-      this.resposta = ''; // Limpar a resposta exibida
-      this.respostaCorreta = ''; // Limpar a alternativa correta
-      this.respostaErrada = ''; // Limpar a alternativa errada
-      this.mostrarGabarito = false; // Resetar a exibição do gabarito
-      this.isRespostaCorreta = false; // Limpar o estado da resposta correta
-      this.respostaVerificada = false; // Limpar o estado da resposta verificada
+  
+      this.selectedOption = '';
+      this.isRespostaCorreta = false;
+      this.mostrarGabarito = false;
+      this.respostaCorreta = '';
+      this.respostaErrada = '';
+      this.respostaVerificada = false;
+  
+      this.questoesService.questaoRespondida(this.usuarioId, this.questaoAtual.id).subscribe({
+        next: (resposta) => {
+          if (resposta) {
+            this.verificarRespostaUsuario(resposta);
+            this.mostrarGabarito = true;
+          } else {
+            this.selectedOption = '';
+            this.isRespostaCorreta = false;
+            this.mostrarGabarito = false;
+            this.respostaCorreta = '';
+            this.respostaErrada = '';
+            this.respostaVerificada = false;
+          }
+        },
+        error: (erro) => {
+          console.error('Erro ao verificar a resposta:', erro);
+        },
+      });
     } else {
       this.message = 'Não há mais questões disponíveis.';
     }
   }
 
   proximaQuestao() {
+    this.jaRespondeu = false;
     if (this.paginaAtual < this.questoes.length - 1) {
       this.paginaAtual++;
       this.questaoAtual = this.questoes[this.paginaAtual];
-
-      // Resetar o estado para evitar fundo nas alternativas
-      this.selectedOption = ''; // Limpar a seleção atual
-      this.resposta = ''; // Limpar a resposta exibida
-      this.respostaCorreta = ''; // Limpar a alternativa correta
-      this.respostaErrada = ''; // Limpar a alternativa errada
-      this.mostrarGabarito = false; // Resetar a exibição do gabarito
-      this.isRespostaCorreta = false; // Limpar o estado da resposta correta
-      this.respostaVerificada = false; // Limpar o estado da resposta verificada
+  
+      this.selectedOption = '';
+      this.isRespostaCorreta = false;
+      this.mostrarGabarito = false; // Gabarito desativado
+      this.respostaCorreta = '';
+      this.respostaErrada = '';
+      this.respostaVerificada = false;
+  
+      this.questoesService.questaoRespondida(this.usuarioId, this.questaoAtual.id).subscribe({
+        next: (resposta) => {
+          if (resposta) {
+            this.verificarRespostaUsuario(resposta);
+          }
+        },
+        error: (erro) => {
+          console.error('Erro ao verificar a resposta:', erro);
+        },
+      });
     } else {
       this.message = 'Não há mais questões disponíveis.';
     }
   }
+  
 
   abrirModal(): void {
     const modalElement = document.getElementById('confirmacaoModal');
@@ -495,14 +595,15 @@ export class PageQuestoesComponent implements OnInit {
         this.questaoAtual = data;
 
         // Sanitizar o conteúdo
-        this.comentarioDaQuestaoDoisSanitizado = this.sanitizer.bypassSecurityTrustHtml(
-          this.questaoAtual.comentarioDaQuestaoDois || ''
-        );
+        this.comentarioDaQuestaoSanitizado =
+          this.sanitizer.bypassSecurityTrustHtml(
+            this.questaoAtual.comentarioDaQuestao || ''
+          );
+          this.sanitizerEnunciado = this.applyClassesToEnunciado(this.questaoAtual.enunciadoDaQuestao || '');
       },
       (error) => {
         console.error('Erro ao carregar cometario:', error);
       }
     );
   }
-  
-}  
+}

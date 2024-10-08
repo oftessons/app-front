@@ -2,11 +2,11 @@
 .container {
   max-width: 1300px;
   padding: 10px;
-  font-family: 'Nunito Sans', sans-serif;
+  font-family: "Nunito Sans", sans-serif;
 }
 
 .container-geral {
-  background-color: #FEFEFE;
+  background-color: #fefefe;
   display: flex;
   flex-direction: column;
   width: 98%;
@@ -16,13 +16,13 @@
   border-radius: 8px;
 }
 
-.form-cad{
+.form-cad {
   margin: 16px;
 }
 
 /* Header */
 .header-container {
-  background-color: #0F1934;
+  background-color: #0f1934;
   text-align: start;
   display: flex;
   align-items: center;
@@ -49,7 +49,7 @@
 }
 
 label {
-  color: #1E1E1E;
+  color: #1e1e1e;
   font-size: 16px;
   margin-bottom: 8px;
   font-weight: 600;
@@ -58,7 +58,7 @@ label {
 .form-control {
   display: block;
   width: 100%;
-  padding: .375rem .75rem;
+  padding: 0.375rem 0.75rem;
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
@@ -66,8 +66,8 @@ label {
   background-color: #c1c0bf3d;
   background-clip: padding-box;
   border: 1px solid #ced4da;
-  border-radius: .25rem;
-  transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+  border-radius: 0.25rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   padding-right: 45px;
 }
 
@@ -112,7 +112,7 @@ textarea {
 .text-p {
   font-size: 20px;
   margin-top: 10px;
-  font-family: 'Nunito Sans', sans-serif;
+  font-family: "Nunito Sans", sans-serif;
 }
 
 /* Botões de Ação */
@@ -127,7 +127,7 @@ textarea {
   margin-top: 12px;
   padding: 10px 20px;
   width: 150px;
-  background-color: #041E4E;
+  background-color: #041e4e;
   color: #fff;
   border: none;
   border-radius: 5px;
@@ -138,7 +138,7 @@ textarea {
   margin-top: 12px;
   padding: 10px 20px;
   width: 150px;
-  background-color: #3B5FA0;
+  background-color: #3b5fa0;
   color: #fff;
   border: none;
   border-radius: 5px;
@@ -156,7 +156,7 @@ textarea {
 
 .button-envio button {
   color: #ffffff;
-  background-color: #0F1934;
+  background-color: #0f1934;
   font-size: 14px;
   font-weight: 700;
   width: 100px;
@@ -164,7 +164,7 @@ textarea {
 
 .button-envio button:hover {
   background-color: transparent;
-  border: 1px solid #0F1934;
+  border: 1px solid #0f1934;
   color: #111111;
 }
 
@@ -215,50 +215,55 @@ textarea {
   margin-right: 10px;
 }
 
-.container-alternativa{
+.container-alternativa {
   display: flex;
 }
 
 /* Layout Responsivo */
 @media screen and (max-width: 768px) {
   .container-geral {
-      width: 92%;
+    width: 92%;
   }
 
   .btn-container {
-      justify-content: center;
+    justify-content: center;
   }
 
   .form-group {
-      display: flex;
-      flex-direction: column;
+    display: flex;
+    flex-direction: column;
   }
 
   .btn {
-      width: 100px;
+    width: 100px;
   }
 
   .button-envio {
-      margin: 8px;
+    margin: 8px;
   }
 
   .button-envio button {
-      width: 80px;
+    width: 80px;
   }
 
   .col {
-      width: 80%;
+    width: 80%;
   }
 
   .cont-imgs {
-      flex-direction: column;
+    flex-direction: column;
+  }
+
+  .col-imagens{
+    display: flex;
+    flex-direction: column !important;
   }
 }
 
 /* Bloco do Enunciado da Questão */
 .bloco-enunciado {
-  background-color: #F5F5F5; /* Cor de fundo clara */
-  border: 1px solid #DDD; /* Borda suave */
+  background-color: #f5f5f5; /* Cor de fundo clara */
+  border: 1px solid #ddd; /* Borda suave */
   border-radius: 8px;
   padding: 20px;
   margin-bottom: 20px;
@@ -272,8 +277,8 @@ textarea {
 }
 
 .bloco-enunciado .form-control {
-  background-color: #FFFFFF; /* Fundo branco para os inputs */
-  border: 1px solid #CCC; /* Borda dos inputs */
+  background-color: #ffffff; /* Fundo branco para os inputs */
+  border: 1px solid #ccc; /* Borda dos inputs */
 }
 
 .bloco-enunciado label {
@@ -284,8 +289,8 @@ textarea {
 
 /* Bloco do Gabarito da Questão */
 .bloco-gabarito {
-  background-color: #E0E7FF; /* Cor de fundo intermediária */
-  border: 1px solid #B2C6FF; /* Borda com tom mais forte */
+  background-color: #e0e7ff; /* Cor de fundo intermediária */
+  border: 1px solid #b2c6ff; /* Borda com tom mais forte */
   border-radius: 8px;
   padding: 20px;
   margin-bottom: 20px;
@@ -299,8 +304,8 @@ textarea {
 }
 
 .bloco-gabarito .form-control {
-  background-color: #FFFFFF; /* Fundo branco para os inputs */
-  border: 1px solid #A0AFFF; /* Borda com tom intermediário */
+  background-color: #ffffff; /* Fundo branco para os inputs */
+  border: 1px solid #a0afff; /* Borda com tom intermediário */
 }
 
 .bloco-gabarito label {
@@ -311,8 +316,8 @@ textarea {
 
 /* Bloco do Comentário da Questão */
 .bloco-comentario {
-  background-color: #FFE3E3; /* Cor de fundo mais escura */
-  border: 1px solid #FFB3B3; /* Borda com tom mais forte */
+  background-color: #ffe3e3; /* Cor de fundo mais escura */
+  border: 1px solid #ffb3b3; /* Borda com tom mais forte */
   border-radius: 8px;
   padding: 20px;
   margin-bottom: 20px;
@@ -326,8 +331,8 @@ textarea {
 }
 
 .bloco-comentario .form-control {
-  background-color: #FFFFFF; /* Fundo branco para os inputs */
-  border: 1px solid #FF9999; /* Borda com tom mais escuro */
+  background-color: #ffffff; /* Fundo branco para os inputs */
+  border: 1px solid #ff9999; /* Borda com tom mais escuro */
 }
 
 .bloco-comentario label {
@@ -337,7 +342,8 @@ textarea {
 }
 
 /* Estilo dos Inputs e Textareas de todos os blocos */
-textarea, input[type="text"] {
+textarea,
+input[type="text"] {
   width: 100%;
   padding: 10px;
   font-size: 16px;
@@ -345,19 +351,21 @@ textarea, input[type="text"] {
   transition: all 0.3s ease-in-out;
 }
 
-textarea:focus, input[type="text"]:focus {
+textarea:focus,
+input[type="text"]:focus {
   border-color: #888;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
-input[type="radio"], input[type="checkbox"] {
+input[type="radio"],
+input[type="checkbox"] {
   margin-right: 8px;
 }
 
 /* Estilo de Botões */
 .btn-primary {
-  background-color: #041E4E;
-  color: #FFFFFF;
+  background-color: #041e4e;
+  color: #ffffff;
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
@@ -369,8 +377,8 @@ input[type="radio"], input[type="checkbox"] {
 }
 
 .btn-secundary {
-  background-color: #3B5FA0;
-  color: #FFFFFF;
+  background-color: #3b5fa0;
+  color: #ffffff;
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
@@ -378,35 +386,72 @@ input[type="radio"], input[type="checkbox"] {
 }
 
 .btn-secundary:hover {
-  background-color: #324A7D;
+  background-color: #324a7d;
 }
 
 .image-container {
-    display: flex;
-    align-items: center;
-  }
-  
-  .checkbox {
-    margin-right: 10px;
-  }
-  
-  .image-upload {
-    flex: 1;
-  }
-  
-  .image-preview {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100px; /* ajuste o tamanho da imagem */
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 10px;
-  }
-  
-  .image-preview img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: cover;
-    border-radius: 5px;
-  }
+  display: flex;
+  align-items: center;
+  padding-bottom: 16px;
+}
+
+.checkbox {
+  margin-right: 10px;
+}
+
+.image-upload {
+  flex: 1;
+}
+
+.image-preview {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px; /* ajuste o tamanho da imagem */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.image-preview img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+/* INPUT GERAL */
+.ql-toolbar {
+  background-color: #f8f9fa;
+}
+
+.ql-container {
+  border: 1px solid #ced4da; 
+  height: 250px; 
+}
+
+.ql-editor {
+  font-size: 1rem;
+  color: #212529;
+}
+
+.custom-quill-editor {
+  height: 200px; /* Defina a altura desejada */
+}
+
+.custom-quill-editor .ql-container {
+  height: 100%; /* Certifique-se de que o contêiner do editor ocupe toda a altura */
+}
+
+.ql-editor img {
+  max-width: 100%;
+  height: auto;
+}
+
+.col-imagens{
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+  align-items: center;
+  width: 100%;
+}

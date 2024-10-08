@@ -17,6 +17,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { ListaQuestoesComponent } from './lista-questoes/lista-questoes.component';
 import { PageSimuladoComponent } from './page-simulado/page-simulado.component';
 import { MeusSimuladosComponent } from './meus-simulados/meus-simulados.component';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { SharedModule } from '../shared/shared.module';
@@ -38,6 +39,7 @@ import { ForbiddenComponent } from './forbidden/forbidden.component';
   imports: [
     CommonModule,
     FormsModule,
+    MatProgressBarModule,
     SistemaRoutingModule,
     MatInputModule,
     MatSelectModule,

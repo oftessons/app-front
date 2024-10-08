@@ -1,5 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,300&display=swap');
 
+@import "~quill/dist/quill.core.css";
+@import "~quill/dist/quill.snow.css";
+
 :root {
   --blue: #007bff;
   --indigo: #6610f2;
@@ -62,6 +65,22 @@ body {
     background: #fefefe;
 }
 
+/* QUILL */
+.ql-align-center {
+  text-align: center;
+}
+
+.ql-align-right {
+  text-align: right;
+}
+
+.ql-align-justify {
+  text-align: justify;
+}
+
+.ql-align-left {
+  text-align: left;
+}
 
 ::-webkit-scrollbar {
   width: 8px;
@@ -8979,6 +8998,14 @@ button.bg-dark:focus {
   .mb-lg-5,
 .my-lg-5 {
     margin-bottom: 3rem !important;
+
+
+
+
+
+
+
+
   }
 
   .ml-lg-5,

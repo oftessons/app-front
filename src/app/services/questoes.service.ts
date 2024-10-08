@@ -191,4 +191,48 @@ export class QuestoesService {
       .post<Resposta>(url, resposta)
       .pipe(catchError((error) => throwError('Erro ao verificar a resposta.')));
   }
+
+  questaoRespondida(idUser: number, questaoId: number): Observable<{
+    opcaoSelecionada: string;
+    correct: boolean;
+    opcaoCorreta: string;
+  } | null> {
+    const url = `${this.apiURL}/respondido/${idUser}?questaoId=${questaoId}`;
+    return this.http
+      .get<{
+        opcaoSelecionada: string;
+        correct: boolean;
+        opcaoCorreta: string;
+      }>(url, { observe: 'response' })
+      .pipe(
+        map(response => {
+          if (response.status === 204) {
+            return null;
+          }
+          return response.body;
+        }),
+        catchError((error) => throwError('Erro ao verificar a resposta.'))
+      );
+  }
+
+
+  // Método correto para buscar questão por ID
+  buscarQuestaoPorId(usuarioId: number, questaoId: number): Observable<Questao | null> {
+    const url = `${this.apiURL}/buscar-questao/${usuarioId}?questaoId=${questaoId}`;
+
+    return this.http.get<Questao>(url, { observe: 'response' }).pipe(
+      map((response) => {
+        if (response.status === 204) {
+          return null; // Retorna null se não houver questão encontrada
+        }
+        return response.body || null; // Retorna a questão se for encontrada
+      }),
+      catchError((error: HttpErrorResponse) => {
+        console.error('Erro ao buscar questão:', error);
+        return throwError('Erro ao buscar questão. Por favor, tente novamente.');
+      })
+    );
+  }
+
+  
 }
