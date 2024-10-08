@@ -1,17 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SelectPadraoComponent } from './select-padrao/select-padrao.component';
+import { InputPadraoComponent } from './input-padrao/input-padrao.component';
 import { ImageResizeModule } from './image-resize/image-resize.module';
-
 
 // material imports
 import { MatIconModule } from "@angular/material/icon";
 
-
-
 @NgModule({
   declarations: [
-    SelectPadraoComponent
+    SelectPadraoComponent,
+    InputPadraoComponent
   ],
   imports: [
     CommonModule,
@@ -20,7 +19,8 @@ import { MatIconModule } from "@angular/material/icon";
   ],
   exports: [
     SelectPadraoComponent,
-    ImageResizeModule
+    ImageResizeModule,
+    InputPadraoComponent
   ]
 })
 export class SharedModule { }
