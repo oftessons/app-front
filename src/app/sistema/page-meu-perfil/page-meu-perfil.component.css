@@ -69,7 +69,7 @@
 
 .btn {
   padding: 5px 15px;
-  background-color: #007bff;
+  background-color: #0F1934;
   color: #fff;
   border: none;
   border-radius: 5px;
@@ -84,7 +84,8 @@
 }
 
 .btn-secondary {
-  background-color: #6c757d;
+  background-color: #EDB120;
+  color: #000000;
   margin-left: 10px;
 }
 

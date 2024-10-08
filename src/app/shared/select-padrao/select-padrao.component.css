@@ -25,8 +25,8 @@ label.active {
 }
 
 .select-dropdown {
-  background: #f0f8ff;
-  border: 1px solid #f0f8ff;
+  background: #fff;
+  border: 1px solid #ffffff;
   padding: 10px;
   cursor: pointer;
   height: 100%;

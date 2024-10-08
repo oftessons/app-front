@@ -80,10 +80,10 @@
 
 .filters-container {
     margin-top: 20px;
-    background: #909298;
+    background: #0F1934;
     border-radius: 5px;
-    padding: 30px;
-}
+    padding: 50px;
+  }
 
 .row {
     display: flex;
@@ -197,7 +197,7 @@
 }
 
 .btn-filtrar {
-    background-color: #041e4e;
+    background-color: #EDB120;
     margin-right: 10px;
 }
 
