@@ -1,1 +1,5 @@
-<p>input-padrao works!</p>
+<!-- input-padrao.component.html -->
+<div class="input-container">
+    <input type="text" [(ngModel)]="value" (focus)="onFocus()" (blur)="onBlur()" placeholder="{{ placeholder }}" />
+    <label [class.active]="value">{{ label }}</label>
+  </div>
