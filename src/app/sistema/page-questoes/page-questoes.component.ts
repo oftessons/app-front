@@ -37,6 +37,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   //resposta: string | null = null;
   usuario!: Usuario;
   usuarioId!: number;
+  mensagemErro: string | null = null;
 
   tiposDeProva = Object.values(TipoDeProva);
   anos = Object.values(Ano);
@@ -312,7 +313,7 @@ verificarRespostaUsuario(resposta: Resposta) {
 
   filtrarQuestoes(): void {
     const filtros: any = {};
-
+  
     if (this.selectedAno) {
       const anoSelecionado = this.anos.find(
         (ano) => this.getDescricaoAno(ano) === this.selectedAno
@@ -358,100 +359,65 @@ verificarRespostaUsuario(resposta: Resposta) {
     if (this.palavraChave) {
       filtros.palavraChave = this.palavraChave;
     }
-
+  
     console.log('Filtros aplicados:', filtros);
-
+  
     if (Object.keys(filtros).length === 0) {
       this.message = 'Por favor, selecione pelo menos um filtro.';
       this.questoes = [];
       return;
     }
-
-    this.questoesService
-      .filtrarQuestoes(this.usuarioId, filtros, 0, 100)
-      .subscribe(
-        (questoes: Questao[]) => {
-          if (questoes.length === 0) {
-            this.message = this.getMensagemNenhumaQuestaoEncontrada(filtros);
-            this.questoes = [];
-            this.questaoAtual = null;
-          } else {
-            this.message = '';
-            this.questoes = questoes;
-            this.paginaAtual = 0;
-            this.questaoAtual = this.questoes[this.paginaAtual];
-          }
-
-          this.resposta = '';
-          this.mostrarGabarito = false;
-        },
-        (error) => {
-          console.error('Erro ao filtrar questões:', error);
-          this.message =
-            'Ocorreu um erro ao filtrar questões. Por favor, tente novamente mais tarde.';
+  
+    this.questoesService.filtrarQuestoes(this.usuarioId, filtros, 0, 100).subscribe(
+      (questoes: Questao[]) => {
+        if (questoes.length === 0) {
+          this.message = this.getMensagemNenhumaQuestaoEncontrada(filtros);
+          this.questoes = [];
+          this.questaoAtual = null;
+        } else {
+          this.message = '';
+          this.questoes = questoes;
+          this.paginaAtual = 0;
+          this.questaoAtual = this.questoes[this.paginaAtual];
         }
-      );
+  
+        this.resposta = '';
+        this.mostrarGabarito = false;
+      },
+      (error) => {
+        console.error('Erro ao filtrar questões:', error);
+        this.message = 'Ocorreu um erro ao filtrar questões. Por favor, tente novamente mais tarde.';
+      }
+    );
   }
+  
 
   getMensagemNenhumaQuestaoEncontrada(filtros: any): string {
-    if (
-      filtros.ano &&
-      !filtros.tipoDeProva &&
-      !filtros.dificuldade &&
-      !filtros.subtema &&
-      !filtros.tema &&
-      !filtros.palavraChave
-    ) {
-      return 'Nenhuma questão encontrada para o ano selecionado.';
-    } else if (
-      filtros.tipoDeProva &&
-      !filtros.ano &&
-      !filtros.dificuldade &&
-      !filtros.subtema &&
-      !filtros.tema &&
-      !filtros.palavraChave
-    ) {
-      return 'Nenhuma questão encontrada para o tipo de prova selecionado.';
-    } else if (
-      filtros.dificuldade &&
-      !filtros.ano &&
-      !filtros.tipoDeProva &&
-      !filtros.subtema &&
-      !filtros.tema &&
-      !filtros.palavraChave
-    ) {
-      return 'Nenhuma questão encontrada para a dificuldade selecionada.';
-    } else if (
-      filtros.subtema &&
-      !filtros.ano &&
-      !filtros.tipoDeProva &&
-      !filtros.dificuldade &&
-      !filtros.tema &&
-      !filtros.palavraChave
-    ) {
-      return 'Nenhuma questão encontrada para o subtema selecionado.';
-    } else if (
-      filtros.tema &&
-      !filtros.ano &&
-      !filtros.tipoDeProva &&
-      !filtros.dificuldade &&
-      !filtros.subtema &&
-      !filtros.palavraChave
-    ) {
-      return 'Nenhuma questão encontrada para o tema selecionado.';
-    } else if (
-      filtros.palavraChave &&
-      !filtros.ano &&
-      !filtros.tipoDeProva &&
-      !filtros.dificuldade &&
-      !filtros.subtema &&
-      !filtros.tema
-    ) {
-      return 'Nenhuma questão encontrada para a palavra-chave informada.';
-    } else {
-      return 'Nenhuma questão encontrada para os filtros selecionados.';
+    let mensagemUsuarioTratamento = 'Nenhuma questão encontrada com os filtros selecionados: ';
+  
+    if (filtros.ano) {
+      mensagemUsuarioTratamento += `Ano: ${this.getDescricaoAno(filtros.ano)}, `;
     }
+    if (filtros.dificuldade) {
+      mensagemUsuarioTratamento += `Dificuldade: ${this.getDescricaoDificuldade(filtros.dificuldade)}, `;
+    }
+    if (filtros.tipoDeProva) {
+      mensagemUsuarioTratamento += `Tipo de Prova: ${this.getDescricaoTipoDeProva(filtros.tipoDeProva)}, `;
+    }
+    if (filtros.subtema) {
+      mensagemUsuarioTratamento += `Subtema: ${this.getDescricaoSubtema(filtros.subtema)}, `;
+    }
+    if (filtros.tema) {
+      mensagemUsuarioTratamento += `Tema: ${this.getDescricaoTema(filtros.tema)}, `;
+    }
+    if (filtros.palavraChave) {
+      mensagemUsuarioTratamento += `Palavra-chave: ${filtros.palavraChave}, `;
+    }
+  
+    // Remover a última vírgula e espaço
+    return mensagemUsuarioTratamento.slice(0, -2) + '.';
   }
+  
 
   anteriorQuestao() {
     this.jaRespondeu = false; 

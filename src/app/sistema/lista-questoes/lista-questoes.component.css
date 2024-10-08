@@ -82,7 +82,7 @@
   }
   
   .crud-container {
-    background-color: #e3eaf0;
+    background-color: #8C8E94;
     padding: 20px;
     border-radius: 5px;
     margin-top: 20px;
@@ -148,48 +148,9 @@
     margin-top: 20px;
   }
   
-/* Ajuste para alinhar os botões horizontalmente com espaçamento */
-.btn-container {
-    display: flex;
-    justify-content: center; /* Centraliza os botões horizontalmente */
-    gap: 10px; /* Espaçamento entre os botões */
-}
-
-.btn-primary {
-    background-color: #3B5FA0;
-    border: none;
-}
-
-.btn-secondary {
-    background-color: #6c757d;
-    border: none;
-}
 
 
 
-/* Alinha os botões à esquerda */
-.btn-container {
-  display: flex;
-  justify-content: flex-start; /* Alinha os botões à esquerda */
-  gap: 10px; /* Espaçamento entre os botões */
-}
-
-/* Aumenta o tamanho dos botões */
-.btn-primary, .btn-secondary {
-  padding: 15px 30px; /* Aumenta o tamanho do botão */
-  font-size: 16px; /* Aumenta o tamanho da fonte */
-  border-radius: 5px; /* Bordas arredondadas */
-}
-
-.btn-primary {
-  background-color: #3B5FA0;
-  border: none;
-}
-
-.btn-secondary {
-  background-color: #6c757d;
-  border: none;
-}
 
 
 /* Modal Container */
@@ -301,4 +262,56 @@
 .btn-cancel:hover {
   background-color: #5a6268; 
 }
+
+
+
+/* Alinhamento dos botões à direita */
+.btn-container {
+  display: flex;
+  justify-content: flex-end; /* Alinha os botões à direita */
+  gap: 10px; /* Espaçamento entre os botões */
+}
+
+/* O input ocupará o restante do espaço */
+.full-width {
+  width: 100%; /* O input ocupará a largura total da coluna */
+}
+
+/* Ajuste para o espaçamento entre os elementos */
+.row {
+  display: flex;
+  justify-content: space-between; /* Espaça os itens no container */
+  align-items: center;
+}
+
+/* Estilo comum para os botões de buscar e limpar */
+.btn-primary, .btn-secondary {
+  width: 150px; /* Largura fixa para os botões */
+  height: 50px; /* Altura fixa para os botões */
+  font-size: 16px; /* Tamanho da fonte */
+  border-radius: 5px; /* Bordas arredondadas */
+}
+
+/* Estilo comum para os botões de editar e deletar */
+.btn-custom-editar, .btn-custom-deletar {
+  width: 150px; /* Largura fixa para os botões */
+  height: 50px; /* Altura fixa para os botões */
+  font-size: 16px; /* Tamanho da fonte */
+  border-radius: 5px; /* Bordas arredondadas */
+}
+
+.table-todas-questoes-do-bd {
+  width: 100%;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-top: 20px;
+}
+
+/* Definindo o espaçamento do campo de entrada */
+.full-width {
+  flex-grow: 1; /* Faz o campo de entrada ocupar todo o espaço disponível */
+  margin-right: 20px; /* Espaço à direita para o botão */
+}
+
 
