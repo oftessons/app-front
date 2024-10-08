@@ -82,7 +82,7 @@
   }
   
   .crud-container {
-    background-color: #e6e6e6; /* Fundo cinza para o contêiner CRUD */
+    background-color: #e3eaf0;
     padding: 20px;
     border-radius: 5px;
     margin-top: 20px;
@@ -165,6 +165,33 @@
     border: none;
 }
 
+
+
+/* Alinha os botões à esquerda */
+.btn-container {
+  display: flex;
+  justify-content: flex-start; /* Alinha os botões à esquerda */
+  gap: 10px; /* Espaçamento entre os botões */
+}
+
+/* Aumenta o tamanho dos botões */
+.btn-primary, .btn-secondary {
+  padding: 15px 30px; /* Aumenta o tamanho do botão */
+  font-size: 16px; /* Aumenta o tamanho da fonte */
+  border-radius: 5px; /* Bordas arredondadas */
+}
+
+.btn-primary {
+  background-color: #3B5FA0;
+  border: none;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  border: none;
+}
+
+
 /* Modal Container */
 .modal {
   position: fixed;
@@ -179,6 +206,12 @@
   opacity: 0; 
   visibility: hidden; 
   transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.alert-laranja {
+  background-color: #FFAD60; /* Cor de fundo laranja */
+  color: rgb(0, 0, 0); /* Texto branco para contraste */
+  border: 1px solid #FFAD60; /* Borda laranja escura */
 }
 
 .modal.open {

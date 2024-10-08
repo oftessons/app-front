@@ -14,6 +14,7 @@ export class PageFiltroComponent implements OnInit {
   filtros: FiltroDTO[] = [];
   usuario!: Usuario;
   usuarioId!: number;
+  carregando: boolean = true; // Variável para controlar o estado de carregamento
 
   constructor(
     private filtroService: FiltroService,
@@ -34,6 +35,7 @@ export class PageFiltroComponent implements OnInit {
       },
       (error) => {
         console.error('Erro ao obter perfil do usuário:', error);
+        this.carregando = false; // Mesmo em caso de erro, desativa o carregamento
       }
     );
   }
@@ -42,9 +44,11 @@ export class PageFiltroComponent implements OnInit {
     this.filtroService.getFiltros(this.usuarioId).subscribe(
       (filtros) => {
         this.filtros = filtros;
+        this.carregando = false; // Desativa o carregamento quando os dados chegam
       },
       (error) => {
         console.error('Erro ao carregar filtros:', error);
+        this.carregando = false; // Mesmo em caso de erro, desativa o carregamento
       }
     );
   }
@@ -52,7 +56,7 @@ export class PageFiltroComponent implements OnInit {
   deletarFiltro(id: number): void {
     this.filtroService.deletarFiltro(id).subscribe(
       () => {
-        this.carregarFiltros();
+        this.carregarFiltros(); // Atualiza a lista de filtros após deletar
       },
       (error) => {
         console.error('Erro ao deletar filtro:', error);

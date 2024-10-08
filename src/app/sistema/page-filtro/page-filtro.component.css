@@ -49,4 +49,16 @@ p.card-text{
   .btn-transparent-danger:hover {
     background-color: rgba(220, 53, 69, 0.1); /* Efeito hover leve com vermelho transparente */
   }
+
+  .no-filters-message {
+    background-color: #FFAD60;
+    border-radius: 10px;
+    padding: 15px;
+    font-size: 14px;
+  }
+  
+  .no-filters-message p {
+    margin: 0; 
+  }
+  
   

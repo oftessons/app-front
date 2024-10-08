@@ -14,6 +14,7 @@ export class MeusSimuladosComponent implements OnInit {
   simulados: Simulado[] = [];
   usuario!: Usuario;
   usuarioId!: number;
+  carregando: boolean = true;  // Variável para indicar o estado de carregamento
 
   constructor(
     private simuladoService: SimuladoService,
@@ -32,22 +33,23 @@ export class MeusSimuladosComponent implements OnInit {
         this.usuarioId = parseInt(this.usuario.id);
         this.simuladoService.obterSimulados(this.usuarioId).subscribe(
           (data: Simulado[]) => {
-            console.log('dados: ', data);
             this.simulados = data;
+            this.carregando = false;  // Desativa o carregamento quando os dados chegarem
           },
           (error) => {
             console.error('Erro ao carregar simulados', error);
+            this.carregando = false;  // Mesmo em caso de erro, desativa o carregamento
           }
         );
       },
       (error) => {
         console.error('Erro ao obter perfil do usuário:', error);
+        this.carregando = false;
       }
     );
   }
 
   editarSimulado(id: number): void {
-    // Redireciona para a rota correta com o ID do simulado
     this.router.navigate([`/simulados`, id]);
   }
 
@@ -55,7 +57,6 @@ export class MeusSimuladosComponent implements OnInit {
     console.log('Deletando simulado com ID:', id);
     this.simuladoService.deletarSimulado(id).subscribe(
       () => {
-        // Remover o simulado da lista após deletar
         this.simulados = this.simulados.filter(
           (simulado) => simulado.id !== id
         );
@@ -66,3 +67,4 @@ export class MeusSimuladosComponent implements OnInit {
     );
   }
 }
+

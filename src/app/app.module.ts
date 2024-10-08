@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule } from '@angular/core'; 
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -19,6 +19,8 @@ import { ChartsModule } from 'ng2-charts';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { SharedModule } from './shared/shared.module';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { QuillModule } from 'ngx-quill';
 
 @NgModule({
   declarations: [
@@ -40,8 +42,23 @@ import { SharedModule } from './shared/shared.module';
     ChartsModule,
     NgxPaginationModule,
     EditorModule,
-    SharedModule
-
+    SharedModule,
+    MatProgressBarModule,
+    QuillModule.forRoot({
+      customOptions: [{
+        import: 'formats/font',
+        whitelist: ['mirza', 'roboto', 'aref', 'serif', 'sansserif', 'monospace']
+      }],
+      modules: {
+        toolbar: [
+          [{ 'color': [] }],
+          ['bold', 'italic', 'underline', 'strike'],
+          [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+          ['clean'],
+          [{ 'align': [] }],
+        ]
+      }
+    })
   ],
   providers: [
     AuthService,
