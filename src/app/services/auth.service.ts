@@ -57,9 +57,6 @@ export class AuthService {
   
     return this.http.put<Usuario>(`${this.apiURL}/update/${usuario.id}`, formData);
   }
-  
-
-  
 
   getUsuarioAutenticado(): Usuario | null {
     const userJson = localStorage.getItem('usuario'); // Assumindo que o usuário está salvo no localStorage
@@ -67,9 +64,7 @@ export class AuthService {
         return JSON.parse(userJson); // Retorna o usuário como objeto
     }
     return null; // Retorna null se não houver usuário
-}
-
-  
+  }
 
   getUserIdFromToken(): string | null {
     const token = this.obterToken();
@@ -79,8 +74,15 @@ export class AuthService {
     }
     return null;
   }
-  
 
+  // Método para obter o nome do usuário autenticado no AuthService
+obterNomeUsuario(): Observable<string> {
+  return this.http.get<{ nome: string }>(`${this.apiURL}/nome`).pipe(
+    map(response => response.nome)  // Extrai a propriedade 'nome' do objeto retornado
+  );
+}
+
+  
   salvarUsuarioAutenticado(usuario: Usuario) {
     const token = this.obterToken();
     if (token) {
