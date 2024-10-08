@@ -6,6 +6,7 @@ import { ImageResizeModule } from './image-resize/image-resize.module';
 
 // material imports
 import { MatIconModule } from "@angular/material/icon";
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { MatIconModule } from "@angular/material/icon";
   imports: [
     CommonModule,
     MatIconModule,
-    ImageResizeModule
+    ImageResizeModule,
+    FormsModule,
   ],
   exports: [
     SelectPadraoComponent,

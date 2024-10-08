@@ -259,11 +259,15 @@
     display: none;
 }
 
+.espaco-select{
+    margin-bottom: 16px;
+  }
+
 .palavra-chave {
-    background-color: aliceblue;
-    width: 450px;
-    height: 50px;
-    border-radius: 10px;
+    background: aliceblue;
+    width: 100%;
+    height: 48px;
+    border-radius: 8px;
 }
 
 @media (max-width: 768px) {
