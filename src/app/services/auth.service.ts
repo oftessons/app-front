@@ -24,12 +24,7 @@ export class AuthService {
   ) { }
 
   obterToken(){
-    const tokenString = localStorage.getItem('access_token')
-    if(tokenString){
-      const token = JSON.parse(tokenString).access_token
-      return token;
-    }
-    return null;
+    return localStorage.getItem('access_token');
   }
 
   encerrarSessao(){
@@ -45,7 +40,7 @@ export class AuthService {
     return this.http.get<Usuario>(`${this.apiURL}/perfil`).pipe(
       map(usuario => {
         // Presumindo que o backend retorne o role do usuário
-        usuario.permissao = this.jwtHelper.decodeToken(this.obterToken()).role;
+        usuario.permissao = this.jwtHelper.decodeToken(JSON.stringify(this.obterToken())).role;
         return usuario;
       })
     );

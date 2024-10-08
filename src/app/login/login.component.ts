@@ -52,8 +52,10 @@ export class LoginComponent {
             console.log(response); // Inspecione a resposta aqui
 
             // Salva o token de acesso no localStorage
-            const access_token = JSON.stringify(response.access_token);
+            const access_token = response.access_token;
             localStorage.setItem('access_token', access_token);
+
+            console.log(access_token);
 
             // Obtém e salva o ID do usuário
             const userId = this.authService.getUserIdFromToken() ?? ''; // Garante que será uma string vazia se for null
@@ -76,15 +78,12 @@ export class LoginComponent {
             localStorage.setItem('usuario', JSON.stringify(usuario));
             
             // Redireciona com base na permissão do usuário
-            if (usuario.permissao === 'ROLE_ADMIN') {
-              this.router.navigate(['/usuario/dashboard']); // O admin pode acessar o dashboard de usuário
-            } else if (usuario.permissao === 'ROLE_USER') {
+            if (usuario.permissao === 'ROLE_ADMIN' || usuario.permissao === 'ROLE_USER') {
               this.router.navigate(['/usuario/dashboard']);
             } else {
               this.router.navigate(['/forbidden']); // Caso não tenha permissão
             }
-            
-          
+
         },
         errorResponse => {
             this.errors = ['Usuário e/ou senha incorreto(s).'];

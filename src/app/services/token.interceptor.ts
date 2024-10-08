@@ -1,10 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-  HttpRequest,
-  HttpHandler,
-  HttpEvent,
-  HttpInterceptor
-} from '@angular/common/http';
+import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor} from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable()
@@ -14,16 +9,14 @@ export class TokenInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
 
-    const tokenString = localStorage.getItem('access_token');
+    const token = localStorage.getItem('access_token');
 
     const url = request.url;
 
-    if( tokenString && !url.endsWith('/oauth/token') ){
-      const token = JSON.parse(tokenString);
-      const jwt = token.access_token;
+    if( token && !url.endsWith('/oauth/token') ){
       request = request.clone({
         setHeaders : {
-          Authorization: 'Bearer ' + jwt
+          Authorization: 'Bearer ' + token
         }
       })
     }

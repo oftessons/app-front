@@ -188,15 +188,21 @@ export class CadastroQuestaoComponent implements OnInit {
 
   onSubmit(): void {
     const onjetojson = this.questaoDTO.toJson();
+
     if (this.fotoDaQuestao) {
       this.formData.append('fotoDaQuestaoArquivo', this.fotoDaQuestao);
     }
+
     if (this.fotoDaResposta) {
       this.formData.append('fotoDaRespostaArquivo', this.fotoDaResposta);
     }
+
     console.debug('Enviando formulário com dados da questão:', this.formData);
+
     console.log('CLASSE ', JSON.stringify(this.questaoDTO));
+
     this.formData.append('questaoDTO', onjetojson);
+
     this.questoesService.salvar(this.formData).subscribe(
       response => {
         this.successMessage = 'Questão salva com sucesso!';
@@ -209,6 +215,7 @@ export class CadastroQuestaoComponent implements OnInit {
         console.error('Erro ao salvar a questão:', error);
       }
     );
+    
     console.log('Dados da questão antes de enviar:', {
       title: this.questaoDTO.title,
       alternativas: this.questaoDTO.alternativas

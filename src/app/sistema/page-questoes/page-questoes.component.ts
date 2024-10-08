@@ -461,6 +461,8 @@ export class PageQuestoesComponent implements OnInit {
 
       this.filtroService.salvarFiltro(this.filtroASalvar, idUser).subscribe(
         (response) => {
+          // Tratamento de Code Status HTTP => {400, 403, 500}
+
           // Exibir mensagem de sucesso
           this.mensagemSucesso = 'Seu filtro foi salvo com sucesso!';
 
