@@ -10,6 +10,12 @@ import { Ano } from "./ano"
 import { AnoDescricoes } from "./ano-descricoes" 
 import { Relevancia } from "./relevancia"
 import { RelevanciaDescricao } from "./relevancia-descricao"
+import { QuantidadeDeQuestoesSelecionadas } from "./quant-questoes"
+import { QuantidadeDeQuestõesSelecionadasDescricoes } from "./quant-que-descricao"
+
+export function getQuantidadeDeQuestõesSelecionadasDescricoes( quantidadeDeQuestoesSelecionadas:QuantidadeDeQuestoesSelecionadas): string{
+  return QuantidadeDeQuestõesSelecionadasDescricoes[quantidadeDeQuestoesSelecionadas];
+}
 
 export function getDescricaoRelevancia(relevancia: Relevancia): string{
   return RelevanciaDescricao[relevancia];

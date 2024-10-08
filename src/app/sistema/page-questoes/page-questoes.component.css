@@ -70,10 +70,16 @@
 }
 .filters-container {
   margin-top: 20px;
-  background: #0F1934;
+  background: #94979d;
   border-radius: 5px;
   padding: 50px;
 }
+
+.erro-mensagem {
+  color: red;
+  margin-top: 10px;
+}
+
 .row {
   display: flex;
   flex-direction: row;

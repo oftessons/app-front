@@ -233,7 +233,7 @@ export class PageSimuladoComponent implements OnInit {
 
   filtrarQuestoes(): void {
     const filtros: any = {};
-
+  
     if (this.selectedAno) {
       filtros.ano = this.selectedAno;
     }
@@ -255,42 +255,56 @@ export class PageSimuladoComponent implements OnInit {
     if (this.quantidadeQuestoesSelecionada) {
       filtros.qtdQuestoes = this.quantidadeQuestoesSelecionada;
     }
-
+  
     if (Object.keys(filtros).length === 0) {
       this.message = 'Por favor, selecione pelo menos um filtro.';
       this.questoes = [];
       this.idsQuestoes = [];
       return;
     }
-
-    this.questoesService
-      .filtrarSimulados(this.usuarioId, filtros, 0, 100)
-      .subscribe(
-        (questoes: Questao[]) => {
-          if (questoes.length === 0) {
-            this.message =
-              'Nenhuma questão encontrada para os filtros selecionados.';
-            this.questoes = [];
-            this.idsQuestoes = [];
-            this.questaoAtual = null;
+  
+    this.questoesService.filtrarSimulados(this.usuarioId, filtros, 0, 100).subscribe(
+      (questoes: Questao[]) => {
+        if (questoes.length === 0) {
+          if (filtros.ano && !filtros.tipoDeProva && !filtros.dificuldade && !filtros.subtema && !filtros.tema && !filtros.palavraChave && !filtros.qtdQuestoes) {
+            this.message = 'Nenhuma questão encontrada para o ano selecionado.';
+          } else if (filtros.tipoDeProva && !filtros.ano && !filtros.dificuldade && !filtros.subtema && !filtros.tema && !filtros.palavraChave && !filtros.qtdQuestoes) {
+            this.message = 'Nenhuma questão encontrada para o tipo de prova selecionado.';
+          } else if (filtros.dificuldade && !filtros.ano && !filtros.tipoDeProva && !filtros.subtema && !filtros.tema && !filtros.palavraChave && !filtros.qtdQuestoes) {
+            this.message = 'Nenhuma questão encontrada para a dificuldade selecionada.';
+          } else if (filtros.subtema && !filtros.ano && !filtros.tipoDeProva && !filtros.dificuldade && !filtros.tema && !filtros.palavraChave && !filtros.qtdQuestoes) {
+            this.message = 'Nenhuma questão encontrada para o subtema selecionado.';
+          } else if (filtros.tema && !filtros.ano && !filtros.tipoDeProva && !filtros.dificuldade && !filtros.subtema && !filtros.palavraChave && !filtros.qtdQuestoes) {
+            this.message = 'Nenhuma questão encontrada para o tema selecionado.';
+          } else if (filtros.palavraChave && !filtros.ano && !filtros.tipoDeProva && !filtros.dificuldade && !filtros.subtema && !filtros.tema && !filtros.qtdQuestoes) {
+            this.message = 'Nenhuma questão encontrada para a palavra-chave informada.';
+          } else if (filtros.qtdQuestoes && !filtros.ano && !filtros.tipoDeProva && !filtros.dificuldade && !filtros.subtema && !filtros.tema && !filtros.palavraChave) {
+            this.message = 'Nenhuma questão encontrada para a quantidade de questões selecionada.';
           } else {
-            this.message = '';
-            this.questoes = questoes;
-            this.idsQuestoes = questoes.map((q) => q.id);
-            this.paginaAtual = 0;
-            this.questaoAtual = this.questoes[this.paginaAtual];
+            this.message = 'Nenhuma questão encontrada para os filtros selecionados.';
           }
-          this.resposta = '';
-          this.mostrarGabarito = false;
-        },
-        (error) => {
-          console.error('Erro ao filtrar questões:', error);
-          this.message =
-            'Ocorreu um erro ao filtrar questões. Por favor, tente novamente mais tarde.';
+          this.questoes = [];
           this.idsQuestoes = [];
+          this.questaoAtual = null;
+        } else {
+          this.message = '';
+          this.questoes = questoes;
+          this.idsQuestoes = questoes.map((q) => q.id);
+          this.paginaAtual = 0;
+          this.questaoAtual = this.questoes[this.paginaAtual];
         }
-      );
+  
+        this.resposta = '';
+        this.mostrarGabarito = false;
+      },
+      (error) => {
+        console.error('Erro ao filtrar questões:', error);
+        this.message = 'Ocorreu um erro ao filtrar questões. Por favor, tente novamente mais tarde.';
+        this.idsQuestoes = [];
+      }
+    );
   }
+  
 
   anteriorQuestao() {
     if (this.paginaAtual > 0) {

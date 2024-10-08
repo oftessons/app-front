@@ -80,7 +80,7 @@
 
 .filters-container {
     margin-top: 20px;
-    background: #0F1934;
+    background: #94979d;
     border-radius: 5px;
     padding: 50px;
   }
@@ -199,6 +199,7 @@
 .btn-filtrar {
     background-color: #EDB120;
     margin-right: 10px;
+    color: #000;
 }
 
 .btn-filtrar-geral {
