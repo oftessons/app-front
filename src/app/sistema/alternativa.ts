@@ -6,6 +6,7 @@ export class Alternativa {
   questao?: Questao; // Adiciona a relação com Questao
   imagemUrl?: string;
   comentario?: string;  // Adiciona o campo para armazenar o comentário de cada alternativa
+  foto?: File;
 }
 
 export class AlternativaImagen {
