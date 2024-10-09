@@ -392,3 +392,7 @@
   font-size: 14px;
   color: #000000;
 }
+
+.img-alternativas img {
+  width: 200px;
+}

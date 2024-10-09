@@ -138,7 +138,7 @@
                     (change)="onOptionChange(alternativa.texto)"
                     [checked]="alternativa.texto === selectedOption">
                   <span class="alternativa-texto">{{ alternativa.texto }} ) </span>
-                  <span *ngIf="alternativa.imagemUrl; else comentarioTexto">
+                  <span *ngIf="alternativa.imagemUrl; else comentarioTexto" class="img-alternativas">
                     <img [src]="alternativa.imagemUrl" alt="Imagem da Alternativa" class="alternativa-foto">
                 </span>
                 <ng-template #comentarioTexto>
