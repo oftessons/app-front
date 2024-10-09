@@ -256,8 +256,6 @@ verificarRespostaUsuario(resposta: Resposta) {
   this.respostaVerificada = true;
 }
 
-  
-
   exibirGabarito() {
     this.mostrarGabarito = true;
   
@@ -273,7 +271,6 @@ verificarRespostaUsuario(resposta: Resposta) {
     }
   }
   
-
   getDescricaoTipoDeProva(tipoDeProva: TipoDeProva): string {
     return getDescricaoTipoDeProva(tipoDeProva);
   }
@@ -357,8 +354,9 @@ verificarRespostaUsuario(resposta: Resposta) {
         filtros.tema = temaSelecionado;
       }
     }
-    if (this.palavraChave) {
-      filtros.palavraChave = this.palavraChave;
+    // Verificar se a palavra-chave está preenchida
+    if (this.palavraChave && this.palavraChave.trim() !== '') {
+      filtros.palavraChave = this.palavraChave.trim();
     }
   
     console.log('Filtros aplicados:', filtros);
