@@ -500,20 +500,51 @@ verificarRespostaUsuario(resposta: Resposta) {
     }
 
     if (this.selectedAno) {
-      this.filtroASalvar.ano = this.selectedAno;
+      const anoSelecionado = this.anos.find(
+          (ano) => this.getDescricaoAno(ano) === this.selectedAno
+      );
+      if (anoSelecionado) {
+          this.filtroASalvar.ano = anoSelecionado;
+      }
     }
     if (this.selectedDificuldade) {
-      this.filtroASalvar.dificuldade = this.selectedDificuldade;
-    }
-    if (this.selectedTipoDeProva) {
-      this.filtroASalvar.tipoDeProva = this.selectedTipoDeProva;
-    }
-    if (this.selectedSubtema) {
-      this.filtroASalvar.subtema = this.selectedSubtema;
-    }
-    if (this.selectedTema) {
-      this.filtroASalvar.tema = this.selectedTema;
-    }
+      const dificuldadeSelecionada = this.dificuldades.find(
+          (dificuldade) =>
+              this.getDescricaoDificuldade(dificuldade) === this.selectedDificuldade
+      );
+      if (dificuldadeSelecionada) {
+          this.filtroASalvar.dificuldade = dificuldadeSelecionada; 
+      }
+  }
+
+  if (this.selectedTipoDeProva) {
+      const tipoDeProvaSelecionado = this.tiposDeProva.find(
+          (tipoDeProva) =>
+              this.getDescricaoTipoDeProva(tipoDeProva) === this.selectedTipoDeProva
+      );
+      if (tipoDeProvaSelecionado) {
+          this.filtroASalvar.tipoDeProva = tipoDeProvaSelecionado; 
+      }
+  }
+
+  if (this.selectedSubtema) {
+      const subtemaSelecionado = this.subtemas.find(
+          (subtema) => this.getDescricaoSubtema(subtema) === this.selectedSubtema
+      );
+      if (subtemaSelecionado) {
+          this.filtroASalvar.subtema = subtemaSelecionado; 
+      }
+  }
+
+  if (this.selectedTema) {
+      const temaSelecionado = this.temas.find(
+          (tema) => this.getDescricaoTema(tema) === this.selectedTema
+      );
+      if (temaSelecionado) {
+          this.filtroASalvar.tema = temaSelecionado; // Valor do enum
+      }
+  }
+
     if (nomeFiltro) {
       this.filtroASalvar.nome = nomeFiltro;
     }
