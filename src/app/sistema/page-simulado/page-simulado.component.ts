@@ -419,17 +419,73 @@ export class PageSimuladoComponent implements OnInit {
     nomeSimulado: string,
     descricaoSimulado: string
   ): void {
-    const simulado: Simulado = {
-      nomeSimulado: nomeSimulado,
-      assunto: descricaoSimulado,
-      quantidadeDeQuestoesSelecionadas: this.selectedQuantidadeDeQuestoesSelecionadas,
-      ano: this.selectedAno,
-      tema: this.selectedTema,
-      dificuldade: this.selectedDificuldade,
-      tipoDeProva: this.selectedTipoDeProva,
-      subtema: this.selectedSubtema,
-      questaoIds: this.idsQuestoes,
-    };
+    const simulado: Simulado = {} as Simulado;
+
+    if (this.selectedAno) {
+      const anoSelecionado = this.anos.find(
+        (ano) => this.getDescricaoAno(ano) === this.selectedAno
+      );
+      if (anoSelecionado) {
+        simulado.ano = anoSelecionado;
+      }
+    }
+  
+    if (this.selectedDificuldade) {
+      const dificuldadeSelecionada = this.dificuldades.find(
+        (dificuldade) =>
+          this.getDescricaoDificuldade(dificuldade) === this.selectedDificuldade
+      );
+      if (dificuldadeSelecionada) {
+        simulado.dificuldade = dificuldadeSelecionada;
+      }
+    }
+
+    if (this.selectedTipoDeProva) {
+      const tipoDeProvaSelecionado = this.tiposDeProva.find(
+        (tipoDeProva) =>
+          this.getDescricaoTipoDeProva(tipoDeProva) === this.selectedTipoDeProva
+      );
+      if (tipoDeProvaSelecionado) {
+        simulado.tipoDeProva = tipoDeProvaSelecionado;
+      }
+    }
+  
+    if (this.selectedSubtema) {
+      const subtemaSelecionado = this.subtemas.find(
+        (subtema) => this.getDescricaoSubtema(subtema) === this.selectedSubtema
+      );
+      if (subtemaSelecionado) {
+        simulado.subtema = subtemaSelecionado;
+      }
+    }
+    if (this.selectedTema) {
+      const temaSelecionado = this.temas.find(
+        (tema) => this.getDescricaoTema(tema) === this.selectedTema
+      );
+      if (temaSelecionado) {
+        simulado.tema = temaSelecionado;
+      }
+    }
+  
+    if (this.selectedQuantidadeDeQuestoesSelecionadas) {
+      const quantidadeSelecionada = this.quantidadeDeQuestoesSelecionadas.find(
+        (quantidadeDeQuestoesSelecionadas) => getDescricaoQuantidadeDeQuestoesSelecionadas(quantidadeDeQuestoesSelecionadas)
+        === this.selectedQuantidadeDeQuestoesSelecionadas
+      );
+      if (quantidadeSelecionada) {
+        simulado.quantidadeDeQuestoesSelecionadas = quantidadeSelecionada;
+      }
+    }
+  
+    if (nomeSimulado) {
+      simulado.nomeSimulado = nomeSimulado;
+    }
+
+    if (descricaoSimulado) {
+      simulado.assunto = descricaoSimulado;
+    }
+  
+    simulado.questaoIds = this.idsQuestoes;
 
     this.simuladoService.cadastrarSimulado(this.usuarioId, simulado).subscribe(
       (response) => {
