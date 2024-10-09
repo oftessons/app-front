@@ -6,6 +6,7 @@ import {
   getDescricaoSubtema,
   getDescricaoTema,
   getDescricaoTipoDeProva,
+  getDescricaoQuantidadeDeQuestoesSelecionadas
 } from '../page-questoes/enums/enum-utils';
 import { Ano } from '../page-questoes/enums/ano';
 import { Dificuldade } from '../page-questoes/enums/dificuldade';
@@ -21,6 +22,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { Usuario } from 'src/app/login/usuario';
 import { Simulado } from '../simulado';
 import { SimuladoService } from 'src/app/services/simulado.service';
+import { QuantidadeDeQuestoesSelecionadas } from '../page-questoes/enums/quant-questoes'
 import Chart from 'chart.js';
 
 declare var bootstrap: any;
@@ -56,6 +58,7 @@ export class PageSimuladoComponent implements OnInit {
   dificuldades = Object.values(Dificuldade);
   subtemas = Object.values(Subtema);
   temas = Object.values(Tema);
+  quantidadeDeQuestoesSelecionadas = Object.values(QuantidadeDeQuestoesSelecionadas);
 
   message: string = '';
   resposta: string = '';
@@ -63,7 +66,7 @@ export class PageSimuladoComponent implements OnInit {
   respostas: any[] = []; // Array que armazena as respostas do usuário
   chart: any;
 
-  quantidadeQuestoesSelecionada: number | null = null;
+  // quantidadeQuestoesSelecionada: number | null = null;
 
   questaoAtual: Questao | null = null;
   paginaAtual: number = 0;
@@ -74,6 +77,7 @@ export class PageSimuladoComponent implements OnInit {
     subtema: null,
     tema: null,
     palavraChave: null,
+    quantidadeDeQuestoesSelecionadas: null,
   };
 
   mostrarCardConfirmacao = false;
@@ -87,6 +91,7 @@ export class PageSimuladoComponent implements OnInit {
   selectedSubtema: Subtema | null = null;
   selectedTema: Tema | null = null;
   palavraChave: string = '';
+  selectedQuantidadeDeQuestoesSelecionadas: QuantidadeDeQuestoesSelecionadas | null = null;
 
   questoes: Questao[] = [];
   isFiltered = false;
@@ -101,6 +106,15 @@ export class PageSimuladoComponent implements OnInit {
 
   simuladoIniciado = false;
   simuladoFinalizado = false;
+  tempoTotal: number = 0;
+
+  tiposDeProvaDescricoes: string[] = [];
+  anosDescricoes: string[] = [];
+  dificuldadesDescricoes: string[] = [];
+  subtemasDescricoes: string[] = [];
+  temasDescricoes: string[] = [];
+  quantidadeDeQuestoesSelecionadasDescricoes: string[] = [];
+
 
   constructor(
     private questoesService: QuestoesService,
@@ -114,6 +128,13 @@ export class PageSimuladoComponent implements OnInit {
     this.dados = this.obterDados();
     console.log('Dados:', this.dados);
     this.obterPerfilUsuario();
+    this.tiposDeProvaDescricoes = this.tiposDeProva.map(tipoDeProva => this.getDescricaoTipoDeProva(tipoDeProva));
+    this.anosDescricoes = this.anos.map(ano => this.getDescricaoAno(ano));
+    this.dificuldadesDescricoes = this.dificuldades.map(dificuldade => this.getDescricaoDificuldade(dificuldade));
+    this.subtemasDescricoes = this.subtemas.map(subtema => this.getDescricaoSubtema(subtema));
+    this.temasDescricoes = this.temas.map(tema => this.getDescricaoTema(tema));
+    this.quantidadeDeQuestoesSelecionadasDescricoes = this.quantidadeDeQuestoesSelecionadas.map(
+      quantidadeDeQuestoesSelecionadas => this.getDescricaoQuantidadeDeQuestoesSelecionadas(quantidadeDeQuestoesSelecionadas));
   }
 
   finalizarSimulado() {
@@ -154,8 +175,6 @@ export class PageSimuladoComponent implements OnInit {
       }
     });
   }
-  
-  
 
   obterDados() {
     // Simula a obtenção de dados
@@ -217,7 +236,6 @@ export class PageSimuladoComponent implements OnInit {
         }
       );
   }
-  
 
   exibirGabarito() {
     this.mostrarGabarito = true;
@@ -243,12 +261,18 @@ export class PageSimuladoComponent implements OnInit {
     return getDescricaoTema(tema);
   }
 
+  getDescricaoQuantidadeDeQuestoesSelecionadas(
+    quantidadeDeQuestoesSelecionadas: QuantidadeDeQuestoesSelecionadas): string {
+    return  getDescricaoQuantidadeDeQuestoesSelecionadas(quantidadeDeQuestoesSelecionadas);
+  }
+
   LimparFiltro() {
     this.selectedAno = null;
     this.selectedDificuldade = null;
     this.selectedTipoDeProva = null;
     this.selectedSubtema = null;
     this.selectedTema = null;
+    this.selectedQuantidadeDeQuestoesSelecionadas = null;
     this.palavraChave = '';
     this.filtros = {
       ano: null,
@@ -265,25 +289,61 @@ export class PageSimuladoComponent implements OnInit {
     const filtros: any = {};
 
     if (this.selectedAno) {
-      filtros.ano = this.selectedAno;
+      const anoSelecionado = this.anos.find(
+        (ano) => this.getDescricaoAno(ano) === this.selectedAno
+      );
+      if (anoSelecionado) {
+        filtros.ano = anoSelecionado;
+      }
     }
     if (this.selectedDificuldade) {
-      filtros.dificuldade = this.selectedDificuldade;
+      const dificuldadeSelecionada = this.dificuldades.find(
+        (dificuldade) =>
+          this.getDescricaoDificuldade(dificuldade) === this.selectedDificuldade
+      );
+      if (dificuldadeSelecionada) {
+        filtros.dificuldade = dificuldadeSelecionada;
+      }
     }
     if (this.selectedTipoDeProva) {
-      filtros.tipoDeProva = this.selectedTipoDeProva;
+      const tipoDeProvaSelecionado = this.tiposDeProva.find(
+        (tipoDeProva) =>
+          this.getDescricaoTipoDeProva(tipoDeProva) === this.selectedTipoDeProva
+      );
+      if (tipoDeProvaSelecionado) {
+        filtros.tipoDeProva = tipoDeProvaSelecionado;
+      }
     }
     if (this.selectedSubtema) {
-      filtros.subtema = this.selectedSubtema;
+      const subtemaSelecionado = this.subtemas.find(
+        (subtema) => this.getDescricaoSubtema(subtema) === this.selectedSubtema
+      );
+      if (subtemaSelecionado) {
+        filtros.subtema = subtemaSelecionado;
+      }
     }
     if (this.selectedTema) {
-      filtros.tema = this.selectedTema;
+      const temaSelecionado = this.temas.find(
+        (tema) => this.getDescricaoTema(tema) === this.selectedTema
+      );
+      if (temaSelecionado) {
+        filtros.tema = temaSelecionado;
+      }
     }
-    if (this.palavraChave) {
-      filtros.palavraChave = this.palavraChave;
+    if (this.quantidadeDeQuestoesSelecionadas) {
+      const quantidadeSelecionada = this.quantidadeDeQuestoesSelecionadas.find(
+        (quantidadeDeQuestoesSelecionadas) => getDescricaoQuantidadeDeQuestoesSelecionadas(quantidadeDeQuestoesSelecionadas)
+         === this.selectedQuantidadeDeQuestoesSelecionadas
+      );
+      if (quantidadeSelecionada) {
+        filtros.quantidadeDeQuestoesSelecionadas = quantidadeSelecionada;
+      }
     }
-    if (this.quantidadeQuestoesSelecionada) {
-      filtros.qtdQuestoes = this.quantidadeQuestoesSelecionada;
+    // Verificar se a palavra-chave está preenchida
+    if (this.palavraChave && this.palavraChave.trim() !== '') {
+      filtros.palavraChave = this.palavraChave.trim();
+    } else {
+      console.error('Quantidade de questões selecionada é inválida:', this.quantidadeDeQuestoesSelecionadas);
     }
 
     if (Object.keys(filtros).length === 0) {
@@ -298,8 +358,23 @@ export class PageSimuladoComponent implements OnInit {
       .subscribe(
         (questoes: Questao[]) => {
           if (questoes.length === 0) {
-            this.message =
-              'Nenhuma questão encontrada para os filtros selecionados.';
+            if (filtros.ano && !filtros.tipoDeProva && !filtros.dificuldade && !filtros.subtema && !filtros.tema && !filtros.palavraChave && !filtros.qtdQuestoes) {
+              this.message = 'Nenhuma questão encontrada para o ano selecionado.';
+            } else if (filtros.tipoDeProva && !filtros.ano && !filtros.dificuldade && !filtros.subtema && !filtros.tema && !filtros.palavraChave && !filtros.qtdQuestoes) {
+              this.message = 'Nenhuma questão encontrada para o tipo de prova selecionado.';
+            } else if (filtros.dificuldade && !filtros.ano && !filtros.tipoDeProva && !filtros.subtema && !filtros.tema && !filtros.palavraChave && !filtros.qtdQuestoes) {
+              this.message = 'Nenhuma questão encontrada para a dificuldade selecionada.';
+            } else if (filtros.subtema && !filtros.ano && !filtros.tipoDeProva && !filtros.dificuldade && !filtros.tema && !filtros.palavraChave && !filtros.qtdQuestoes) {
+              this.message = 'Nenhuma questão encontrada para o subtema selecionado.';
+            } else if (filtros.tema && !filtros.ano && !filtros.tipoDeProva && !filtros.dificuldade && !filtros.subtema && !filtros.palavraChave && !filtros.qtdQuestoes) {
+              this.message = 'Nenhuma questão encontrada para o tema selecionado.';
+            } else if (filtros.palavraChave && !filtros.ano && !filtros.tipoDeProva && !filtros.dificuldade && !filtros.subtema && !filtros.tema && !filtros.qtdQuestoes) {
+              this.message = 'Nenhuma questão encontrada para a palavra-chave informada.';
+            } else if (filtros.qtdQuestoes && !filtros.ano && !filtros.tipoDeProva && !filtros.dificuldade && !filtros.subtema && !filtros.tema && !filtros.palavraChave) {
+              this.message = 'Nenhuma questão encontrada para a quantidade de questões selecionada.';
+            } else {
+              this.message = 'Nenhuma questão encontrada para os filtros selecionados.';
+            }
             this.questoes = [];
             this.idsQuestoes = [];
             this.questaoAtual = null;
@@ -347,7 +422,7 @@ export class PageSimuladoComponent implements OnInit {
     const simulado: Simulado = {
       nomeSimulado: nomeSimulado,
       assunto: descricaoSimulado,
-      qtdQuestoes: this.quantidadeQuestoesSelecionada,
+      quantidadeDeQuestoesSelecionadas: this.selectedQuantidadeDeQuestoesSelecionadas,
       ano: this.selectedAno,
       tema: this.selectedTema,
       dificuldade: this.selectedDificuldade,

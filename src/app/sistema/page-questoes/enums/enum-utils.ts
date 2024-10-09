@@ -35,3 +35,7 @@ export function getDescricaoTema(tema: Tema): string {
 export function getDescricaoTipoDeProva(tipoDeProva: TipoDeProva): string {
   return TipoDeProvaDescricoes[tipoDeProva];
 }
+
+export function getDescricaoQuantidadeDeQuestoesSelecionadas(quantidadeDeQuestoesSelecionadas: QuantidadeDeQuestoesSelecionadas): string {
+  return QuantidadeDeQuestõesSelecionadasDescricoes[quantidadeDeQuestoesSelecionadas];
+}

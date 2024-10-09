@@ -10,7 +10,7 @@
 .conteudo-questao p {
   padding: 10px; /* Espaçamento para o parágrafo */
   margin: 0; /* Remover margens padrão */
-  font-size: 16px;
+  font-size: 14px;
 }
 .questao-foto {
   max-width: 350px;
