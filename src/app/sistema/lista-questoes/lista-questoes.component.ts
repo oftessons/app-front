@@ -12,6 +12,8 @@ import { Subtema } from '../page-questoes/enums/subtema';
 import { Tema } from '../page-questoes/enums/tema';
 import { Filtro } from '../filtro';
 import { FiltroService } from 'src/app/services/filtro.service';
+import { Usuario } from 'src/app/login/usuario';
+import { Permissao } from 'src/app/login/Permissao';
 
 @Component({
   selector: 'app-lista-questoes',
@@ -19,6 +21,8 @@ import { FiltroService } from 'src/app/services/filtro.service';
   styleUrls: ['./lista-questoes.component.css'],
 })
 export class ListaQuestoesComponent implements OnInit {
+  usuario: Usuario | null = null;
+  Permissao = Permissao; // Adicione esta linha
   questaoId!: number;  // Adiciona a variável questaoId
   filtros: Filtro[] = [];
   tiposDeProva = Object.values(TipoDeProva);
@@ -55,6 +59,7 @@ export class ListaQuestoesComponent implements OnInit {
 
   ngOnInit(): void {
     this.carregarFiltros();
+    this.usuario = this.authService.getUsuarioAutenticado();
   }
 
 

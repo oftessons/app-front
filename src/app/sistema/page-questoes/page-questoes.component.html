@@ -117,12 +117,13 @@
       </div>
       <div class="conteudo-questao">
         <div class="img-comentario" [innerHTML]="questaoAtual.enunciadoDaQuestao"></div>
-        <img [src]="questaoAtual?.fotoDaQuestaoUrl" alt="Foto da questão" class="questao-foto">
+        <!-- Verificar se a URL da foto da questão está presente -->
+        <img *ngIf="questaoAtual?.fotoDaQuestaoUrl" [src]="questaoAtual?.fotoDaQuestaoUrl" alt="Foto da questão" class="questao-foto">
         <div class="row">
           <div class="col-md-12">
             <div class="form-group">
               <label>Selecione a Alternativa:</label>
-                <div *ngFor="let alternativa of questaoAtual.alternativas; let i = index" class="alternativa"
+              <div *ngFor="let alternativa of questaoAtual.alternativas; let i = index" class="alternativa"
                 [ngClass]="{
                   'alternativa-certa': respostaVerificada && isRespostaCorreta && alternativa.texto === selectedOption,
                   'alternativa-errada': respostaVerificada && !isRespostaCorreta && alternativa.texto === selectedOption
@@ -139,21 +140,22 @@
                   <span class="alternativa-comentario">{{ alternativa.comentario }}</span>
                 </div>
               </div>
-
+        
               <div *ngIf="message" class="alert alert-info mt-3 alert-custom" role="alert">
                 {{ message }}
               </div>   
-
+        
               <div *ngIf="mostrarGabarito && questaoAtual">
                 <h2 style="margin-top: 10px;">Comentário da Questão</h2>
-                <img [src]="questaoAtual?.fotoDaRespostaUmUrl" alt="Foto do Comentário" class="questao-foto">
+                <!-- Verificar se a URL da foto da resposta um está presente -->
+                <img *ngIf="questaoAtual?.fotoDaRespostaUmUrl" [src]="questaoAtual?.fotoDaRespostaUmUrl" alt="Foto do Comentário" class="questao-foto">
                 <!-- Exibe o comentário da Questão Dois com HTML Sanitizado -->
                 <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestao"></div>
-                <img [src]="questaoAtual?.fotoDaRespostaDoisUrl" alt="Foto do Comentário" class="questao-foto">
+                <!-- Verificar se a URL da foto da resposta dois está presente -->
+                <img *ngIf="questaoAtual?.fotoDaRespostaDoisUrl" [src]="questaoAtual?.fotoDaRespostaDoisUrl" alt="Foto do Comentário" class="questao-foto">
                 <p>Referência: {{ questaoAtual.referenciaBi }}</p>
                 <p>Comentado por: {{ questaoAtual.comentadorDaQuestao }}</p>
               </div>
-
               <div class="button-row">
                 <div class="left-buttons">
                   <button *ngIf="resposta" class="btn-gabarito" (click)="exibirGabarito()">Gabarito</button>
