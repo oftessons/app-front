@@ -235,28 +235,26 @@
           </div>
         </div>
   
-        <div *ngIf="questaoDTO.tipoItemQuestaoImagem=== 'imagem'">
+        <div *ngIf="questaoDTO.tipoItemQuestaoImagem === 'imagem'">
           <div *ngFor="let alternativa of questaoDTO.alternativas; let i = index">
             <div class="image-container">
               <input type="radio" [name]="questaoDTO.tipoItemQuestaoImagem + 'Alternativa'"
-                (click)="markCorrectImage(i)" [checked]="alternativa.correta" class="checkbox">
-              <div class="image-upload" (drop)="onDrop($event, 'afirmacao' + i)" (dragover)="onDragOver($event)">
+                     (click)="markCorrectImage(i)" [checked]="alternativa.correta" class="checkbox">
+              <div class="image-upload">
                 <input type="file" id="afirmacao{{ i }}" name="afirmacao{{ i }}"
-                  (change)="onFileSelectedImage($event, 'afirmacao' + i)" accept="image/*" style="display: none;" />
+                       (change)="onFileSelectedImage($event, 'afirmacao' + i)" accept="image/*" />
                 <label for="afirmacao{{ i }}">
                   <div class="image-preview" id="imagePreview{{ i }}">
-                    <img *ngIf="imagePreviews['afirmacao' + i]" [src]="imagePreviews['afirmacao' + i]"
-                      alt="Image Preview" />
+                    <img *ngIf="imagePreviews['afirmacao' + i]" [src]="imagePreviews['afirmacao' + i]" alt="Image Preview" />
                     <span *ngIf="!imagePreviews['afirmacao' + i]">
-                      <img src="assets/imagens/img-foto.svg" style="width: 50px; opacity: 0.5;">
-                      clique ou arraste a imagem para fazer upload
+                      <img src="assets/imagens/img-foto.svg" style="width: 50px; opacity: 0.5;"> clique ou arraste a imagem para fazer upload
                     </span>
                   </div>
                 </label>
               </div>
             </div>
           </div>
-        </div>
+        </div>        
       </div>
     </div>
   </form>

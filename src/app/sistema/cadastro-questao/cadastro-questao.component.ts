@@ -253,6 +253,18 @@ onSubmit(): void {
       console.log("fotoDaRespostaDois: passo");
       this.formData.append('fotoDaRespostaDoisArquivo', this.fotoDaRespostaDois);
     }
+    if (this.questaoDTO.alternativas[0].foto) {
+      this.formData.append('A', this.questaoDTO.alternativas[0].foto);
+    }
+    if (this.questaoDTO.alternativas[1].foto) {
+      this.formData.append('B', this.questaoDTO.alternativas[1].foto);
+    }
+    if (this.questaoDTO.alternativas[2].foto) {
+      this.formData.append('C', this.questaoDTO.alternativas[2].foto);
+    }
+    if (this.questaoDTO.alternativas[3].foto) {
+      this.formData.append('D', this.questaoDTO.alternativas[3].foto);
+    }
   
     console.debug('Enviando formulário com dados da questão:', this.formData);
     console.log('CLASSE ', objetoJson);
@@ -311,16 +323,21 @@ updateTipoItemQuestaoImagem(tipo: string) {
   this.questaoDTO.tipoItemQuestaoImagem = tipo;
 }
 
-
-onFileSelectedImage(event: any, identifier: string) {
+onFileSelectedImage(event: any, alternativaIndex: string) {
   const file = event.target.files[0];
-  const reader = new FileReader();
-  reader.onload = () => {
-    this.imagePreviews[identifier] = reader.result;
-  };
-  reader.readAsDataURL(file);
-}
 
+  if (file) {
+    const index = parseInt(alternativaIndex.replace('afirmacao', ''));
+
+    this.questaoDTO.alternativas[index].foto = file;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.imagePreviews[alternativaIndex] = reader.result;
+    };
+    reader.readAsDataURL(file);
+  }
+}
 
 
 }
