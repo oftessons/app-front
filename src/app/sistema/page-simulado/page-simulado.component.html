@@ -132,12 +132,9 @@
       </div>
       
   
-      <p>{{ questaoAtual.enunciadoDaQuestao }}</p>
-      <img *ngIf="questaoAtual.fotoDaQuestao" [src]="questaoAtual.fotoDaQuestao" alt="Foto da questão" class="questao-foto">
-      <p>{{ questaoAtual.afirmacaoUm }}</p>
-      <p>{{ questaoAtual.afirmacaoDois }}</p>
-      <p>{{ questaoAtual.afirmacaoTres }}</p>
-      <p>{{ questaoAtual.afirmacaoQuatro }}</p>
+      <!-- <p>{{ questaoAtual.enunciadoDaQuestao }}</p> -->
+      <div class="img-comentario" [innerHTML]="questaoAtual.enunciadoDaQuestao"></div>
+      <img *ngIf="questaoAtual?.fotoDaQuestaoUrl" [src]="questaoAtual?.fotoDaQuestaoUrl" alt="Foto da questão" class="questao-foto">
       <div class="row">
         <div class="col-md-12">
           <div class="form-group">
