@@ -5,13 +5,11 @@
 <div class="container">
 <div class="filters-container">
   <div class="select-container">
-    <mat-form-field appearance="fill" class="select-questoes">
-      <mat-label>Quantidade de Questões</mat-label>
-      <mat-select [(value)]="quantidadeQuestoesSelecionada">
-        <mat-option value="50">50 Questões</mat-option>
-        <mat-option value="125">100 Questões</mat-option>
-      </mat-select>
-    </mat-form-field>
+    <app-select-padrao
+        label="Quantidade de Questões"
+        [options]="quantidadeDeQuestoesSelecionadasDescricoes"
+        [(selectedValue)]="selectedQuantidadeDeQuestoesSelecionadas">
+    </app-select-padrao>
   </div>
   <form #filtroForm="ngForm" (ngSubmit)="filtrarQuestoes()" class="consulta-form">
     <div class="row">
