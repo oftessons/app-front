@@ -10,6 +10,7 @@ export class SelectPadraoComponent {
   @Input() options: any[] = []; 
   @Input() selectedValue: any; 
   @Output() selectedValueChange: EventEmitter<any> = new EventEmitter<any>();
+  @Input() customStyles: { [key: string]: string } = {};
 
   isOpen: boolean = false;
 

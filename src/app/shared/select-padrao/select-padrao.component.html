@@ -1,7 +1,7 @@
 <!-- select.component.html -->
 <div class="select-container">
   <label [class.active]="selectedValue">{{ label }}</label>
-  <div class="select-dropdown" (click)="isOpen = !isOpen">
+  <div [ngStyle]="customStyles" class="select-dropdown" (click)="isOpen = !isOpen">
     <div class="selected-value">{{ selectedValue || '' }}</div>
     <div class="arrow-down"></div>
   </div>
