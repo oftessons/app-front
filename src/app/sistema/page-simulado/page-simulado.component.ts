@@ -21,7 +21,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { Usuario } from 'src/app/login/usuario';
 import { Simulado } from '../simulado';
 import { SimuladoService } from 'src/app/services/simulado.service';
-import * as Chart from 'chart.js';
+import Chart from 'chart.js';
 
 declare var bootstrap: any;
 
@@ -101,13 +101,6 @@ export class PageSimuladoComponent implements OnInit {
 
   simuladoIniciado = false;
   simuladoFinalizado = false;
-  tempoTotal: number = 0;
-
-  tiposDeProvaDescricoes: string[] = [];
-  anosDescricoes: string[] = [];
-  dificuldadesDescricoes: string[] = [];
-  subtemasDescricoes: string[] = [];
-  temasDescricoes: string[] = [];
 
   constructor(
     private questoesService: QuestoesService,
@@ -121,19 +114,45 @@ export class PageSimuladoComponent implements OnInit {
     this.dados = this.obterDados();
     console.log('Dados:', this.dados);
     this.obterPerfilUsuario();
-    this.tiposDeProvaDescricoes = this.tiposDeProva.map(tipoDeProva => this.getDescricaoTipoDeProva(tipoDeProva));
-    this.anosDescricoes = this.anos.map(ano => this.getDescricaoAno(ano));
-    this.dificuldadesDescricoes = this.dificuldades.map(dificuldade => this.getDescricaoDificuldade(dificuldade));
-    this.subtemasDescricoes = this.subtemas.map(subtema => this.getDescricaoSubtema(subtema));
-    this.temasDescricoes = this.temas.map(tema => this.getDescricaoTema(tema));
   }
 
   finalizarSimulado() {
-    
+    console.log('Respostas enviadas:', this.respostas);
+    this.simuladoService.finalizarSimulado(this.usuarioId, this.respostas).subscribe((resultado) => {
+      console.log('Resultado da API:', resultado);
+      this.gerarGrafico(resultado.acertos, resultado.erros);
+    });
+    this.simuladoIniciado = false;
+    this.simuladoFinalizado = true;
   }
 
   gerarGrafico(acertos: number, erros: number) {
-    
+    console.log('Acertos:', acertos, 'Erros:', erros);  // Verifique os valores aqui
+    if (this.chart) {
+      this.chart.destroy();
+    }
+    this.chart = new Chart('graficoBarras', {
+      type: 'bar',
+      data: {
+        labels: ['Acertos', 'Erros'],
+        datasets: [{
+          label: 'Quantidade',
+          data: [acertos, erros],
+          backgroundColor: ['#4CAF50', '#F44336'],
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true,
+              precision: 0
+            }
+          }]
+        }
+      }
+    });
   }
   
   
@@ -246,54 +265,25 @@ export class PageSimuladoComponent implements OnInit {
     const filtros: any = {};
 
     if (this.selectedAno) {
-      const anoSelecionado = this.anos.find(
-        (ano) => this.getDescricaoAno(ano) === this.selectedAno
-      );
-      if (anoSelecionado) {
-        filtros.ano = anoSelecionado;
-      }
+      filtros.ano = this.selectedAno;
     }
     if (this.selectedDificuldade) {
-      const dificuldadeSelecionada = this.dificuldades.find(
-        (dificuldade) =>
-          this.getDescricaoDificuldade(dificuldade) === this.selectedDificuldade
-      );
-      if (dificuldadeSelecionada) {
-        filtros.dificuldade = dificuldadeSelecionada;
-      }
+      filtros.dificuldade = this.selectedDificuldade;
     }
     if (this.selectedTipoDeProva) {
-      const tipoDeProvaSelecionado = this.tiposDeProva.find(
-        (tipoDeProva) =>
-          this.getDescricaoTipoDeProva(tipoDeProva) === this.selectedTipoDeProva
-      );
-      if (tipoDeProvaSelecionado) {
-        filtros.tipoDeProva = tipoDeProvaSelecionado;
-      }
+      filtros.tipoDeProva = this.selectedTipoDeProva;
     }
     if (this.selectedSubtema) {
-      const subtemaSelecionado = this.subtemas.find(
-        (subtema) => this.getDescricaoSubtema(subtema) === this.selectedSubtema
-      );
-      if (subtemaSelecionado) {
-        filtros.subtema = subtemaSelecionado;
-      }
+      filtros.subtema = this.selectedSubtema;
     }
     if (this.selectedTema) {
-      const temaSelecionado = this.temas.find(
-        (tema) => this.getDescricaoTema(tema) === this.selectedTema
-      );
-      if (temaSelecionado) {
-        filtros.tema = temaSelecionado;
-      }
+      filtros.tema = this.selectedTema;
     }
     if (this.palavraChave) {
       filtros.palavraChave = this.palavraChave;
     }
     if (this.quantidadeQuestoesSelecionada) {
       filtros.qtdQuestoes = this.quantidadeQuestoesSelecionada;
-    } else {
-      console.error('Quantidade de questões selecionada é inválida:', this.quantidadeQuestoesSelecionada);
     }
 
     if (Object.keys(filtros).length === 0) {
@@ -308,23 +298,8 @@ export class PageSimuladoComponent implements OnInit {
       .subscribe(
         (questoes: Questao[]) => {
           if (questoes.length === 0) {
-            if (filtros.ano && !filtros.tipoDeProva && !filtros.dificuldade && !filtros.subtema && !filtros.tema && !filtros.palavraChave && !filtros.qtdQuestoes) {
-              this.message = 'Nenhuma questão encontrada para o ano selecionado.';
-            } else if (filtros.tipoDeProva && !filtros.ano && !filtros.dificuldade && !filtros.subtema && !filtros.tema && !filtros.palavraChave && !filtros.qtdQuestoes) {
-              this.message = 'Nenhuma questão encontrada para o tipo de prova selecionado.';
-            } else if (filtros.dificuldade && !filtros.ano && !filtros.tipoDeProva && !filtros.subtema && !filtros.tema && !filtros.palavraChave && !filtros.qtdQuestoes) {
-              this.message = 'Nenhuma questão encontrada para a dificuldade selecionada.';
-            } else if (filtros.subtema && !filtros.ano && !filtros.tipoDeProva && !filtros.dificuldade && !filtros.tema && !filtros.palavraChave && !filtros.qtdQuestoes) {
-              this.message = 'Nenhuma questão encontrada para o subtema selecionado.';
-            } else if (filtros.tema && !filtros.ano && !filtros.tipoDeProva && !filtros.dificuldade && !filtros.subtema && !filtros.palavraChave && !filtros.qtdQuestoes) {
-              this.message = 'Nenhuma questão encontrada para o tema selecionado.';
-            } else if (filtros.palavraChave && !filtros.ano && !filtros.tipoDeProva && !filtros.dificuldade && !filtros.subtema && !filtros.tema && !filtros.qtdQuestoes) {
-              this.message = 'Nenhuma questão encontrada para a palavra-chave informada.';
-            } else if (filtros.qtdQuestoes && !filtros.ano && !filtros.tipoDeProva && !filtros.dificuldade && !filtros.subtema && !filtros.tema && !filtros.palavraChave) {
-              this.message = 'Nenhuma questão encontrada para a quantidade de questões selecionada.';
-            } else {
-              this.message = 'Nenhuma questão encontrada para os filtros selecionados.';
-            }
+            this.message =
+              'Nenhuma questão encontrada para os filtros selecionados.';
             this.questoes = [];
             this.idsQuestoes = [];
             this.questaoAtual = null;
@@ -346,7 +321,6 @@ export class PageSimuladoComponent implements OnInit {
         }
       );
   }
-  
 
   anteriorQuestao() {
     if (this.paginaAtual > 0) {

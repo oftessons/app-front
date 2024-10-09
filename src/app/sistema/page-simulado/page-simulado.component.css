@@ -466,3 +466,22 @@
     display: inline-block; /* Para que o tamanho se ajuste ao conteúdo */
     font-size: 15px;
 }
+
+
+.grafico-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f4f4f4; /* Fundo diferente */
+    border: 2px solid #041e4e; /* Borda destacada */
+    border-radius: 10px;
+    padding: 10px;
+    width: 350px; /* Largura do gráfico reduzida */
+    height: 200px; /* Altura do gráfico reduzida */
+    margin: 0 20px; /* Espaçamento lateral para centralizar entre os botões */
+}
+
+canvas {
+    max-width: 100%;
+    max-height: 100%;
+}

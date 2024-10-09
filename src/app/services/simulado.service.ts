@@ -11,6 +11,11 @@ export class SimuladoService {
   apiURL: string = environment.apiURLBase + '/api/simulado';
   constructor(private http: HttpClient) {}
 
+  
+  finalizarSimulado(idUser: number, respostas: any[]) {
+    return this.http.post<any>(`${this.apiURL}/finalizar/${idUser}`, respostas);
+  }
+
   // Método para cadastrar um novo simulado
   cadastrarSimulado(idUser: number, simulado: Simulado): Observable<string> {
     return this.http.post<string>(`${this.apiURL}/${idUser}`, simulado);

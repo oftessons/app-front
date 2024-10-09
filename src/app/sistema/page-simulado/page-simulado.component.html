@@ -107,61 +107,70 @@
 
 <!-- Exibição dos Resultados -->
 <div *ngIf="questaoAtual">
-<div class="identificadores-questao-resul">
-  <h2 class="h2">Resultado da Filtragem</h2>
-</div>
-<div class="questao">
-  <div class="identificadores-questao">
-    <h3>ID: {{ questaoAtual.id }}</h3>
-    <h3>Tema: {{ questaoAtual.tema }}</h3>
-    <h3>Ano: {{ questaoAtual.ano }}</h3>
+  <div class="identificadores-questao-resul">
+    <h2 class="h2">Resultado da Filtragem</h2>
   </div>
-  <div class="conteudo-questao">
-    <div class="timer-container">
-      <div class="buttons-simulado">
+  <div class="questao">
+    <div class="identificadores-questao">
+      <h3>ID: {{ questaoAtual.id }}</h3>
+      <h3>Tema: {{ questaoAtual.tema }}</h3>
+      <h3>Ano: {{ questaoAtual.ano }}</h3>
+    </div>
+    <div class="conteudo-questao">
+      <div class="timer-container">
+        <div class="buttons-simulado">
           <button (click)="iniciarSimulado()" class="btn-iniciar">Iniciar Simulado</button>
-          <button (click)="finalizarSimulado()" class="btn-finalizar" [disabled]="!isSimuladoIniciado">Finalizar Simulado</button>
+          
+          <!-- Centralização do gráfico -->
+          <div class="grafico-container">
+              <canvas id="graficoBarras"></canvas>
+          </div>
       </div>
-      <div class="tempo">
-        <h3>Tempo: {{ formatarTempo(tempo) }}</h3>
-      </div> <!-- Temporizador centralizado -->
-  </div>
-
-    <p>{{ questaoAtual.enunciadoDaQuestao }}</p>
-    <img *ngIf="questaoAtual.fotoDaQuestao" [src]="questaoAtual.fotoDaQuestao" alt="Foto da questão" class="questao-foto">
-    <p>{{ questaoAtual.afirmacaoUm }}</p>
-    <p>{{ questaoAtual.afirmacaoDois }}</p>
-    <p>{{ questaoAtual.afirmacaoTres }}</p>
-    <p>{{ questaoAtual.afirmacaoQuatro }}</p>
-    <div class="row">
-      <div class="col-md-12">
-        <div class="form-group">
-          <label>Selecione a Alternativa:</label>
-          <div *ngFor="let alternativa of questaoAtual.alternativas; let i = index" class="alternativa">
-          <div class="alternativa-input-group">
-            <input 
-              type="radio" 
-              name="alternativa" 
-              [value]="alternativa.texto"
-              [(ngModel)]="selectedOption" 
-              (change)="onOptionChange(alternativa.texto)"
-              [checked]="alternativa.texto === selectedOption">
-            <span class="alternativa-texto">{{ alternativa.texto }} ) </span>
-            <span class="alternativa-comentario">{{ alternativa.comentario }}</span>
+      
+      <!-- Botão do Timer -->
+      <div class="timer-container">
+          <h3>Tempo: {{ formatarTempo(tempo) }}</h3>
+      </div>
+      
+  
+      <p>{{ questaoAtual.enunciadoDaQuestao }}</p>
+      <img *ngIf="questaoAtual.fotoDaQuestao" [src]="questaoAtual.fotoDaQuestao" alt="Foto da questão" class="questao-foto">
+      <p>{{ questaoAtual.afirmacaoUm }}</p>
+      <p>{{ questaoAtual.afirmacaoDois }}</p>
+      <p>{{ questaoAtual.afirmacaoTres }}</p>
+      <p>{{ questaoAtual.afirmacaoQuatro }}</p>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label>Selecione a Alternativa:</label>
+            <div *ngFor="let alternativa of questaoAtual.alternativas; let i = index" class="alternativa">
+            <div class="alternativa-input-group">
+              <input 
+                type="radio" 
+                name="alternativa" 
+                [value]="alternativa.texto"
+                [(ngModel)]="selectedOption" 
+                (change)="onOptionChange(alternativa.texto)"
+                [checked]="alternativa.texto === selectedOption">
+              <span class="alternativa-texto">{{ alternativa.texto }} ) </span>
+              <span class="alternativa-comentario">{{ alternativa.comentario }}</span>
+            </div>
+          </div>
+         
           </div>
         </div>
-       
+      </div>
+      
+      <div class="button-row">
+        <div class="right-buttons">
+          <button class="btn-anterior" (click)="anteriorQuestao()" [disabled]="paginaAtual === 0">Anterior</button>
+          <button class="btn-responder" (click)="questaoAtual && responderQuestao(questaoAtual)">Responder</button>
+          <button class="btn-proxima" (click)="proximaQuestao()">Próxima</button>
+          <button (click)="finalizarSimulado()" class="btn-finalizar">Finalizar Simulado</button>
         </div>
-      </div>
-    </div>
-    
-    <div class="button-row">
-      <div class="right-buttons">
-        <button class="btn-anterior" (click)="anteriorQuestao()" [disabled]="paginaAtual === 0">Anterior</button>
-        <button class="btn-responder" (click)="questaoAtual && responderQuestao(questaoAtual)">Responder</button>
-        <button class="btn-proxima" (click)="proximaQuestao()">Próxima</button>
-      </div>
-    </div>        
-</div>
+      </div>        
+  </div>
+  </div>
+  </div>
 </div>
 </div>
