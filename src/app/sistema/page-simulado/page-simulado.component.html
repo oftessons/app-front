@@ -55,10 +55,11 @@
         </app-select-padrao>
       </div>
       <div class="col col-12 col-md-6 espaco-select">
-        <mat-form-field appearance="fill" class="palavra-chave">
-          <mat-label>Pesquisar por palavra-chave</mat-label>
-          <input matInput placeholder="Pesquisar por palavra-chave" name="palavraChave" [(ngModel)]="palavraChave" class="custom-input">
-        </mat-form-field>        
+        <app-input-padrao
+            label="Pesquisar por palavra-chave"
+            [(value)]="palavraChave"
+            class="palavra-chave">
+          </app-input-padrao>       
       </div>
     </div>
     

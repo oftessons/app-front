@@ -318,8 +318,9 @@ export class PageSimuladoComponent implements OnInit {
         filtros.tema = temaSelecionado;
       }
     }
-    if (this.palavraChave) {
-      filtros.palavraChave = this.palavraChave;
+    // Verificar se a palavra-chave está preenchida
+    if (this.palavraChave && this.palavraChave.trim() !== '') {
+      filtros.palavraChave = this.palavraChave.trim();
     }
     if (this.quantidadeQuestoesSelecionada) {
       filtros.qtdQuestoes = this.quantidadeQuestoesSelecionada;
