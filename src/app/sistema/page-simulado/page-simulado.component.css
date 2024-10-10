@@ -486,9 +486,10 @@ canvas {
   justify-content: center;
   align-items: center;
   margin-top: 20px;
+  margin-bottom: 24px;
   background: #c0c0c1;
   padding: 32px;
-  height: 450px;
+  height: 480px;
   border-radius: 16px;
 }
 
