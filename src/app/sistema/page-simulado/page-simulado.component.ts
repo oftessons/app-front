@@ -24,6 +24,7 @@ import { Simulado } from '../simulado';
 import { SimuladoService } from 'src/app/services/simulado.service';
 import { QuantidadeDeQuestoesSelecionadas } from '../page-questoes/enums/quant-questoes'
 import Chart from 'chart.js';
+import { Router } from '@angular/router';
 
 declare var bootstrap: any;
 
@@ -120,7 +121,8 @@ export class PageSimuladoComponent implements OnInit {
     private questoesService: QuestoesService,
     private filtroService: FiltroService,
     private simuladoService: SimuladoService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -503,8 +505,7 @@ export class PageSimuladoComponent implements OnInit {
     return numero < 10 ? `0${numero}` : `${numero}`;
   }
 
-  confirmarFim() {
-    // Finalizar simulado
-    alert('Simulado concluído!');
+  backHome() {
+    this.router.navigate(['usuario/dashboard']);
   }
 }
