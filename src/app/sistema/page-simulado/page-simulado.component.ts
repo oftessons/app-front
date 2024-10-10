@@ -502,4 +502,9 @@ export class PageSimuladoComponent implements OnInit {
   formatarNumero(numero: number): string {
     return numero < 10 ? `0${numero}` : `${numero}`;
   }
+
+  confirmarFim() {
+    // Finalizar simulado
+    alert('Simulado concluído!');
+  }
 }
