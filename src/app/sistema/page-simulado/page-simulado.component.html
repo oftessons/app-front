@@ -169,6 +169,12 @@
         <!-- Gráfico de Resultados -->
         <div *ngIf="simuladoFinalizado" class="resultado-container">
           <h2>Resultados do Simulado</h2>
+
+          <!-- Exibição do Tempo Final -->
+          <div class="tempo-final-container">
+            <h3>Tempo Final: {{ formatarTempo(tempoTotal) }}</h3>
+          </div>
+
           <div class="grafico-container">
             <canvas id="graficoBarras"></canvas>
           </div>

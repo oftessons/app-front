@@ -147,6 +147,7 @@ export class PageSimuladoComponent implements OnInit {
     });
     this.simuladoIniciado = false;
     this.simuladoFinalizado = true;
+    this.tempoTotal = this.tempo; // Tempo total em segundos
   }
 
   gerarGrafico(acertos: number, erros: number) {
