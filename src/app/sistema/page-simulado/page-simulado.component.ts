@@ -24,6 +24,7 @@ import { Simulado } from '../simulado';
 import { SimuladoService } from 'src/app/services/simulado.service';
 import { QuantidadeDeQuestoesSelecionadas } from '../page-questoes/enums/quant-questoes'
 import Chart from 'chart.js';
+import { Router } from '@angular/router';
 
 declare var bootstrap: any;
 
@@ -120,7 +121,8 @@ export class PageSimuladoComponent implements OnInit {
     private questoesService: QuestoesService,
     private filtroService: FiltroService,
     private simuladoService: SimuladoService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -145,6 +147,7 @@ export class PageSimuladoComponent implements OnInit {
     });
     this.simuladoIniciado = false;
     this.simuladoFinalizado = true;
+    this.tempoTotal = this.tempo; // Tempo total em segundos
   }
 
   gerarGrafico(acertos: number, erros: number) {
@@ -501,5 +504,9 @@ export class PageSimuladoComponent implements OnInit {
   // Função auxiliar para formatar com dois dígitos
   formatarNumero(numero: number): string {
     return numero < 10 ? `0${numero}` : `${numero}`;
+  }
+
+  backHome() {
+    this.router.navigate(['usuario/dashboard']);
   }
 }
