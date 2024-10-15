@@ -37,6 +37,8 @@ export class PageSimuladoComponent implements OnInit {
   nomeSimulado: string = '';
   descricaoSimulado: string = '';
 
+  mensagemDeAviso!: string;
+
   tempo: number = 0; // Contador de tempo em segundos
   intervalId: any; // Armazena o ID do intervalo para controlar o timer
   isSimuladoIniciado: boolean = false; // Controla se o simulado foi iniciado ou não
@@ -66,8 +68,6 @@ export class PageSimuladoComponent implements OnInit {
 
   respostas: any[] = []; // Array que armazena as respostas do usuário
   chart: any;
-
-  // quantidadeQuestoesSelecionada: number | null = null;
 
   questaoAtual: Questao | null = null;
   paginaAtual: number = 0;
@@ -184,10 +184,22 @@ export class PageSimuladoComponent implements OnInit {
     return { exemplo: 'valor' };
   }
 
-  onOptionChange(texto: string): void {
-    this.selectedOption = texto;
-    console.log('Alternativa selecionada:', texto);
+  onOptionChange(alternativaTexto: string) {
+    this.selectedOption = alternativaTexto;
+    if (this.questaoAtual) {
+      this.respostas[this.paginaAtual] = alternativaTexto;
+    }
   }
+
+  getLetraAlternativa(alternativaTexto: string): string {
+    if (this.questaoAtual) {
+      const index = this.questaoAtual.alternativas.findIndex(alt => alt.texto === alternativaTexto);
+      return String.fromCharCode(65 + index);
+    }
+    return '';
+  }
+
+
 
   obterPerfilUsuario() {
     this.authService.obterUsuarioAutenticadoDoBackend().subscribe(
@@ -202,6 +214,14 @@ export class PageSimuladoComponent implements OnInit {
   }
 
   responderQuestao(questao: Questao | null): void {
+    if (this.selectedOption) {
+      this.mensagemDeAviso = `Você marcou a letra ${this.getLetraAlternativa(this.selectedOption)} como resposta, continue seus estudos e vá para a próxima questão 😃.`;
+      // Armazena a resposta para a questão atual
+      this.respostas[this.paginaAtual] = this.selectedOption;
+    } else {
+      this.mensagemDeAviso = 'Por favor, selecione uma alternativa antes de responder.';
+    }
+
     if (!questao) {
       console.error('Questão atual é nula.');
       this.resposta = 'Nenhuma questão selecionada.';
@@ -399,22 +419,35 @@ export class PageSimuladoComponent implements OnInit {
         }
       );
   }
+  
+  carregarRespostaAnterior() {
+    const respostaAnterior = this.respostas[this.paginaAtual];
+    if (respostaAnterior) {
+      this.selectedOption = respostaAnterior;
+      this.mensagemDeAviso = `Você respondeu anteriormente a letra ${this.getLetraAlternativa(respostaAnterior)}.`; // Exibe mensagem apenas ao voltar
+    } else {
+      this.selectedOption = '';
+    }
+  }
 
   anteriorQuestao() {
+    this.mensagemDeAviso = '';
     if (this.paginaAtual > 0) {
       this.paginaAtual--;
       this.questaoAtual = this.questoes[this.paginaAtual];
       this.mostrarGabarito = false;
-      this.resposta = '';
+      this.carregarRespostaAnterior(); // Chame a função para carregar a resposta anterior
     }
   }
-
+  
   proximaQuestao() {
     if (this.paginaAtual < this.questoes.length - 1) {
       this.paginaAtual++;
       this.questaoAtual = this.questoes[this.paginaAtual];
       this.mostrarGabarito = false;
       this.resposta = '';
+      this.selectedOption = '';
+      this.mensagemDeAviso = ''; // Limpa a mensagem ao clicar em "próxima"
     }
   }
 
@@ -482,14 +515,6 @@ export class PageSimuladoComponent implements OnInit {
     this.simuladoIniciado = true;
     this.simuladoFinalizado = false;
   }
-
-  //finalizarSimulado(): void {
-   // if (this.isSimuladoIniciado) {
-   //   clearInterval(this.intervalId); // Para o contador
-   //   this.isSimuladoIniciado = false;
-      //alert(`Simulado finalizado! Tempo total: ${this.formatarTempo(this.tempo)}`);
-  //  }
-  //}
 
   // Função para formatar o tempo decorrido (opcional)
   formatarTempo(segundos: number): string {

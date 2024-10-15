@@ -26,7 +26,7 @@ import Quill from 'quill';
 
 export class CadastroQuestaoComponent implements OnInit,  AfterViewInit {
   usuario: Usuario | null = null;
-  Permissao = Permissao; // Adicione esta linha
+  Permissao = Permissao;
   formData = new FormData();
   questaoDTO = new Questao();
   successMessage: string | null = null;
@@ -36,8 +36,6 @@ export class CadastroQuestaoComponent implements OnInit,  AfterViewInit {
   fotoDaQuestaoTres: File | null = null;
   fotoDaRespostaUm: File | null = null;
   fotoDaRespostaDois: File | null = null;
-  // fotoDaRespostaDois: File | null = null;
-  // fotoDaRespostaTres: File | null = null;
   imagePreviews: { [key: string]: string | ArrayBuffer | null } = {};
   id!: number;
   selectedAlternativa: number | undefined;
@@ -57,7 +55,6 @@ export class CadastroQuestaoComponent implements OnInit,  AfterViewInit {
   // editorConfig: any;
 
   editorContent: string = '';
-  // Configuração da barra de ferramentas
   editorConfig = {
   toolbar: '#toolbar'
 };
@@ -99,10 +96,10 @@ editorConfig1 = {
     ];
 
     this.questaoDTO.alternativaImagems = [
-      { id: 1, texto: '1', correta: false },
-      { id: 2, texto: '2', correta: false },
-      { id: 3, texto: '3', correta: false },
-      { id: 4, texto: '4', correta: false }
+      { id: 1, texto: 'A', correta: false },
+      { id: 2, texto: 'B', correta: false },
+      { id: 3, texto: 'C', correta: false },
+      { id: 4, texto: 'D', correta: false }
     ];
     
     this.usuario = this.authService.getUsuarioAutenticado();
@@ -299,15 +296,6 @@ onSubmit(): void {
     }
   }
 
-  // handleImageChange(event: any, index: number) {
-  // const file = event.target.files[0];
-  //   const reader = new FileReader();
-  //   reader.onload = () => {
-  //     this.questaoDTO.alternativas[index].imagemUrl = reader.result as string;
-  //   };
-  //   reader.readAsDataURL(file);
-  // }
-
   handleImageChange(event: any, index: number) {
   const file = event.target.files[0];
   const reader = new FileReader();
@@ -338,6 +326,4 @@ onFileSelectedImage(event: any, alternativaIndex: string) {
     reader.readAsDataURL(file);
   }
 }
-
-
 }
