@@ -117,8 +117,20 @@
         <h3>Ano: {{ questaoAtual.ano }}</h3>
       </div>
       <div class="conteudo-questao">
-        <div class="img-comentario" [innerHTML]="questaoAtual.enunciadoDaQuestao"></div>
-        <!-- Verificar se a URL da foto da questão está presente -->
+        <!-- Quero se se eu tiver cadastrado o video apareca aqui no enunciado-->
+        <div class="img-comentario" [innerHTML]="questaoAtual.enunciadoDaQuestao | safeHtml"></div> 
+        
+        <iframe 
+        *ngIf="questaoAtual?.videoUrl" 
+        [src]="sanitizeVideoUrl(questaoAtual.videoUrl!)" 
+        width="560" 
+        height="315" 
+        frameborder="0" 
+        allowfullscreen>
+      </iframe>
+      
+        
+        
         <img *ngIf="questaoAtual?.fotoDaQuestaoUrl" [src]="questaoAtual?.fotoDaQuestaoUrl" alt="Foto da questão" class="questao-foto">
         <div class="row">
           <div class="col-md-12">
@@ -167,13 +179,22 @@
                   <button *ngIf="resposta" class="btn-gabarito" (click)="exibirGabarito()">Gabarito</button>
                 </div>
                 <div class="right-buttons">
-                  <button class="btn-anterior" (click)="anteriorQuestao()" [disabled]="paginaAtual === 0">Anterior</button>
-                  <button class="btn-responder" (click)="questaoAtual && responderQuestao(questaoAtual)" [disabled]="jaRespondeu">
+                  <button class="btn-anterior" 
+                          (click)="anteriorQuestao()" 
+                          [disabled]="paginaAtual === 0">
+                    Anterior
+                  </button>
+                  <button class="btn-responder" 
+                          (click)="questaoAtual && responderQuestao(questaoAtual)" 
+                          [disabled]="jaRespondeu">
                     Responder
-                </button>             
-                  <button class="btn-proxima" (click)="proximaQuestao()">Próxima</button>
+                  </button>
+                  <button class="btn-proxima" 
+                          (click)="proximaQuestao()">
+                    Próxima
+                  </button>
                 </div>
-              </div>              
+              </div>                          
             </div>
           </div>
         </div>
