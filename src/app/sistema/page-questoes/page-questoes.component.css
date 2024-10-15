@@ -10,7 +10,7 @@
 .conteudo-questao p {
   padding: 10px; /* Espaçamento para o parágrafo */
   margin: 0; /* Remover margens padrão */
-  font-size: 14px;
+  font-size: 16px;
 }
 .questao-foto {
   max-width: 350px;
@@ -442,11 +442,11 @@
 }
 .alternativa-texto {
   font-weight: bold;
-  font-size: 14px;
+  font-size: 16px;
   margin-right: 10px;
 }
 .alternativa-comentario {
-  font-size: 14px;
+  font-size: 16px;
   color: #000000;
 }
 
@@ -471,3 +471,11 @@
   }
 }
 
+
+.selecione-text{
+  font-size: 16px;
+}
+
+.img-comentario{
+  font-size: 16px;
+}

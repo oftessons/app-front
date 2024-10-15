@@ -2,171 +2,184 @@
   <div class="container mt-4">
     <h1 class="mt-4"> <span> | </span> Simulados</h1>
   </div>
-<div class="container">
-<div class="filters-container">
-  <div class="select-container">
-    <app-select-padrao
-        label="Quantidade de Questões"
-        [options]="quantidadeDeQuestoesSelecionadasDescricoes"
-        [(selectedValue)]="selectedQuantidadeDeQuestoesSelecionadas">
-    </app-select-padrao>
-  </div>
-  <form #filtroForm="ngForm" (ngSubmit)="filtrarQuestoes()" class="consulta-form">
-    <div class="row">
-      <div class="col col-12 col-md-6 espaco-select">
+  <div class="container">
+    <div class="filters-container">
+      <div class="select-container">
         <app-select-padrao
-              label="Ano"
-              [options]="anosDescricoes"
-              [(selectedValue)]="selectedAno">
+            label="Quantidade de Questões"
+            [options]="quantidadeDeQuestoesSelecionadasDescricoes"
+            [(selectedValue)]="selectedQuantidadeDeQuestoesSelecionadas">
         </app-select-padrao>
       </div>
-      <div class="col col-12 col-md-6 espaco-select">
-        <app-select-padrao
-              label="Dificuldade"
-              [options]="dificuldadesDescricoes"
-              [(selectedValue)]="selectedDificuldade">
-        </app-select-padrao>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col col-12 col-md-6 espaco-select">
-        <app-select-padrao
-              label="Tipo de Prova"
-              [options]="tiposDeProvaDescricoes"
-              [(selectedValue)]="selectedTipoDeProva">
-        </app-select-padrao>
-      </div>
-      <div class="col col-12 col-md-6 espaco-select">
-        <app-select-padrao
-              label="Subtema"
-              [options]="subtemasDescricoes"
-              [(selectedValue)]="selectedSubtema">
-        </app-select-padrao>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col col-12 col-md-6 espaco-select">
-        <app-select-padrao
-            label="Tema"
-            [options]="temasDescricoes"
-            [(selectedValue)]="selectedTema">
-        </app-select-padrao>
-      </div>
-      <div class="col col-12 col-md-6 espaco-select">
-        <app-input-padrao
-            label="Pesquisar por palavra-chave"
-            [(value)]="palavraChave"
-            class="palavra-chave">
-          </app-input-padrao>       
-      </div>
-    </div>
+      <form #filtroForm="ngForm" (ngSubmit)="filtrarQuestoes()" class="consulta-form">
+        <div class="row">
+          <div class="col col-12 col-md-6 espaco-select">
+            <app-select-padrao
+                  label="Ano"
+                  [options]="anosDescricoes"
+                  [(selectedValue)]="selectedAno">
+            </app-select-padrao>
+          </div>
+          <div class="col col-12 col-md-6 espaco-select">
+            <app-select-padrao
+                  label="Dificuldade"
+                  [options]="dificuldadesDescricoes"
+                  [(selectedValue)]="selectedDificuldade">
+            </app-select-padrao>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col col-12 col-md-6 espaco-select">
+            <app-select-padrao
+                  label="Tipo de Prova"
+                  [options]="tiposDeProvaDescricoes"
+                  [(selectedValue)]="selectedTipoDeProva">
+            </app-select-padrao>
+          </div>
+          <div class="col col-12 col-md-6 espaco-select">
+            <app-select-padrao
+                  label="Subtema"
+                  [options]="subtemasDescricoes"
+                  [(selectedValue)]="selectedSubtema">
+            </app-select-padrao>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col col-12 col-md-6 espaco-select">
+            <app-select-padrao
+                label="Tema"
+                [options]="temasDescricoes"
+                [(selectedValue)]="selectedTema">
+            </app-select-padrao>
+          </div>
+          <div class="col col-12 col-md-6 espaco-select">
+            <app-input-padrao
+                label="Pesquisar por palavra-chave"
+                [(value)]="palavraChave"
+                class="palavra-chave">
+              </app-input-padrao>       
+          </div>
+        </div>
     
-    <div *ngIf="message" class="alert alert-info mt-3 alert-custom" role="alert">
-      {{ message }}
-    </div>
-    
+        <div *ngIf="message" class="alert alert-info mt-3 alert-custom" role="alert">
+          {{ message }}
+        </div>
 
-    <div class="button-row-filtro">
-      <button type="submit" class="btn-filtrar">Filtrar</button>
-      <button type="button" class="btn-filtrar-geral" (click)="LimparFiltro()">Limpar Filtro</button>
-      <button type="button" class="btn-salvar" (click)="abrirModal()">Salvar Simulado</button>
+        <div class="button-row-filtro">
+          <button type="submit" class="btn-filtrar">Filtrar</button>
+          <button type="button" class="btn-filtrar-geral" (click)="LimparFiltro()">Limpar Filtro</button>
+          <button type="button" class="btn-salvar" (click)="abrirModal()">Salvar Simulado</button>
+        </div>
+      </form>
     </div>
-  </form>
-</div>
-</div>
+  </div>
 
-<div class="modal fade" id="confirmacaoModal" #confirmacaoModalRef tabindex="-1" aria-labelledby="confirmacaoModalLabel" aria-hidden="true">
-  <div class="mr-box-save-lista-overlay"></div>
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="confirmacaoModalLabel">Salvar Simulado</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form class="form-group">
-          <div class="mb-3">
-            <label for="nomeFiltro" class="form-label">Nome <span>*</span></label>
-            <input type="text" class="form-control" id="nomeFiltro" #nomeFiltroInput placeholder="Ex. Simulado de Óptica" required>
-          </div>
-          <div class="mb-3">
-            <label for="descricaoFiltro" class="form-label">Assunto</label>
-            <input type="text" class="form-control" id="descricaoFiltro" #descricaoFiltroInput placeholder="Ex. Vergência, objeto e imagem">
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-success" (click)="confirmarSalvarSimulado(nomeFiltroInput.value, descricaoFiltroInput.value)">Confirmar</button>
+  <div class="modal fade" id="confirmacaoModal" #confirmacaoModalRef tabindex="-1" aria-labelledby="confirmacaoModalLabel" aria-hidden="true">
+    <div class="mr-box-save-lista-overlay"></div>
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmacaoModalLabel">Salvar Simulado</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form class="form-group">
+            <div class="mb-3">
+              <label for="nomeFiltro" class="form-label">Nome <span>*</span></label>
+              <input type="text" class="form-control" id="nomeFiltro" #nomeFiltroInput placeholder="Ex. Simulado de Óptica" required>
+            </div>
+            <div class="mb-3">
+              <label for="descricaoFiltro" class="form-label">Assunto</label>
+              <input type="text" class="form-control" id="descricaoFiltro" #descricaoFiltroInput placeholder="Ex. Vergência, objeto e imagem">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-success" (click)="confirmarSalvarSimulado(nomeFiltroInput.value, descricaoFiltroInput.value)">Confirmar</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-
-<!-- Exibição dos Resultados -->
-<div *ngIf="questaoAtual">
-  <div class="identificadores-questao-resul">
-    <h2 class="h2">Resultado da Filtragem</h2>
-  </div>
-  <div class="questao">
-    <div class="identificadores-questao">
-      <h3>ID: {{ questaoAtual.id }}</h3>
-      <h3>Tema: {{ questaoAtual.tema }}</h3>
-      <h3>Ano: {{ questaoAtual.ano }}</h3>
+  <!-- Exibição dos Resultados -->
+  <div *ngIf="questaoAtual">
+    <div class="identificadores-questao-resul">
+      <h2 class="h2">Resultado da Filtragem</h2>
     </div>
-    <div class="conteudo-questao">
-      <div class="timer-container">
-        <div class="buttons-simulado">
-          <button (click)="iniciarSimulado()" class="btn-iniciar">Iniciar Simulado</button>
-          
-          <!-- Centralização do gráfico -->
-          <div class="grafico-container">
-              <canvas id="graficoBarras"></canvas>
+    <div class="questao">
+      <!-- Exibição dos Resultados -->
+      <div *ngIf="simuladoIniciado && !simuladoFinalizado">
+        <div class="identificadores-questao">
+          <h3>ID: {{ questaoAtual.id }}</h3>
+          <h3>Tema: {{ questaoAtual.tema }}</h3>
+          <h3>Ano: {{ questaoAtual.ano }}</h3>
+        </div>
+
+        <div class="conteudo-questao">
+          <div class="timer-container">
+            <h3>
+              <span>Tempo:</span> 
+              {{ formatarTempo(tempo) }}
+            </h3>
           </div>
-      </div>
+          <div [innerHTML]="questaoAtual.enunciadoDaQuestao"></div>
+          <img *ngIf="questaoAtual?.fotoDaQuestaoUrl" [src]="questaoAtual?.fotoDaQuestaoUrl" alt="Foto da questão" class="questao-foto">
       
-      <!-- Botão do Timer -->
-      <div class="timer-container">
-          <h3>Tempo: {{ formatarTempo(tempo) }}</h3>
-      </div>
-      
-  
-      <!-- <p>{{ questaoAtual.enunciadoDaQuestao }}</p> -->
-      <div class="img-comentario" [innerHTML]="questaoAtual.enunciadoDaQuestao"></div>
-      <img *ngIf="questaoAtual?.fotoDaQuestaoUrl" [src]="questaoAtual?.fotoDaQuestaoUrl" alt="Foto da questão" class="questao-foto">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="form-group">
-            <label>Selecione a Alternativa:</label>
-            <div *ngFor="let alternativa of questaoAtual.alternativas; let i = index" class="alternativa">
-            <div class="alternativa-input-group">
-              <input 
-                type="radio" 
-                name="alternativa" 
-                [value]="alternativa.texto"
-                [(ngModel)]="selectedOption" 
-                (change)="onOptionChange(alternativa.texto)"
-                [checked]="alternativa.texto === selectedOption">
-              <span class="alternativa-texto">{{ alternativa.texto }} ) </span>
-              <span class="alternativa-comentario">{{ alternativa.comentario }}</span>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label>Selecione a Alternativa:</label>
+                <div *ngFor="let alternativa of questaoAtual.alternativas; let i = index" class="alternativa">
+                  <div class="alternativa-input-group">
+                    <input 
+                      type="radio" 
+                      name="alternativa" 
+                      [value]="alternativa.texto"
+                      [(ngModel)]="selectedOption" 
+                      (change)="onOptionChange(alternativa.texto)"
+                      [checked]="alternativa.texto === selectedOption">
+                    <span class="alternativa-texto">{{ alternativa.texto }} ) </span>
+                    <span class="alternativa-comentario">{{ alternativa.comentario }}</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-         
+
+          <div class="button-row">
+            <div class="right-buttons">
+              <button class="btn-anterior" (click)="anteriorQuestao()" [disabled]="paginaAtual === 0">Anterior</button>
+              <button class="btn-responder" (click)="questaoAtual && responderQuestao(questaoAtual)">Responder</button>
+              <button class="btn-proxima" (click)="proximaQuestao()">Próxima</button>
+              <button (click)="finalizarSimulado()" class="btn-finalizar">Finalizar Simulado</button>
+            </div>
+          </div>  
+        </div>      
+      </div>
+
+      <div>
+        <!-- Botão "Iniciar Simulado" -->
+        <div class="iniciar-simulado-container" *ngIf="!simuladoIniciado && !simuladoFinalizado">
+          <h2>Clique para Iniciar o Simulado</h2>
+          <button (click)="iniciarSimulado()" class="btn-iniciar">Iniciar Simulado</button>
+        </div>
+
+        <!-- Gráfico de Resultados -->
+        <div *ngIf="simuladoFinalizado" class="resultado-container">
+          <h2>Resultados do Simulado</h2>
+
+          <!-- Exibição do Tempo Final -->
+          <div class="tempo-final-container">
+            <h3>Tempo Final: {{ formatarTempo(tempoTotal) }}</h3>
           </div>
+
+          <div class="grafico-container">
+            <canvas id="graficoBarras"></canvas>
+          </div>
+          <button class="btn-back" (click)="backHome()">Voltar para a Home</button>
         </div>
       </div>
-      
-      <div class="button-row">
-        <div class="right-buttons">
-          <button class="btn-anterior" (click)="anteriorQuestao()" [disabled]="paginaAtual === 0">Anterior</button>
-          <button class="btn-responder" (click)="questaoAtual && responderQuestao(questaoAtual)">Responder</button>
-          <button class="btn-proxima" (click)="proximaQuestao()">Próxima</button>
-          <button (click)="finalizarSimulado()" class="btn-finalizar">Finalizar Simulado</button>
-        </div>
-      </div>        
-  </div>
-  </div>
-  </div>
-</div>
+    </div>
+  </div>        
 </div>
