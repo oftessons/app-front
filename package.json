@@ -22,6 +22,7 @@
     "@angular/router": "~12.2.0",
     "@auth0/angular-jwt": "^4.2.0",
     "@popperjs/core": "^2.11.8",
+    "@stripe/stripe-js": "^4.8.0",
     "@tinymce/tinymce-angular": "^4.2.2",
     "bootstrap": "^5.3.3",
     "chart.js": "^2.9.4",
