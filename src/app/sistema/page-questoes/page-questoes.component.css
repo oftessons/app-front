@@ -65,9 +65,7 @@
   border-radius: 5px;
   cursor: pointer;
 }
-.btn-filters:hover {
-  background-color: #0056b3;
-}
+
 .filters-container {
   margin-top: 20px;
   background: #94979d;
@@ -170,9 +168,7 @@
   background-color: #6c757d; /* Cor de fundo do botão Cancelar */
   color: #fff; /* Cor do texto do botão Cancelar */
 }
-.btn-secondary:hover {
-  background-color: #5a6268; /* Cor de fundo do botão Cancelar no hover */
-}
+
 .btn-success {
   background-color: #28a745; /* Cor de fundo do botão Confirmar */
   color: #fff; /* Cor do texto do botão Confirmar */
@@ -361,10 +357,7 @@
   font-weight: bold;
 }
 
-.btn-gabarito:hover {
-  background-color: #f4a261;
-  color: #464545;
-}
+
 
 .btn-anterior,
 .btn-proxima,
@@ -428,11 +421,9 @@
   color: #d0d0d0; /* Dark red text */
   border-color: #f5c6cb; /* Light red border */
 }
-.alternativa-certa:hover,
-.alternativa-errada:hover {
-  cursor: pointer; /* Change cursor on hover */
-  background-color: #e2e6ea; /* Light grey background on hover for better UX */
-}
+
+
+
 .alternativa-input-group {
   display: flex;
   align-items: center;
@@ -442,7 +433,7 @@
 }
 .alternativa-texto {
   font-weight: bold;
-  font-size: 16px;
+  font-size: 14px;
   margin-right: 10px;
 }
 .alternativa-comentario {

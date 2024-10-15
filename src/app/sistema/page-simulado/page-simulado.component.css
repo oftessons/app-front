@@ -123,7 +123,8 @@
 
 .btn-anterior,
 .btn-responder,
-.btn-proxima {
+.btn-proxima,
+.btn-finalizar {
   padding: 10px 20px;
   width: 130px;
   border: none;
@@ -382,6 +383,7 @@
 
 .btn-proxima {
   background-color: #3b5fa0;
+  margin-left: 10px;
 }
 
 .btn-responder {
@@ -417,8 +419,7 @@
   text-align: center;
 }
 
-.btn-iniciar,
-.btn-finalizar {
+.btn-iniciar {
   margin-right: 10px;
   padding: 10px 20px;
   border: none;
@@ -441,6 +442,7 @@
   background-color: #9a9a9a;
   cursor: not-allowed;
 }
+
 
 .buttons-simulado {
   display: flex;
@@ -477,6 +479,13 @@
 canvas {
   max-width: 100%;
   max-height: 100%;
+}
+
+.alert.alert-info {
+  background-color: #b3c9eb;
+  border: #b3c9eb;
+  font-size: 15px;
+  color: rgb(0, 0, 0);
 }
 
 .iniciar-simulado-container,
@@ -533,4 +542,40 @@ canvas {
   font-size: 16px;
   color: #fff;
   background: #3B5FA0;
+}
+
+.alternativa-texto {
+  font-weight: bold;
+  font-size: 14px;
+  margin-right: 5px;
+  margin-left: 5px;
+}
+.alternativa-comentario {
+  font-size: 14px;
+  color: #000000;
+}
+
+/* Media Query para telas menores */
+@media (max-width: 768px) {
+  .button-row {
+    flex-direction: column; /* Mantém a coluna em telas menores */
+    align-items: stretch; /* Faz os botões ocuparem a largura total */
+  }
+
+  .right-buttons {
+    flex-direction: row; /* Mantém a disposição em linha */
+    justify-content: space-between; /* Espaço igual entre os botões */
+    width: 100%; /* Largura total */
+    margin-bottom: 10px; /* Espaçamento entre as linhas */
+  }
+  .btn-proxima {
+    margin-left: 0; /* Remove a margem à esquerda em dispositivos móveis */
+  }
+  .btn-anterior,
+  .btn-responder,
+  .btn-proxima,
+  .btn-finalizar {
+    width: 48%; /* Largura de cada botão em uma linha (2 botões por linha) */
+    margin-bottom: 10px; /* Adiciona espaçamento entre os botões verticais */
+  }
 }

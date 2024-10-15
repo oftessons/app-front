@@ -144,17 +144,23 @@
                   </div>
                 </div>
               </div>
+              <!-- Mensagem de aviso -->
+              <div *ngIf="mensagemDeAviso" class="alert alert-info mt-2">
+                {{ mensagemDeAviso }}
+              </div>
             </div>
           </div>
-
+          
           <div class="button-row">
             <div class="right-buttons">
               <button class="btn-anterior" (click)="anteriorQuestao()" [disabled]="paginaAtual === 0">Anterior</button>
               <button class="btn-responder" (click)="questaoAtual && responderQuestao(questaoAtual)">Responder</button>
-              <button class="btn-proxima" (click)="proximaQuestao()">Próxima</button>
-              <button (click)="finalizarSimulado()" class="btn-finalizar">Finalizar Simulado</button>
             </div>
-          </div>  
+            <div class="right-buttons">
+              <button class="btn-proxima" style="margin-left: 10px;" (click)="proximaQuestao()">Próxima</button>
+              <button class="btn-finalizar" (click)="finalizarSimulado()">Finalizar</button>
+            </div>
+          </div>          
         </div>      
       </div>
 
