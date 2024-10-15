@@ -10,6 +10,7 @@ export class Questao {
   diaDoCadastro!: string;
   idUser!: number;
   title!: string;
+  videoUrl?: string;
   enunciadoDaQuestao!: string;
   afirmacaoUm!: string;
   afirmacaoDois!: string;

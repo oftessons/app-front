@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild, AfterViewChecked } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, AfterViewChecked, PipeTransform } from '@angular/core';
 import { TipoDeProva } from './enums/tipoDeProva';
 import {
   getDescricaoAno,
@@ -21,7 +21,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { Usuario } from 'src/app/login/usuario';
 import { FiltroDTO } from '../filtroDTO';
 
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { DomSanitizer, SafeHtml, SafeResourceUrl } from '@angular/platform-browser';
 
 declare var bootstrap: any;
 
@@ -34,7 +34,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   
   questao: Questao = new Questao();
   selectedOption: string = '';
-  //resposta: string | null = null;
   usuario!: Usuario;
   usuarioId!: number;
   mensagemErro: string | null = null;
@@ -71,9 +70,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   mostrarCardConfirmacao = false;
   filtroASalvar!: FiltroDTO;
 
-  mostrarGabarito: boolean = false; // Adiciona esta variável para controlar a exibição do gabarito
-
-  //selectedOption: string = ''; // Adiciona esta variável para armazenar a opção selecionada
+  mostrarGabarito: boolean = false; 
   @ViewChild('confirmacaoModalRef', { static: false })
   confirmacaoModal!: ElementRef;
 
@@ -141,6 +138,14 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     );
   }
 
+  sanitizeVideoUrl(videoUrl: string | undefined): SafeResourceUrl {
+    if (videoUrl) {
+      return this.sanitizer.bypassSecurityTrustResourceUrl(videoUrl);
+    }
+    return ''; // Return a safe empty value if no URL is provided
+  }
+
+
   ngAfterViewChecked(): void {
     this.resizeImages();
   }
@@ -157,8 +162,34 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   applyClassesToEnunciado(content: string): SafeHtml {
     const div = document.createElement('div');
     div.innerHTML = content;
+  
+    // Verificar se há iframes de vídeo
+    const iframes = div.getElementsByTagName('iframe');
+    for (let i = 0; i < iframes.length; i++) {
+      const iframe = iframes[i];
+      console.log("Video URL:", this.questaoAtual?.videoUrl);
 
-    // Apply classes to elements
+  
+      // Sanitizar apenas URLs seguras (por exemplo, YouTube, Vimeo)
+      const src = iframe.getAttribute('src');
+      if (src && (src.startsWith('https://www.youtube.com/') || src.startsWith('https://player.vimeo.com/'))) {
+        // Definir atributos padrões do iframe de vídeo
+        iframe.setAttribute('width', '560'); // Largura do vídeo
+        iframe.setAttribute('height', '315'); // Altura do vídeo
+        iframe.setAttribute('frameborder', '0');
+        iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+        iframe.setAttribute('allowfullscreen', 'true');
+        console.log("Video URL:", this.questaoAtual?.videoUrl);
+
+      } else {
+        console.log("Video URL:", this.questaoAtual?.videoUrl);
+
+        // Remover iframes de fontes não seguras
+        iframe.remove();
+      }
+    }
+  
+    // Aplicar classes aos outros elementos
     const elementsWithClasses = div.querySelectorAll('[class]');
     elementsWithClasses.forEach((element) => {
       const classList = element.className.split(' ');
@@ -166,13 +197,20 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
         element.classList.add(className);
       });
     });
-
+  
+    // Retornar o conteúdo sanitizado com vídeos
     return this.sanitizeContent(div.innerHTML);
+
+
   }
 
+
+  
+  
   sanitizeContent(content: string): SafeHtml {
     return this.sanitizer.bypassSecurityTrustHtml(content);
   }
+
 
   onOptionChange(texto: string): void {
     this.selectedOption = texto;

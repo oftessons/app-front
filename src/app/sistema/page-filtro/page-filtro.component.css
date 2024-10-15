@@ -1,64 +1,126 @@
+/* Estilo geral da container */
 .container {
-    max-width: 1300px;
-    padding: 10px;
-    font-family: 'Nunito Sans', sans-serif;
+  max-width: 1300px;
+  padding: 10px;
+  font-family: 'Nunito Sans', sans-serif;
 }
 
-.text-p{
-    font-size: 20px;
-    margin-top: 10px;
-    font-family: 'Nunito Sans', sans-serif;
+/* Estilo dos textos */
+.text-p {
+  font-size: 20px;
+  margin-top: 10px;
+  font-family: 'Nunito Sans', sans-serif;
 }
 
-h5{
+h5 {
   color: #7E1313;
 }
-p.card-text{
+
+p.card-text {
   margin-top: 5px;
+  margin-block: 10px;
 }
 
-
+/* Ícones */
 .icon {
-    width: 20px; /* Define a largura do ícone */
-    height: 20px; /* Define a altura do ícone */
-    vertical-align: middle; /* Alinha o ícone verticalmente com o texto */
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
 }
 
 .icon-lista {
-    width: 30px; /* Define a largura do ícone */
-    height: 30px; /* Define a altura do ícone */
-    vertical-align: middle; /* Alinha o ícone verticalmente com o texto */
+  width: 30px;
+  height: 30px;
+  vertical-align: middle;
 }
-  
+
+/* Botões */
 .btn-transparent-primary {
-    background-color: transparent;
-    color: #1E1E1E; /* Cor do texto (azul padrão) */
-    border: 1px solid #1E1E1E; /* Cor da borda (azul padrão) */
-  }
-  
-  .btn-transparent-primary:hover {
-    background-color: rgba(13, 110, 253, 0.1); /* Efeito hover leve com azul transparente */
-  }
-  
-  .btn-transparent-danger {
-    background-color: transparent;
-    color: #7E1313; /* Cor do texto (vermelho) */
-    border: 1px solid #7E1313; /* Cor da borda (vermelho) */
-  }
-  
-  .btn-transparent-danger:hover {
-    background-color: rgba(220, 53, 69, 0.1); /* Efeito hover leve com vermelho transparente */
+  background-color: transparent;
+  color: #1E1E1E;
+  border: 1px solid #1E1E1E;
+}
+
+.btn-transparent-primary:hover {
+  background-color: rgba(13, 110, 253, 0.1);
+}
+
+.btn-transparent-danger {
+  background-color: transparent;
+  color: #7E1313;
+  border: 1px solid #7E1313;
+}
+
+.btn-transparent-danger:hover {
+  background-color: rgba(220, 53, 69, 0.1);
+}
+
+/* Mensagem sem filtros */
+.no-filters-message {
+  background-color: #FFAD60;
+  border-radius: 10px;
+  padding: 15px;
+  font-size: 14px;
+}
+
+.no-filters-message p {
+  margin: 0;
+}
+
+/* Responsividade */
+
+/* Celulares: botões empilhados verticalmente */
+@media (max-width: 768px) {
+  .card-body {
+    flex-direction: column;
+    align-items: flex-start;
   }
 
-  .no-filters-message {
-    background-color: #FFAD60;
-    border-radius: 10px;
-    padding: 15px;
-    font-size: 14px;
+  .card-body > div:last-child {
+    display: flex;
+    flex-direction: column;
+    width: 100%; /* Botões ocupam 100% da largura */
+    gap: 10px; /* Espaçamento entre os botões */
   }
-  
-  .no-filters-message p {
-    margin: 0; 
+
+  .btn {
+    width: 100%; /* Botões ocupam toda a largura disponível */
   }
-  
-  
+}
+
+/* Aumenta o espaçamento entre a imagem e o texto */
+.card-title .icon-lista {
+  margin-right: 10px; /* Define o espaço entre o ícone e o nome */
+}
+
+
+/* Tablets: botões lado a lado */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .card-body {
+    flex-wrap: wrap; /* Permite que os itens quebrem linha */
+    gap: 15px;
+  }
+
+  .card-body > div:last-child {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start; /* Alinha os botões à esquerda */
+    gap: 15px; /* Espaçamento horizontal entre botões */
+  }
+
+  .btn {
+    flex: 1 1 45%; /* Cada botão ocupa 45% da largura */
+    max-width: 45%;
+  }
+}
+
+/* Desktops: layout lado a lado com espaçamento */
+@media (min-width: 1024px) {
+  .card-body {
+    justify-content: space-between;
+  }
+
+  .btn {
+    width: auto;
+  }
+}

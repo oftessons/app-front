@@ -22,6 +22,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { SharedModule } from '../shared/shared.module';
 import { ForbiddenComponent } from './forbidden/forbidden.component';
+import { SafeHtmlPipe } from '../pipes/safe-html.pipe';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { ForbiddenComponent } from './forbidden/forbidden.component';
     PageSimuladoComponent,
     MeusSimuladosComponent,
     ForbiddenComponent,
+    SafeHtmlPipe,
   ],
   imports: [
     CommonModule,
@@ -47,7 +49,7 @@ import { ForbiddenComponent } from './forbidden/forbidden.component';
     ChartsModule,
     NgxPaginationModule,
     EditorModule,
-    SharedModule
+    SharedModule,
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA, // Permite o uso de elementos personalizados

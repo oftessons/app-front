@@ -105,6 +105,63 @@
   margin-top: 20px;
 }
 
+
+.button-row {
+  display: flex;
+  justify-content: space-between; /* Distribui as áreas à esquerda e à direita */
+  align-items: center;
+  margin-top: 20px;
+  gap: 10px; /* Espaço entre as seções */
+}
+
+.left-buttons, 
+.right-buttons {
+  display: flex;
+  gap: 10px; /* Espaçamento entre botões */
+}
+
+.right-buttons button {
+  flex: 1; /* Faz os botões se adaptarem ao espaço disponível */
+  min-width: 100px;
+}
+
+/* Ajuste para telas menores */
+@media (max-width: 768px) {
+  .button-row {
+    flex-direction: column; /* Empilha os botões */
+    align-items: stretch; /* Faz os botões preencherem toda a largura */
+  }
+
+  .left-buttons, 
+  .right-buttons {
+    justify-content: center; /* Centraliza os botões */
+  }
+
+  .right-buttons button {
+    width: 100%; /* Faz os botões ocuparem a largura total */
+  }
+}
+
+@media (max-width: 768px) {
+  .button-row-filtro {
+    flex-direction: column; /* Empilha os botões verticalmente */
+  }
+
+  .btn-filtrar, .btn-salvar, .btn-filtrar-geral {
+    width: 100%; /* Botões ocupam 100% da largura */
+    margin-bottom: 10px; /* Espaçamento entre botões */
+  }
+
+  .img-container {
+    margin: 10px 0;
+  }
+
+  .questao-foto {
+    max-width: 90%; /* Reduz a imagem um pouco em telas pequenas */
+  }
+}
+
+
 .icon {
   margin-right: 10px;
   width: 20px;
@@ -396,6 +453,24 @@
 .img-alternativas img {
   width: 200px;
 }
+
+/* Responsividade para tablets */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .button-row-filtro {
+    flex-wrap: nowrap; /* Mantém os botões em uma única linha */
+    justify-content: flex-start; /* Alinha os botões à esquerda */
+    gap: 10px; /* Espaçamento entre os botões */
+  }
+
+  .btn-filtrar, 
+  .btn-salvar, 
+  .btn-filtrar-geral {
+    flex: 1 1 30%; /* Cada botão ocupa 30% da linha */
+    margin-bottom: 0; /* Remove o espaçamento vertical */
+    max-width: 30%; /* Limita a largura para não exceder 30% */
+  }
+}
+
 
 .selecione-text{
   font-size: 16px;
