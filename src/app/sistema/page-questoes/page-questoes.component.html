@@ -168,7 +168,7 @@
                 <!-- Verificar se a URL da foto da resposta um está presente -->
                 <img *ngIf="questaoAtual?.fotoDaRespostaUmUrl" [src]="questaoAtual?.fotoDaRespostaUmUrl" alt="Foto do Comentário" class="questao-foto">
                 <!-- Exibe o comentário da Questão Dois com HTML Sanitizado -->
-                <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestao"></div>
+                <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestao | safeHtml"></div>
                 <!-- Verificar se a URL da foto da resposta dois está presente -->
                 <img *ngIf="questaoAtual?.fotoDaRespostaDoisUrl" [src]="questaoAtual?.fotoDaRespostaDoisUrl" alt="Foto do Comentário" class="questao-foto">
                 <p>Referência: {{ questaoAtual.referenciaBi }}</p>
