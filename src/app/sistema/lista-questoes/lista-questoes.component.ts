@@ -137,13 +137,17 @@ export class ListaQuestoesComponent implements OnInit {
     this.questoesService.deletar(this.questaoSelecionada).subscribe(
       (response) => {
         this.mensagemSucesso = 'Questão deletada com sucesso!';
-        this.ngOnInit();
+        this.questoes = [];  
+        this.message = 'A questão foi deletada. Busque outra.';
         this.fecharModal();
       },
-      (erro) => (this.mensagemErro = 'Ocorreu um erro ao deletar a questão.')
+      (erro) => {
+        this.mensagemErro = 'Ocorreu um erro ao deletar a questão.';
+      }
     );
   }
-
+  
+  
   deletarFiltro(id: number): void {
     this.filtroService.deletarFiltro(id)
       .subscribe(

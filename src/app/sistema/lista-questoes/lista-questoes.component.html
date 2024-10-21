@@ -25,11 +25,13 @@
       </form>
     </div>
 
-    <div *ngIf="message" class="alert alert-warning alert-laranja mt-3" role="alert">
+    <div *ngIf="mensagemSucesso" class="alert alert-success mt-3" role="alert">
+      {{ mensagemSucesso }}
+    </div>
+    <div *ngIf="message && !questoes.length" class="alert alert-warning mt-3" role="alert">
       {{ message }}
     </div>
-    
-
+  
     <div *ngIf="questoes.length > 0" class="crud-container mt-3">
       <div class="table-responsive">
         <table class="table table-todas-questoes-do-bd">
