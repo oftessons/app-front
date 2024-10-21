@@ -167,7 +167,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     const iframes = div.getElementsByTagName('iframe');
     for (let i = 0; i < iframes.length; i++) {
       const iframe = iframes[i];
-      console.log("Video URL:", this.questaoAtual?.videoUrl);
+    //  console.log("Video URL:", this.questaoAtual?.videoUrl);
 
   
       // Sanitizar apenas URLs seguras (por exemplo, YouTube, Vimeo)
@@ -179,10 +179,10 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
         iframe.setAttribute('frameborder', '0');
         iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
         iframe.setAttribute('allowfullscreen', 'true');
-        console.log("Video URL:", this.questaoAtual?.videoUrl);
+       // console.log("Video URL:", this.questaoAtual?.videoUrl);
 
       } else {
-        console.log("Video URL:", this.questaoAtual?.videoUrl);
+       // console.log("Video URL:", this.questaoAtual?.videoUrl);
 
         // Remover iframes de fontes não seguras
         iframe.remove();
@@ -214,7 +214,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
   onOptionChange(texto: string): void {
     this.selectedOption = texto;
-    console.log('Alternativa selecionada:', texto);
+    //console.log('Alternativa selecionada:', texto);
   }
 
   obterPerfilUsuario() {
@@ -224,7 +224,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
         this.usuarioId = parseInt(this.usuario.id);
       },
       (error) => {
-        console.error('Erro ao obter perfil do usuário:', error);
+       
       }
     );
   }
@@ -266,7 +266,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
               this.verificarRespostaUsuario(resposta);
             },
             (error) => {
-              console.error('Erro ao verificar resposta:', error);
               this.resposta =
                 'Ocorreu um erro ao verificar a resposta. Por favor, tente novamente mais tarde.';
             }

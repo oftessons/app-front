@@ -475,3 +475,10 @@ p {
 .img-comentario{
   font-size: 16px;
 }
+
+.letra-parenteses {
+  white-space: nowrap; 
+  font-weight: bold;
+  padding: 2px;
+  margin-right: 10px;
+}
