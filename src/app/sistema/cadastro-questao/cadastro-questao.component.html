@@ -51,11 +51,11 @@
           <div class="col-md-6">
             <div class="form-group">
               <app-select-padrao
-                label="Dificuldade"
-                [options]="dificuldades"
-                [(selectedValue)]="questaoDTO.dificuldade"
-                [customStyles]="{'background': '#EFEFEF'}">
-              </app-select-padrao>
+              label="Tipo de Prova"
+              [options]="tiposDeProva"
+              [(selectedValue)]="questaoDTO.tipoDeProva"
+              [customStyles]="{'background': '#EFEFEF'}">
+            </app-select-padrao>
             </div>
           </div>
         </div>
@@ -85,11 +85,11 @@
           <div class="col-md-6">
             <div class="form-group">
               <app-select-padrao
-                label="Tipo de Prova"
-                [options]="tiposDeProva"
-                [(selectedValue)]="questaoDTO.tipoDeProva"
-                [customStyles]="{'background': '#EFEFEF'}">
-              </app-select-padrao>
+              label="Dificuldade"
+              [options]="dificuldades"
+              [(selectedValue)]="questaoDTO.dificuldade"
+              [customStyles]="{'background': '#EFEFEF'}">
+            </app-select-padrao>
             </div>
           </div>
           <div class="col-md-6">
@@ -188,7 +188,7 @@
                       alt="Image Preview" />
                     <span *ngIf="!imagePreviews['fotoDaQuestao']">
                       <img src="assets/imagens/img-foto.svg" style="width: 50px; opacity: 0.5;">
-                      clique ou arraste a imagem para fazer upload
+                      Clique para fazer upload da imagem
                     </span>
                   </div>
                 </label>
@@ -248,7 +248,7 @@
                   <div class="image-preview" id="imagePreview{{ i }}">
                     <img *ngIf="imagePreviews['afirmacao' + i]" [src]="imagePreviews['afirmacao' + i]" alt="Image Preview" />
                     <span *ngIf="!imagePreviews['afirmacao' + i]">
-                      <img src="assets/imagens/img-foto.svg" style="width: 50px; opacity: 0.5;"> clique ou arraste a imagem para fazer upload
+                      <img src="assets/imagens/img-foto.svg" style="width: 50px; opacity: 0.5;"> Clique para fazer upload da imagem
                     </span>
                   </div>
                 </label>
@@ -350,7 +350,7 @@
                     alt="Image Preview" />
                   <span *ngIf="!imagePreviews['fotoDaRespostaUm']">
                     <img src="assets/imagens/img-foto.svg" style="width: 50px; opacity: 0.5;">
-                    clique ou arraste a imagem para fazer upload
+                    Clique para fazer upload da imagem
                   </span>
                 </div>
               </label>
@@ -367,7 +367,7 @@
                     alt="Image Preview" />
                   <span *ngIf="!imagePreviews['fotoDaRespostaDois']">
                     <img src="assets/imagens/img-foto.svg" style="width: 50px; opacity: 0.5;">
-                    clique ou arraste a imagem para fazer upload
+                    Clique para fazer upload da imagem
                   </span>
                 </div>
               </label>

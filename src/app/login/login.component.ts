@@ -26,7 +26,8 @@ export class LoginComponent {
 
   confirmPasswordError: string | null = null;
   confirmPassword: string = '';
-  // passwordVisible: boolean = false;
+  consentimento: boolean = false;  
+
   showTooltip: boolean = false;
   passwordValidations = {
     minLength: false,
