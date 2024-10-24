@@ -475,6 +475,11 @@ p {
 .img-comentario{
   font-size: 16px;
 }
+.img-comentario {
+  white-space: pre-wrap; /* Preserva quebras de linha e espaços */
+  word-break: break-word; /* Quebra palavras longas */
+}
+
 
 .letra-parenteses {
   white-space: nowrap; 

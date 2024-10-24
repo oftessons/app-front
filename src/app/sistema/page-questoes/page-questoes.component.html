@@ -21,18 +21,18 @@
           </div>
           <div class="col col-12 col-md-6 espaco-select">
             <app-select-padrao
-              label="Dificuldade"
-              [options]="dificuldadesDescricoes"
-              [(selectedValue)]="selectedDificuldade">
+              label="Tipo de Prova"
+              [options]="tiposDeProvaDescricoes"
+              [(selectedValue)]="selectedTipoDeProva">
             </app-select-padrao>
           </div>
         </div>
         <div class="row">
           <div class="col col-12 col-md-6 espaco-select">
             <app-select-padrao
-              label="Tipo de Prova"
-              [options]="tiposDeProvaDescricoes"
-              [(selectedValue)]="selectedTipoDeProva">
+              label="Tema"
+              [options]="temasDescricoes"
+              [(selectedValue)]="selectedTema">
             </app-select-padrao>
           </div>
           <div class="col col-12 col-md-6 espaco-select">
@@ -43,12 +43,12 @@
             </app-select-padrao>
           </div>
         </div>
-        <div class="row rol-col">
+        <div class="row rol-col">   
           <div class="col col-12 col-md-6 espaco-select">
             <app-select-padrao
-              label="Tema"
-              [options]="temasDescricoes"
-              [(selectedValue)]="selectedTema">
+              label="Dificuldade"
+              [options]="dificuldadesDescricoes"
+              [(selectedValue)]="selectedDificuldade">
             </app-select-padrao>
           </div>
           <div class="col col-12 col-md-6 espaco-select">
@@ -171,7 +171,7 @@
                 <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestao | safeHtml"></div>
                 <!-- Verificar se a URL da foto da resposta dois está presente -->
                 <img *ngIf="questaoAtual?.fotoDaRespostaDoisUrl" [src]="questaoAtual?.fotoDaRespostaDoisUrl" alt="Foto do Comentário" class="questao-foto">
-                <p>Referência: {{ questaoAtual.referenciaBi }}</p>
+                <p *ngIf="questaoAtual?.referenciaBi">Referência: {{ questaoAtual.referenciaBi }}</p>
                 <p>Comentado por: {{ questaoAtual.comentadorDaQuestao }}</p>
               </div>
               <div class="button-row">
