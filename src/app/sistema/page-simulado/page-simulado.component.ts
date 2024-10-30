@@ -6,7 +6,8 @@ import {
   getDescricaoSubtema,
   getDescricaoTema,
   getDescricaoTipoDeProva,
-  getDescricaoQuantidadeDeQuestoesSelecionadas
+  getDescricaoQuantidadeDeQuestoesSelecionadas,
+  getDescricaoRespostasSimulado
 } from '../page-questoes/enums/enum-utils';
 import { Ano } from '../page-questoes/enums/ano';
 import { Dificuldade } from '../page-questoes/enums/dificuldade';
@@ -22,7 +23,8 @@ import { AuthService } from 'src/app/services/auth.service';
 import { Usuario } from 'src/app/login/usuario';
 import { Simulado } from '../simulado';
 import { SimuladoService } from 'src/app/services/simulado.service';
-import { QuantidadeDeQuestoesSelecionadas } from '../page-questoes/enums/quant-questoes'
+import { QuantidadeDeQuestoesSelecionadas } from '../page-questoes/enums/quant-questoes';
+import { RespostasSimulado } from '../page-questoes/enums/resp-simu';
 import Chart from 'chart.js';
 import { Router } from '@angular/router';
 
@@ -62,6 +64,7 @@ export class PageSimuladoComponent implements OnInit {
   subtemas = Object.values(Subtema);
   temas = Object.values(Tema);
   quantidadeDeQuestoesSelecionadas = Object.values(QuantidadeDeQuestoesSelecionadas);
+  respostasSimulado = Object.values(RespostasSimulado);
 
   message: string = '';
   resposta: string = '';
@@ -79,6 +82,7 @@ export class PageSimuladoComponent implements OnInit {
     tema: null,
     palavraChave: null,
     quantidadeDeQuestoesSelecionadas: null,
+    respostasSimulado: null,
   };
 
   mostrarCardConfirmacao = false;
@@ -93,6 +97,7 @@ export class PageSimuladoComponent implements OnInit {
   selectedTema: Tema | null = null;
   palavraChave: string = '';
   selectedQuantidadeDeQuestoesSelecionadas: QuantidadeDeQuestoesSelecionadas | null = null;
+  selectedRespostasSimulado: RespostasSimulado | null = null;
 
   questoes: Questao[] = [];
   isFiltered = false;
@@ -115,6 +120,7 @@ export class PageSimuladoComponent implements OnInit {
   subtemasDescricoes: string[] = [];
   temasDescricoes: string[] = [];
   quantidadeDeQuestoesSelecionadasDescricoes: string[] = [];
+  respostasSimuladoDescricao: string[] = [];
 
 
   constructor(
@@ -137,6 +143,8 @@ export class PageSimuladoComponent implements OnInit {
     this.temasDescricoes = this.temas.map(tema => this.getDescricaoTema(tema));
     this.quantidadeDeQuestoesSelecionadasDescricoes = this.quantidadeDeQuestoesSelecionadas.map(
       quantidadeDeQuestoesSelecionadas => this.getDescricaoQuantidadeDeQuestoesSelecionadas(quantidadeDeQuestoesSelecionadas));
+    this.respostasSimuladoDescricao = this.respostasSimulado.map(
+      respostasSimulado => this.getDescricaoRespostasSimulado(respostasSimulado));
   }
 
   finalizarSimulado() {
@@ -287,6 +295,10 @@ export class PageSimuladoComponent implements OnInit {
   getDescricaoQuantidadeDeQuestoesSelecionadas(
     quantidadeDeQuestoesSelecionadas: QuantidadeDeQuestoesSelecionadas): string {
     return  getDescricaoQuantidadeDeQuestoesSelecionadas(quantidadeDeQuestoesSelecionadas);
+  }
+
+  getDescricaoRespostasSimulado(respostasSimulado: RespostasSimulado): string {
+    return getDescricaoRespostasSimulado(respostasSimulado);
   }
 
   LimparFiltro() {

@@ -4,12 +4,21 @@
   </div>
   <div class="container">
     <div class="filters-container">
-      <div class="select-container">
-        <app-select-padrao
+      <div class="row">
+        <div class="col col-12 col-md-6 espaco-select">
+          <app-select-padrao
             label="Quantidade de Questões"
             [options]="quantidadeDeQuestoesSelecionadasDescricoes"
             [(selectedValue)]="selectedQuantidadeDeQuestoesSelecionadas">
-        </app-select-padrao>
+          </app-select-padrao>
+        </div>
+        <div class="col col-12 col-md-6 espaco-select">
+          <app-select-padrao
+            label="Questões Respondidas"
+            [options]="respostasSimuladoDescricao"
+            [(selectedValue)]="selectedRespostasSimulado">
+          </app-select-padrao>
+        </div>
       </div>
       <form #filtroForm="ngForm" (ngSubmit)="filtrarQuestoes()" class="consulta-form">
         <div class="row">
