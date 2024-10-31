@@ -99,6 +99,8 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   comentarioDaQuestaoSanitizado: SafeHtml = '';
   sanitizerEnunciado: SafeHtml = '';
 
+  porcentagens: Map<string, string> | null = null;
+
   constructor(
     private questoesService: QuestoesService,
     private filtroService: FiltroService,
@@ -203,9 +205,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
 
   }
-
-
-  
   
   sanitizeContent(content: string): SafeHtml {
     return this.sanitizer.bypassSecurityTrustHtml(content);
@@ -264,6 +263,26 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   
               // Verificar a resposta do usuário e exibir o resultado
               this.verificarRespostaUsuario(resposta);
+
+              // Atualizar manualmente as porcentagens no front-end
+              if (this.porcentagens) {
+                const currentPercentageString = this.porcentagens.get(this.selectedOption) || '0%';
+                const currentPercentage = parseFloat(currentPercentageString.replace('%', ''));
+                const newPercentage = currentPercentage + 1;
+                this.porcentagens.set(this.selectedOption, `${newPercentage}%`);
+              } else {
+                this.porcentagens = new Map([[this.selectedOption, '1%']]);
+              }
+
+              // Após enviar a resposta, obtenha as porcentagens de respostas
+              this.questoesService.getAcertosErrosQuestao(questao.id).subscribe(
+                (data) => {
+                  this.porcentagens = new Map(Object.entries(data));
+                },
+                (error) => {
+                  console.error('Erro ao obter acertos e erros da questão:', error);
+                }
+              );
             },
             (error) => {
               this.resposta =
@@ -274,11 +293,8 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       }
     }
   }
-  
 
-
-
-  // Método para verificar a resposta do usuário e exibir gabarito
+// Método para verificar a resposta do usuário e exibir gabarito
 verificarRespostaUsuario(resposta: Resposta) {
   this.selectedOption = resposta.opcaoSelecionada;
   this.isRespostaCorreta = resposta.correct;

@@ -136,7 +136,7 @@
         <div class="row">
           <div class="col-md-12">
             <div class="form-group">
-              <label class="selecione-text">Selecione a Alternativa:</label>
+              <!-- <label class="selecione-text">Selecione a Alternativa:</label> -->
               <div *ngFor="let alternativa of questaoAtual.alternativas; let i = index" class="alternativa"
                 [ngClass]="{
                   'alternativa-certa': respostaVerificada && isRespostaCorreta && alternativa.texto === selectedOption,
@@ -159,6 +159,21 @@
               </ng-template>
                 </div>
               </div>
+
+              <!-- Adicione a exibição das porcentagens -->
+              <div class="progress-container" *ngIf="porcentagens">
+                <h3>Porcentagens de Respostas:</h3>
+                <div *ngFor="let key of porcentagens.keys()">
+                  <div class="progress-label">
+                    {{ key }}
+                  </div>
+                  <div class="progress">
+                    <div class="progress-inner" [ngStyle]="{'width.%': porcentagens.get(key)}">
+                      <span>{{ porcentagens.get(key) }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
         
               <div *ngIf="message" class="alert alert-info mt-3 alert-custom" role="alert">
                 {{ message }}
@@ -179,6 +194,7 @@
                 <div class="left-buttons">
                   <button *ngIf="resposta" class="btn-gabarito" (click)="exibirGabarito()">Gabarito</button>
                 </div>
+
                 <div class="right-buttons">
                   <button class="btn-anterior" 
                           (click)="anteriorQuestao()" 
@@ -195,7 +211,7 @@
                     Próxima
                   </button>
                 </div>
-              </div>                          
+              </div>
             </div>
           </div>
         </div>
