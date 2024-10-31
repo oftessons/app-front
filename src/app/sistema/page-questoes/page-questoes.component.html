@@ -163,12 +163,12 @@
               <!-- Adicione a exibição das porcentagens -->
               <div class="progress-container" *ngIf="porcentagens">
                 <h3>Porcentagens de Respostas:</h3>
-                <div *ngFor="let key of porcentagens.keys()">
+                <div class="itens-progresso" *ngFor="let key of porcentagens.keys()">
                   <div class="progress-label">
-                    {{ key }}
+                    {{ key }})
                   </div>
                   <div class="progress">
-                    <div class="progress-inner" [ngStyle]="{'width.%': porcentagens.get(key)}">
+                    <div class="progress-inner" [ngStyle]="{'width.%': porcentagens.get(key) | slice:0:-1}">
                       <span>{{ porcentagens.get(key) }}</span>
                     </div>
                   </div>

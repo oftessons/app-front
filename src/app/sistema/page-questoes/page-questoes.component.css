@@ -128,7 +128,7 @@
   display: flex;
   flex-direction: column;
   margin-top: 10px;
-  width: 25%; /* Ajuste a largura do contêiner geral */
+  width: 40%; /* Ajuste a largura do contêiner geral */
 }
 
 .progress-bar {
@@ -155,17 +155,22 @@
   margin-bottom: 10px;
 }
 
+.itens-progresso {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+
 .progress-inner {
   height: 40px;
-  background: #0056b3;
-  /* position: relative; */
+  background: #041E4E;
   transition: width 0.4s ease;
 }
 
 .progress-inner span {
   text-align: center;
   margin: 14px;
-  color: #ffffff;
+  color: #fff;
   font-weight: 700;
   font-size: 14px;
 }
@@ -203,6 +208,10 @@
 
   .questao-foto {
     max-width: 90%; /* Reduz a imagem um pouco em telas pequenas */
+  }
+
+  .progress-container {
+    width: 100%; /* Ajuste a largura do contêiner geral */
   }
 }
 
