@@ -234,5 +234,19 @@ export class QuestoesService {
     );
   }
 
+   // Método para obter acertos e erros de uma questão por ID
+   getAcertosErrosQuestao(idQuestao: number): Observable<Map<string, string>> {
+    const url = `${this.apiURL}/acertos-erros-questao/${idQuestao}`;
+
+    return this.http.get<Map<string, string>>(url).pipe(
+      catchError((error: HttpErrorResponse) => {
+        console.error('Erro ao recuperar acertos e erros da questão:', error);
+        return throwError('Erro ao recuperar acertos e erros da questão. Por favor, tente novamente.');
+      })
+    );
+  }
+
+
+
   
 }

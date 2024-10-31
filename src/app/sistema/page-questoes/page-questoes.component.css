@@ -123,6 +123,58 @@
   min-width: 100px;
 }
 
+/* PORECNTAGEM */
+.progress-container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+  width: 40%; /* Ajuste a largura do contêiner geral */
+}
+
+.progress-bar {
+  height: 48px;
+  background-color: #007bff;
+  text-align: center;
+  color: #000000;
+  border-radius: 8px;
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.progress-label {
+  margin-left: 8px;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.progress {
+  width: 100%;
+  background: #ffffff; 
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.itens-progresso {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+
+.progress-inner {
+  height: 40px;
+  background: #041E4E;
+  transition: width 0.4s ease;
+}
+
+.progress-inner span {
+  text-align: center;
+  margin: 14px;
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+}
+
 /* Ajuste para telas menores */
 @media (max-width: 768px) {
   .button-row {
@@ -156,6 +208,10 @@
 
   .questao-foto {
     max-width: 90%; /* Reduz a imagem um pouco em telas pequenas */
+  }
+
+  .progress-container {
+    width: 100%; /* Ajuste a largura do contêiner geral */
   }
 }
 

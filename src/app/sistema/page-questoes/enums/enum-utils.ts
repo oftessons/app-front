@@ -12,6 +12,8 @@ import { Relevancia } from "./relevancia"
 import { RelevanciaDescricao } from "./relevancia-descricao"
 import { QuantidadeDeQuestoesSelecionadas } from "./quant-questoes"
 import { QuantidadeDeQuestõesSelecionadasDescricoes } from "./quant-que-descricao"
+import { RespostasSimulado } from "./resp-simu"
+import { RespostasSimuladosDescricao } from "./resp-simu-descricao"
 
 export function getQuantidadeDeQuestõesSelecionadasDescricoes( quantidadeDeQuestoesSelecionadas:QuantidadeDeQuestoesSelecionadas): string{
   return QuantidadeDeQuestõesSelecionadasDescricoes[quantidadeDeQuestoesSelecionadas];
@@ -38,4 +40,8 @@ export function getDescricaoTipoDeProva(tipoDeProva: TipoDeProva): string {
 
 export function getDescricaoQuantidadeDeQuestoesSelecionadas(quantidadeDeQuestoesSelecionadas: QuantidadeDeQuestoesSelecionadas): string {
   return QuantidadeDeQuestõesSelecionadasDescricoes[quantidadeDeQuestoesSelecionadas];
+}
+
+export function getDescricaoRespostasSimulado(respostasSimulado: RespostasSimulado): string {
+  return RespostasSimuladosDescricao[respostasSimulado];
 }
