@@ -70,6 +70,7 @@ export class PageSimuladoComponent implements OnInit {
   resposta: string = '';
 
   respostas: any[] = []; // Array que armazena as respostas do usuário
+  respostasList: any[] = [];
   chart: any;
 
   questaoAtual: Questao | null = null;
@@ -148,8 +149,8 @@ export class PageSimuladoComponent implements OnInit {
   }
 
   finalizarSimulado() {
-    console.log('Respostas enviadas:', this.respostas);
-    this.simuladoService.finalizarSimulado(this.usuarioId, this.respostas).subscribe((resultado) => {
+    console.log('Respostas enviadas:', this.respostasList);
+    this.simuladoService.finalizarSimulado(this.usuarioId, this.respostasList).subscribe((resultado) => {
       console.log('Resultado da API:', resultado);
       this.gerarGrafico(resultado.acertos, resultado.erros);
     });
@@ -254,7 +255,7 @@ export class PageSimuladoComponent implements OnInit {
           }
   
           // Adicionar a resposta à lista de respostas do simulado
-          this.respostas.push({
+          this.respostasList.push({
             questaoId: questao.id,
             selecionarOpcao: this.selectedOption,
             correta: resposta.correct
@@ -347,6 +348,15 @@ export class PageSimuladoComponent implements OnInit {
       );
       if (tipoDeProvaSelecionado) {
         filtros.tipoDeProva = tipoDeProvaSelecionado;
+      }
+    }
+    if (this.selectedRespostasSimulado) {
+      const respostaSimuladoSelecionado = this.respostasSimulado.find(
+        (respostaSimulado) =>
+          this.getDescricaoRespostasSimulado(respostaSimulado) === this.selectedRespostasSimulado
+      );
+      if (respostaSimuladoSelecionado) {
+        filtros.questaoRespondida = respostaSimuladoSelecionado;
       }
     }
     if (this.selectedSubtema) {
