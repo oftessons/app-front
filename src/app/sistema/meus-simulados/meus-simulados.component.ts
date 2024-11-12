@@ -50,7 +50,16 @@ export class MeusSimuladosComponent implements OnInit {
   }
 
   editarSimulado(id: number): void {
-    this.router.navigate([`/simulados`, id]);
+    this.simuladoService.obterSimuladoPorId(id).subscribe(
+      (data) => {
+        console.log('Simulado:', data);
+        this.router.navigate(['/usuario/simulados'], { state: { simulado: data } });
+      },
+      (error) => {
+        alert('Erro ao obter simulado por ID');
+        console.error('Erro ao obter simulado por ID:', error);
+      }
+    )
   }
 
   deletarSimulado(id: number): void {

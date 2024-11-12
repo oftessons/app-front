@@ -27,6 +27,7 @@ import { QuantidadeDeQuestoesSelecionadas } from '../page-questoes/enums/quant-q
 import { RespostasSimulado } from '../page-questoes/enums/resp-simu';
 import Chart from 'chart.js';
 import { Router } from '@angular/router';
+import {QuantidadeDeQuestõesSelecionadasDescricoes} from '../page-questoes/enums/quant-que-descricao';
 
 declare var bootstrap: any;
 
@@ -134,16 +135,28 @@ export class PageSimuladoComponent implements OnInit {
 
   ngOnInit() {
     console.log('Componente inicializado');
+    const meuSimulado = history.state.simulado;
+    console.log('Valores passados:', meuSimulado);
     this.dados = this.obterDados();
     console.log('Dados:', this.dados);
     this.obterPerfilUsuario();
+    if(meuSimulado){
+        this.selectedAno = meuSimulado.ano;
+        this.selectedTipoDeProva = meuSimulado.tipoDeProva;
+        this.selectedTema = meuSimulado.tema;
+        this.selectedSubtema = meuSimulado.subtema;
+        this.selectedDificuldade = meuSimulado.dificuldade;
+        this.selectedQuantidadeDeQuestoesSelecionadas = meuSimulado.qtdQuestoes;
+        this.selectedRespostasSimulado = meuSimulado.respostasSimulado;
+    }
     this.tiposDeProvaDescricoes = this.tiposDeProva.map(tipoDeProva => this.getDescricaoTipoDeProva(tipoDeProva));
     this.anosDescricoes = this.anos.map(ano => this.getDescricaoAno(ano));
     this.dificuldadesDescricoes = this.dificuldades.map(dificuldade => this.getDescricaoDificuldade(dificuldade));
     this.subtemasDescricoes = this.subtemas.map(subtema => this.getDescricaoSubtema(subtema));
     this.temasDescricoes = this.temas.map(tema => this.getDescricaoTema(tema));
     this.quantidadeDeQuestoesSelecionadasDescricoes = this.quantidadeDeQuestoesSelecionadas.map(
-      quantidadeDeQuestoesSelecionadas => this.getDescricaoQuantidadeDeQuestoesSelecionadas(quantidadeDeQuestoesSelecionadas));
+        quantidadeDeQuestoesSelecionadas => this.getDescricaoQuantidadeDeQuestoesSelecionadas(quantidadeDeQuestoesSelecionadas));
+      
     this.respostasSimuladoDescricao = this.respostasSimulado.map(
       respostasSimulado => this.getDescricaoRespostasSimulado(respostasSimulado));
   }
@@ -477,18 +490,25 @@ export class PageSimuladoComponent implements OnInit {
     nomeSimulado: string,
     descricaoSimulado: string
   ): void {
-    const simulado: Simulado = {
+    // const qtdQuestoesValue = this.selectedQuantidadeDeQuestoesSelecionadas?.split(' ')[0];
+    const qtdQuestoesValue = this.selectedQuantidadeDeQuestoesSelecionadas;
+    const simulado: any = { 
       nomeSimulado: nomeSimulado,
       assunto: descricaoSimulado,
-      quantidadeDeQuestoesSelecionadas: this.selectedQuantidadeDeQuestoesSelecionadas,
+      qtdQuestoes: qtdQuestoesValue,
       ano: this.selectedAno,
       tema: this.selectedTema,
       dificuldade: this.selectedDificuldade,
       tipoDeProva: this.selectedTipoDeProva,
       subtema: this.selectedSubtema,
       questaoIds: this.idsQuestoes,
+      respostasSimulado: this.selectedRespostasSimulado,
     };
-
+    console.log('Simulado:', simulado);
+    if (!simulado.nomeSimulado || !simulado.assunto || simulado.qtdQuestoes == null){
+      alert('Campos obrigatórios estão faltando: Nome, Assunto ou Quantidade de questões.');
+      return;
+    }
     this.simuladoService.cadastrarSimulado(this.usuarioId, simulado).subscribe(
       (response) => {
         // Exibir mensagem de sucesso
