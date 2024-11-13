@@ -173,12 +173,12 @@ export class PageSimuladoComponent implements OnInit {
   }
 
   gerarGrafico(acertos: number, erros: number) {
-    console.log('Acertos:', acertos, 'Erros:', erros);  // Verifique os valores aqui
+    console.log('Acertos:', acertos, 'Erros:', erros);  
     if (this.chart) {
       this.chart.destroy();
     }
     this.chart = new Chart('graficoBarras', {
-      type: 'bar',
+      type: 'pie',
       data: {
         labels: ['Acertos', 'Erros'],
         datasets: [{
@@ -189,17 +189,15 @@ export class PageSimuladoComponent implements OnInit {
       },
       options: {
         responsive: true,
-        scales: {
-          yAxes: [{
-            ticks: {
-              beginAtZero: true,
-              precision: 0
-            }
-          }]
+        plugins: {
+          legend: {
+            position: 'top',
+          }
         }
       }
     });
   }
+  
 
   obterDados() {
     // Simula a obtenção de dados

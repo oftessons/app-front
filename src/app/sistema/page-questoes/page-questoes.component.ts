@@ -101,6 +101,12 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
   porcentagens: Map<string, string> | null = null;
 
+  questaoAtualIndex = 0;
+  respostaUsuario = '';
+  mostrarPorcentagem = false;
+  porcentagemAcertos = 0;
+  acertos = 0;
+
   constructor(
     private questoesService: QuestoesService,
     private filtroService: FiltroService,
@@ -236,72 +242,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     );
   }
 
-  responderQuestao(questao: Questao | null): void {
-    if (!this.jaRespondeu) {  // Verificar se o usuário já respondeu
-      if (!questao) {
-        console.error('Questão atual é nula.');
-        this.resposta = 'Nenhuma questão selecionada.';
-        return;
-      }
   
-      if (this.selectedOption) {
-        const alternativaSelecionada = questao.alternativas.find(
-          (a) => a.texto === this.selectedOption
-        );
-  
-        if (alternativaSelecionada) {
-          const respostaDTO: RespostaDTO = {
-            questaoId: questao.id,
-            selecionarOpcao: this.selectedOption,
-          };
-  
-          const idUser = parseInt(this.usuario.id);
-  
-          // Chamamos o serviço para verificar a resposta
-          this.questoesService.checkAnswer(questao.id, idUser, respostaDTO).subscribe(
-            (resposta: Resposta) => {
-              this.isRespostaCorreta = resposta.correct;
-              this.respostaVerificada = true; // Verificação foi realizada
-              this.resposta = resposta.correct
-                ? 'Resposta correta!'
-                : 'Resposta incorreta. Tente novamente.';
-  
-              // Marque que o usuário já respondeu para desativar o botão
-              this.jaRespondeu = true;
-  
-              // Verificar a resposta do usuário e exibir o resultado
-              this.verificarRespostaUsuario(resposta);
-
-              // Atualizar manualmente as porcentagens no front-end
-              if (this.porcentagens) {
-                const currentPercentageString = this.porcentagens.get(this.selectedOption) || '0%';
-                const currentPercentage = parseFloat(currentPercentageString.replace('%', ''));
-                const newPercentage = currentPercentage + 1;
-                this.porcentagens.set(this.selectedOption, `${newPercentage}%`);
-              } else {
-                this.porcentagens = new Map([[this.selectedOption, '1%']]);
-              }
-
-              // Após enviar a resposta, obtenha as porcentagens de respostas
-              this.questoesService.getAcertosErrosQuestao(questao.id).subscribe(
-                (data) => {
-                  this.porcentagens = new Map(Object.entries(data));
-                },
-                (error) => {
-                  console.error('Erro ao obter acertos e erros da questão:', error);
-                }
-              );
-            },
-            (error) => {
-              this.resposta =
-                'Ocorreu um erro ao verificar a resposta. Por favor, tente novamente mais tarde.';
-            }
-          );
-        }
-      }
-    }
-  }
-
 // Método para verificar a resposta do usuário e exibir gabarito
 verificarRespostaUsuario(resposta: Resposta) {
   this.selectedOption = resposta.opcaoSelecionada;
@@ -478,7 +419,6 @@ verificarRespostaUsuario(resposta: Resposta) {
     return mensagemUsuarioTratamento.slice(0, -2) + '.';
   }
   
-
   anteriorQuestao() {
     this.jaRespondeu = false; 
     if (this.paginaAtual > 0) {
@@ -497,10 +437,12 @@ verificarRespostaUsuario(resposta: Resposta) {
           if (resposta) {
             this.verificarRespostaUsuario(resposta);
             this.mostrarGabarito = true;
+            this.mostrarPorcentagem = true; // Exibe a barra de porcentagem se a questão foi respondida anteriormente
           } else {
             this.selectedOption = '';
             this.isRespostaCorreta = false;
             this.mostrarGabarito = false;
+            this.mostrarPorcentagem = false; // Oculta a barra de porcentagem se a questão não foi respondida
             this.respostaCorreta = '';
             this.respostaErrada = '';
             this.respostaVerificada = false;
@@ -514,34 +456,114 @@ verificarRespostaUsuario(resposta: Resposta) {
       this.message = 'Não há mais questões disponíveis.';
     }
   }
-
+  
+  
   proximaQuestao() {
     this.jaRespondeu = false;
+  
     if (this.paginaAtual < this.questoes.length - 1) {
       this.paginaAtual++;
       this.questaoAtual = this.questoes[this.paginaAtual];
   
+      // Resetar variáveis relacionadas à resposta
       this.selectedOption = '';
       this.isRespostaCorreta = false;
-      this.mostrarGabarito = false; // Gabarito desativado
+      this.mostrarGabarito = false;
       this.respostaCorreta = '';
       this.respostaErrada = '';
       this.respostaVerificada = false;
   
+      // Garantir que a barra de progresso seja redefinida
+      this.mostrarPorcentagem = false;
+      this.porcentagemAcertos = 0;
+  
       this.questoesService.questaoRespondida(this.usuarioId, this.questaoAtual.id).subscribe({
         next: (resposta) => {
-          if (resposta) {
+          if (resposta) { 
             this.verificarRespostaUsuario(resposta);
+            // Exibe a barra de progresso se a questão já foi respondida
+            this.mostrarPorcentagem = true;
           }
         },
         error: (erro) => {
           console.error('Erro ao verificar a resposta:', erro);
         },
       });
-    } else {
-      this.message = 'Não há mais questões disponíveis.';
     }
   }
+  
+  
+  
+  responderQuestao(questao: Questao | null): void {
+    if (!this.jaRespondeu) {  // Verificar se o usuário já respondeu
+      if (!questao) {
+        console.error('Questão atual é nula.');
+        this.resposta = 'Nenhuma questão selecionada.';
+        return;
+      }
+  
+      if (this.selectedOption) {
+        const alternativaSelecionada = questao.alternativas.find(
+          (a) => a.texto === this.selectedOption
+        );
+  
+        if (alternativaSelecionada) {
+          const respostaDTO: RespostaDTO = {
+            questaoId: questao.id,
+            selecionarOpcao: this.selectedOption,
+          };
+  
+          const idUser = parseInt(this.usuario.id);
+  
+          // Chamamos o serviço para verificar a resposta
+          this.questoesService.checkAnswer(questao.id, idUser, respostaDTO).subscribe(
+            (resposta: Resposta) => {
+              this.isRespostaCorreta = resposta.correct;
+              this.respostaVerificada = true; // Verificação foi realizada
+              this.resposta = resposta.correct
+                ? 'Resposta correta!'
+                : 'Resposta incorreta. Tente novamente.';
+  
+              // Marque que o usuário já respondeu para desativar o botão
+              this.jaRespondeu = true;
+  
+              // Verificar a resposta do usuário e exibir o resultado
+              this.verificarRespostaUsuario(resposta);
+  
+              // Exibe a barra de porcentagem após o usuário responder
+              this.mostrarPorcentagem = true;
+  
+              // Atualizar manualmente as porcentagens no front-end
+              if (this.porcentagens) {
+                const currentPercentageString = this.porcentagens.get(this.selectedOption) || '0%';
+                const currentPercentage = parseFloat(currentPercentageString.replace('%', ''));
+                const newPercentage = currentPercentage + 1;
+                this.porcentagens.set(this.selectedOption, `${newPercentage}%`);
+              } else {
+                this.porcentagens = new Map([[this.selectedOption, '1%']]);
+              }
+  
+              // Após enviar a resposta, obtenha as porcentagens de respostas
+              this.questoesService.getAcertosErrosQuestao(questao.id).subscribe(
+                (data) => {
+                  this.porcentagens = new Map(Object.entries(data));
+                },
+                (error) => {
+                  console.error('Erro ao obter acertos e erros da questão:', error);
+                }
+              );
+            },
+            (error) => {
+              this.resposta =
+                'Ocorreu um erro ao verificar a resposta. Por favor, tente novamente mais tarde.';
+            }
+          );
+        }
+      }
+    }
+  }
+  
+ 
   
 
   abrirModal(): void {
