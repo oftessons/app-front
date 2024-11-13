@@ -65,6 +65,15 @@ export class PageFiltroComponent implements OnInit {
   }
 
   editarFiltro(id: number): void {
-    this.router.navigate(['/editar-filtro', id]); // Navega para a rota de edição
+    this.filtroService.getFiltroById(id).subscribe(
+      (data) => {
+        console.log('Filtro:', data);
+        this.router.navigate(['/usuario/questoes'], { state: { questao: data } });
+      },
+      (error) => {
+        alert('Erro ao obter filtro por ID');
+        console.error('Erro ao obter simulado por ID:', error);
+      }
+    )
   }
 }
