@@ -12,8 +12,8 @@ export class SimuladoService {
   constructor(private http: HttpClient) {}
 
   
-  finalizarSimulado(idUser: number, respostas: any[]) {
-    return this.http.post<any>(`${this.apiURL}/finalizar/${idUser}`, respostas);
+  finalizarSimulado(idUser: number, respostasEnviadas: any[]) {
+    return this.http.post<any>(`${this.apiURL}/finalizar/${idUser}`, respostasEnviadas);
   }
 
   // Método para cadastrar um novo simulado
