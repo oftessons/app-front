@@ -216,6 +216,12 @@ editorConfig4 = {
         case 'fotoDaRespostaDois':
           this.fotoDaRespostaDois = file;
           break;
+          case 'fotoDaRespostaTres':
+          this.fotoDaRespostaTres = file;
+          break;
+          case 'fotoDaRespostaQuatro':
+          this.fotoDaRespostaQuatro = file;
+          break;
         default:
           break;
       }
@@ -267,8 +273,18 @@ editorConfig4 = {
 
 onSubmit(): void {
     console.log('Form data:', this.questaoDTO);
+
+    const quillEditor4 = document.querySelector('#editor4 .ql-editor');
+    if (quillEditor4) {
+      this.questaoDTO.comentarioDaQuestaoQuatro = quillEditor4.innerHTML;
+    }
+
+    const quillEditor3 = document.querySelector('#editor3 .ql-editor');
+    if (quillEditor3) {
+      this.questaoDTO.comentarioDaQuestaoTres = quillEditor3.innerHTML;
+    }
   
-    const quillEditor2 = document.querySelector('#editor .ql-editor');
+    const quillEditor2 = document.querySelector('#editor2 .ql-editor');
     if (quillEditor2) {
       this.questaoDTO.comentarioDaQuestaoDois = quillEditor2.innerHTML;
     }
