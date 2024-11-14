@@ -297,6 +297,14 @@ onSubmit(): void {
       console.log("fotoDaRespostaDois: passo");
       this.formData.append('fotoDaRespostaDoisArquivo', this.fotoDaRespostaDois);
     }
+    if (this.fotoDaRespostaTres) {
+      console.log("fotoDaRespostaTres: passo");
+      this.formData.append('fotoDaRespostaTresArquivo', this.fotoDaRespostaTres);
+    }
+    if (this.fotoDaRespostaQuatro) {
+      console.log("fotoDaRespostaQuatro: passo");
+      this.formData.append('fotoDaRespostaQuatroArquivo', this.fotoDaRespostaQuatro);
+    }
     if (this.questaoDTO.alternativas[0].foto) {
       this.formData.append('A', this.questaoDTO.alternativas[0].foto);
     }
