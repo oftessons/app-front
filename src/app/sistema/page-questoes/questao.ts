@@ -28,11 +28,13 @@ export class Questao {
   // fotoDaResposta!: File;
   fotoDaRespostaUm!: File;
   fotoDaRespostaDois!: File;
+  fotoDaRespostaTres!: File;
+  fotoDaRespostaQuatro!: File;
   comentarioDaQuestao!: string;
   // comentarioDaQuestaoUm!: string;
-  // comentarioDaQuestaoDois!: string;
-  // comentarioDaQuestaoTres!: string;
-  // comentarioDaQuestaoQuatro!: string;
+  comentarioDaQuestaoDois!: string;
+  comentarioDaQuestaoTres!: string;
+  comentarioDaQuestaoQuatro!: string;
   // comentarioDaQuestaoGeral!: string;
   referenciaBi!: string;
   comentadorDaQuestao!: string;
@@ -67,6 +69,9 @@ export class Questao {
       fotoDaQuestao: this.fotoDaQuestao,
       fotoDaRespostaUm: this.fotoDaRespostaUm,
       fotoDaRespostaDois: this.fotoDaRespostaDois,
+      fotoDaRespopstaTres: this.fotoDaRespostaTres,
+      fotoDaRespostaQuatro: this.fotoAfirmacaoQuatro,
+
 
       fotoDaQuestaoUrl: this.fotoDaQuestaoUrl,
       fotoDaRespostaUmUrl: this.fotoDaRespostaUmUrl,
@@ -75,9 +80,9 @@ export class Questao {
       // fotoDaResposta: this.fotoDaResposta,
       comentarioDaQuestao: this.comentadorDaQuestao,
       // comentarioDaQuestaoUm: this.comentarioDaQuestaoUm,
-      // comentarioDaQuestaoDois: this.comentarioDaQuestaoDois,
-      // comentarioDaQuestaoTres: this.comentarioDaQuestaoTres,
-      // comentarioDaQuestaoQuatro: this.comentarioDaQuestaoQuatro,
+      comentarioDaQuestaoDois: this.comentarioDaQuestaoDois,
+      comentarioDaQuestaoTres: this.comentarioDaQuestaoTres,
+      comentarioDaQuestaoQuatro: this.comentarioDaQuestaoQuatro,
       // comentarioDaQuestaoGeral: this.comentarioDaQuestaoGeral,
       referenciaBi: this.referenciaBi,
       comentadorDaQuestao: this.comentadorDaQuestao,

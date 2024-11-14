@@ -36,6 +36,8 @@ export class CadastroQuestaoComponent implements OnInit,  AfterViewInit {
   fotoDaQuestaoTres: File | null = null;
   fotoDaRespostaUm: File | null = null;
   fotoDaRespostaDois: File | null = null;
+  fotoDaRespostaTres: File | null = null;
+  fotoDaRespostaQuatro: File | null = null;
   imagePreviews: { [key: string]: string | ArrayBuffer | null } = {};
   id!: number;
   selectedAlternativa: number | undefined;
@@ -63,6 +65,17 @@ editorConfig1 = {
   toolbar: '#toolbar1'
 };
 
+editorConfig2 = {
+  toolbar: '#toolbar2'
+};
+
+editorConfig3 = {
+  toolbar: '#toolbar3'
+};
+
+editorConfig4 = {
+  toolbar: '#toolbar4'
+};
 
   constructor(
     private questoesService: QuestoesService,
@@ -111,6 +124,39 @@ editorConfig1 = {
   }
 
   ngAfterViewInit(): void {
+    const quill4 = new Quill('#editor4', {
+      modules: {
+        toolbar: this.editorConfig4.toolbar
+      },
+      theme: 'snow'
+    });
+
+    quill4.on('text-change', () => {
+      this.questaoDTO.comentarioDaQuestaoQuatro = quill4.root.innerHTML;
+    });
+
+    const quill3 = new Quill('#editor3', {
+      modules: {
+        toolbar: this.editorConfig3.toolbar
+      },
+      theme: 'snow'
+    });
+
+    quill3.on('text-change', () => {
+      this.questaoDTO.comentarioDaQuestaoTres = quill3.root.innerHTML;
+    });
+
+    const quill2 = new Quill('#editor2', {
+      modules: {
+        toolbar: this.editorConfig2.toolbar
+      },
+      theme: 'snow'
+    });
+
+    quill2.on('text-change', () => {
+      this.questaoDTO.comentarioDaQuestaoDois = quill2.root.innerHTML;
+    });
+
     const quill = new Quill('#editor', {
       modules: {
         toolbar: this.editorConfig.toolbar
@@ -138,9 +184,6 @@ editorConfig1 = {
     getEditorContent() {
       console.log(this.editorContent);
     }
-
-
-  
 
    onAlternativaChange(index: number) {
     this.selectedAlternativa = index;
@@ -225,7 +268,11 @@ editorConfig1 = {
 onSubmit(): void {
     console.log('Form data:', this.questaoDTO);
   
-    // Ensure the editor content is up-to-date
+    const quillEditor2 = document.querySelector('#editor .ql-editor');
+    if (quillEditor2) {
+      this.questaoDTO.comentarioDaQuestaoDois = quillEditor2.innerHTML;
+    }
+
     const quillEditor = document.querySelector('#editor .ql-editor');
     if (quillEditor) {
       this.questaoDTO.comentarioDaQuestao = quillEditor.innerHTML;
