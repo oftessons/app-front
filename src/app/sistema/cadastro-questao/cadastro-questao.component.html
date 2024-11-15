@@ -398,14 +398,16 @@
       <label>Imagem do gabarito 2:</label>
       <div class="image-upload" (drop)="onDrop($event, 'fotoDaRespostaDois')" (dragover)="onDragOver($event)">
         <input type="file" id="fotoDaRespostaDois" name="fotoDaRespostaDois"
-          (change)="onFileSelected($event, 'fotoDaRespostaDois')" accept="image/*" style="display: none;" />
+          (change)="onFileSelected($event, 'fotoDaRespostaDois')" accept="image/*,video/*" style="display: none;" />
         <label for="fotoDaRespostaDois">
-          <div class="image-preview" id="imagePreview">
-            <img *ngIf="imagePreviews['fotoDaRespostaDois']" [src]="imagePreviews['fotoDaRespostaDois']"
-              alt="Image Preview" />
-            <span *ngIf="!imagePreviews['fotoDaRespostaDois']">
-              <img src="assets/imagens/img-foto.svg" style="width: 50px; opacity: 0.5;">
-              Clique para fazer upload da imagem
+          <div class="foto-preview" id="fotoPreview">
+            <ng-container *ngIf="fotoPreviews['fotoDaRespostaDois']">
+              <img *ngIf="isImage(fotoPreviews['fotoDaRespostaDois'])" [src]="fotoPreviews['fotoDaRespostaDois']" alt="Image Preview" />
+              <video *ngIf="isVideo(fotoPreviews['fotoDaRespostaDois'])" [src]="fotoPreviews['fotoDaRespostaDois']" controls></video>
+            </ng-container>
+            <span *ngIf="!fotoPreviews['fotoDaRespostaDois']" class="upload-placeholder">
+              <img src="assets/imagens/img-foto.svg" class="upload-icon">
+              <p>Clique para fazer upload da imagem ou vídeo</p>
             </span>
           </div>
         </label>
@@ -472,15 +474,17 @@
     <div class="form-group">
       <label>Imagem do gabarito 3:</label>
       <div class="image-upload" (drop)="onDrop($event, 'fotoDaRespostaTres')" (dragover)="onDragOver($event)">
-        <input type="file" id="fotoDaRespostaTres" name="fotoDaRespostaDois"
-          (change)="onFileSelected($event, 'fotoDaRespostaTres')" accept="image/*" style="display: none;" />
+        <input type="file" id="fotoDaRespostaTres" name="fotoDaRespostaTres"
+          (change)="onFileSelected($event, 'fotoDaRespostaTres')" accept="image/*,video/*" style="display: none;" />
         <label for="fotoDaRespostaTres">
-          <div class="image-preview" id="imagePreview">
-            <img *ngIf="imagePreviews['fotoDaRespostaTres']" [src]="imagePreviews['fotoDaRespostaTres']"
-              alt="Image Preview" />
-            <span *ngIf="!imagePreviews['fotoDaRespostaTres']">
-              <img src="assets/imagens/img-foto.svg" style="width: 50px; opacity: 0.5;">
-              Clique para fazer upload da imagem
+          <div class="foto-preview" id="fotoPreviewTres">
+            <ng-container *ngIf="fotoPreviews['fotoDaRespostaTres']">
+              <img *ngIf="isImage(fotoPreviews['fotoDaRespostaTres'])" [src]="fotoPreviews['fotoDaRespostaTres']" alt="Image Preview" />
+              <video *ngIf="isVideo(fotoPreviews['fotoDaRespostaTres'])" [src]="fotoPreviews['fotoDaRespostaTres']" controls></video>
+            </ng-container>
+            <span *ngIf="!fotoPreviews['fotoDaRespostaTres']" class="upload-placeholder">
+              <img src="assets/imagens/img-foto.svg" class="upload-icon">
+              <p>Clique para fazer upload da imagem ou vídeo</p>
             </span>
           </div>
         </label>
@@ -532,15 +536,17 @@
     <div class="form-group">
       <label>Imagem do gabarito 4:</label>
       <div class="image-upload" (drop)="onDrop($event, 'fotoDaRespostaQuatro')" (dragover)="onDragOver($event)">
-        <input type="file" id="fotoDaRespostaQuatro" name="fotoDaRespostaDois"
-          (change)="onFileSelected($event, 'fotoDaRespostaQuatro')" accept="image/*" style="display: none;" />
+        <input type="file" id="fotoDaRespostaQuatro" name="fotoDaRespostaQuatro"
+          (change)="onFileSelected($event, 'fotoDaRespostaQuatro')" accept="image/*,video/*" style="display: none;" />
         <label for="fotoDaRespostaQuatro">
-          <div class="image-preview" id="imagePreview">
-            <img *ngIf="imagePreviews['fotoDaRespostaQuatro']" [src]="imagePreviews['fotoDaRespostaQuatros']"
-              alt="Image Preview" />
-            <span *ngIf="!imagePreviews['fotoDaRespostaQuatro']">
-              <img src="assets/imagens/img-foto.svg" style="width: 50px; opacity: 0.5;">
-              Clique para fazer upload da imagem
+          <div class="foto-preview" id="fotoPreviewQuatro">
+            <ng-container *ngIf="fotoPreviews['fotoDaRespostaQuatro']">
+              <img *ngIf="isImage(fotoPreviews['fotoDaRespostaQuatro'])" [src]="fotoPreviews['fotoDaRespostaQuatro']" alt="Image Preview" />
+              <video *ngIf="isVideo(fotoPreviews['fotoDaRespostaQuatro'])" [src]="fotoPreviews['fotoDaRespostaQuatro']" controls></video>
+            </ng-container>
+            <span *ngIf="!fotoPreviews['fotoDaRespostaQuatro']" class="upload-placeholder">
+              <img src="assets/imagens/img-foto.svg" class="upload-icon">
+              <p>Clique para fazer upload da imagem ou vídeo</p>
             </span>
           </div>
         </label>
