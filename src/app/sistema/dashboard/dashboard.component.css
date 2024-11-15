@@ -45,6 +45,7 @@
 .p-title {
   color: #080808;
   font-size: 24px;
+  font-weight: 700;
   font-family: "Nunito Sans", sans-serif;
 }
 .icon {
@@ -67,6 +68,7 @@
 
 .btn-pesquisa {
   color: #080808;
+  font-weight: 500;
 }
 .btn-pesquisa:hover {
   color: #256cd0;
