@@ -28,6 +28,7 @@ import { RespostasSimulado } from '../page-questoes/enums/resp-simu';
 import Chart from 'chart.js';
 import { Router } from '@angular/router';
 import {QuantidadeDeQuestõesSelecionadasDescricoes} from '../page-questoes/enums/quant-que-descricao';
+import { DomSanitizer, SafeHtml, SafeResourceUrl } from '@angular/platform-browser';
 
 declare var bootstrap: any;
 
@@ -124,13 +125,16 @@ export class PageSimuladoComponent implements OnInit {
   quantidadeDeQuestoesSelecionadasDescricoes: string[] = [];
   respostasSimuladoDescricao: string[] = [];
 
+  mostrarFiltros: boolean = false;
+
 
   constructor(
     private questoesService: QuestoesService,
     private filtroService: FiltroService,
     private simuladoService: SimuladoService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private sanitizer: DomSanitizer
   ) {}
 
   ngOnInit() {
@@ -573,5 +577,21 @@ export class PageSimuladoComponent implements OnInit {
 
   backHome() {
     this.router.navigate(['usuario/dashboard']);
+  }
+
+  isImage(url: string): boolean {
+    return url.match(/\.(jpeg|jpg|gif|png)$/) != null;
+  }
+
+  isVideo(url: string): boolean {
+    return url.match(/\.(mp4|webm|ogg)$/) != null;
+  }
+
+  sanitizeVideoUrl(url: string): SafeResourceUrl {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  }
+
+  toggleFiltros() {
+    this.mostrarFiltros = !this.mostrarFiltros;
   }
 }

@@ -34,6 +34,14 @@
   margin-bottom: 10px;
 }
 
+.questao-video {
+  width: 500px;
+  height: auto;
+  display: block;
+  margin-bottom: 16px;
+  margin: 10px auto;
+}
+
 .identificadores-questao {
   display: flex;
   color: #101010;
@@ -443,7 +451,6 @@
   cursor: not-allowed;
 }
 
-
 .buttons-simulado {
   display: flex;
   justify-content: center;
@@ -541,7 +548,7 @@ canvas {
   cursor: pointer;
   font-size: 16px;
   color: #fff;
-  background: #3B5FA0;
+  background: #3b5fa0;
 }
 
 .alternativa-texto {
@@ -553,6 +560,16 @@ canvas {
 .alternativa-comentario {
   font-size: 14px;
   color: #000000;
+}
+
+.filtros-container {
+  max-height: 1000px;
+  overflow: hidden;
+  transition: max-height 0.8s ease-in-out, padding 0.8s ease-in-out;
+}
+
+.filtros-container-open {
+  max-height: 0;
 }
 
 /* Media Query para telas menores */
