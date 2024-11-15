@@ -176,7 +176,28 @@ textarea {
   width: 100%;
   text-align: center;
   padding: 20px;
+}
+
+.foto-preview {
+  max-width: 100%;
+  width: 300px;
+  height: auto;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  padding: 16px;
   cursor: pointer;
+  border: 1px solid #dee2e6;
+  background: #f8f9fa;
+}
+
+.foto-preview img,
+.foto-preview video {
+  max-width: 100%;
+  height: auto;
+  border-radius: 5px;
 }
 
 .image-upload input[type="file"] {
@@ -189,21 +210,16 @@ textarea {
   cursor: pointer;
 }
 
-.image-preview {
+.upload-placeholder {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  height: 100px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 10px;
 }
 
-.image-preview img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: cover;
-  border-radius: 5px;
+.upload-icon {
+  width: 50px;
+  opacity: 0.5;
+  margin-bottom: 10px;
 }
 
 .cont-imgs {
@@ -254,7 +270,7 @@ textarea {
     flex-direction: column;
   }
 
-  .col-imagens{
+  .col-imagens {
     display: flex;
     flex-direction: column !important;
   }
@@ -426,8 +442,8 @@ input[type="checkbox"] {
 }
 
 .ql-container {
-  border: 1px solid #ced4da; 
-  height: 250px; 
+  border: 1px solid #ced4da;
+  height: 250px;
 }
 
 .ql-editor {
@@ -448,7 +464,7 @@ input[type="checkbox"] {
   height: auto;
 }
 
-.col-imagens{
+.col-imagens {
   display: flex;
   flex-direction: row;
   gap: 24px;

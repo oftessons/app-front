@@ -5,16 +5,6 @@
       <h2>{{ questaoDTO.id ? 'Edição da Questão' : 'Cadastro da Questão' }}</h2>
     </div>
     <form class="form-cad" #questaoForm="ngForm" (ngSubmit)="onSubmit()">
-      <div class="row">
-        <div class="col-md-12">
-          <div *ngIf="successMessage" class="alert alert-success" role="alert">
-            {{ successMessage }}
-          </div>
-          <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
-            {{ errorMessage }}
-          </div>
-        </div>
-      </div>
       <div class="row" *ngIf="questaoDTO.id">
         <div class="col-md-6">
           <div class="form-group">
@@ -176,26 +166,22 @@
         <hr class="line">
       </div>
       <div class="cont-imgs">
-        <div class="row">
-          <div class="col-md-10">
-            <div class="form-group">
-              <div class="image-upload" (drop)="onDrop($event, 'fotoDaQuestao')" (dragover)="onDragOver($event)">
-                <input type="file" id="fotoDaQuestao" name="fotoDaQuestao"
-                  (change)="onFileSelected($event, 'fotoDaQuestao')" accept="image/*,video/*" style="display: none;" />
-                <label for="fotoDaQuestao">
-                  <div class="foto-preview" id="fotoPreview">
-                    <ng-container *ngIf="fotoPreviews['fotoDaQuestao']">
-                      <img *ngIf="isImage(fotoPreviews['fotoDaQuestao'])" [src]="fotoPreviews['fotoDaQuestao']" alt="Image Preview" />
-                      <video *ngIf="isVideo(fotoPreviews['fotoDaQuestao'])" [src]="fotoPreviews['fotoDaQuestao']" controls></video>
-                    </ng-container>
-                    <span *ngIf="!fotoPreviews['fotoDaQuestao']">
-                      <img src="assets/imagens/img-foto.svg" style="width: 50px; opacity: 0.5;">
-                      Clique para fazer upload da imagem ou vídeo
-                    </span>
-                  </div>
-                </label>
+        <div class="form-group">
+          <div class="image-upload" (drop)="onDrop($event, 'fotoDaQuestao')" (dragover)="onDragOver($event)">
+            <input type="file" id="fotoDaQuestao" name="fotoDaQuestao"
+              (change)="onFileSelected($event, 'fotoDaQuestao')" accept="image/*,video/*" style="display: none;" />
+            <label for="fotoDaQuestao">
+              <div class="foto-preview" id="fotoPreview">
+                <ng-container *ngIf="fotoPreviews['fotoDaQuestao']">
+                  <img *ngIf="isImage(fotoPreviews['fotoDaQuestao'])" [src]="fotoPreviews['fotoDaQuestao']" alt="Image Preview" />
+                  <video *ngIf="isVideo(fotoPreviews['fotoDaQuestao'])" [src]="fotoPreviews['fotoDaQuestao']" controls></video>
+                </ng-container>
+                <span *ngIf="!fotoPreviews['fotoDaQuestao']" class="upload-placeholder">
+                  <img src="assets/imagens/img-foto.svg" style="width: 50px; opacity: 0.5;" class="upload-icon">
+                  Clique para fazer upload da imagem ou vídeo
+                </span>
               </div>
-            </div>
+            </label>
           </div>
         </div>
       </div>
@@ -503,7 +489,6 @@
       <div class="form-group">
         <label>Comentário do Gabarito 4:</label>
         <div id="toolbar4">
-          <!-- Add font size dropdown -->
           <select class="ql-header">
             <option value="1"></option>
             <option value="2"></option>
@@ -513,43 +498,29 @@
             <option value="6"></option>
             <option selected></option>
           </select>
-          <!-- Add font family dropdown -->
           <select class="ql-font">
             <option selected></option>
             <option value="serif"></option>
             <option value="monospace"></option>
           </select>
-            <!-- Add a bold button -->
             <button class="ql-bold"></button>
-            <!-- Add an italic button -->
             <button class="ql-italic"></button>
-            <!-- Add an underline button -->
             <button class="ql-underline"></button>
-            <!-- Adicione o seletor de cores -->
             <select class="ql-color"></select>
-            <!-- Adicione o seletor de cores de fundo -->
             <select class="ql-background"></select>
-            <!-- Add alignment buttons -->
             <select class="ql-align">
               <option selected></option>
               <option value="center"></option>
               <option value="right"></option>
               <option value="justify"></option>
             </select>
-            <!-- Add a list button -->
             <button class="ql-list" value="ordered"></button>
             <button class="ql-list" value="bullet"></button>
-            <!-- Add a link button -->
             <button class="ql-link"></button>
-            <!-- Add an image button -->
             <button class="ql-image"></button>
-            <!-- Add a video button -->
             <button class="ql-video"></button>
-            <!-- Add a clean button -->
             <button class="ql-clean"></button>
           </div>
-        
-        <!-- Quill Editor Container -->
         <div id="editor4" class="form-control" name="comentarioDaQuestaoQuatro"
           [(ngModel)]="questaoDTO.comentarioDaQuestaoQuatro">
         </div>
@@ -574,20 +545,6 @@
       </div>
     </div>
 
-    <!-- <div>
-      <div>
-        <hr class="line">
-        <span class="div-section">
-          Imagens da Resolução da Questão:
-        </span>
-        <hr class="line">
-      </div>
-      <div class="row">
-        <div class="col-imagens">
-        </div>
-      </div>
-    </div> -->
-
     <div>
       <hr class="line">
       <span class="div-section">
@@ -609,6 +566,16 @@
           <label>Nome do Professor Comentador da Questão: </label>
           <input type="text" class="form-control" name="comentadorDaQuestao"
             [(ngModel)]="questaoDTO.comentadorDaQuestao" placeholder="Digite o nome do professor comentador" />
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div *ngIf="successMessage" class="alert alert-success" role="alert">
+          {{ successMessage }}
+        </div>
+        <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+          {{ errorMessage }}
         </div>
       </div>
     </div>
