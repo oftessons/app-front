@@ -4,6 +4,10 @@
     
     <!-- Barra de progresso durante o carregamento -->
     <mat-progress-bar *ngIf="carregando" mode="indeterminate"></mat-progress-bar>
+
+    <div *ngIf="mensagemSucesso" class="alert alert-success custom-alert">
+      {{ mensagemSucesso }}
+    </div>
     
     <!-- Simulados ou mensagem de nenhum simulado -->
     <div *ngIf="!carregando">

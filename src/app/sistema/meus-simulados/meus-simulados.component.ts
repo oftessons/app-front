@@ -15,6 +15,8 @@ export class MeusSimuladosComponent implements OnInit {
   usuario!: Usuario;
   usuarioId!: number;
   carregando: boolean = true;  // Variável para indicar o estado de carregamento
+  mensagemSucesso: string = '';
+
 
   constructor(
     private simuladoService: SimuladoService,
@@ -63,17 +65,26 @@ export class MeusSimuladosComponent implements OnInit {
   }
 
   deletarSimulado(id: number): void {
-    console.log('Deletando simulado com ID:', id);
     this.simuladoService.deletarSimulado(id).subscribe(
       () => {
+        // Atualizar a lista de simulados
         this.simulados = this.simulados.filter(
           (simulado) => simulado.id !== id
         );
+  
+        // Definir a mensagem de sucesso
+        this.mensagemSucesso = 'Simulado Deletado com Sucesso.';
+        
+        // Esconder a mensagem após 3 segundos
+        setTimeout(() => {
+          this.mensagemSucesso = '';
+        }, 3000);
       },
       (error) => {
         console.error('Erro ao deletar o simulado', error);
       }
     );
   }
+  
 }
 

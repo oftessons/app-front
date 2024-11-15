@@ -15,6 +15,7 @@ export class PageFiltroComponent implements OnInit {
   usuario!: Usuario;
   usuarioId!: number;
   carregando: boolean = true; // Variável para controlar o estado de carregamento
+  mensagemSucesso: string = '';
 
   constructor(
     private filtroService: FiltroService,
@@ -56,13 +57,23 @@ export class PageFiltroComponent implements OnInit {
   deletarFiltro(id: number): void {
     this.filtroService.deletarFiltro(id).subscribe(
       () => {
-        this.carregarFiltros(); // Atualiza a lista de filtros após deletar
+        // Atualizar a lista de filtros após deletar
+        this.filtros = this.filtros.filter(filtro => filtro.id !== id);
+  
+        // Definir a mensagem de sucesso
+        this.mensagemSucesso = 'Filtro Deletado com Sucesso.';
+        
+        // Esconder a mensagem após 3 segundos
+        setTimeout(() => {
+          this.mensagemSucesso = '';
+        }, 3000);
       },
       (error) => {
         console.error('Erro ao deletar filtro:', error);
       }
     );
   }
+  
 
   editarFiltro(id: number): void {
     this.filtroService.getFiltroById(id).subscribe(
