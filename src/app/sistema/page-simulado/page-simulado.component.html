@@ -1,85 +1,93 @@
 <div class="container pt-5">
   <div class="container mt-4">
-    <h1 class="mt-4"> <span> | </span> Simulados</h1>
+    <div class="header">
+      <h1 class="mt-4"> <span> | </span> Simulados</h1>
+      <button class="btn-filtros" (click)="toggleFiltros()">
+      <img src="assets/imagens/q-f.svg" alt="Ícone do Filtro" class="icon">
+      Filtro Simulado
+      </button>
+    </div>
   </div>
-  <div class="container">
-    <div class="filters-container">
-      <div class="row">
-        <div class="col col-12 col-md-6 espaco-select">
-          <app-select-padrao
-            label="Quantidade de Questões"
-            [options]="quantidadeDeQuestoesSelecionadasDescricoes"
-            [(selectedValue)]="selectedQuantidadeDeQuestoesSelecionadas">
-          </app-select-padrao>
-        </div>
-        <div class="col col-12 col-md-6 espaco-select">
-          <app-select-padrao
-            label="Questões Respondidas"
-            [options]="respostasSimuladoDescricao"
-            [(selectedValue)]="selectedRespostasSimulado">
-          </app-select-padrao>
-        </div>
+  <div [ngClass]="{'filtros-container': true, 'filtros-container-open': mostrarFiltros}">
+    <div class="container">
+      <div class="filters-container">
+        <form #filtroForm="ngForm" (ngSubmit)="filtrarQuestoes()" class="consulta-form">
+          <div class="row">
+            <div class="col col-12 col-md-6 espaco-select">
+              <app-select-padrao
+                label="Quantidade de Questões"
+                [options]="quantidadeDeQuestoesSelecionadasDescricoes"
+                [(selectedValue)]="selectedQuantidadeDeQuestoesSelecionadas">
+              </app-select-padrao>
+            </div>
+            <div class="col col-12 col-md-6 espaco-select">
+              <app-select-padrao
+                label="Questões Respondidas"
+                [options]="respostasSimuladoDescricao"
+                [(selectedValue)]="selectedRespostasSimulado">
+              </app-select-padrao>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col col-12 col-md-6 espaco-select">
+              <app-select-padrao
+                    label="Ano"
+                    [options]="anosDescricoes"
+                    [(selectedValue)]="selectedAno">
+              </app-select-padrao>
+            </div>
+            <div class="col col-12 col-md-6 espaco-select">
+              <app-select-padrao
+                    label="Tipo de Prova"
+                    [options]="tiposDeProvaDescricoes"
+                    [(selectedValue)]="selectedTipoDeProva">
+              </app-select-padrao>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col col-12 col-md-6 espaco-select">
+              <app-select-padrao
+                  label="Tema"
+                  [options]="temasDescricoes"
+                  [(selectedValue)]="selectedTema">
+              </app-select-padrao>
+            </div>
+            <div class="col col-12 col-md-6 espaco-select">
+              <app-select-padrao
+                    label="Subtema"
+                    [options]="subtemasDescricoes"
+                    [(selectedValue)]="selectedSubtema">
+              </app-select-padrao>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col col-12 col-md-6 espaco-select">
+              <app-select-padrao
+                    label="Dificuldade"
+                    [options]="dificuldadesDescricoes"
+                    [(selectedValue)]="selectedDificuldade">
+              </app-select-padrao>
+            </div>
+            <div class="col col-12 col-md-6 espaco-select">
+              <app-input-padrao
+                  label="Pesquisar por palavra-chave"
+                  [(value)]="palavraChave"
+                  class="palavra-chave">
+                </app-input-padrao>       
+            </div>
+          </div>
+      
+          <div *ngIf="message" class="alert alert-info mt-3 alert-custom" role="alert">
+            {{ message }}
+          </div>
+  
+          <div class="button-row-filtro">
+            <button type="submit" class="btn-filtrar">Filtrar</button>
+            <button type="button" class="btn-filtrar-geral" (click)="LimparFiltro()">Limpar Filtro</button>
+            <button type="button" class="btn-salvar" (click)="abrirModal()">Salvar Simulado</button>
+          </div>
+        </form>
       </div>
-      <form #filtroForm="ngForm" (ngSubmit)="filtrarQuestoes()" class="consulta-form">
-        <div class="row">
-          <div class="col col-12 col-md-6 espaco-select">
-            <app-select-padrao
-                  label="Ano"
-                  [options]="anosDescricoes"
-                  [(selectedValue)]="selectedAno">
-            </app-select-padrao>
-          </div>
-          <div class="col col-12 col-md-6 espaco-select">
-            <app-select-padrao
-                  label="Tipo de Prova"
-                  [options]="tiposDeProvaDescricoes"
-                  [(selectedValue)]="selectedTipoDeProva">
-            </app-select-padrao>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col col-12 col-md-6 espaco-select">
-            <app-select-padrao
-                label="Tema"
-                [options]="temasDescricoes"
-                [(selectedValue)]="selectedTema">
-            </app-select-padrao>
-          </div>
-          <div class="col col-12 col-md-6 espaco-select">
-            <app-select-padrao
-                  label="Subtema"
-                  [options]="subtemasDescricoes"
-                  [(selectedValue)]="selectedSubtema">
-            </app-select-padrao>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col col-12 col-md-6 espaco-select">
-            <app-select-padrao
-                  label="Dificuldade"
-                  [options]="dificuldadesDescricoes"
-                  [(selectedValue)]="selectedDificuldade">
-            </app-select-padrao>
-          </div>
-          <div class="col col-12 col-md-6 espaco-select">
-            <app-input-padrao
-                label="Pesquisar por palavra-chave"
-                [(value)]="palavraChave"
-                class="palavra-chave">
-              </app-input-padrao>       
-          </div>
-        </div>
-    
-        <div *ngIf="message" class="alert alert-info mt-3 alert-custom" role="alert">
-          {{ message }}
-        </div>
-
-        <div class="button-row-filtro">
-          <button type="submit" class="btn-filtrar">Filtrar</button>
-          <button type="button" class="btn-filtrar-geral" (click)="LimparFiltro()">Limpar Filtro</button>
-          <button type="button" class="btn-salvar" (click)="abrirModal()">Salvar Simulado</button>
-        </div>
-      </form>
     </div>
   </div>
 
@@ -133,12 +141,24 @@
             </h3>
           </div>
           <div [innerHTML]="questaoAtual.enunciadoDaQuestao"></div>
-          <img *ngIf="questaoAtual?.fotoDaQuestaoUrl" [src]="questaoAtual?.fotoDaQuestaoUrl" alt="Foto da questão" class="questao-foto">
+          <ng-container *ngIf="questaoAtual?.fotoDaQuestaoUrl">
+            <img 
+              *ngIf="isImage(questaoAtual.fotoDaQuestaoUrl)" 
+              [src]="questaoAtual.fotoDaQuestaoUrl" 
+              alt="Foto da questão" 
+              class="questao-foto">
+            <video 
+              *ngIf="isVideo(questaoAtual.fotoDaQuestaoUrl)" 
+              [src]="questaoAtual.fotoDaQuestaoUrl" 
+              controls
+              controlsList="nodownload"  
+              class="questao-video">
+            </video>
+          </ng-container>
       
           <div class="row">
             <div class="col-md-12">
               <div class="form-group">
-                <label>Selecione a Alternativa:</label>
                 <div *ngFor="let alternativa of questaoAtual.alternativas; let i = index" class="alternativa">
                   <div class="alternativa-input-group">
                     <input 
