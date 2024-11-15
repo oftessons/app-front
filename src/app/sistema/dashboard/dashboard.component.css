@@ -34,6 +34,7 @@
   margin-top: 10px;
   background: #edb120;
   font-family: "Nunito Sans", sans-serif;
+  border: none !important;
 }
 
 .card-title {
