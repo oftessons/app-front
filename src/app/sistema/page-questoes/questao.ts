@@ -25,6 +25,8 @@ export class Questao {
   fotoDaQuestaoUrl!: string;
   fotoDaRespostaUmUrl!: string;
   fotoDaRespostaDoisUrl!: string;
+  fotoDaRespostaTresUrl!: string;
+  fotoDaRespostaQuatroUrl!: string;
   // fotoDaResposta!: File;
   fotoDaRespostaUm!: File;
   fotoDaRespostaDois!: File;
@@ -76,6 +78,8 @@ export class Questao {
       fotoDaQuestaoUrl: this.fotoDaQuestaoUrl,
       fotoDaRespostaUmUrl: this.fotoDaRespostaUmUrl,
       fotoDaRespostaDoisUrl: this.fotoDaRespostaDoisUrl,
+      fotoDaRespostaTresUrl: this.fotoDaRespostaTresUrl,
+      fotoDaRespostaQuatroUrl: this.fotoDaRespostaQuatroUrl,
 
       // fotoDaResposta: this.fotoDaResposta,
       comentarioDaQuestao: this.comentadorDaQuestao,

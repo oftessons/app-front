@@ -162,7 +162,7 @@
 
               <!-- Adicione a exibição das porcentagens -->
                
-              <div class="progress-container" *ngIf="porcentagens">
+              <div class="progress-container" *ngIf="mostrarPorcentagem && porcentagens">
                 <h3>Porcentagens de Respostas:</h3>
                 <div class="itens-progresso" *ngFor="let key of porcentagens.keys()">
                   <div class="progress-label">
@@ -182,12 +182,16 @@
         
               <div *ngIf="mostrarGabarito && questaoAtual">
                 <h2 style="margin-top: 10px;">Comentário da Questão</h2>
-                <!-- Verificar se a URL da foto da resposta um está presente -->
-                <img *ngIf="questaoAtual?.fotoDaRespostaUmUrl" [src]="questaoAtual?.fotoDaRespostaUmUrl" alt="Foto do Comentário" class="questao-foto">
                 <!-- Exibe o comentário da Questão Dois com HTML Sanitizado -->
                 <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestao | safeHtml"></div>
-                <!-- Verificar se a URL da foto da resposta dois está presente -->
+                <!-- Verificar se a URL da foto da resposta um está presente -->
+                <img *ngIf="questaoAtual?.fotoDaRespostaUmUrl" [src]="questaoAtual?.fotoDaRespostaUmUrl" alt="Foto do Comentário" class="questao-foto">
+                <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestaoDois | safeHtml"></div>
                 <img *ngIf="questaoAtual?.fotoDaRespostaDoisUrl" [src]="questaoAtual?.fotoDaRespostaDoisUrl" alt="Foto do Comentário" class="questao-foto">
+                <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestaoTres | safeHtml"></div>
+                <img *ngIf="questaoAtual?.fotoDaRespostaTresUrl" [src]="questaoAtual?.fotoDaRespostaTresUrl" alt="Foto do Comentário" class="questao-foto">
+                <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestaoQuatro | safeHtml"></div>
+                <img *ngIf="questaoAtual?.fotoDaRespostaQuatroUrl" [src]="questaoAtual?.fotoDaRespostaQuatroUrl" alt="Foto do Comentário" class="questao-foto">
                 <p *ngIf="questaoAtual?.referenciaBi">Referência: {{ questaoAtual.referenciaBi }}</p>
                 <p>Comentado por: {{ questaoAtual.comentadorDaQuestao }}</p>
               </div>
