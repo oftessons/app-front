@@ -74,6 +74,7 @@ export class PageSimuladoComponent implements OnInit {
   respostas: any[] = []; // Array que armazena as respostas do usuário
   respostasList: any[] = [];
   chart: any;
+  alertaVisivel = false;
 
   questaoAtual: Questao | null = null;
   paginaAtual: number = 0;
@@ -487,12 +488,10 @@ export class PageSimuladoComponent implements OnInit {
       this.mensagemDeAviso = ''; // Limpa a mensagem ao clicar em "próxima"
     }
   }
-
   confirmarSalvarSimulado(
     nomeSimulado: string,
     descricaoSimulado: string
   ): void {
-    // const qtdQuestoesValue = this.selectedQuantidadeDeQuestoesSelecionadas?.split(' ')[0];
     const qtdQuestoesValue = this.selectedQuantidadeDeQuestoesSelecionadas;
     const simulado: any = { 
       nomeSimulado: nomeSimulado,
@@ -507,24 +506,30 @@ export class PageSimuladoComponent implements OnInit {
       respostasSimulado: this.selectedRespostasSimulado,
     };
     console.log('Simulado:', simulado);
-    if (!simulado.nomeSimulado || !simulado.assunto || simulado.qtdQuestoes == null){
+  
+    // Validação de campos obrigatórios
+    if (!simulado.nomeSimulado || !simulado.assunto || simulado.qtdQuestoes == null) {
       alert('Campos obrigatórios estão faltando: Nome, Assunto ou Quantidade de questões.');
       return;
     }
+  
     this.simuladoService.cadastrarSimulado(this.usuarioId, simulado).subscribe(
       (response) => {
         // Exibir mensagem de sucesso
         this.mensagemSucesso = 'Seu simulado foi cadastrado com sucesso!';
-
-        // Esconder a mensagem após 5 segundos
+        console.log('Simulado cadastrado com sucesso:', response);
+  
+        // Esconder a mensagem de sucesso após 5 segundos
         setTimeout(() => {
           this.mensagemSucesso = '';
         }, 5000);
-
+  
         // Fecha o modal automaticamente após sucesso
         const modalElement = document.getElementById('confirmacaoModal');
-        const modalInstance = bootstrap.Modal.getInstance(modalElement!);
-        modalInstance.hide(); // Fecha o modal
+        if (modalElement) {
+          const modalInstance = bootstrap.Modal.getInstance(modalElement);
+          modalInstance?.hide();
+        }
       },
       (error) => {
         // Exibir mensagem de erro
@@ -533,9 +538,14 @@ export class PageSimuladoComponent implements OnInit {
       }
     );
   }
+  
 
   abrirModal(): void {
     const modalElement = document.getElementById('confirmacaoModal');
+    const modala = document.getElementById('confirmacaoModal');
+    if (modala) {
+      modala.style.display = 'block';
+    }
     const modal = new bootstrap.Modal(modalElement!);
     modal.show();
 
@@ -543,6 +553,11 @@ export class PageSimuladoComponent implements OnInit {
       this.fecharCardConfirmacao();
     });
   }
+
+  fecharAlerta() {
+    this.alertaVisivel = false;
+  }
+ 
 
   fecharCardConfirmacao(): void {
     this.mostrarCardConfirmacao = false;

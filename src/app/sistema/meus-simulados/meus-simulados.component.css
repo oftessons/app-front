@@ -49,6 +49,17 @@
     color: #7E1313;
     border: 1px solid #7E1313;
   }
+
+  .custom-alert {
+    background-color: #399918;
+    color: black;
+    padding: 10px;
+    margin-bottom: 15px;
+    text-align: center;
+    border-radius: 5px;
+    font-weight: bold;
+  }
+  
   
   .btn-transparent-danger:hover {
     background-color: rgba(220, 53, 69, 0.1);
