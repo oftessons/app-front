@@ -34,6 +34,7 @@
   margin-top: 10px;
   background: #edb120;
   font-family: "Nunito Sans", sans-serif;
+  border: none !important;
 }
 
 .card-title {
@@ -45,6 +46,7 @@
 .p-title {
   color: #080808;
   font-size: 24px;
+  font-weight: 700;
   font-family: "Nunito Sans", sans-serif;
 }
 .icon {
@@ -67,6 +69,7 @@
 
 .btn-pesquisa {
   color: #080808;
+  font-weight: 500;
 }
 .btn-pesquisa:hover {
   color: #256cd0;

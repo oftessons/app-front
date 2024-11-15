@@ -132,7 +132,8 @@
           <video 
             *ngIf="isVideo(questaoAtual.fotoDaQuestaoUrl)" 
             [src]="questaoAtual.fotoDaQuestaoUrl" 
-            controls 
+            controls
+            controlsList="nodownload"  
             class="questao-video">
           </video>
         </ng-container>
@@ -198,7 +199,8 @@
                   <video 
                     *ngIf="isVideo(questaoAtual.fotoDaRespostaUmUrl)" 
                     [src]="questaoAtual.fotoDaRespostaUmUrl" 
-                    controls 
+                    controls
+                    controlsList="nodownload"  
                     class="questao-video">
                   </video>
                 </ng-container>
@@ -213,7 +215,8 @@
                   <video 
                     *ngIf="isVideo(questaoAtual.fotoDaRespostaDoisUrl)" 
                     [src]="questaoAtual.fotoDaRespostaDoisUrl" 
-                    controls 
+                    controls
+                    controlsList="nodownload"  
                     class="questao-video">
                   </video>
                 </ng-container>
@@ -228,7 +231,8 @@
                   <video 
                     *ngIf="isVideo(questaoAtual.fotoDaRespostaTresUrl)" 
                     [src]="questaoAtual.fotoDaRespostaTresUrl" 
-                    controls 
+                    controls
+                    controlsList="nodownload"  
                     class="questao-video">
                   </video>
                 </ng-container>
@@ -243,7 +247,8 @@
                   <video 
                     *ngIf="isVideo(questaoAtual.fotoDaRespostaQuatroUrl)" 
                     [src]="questaoAtual.fotoDaRespostaQuatroUrl" 
-                    controls 
+                    controls
+                    controlsList="nodownload"  
                     class="questao-video">
                   </video>
                 </ng-container>
