@@ -107,6 +107,8 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   porcentagemAcertos = 0;
   acertos = 0;
 
+  mostrarFiltros: boolean = false;
+
   constructor(
     private questoesService: QuestoesService,
     private filtroService: FiltroService,
@@ -696,5 +698,9 @@ verificarRespostaUsuario(resposta: Resposta) {
 
   sanitizeVideoUrl(url: string): SafeResourceUrl {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  }
+
+  toggleFiltros() {
+    this.mostrarFiltros = !this.mostrarFiltros;
   }
 }

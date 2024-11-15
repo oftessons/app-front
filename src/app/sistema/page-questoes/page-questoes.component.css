@@ -551,3 +551,13 @@ p {
   padding: 2px;
   margin-right: 10px;
 }
+
+.filtros-container {
+  max-height: 1000px; /* Defina um valor grande o suficiente para conter o conteúdo */
+  overflow: hidden;
+  transition: max-height 0.8s ease-in-out, padding 0.8s ease-in-out;
+}
+
+.filtros-container-open {
+  max-height: 0;
+}
