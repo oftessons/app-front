@@ -154,12 +154,12 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     );
   }
 
-  sanitizeVideoUrl(videoUrl: string | undefined): SafeResourceUrl {
-    if (videoUrl) {
-      return this.sanitizer.bypassSecurityTrustResourceUrl(videoUrl);
-    }
-    return ''; // Return a safe empty value if no URL is provided
-  }
+  // sanitizeVideoUrl(videoUrl: string | undefined): SafeResourceUrl {
+  //   if (videoUrl) {
+  //     return this.sanitizer.bypassSecurityTrustResourceUrl(videoUrl);
+  //   }
+  //   return '';
+  // }
 
 
   ngAfterViewChecked(): void {
@@ -684,5 +684,17 @@ verificarRespostaUsuario(resposta: Resposta) {
         console.error('Erro ao carregar cometario:', error);
       }
     );
+  }
+
+  isImage(url: string): boolean {
+    return url.match(/\.(jpeg|jpg|gif|png)$/) != null;
+  }
+
+  isVideo(url: string): boolean {
+    return url.match(/\.(mp4|webm|ogg)$/) != null;
+  }
+
+  sanitizeVideoUrl(url: string): SafeResourceUrl {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 }

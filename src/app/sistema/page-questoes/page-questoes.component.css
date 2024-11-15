@@ -20,6 +20,14 @@
   margin-bottom: 10px;
 }
 
+.questao-video {
+  width: 500px;
+  height: auto;
+  display: block;
+  margin-bottom: 16px;
+  margin: 10px auto;
+}
+
 .identificadores-questao {
   display: flex;
   color: #101010;

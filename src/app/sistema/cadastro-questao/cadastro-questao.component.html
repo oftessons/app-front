@@ -171,7 +171,7 @@
       <div>
         <hr class="line">
         <span class="div-section">
-          Imagem para o enunciado da questão:
+          Imagem ou vídeo para o enunciado da questão:
         </span>
         <hr class="line">
       </div>
@@ -181,14 +181,16 @@
             <div class="form-group">
               <div class="image-upload" (drop)="onDrop($event, 'fotoDaQuestao')" (dragover)="onDragOver($event)">
                 <input type="file" id="fotoDaQuestao" name="fotoDaQuestao"
-                  (change)="onFileSelected($event, 'fotoDaQuestao')" accept="image/*" style="display: none;" />
+                  (change)="onFileSelected($event, 'fotoDaQuestao')" accept="image/*,video/*" style="display: none;" />
                 <label for="fotoDaQuestao">
-                  <div class="image-preview" id="imagePreview">
-                    <img *ngIf="imagePreviews['fotoDaQuestao']" [src]="imagePreviews['fotoDaQuestao']"
-                      alt="Image Preview" />
-                    <span *ngIf="!imagePreviews['fotoDaQuestao']">
+                  <div class="foto-preview" id="fotoPreview">
+                    <ng-container *ngIf="fotoPreviews['fotoDaQuestao']">
+                      <img *ngIf="isImage(fotoPreviews['fotoDaQuestao'])" [src]="fotoPreviews['fotoDaQuestao']" alt="Image Preview" />
+                      <video *ngIf="isVideo(fotoPreviews['fotoDaQuestao'])" [src]="fotoPreviews['fotoDaQuestao']" controls></video>
+                    </ng-container>
+                    <span *ngIf="!fotoPreviews['fotoDaQuestao']">
                       <img src="assets/imagens/img-foto.svg" style="width: 50px; opacity: 0.5;">
-                      Clique para fazer upload da imagem
+                      Clique para fazer upload da imagem ou vídeo
                     </span>
                   </div>
                 </label>

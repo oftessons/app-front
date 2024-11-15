@@ -121,18 +121,21 @@
         <!-- Quero se se eu tiver cadastrado o video apareca aqui no enunciado-->
         <div class="img-comentario" [innerHTML]="questaoAtual.enunciadoDaQuestao | safeHtml"></div> 
         
-        <iframe 
-        *ngIf="questaoAtual?.videoUrl" 
-        [src]="sanitizeVideoUrl(questaoAtual.videoUrl!)" 
-        width="560" 
-        height="315" 
-        frameborder="0" 
-        allowfullscreen>
-      </iframe>
-      
+        <ng-container *ngIf="questaoAtual?.fotoDaQuestaoUrl">
+          <img 
+            *ngIf="isImage(questaoAtual.fotoDaQuestaoUrl)" 
+            [src]="questaoAtual.fotoDaQuestaoUrl" 
+            alt="Foto da questão" 
+            class="questao-foto">
+          <video 
+            *ngIf="isVideo(questaoAtual.fotoDaQuestaoUrl)" 
+            [src]="questaoAtual.fotoDaQuestaoUrl" 
+            controls 
+            class="questao-video">
+          </video>
+        </ng-container>
         
-        
-        <img *ngIf="questaoAtual?.fotoDaQuestaoUrl" [src]="questaoAtual?.fotoDaQuestaoUrl" alt="Foto da questão" class="questao-foto">
+        <!-- <img *ngIf="questaoAtual?.fotoDaQuestaoUrl" [src]="questaoAtual?.fotoDaQuestaoUrl" alt="Foto da questão" class="questao-foto"> -->
         <div class="row">
           <div class="col-md-12">
             <div class="form-group">

@@ -53,6 +53,7 @@ export class CadastroQuestaoComponent implements OnInit,  AfterViewInit {
 
   selectedImage: string='';
   uploadedImage: string='';
+  fotoPreviews: { [key: string]: string | ArrayBuffer | null } = {};
 
   // editorConfig: any;
 
@@ -227,12 +228,21 @@ editorConfig4 = {
       }
       const reader = new FileReader();
       reader.onload = () => {
-        this.imagePreviews[field] = reader.result;
-        console.log(`Imagem carregada para o campo ${field}.`);
+        this.fotoPreviews[field] = reader.result;
+        console.log(`Arquivo carregado para o campo ${field}.`);
       };
       reader.readAsDataURL(file);
     }
   }
+
+  isImage(fileUrl: string | ArrayBuffer | null): boolean {
+    return typeof fileUrl === 'string' && fileUrl.startsWith('data:image/');
+  }
+
+  isVideo(fileUrl: string | ArrayBuffer | null): boolean {
+    return typeof fileUrl === 'string' && fileUrl.startsWith('data:video/');
+  }
+  
   onDrop(event: DragEvent, field: string) {
     event.preventDefault();
     const file = event.dataTransfer?.files[0];
