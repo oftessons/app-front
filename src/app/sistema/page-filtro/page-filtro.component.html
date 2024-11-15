@@ -5,6 +5,10 @@
     <!-- Barra de progresso durante o carregamento -->
     <mat-progress-bar *ngIf="carregando" mode="indeterminate"></mat-progress-bar>
 
+    <div *ngIf="mensagemSucesso" class="alert alert-success custom-alert">
+      {{ mensagemSucesso }}
+    </div>
+
     <!-- Filtros ou mensagem de nenhum filtro -->
     <div *ngIf="!carregando">
       <div *ngIf="filtros.length > 0; else noFilters">
