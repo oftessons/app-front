@@ -2,75 +2,77 @@
   <div class="container mt-4">
     <div class="header">
       <h1 class="mt-4"><span> | </span> Questões</h1>
-      <button class="btn-filtros" routerLink="/usuario/filtro">
+      <button class="btn-filtros" (click)="toggleFiltros()">
         <img src="assets/imagens/q-f.svg" alt="Ícone do Filtro" class="icon">
         Filtros
       </button>
     </div>
   </div>
-  <div class="container">
-    <div class="filters-container">
-      <form #filtroForm="ngForm" (ngSubmit)="filtrarQuestoes()" class="consulta-form">
-        <div class="row">
-          <div class="col col-12 col-md-6 espaco-select">
-            <app-select-padrao
-              label="Ano"
-              [options]="anosDescricoes"
-              [(selectedValue)]="selectedAno">
-            </app-select-padrao>
+  <div [ngClass]="{'filtros-container': true, 'filtros-container-open': mostrarFiltros}">
+    <div class="container">
+      <div class="filters-container">
+        <form #filtroForm="ngForm" (ngSubmit)="filtrarQuestoes()" class="consulta-form">
+          <div class="row">
+            <div class="col col-12 col-md-6 espaco-select">
+              <app-select-padrao
+                label="Ano"
+                [options]="anosDescricoes"
+                [(selectedValue)]="selectedAno">
+              </app-select-padrao>
+            </div>
+            <div class="col col-12 col-md-6 espaco-select">
+              <app-select-padrao
+                label="Tipo de Prova"
+                [options]="tiposDeProvaDescricoes"
+                [(selectedValue)]="selectedTipoDeProva">
+              </app-select-padrao>
+            </div>
           </div>
-          <div class="col col-12 col-md-6 espaco-select">
-            <app-select-padrao
-              label="Tipo de Prova"
-              [options]="tiposDeProvaDescricoes"
-              [(selectedValue)]="selectedTipoDeProva">
-            </app-select-padrao>
+          <div class="row">
+            <div class="col col-12 col-md-6 espaco-select">
+              <app-select-padrao
+                label="Tema"
+                [options]="temasDescricoes"
+                [(selectedValue)]="selectedTema">
+              </app-select-padrao>
+            </div>
+            <div class="col col-12 col-md-6 espaco-select">
+              <app-select-padrao
+                label="Subtema"
+                [options]="subtemasDescricoes"
+                [(selectedValue)]="selectedSubtema">
+              </app-select-padrao>
+            </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="col col-12 col-md-6 espaco-select">
-            <app-select-padrao
-              label="Tema"
-              [options]="temasDescricoes"
-              [(selectedValue)]="selectedTema">
-            </app-select-padrao>
+          <div class="row rol-col">   
+            <div class="col col-12 col-md-6 espaco-select">
+              <app-select-padrao
+                label="Dificuldade"
+                [options]="dificuldadesDescricoes"
+                [(selectedValue)]="selectedDificuldade">
+              </app-select-padrao>
+            </div>
+            <div class="col col-12 col-md-6 espaco-select">
+              <app-input-padrao
+                label="Pesquisar por palavra-chave"
+                [(value)]="palavraChave"
+                class="palavra-chave">
+              </app-input-padrao>        
+            </div>
           </div>
-          <div class="col col-12 col-md-6 espaco-select">
-            <app-select-padrao
-              label="Subtema"
-              [options]="subtemasDescricoes"
-              [(selectedValue)]="selectedSubtema">
-            </app-select-padrao>
+  
+  
+          <div *ngIf="message" class="alert alert-info mt-3 alert-custom" role="alert">
+            {{ message }}
           </div>
-        </div>
-        <div class="row rol-col">   
-          <div class="col col-12 col-md-6 espaco-select">
-            <app-select-padrao
-              label="Dificuldade"
-              [options]="dificuldadesDescricoes"
-              [(selectedValue)]="selectedDificuldade">
-            </app-select-padrao>
+  
+          <div class="button-row-filtro">
+            <button type="submit" class="btn-filtrar">Filtrar</button>
+            <button type="button" class="btn-filtrar-geral" (click)="LimparFiltro()">Limpar Filtro</button>
+            <button type="button" class="btn-salvar" (click)="abrirModal()">Salvar Filtro</button>
           </div>
-          <div class="col col-12 col-md-6 espaco-select">
-            <app-input-padrao
-              label="Pesquisar por palavra-chave"
-              [(value)]="palavraChave"
-              class="palavra-chave">
-            </app-input-padrao>        
-          </div>
-        </div>
-
-
-        <div *ngIf="message" class="alert alert-info mt-3 alert-custom" role="alert">
-          {{ message }}
-        </div>
-
-        <div class="button-row-filtro">
-          <button type="submit" class="btn-filtrar">Filtrar</button>
-          <button type="button" class="btn-filtrar-geral" (click)="LimparFiltro()">Limpar Filtro</button>
-          <button type="button" class="btn-salvar" (click)="abrirModal()">Salvar Filtro</button>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   </div>
 
@@ -121,18 +123,21 @@
         <!-- Quero se se eu tiver cadastrado o video apareca aqui no enunciado-->
         <div class="img-comentario" [innerHTML]="questaoAtual.enunciadoDaQuestao | safeHtml"></div> 
         
-        <iframe 
-        *ngIf="questaoAtual?.videoUrl" 
-        [src]="sanitizeVideoUrl(questaoAtual.videoUrl!)" 
-        width="560" 
-        height="315" 
-        frameborder="0" 
-        allowfullscreen>
-      </iframe>
-      
+        <ng-container *ngIf="questaoAtual?.fotoDaQuestaoUrl">
+          <img 
+            *ngIf="isImage(questaoAtual.fotoDaQuestaoUrl)" 
+            [src]="questaoAtual.fotoDaQuestaoUrl" 
+            alt="Foto da questão" 
+            class="questao-foto">
+          <video 
+            *ngIf="isVideo(questaoAtual.fotoDaQuestaoUrl)" 
+            [src]="questaoAtual.fotoDaQuestaoUrl" 
+            controls 
+            class="questao-video">
+          </video>
+        </ng-container>
         
-        
-        <img *ngIf="questaoAtual?.fotoDaQuestaoUrl" [src]="questaoAtual?.fotoDaQuestaoUrl" alt="Foto da questão" class="questao-foto">
+        <!-- <img *ngIf="questaoAtual?.fotoDaQuestaoUrl" [src]="questaoAtual?.fotoDaQuestaoUrl" alt="Foto da questão" class="questao-foto"> -->
         <div class="row">
           <div class="col-md-12">
             <div class="form-group">
@@ -162,7 +167,7 @@
 
               <!-- Adicione a exibição das porcentagens -->
                
-              <div class="progress-container" *ngIf="porcentagens">
+              <div class="progress-container" *ngIf="mostrarPorcentagem && porcentagens">
                 <h3>Porcentagens de Respostas:</h3>
                 <div class="itens-progresso" *ngFor="let key of porcentagens.keys()">
                   <div class="progress-label">
@@ -182,12 +187,66 @@
         
               <div *ngIf="mostrarGabarito && questaoAtual">
                 <h2 style="margin-top: 10px;">Comentário da Questão</h2>
-                <!-- Verificar se a URL da foto da resposta um está presente -->
-                <img *ngIf="questaoAtual?.fotoDaRespostaUmUrl" [src]="questaoAtual?.fotoDaRespostaUmUrl" alt="Foto do Comentário" class="questao-foto">
-                <!-- Exibe o comentário da Questão Dois com HTML Sanitizado -->
+                <!-- Exibe o comentário da Questão com HTML Sanitizado -->
                 <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestao | safeHtml"></div>
-                <!-- Verificar se a URL da foto da resposta dois está presente -->
-                <img *ngIf="questaoAtual?.fotoDaRespostaDoisUrl" [src]="questaoAtual?.fotoDaRespostaDoisUrl" alt="Foto do Comentário" class="questao-foto">
+                <ng-container *ngIf="questaoAtual?.fotoDaQuestaoUrl">
+                  <img 
+                    *ngIf="isImage(questaoAtual.fotoDaRespostaUmUrl)" 
+                    [src]="questaoAtual.fotoDaRespostaUmUrl" 
+                    alt="Foto da questão" 
+                    class="questao-foto">
+                  <video 
+                    *ngIf="isVideo(questaoAtual.fotoDaRespostaUmUrl)" 
+                    [src]="questaoAtual.fotoDaRespostaUmUrl" 
+                    controls 
+                    class="questao-video">
+                  </video>
+                </ng-container>
+                <!-- Exibe o comentário da Questão com HTML Sanitizado -->
+                <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestaoDois | safeHtml"></div>
+                <ng-container *ngIf="questaoAtual?.fotoDaQuestaoUrl">
+                  <img 
+                    *ngIf="isImage(questaoAtual.fotoDaRespostaDoisUrl)" 
+                    [src]="questaoAtual.fotoDaRespostaDoisUrl" 
+                    alt="Foto da questão" 
+                    class="questao-foto">
+                  <video 
+                    *ngIf="isVideo(questaoAtual.fotoDaRespostaDoisUrl)" 
+                    [src]="questaoAtual.fotoDaRespostaDoisUrl" 
+                    controls 
+                    class="questao-video">
+                  </video>
+                </ng-container>
+                <!-- Exibe o comentário da Questão com HTML Sanitizado -->
+                <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestaoTres | safeHtml"></div>
+                <ng-container *ngIf="questaoAtual?.fotoDaQuestaoUrl">
+                  <img 
+                    *ngIf="isImage(questaoAtual.fotoDaRespostaTresUrl)" 
+                    [src]="questaoAtual.fotoDaRespostaTresUrl" 
+                    alt="Foto da questão" 
+                    class="questao-foto">
+                  <video 
+                    *ngIf="isVideo(questaoAtual.fotoDaRespostaTresUrl)" 
+                    [src]="questaoAtual.fotoDaRespostaTresUrl" 
+                    controls 
+                    class="questao-video">
+                  </video>
+                </ng-container>
+                <!-- Exibe o comentário da Questão com HTML Sanitizado -->
+                <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestaoQuatro | safeHtml"></div>
+                <ng-container *ngIf="questaoAtual?.fotoDaQuestaoUrl">
+                  <img 
+                    *ngIf="isImage(questaoAtual.fotoDaRespostaQuatroUrl)" 
+                    [src]="questaoAtual.fotoDaRespostaQuatroUrl" 
+                    alt="Foto da questão" 
+                    class="questao-foto">
+                  <video 
+                    *ngIf="isVideo(questaoAtual.fotoDaRespostaQuatroUrl)" 
+                    [src]="questaoAtual.fotoDaRespostaQuatroUrl" 
+                    controls 
+                    class="questao-video">
+                  </video>
+                </ng-container>
                 <p *ngIf="questaoAtual?.referenciaBi">Referência: {{ questaoAtual.referenciaBi }}</p>
                 <p>Comentado por: {{ questaoAtual.comentadorDaQuestao }}</p>
               </div>

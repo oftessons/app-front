@@ -20,6 +20,14 @@
   margin-bottom: 10px;
 }
 
+.questao-video {
+  width: 500px;
+  height: auto;
+  display: block;
+  margin-bottom: 16px;
+  margin: 10px auto;
+}
+
 .identificadores-questao {
   display: flex;
   color: #101010;
@@ -542,4 +550,14 @@ p {
   font-weight: bold;
   padding: 2px;
   margin-right: 10px;
+}
+
+.filtros-container {
+  max-height: 1000px; /* Defina um valor grande o suficiente para conter o conteúdo */
+  overflow: hidden;
+  transition: max-height 0.8s ease-in-out, padding 0.8s ease-in-out;
+}
+
+.filtros-container-open {
+  max-height: 0;
 }

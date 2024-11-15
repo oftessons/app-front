@@ -1,46 +1,92 @@
 .container {
-    max-width: 1300px;
-    padding: 10px;
-    font-family: 'Nunito Sans', sans-serif;
+  max-width: 1300px;
+  padding: 10px;
+  font-family: "Nunito Sans", sans-serif;
 }
-.mt-4{
-    font-size: 28px;
-    font-family: 'Nunito Sans', sans-serif;
-    font-weight: bold;
+
+.cont-hello {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
 }
-.span{
-    font-size: 16px;
-    color: #0F1934;
+
+.mt-4 {
+  font-size: 28px;
+  font-family: "Nunito Sans", sans-serif;
+  font-weight: bold;
 }
-.text-p{
-    font-size: 20px;
-    margin-top: 10px;
-    font-family: 'Nunito Sans', sans-serif;
+.span {
+  font-size: 16px;
+  color: #0f1934;
 }
-.card{
-    margin-top: 10px;
-    background-color: #0F1934;
-    font-family: 'Nunito Sans', sans-serif;
+.text-p {
+  font-size: 20px;
+  margin-top: 10px;
+  font-family: "Nunito Sans", sans-serif;
 }
-.card-title{
-    color: #CDDAEF;
-    font-size:24px;
-    font-family: 'Nunito Sans', sans-serif;
+.card {
+  margin-top: 10px;
+  background: #0f1934;
+  font-family: "Nunito Sans", sans-serif;
 }
-.icon{
-    margin-bottom: 5px;
-    margin-top: 10px;
+
+.card-pesquisa {
+  margin-top: 10px;
+  background: #edb120;
+  font-family: "Nunito Sans", sans-serif;
 }
-.icon-fi{
-    width: 55px;
-    height: 55px;
-    margin-top: 5px;
+
+.card-title {
+  color: #cddaef;
+  font-size: 24px;
+  font-family: "Nunito Sans", sans-serif;
 }
-.btn{
-    margin-top: 10px;
-    background-color: transparent;
-    border-color: transparent;
+
+.p-title {
+  color: #080808;
+  font-size: 24px;
+  font-family: "Nunito Sans", sans-serif;
 }
-.btn:hover{
-    color: #6be26b;
+.icon {
+  margin-bottom: 5px;
+  margin-top: 10px;
+}
+.icon-fi {
+  width: 55px;
+  height: 55px;
+  margin-top: 5px;
+}
+.btn {
+  margin-top: 10px;
+  background-color: transparent;
+  border-color: transparent;
+}
+.btn:hover {
+  color: #6be26b;
+}
+
+.btn-pesquisa {
+  color: #080808;
+}
+.btn-pesquisa:hover {
+  color: #256cd0;
+}
+
+.contagem {
+  display: flex;
+  gap: 4px;
+  flex-direction: column;
+  margin-top: 10px;
+}
+
+.timer span {
+  font-size: 24px;
+  color: #0f1934;
+  font-family: "Nunito Sans", sans-serif;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid #dee2e6;
+  border-radius: 5px;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  padding: 10px;
+  backdrop-filter: blur(10px);
 }

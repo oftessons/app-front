@@ -5,16 +5,6 @@
       <h2>{{ questaoDTO.id ? 'Edição da Questão' : 'Cadastro da Questão' }}</h2>
     </div>
     <form class="form-cad" #questaoForm="ngForm" (ngSubmit)="onSubmit()">
-      <div class="row">
-        <div class="col-md-12">
-          <div *ngIf="successMessage" class="alert alert-success" role="alert">
-            {{ successMessage }}
-          </div>
-          <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
-            {{ errorMessage }}
-          </div>
-        </div>
-      </div>
       <div class="row" *ngIf="questaoDTO.id">
         <div class="col-md-6">
           <div class="form-group">
@@ -171,29 +161,27 @@
       <div>
         <hr class="line">
         <span class="div-section">
-          Imagem para o enunciado da questão:
+          Imagem ou vídeo para o enunciado da questão:
         </span>
         <hr class="line">
       </div>
       <div class="cont-imgs">
-        <div class="row">
-          <div class="col-md-10">
-            <div class="form-group">
-              <div class="image-upload" (drop)="onDrop($event, 'fotoDaQuestao')" (dragover)="onDragOver($event)">
-                <input type="file" id="fotoDaQuestao" name="fotoDaQuestao"
-                  (change)="onFileSelected($event, 'fotoDaQuestao')" accept="image/*" style="display: none;" />
-                <label for="fotoDaQuestao">
-                  <div class="image-preview" id="imagePreview">
-                    <img *ngIf="imagePreviews['fotoDaQuestao']" [src]="imagePreviews['fotoDaQuestao']"
-                      alt="Image Preview" />
-                    <span *ngIf="!imagePreviews['fotoDaQuestao']">
-                      <img src="assets/imagens/img-foto.svg" style="width: 50px; opacity: 0.5;">
-                      Clique para fazer upload da imagem
-                    </span>
-                  </div>
-                </label>
+        <div class="form-group">
+          <div class="image-upload" (drop)="onDrop($event, 'fotoDaQuestao')" (dragover)="onDragOver($event)">
+            <input type="file" id="fotoDaQuestao" name="fotoDaQuestao"
+              (change)="onFileSelected($event, 'fotoDaQuestao')" accept="image/*,video/*" style="display: none;" />
+            <label for="fotoDaQuestao">
+              <div class="foto-preview" id="fotoPreview">
+                <ng-container *ngIf="fotoPreviews['fotoDaQuestao']">
+                  <img *ngIf="isImage(fotoPreviews['fotoDaQuestao'])" [src]="fotoPreviews['fotoDaQuestao']" alt="Image Preview" />
+                  <video *ngIf="isVideo(fotoPreviews['fotoDaQuestao'])" [src]="fotoPreviews['fotoDaQuestao']" controls></video>
+                </ng-container>
+                <span *ngIf="!fotoPreviews['fotoDaQuestao']" class="upload-placeholder">
+                  <img src="assets/imagens/img-foto.svg" style="width: 50px; opacity: 0.5;" class="upload-icon">
+                  Clique para fazer upload da imagem ou vídeo
+                </span>
               </div>
-            </div>
+            </label>
           </div>
         </div>
       </div>
@@ -274,7 +262,7 @@
     </div>
     <div class="row">
       <div class="form-group">
-        <label>Comentário do Gabarito:</label>
+        <label>Comentário do Gabarito 1:</label>
         <div id="toolbar">
           <!-- Add font size dropdown -->
           <select class="ql-header">
@@ -329,51 +317,239 @@
       </div>
     </div>
 
-    <div>
-      <div>
-        <hr class="line">
-        <span class="div-section">
-          Imagens da Resolução da Questão:
-        </span>
-        <hr class="line">
+    <div class="form-group">
+      <label>Imagem do gabarito 1:</label>
+      <div class="image-upload" (drop)="onDrop($event, 'fotoDaRespostaUm')" (dragover)="onDragOver($event)">
+        <input type="file" id="fotoDaRespostaUm" name="fotoDaRespostaUm"
+          (change)="onFileSelected($event, 'fotoDaRespostaUm')" accept="image/*,video/*" style="display: none;" />
+        <label for="fotoDaRespostaUm">
+          <div class="foto-preview" id="fotoPreview">
+            <ng-container *ngIf="fotoPreviews['fotoDaRespostaUm']">
+              <img *ngIf="isImage(fotoPreviews['fotoDaRespostaUm'])" [src]="fotoPreviews['fotoDaRespostaUm']" alt="Image Preview" />
+              <video *ngIf="isVideo(fotoPreviews['fotoDaRespostaUm'])" [src]="fotoPreviews['fotoDaRespostaUm']" controls></video>
+            </ng-container>
+            <span *ngIf="!fotoPreviews['fotoDaRespostaUm']" class="upload-placeholder">
+              <img src="assets/imagens/img-foto.svg" class="upload-icon">
+              <p>Clique para fazer upload da imagem ou vídeo</p>
+            </span>
+          </div>
+        </label>
       </div>
-      <div class="row">
-        <div class="col-imagens">
-          <div class="form-group">
-            <label>Imagem do gabarito 1:</label>
-            <div class="image-upload" (drop)="onDrop($event, 'fotoDaRespostaUm')" (dragover)="onDragOver($event)">
-              <input type="file" id="fotoDaRespostaUm" name="fotoDaRespostaUm"
-                (change)="onFileSelected($event, 'fotoDaRespostaUm')" accept="image/*" style="display: none;" />
-              <label for="fotoDaRespostaUm">
-                <div class="image-preview" id="imagePreview">
-                  <img *ngIf="imagePreviews['fotoDaRespostaUm']" [src]="imagePreviews['fotoDaRespostaUm']"
-                    alt="Image Preview" />
-                  <span *ngIf="!imagePreviews['fotoDaRespostaUm']">
-                    <img src="assets/imagens/img-foto.svg" style="width: 50px; opacity: 0.5;">
-                    Clique para fazer upload da imagem
-                  </span>
-                </div>
-              </label>
-            </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group">
+        <label>Comentário do Gabarito 2:</label>
+        <div id="toolbar2">
+          <!-- Add font size dropdown -->
+          <select class="ql-header">
+            <option value="1"></option>
+            <option value="2"></option>
+            <option value="3"></option>
+            <option value="4"></option>
+            <option value="5"></option>
+            <option value="6"></option>
+            <option selected></option>
+          </select>
+          <!-- Add font family dropdown -->
+          <select class="ql-font">
+            <option selected></option>
+            <option value="serif"></option>
+            <option value="monospace"></option>
+          </select>
+            <!-- Add a bold button -->
+            <button class="ql-bold"></button>
+            <!-- Add an italic button -->
+            <button class="ql-italic"></button>
+            <!-- Add an underline button -->
+            <button class="ql-underline"></button>
+            <!-- Adicione o seletor de cores -->
+            <select class="ql-color"></select>
+            <!-- Adicione o seletor de cores de fundo -->
+            <select class="ql-background"></select>
+            <!-- Add alignment buttons -->
+            <select class="ql-align">
+              <option selected></option>
+              <option value="center"></option>
+              <option value="right"></option>
+              <option value="justify"></option>
+            </select>
+            <!-- Add a list button -->
+            <button class="ql-list" value="ordered"></button>
+            <button class="ql-list" value="bullet"></button>
+            <!-- Add a link button -->
+            <button class="ql-link"></button>
+            <!-- Add an image button -->
+            <button class="ql-image"></button>
+            <!-- Add a video button -->
+            <button class="ql-video"></button>
+            <!-- Add a clean button -->
+            <button class="ql-clean"></button>
           </div>
-          <div class="form-group">
-            <label>Imagem do gabarito 2:</label>
-            <div class="image-upload" (drop)="onDrop($event, 'fotoDaRespostaDois')" (dragover)="onDragOver($event)">
-              <input type="file" id="fotoDaRespostaDois" name="fotoDaRespostaDois"
-                (change)="onFileSelected($event, 'fotoDaRespostaDois')" accept="image/*" style="display: none;" />
-              <label for="fotoDaRespostaDois">
-                <div class="image-preview" id="imagePreview">
-                  <img *ngIf="imagePreviews['fotoDaRespostaDois']" [src]="imagePreviews['fotoDaRespostaDois']"
-                    alt="Image Preview" />
-                  <span *ngIf="!imagePreviews['fotoDaRespostaDois']">
-                    <img src="assets/imagens/img-foto.svg" style="width: 50px; opacity: 0.5;">
-                    Clique para fazer upload da imagem
-                  </span>
-                </div>
-              </label>
-            </div>
-          </div>
+        
+        <!-- Quill Editor Container -->
+        <div id="editor2" class="form-control" name="comentarioDaQuestaoDois"
+          [(ngModel)]="questaoDTO.comentarioDaQuestaoDois">
         </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Imagem do gabarito 2:</label>
+      <div class="image-upload" (drop)="onDrop($event, 'fotoDaRespostaDois')" (dragover)="onDragOver($event)">
+        <input type="file" id="fotoDaRespostaDois" name="fotoDaRespostaDois"
+          (change)="onFileSelected($event, 'fotoDaRespostaDois')" accept="image/*,video/*" style="display: none;" />
+        <label for="fotoDaRespostaDois">
+          <div class="foto-preview" id="fotoPreview">
+            <ng-container *ngIf="fotoPreviews['fotoDaRespostaDois']">
+              <img *ngIf="isImage(fotoPreviews['fotoDaRespostaDois'])" [src]="fotoPreviews['fotoDaRespostaDois']" alt="Image Preview" />
+              <video *ngIf="isVideo(fotoPreviews['fotoDaRespostaDois'])" [src]="fotoPreviews['fotoDaRespostaDois']" controls></video>
+            </ng-container>
+            <span *ngIf="!fotoPreviews['fotoDaRespostaDois']" class="upload-placeholder">
+              <img src="assets/imagens/img-foto.svg" class="upload-icon">
+              <p>Clique para fazer upload da imagem ou vídeo</p>
+            </span>
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group">
+        <label>Comentário do Gabarito 3:</label>
+        <div id="toolbar3">
+          <!-- Add font size dropdown -->
+          <select class="ql-header">
+            <option value="1"></option>
+            <option value="2"></option>
+            <option value="3"></option>
+            <option value="4"></option>
+            <option value="5"></option>
+            <option value="6"></option>
+            <option selected></option>
+          </select>
+          <!-- Add font family dropdown -->
+          <select class="ql-font">
+            <option selected></option>
+            <option value="serif"></option>
+            <option value="monospace"></option>
+          </select>
+            <!-- Add a bold button -->
+            <button class="ql-bold"></button>
+            <!-- Add an italic button -->
+            <button class="ql-italic"></button>
+            <!-- Add an underline button -->
+            <button class="ql-underline"></button>
+            <!-- Adicione o seletor de cores -->
+            <select class="ql-color"></select>
+            <!-- Adicione o seletor de cores de fundo -->
+            <select class="ql-background"></select>
+            <!-- Add alignment buttons -->
+            <select class="ql-align">
+              <option selected></option>
+              <option value="center"></option>
+              <option value="right"></option>
+              <option value="justify"></option>
+            </select>
+            <!-- Add a list button -->
+            <button class="ql-list" value="ordered"></button>
+            <button class="ql-list" value="bullet"></button>
+            <!-- Add a link button -->
+            <button class="ql-link"></button>
+            <!-- Add an image button -->
+            <button class="ql-image"></button>
+            <!-- Add a video button -->
+            <button class="ql-video"></button>
+            <!-- Add a clean button -->
+            <button class="ql-clean"></button>
+          </div>
+        
+        <!-- Quill Editor Container -->
+        <div id="editor3" class="form-control" name="comentarioDaQuestaoTres"
+          [(ngModel)]="questaoDTO.comentarioDaQuestaoTres">
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Imagem do gabarito 3:</label>
+      <div class="image-upload" (drop)="onDrop($event, 'fotoDaRespostaTres')" (dragover)="onDragOver($event)">
+        <input type="file" id="fotoDaRespostaTres" name="fotoDaRespostaTres"
+          (change)="onFileSelected($event, 'fotoDaRespostaTres')" accept="image/*,video/*" style="display: none;" />
+        <label for="fotoDaRespostaTres">
+          <div class="foto-preview" id="fotoPreviewTres">
+            <ng-container *ngIf="fotoPreviews['fotoDaRespostaTres']">
+              <img *ngIf="isImage(fotoPreviews['fotoDaRespostaTres'])" [src]="fotoPreviews['fotoDaRespostaTres']" alt="Image Preview" />
+              <video *ngIf="isVideo(fotoPreviews['fotoDaRespostaTres'])" [src]="fotoPreviews['fotoDaRespostaTres']" controls></video>
+            </ng-container>
+            <span *ngIf="!fotoPreviews['fotoDaRespostaTres']" class="upload-placeholder">
+              <img src="assets/imagens/img-foto.svg" class="upload-icon">
+              <p>Clique para fazer upload da imagem ou vídeo</p>
+            </span>
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group">
+        <label>Comentário do Gabarito 4:</label>
+        <div id="toolbar4">
+          <select class="ql-header">
+            <option value="1"></option>
+            <option value="2"></option>
+            <option value="3"></option>
+            <option value="4"></option>
+            <option value="5"></option>
+            <option value="6"></option>
+            <option selected></option>
+          </select>
+          <select class="ql-font">
+            <option selected></option>
+            <option value="serif"></option>
+            <option value="monospace"></option>
+          </select>
+            <button class="ql-bold"></button>
+            <button class="ql-italic"></button>
+            <button class="ql-underline"></button>
+            <select class="ql-color"></select>
+            <select class="ql-background"></select>
+            <select class="ql-align">
+              <option selected></option>
+              <option value="center"></option>
+              <option value="right"></option>
+              <option value="justify"></option>
+            </select>
+            <button class="ql-list" value="ordered"></button>
+            <button class="ql-list" value="bullet"></button>
+            <button class="ql-link"></button>
+            <button class="ql-image"></button>
+            <button class="ql-video"></button>
+            <button class="ql-clean"></button>
+          </div>
+        <div id="editor4" class="form-control" name="comentarioDaQuestaoQuatro"
+          [(ngModel)]="questaoDTO.comentarioDaQuestaoQuatro">
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Imagem do gabarito 4:</label>
+      <div class="image-upload" (drop)="onDrop($event, 'fotoDaRespostaQuatro')" (dragover)="onDragOver($event)">
+        <input type="file" id="fotoDaRespostaQuatro" name="fotoDaRespostaQuatro"
+          (change)="onFileSelected($event, 'fotoDaRespostaQuatro')" accept="image/*,video/*" style="display: none;" />
+        <label for="fotoDaRespostaQuatro">
+          <div class="foto-preview" id="fotoPreviewQuatro">
+            <ng-container *ngIf="fotoPreviews['fotoDaRespostaQuatro']">
+              <img *ngIf="isImage(fotoPreviews['fotoDaRespostaQuatro'])" [src]="fotoPreviews['fotoDaRespostaQuatro']" alt="Image Preview" />
+              <video *ngIf="isVideo(fotoPreviews['fotoDaRespostaQuatro'])" [src]="fotoPreviews['fotoDaRespostaQuatro']" controls></video>
+            </ng-container>
+            <span *ngIf="!fotoPreviews['fotoDaRespostaQuatro']" class="upload-placeholder">
+              <img src="assets/imagens/img-foto.svg" class="upload-icon">
+              <p>Clique para fazer upload da imagem ou vídeo</p>
+            </span>
+          </div>
+        </label>
       </div>
     </div>
 
@@ -398,6 +574,16 @@
           <label>Nome do Professor Comentador da Questão: </label>
           <input type="text" class="form-control" name="comentadorDaQuestao"
             [(ngModel)]="questaoDTO.comentadorDaQuestao" placeholder="Digite o nome do professor comentador" />
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div *ngIf="successMessage" class="alert alert-success" role="alert">
+          {{ successMessage }}
+        </div>
+        <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+          {{ errorMessage }}
         </div>
       </div>
     </div>

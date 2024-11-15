@@ -36,6 +36,8 @@ export class CadastroQuestaoComponent implements OnInit,  AfterViewInit {
   fotoDaQuestaoTres: File | null = null;
   fotoDaRespostaUm: File | null = null;
   fotoDaRespostaDois: File | null = null;
+  fotoDaRespostaTres: File | null = null;
+  fotoDaRespostaQuatro: File | null = null;
   imagePreviews: { [key: string]: string | ArrayBuffer | null } = {};
   id!: number;
   selectedAlternativa: number | undefined;
@@ -51,6 +53,7 @@ export class CadastroQuestaoComponent implements OnInit,  AfterViewInit {
 
   selectedImage: string='';
   uploadedImage: string='';
+  fotoPreviews: { [key: string]: string | ArrayBuffer | null } = {};
 
   // editorConfig: any;
 
@@ -63,6 +66,17 @@ editorConfig1 = {
   toolbar: '#toolbar1'
 };
 
+editorConfig2 = {
+  toolbar: '#toolbar2'
+};
+
+editorConfig3 = {
+  toolbar: '#toolbar3'
+};
+
+editorConfig4 = {
+  toolbar: '#toolbar4'
+};
 
   constructor(
     private questoesService: QuestoesService,
@@ -111,6 +125,39 @@ editorConfig1 = {
   }
 
   ngAfterViewInit(): void {
+    const quill4 = new Quill('#editor4', {
+      modules: {
+        toolbar: this.editorConfig4.toolbar
+      },
+      theme: 'snow'
+    });
+
+    quill4.on('text-change', () => {
+      this.questaoDTO.comentarioDaQuestaoQuatro = quill4.root.innerHTML;
+    });
+
+    const quill3 = new Quill('#editor3', {
+      modules: {
+        toolbar: this.editorConfig3.toolbar
+      },
+      theme: 'snow'
+    });
+
+    quill3.on('text-change', () => {
+      this.questaoDTO.comentarioDaQuestaoTres = quill3.root.innerHTML;
+    });
+
+    const quill2 = new Quill('#editor2', {
+      modules: {
+        toolbar: this.editorConfig2.toolbar
+      },
+      theme: 'snow'
+    });
+
+    quill2.on('text-change', () => {
+      this.questaoDTO.comentarioDaQuestaoDois = quill2.root.innerHTML;
+    });
+
     const quill = new Quill('#editor', {
       modules: {
         toolbar: this.editorConfig.toolbar
@@ -138,9 +185,6 @@ editorConfig1 = {
     getEditorContent() {
       console.log(this.editorContent);
     }
-
-
-  
 
    onAlternativaChange(index: number) {
     this.selectedAlternativa = index;
@@ -173,17 +217,32 @@ editorConfig1 = {
         case 'fotoDaRespostaDois':
           this.fotoDaRespostaDois = file;
           break;
+          case 'fotoDaRespostaTres':
+          this.fotoDaRespostaTres = file;
+          break;
+          case 'fotoDaRespostaQuatro':
+          this.fotoDaRespostaQuatro = file;
+          break;
         default:
           break;
       }
       const reader = new FileReader();
       reader.onload = () => {
-        this.imagePreviews[field] = reader.result;
-        console.log(`Imagem carregada para o campo ${field}.`);
+        this.fotoPreviews[field] = reader.result;
+        console.log(`Arquivo carregado para o campo ${field}.`);
       };
       reader.readAsDataURL(file);
     }
   }
+
+  isImage(fileUrl: string | ArrayBuffer | null): boolean {
+    return typeof fileUrl === 'string' && fileUrl.startsWith('data:image/');
+  }
+
+  isVideo(fileUrl: string | ArrayBuffer | null): boolean {
+    return typeof fileUrl === 'string' && fileUrl.startsWith('data:video/');
+  }
+  
   onDrop(event: DragEvent, field: string) {
     event.preventDefault();
     const file = event.dataTransfer?.files[0];
@@ -224,8 +283,22 @@ editorConfig1 = {
 
 onSubmit(): void {
     console.log('Form data:', this.questaoDTO);
+
+    const quillEditor4 = document.querySelector('#editor4 .ql-editor');
+    if (quillEditor4) {
+      this.questaoDTO.comentarioDaQuestaoQuatro = quillEditor4.innerHTML;
+    }
+
+    const quillEditor3 = document.querySelector('#editor3 .ql-editor');
+    if (quillEditor3) {
+      this.questaoDTO.comentarioDaQuestaoTres = quillEditor3.innerHTML;
+    }
   
-    // Ensure the editor content is up-to-date
+    const quillEditor2 = document.querySelector('#editor2 .ql-editor');
+    if (quillEditor2) {
+      this.questaoDTO.comentarioDaQuestaoDois = quillEditor2.innerHTML;
+    }
+
     const quillEditor = document.querySelector('#editor .ql-editor');
     if (quillEditor) {
       this.questaoDTO.comentarioDaQuestao = quillEditor.innerHTML;
@@ -249,6 +322,14 @@ onSubmit(): void {
     if (this.fotoDaRespostaDois) {
       console.log("fotoDaRespostaDois: passo");
       this.formData.append('fotoDaRespostaDoisArquivo', this.fotoDaRespostaDois);
+    }
+    if (this.fotoDaRespostaTres) {
+      console.log("fotoDaRespostaTres: passo");
+      this.formData.append('fotoDaRespostaTresArquivo', this.fotoDaRespostaTres);
+    }
+    if (this.fotoDaRespostaQuatro) {
+      console.log("fotoDaRespostaQuatro: passo");
+      this.formData.append('fotoDaRespostaQuatroArquivo', this.fotoDaRespostaQuatro);
     }
     if (this.questaoDTO.alternativas[0].foto) {
       this.formData.append('A', this.questaoDTO.alternativas[0].foto);
