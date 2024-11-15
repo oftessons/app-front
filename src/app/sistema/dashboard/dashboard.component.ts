@@ -14,9 +14,9 @@ export class DashboardComponent implements OnInit {
   usuarioLogado: Usuario | null = null;
   nomeUsuario: string = '';
   diasRestantes: number = 60;
-  horasRestantes: number = 0;
-  minutosRestantes: number = 0;
-  segundosRestantes: number = 0; 
+  horasRestantes: string = '00';
+  minutosRestantes: string = '00';
+  segundosRestantes: string = '00';
   private intervalId: any;
 
   constructor(
@@ -57,22 +57,23 @@ export class DashboardComponent implements OnInit {
       const distancia = fim.getTime() - agora;
 
       this.diasRestantes = Math.floor(distancia / (1000 * 60 * 60 * 24));
-      this.horasRestantes = Math.floor((distancia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      this.minutosRestantes = Math.floor((distancia % (1000 * 60 * 60)) / (1000 * 60));
-      this.segundosRestantes = Math.floor((distancia % (1000 * 60)) / 1000);
+      this.horasRestantes = this.formatTime(Math.floor((distancia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
+      this.minutosRestantes = this.formatTime(Math.floor((distancia % (1000 * 60 * 60)) / (1000 * 60)));
+      this.segundosRestantes = this.formatTime(Math.floor((distancia % (1000 * 60)) / 1000));
 
       if (distancia < 0) {
         clearInterval(this.intervalId);
         this.diasRestantes = 0;
-        this.horasRestantes = 0;
-        this.minutosRestantes = 0;
-        this.segundosRestantes = 0;
+        this.horasRestantes = '00';
+        this.minutosRestantes = '00';
+        this.segundosRestantes = '00';
       }
     }, 1000);
   }
 
-  irParaPesquisa() {
-    this.router.navigate(['/pesquisa']);
+  formatTime(time: number): string {
+    return time < 10 ? `0${time}` : `${time}`;
   }
+
   
 }

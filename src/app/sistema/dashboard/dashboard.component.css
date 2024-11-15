@@ -32,7 +32,7 @@
 
 .card-pesquisa {
   margin-top: 10px;
-  background: #EDB120;
+  background: #edb120;
   font-family: "Nunito Sans", sans-serif;
 }
 
@@ -73,8 +73,20 @@
 }
 
 .contagem {
-    display: flex;
-    gap: 4px;
-    flex-direction: column;
-    margin-top: 10px;
+  display: flex;
+  gap: 4px;
+  flex-direction: column;
+  margin-top: 10px;
+}
+
+.timer span {
+  font-size: 24px;
+  color: #0f1934;
+  font-family: "Nunito Sans", sans-serif;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid #dee2e6;
+  border-radius: 5px;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  padding: 10px;
+  backdrop-filter: blur(10px);
 }
