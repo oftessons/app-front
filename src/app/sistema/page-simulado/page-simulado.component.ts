@@ -488,13 +488,13 @@ export class PageSimuladoComponent implements OnInit {
       this.mensagemDeAviso = ''; // Limpa a mensagem ao clicar em "próxima"
     }
   }
-  confirmarSalvarSimulado(
-    nomeSimulado: string,
-    descricaoSimulado: string
-  ): void {
+  
+  confirmarSalvarSimulado(nomeSimulado: string, descricaoSimulado: string): void {
     const qtdQuestoesValue = this.selectedQuantidadeDeQuestoesSelecionadas;
+    
+    // Montando o objeto simulado
     const simulado: any = { 
-      nomeSimulado: nomeSimulado,
+      nomeSimulado,
       assunto: descricaoSimulado,
       qtdQuestoes: qtdQuestoesValue,
       ano: this.selectedAno,
@@ -505,26 +505,19 @@ export class PageSimuladoComponent implements OnInit {
       questaoIds: this.idsQuestoes,
       respostasSimulado: this.selectedRespostasSimulado,
     };
-    console.log('Simulado:', simulado);
   
-    // Validação de campos obrigatórios
+    // Validação básica
     if (!simulado.nomeSimulado || !simulado.assunto || simulado.qtdQuestoes == null) {
-      alert('Campos obrigatórios estão faltando: Nome, Assunto ou Quantidade de questões.');
+      this.exibirMensagem('Preencha todos os campos obrigatórios: Nome, Assunto e Quantidade de Questões.', 'erro');
       return;
     }
   
+    // Chamada ao serviço
     this.simuladoService.cadastrarSimulado(this.usuarioId, simulado).subscribe(
       (response) => {
-        // Exibir mensagem de sucesso
-        this.mensagemSucesso = 'Seu simulado foi cadastrado com sucesso!';
-        console.log('Simulado cadastrado com sucesso:', response);
-  
-        // Esconder a mensagem de sucesso após 5 segundos
-        setTimeout(() => {
-          this.mensagemSucesso = '';
-        }, 5000);
-  
-        // Fecha o modal automaticamente após sucesso
+        this.exibirMensagem('Seu simulado foi cadastrado com sucesso!', 'sucesso');
+        
+        // Fechar modal automaticamente (usando Bootstrap ou outro método)
         const modalElement = document.getElementById('confirmacaoModal');
         if (modalElement) {
           const modalInstance = bootstrap.Modal.getInstance(modalElement);
@@ -532,13 +525,22 @@ export class PageSimuladoComponent implements OnInit {
         }
       },
       (error) => {
-        // Exibir mensagem de erro
-        alert('Erro ao cadastrar o simulado. Por favor, tente novamente.');
-        console.error('Erro ao cadastrar o simulado:', error);
+        const errorMessage = error?.error?.message || 'Erro ao cadastrar o simulado. Tente novamente.';
+        this.exibirMensagem(errorMessage, 'erro');
       }
     );
   }
   
+
+  mensagem: { texto: string; tipo: string } | null = null;
+
+exibirMensagem(texto: string, tipo: 'sucesso' | 'erro'): void {
+  this.mensagem = { texto, tipo };
+  setTimeout(() => {
+    this.mensagem = null;
+  }, 5000); // Mensagem desaparece após 5 segundos
+}
+
 
   abrirModal(): void {
     const modalElement = document.getElementById('confirmacaoModal');

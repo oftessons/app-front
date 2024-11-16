@@ -80,6 +80,10 @@
           <div *ngIf="message" class="alert alert-info mt-3 alert-custom" role="alert">
             {{ message }}
           </div>
+
+          <div *ngIf="mensagem" class="alert" [ngClass]="{'alert-success': mensagem.tipo === 'sucesso', 'alert-danger': mensagem.tipo === 'erro'}">
+            {{ mensagem.texto }}
+          </div>
   
           <div class="button-row-filtro">
             <button type="submit" class="btn-filtrar">Filtrar</button>

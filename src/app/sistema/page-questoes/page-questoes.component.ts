@@ -583,88 +583,98 @@ verificarRespostaUsuario(resposta: Resposta) {
     if (!this.filtroASalvar) {
       this.filtroASalvar = {} as FiltroDTO;
     }
-
+  
+    // Preenchendo os campos do filtro com base nos valores selecionados
     if (this.selectedAno) {
       const anoSelecionado = this.anos.find(
-          (ano) => this.getDescricaoAno(ano) === this.selectedAno
+        (ano) => this.getDescricaoAno(ano) === this.selectedAno
       );
       if (anoSelecionado) {
-          this.filtroASalvar.ano = anoSelecionado;
+        this.filtroASalvar.ano = anoSelecionado;
       }
     }
     if (this.selectedDificuldade) {
       const dificuldadeSelecionada = this.dificuldades.find(
-          (dificuldade) =>
-              this.getDescricaoDificuldade(dificuldade) === this.selectedDificuldade
+        (dificuldade) =>
+          this.getDescricaoDificuldade(dificuldade) === this.selectedDificuldade
       );
       if (dificuldadeSelecionada) {
-          this.filtroASalvar.dificuldade = dificuldadeSelecionada; 
+        this.filtroASalvar.dificuldade = dificuldadeSelecionada;
       }
-  }
-
-  if (this.selectedTipoDeProva) {
+    }
+  
+    if (this.selectedTipoDeProva) {
       const tipoDeProvaSelecionado = this.tiposDeProva.find(
-          (tipoDeProva) =>
-              this.getDescricaoTipoDeProva(tipoDeProva) === this.selectedTipoDeProva
+        (tipoDeProva) =>
+          this.getDescricaoTipoDeProva(tipoDeProva) === this.selectedTipoDeProva
       );
       if (tipoDeProvaSelecionado) {
-          this.filtroASalvar.tipoDeProva = tipoDeProvaSelecionado; 
+        this.filtroASalvar.tipoDeProva = tipoDeProvaSelecionado;
       }
-  }
-
-  if (this.selectedSubtema) {
+    }
+  
+    if (this.selectedSubtema) {
       const subtemaSelecionado = this.subtemas.find(
-          (subtema) => this.getDescricaoSubtema(subtema) === this.selectedSubtema
+        (subtema) => this.getDescricaoSubtema(subtema) === this.selectedSubtema
       );
       if (subtemaSelecionado) {
-          this.filtroASalvar.subtema = subtemaSelecionado; 
+        this.filtroASalvar.subtema = subtemaSelecionado;
       }
-  }
-
-  if (this.selectedTema) {
+    }
+  
+    if (this.selectedTema) {
       const temaSelecionado = this.temas.find(
-          (tema) => this.getDescricaoTema(tema) === this.selectedTema
+        (tema) => this.getDescricaoTema(tema) === this.selectedTema
       );
       if (temaSelecionado) {
-          this.filtroASalvar.tema = temaSelecionado; // Valor do enum
+        this.filtroASalvar.tema = temaSelecionado;
       }
-  }
-
+    }
+  
     if (nomeFiltro) {
       this.filtroASalvar.nome = nomeFiltro;
     }
     if (descricaoFiltro) {
       this.filtroASalvar.assunto = descricaoFiltro;
     }
-
+  
+    // Validação de campos obrigatórios
+    if (!nomeFiltro) {
+      this.exibirMensagem('O campo "Nome" é obrigatório.', 'erro');
+      return;
+    }
+  
     if (this.filtroASalvar) {
       const idUser = parseInt(this.usuario.id);
-
+  
       this.filtroService.salvarFiltro(this.filtroASalvar, idUser).subscribe(
         (response) => {
-          // Tratamento de Code Status HTTP => {400, 403, 500}
-
-          // Exibir mensagem de sucesso
-          this.mensagemSucesso = 'Seu filtro foi salvo com sucesso!';
-
-          // Esconder a mensagem após 5 segundos
-          setTimeout(() => {
-            this.mensagemSucesso = '';
-          }, 5000);
-
-          // Fecha o modal automaticamente após sucesso
+          this.exibirMensagem('O filtro foi salvo com sucesso!', 'sucesso');
+  
+          // Fechar modal automaticamente
           const modalElement = document.getElementById('confirmacaoModal');
-          const modalInstance = bootstrap.Modal.getInstance(modalElement!);
-          modalInstance.hide(); // Fecha o modal
+          if (modalElement) {
+            const modalInstance = bootstrap.Modal.getInstance(modalElement);
+            modalInstance?.hide();
+          }
         },
         (error) => {
-          // Exibir mensagem de erro
-          alert('Erro ao salvar o filtro. Por favor, tente novamente.');
-          console.error('Erro ao salvar filtro:', error);
+          const errorMessage = error?.error?.message || 'Erro ao salvar o filtro. Por favor, tente novamente.';
+          this.exibirMensagem(errorMessage, 'erro');
         }
       );
     }
   }
+  
+mensagem: { texto: string; tipo: string } | null = null;
+
+exibirMensagem(texto: string, tipo: 'sucesso' | 'erro'): void {
+  this.mensagem = { texto, tipo };
+  setTimeout(() => {
+    this.mensagem = null;
+  }, 5000); // A mensagem desaparece após 5 segundos
+}
+
 
   fecharCardConfirmacao(): void {
     this.mostrarCardConfirmacao = false;
