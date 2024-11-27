@@ -376,19 +376,20 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   }
 
     
-verificarRespostaUsuario(resposta: Resposta) {
-  this.selectedOption = resposta.opcaoSelecionada;
-  this.isRespostaCorreta = resposta.correct;
-
-  if (resposta.correct) {
-    this.respostaCorreta = this.selectedOption;
-    this.respostaErrada = '';
-  } else {
-    this.respostaErrada = this.selectedOption;
-    this.respostaCorreta = resposta.opcaoCorreta;
+  verificarRespostaUsuario(resposta: Resposta) {
+    this.selectedOption = resposta.opcaoSelecionada; // Alternativa escolhida
+    this.isRespostaCorreta = resposta.correct; // Se está correta ou não
+  
+    if (resposta.correct) {
+      this.respostaCorreta = this.selectedOption;
+      this.respostaErrada = '';
+    } else {
+      this.respostaErrada = this.selectedOption;
+      this.respostaCorreta = resposta.opcaoCorreta; // Alternativa correta
+    }
+    this.respostaVerificada = true; // Marca como verificada
   }
-  this.respostaVerificada = true;
-}
+  
 
   exibirGabarito() {
     this.mostrarGabarito = true;
@@ -406,12 +407,14 @@ verificarRespostaUsuario(resposta: Resposta) {
   }
   
   anteriorQuestao() {
-    this.jaRespondeu = false; 
-    this.mensagemErro = ''; 
+    this.jaRespondeu = false;
+    this.mensagemErro = ''; // Limpa a mensagem de erro ao voltar para uma questão anterior
+  
     if (this.paginaAtual > 0) {
       this.paginaAtual--;
       this.questaoAtual = this.questoes[this.paginaAtual];
   
+      // Resetar variáveis relacionadas à resposta
       this.selectedOption = '';
       this.isRespostaCorreta = false;
       this.mostrarGabarito = false;
@@ -419,37 +422,35 @@ verificarRespostaUsuario(resposta: Resposta) {
       this.respostaErrada = '';
       this.respostaVerificada = false;
   
+      // Recuperar resposta anterior, se existir
       this.questoesService.questaoRespondida(this.usuarioId, this.questaoAtual.id).subscribe({
         next: (resposta) => {
           if (resposta) {
+            // Recupera os dados da resposta
             this.verificarRespostaUsuario(resposta);
+  
+            // Atualiza a exibição
             this.mostrarGabarito = true;
-            this.mostrarPorcentagem = true; // Exibe a barra de porcentagem se a questão foi respondida anteriormente
-          } else {
-            this.selectedOption = '';
-            this.isRespostaCorreta = false;
-            this.mostrarGabarito = false;
-            this.mostrarPorcentagem = false; // Oculta a barra de porcentagem se a questão não foi respondida
-            this.respostaCorreta = '';
-            this.respostaErrada = '';
-            this.respostaVerificada = false;
+            this.mostrarPorcentagem = true;
           }
         },
         error: (erro) => {
           console.error('Erro ao verificar a resposta:', erro);
+          this.mensagemErro = 'Erro ao recuperar a resposta da questão anterior.';
         },
       });
     } else {
-      this.message = 'Não há mais questões disponíveis.';
+      this.mensagemErro = 'Você já está na primeira questão.';
     }
   }
+  
   
   
   proximaQuestao() {
     this.jaRespondeu = false;
     this.resposta = '';
     this.mensagemErro = ''; // Limpa qualquer mensagem de erro anterior
-    
+  
     if (this.paginaAtual < this.questoes.length - 1) {
       this.paginaAtual++;
       this.questaoAtual = this.questoes[this.paginaAtual];
@@ -462,26 +463,30 @@ verificarRespostaUsuario(resposta: Resposta) {
       this.respostaErrada = '';
       this.respostaVerificada = false;
   
-      // Garantir que a barra de progresso seja redefinida
-      this.mostrarPorcentagem = false;
+      this.mostrarPorcentagem = false; // Reseta a barra de progresso
       this.porcentagemAcertos = 0;
   
       this.questoesService.questaoRespondida(this.usuarioId, this.questaoAtual.id).subscribe({
         next: (resposta) => {
-          if (resposta) { 
+          if (resposta) {
+            // Recupera os dados da resposta anterior
             this.verificarRespostaUsuario(resposta);
-            // Exibe a barra de progresso se a questão já foi respondida
+  
+            // Mostra o gabarito e a barra de progresso se a questão foi respondida
+            this.mostrarGabarito = true;
             this.mostrarPorcentagem = true;
           }
         },
         error: (erro) => {
           console.error('Erro ao verificar a resposta:', erro);
+          this.mensagemErro = 'Erro ao recuperar a resposta da próxima questão.';
         },
       });
     } else {
-      this.mensagemErro = 'Não há mais questões, mas em breve novas questões estarão disponíveis.📘'; 
+      this.mensagemErro = 'Não há mais questões, mas em breve novas questões estarão disponíveis. 📘';
     }
   }
+  
     
   responderQuestao(questao: Questao | null): void {
     if (!this.jaRespondeu) {  // Verificar se o usuário já respondeu
@@ -557,8 +562,6 @@ verificarRespostaUsuario(resposta: Resposta) {
     const modalElement = document.getElementById('confirmacaoModal');
     const modal = new bootstrap.Modal(modalElement!);
     modal.show();
-
-    // Adiciona evento para quando o modal for fechado
     modalElement?.addEventListener('hidden.bs.modal', () => {
       this.fecharCardConfirmacao();
     });
@@ -568,8 +571,6 @@ verificarRespostaUsuario(resposta: Resposta) {
     if (!this.filtroASalvar) {
       this.filtroASalvar = {} as FiltroDTO;
     }
-  
-    // Preenchendo os campos do filtro com base nos valores selecionados
     if (this.selectedAno) {
       const anoSelecionado = this.anos.find(
         (ano) => this.getDescricaoAno(ano) === this.selectedAno

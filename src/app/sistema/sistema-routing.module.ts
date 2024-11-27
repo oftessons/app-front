@@ -41,14 +41,14 @@ const routes: Routes = [
         data: { role: 'ADMIN' }
       },
       { 
-        path: 'cadastro-aulas', 
-        component: CadastroDeAulasComponent, 
+        path: 'cadastro-questao/:id', 
+        component: CadastroQuestaoComponent, 
         canActivate: [AuthGuard], 
         data: { role: 'ADMIN' }
       },
       { 
-        path: 'cadastro-questao/:id', 
-        component: CadastroQuestaoComponent, 
+        path: 'cadastro-aulas', 
+        component: CadastroDeAulasComponent, 
         canActivate: [AuthGuard], 
         data: { role: 'ADMIN' }
       },

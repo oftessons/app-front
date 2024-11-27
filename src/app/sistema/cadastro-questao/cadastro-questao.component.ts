@@ -250,7 +250,6 @@ editorConfig4 = {
       const reader = new FileReader();
       reader.onload = () => {
         this.imagePreviews[field] = reader.result;
-       // console.debug(`Imagem arrastada para o campo ${field}.`);
       };
       reader.readAsDataURL(file);
     }
@@ -264,26 +263,19 @@ editorConfig4 = {
     this.questaoDTO.alternativas.forEach((alt, i) => {
       alt.correta = i === index;
     });
-   // console.log('Alternativa correta atualizada:', this.questaoDTO.alternativas);
   }
 
   markCorrect(index: number): void {
     this.updateCorrectAlternative(index);
-   // console.log('Alternativa correta marcada:', this.questaoDTO.alternativas);
-   // console.log('Alternativa correta selecionada:', index);
     this.questaoDTO.alternativaCorreta = [this.questaoDTO.alternativas[index]];
   }
 
     markCorrectImage(index: number): void {
     this.updateCorrectAlternative(index);
-   // console.log('Alternativa correta marcada:', this.questaoDTO.alternativas);
-   // console.log('Alternativa correta selecionada:', index);
     this.questaoDTO.alternativaCorreta = [this.questaoDTO.alternativas[index]];
   }
 
 onSubmit(): void {
-   // console.log('Form data:', this.questaoDTO);
-
     const quillEditor4 = document.querySelector('#editor4 .ql-editor');
     if (quillEditor4) {
       this.questaoDTO.comentarioDaQuestaoQuatro = quillEditor4.innerHTML;
@@ -357,7 +349,7 @@ onSubmit(): void {
       error => {
         this.errorMessage = error;
         this.successMessage = null;
-      //  console.error('Erro ao salvar a questão:', error);
+        console.error('Erro ao salvar a questão:', error);
       }
     );
   

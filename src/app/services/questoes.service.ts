@@ -95,8 +95,36 @@ export class QuestoesService {
       );
   }
 
-  atualizar(formData: FormData, id: number): Observable<any> {
-    return this.http.put<any>(`${this.apiURL}/cadastro/${id}`, formData);
+ 
+  atualizarQuestao(formData: FormData, id: number): Observable<any> {
+    return this.http
+      .put<any>(`${this.apiURL}/atualizarQuestao/${id}`, formData, {
+        responseType: 'text' as 'json',
+      })
+      .pipe(
+        map((response) => this.handleResponse(response, 'Questão atualizada com sucesso!')),
+        catchError((error) => this.handleError(error))
+      );
+  }
+
+  private handleResponse(response: any, defaultMessage: string): any {
+    try {
+      const jsonResponse = JSON.parse(response);
+      return jsonResponse || { message: defaultMessage };
+    } catch {
+      return { message: defaultMessage };
+    }
+  }
+
+  private handleError(error: any): Observable<never> {
+    let errorMessage = '';
+    if (error.error instanceof ErrorEvent) {
+      errorMessage = `Erro: ${error.error.message}`;
+    } else {
+      errorMessage = `Erro no servidor: ${error.status}, ${error.message}`;
+    }
+    console.error(errorMessage);
+    return throwError(errorMessage);
   }
 
   getQuestaoById(id: number): Observable<Questao> {
@@ -134,6 +162,8 @@ export class QuestoesService {
     return this.http.get<Questao[]>(url, { params });
   }
 
+
+  
   filtrarSimulados(
     userId: number,
     filtros: any,
