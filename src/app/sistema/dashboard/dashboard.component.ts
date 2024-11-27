@@ -30,7 +30,7 @@ export class DashboardComponent implements OnInit {
       err => console.error('Erro ao buscar nome do usuário', err)
     );
     this.usuarioLogado = this.authService.getUsuarioAutenticado();
-    console.log(this.usuarioLogado); // Verifica se o usuário está sendo carregado corretamente
+    //console.log(this.usuarioLogado); // Verifica se o usuário está sendo carregado corretamente
     this.iniciarContador();
   }
 

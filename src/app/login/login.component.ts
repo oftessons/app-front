@@ -23,7 +23,6 @@ export class LoginComponent {
   showForgotPassword: boolean = false;
   usuario!: Usuario | null;
 
-
   confirmPasswordError: string | null = null;
   confirmPassword: string = '';
   consentimento: boolean = false;  
@@ -50,13 +49,10 @@ export class LoginComponent {
   onSubmit() {
     this.authService.tentarLogar(this.username, this.password).subscribe(
         (response: any) => {
-            console.log(response); // Inspecione a resposta aqui
-
+          
             // Salva o token de acesso no localStorage
             const access_token = response.access_token;
             localStorage.setItem('access_token', access_token);
-
-            console.log(access_token);
 
             // Obtém e salva o ID do usuário
             const userId = this.authService.getUserIdFromToken() ?? ''; // Garante que será uma string vazia se for null
@@ -64,17 +60,17 @@ export class LoginComponent {
 
             // Cria o objeto usuário
             const usuario: Usuario = {
-                id: userId,  // Supondo que você tenha o userId
-                fotoUrl: null, // Se você tiver uma URL de foto, adicione aqui
-                username: response.username, // Supondo que username esteja na resposta
-                password: '',  // Não armazene a senha
+                id: userId,  
+                fotoUrl: null, 
+                username: response.username, 
+                password: '', 
                 email: response.email || '',
                 telefone: response.telefone || '',
                 cidade: response.cidade || '',
                 estado: response.estado || '',
                 nome: response.nome || '',
-                confirmPassword: '', // Não armazene
-                permissao: response.authorities.length > 0 ? response.authorities[0] : null // Atribui a primeira autoridade
+                confirmPassword: '', 
+                permissao: response.authorities.length > 0 ? response.authorities[0] : null 
             };
             localStorage.setItem('usuario', JSON.stringify(usuario));
             
@@ -92,12 +88,10 @@ export class LoginComponent {
     );
 }
 
-
-
   preparaCadastrar(event: Event) {
     event.preventDefault();
     this.cadastrando = true;
-    this.showForgotPassword = false; // Certifique-se de que o formulário de recuperação de senha está escondido
+    this.showForgotPassword = false; 
   }
 
   cancelaCadastro() {
@@ -191,9 +185,6 @@ export class LoginComponent {
     );
   }
 
-
-  // mudança aqui no login
-
   salvaUserLocal() {
     this.authService.obterUsuarioAutenticadoDoBackend().subscribe(
       (usuario: Usuario) => {
@@ -203,7 +194,7 @@ export class LoginComponent {
         localStorage.setItem('usuario', usuario.username);
       },
       error => {
-        console.error('Erro ao obter dados do usuário:', error);
+       // console.error('Erro ao obter dados do usuário:', error);
       }
     );
   }
@@ -211,14 +202,14 @@ export class LoginComponent {
   forgotPassword(event: Event) {
     event.preventDefault();
     this.showForgotPassword = true;
-    this.cadastrando = false; // Certifique-se de que o formulário de cadastro está escondido
+    this.cadastrando = false; 
   }
 
   sendForgotPasswordEmail() {
     this.authService.forgotPassword(this.forgotEmail).subscribe(
       (response: any) => {
         this.mensagemSucesso = 'E-mail de recuperação de senha enviado com sucesso!';
-        this.showForgotPassword = false; // Opcional: esconde o formulário após o envio do email
+        this.showForgotPassword = false; 
         this.forgotEmail = '';
       },
       error => {

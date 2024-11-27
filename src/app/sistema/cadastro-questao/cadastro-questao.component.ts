@@ -183,7 +183,7 @@ editorConfig4 = {
 
     // Função para obter o conteúdo do editor
     getEditorContent() {
-      console.log(this.editorContent);
+     // console.log(this.editorContent);
     }
 
    onAlternativaChange(index: number) {
@@ -191,16 +191,16 @@ editorConfig4 = {
   }
 
   carregarQuestao(id: number): void {
-    console.log('Carregando questão com ID:', id);
+   // console.log('Carregando questão com ID:', id);
     this.questoesService.getQuestaoById(id).subscribe(
       questao => {
         this.questaoDTO = questao;
         this.questaoDTO.alternativas = this.questaoDTO.alternativas || [];  // Inicializa alternativas se for undefined
         this.selectedAlternativeIndex = this.questaoDTO.alternativas.findIndex(alt => alt.correta);
-        console.log('Questão carregada:', this.questaoDTO);
+       // console.log('Questão carregada:', this.questaoDTO);
       },
       error => {
-        console.error('Erro ao carregar questão:', error);
+      //  console.error('Erro ao carregar questão:', error);
       }
     );
   }
@@ -229,7 +229,7 @@ editorConfig4 = {
       const reader = new FileReader();
       reader.onload = () => {
         this.fotoPreviews[field] = reader.result;
-        console.log(`Arquivo carregado para o campo ${field}.`);
+      //  console.log(`Arquivo carregado para o campo ${field}.`);
       };
       reader.readAsDataURL(file);
     }
@@ -250,7 +250,7 @@ editorConfig4 = {
       const reader = new FileReader();
       reader.onload = () => {
         this.imagePreviews[field] = reader.result;
-        console.debug(`Imagem arrastada para o campo ${field}.`);
+       // console.debug(`Imagem arrastada para o campo ${field}.`);
       };
       reader.readAsDataURL(file);
     }
@@ -264,25 +264,25 @@ editorConfig4 = {
     this.questaoDTO.alternativas.forEach((alt, i) => {
       alt.correta = i === index;
     });
-    console.log('Alternativa correta atualizada:', this.questaoDTO.alternativas);
+   // console.log('Alternativa correta atualizada:', this.questaoDTO.alternativas);
   }
 
   markCorrect(index: number): void {
     this.updateCorrectAlternative(index);
-    console.log('Alternativa correta marcada:', this.questaoDTO.alternativas);
-    console.log('Alternativa correta selecionada:', index);
+   // console.log('Alternativa correta marcada:', this.questaoDTO.alternativas);
+   // console.log('Alternativa correta selecionada:', index);
     this.questaoDTO.alternativaCorreta = [this.questaoDTO.alternativas[index]];
   }
 
     markCorrectImage(index: number): void {
     this.updateCorrectAlternative(index);
-    console.log('Alternativa correta marcada:', this.questaoDTO.alternativas);
-    console.log('Alternativa correta selecionada:', index);
+   // console.log('Alternativa correta marcada:', this.questaoDTO.alternativas);
+   // console.log('Alternativa correta selecionada:', index);
     this.questaoDTO.alternativaCorreta = [this.questaoDTO.alternativas[index]];
   }
 
 onSubmit(): void {
-    console.log('Form data:', this.questaoDTO);
+   // console.log('Form data:', this.questaoDTO);
 
     const quillEditor4 = document.querySelector('#editor4 .ql-editor');
     if (quillEditor4) {
@@ -316,19 +316,19 @@ onSubmit(): void {
       this.formData.append('fotoDaQuestaoArquivo', this.fotoDaQuestao);
     }
     if (this.fotoDaRespostaUm) {
-      console.log("fotoDaRespostaUm: passo");
+    //  console.log("fotoDaRespostaUm: passo");
       this.formData.append('fotoDaRespostaUmArquivo', this.fotoDaRespostaUm);
     }
     if (this.fotoDaRespostaDois) {
-      console.log("fotoDaRespostaDois: passo");
+     // console.log("fotoDaRespostaDois: passo");
       this.formData.append('fotoDaRespostaDoisArquivo', this.fotoDaRespostaDois);
     }
     if (this.fotoDaRespostaTres) {
-      console.log("fotoDaRespostaTres: passo");
+     // console.log("fotoDaRespostaTres: passo");
       this.formData.append('fotoDaRespostaTresArquivo', this.fotoDaRespostaTres);
     }
     if (this.fotoDaRespostaQuatro) {
-      console.log("fotoDaRespostaQuatro: passo");
+     // console.log("fotoDaRespostaQuatro: passo");
       this.formData.append('fotoDaRespostaQuatroArquivo', this.fotoDaRespostaQuatro);
     }
     if (this.questaoDTO.alternativas[0].foto) {
@@ -344,20 +344,20 @@ onSubmit(): void {
       this.formData.append('D', this.questaoDTO.alternativas[3].foto);
     }
   
-    console.debug('Enviando formulário com dados da questão:', this.formData);
-    console.log('CLASSE ', objetoJson);
+    //console.debug('Enviando formulário com dados da questão:', this.formData);
+   // console.log('CLASSE ', objetoJson);
     this.formData.append('questaoDTO', objetoJson);
   
     this.questoesService.salvar(this.formData).subscribe(
       response => {
         this.successMessage = 'Questão salva com sucesso!';
         this.errorMessage = null;
-        console.debug('Questão salva com sucesso:', response);
+      //  console.debug('Questão salva com sucesso:', response);
       },
       error => {
         this.errorMessage = error;
         this.successMessage = null;
-        console.error('Erro ao salvar a questão:', error);
+      //  console.error('Erro ao salvar a questão:', error);
       }
     );
   

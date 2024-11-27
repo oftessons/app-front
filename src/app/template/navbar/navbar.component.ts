@@ -20,9 +20,8 @@ export class NavbarComponent {
   ) { }
 
   ngOnInit() {
-    // Chama o serviço para buscar o nome do usuário autenticado
     this.authService.obterNomeUsuario().subscribe(
-      nome => this.nomeUsuario = nome, // Armazena o nome do usuário
+      nome => this.nomeUsuario = nome,
       err => console.error('Erro ao buscar nome do usuário', err)
     );
   }
