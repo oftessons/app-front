@@ -258,7 +258,7 @@
                   </video>
                 </ng-container>
                 <p *ngIf="questaoAtual?.referenciaBi">Referência: {{ questaoAtual.referenciaBi }}</p>
-                <p>Comentado por: {{ questaoAtual.comentadorDaQuestao }}</p>
+                <p *ngIf="questaoAtual?.comentadorDaQuestao">Comentado por: {{ questaoAtual.comentadorDaQuestao }}</p>
               </div>
               <div class="error-message" *ngIf="mensagemErro">{{ mensagemErro }}</div>
               <div class="button-row">
