@@ -12,6 +12,8 @@ import { ListaQuestoesComponent } from './lista-questoes/lista-questoes.componen
 import { PageSimuladoComponent } from './page-simulado/page-simulado.component';
 import { MeusSimuladosComponent } from './meus-simulados/meus-simulados.component';
 import { ForbiddenComponent } from './forbidden/forbidden.component';
+import { PainelDeAulasComponent } from './painel-de-aulas/painel-de-aulas.component';
+import { CadastroDeAulasComponent } from './cadastro-de-aulas/cadastro-de-aulas.component';
 
 const routes: Routes = [
   { 
@@ -22,6 +24,7 @@ const routes: Routes = [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'questoes', component: PageQuestoesComponent },
       { path: 'filtro', component: PageFiltroComponent },
+      { path: 'painel-de-aulas', component: PainelDeAulasComponent},
       { path: 'desempenho', component: PageDesempenhoComponent },
       { path: 'meu-perfil', component: PageMeuPerfilComponent },
       { path: 'simulados', component: PageSimuladoComponent },
@@ -34,6 +37,12 @@ const routes: Routes = [
       { 
         path: 'cadastro-questao', 
         component: CadastroQuestaoComponent, 
+        canActivate: [AuthGuard], 
+        data: { role: 'ADMIN' }
+      },
+      { 
+        path: 'cadastro-aulas', 
+        component: CadastroDeAulasComponent, 
         canActivate: [AuthGuard], 
         data: { role: 'ADMIN' }
       },

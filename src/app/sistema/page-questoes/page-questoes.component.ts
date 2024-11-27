@@ -156,14 +156,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     );
   }
 
-  // sanitizeVideoUrl(videoUrl: string | undefined): SafeResourceUrl {
-  //   if (videoUrl) {
-  //     return this.sanitizer.bypassSecurityTrustResourceUrl(videoUrl);
-  //   }
-  //   return '';
-  // }
-
-
   ngAfterViewChecked(): void {
     this.resizeImages();
   }
@@ -197,17 +189,12 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
         iframe.setAttribute('frameborder', '0');
         iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
         iframe.setAttribute('allowfullscreen', 'true');
-       // console.log("Video URL:", this.questaoAtual?.videoUrl);
 
       } else {
-       // console.log("Video URL:", this.questaoAtual?.videoUrl);
-
-        // Remover iframes de fontes não seguras
         iframe.remove();
       }
     }
   
-    // Aplicar classes aos outros elementos
     const elementsWithClasses = div.querySelectorAll('[class]');
     elementsWithClasses.forEach((element) => {
       const classList = element.className.split(' ');
@@ -244,37 +231,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     );
   }
 
-  
-// Método para verificar a resposta do usuário e exibir gabarito
-verificarRespostaUsuario(resposta: Resposta) {
-  this.selectedOption = resposta.opcaoSelecionada;
-  this.isRespostaCorreta = resposta.correct;
-
-  if (resposta.correct) {
-    this.respostaCorreta = this.selectedOption;
-    this.respostaErrada = '';
-  } else {
-    this.respostaErrada = this.selectedOption;
-    this.respostaCorreta = resposta.opcaoCorreta;
-  }
-  this.respostaVerificada = true;
-}
-
-  exibirGabarito() {
-    this.mostrarGabarito = true;
-  
-    if (this.questaoAtual) {
-      this.respostaCorreta =
-        this.questaoAtual.alternativas.find(
-          (a) => a.texto === this.respostaCorreta
-        )?.texto || '';
-      this.respostaErrada =
-        this.questaoAtual.alternativas.find(
-          (a) => a.texto === this.respostaErrada
-        )?.texto || '';
-    }
-  }
-  
   getDescricaoTipoDeProva(tipoDeProva: TipoDeProva): string {
     return getDescricaoTipoDeProva(tipoDeProva);
   }
@@ -420,6 +376,36 @@ verificarRespostaUsuario(resposta: Resposta) {
     // Remover a última vírgula e espaço
     return mensagemUsuarioTratamento.slice(0, -2) + '.';
   }
+
+    
+verificarRespostaUsuario(resposta: Resposta) {
+  this.selectedOption = resposta.opcaoSelecionada;
+  this.isRespostaCorreta = resposta.correct;
+
+  if (resposta.correct) {
+    this.respostaCorreta = this.selectedOption;
+    this.respostaErrada = '';
+  } else {
+    this.respostaErrada = this.selectedOption;
+    this.respostaCorreta = resposta.opcaoCorreta;
+  }
+  this.respostaVerificada = true;
+}
+
+  exibirGabarito() {
+    this.mostrarGabarito = true;
+  
+    if (this.questaoAtual) {
+      this.respostaCorreta =
+        this.questaoAtual.alternativas.find(
+          (a) => a.texto === this.respostaCorreta
+        )?.texto || '';
+      this.respostaErrada =
+        this.questaoAtual.alternativas.find(
+          (a) => a.texto === this.respostaErrada
+        )?.texto || '';
+    }
+  }
   
   anteriorQuestao() {
     this.jaRespondeu = false; 
@@ -564,8 +550,6 @@ verificarRespostaUsuario(resposta: Resposta) {
       }
     }
   }
-  
- 
   
 
   abrirModal(): void {

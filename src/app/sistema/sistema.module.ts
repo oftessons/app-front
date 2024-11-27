@@ -23,6 +23,8 @@ import { EditorModule } from '@tinymce/tinymce-angular';
 import { SharedModule } from '../shared/shared.module';
 import { ForbiddenComponent } from './forbidden/forbidden.component';
 import { SafeHtmlPipe } from '../pipes/safe-html.pipe';
+import { PainelDeAulasComponent } from './painel-de-aulas/painel-de-aulas.component';
+import { CadastroDeAulasComponent } from './cadastro-de-aulas/cadastro-de-aulas.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +39,8 @@ import { SafeHtmlPipe } from '../pipes/safe-html.pipe';
     MeusSimuladosComponent,
     ForbiddenComponent,
     SafeHtmlPipe,
+    PainelDeAulasComponent,
+    CadastroDeAulasComponent,
   ],
   imports: [
     CommonModule,

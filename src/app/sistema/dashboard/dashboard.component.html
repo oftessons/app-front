@@ -1,19 +1,11 @@
 <div class="container pt-5">
     <div class="container mt-4">
-        <div class="cont-hello">
+        
             <div>
                 <h1 class="mt-4"> 👋 Seja Bem-vindo, {{ nomeUsuario }} </h1>
                 <h3 class="text-p"> <span> | </span> Painel de Controle</h3>
             </div>
-            <div class="text-center contagem">
-                <h4>Contagem Regressiva: {{ diasRestantes }} dias</h4>
-                <h1 class="timer">
-                    <span>{{ horasRestantes }}</span> :
-                    <span>{{ minutosRestantes }}</span> :
-                    <span>{{ segundosRestantes }}</span>
-                </h1>
-            </div>
-        </div>
+        
 
         <div class="row">
             <div class="col-md-3 mb-4">
@@ -27,6 +19,17 @@
                     </div>
                 </div>
             </div>
+            <div class="col-md-3 mb-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h5 class="card-title"> Aulas</h5>
+                        <div class="card-icon">
+                            <img src="assets/Icons/au-bra.svg" alt="Ícone de Aulas" class="icon"style="width: 50px; height: 50px;">
+                        </div>
+                        <a routerLink="/usuario/painel-de-aulas" class="btn btn-primary">Acessar ></a>
+                    </div>
+                </div>
+            </div>               
             <div class="col-md-3 mb-4">
                 <div class="card">
                     <div class="card-body text-center">
@@ -79,6 +82,17 @@
                             <img src="assets/imagens/ibm-simulated.svg" alt="Ícone de Empresa de Engenharia" class="icon">
                         </div>
                         <a routerLink="/usuario/meus-simulados" class="btn btn-primary">Acessar ></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4" *ngIf="isAdmin()">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h5 class="card-title"> Cadastro de Aulas</h5>
+                        <div class="card-icon">
+                            <img src="assets/Icons/cad-aula.svg" alt="Ícone de Aulas" class="icon"style="width: 50px; height: 50px;">
+                        </div>
+                        <a routerLink="/usuario/cadastro-aulas" class="btn btn-primary">Acessar ></a>
                     </div>
                 </div>
             </div>
