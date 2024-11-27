@@ -472,6 +472,15 @@ p {
   transition: background-color 0.3s, border-color 0.3s; /* Smooth transitions for background and border color */
 }
 
+.error-message {
+  background-color: #FFAD60;
+  color: rgb(0, 0, 0);
+  border: 1px solid #FFAD60;
+  border-radius: 5px;
+  font-size: 14px;
+  padding: 15px;
+  font-weight: bold;
+}
 
 .alternativa-certa {
   background-color: #c8e6c9; /* Cor de fundo para alternativa correta */

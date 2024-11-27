@@ -409,6 +409,7 @@ verificarRespostaUsuario(resposta: Resposta) {
   
   anteriorQuestao() {
     this.jaRespondeu = false; 
+    this.mensagemErro = ''; 
     if (this.paginaAtual > 0) {
       this.paginaAtual--;
       this.questaoAtual = this.questoes[this.paginaAtual];
@@ -448,7 +449,9 @@ verificarRespostaUsuario(resposta: Resposta) {
   
   proximaQuestao() {
     this.jaRespondeu = false;
-  
+    this.resposta = '';
+    this.mensagemErro = ''; // Limpa qualquer mensagem de erro anterior
+    
     if (this.paginaAtual < this.questoes.length - 1) {
       this.paginaAtual++;
       this.questaoAtual = this.questoes[this.paginaAtual];
@@ -477,11 +480,11 @@ verificarRespostaUsuario(resposta: Resposta) {
           console.error('Erro ao verificar a resposta:', erro);
         },
       });
+    } else {
+      this.mensagemErro = 'Não há mais questões, mas em breve novas questões estarão disponíveis.📘'; 
     }
   }
-  
-  
-  
+    
   responderQuestao(questao: Questao | null): void {
     if (!this.jaRespondeu) {  // Verificar se o usuário já respondeu
       if (!questao) {
