@@ -25,7 +25,7 @@ export class PageMeuPerfilComponent implements OnInit {
         this.usuario = data;
       },
       (error) => {
-        console.error('Erro ao obter perfil do usuário:', error);
+       // console.error('Erro ao obter perfil do usuário:', error);
       }
     );
   }
@@ -37,10 +37,10 @@ export class PageMeuPerfilComponent implements OnInit {
         .atualizarUsuario(this.usuario, this.selectedFile)
         .subscribe(
           (data) => {
-            console.log('Perfil atualizado com sucesso:', data);
+          //  console.log('Perfil atualizado com sucesso:', data);
           },
           (error) => {
-            console.error('Erro ao atualizar perfil do usuário:', error);
+           // console.error('Erro ao atualizar perfil do usuário:', error);
           }
         );
     }

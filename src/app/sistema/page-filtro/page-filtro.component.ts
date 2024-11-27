@@ -35,7 +35,7 @@ export class PageFiltroComponent implements OnInit {
         this.carregarFiltros();
       },
       (error) => {
-        console.error('Erro ao obter perfil do usuário:', error);
+        //console.error('Erro ao obter perfil do usuário:', error);
         this.carregando = false; // Mesmo em caso de erro, desativa o carregamento
       }
     );

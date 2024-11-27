@@ -319,8 +319,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       filtros.palavraChave = this.palavraChave.trim();
     }
   
-    console.log('Filtros aplicados:', filtros);
-  
     if (Object.keys(filtros).length === 0) {
       this.message = 'Por favor, selecione pelo menos um filtro.';
       this.questoes = [];
@@ -680,7 +678,7 @@ exibirMensagem(texto: string, tipo: 'sucesso' | 'erro'): void {
           this.sanitizerEnunciado = this.applyClassesToEnunciado(this.questaoAtual.enunciadoDaQuestao || '');
       },
       (error) => {
-        console.error('Erro ao carregar cometario:', error);
+        //console.error('Erro ao carregar cometario:', error);
       }
     );
   }

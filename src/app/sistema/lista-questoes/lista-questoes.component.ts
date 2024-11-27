@@ -69,12 +69,11 @@ export class ListaQuestoesComponent implements OnInit {
   editarFiltro(id: number): void {
     this.filtroService.getFiltroById(id).subscribe(
       (data) => {
-        console.log('Filtro:', data);
         this.router.navigate(['/usuario/questoes'], { state: { questao: data } });
       },
       (error) => {
         alert('Erro ao obter filtro por ID');
-        console.error('Erro ao obter simulado por ID:', error);
+        //console.error('Erro ao obter simulado por ID:', error);
       }
     )
   }
@@ -95,7 +94,7 @@ export class ListaQuestoesComponent implements OnInit {
               }
             },
             (error) => {
-              console.error('Erro ao buscar questões:', error);
+             // console.error('Erro ao buscar questões:', error);
               this.message = 'Erro ao buscar questão. Por favor, tente novamente.';
             }
           );
@@ -104,7 +103,7 @@ export class ListaQuestoesComponent implements OnInit {
         }
       },
       (error) => {
-        console.error('Erro ao obter usuário autenticado:', error);
+       // console.error('Erro ao obter usuário autenticado:', error);
       }
     );
   }
@@ -112,21 +111,17 @@ export class ListaQuestoesComponent implements OnInit {
 
   // Métodos para abrir e fechar o modal
   preparaDelecao(questao: Questao): void {
-    console.log('Preparando deleção da questão:', questao);
     this.questaoSelecionada = questao;
     this.modalTitle = 'Confirmação de Exclusão';
     this.modalType = 'deleteQuestao';
     this.modalAberto = true;
-    console.log('Modal aberto:', this.modalAberto);
   }
 
   preparaDelecaoFiltro(filtro: Filtro): void {
-    console.log('Preparando deleção do filtro:', filtro);
     this.filtroSelecionado = filtro;
     this.modalTitle = 'Confirmação de Exclusão';
     this.modalType = 'deleteFiltro';
     this.modalAberto = true;
-    console.log('Modal aberto:', this.modalAberto);
   }
 
   fecharModal() {
@@ -134,7 +129,6 @@ export class ListaQuestoesComponent implements OnInit {
   }
 
   confirmarAcao(): void {
-    console.log('Confirmando ação para o tipo:', this.modalType);
     if (this.modalType === 'deleteQuestao') {
       this.deletarQuestao();
     } else if (this.modalType === 'deleteFiltro') {

@@ -139,11 +139,8 @@ export class PageSimuladoComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    console.log('Componente inicializado');
     const meuSimulado = history.state.simulado;
-    console.log('Valores passados:', meuSimulado);
     this.dados = this.obterDados();
-    console.log('Dados:', this.dados);
     this.obterPerfilUsuario();
     if(meuSimulado){
         this.selectedAno = meuSimulado.ano;
@@ -167,9 +164,7 @@ export class PageSimuladoComponent implements OnInit {
   }
 
   finalizarSimulado() {
-    console.log('Respostas enviadas:', this.respostasList);
     this.simuladoService.finalizarSimulado(this.usuarioId, this.respostasList).subscribe((resultado) => {
-      console.log('Resultado da API:', resultado);
       this.gerarGrafico(resultado.acertos, resultado.erros);
     });
     this.simuladoIniciado = false;
@@ -178,7 +173,6 @@ export class PageSimuladoComponent implements OnInit {
   }
 
   gerarGrafico(acertos: number, erros: number) {
-    console.log('Acertos:', acertos, 'Erros:', erros);  
     if (this.chart) {
       this.chart.destroy();
     }
@@ -262,7 +256,6 @@ export class PageSimuladoComponent implements OnInit {
       .checkAnswer(questao.id, this.usuarioId, respostaDTO)
       .subscribe(
         (resposta: Resposta) => {
-          console.log('Resposta do backend:', resposta);
           if (resposta.correct) {
             this.isRespostaCorreta = resposta.correct;
             this.resposta = 'Resposta correta!';

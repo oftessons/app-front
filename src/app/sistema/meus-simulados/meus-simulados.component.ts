@@ -39,13 +39,13 @@ export class MeusSimuladosComponent implements OnInit {
             this.carregando = false;  // Desativa o carregamento quando os dados chegarem
           },
           (error) => {
-            console.error('Erro ao carregar simulados', error);
+           // console.error('Erro ao carregar simulados', error);
             this.carregando = false;  // Mesmo em caso de erro, desativa o carregamento
           }
         );
       },
       (error) => {
-        console.error('Erro ao obter perfil do usuário:', error);
+        //console.error('Erro ao obter perfil do usuário:', error);
         this.carregando = false;
       }
     );
@@ -54,7 +54,7 @@ export class MeusSimuladosComponent implements OnInit {
   editarSimulado(id: number): void {
     this.simuladoService.obterSimuladoPorId(id).subscribe(
       (data) => {
-        console.log('Simulado:', data);
+       // console.log('Simulado:', data);
         this.router.navigate(['/usuario/simulados'], { state: { simulado: data } });
       },
       (error) => {

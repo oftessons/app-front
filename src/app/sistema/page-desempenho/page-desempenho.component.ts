@@ -240,7 +240,6 @@ export class PageDesempenhoComponent implements OnInit {
   }
 
   private processChartData2(data: any): void {
-    console.log('ProcessChartData2:', data);
     const temas = Object.values(TemaDescricoes);
     this.barChartLabels2 = temas;
 
@@ -259,7 +258,6 @@ export class PageDesempenhoComponent implements OnInit {
   }
 
   private processChartData4(data: any): void {
-    console.log('ProcessChartData4:', data);
     const temas = Object.values(TemaDescricoes);
     this.barChartLabels4 = temas;
 
@@ -287,7 +285,6 @@ export class PageDesempenhoComponent implements OnInit {
   }
 
   private processChartData3(data: Map<string, Map<string, number>>): void {
-    console.log('ProcessChartData3:', data);
     const acertosData: number[] = new Array(12).fill(0);
     const errosData: number[] = new Array(12).fill(0);
 
