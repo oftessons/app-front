@@ -122,6 +122,24 @@ editorConfig4 = {
     this.questaoDTO.tipoItemQuestao='texto'
     this.questaoDTO.tipoItemQuestaoImagem='texto'
 
+    this.activatedRoute.params.subscribe(params => {
+      this.questaoDTO.id = +params['id'];
+      if (this.questaoDTO.id){
+        this.questoesService.getQuestaoById(this.questaoDTO.id).subscribe(
+          (questao) => {
+            console.log("QUESTAO RETORNADA PELO ID: ")
+            console.log(questao)
+            this.questaoDTO = questao;
+            this.questaoDTO.alternativas = this.questaoDTO.alternativas || [];
+
+          },
+          (error) => {
+            console.error('Erro ao carregar questão:', error);
+          }
+        )
+      }
+    });
+
   }
 
   ngAfterViewInit(): void {
