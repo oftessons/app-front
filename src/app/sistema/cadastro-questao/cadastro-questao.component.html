@@ -173,8 +173,8 @@
             <label for="fotoDaQuestao">
               <div class="foto-preview" id="fotoPreview">
                 <ng-container *ngIf="fotoPreviews['fotoDaQuestao']">
-                  <img *ngIf="isImage(fotoPreviews['fotoDaQuestao'])" [src]="fotoPreviews['fotoDaQuestao']" alt="Image Preview" />
-                  <video *ngIf="isVideo(fotoPreviews['fotoDaQuestao'])" [src]="fotoPreviews['fotoDaQuestao']" controls></video>
+                  <img *ngIf="isPreviewImage(fotoPreviews['fotoDaQuestao'])" [src]="fotoPreviews['fotoDaQuestao']" alt="Image Preview" />
+                  <video *ngIf="isPreviewVideo(fotoPreviews['fotoDaQuestao'])" [src]="fotoPreviews['fotoDaQuestao']" controls></video>
                 </ng-container>
                 <span *ngIf="!fotoPreviews['fotoDaQuestao']" class="upload-placeholder">
                   <img src="assets/imagens/img-foto.svg" style="width: 50px; opacity: 0.5;" class="upload-icon">
@@ -184,7 +184,7 @@
             </label>
           </div>
         </div>
-      </div>
+      </div>      
     </form>
 </div>
 
@@ -223,23 +223,53 @@
             </div>
           </div>
         </div>
-  
-        <div *ngIf="questaoDTO.tipoItemQuestaoImagem === 'imagem'">
-          <div *ngFor="let alternativa of questaoDTO.alternativas; let i = index">
-            <div class="image-container">
-              <input type="radio" [name]="questaoDTO.tipoItemQuestaoImagem + 'Alternativa'"
-                     (click)="markCorrectImage(i)" [checked]="alternativa.correta" class="checkbox">
-              <div class="image-upload">
-                <input type="file" id="afirmacao{{ i }}" name="afirmacao{{ i }}"
-                       (change)="onFileSelectedImage($event, 'afirmacao' + i)" accept="image/*" />
-                <label for="afirmacao{{ i }}">
-                  <div class="image-preview" id="imagePreview{{ i }}">
-                    <img *ngIf="imagePreviews['afirmacao' + i]" [src]="imagePreviews['afirmacao' + i]" alt="Image Preview" />
-                    <span *ngIf="!imagePreviews['afirmacao' + i]">
-                      <img src="assets/imagens/img-foto.svg" style="width: 50px; opacity: 0.5;"> Clique para fazer upload da imagem
-                    </span>
-                  </div>
-                </label>
+
+        <div *ngIf="questaoDTO.id">
+          <h2>{{ questaoDTO.id ? 'Edição da Questão' : 'Cadastro da Questão' }}</h2>
+          <div *ngIf="questaoDTO.tipoItemQuestaoImagem === 'imagem'">
+            <div *ngFor="let alternativa of questaoDTO.alternativas; let i = index">
+              <div class="form-group">
+                <input type="radio" [name]="questaoDTO.tipoItemQuestaoImagem + 'Alternativa'"
+                      (click)="markCorrectImage(i)" [checked]="alternativa.correta" class="checkbox">
+                <div class="image-upload" (drop)="onDrop($event, 'fotoDaAlternativa' + i)" (dragover)="onDragOver($event)">
+                  <input type="file" id="fotoDaAlternativa{{ i }}" name="fotoDaAlternativa{{ i }}"
+                    (change)="onFileSelectedImage($event, 'fotoDaAlternativa' + i)" accept="image/*,video/*" style="display: none;" />
+                  <label for="fotoDaAlternativa{{ i }}">
+                    <div class="foto-preview" id="fotoPreview{{ i }}">
+                      <ng-container *ngIf="fotoPreviews['fotoDaAlternativa' + i]">
+                        <img *ngIf="fotoPreviews['fotoDaAlternativa' + i]" 
+                            [src]="fotoPreviews['fotoDaAlternativa' + i]" alt="Image Preview" />
+                      </ng-container>
+                      <span *ngIf="!fotoPreviews['fotoDaAlternativa' + i]" class="upload-placeholder">
+                        <img src="assets/imagens/img-foto.svg" class="upload-icon">
+                        <p>Clique para fazer upload da imagem ou vídeo</p>
+                      </span>
+                    </div>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div *ngIf="!questaoDTO.id">
+          <div *ngIf="questaoDTO.tipoItemQuestaoImagem === 'imagem'">
+            <div *ngFor="let alternativa of questaoDTO.alternativas; let i = index">
+              <div class="image-container">
+                <input type="radio" [name]="questaoDTO.tipoItemQuestaoImagem + 'Alternativa'"
+                      (click)="markCorrectImage(i)" [checked]="alternativa.correta" class="checkbox">
+                <div class="image-upload">
+                  <input type="file" id="afirmacao{{ i }}" name="afirmacao{{ i }}"
+                        (change)="onFileSelectedImage($event, 'afirmacao' + i)" accept="image/*" />
+                  <label for="afirmacao{{ i }}">
+                    <div class="image-preview" id="imagePreview{{ i }}">
+                      <img *ngIf="imagePreviews['afirmacao' + i]" [src]="imagePreviews['afirmacao' + i]" alt="Image Preview" />
+                      <span *ngIf="!imagePreviews['afirmacao' + i]">
+                        <img src="assets/imagens/img-foto.svg" style="width: 50px; opacity: 0.5;"> Clique para fazer upload da imagem
+                      </span>
+                    </div>
+                  </label>
+                </div>
               </div>
             </div>
           </div>
@@ -325,8 +355,8 @@
         <label for="fotoDaRespostaUm">
           <div class="foto-preview" id="fotoPreview">
             <ng-container *ngIf="fotoPreviews['fotoDaRespostaUm']">
-              <img *ngIf="isImage(fotoPreviews['fotoDaRespostaUm'])" [src]="fotoPreviews['fotoDaRespostaUm']" alt="Image Preview" />
-              <video *ngIf="isVideo(fotoPreviews['fotoDaRespostaUm'])" [src]="fotoPreviews['fotoDaRespostaUm']" controls></video>
+              <img *ngIf="isPreviewImage(fotoPreviews['fotoDaRespostaUm'])" [src]="fotoPreviews['fotoDaRespostaUm']" alt="Image Preview" />
+              <video *ngIf="isPreviewVideo(fotoPreviews['fotoDaRespostaUm'])" [src]="fotoPreviews['fotoDaRespostaUm']" controls></video>
             </ng-container>
             <span *ngIf="!fotoPreviews['fotoDaRespostaUm']" class="upload-placeholder">
               <img src="assets/imagens/img-foto.svg" class="upload-icon">
@@ -402,8 +432,8 @@
         <label for="fotoDaRespostaDois">
           <div class="foto-preview" id="fotoPreview">
             <ng-container *ngIf="fotoPreviews['fotoDaRespostaDois']">
-              <img *ngIf="isImage(fotoPreviews['fotoDaRespostaDois'])" [src]="fotoPreviews['fotoDaRespostaDois']" alt="Image Preview" />
-              <video *ngIf="isVideo(fotoPreviews['fotoDaRespostaDois'])" [src]="fotoPreviews['fotoDaRespostaDois']" controls></video>
+              <img *ngIf="isPreviewImage(fotoPreviews['fotoDaRespostaDois'])" [src]="fotoPreviews['fotoDaRespostaDois']" alt="Image Preview" />
+              <video *ngIf="isPreviewVideo(fotoPreviews['fotoDaRespostaDois'])" [src]="fotoPreviews['fotoDaRespostaDois']" controls></video>
             </ng-container>
             <span *ngIf="!fotoPreviews['fotoDaRespostaDois']" class="upload-placeholder">
               <img src="assets/imagens/img-foto.svg" class="upload-icon">
@@ -479,8 +509,8 @@
         <label for="fotoDaRespostaTres">
           <div class="foto-preview" id="fotoPreviewTres">
             <ng-container *ngIf="fotoPreviews['fotoDaRespostaTres']">
-              <img *ngIf="isImage(fotoPreviews['fotoDaRespostaTres'])" [src]="fotoPreviews['fotoDaRespostaTres']" alt="Image Preview" />
-              <video *ngIf="isVideo(fotoPreviews['fotoDaRespostaTres'])" [src]="fotoPreviews['fotoDaRespostaTres']" controls></video>
+              <img *ngIf="isPreviewImage(fotoPreviews['fotoDaRespostaTres'])" [src]="fotoPreviews['fotoDaRespostaTres']" alt="Image Preview" />
+              <video *ngIf="isPreviewVideo(fotoPreviews['fotoDaRespostaTres'])" [src]="fotoPreviews['fotoDaRespostaTres']" controls></video>
             </ng-container>
             <span *ngIf="!fotoPreviews['fotoDaRespostaTres']" class="upload-placeholder">
               <img src="assets/imagens/img-foto.svg" class="upload-icon">
@@ -541,8 +571,8 @@
         <label for="fotoDaRespostaQuatro">
           <div class="foto-preview" id="fotoPreviewQuatro">
             <ng-container *ngIf="fotoPreviews['fotoDaRespostaQuatro']">
-              <img *ngIf="isImage(fotoPreviews['fotoDaRespostaQuatro'])" [src]="fotoPreviews['fotoDaRespostaQuatro']" alt="Image Preview" />
-              <video *ngIf="isVideo(fotoPreviews['fotoDaRespostaQuatro'])" [src]="fotoPreviews['fotoDaRespostaQuatro']" controls></video>
+              <img *ngIf="isPreviewImage(fotoPreviews['fotoDaRespostaQuatro'])" [src]="fotoPreviews['fotoDaRespostaQuatro']" alt="Image Preview" />
+              <video *ngIf="isPreviewVideo(fotoPreviews['fotoDaRespostaQuatro'])" [src]="fotoPreviews['fotoDaRespostaQuatro']" controls></video>
             </ng-container>
             <span *ngIf="!fotoPreviews['fotoDaRespostaQuatro']" class="upload-placeholder">
               <img src="assets/imagens/img-foto.svg" class="upload-icon">

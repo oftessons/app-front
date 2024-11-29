@@ -61,8 +61,8 @@ export class QuestoesService {
     return this.http.get(`${this.apiURL}/acertos-erros-tema/${idUser}`);
   }
 
-  salvar(formData: FormData): Observable<any> {    
-    const headers = new HttpHeaders;
+  salvar(formData: FormData): Observable<any> {
+    const headers = new HttpHeaders();
 
     return this.http
       .post<any>(`${this.apiURL}/cadastro`, formData, {
@@ -95,14 +95,15 @@ export class QuestoesService {
       );
   }
 
- 
   atualizarQuestao(formData: FormData, id: number): Observable<any> {
     return this.http
       .put<any>(`${this.apiURL}/atualizarQuestao/${id}`, formData, {
         responseType: 'text' as 'json',
       })
       .pipe(
-        map((response) => this.handleResponse(response, 'Questão atualizada com sucesso!')),
+        map((response) =>
+          this.handleResponse(response, 'Questão atualizada com sucesso!')
+        ),
         catchError((error) => this.handleError(error))
       );
   }
@@ -128,7 +129,7 @@ export class QuestoesService {
   }
 
   getQuestaoById(id: number): Observable<Questao> {
-    return this.http.get<Questao>(`${this.apiURL}/questoes/${id}`);
+    return this.http.get<Questao>(`${this.apiURL}/${id}`);
   }
 
   obterTodasQuestoes(): Observable<Questao[]> {
@@ -162,8 +163,6 @@ export class QuestoesService {
     return this.http.get<Questao[]>(url, { params });
   }
 
-
-  
   filtrarSimulados(
     userId: number,
     filtros: any,
@@ -222,7 +221,10 @@ export class QuestoesService {
       .pipe(catchError((error) => throwError('Erro ao verificar a resposta.')));
   }
 
-  questaoRespondida(idUser: number, questaoId: number): Observable<{
+  questaoRespondida(
+    idUser: number,
+    questaoId: number
+  ): Observable<{
     opcaoSelecionada: string;
     correct: boolean;
     opcaoCorreta: string;
@@ -235,7 +237,7 @@ export class QuestoesService {
         opcaoCorreta: string;
       }>(url, { observe: 'response' })
       .pipe(
-        map(response => {
+        map((response) => {
           if (response.status === 204) {
             return null;
           }
@@ -245,9 +247,11 @@ export class QuestoesService {
       );
   }
 
-
   // Método correto para buscar questão por ID
-  buscarQuestaoPorId(usuarioId: number, questaoId: number): Observable<Questao | null> {
+  buscarQuestaoPorId(
+    usuarioId: number,
+    questaoId: number
+  ): Observable<Questao | null> {
     const url = `${this.apiURL}/buscar-questao/${usuarioId}?questaoId=${questaoId}`;
 
     return this.http.get<Questao>(url, { observe: 'response' }).pipe(
@@ -259,24 +263,24 @@ export class QuestoesService {
       }),
       catchError((error: HttpErrorResponse) => {
         console.error('Erro ao buscar questão:', error);
-        return throwError('Erro ao buscar questão. Por favor, tente novamente.');
+        return throwError(
+          'Erro ao buscar questão. Por favor, tente novamente.'
+        );
       })
     );
   }
 
-   // Método para obter acertos e erros de uma questão por ID
-   getAcertosErrosQuestao(idQuestao: number): Observable<Map<string, string>> {
+  // Método para obter acertos e erros de uma questão por ID
+  getAcertosErrosQuestao(idQuestao: number): Observable<Map<string, string>> {
     const url = `${this.apiURL}/acertos-erros-questao/${idQuestao}`;
 
     return this.http.get<Map<string, string>>(url).pipe(
       catchError((error: HttpErrorResponse) => {
         console.error('Erro ao recuperar acertos e erros da questão:', error);
-        return throwError('Erro ao recuperar acertos e erros da questão. Por favor, tente novamente.');
+        return throwError(
+          'Erro ao recuperar acertos e erros da questão. Por favor, tente novamente.'
+        );
       })
     );
   }
-
-
-
-  
 }

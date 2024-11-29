@@ -122,6 +122,47 @@ editorConfig4 = {
     this.questaoDTO.tipoItemQuestao='texto'
     this.questaoDTO.tipoItemQuestaoImagem='texto'
 
+    this.activatedRoute.params.subscribe(params => {
+      this.questaoDTO.id = +params['id'];
+      if (this.questaoDTO.id){
+        this.questoesService.getQuestaoById(this.questaoDTO.id).subscribe(
+          (questao) => {
+            console.log("QUESTAO RETORNADA PELO ID: ")
+            console.log(questao)
+            this.questaoDTO = questao;
+            this.questaoDTO.alternativas = this.questaoDTO.alternativas || [];
+            if (this.questaoDTO.fotoDaQuestaoUrl) {
+              this.fotoPreviews['fotoDaQuestao'] = this.questaoDTO.fotoDaQuestaoUrl;
+            }
+            for (let i = 0; i < this.questaoDTO.alternativas.length; i++) {
+              const imagemUrl = this.questaoDTO.alternativas[i].imagemUrl;
+              if (imagemUrl) {
+                this.fotoPreviews['fotoDaAlternativa' + i] = imagemUrl;
+              } else {
+                this.fotoPreviews['fotoDaAlternativa' + i] = null;
+              }
+            }
+            
+            if (this.questaoDTO.fotoDaRespostaUmUrl){
+              this.fotoPreviews['fotoDaRespostaUm'] = this.questaoDTO.fotoDaRespostaUmUrl;
+            }
+            if (this.questaoDTO.fotoDaRespostaDoisUrl){
+              this.fotoPreviews['fotoDaRespostaDois'] = this.questaoDTO.fotoDaRespostaDoisUrl;
+            }
+            if (this.questaoDTO.fotoDaRespostaTresUrl){
+              this.fotoPreviews['fotoDaRespostaTres'] = this.questaoDTO.fotoDaRespostaTresUrl;
+            }
+            if (this.questaoDTO.fotoDaRespostaQuatroUrl){
+              this.fotoPreviews['fotoDaRespostaQuatro'] = this.questaoDTO.fotoDaRespostaQuatroUrl;
+            }
+          },
+          (error) => {
+            console.error('Erro ao carregar questão:', error);
+          }
+        )
+      }
+    });
+
   }
 
   ngAfterViewInit(): void {
@@ -238,10 +279,33 @@ editorConfig4 = {
   isImage(fileUrl: string | ArrayBuffer | null): boolean {
     return typeof fileUrl === 'string' && fileUrl.startsWith('data:image/');
   }
-
+  
   isVideo(fileUrl: string | ArrayBuffer | null): boolean {
     return typeof fileUrl === 'string' && fileUrl.startsWith('data:video/');
   }
+  
+  urlIsImage(url: string): boolean {
+    return typeof url === 'string' && /\.(jpeg|jpg|png|gif)$/i.test(url);
+  }
+  
+  urlIsVideo(url: string): boolean {
+    return typeof url === 'string' && /\.(mp4|webm|ogg)$/i.test(url);
+  }
+  
+  isPreviewImage(preview: string | ArrayBuffer | null): boolean {
+    return (
+      typeof preview === 'string' &&
+      (this.isImage(preview) || this.urlIsImage(preview))
+    );
+  }
+  
+  isPreviewVideo(preview: string | ArrayBuffer | null): boolean {
+    return (
+      typeof preview === 'string' &&
+      (this.isVideo(preview) || this.urlIsVideo(preview))
+    );
+  }
+  
   
   onDrop(event: DragEvent, field: string) {
     event.preventDefault();

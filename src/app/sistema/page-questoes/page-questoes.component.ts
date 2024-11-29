@@ -676,7 +676,6 @@ exibirMensagem(texto: string, tipo: 'sucesso' | 'erro'): void {
     this.questoesService.getQuestaoById(this.paginaAtual).subscribe(
       (data: Questao) => {
         this.questaoAtual = data;
-
         // Sanitizar o conteúdo
         this.comentarioDaQuestaoSanitizado =
           this.sanitizer.bypassSecurityTrustHtml(
