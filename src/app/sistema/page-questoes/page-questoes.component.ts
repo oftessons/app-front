@@ -109,6 +109,14 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
   mostrarFiltros: boolean = false;
 
+  numeroDeQuestoes: number = 0;
+  navegacaoPorQuestao: any[] = [
+    {
+    questao: null,
+    index: 0,
+    },
+  ];
+
   constructor(
     private questoesService: QuestoesService,
     private filtroService: FiltroService,
@@ -336,10 +344,16 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
           this.questoes = questoes;
           this.paginaAtual = 0;
           this.questaoAtual = this.questoes[this.paginaAtual];
+
+          this.navegacaoPorQuestao = this.questoes.map((questao, index) => ({
+            questao: questao,
+            index: index,
+          }));
         }
   
         this.resposta = '';
         this.mostrarGabarito = false;
+        this.numeroDeQuestoes = questoes.length;
       },
       (error) => {
         console.error('Erro ao filtrar questões:', error);
@@ -347,6 +361,14 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       }
     );
   }
+
+  selecionarQuestao(event: Event): void {
+    const target = event.target as HTMLSelectElement;
+    const index = Number(target.value);
+    this.paginaAtual = index;
+    this.questaoAtual = this.questoes[this.paginaAtual];
+  }  
+  
   
 
   getMensagemNenhumaQuestaoEncontrada(filtros: any): string {
