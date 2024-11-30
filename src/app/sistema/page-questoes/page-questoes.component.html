@@ -115,6 +115,12 @@
   <div *ngIf="questaoAtual">
     <div class="identificadores-questao-resul">
       <h2 class="h2">Resultado da Filtragem</h2>
+      <h2 class="h2">Numero de questões encontradas: {{ numeroDeQuestoes }}</h2>
+      <select (change)="selecionarQuestao($event)">
+        <option *ngFor="let item of navegacaoPorQuestao" [value]="item.index">
+          {{ 'Questão ' + (item.index + 1) }}
+        </option>
+      </select>         
     </div>
     <div class="questao">
       <div class="identificadores-questao">
