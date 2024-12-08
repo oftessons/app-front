@@ -7,11 +7,13 @@ import { ImageResizeModule } from './image-resize/image-resize.module';
 // material imports
 import { MatIconModule } from "@angular/material/icon";
 import { FormsModule } from '@angular/forms';
+import { ModuloAulasComponent } from './modulo-aulas/modulo-aulas.component';
 
 @NgModule({
   declarations: [
     SelectPadraoComponent,
-    InputPadraoComponent
+    InputPadraoComponent,
+    ModuloAulasComponent
   ],
   imports: [
     CommonModule,
