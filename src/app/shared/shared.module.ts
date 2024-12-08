@@ -24,7 +24,8 @@ import { ModuloAulasComponent } from './modulo-aulas/modulo-aulas.component';
   exports: [
     SelectPadraoComponent,
     ImageResizeModule,
-    InputPadraoComponent
+    InputPadraoComponent,
+    ModuloAulasComponent
   ]
 })
 export class SharedModule { }

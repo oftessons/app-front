@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-modulo-aulas',
@@ -7,9 +8,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ModuloAulasComponent implements OnInit {
 
-  constructor() { }
+  @Input() title: string = 'Título do Card';
+  @Input() description: string = 'Descrição do Card';
+  @Input() imageUrl: string = '';
+  @Input() buttonText: string = 'Acessar conteúdo';
+  @Input() route: string = '/';
+
+  constructor(private router: Router) {}
 
   ngOnInit(): void {
+  }
+
+  navigateToRoute(): void {
+    this.router.navigate([this.route]);
   }
 
 }
