@@ -360,6 +360,8 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
         this.message = 'Ocorreu um erro ao filtrar questões. Por favor, tente novamente mais tarde.';
       }
     );
+
+    this.toggleFiltros();
   }
 
   selecionarQuestao(event: Event): void {
