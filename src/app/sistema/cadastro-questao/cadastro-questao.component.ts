@@ -130,6 +130,7 @@ editorConfig4 = {
             console.log("QUESTAO RETORNADA PELO ID: ")
             console.log(questao)
             this.questaoDTO = questao;
+            this.atualizarEditoresComDados();
             this.questaoDTO.alternativas = this.questaoDTO.alternativas || [];
             if (this.questaoDTO.fotoDaQuestaoUrl) {
               this.fotoPreviews['fotoDaQuestao'] = this.questaoDTO.fotoDaQuestaoUrl;
@@ -172,55 +173,85 @@ editorConfig4 = {
       },
       theme: 'snow'
     });
-
+    quill4.root.innerHTML = this.questaoDTO.comentarioDaQuestaoQuatro || '';
     quill4.on('text-change', () => {
       this.questaoDTO.comentarioDaQuestaoQuatro = quill4.root.innerHTML;
     });
-
+  
     const quill3 = new Quill('#editor3', {
       modules: {
         toolbar: this.editorConfig3.toolbar
       },
       theme: 'snow'
     });
-
+    quill3.root.innerHTML = this.questaoDTO.comentarioDaQuestaoTres || '';
     quill3.on('text-change', () => {
       this.questaoDTO.comentarioDaQuestaoTres = quill3.root.innerHTML;
     });
-
+  
     const quill2 = new Quill('#editor2', {
       modules: {
         toolbar: this.editorConfig2.toolbar
       },
       theme: 'snow'
     });
-
+    quill2.root.innerHTML = this.questaoDTO.comentarioDaQuestaoDois || '';
     quill2.on('text-change', () => {
       this.questaoDTO.comentarioDaQuestaoDois = quill2.root.innerHTML;
     });
-
+  
     const quill = new Quill('#editor', {
       modules: {
         toolbar: this.editorConfig.toolbar
       },
       theme: 'snow'
     });
-
+    quill.root.innerHTML = this.questaoDTO.comentarioDaQuestao || '';
     quill.on('text-change', () => {
       this.questaoDTO.comentarioDaQuestao = quill.root.innerHTML;
     });
-
+  
     const quill1 = new Quill('#editor1', {
       modules: {
         toolbar: this.editorConfig1.toolbar
       },
       theme: 'snow'
     });
-
+    quill1.root.innerHTML = this.questaoDTO.enunciadoDaQuestao || '';
     quill1.on('text-change', () => {
       this.questaoDTO.enunciadoDaQuestao = quill1.root.innerHTML;
     });
   }
+
+  atualizarEditoresComDados(): void {
+    setTimeout(() => {
+      const editor1 = document.querySelector('#editor')?.querySelector('.ql-editor');
+      if (editor1) {
+        editor1.innerHTML = this.questaoDTO.comentarioDaQuestao || '';
+      }
+  
+      const editor2 = document.querySelector('#editor2')?.querySelector('.ql-editor');
+      if (editor2) {
+        editor2.innerHTML = this.questaoDTO.comentarioDaQuestaoDois || '';
+      }
+  
+      const editor3 = document.querySelector('#editor3')?.querySelector('.ql-editor');
+      if (editor3) {
+        editor3.innerHTML = this.questaoDTO.comentarioDaQuestaoTres || '';
+      }
+  
+      const editor4 = document.querySelector('#editor4')?.querySelector('.ql-editor');
+      if (editor4) {
+        editor4.innerHTML = this.questaoDTO.comentarioDaQuestaoQuatro || '';
+      }
+  
+      const editor5 = document.querySelector('#editor1')?.querySelector('.ql-editor');
+      if (editor5) {
+        editor5.innerHTML = this.questaoDTO.enunciadoDaQuestao || '';
+      }
+    });
+  }
+  
 
     // Função para obter o conteúdo do editor
     getEditorContent() {
