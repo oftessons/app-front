@@ -130,6 +130,7 @@ editorConfig4 = {
             console.log("QUESTAO RETORNADA PELO ID: ")
             console.log(questao)
             this.questaoDTO = questao;
+            this.atualizarEditoresComDados();
             this.questaoDTO.alternativas = this.questaoDTO.alternativas || [];
             if (this.questaoDTO.fotoDaQuestaoUrl) {
               this.fotoPreviews['fotoDaQuestao'] = this.questaoDTO.fotoDaQuestaoUrl;
@@ -172,55 +173,85 @@ editorConfig4 = {
       },
       theme: 'snow'
     });
-
+    quill4.root.innerHTML = this.questaoDTO.comentarioDaQuestaoQuatro || '';
     quill4.on('text-change', () => {
       this.questaoDTO.comentarioDaQuestaoQuatro = quill4.root.innerHTML;
     });
-
+  
     const quill3 = new Quill('#editor3', {
       modules: {
         toolbar: this.editorConfig3.toolbar
       },
       theme: 'snow'
     });
-
+    quill3.root.innerHTML = this.questaoDTO.comentarioDaQuestaoTres || '';
     quill3.on('text-change', () => {
       this.questaoDTO.comentarioDaQuestaoTres = quill3.root.innerHTML;
     });
-
+  
     const quill2 = new Quill('#editor2', {
       modules: {
         toolbar: this.editorConfig2.toolbar
       },
       theme: 'snow'
     });
-
+    quill2.root.innerHTML = this.questaoDTO.comentarioDaQuestaoDois || '';
     quill2.on('text-change', () => {
       this.questaoDTO.comentarioDaQuestaoDois = quill2.root.innerHTML;
     });
-
+  
     const quill = new Quill('#editor', {
       modules: {
         toolbar: this.editorConfig.toolbar
       },
       theme: 'snow'
     });
-
+    quill.root.innerHTML = this.questaoDTO.comentarioDaQuestao || '';
     quill.on('text-change', () => {
       this.questaoDTO.comentarioDaQuestao = quill.root.innerHTML;
     });
-
+  
     const quill1 = new Quill('#editor1', {
       modules: {
         toolbar: this.editorConfig1.toolbar
       },
       theme: 'snow'
     });
-
+    quill1.root.innerHTML = this.questaoDTO.enunciadoDaQuestao || '';
     quill1.on('text-change', () => {
       this.questaoDTO.enunciadoDaQuestao = quill1.root.innerHTML;
     });
   }
+
+  atualizarEditoresComDados(): void {
+    setTimeout(() => {
+      const editor1 = document.querySelector('#editor')?.querySelector('.ql-editor');
+      if (editor1) {
+        editor1.innerHTML = this.questaoDTO.comentarioDaQuestao || '';
+      }
+  
+      const editor2 = document.querySelector('#editor2')?.querySelector('.ql-editor');
+      if (editor2) {
+        editor2.innerHTML = this.questaoDTO.comentarioDaQuestaoDois || '';
+      }
+  
+      const editor3 = document.querySelector('#editor3')?.querySelector('.ql-editor');
+      if (editor3) {
+        editor3.innerHTML = this.questaoDTO.comentarioDaQuestaoTres || '';
+      }
+  
+      const editor4 = document.querySelector('#editor4')?.querySelector('.ql-editor');
+      if (editor4) {
+        editor4.innerHTML = this.questaoDTO.comentarioDaQuestaoQuatro || '';
+      }
+  
+      const editor5 = document.querySelector('#editor1')?.querySelector('.ql-editor');
+      if (editor5) {
+        editor5.innerHTML = this.questaoDTO.enunciadoDaQuestao || '';
+      }
+    });
+  }
+  
 
     // Função para obter o conteúdo do editor
     getEditorContent() {
@@ -364,7 +395,7 @@ onSubmit(): void {
     if (quillEditor1) {
       this.questaoDTO.enunciadoDaQuestao = quillEditor1.innerHTML;
     }
-  
+    console.log("Alernativas: ", this.questaoDTO.alternativas);
     const objetoJson = JSON.stringify(this.questaoDTO);
     this.formData = new FormData();
   
@@ -387,35 +418,83 @@ onSubmit(): void {
      // console.log("fotoDaRespostaQuatro: passo");
       this.formData.append('fotoDaRespostaQuatroArquivo', this.fotoDaRespostaQuatro);
     }
-    if (this.questaoDTO.alternativas[0].foto) {
+    if(this.questaoDTO.id != null){
+      this.questaoDTO.alternativas.forEach((alt, index) => {
+        if (alt.foto) {
+          if(alt.texto == 'A'){
+            this.formData.append('A', alt.foto);
+          }
+          if(alt.texto == 'B'){
+            this.formData.append('B', alt.foto);
+          }
+          if(alt.texto == 'C'){
+            this.formData.append('C', alt.foto);
+          }
+          if(alt.texto == 'D'){
+            this.formData.append('D', alt.foto);
+          }
+        }
+      });
+    }else{
+      if (this.questaoDTO.alternativas[0].foto) {
       this.formData.append('A', this.questaoDTO.alternativas[0].foto);
-    }
-    if (this.questaoDTO.alternativas[1].foto) {
-      this.formData.append('B', this.questaoDTO.alternativas[1].foto);
-    }
-    if (this.questaoDTO.alternativas[2].foto) {
-      this.formData.append('C', this.questaoDTO.alternativas[2].foto);
-    }
-    if (this.questaoDTO.alternativas[3].foto) {
-      this.formData.append('D', this.questaoDTO.alternativas[3].foto);
+      }
+      if (this.questaoDTO.alternativas[1].foto) {
+        this.formData.append('B', this.questaoDTO.alternativas[1].foto);
+      }
+      if (this.questaoDTO.alternativas[2].foto) {
+        this.formData.append('C', this.questaoDTO.alternativas[2].foto);
+      }
+      if (this.questaoDTO.alternativas[3].foto) {
+        this.formData.append('D', this.questaoDTO.alternativas[3].foto);
+      }
     }
   
     //console.debug('Enviando formulário com dados da questão:', this.formData);
    // console.log('CLASSE ', objetoJson);
     this.formData.append('questaoDTO', objetoJson);
-  
-    this.questoesService.salvar(this.formData).subscribe(
-      response => {
-        this.successMessage = 'Questão salva com sucesso!';
-        this.errorMessage = null;
-      //  console.debug('Questão salva com sucesso:', response);
-      },
-      error => {
-        this.errorMessage = error;
-        this.successMessage = null;
-        console.error('Erro ao salvar a questão:', error);
+    console.log('objetoJson ', objetoJson);
+
+    if(!this.questaoDTO.id){
+      this.questoesService.salvar(this.formData).subscribe(
+        response => {
+          this.successMessage = 'Questão salva com sucesso!';
+          this.errorMessage = null;
+        //  console.debug('Questão salva com sucesso:', response);
+        },
+        error => {
+          this.errorMessage = error;
+          this.successMessage = null;
+          console.error('Erro ao salvar a questão:', error);
+        }
+      );
+    } else {
+      console.log("Saida da Foto 0: ",this.questaoDTO.alternativas[0].foto);
+      if(this.questaoDTO.alternativas[0].foto){
+        console.log("Saida da Foto 0 diferente de null");
+      }else{
+        console.log("Saida da Foto 0 igual a null");
       }
-    );
+
+      this.questaoDTO.alternativas.forEach((alt, index) => {
+        if (alt.foto instanceof File) {
+          console.log(`foto${index}`, alt.foto);
+        }
+      });
+
+      this.questoesService.atualizarQuestao(this.formData, this.questaoDTO.id).subscribe(
+        response => {
+          this.successMessage = 'Questão atualizada com sucesso!';
+          this.errorMessage = null;
+          console.debug('Questão atualizada com sucesso:', response);
+        },
+        error => {
+          this.errorMessage = error;
+          this.successMessage = null;
+          console.error('Erro ao atualizar a questão:', error);
+        }
+      );
+    }
   
     console.log('Dados da questão antes de enviar:', {
       title: this.questaoDTO.title,
@@ -463,4 +542,23 @@ onFileSelectedImage(event: any, alternativaIndex: string) {
     reader.readAsDataURL(file);
   }
 }
+
+onFileSelectedImageEditar(event: any, alternativaIndex: string) {
+  const file = event.target.files[0];
+
+  if (file) {
+    // Atualiza a propriedade da alternativa correspondente
+    const index = parseInt(alternativaIndex.replace('fotoDaAlternativa', ''), 10);
+    this.questaoDTO.alternativas[index].foto = file;
+
+    // Atualiza a pré-visualização
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.fotoPreviews[alternativaIndex] = reader.result as string;
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+
 }
