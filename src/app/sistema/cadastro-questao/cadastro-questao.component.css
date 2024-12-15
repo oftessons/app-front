@@ -473,19 +473,19 @@ input[type="checkbox"] {
 }
 
 .alert-success {
-  background-color: #10d63e; 
-  color: #000000; 
-  border: 1px solid  #10d63e; 
+  background-color: #10d63e;
+  color: #000000;
+  border: 1px solid #10d63e;
   border-radius: 4px; /* Bordas arredondadas */
   padding: 15px; /* Espaçamento interno */
   font-size: 16px; /* Tamanho da fonte */
 }
 
 .alert-danger {
-  background-color: #ea1123; 
-  color: #ffffff; 
-  border: 1px solid #ea1123; 
+  background-color: #ea1123;
+  color: #ffffff;
+  border: 1px solid #ea1123;
   border-radius: 4px;
-  padding: 15px; 
-  font-size: 16px; 
+  padding: 15px;
+  font-size: 16px;
 }

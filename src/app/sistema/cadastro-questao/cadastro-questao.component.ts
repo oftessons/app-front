@@ -395,7 +395,7 @@ onSubmit(): void {
     if (quillEditor1) {
       this.questaoDTO.enunciadoDaQuestao = quillEditor1.innerHTML;
     }
-  
+    console.log("Alernativas: ", this.questaoDTO.alternativas);
     const objetoJson = JSON.stringify(this.questaoDTO);
     this.formData = new FormData();
   
@@ -418,35 +418,83 @@ onSubmit(): void {
      // console.log("fotoDaRespostaQuatro: passo");
       this.formData.append('fotoDaRespostaQuatroArquivo', this.fotoDaRespostaQuatro);
     }
-    if (this.questaoDTO.alternativas[0].foto) {
+    if(this.questaoDTO.id != null){
+      this.questaoDTO.alternativas.forEach((alt, index) => {
+        if (alt.foto) {
+          if(alt.texto == 'A'){
+            this.formData.append('A', alt.foto);
+          }
+          if(alt.texto == 'B'){
+            this.formData.append('B', alt.foto);
+          }
+          if(alt.texto == 'C'){
+            this.formData.append('C', alt.foto);
+          }
+          if(alt.texto == 'D'){
+            this.formData.append('D', alt.foto);
+          }
+        }
+      });
+    }else{
+      if (this.questaoDTO.alternativas[0].foto) {
       this.formData.append('A', this.questaoDTO.alternativas[0].foto);
-    }
-    if (this.questaoDTO.alternativas[1].foto) {
-      this.formData.append('B', this.questaoDTO.alternativas[1].foto);
-    }
-    if (this.questaoDTO.alternativas[2].foto) {
-      this.formData.append('C', this.questaoDTO.alternativas[2].foto);
-    }
-    if (this.questaoDTO.alternativas[3].foto) {
-      this.formData.append('D', this.questaoDTO.alternativas[3].foto);
+      }
+      if (this.questaoDTO.alternativas[1].foto) {
+        this.formData.append('B', this.questaoDTO.alternativas[1].foto);
+      }
+      if (this.questaoDTO.alternativas[2].foto) {
+        this.formData.append('C', this.questaoDTO.alternativas[2].foto);
+      }
+      if (this.questaoDTO.alternativas[3].foto) {
+        this.formData.append('D', this.questaoDTO.alternativas[3].foto);
+      }
     }
   
     //console.debug('Enviando formulário com dados da questão:', this.formData);
    // console.log('CLASSE ', objetoJson);
     this.formData.append('questaoDTO', objetoJson);
-  
-    this.questoesService.salvar(this.formData).subscribe(
-      response => {
-        this.successMessage = 'Questão salva com sucesso!';
-        this.errorMessage = null;
-      //  console.debug('Questão salva com sucesso:', response);
-      },
-      error => {
-        this.errorMessage = error;
-        this.successMessage = null;
-        console.error('Erro ao salvar a questão:', error);
+    console.log('objetoJson ', objetoJson);
+
+    if(!this.questaoDTO.id){
+      this.questoesService.salvar(this.formData).subscribe(
+        response => {
+          this.successMessage = 'Questão salva com sucesso!';
+          this.errorMessage = null;
+        //  console.debug('Questão salva com sucesso:', response);
+        },
+        error => {
+          this.errorMessage = error;
+          this.successMessage = null;
+          console.error('Erro ao salvar a questão:', error);
+        }
+      );
+    } else {
+      console.log("Saida da Foto 0: ",this.questaoDTO.alternativas[0].foto);
+      if(this.questaoDTO.alternativas[0].foto){
+        console.log("Saida da Foto 0 diferente de null");
+      }else{
+        console.log("Saida da Foto 0 igual a null");
       }
-    );
+
+      this.questaoDTO.alternativas.forEach((alt, index) => {
+        if (alt.foto instanceof File) {
+          console.log(`foto${index}`, alt.foto);
+        }
+      });
+
+      this.questoesService.atualizarQuestao(this.formData, this.questaoDTO.id).subscribe(
+        response => {
+          this.successMessage = 'Questão atualizada com sucesso!';
+          this.errorMessage = null;
+          console.debug('Questão atualizada com sucesso:', response);
+        },
+        error => {
+          this.errorMessage = error;
+          this.successMessage = null;
+          console.error('Erro ao atualizar a questão:', error);
+        }
+      );
+    }
   
     console.log('Dados da questão antes de enviar:', {
       title: this.questaoDTO.title,
@@ -494,4 +542,23 @@ onFileSelectedImage(event: any, alternativaIndex: string) {
     reader.readAsDataURL(file);
   }
 }
+
+onFileSelectedImageEditar(event: any, alternativaIndex: string) {
+  const file = event.target.files[0];
+
+  if (file) {
+    // Atualiza a propriedade da alternativa correspondente
+    const index = parseInt(alternativaIndex.replace('fotoDaAlternativa', ''), 10);
+    this.questaoDTO.alternativas[index].foto = file;
+
+    // Atualiza a pré-visualização
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.fotoPreviews[alternativaIndex] = reader.result as string;
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+
 }

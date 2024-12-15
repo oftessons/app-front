@@ -230,27 +230,33 @@
             <div *ngFor="let alternativa of questaoDTO.alternativas; let i = index">
               <div class="form-group">
                 <input type="radio" [name]="questaoDTO.tipoItemQuestaoImagem + 'Alternativa'"
-                      (click)="markCorrectImage(i)" [checked]="alternativa.correta" class="checkbox">
-                <div class="image-upload" (drop)="onDrop($event, 'fotoDaAlternativa' + i)" (dragover)="onDragOver($event)">
+                       (click)="markCorrectImage(i)" [checked]="alternativa.correta" class="checkbox">
+        
+                <div class="image-upload">
+                  <!-- Input de upload de imagem -->
                   <input type="file" id="fotoDaAlternativa{{ i }}" name="fotoDaAlternativa{{ i }}"
-                    (change)="onFileSelectedImage($event, 'fotoDaAlternativa' + i)" accept="image/*,video/*" style="display: none;" />
-                  <label for="fotoDaAlternativa{{ i }}">
-                    <div class="foto-preview" id="fotoPreview{{ i }}">
-                      <ng-container *ngIf="fotoPreviews['fotoDaAlternativa' + i]">
-                        <img *ngIf="fotoPreviews['fotoDaAlternativa' + i]" 
-                            [src]="fotoPreviews['fotoDaAlternativa' + i]" alt="Image Preview" />
-                      </ng-container>
-                      <span *ngIf="!fotoPreviews['fotoDaAlternativa' + i]" class="upload-placeholder">
-                        <img src="assets/imagens/img-foto.svg" class="upload-icon">
-                        <p>Clique para fazer upload da imagem ou vídeo</p>
-                      </span>
-                    </div>
-                  </label>
+                         (change)="onFileSelectedImageEditar($event, 'fotoDaAlternativa' + i)" 
+                         accept="image/*,video/*" style="display: none;" />
+        
+                         <label for="fotoDaAlternativa{{ i }}">
+                          <div class="foto-preview" id="fotoPreview{{ i }}">
+                            <!-- Mostra pré-visualização se existir -->
+                            <ng-container *ngIf="fotoPreviews['fotoDaAlternativa' + i]">
+                              <img [src]="fotoPreviews['fotoDaAlternativa' + i]" alt="Image Preview" />
+                            </ng-container>
+                            <!-- Placeholder se não houver imagem -->
+                            <span *ngIf="!fotoPreviews['fotoDaAlternativa' + i]" class="upload-placeholder">
+                              <img src="assets/imagens/img-foto.svg" class="upload-icon">
+                              <p>Clique para fazer upload da imagem</p>
+                            </span>
+                          </div>
+                        </label>
+                        
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        </div>        
         
         <div *ngIf="!questaoDTO.id">
           <div *ngIf="questaoDTO.tipoItemQuestaoImagem === 'imagem'">
