@@ -31,6 +31,13 @@ export class ListaQuestoesComponent implements OnInit {
   subtemas = Object.values(Subtema);
   temas = Object.values(Tema);
 
+  aulaId!: number; // Variável para armazenar o ID da aula
+  aulas: any[] = []; // Lista de aulas
+  pageAula: number = 1;
+  pageSizeAula: number = 5;
+  mensagemAula: string = '';
+  mensagemSucessoAula: string = '';
+
   questoes: Questao[] = [];
   selectedAno?: Ano;
   selectedTipoDeProva?: TipoDeProva;
@@ -170,4 +177,47 @@ export class ListaQuestoesComponent implements OnInit {
     this.questoes = [];
     this.message = '';
   }
+
+  buscarAulas(): void {
+    this.authService.obterUsuarioAutenticadoDoBackend().subscribe(
+      (usuario) => {
+        const idUser = parseInt(usuario.id); // Pegando o ID do usuário
+        if (this.aulaId) {
+          this.questoesService.buscarAulaPorId(idUser, this.aulaId).subscribe(
+            (aula: any | null) => {
+              if (!aula) {
+                this.mensagemAula = 'Nenhuma aula encontrada com o ID informado.';
+                this.aulas = [];
+              } else {
+                this.aulas = [aula];
+                this.mensagemAula = '';
+              }
+            },
+            (error) => {
+              this.mensagemAula = 'Erro ao buscar aula. Por favor, tente novamente.';
+            }
+          );
+        } else {
+          this.mensagemAula = 'Por favor, insira o ID da aula.';
+        }
+      },
+      (error) => {
+        console.error('Erro ao obter usuário autenticado:', error);
+      }
+    );
+  }
+  
+  limparFiltrosAula(): void {
+    this.aulas = [];
+    this.mensagemAula = '';
+  }
+  aulaSelecionada: any; // Defina o tipo correto se souber qual é
+
+preparaDelecaoAula(aula: any): void {
+  this.aulaSelecionada = aula;
+  this.modalTitle = 'Confirmação de Exclusão de Aula';
+  this.modalType = 'deleteAula';
+  this.modalAberto = true;
+}
+
 }

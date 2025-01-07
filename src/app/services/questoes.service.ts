@@ -283,4 +283,9 @@ export class QuestoesService {
       })
     );
   }
+
+  buscarAulaPorId(idUser: number, aulaId: number): Observable<any> {
+    return this.http.get<any>(`/api/aulas/${idUser}/${aulaId}`);
+  }
+  
 }

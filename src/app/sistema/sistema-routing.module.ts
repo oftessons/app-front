@@ -14,6 +14,17 @@ import { MeusSimuladosComponent } from './meus-simulados/meus-simulados.componen
 import { ForbiddenComponent } from './forbidden/forbidden.component';
 import { PainelDeAulasComponent } from './painel-de-aulas/painel-de-aulas.component';
 import { CadastroDeAulasComponent } from './cadastro-de-aulas/cadastro-de-aulas.component';
+import { ModuloCatarataComponent } from './modulos-das-aulas/modulo-catarata/modulo-catarata.component';
+import { ModuloCirurgiaRefrativaComponent } from './modulos-das-aulas/modulo-cirurgia-refrativa/modulo-cirurgia-refrativa.component';
+import { ModuloCorneaConjutivaEscleraComponent } from './modulos-das-aulas/modulo-cornea-conjutiva-esclera/modulo-cornea-conjutiva-esclera.component';
+import { ModuloEstrabismoEOftalmopedComponent } from './modulos-das-aulas/modulo-estrabismo-e-oftalmoped/modulo-estrabismo-e-oftalmoped.component';
+import { ModuloFarmacologiaComponent } from './modulos-das-aulas/modulo-farmacologia/modulo-farmacologia.component';
+import { ModuloGlaucomaComponent } from './modulos-das-aulas/modulo-glaucoma/modulo-glaucoma.component';
+import { ModuloLentesDeContatoComponent } from './modulos-das-aulas/modulo-lentes-de-contato/modulo-lentes-de-contato.component';
+import { ModuloOpticaRefratometriaVisaoSubnormalComponent } from './modulos-das-aulas/modulo-optica-refratometria-visao-subnormal/modulo-optica-refratometria-visao-subnormal.component';
+import { ModuloPlasticaEOrbitaComponent } from './modulos-das-aulas/modulo-plastica-e-orbita/modulo-plastica-e-orbita.component';
+import { ModuloRetinaComponent } from './modulos-das-aulas/modulo-retina/modulo-retina.component';
+import { ModuloUveiteOncologiaOcularComponent } from './modulos-das-aulas/modulo-uveite-oncologia-ocular/modulo-uveite-oncologia-ocular.component';
 
 const routes: Routes = [
   { 
@@ -25,6 +36,17 @@ const routes: Routes = [
       { path: 'questoes', component: PageQuestoesComponent },
       { path: 'filtro', component: PageFiltroComponent },
       { path: 'painel-de-aulas', component: PainelDeAulasComponent},
+      { path: 'modulo-catarata', component:ModuloCatarataComponent},
+      { path:'modulo-cirurgia-refrativa', component: ModuloCirurgiaRefrativaComponent},
+      { path:'modulo-cornea-conjuntiva-esclera', component: ModuloCorneaConjutivaEscleraComponent},
+      { path:'modulo-estrabismo-e-oftalmoped', component:ModuloEstrabismoEOftalmopedComponent},
+      { path:'modulo-farmacologia', component:ModuloFarmacologiaComponent},
+      { path:'modulo-glaucoma', component:ModuloGlaucomaComponent},
+      { path:'modulo-lentes-de-contato', component:ModuloLentesDeContatoComponent},
+      { path:'modulo-optica-refratometria-visao-subnormal', component:ModuloOpticaRefratometriaVisaoSubnormalComponent},
+      { path:'modulo-plastica-e-orbita', component:ModuloPlasticaEOrbitaComponent},
+      { path:'modulo-retina', component:ModuloRetinaComponent},
+      { path:'modulo-uveite-oncologia-ocular', component:ModuloUveiteOncologiaOcularComponent},
       { path: 'desempenho', component: PageDesempenhoComponent },
       { path: 'meu-perfil', component: PageMeuPerfilComponent },
       { path: 'simulados', component: PageSimuladoComponent },

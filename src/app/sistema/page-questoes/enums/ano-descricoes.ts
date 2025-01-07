@@ -1,6 +1,7 @@
 import { Ano } from "./ano";
 
 export const AnoDescricoes: Record<Ano, string> = {
+  [Ano.ANO_2025]: '2025',
   [Ano.ANO_2024]: '2024',
   [Ano.ANO_2023]: '2023',
   [Ano.ANO_2022]: '2022',

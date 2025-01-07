@@ -25,6 +25,17 @@ import { ForbiddenComponent } from './forbidden/forbidden.component';
 import { SafeHtmlPipe } from '../pipes/safe-html.pipe';
 import { PainelDeAulasComponent } from './painel-de-aulas/painel-de-aulas.component';
 import { CadastroDeAulasComponent } from './cadastro-de-aulas/cadastro-de-aulas.component';
+import { ModuloRetinaComponent } from './modulos-das-aulas/modulo-retina/modulo-retina.component';
+import { ModuloCorneaConjutivaEscleraComponent } from './modulos-das-aulas/modulo-cornea-conjutiva-esclera/modulo-cornea-conjutiva-esclera.component';
+import { ModuloCatarataComponent } from './modulos-das-aulas/modulo-catarata/modulo-catarata.component';
+import { ModuloGlaucomaComponent } from './modulos-das-aulas/modulo-glaucoma/modulo-glaucoma.component';
+import { ModuloPlasticaEOrbitaComponent } from './modulos-das-aulas/modulo-plastica-e-orbita/modulo-plastica-e-orbita.component';
+import { ModuloEstrabismoEOftalmopedComponent } from './modulos-das-aulas/modulo-estrabismo-e-oftalmoped/modulo-estrabismo-e-oftalmoped.component';
+import { ModuloCirurgiaRefrativaComponent } from './modulos-das-aulas/modulo-cirurgia-refrativa/modulo-cirurgia-refrativa.component';
+import { ModuloLentesDeContatoComponent } from './modulos-das-aulas/modulo-lentes-de-contato/modulo-lentes-de-contato.component';
+import { ModuloFarmacologiaComponent } from './modulos-das-aulas/modulo-farmacologia/modulo-farmacologia.component';
+import { ModuloOpticaRefratometriaVisaoSubnormalComponent } from './modulos-das-aulas/modulo-optica-refratometria-visao-subnormal/modulo-optica-refratometria-visao-subnormal.component';
+import { ModuloUveiteOncologiaOcularComponent } from './modulos-das-aulas/modulo-uveite-oncologia-ocular/modulo-uveite-oncologia-ocular.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +52,17 @@ import { CadastroDeAulasComponent } from './cadastro-de-aulas/cadastro-de-aulas.
     SafeHtmlPipe,
     PainelDeAulasComponent,
     CadastroDeAulasComponent,
+    ModuloRetinaComponent,
+    ModuloCorneaConjutivaEscleraComponent,
+    ModuloCatarataComponent,
+    ModuloGlaucomaComponent,
+    ModuloPlasticaEOrbitaComponent,
+    ModuloEstrabismoEOftalmopedComponent,
+    ModuloCirurgiaRefrativaComponent,
+    ModuloLentesDeContatoComponent,
+    ModuloFarmacologiaComponent,
+    ModuloOpticaRefratometriaVisaoSubnormalComponent,
+    ModuloUveiteOncologiaOcularComponent,
   ],
   imports: [
     CommonModule,

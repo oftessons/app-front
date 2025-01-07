@@ -94,3 +94,69 @@
     </div>
   </div>
 </div>
+
+
+<div class="container pt-5"></div>
+<div class="container mt-4">
+  <h1 class="mt-4"><span> | </span>Busca por ID da Aula</h1>
+</div>
+
+<div class="container">
+  <div class="container-buscar">
+    <form #consultaAulaForm="ngForm" (submit)="buscarAulas()" class="consulta-form">
+      <div class="row align-items-center">
+        <div class="col-md-4">
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>ID da Aula</mat-label>
+            <input matInput name="aulaId" [(ngModel)]="aulaId" placeholder="Digite o ID da aula" />
+          </mat-form-field>
+        </div>
+        <div class="col-md-4 text-center btn-container">
+          <button type="submit" class="btn btn-primary">
+            <i class="fa fa-search"></i> Buscar
+          </button>
+          <button type="button" class="btn btn-secondary" (click)="limparFiltrosAula()">
+            Limpar
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div *ngIf="mensagemSucessoAula" class="alert alert-success mt-3" role="alert">
+    {{ mensagemSucessoAula }}
+  </div>
+  <div *ngIf="mensagemAula && !aulas.length" class="alert alert-warning mt-3" role="alert">
+    {{ mensagemAula }}
+  </div>
+
+  <div *ngIf="aulas.length > 0" class="crud-container mt-3">
+    <div class="table-responsive">
+      <table class="table table-todas-aulas-do-bd">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Data de Cadastro</th>
+            <th>Nome da Aula</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let aula of aulas | paginate: { itemsPerPage: pageSizeAula, currentPage: pageAula }">
+            <td>{{ aula.id }}</td>
+            <td>{{ aula.dataCadastro }}</td>
+            <td>{{ aula.nome }}</td>
+            <td>
+              <button class="btn btn-primary btn-custom-editar" routerLink="/usuario/cadastro-aula/{{ aula.id }}">
+                Editar <img src="assets/imagens/pencil.svg" alt="Ícone de Editar" class="icon" />
+              </button>
+              <button class="btn btn-danger btn-custom-deletar" (click)="preparaDelecaoAula(aula)" data-toggle="modal" data-target="#modalDelecaoAula">
+                Deletar <img src="assets/imagens/de.svg" alt="Ícone de Deletar" class="icon" />
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
