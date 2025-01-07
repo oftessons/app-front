@@ -188,6 +188,21 @@ textarea {
   width: 100%;
 }
 
+textarea,
+input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  transition: all 0.3s ease-in-out;
+}
+
+textarea:focus,
+input[type="text"]:focus {
+  border-color: #888;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
 /* Layout Responsivo */
 @media screen and (max-width: 768px) {
   .container-geral {
