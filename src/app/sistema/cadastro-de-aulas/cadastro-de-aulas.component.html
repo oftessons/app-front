@@ -79,9 +79,9 @@
           </div>
 
           <div class="container mt-4 container-btn">
-            <button type="button" class="btn btn-secundary" routerLink="/usuario/dashboard">Voltar</button>
-            <button type="submit" class="btn btn-primary">Salvar</button>
-            <!-- <button type="submit" class="btn btn-primary">Atualizar</button> -->
+            <button type="button" class="btn btn-secundary" routerLink="/usuario/dashboard" *ngIf="!aulaDTO.id">Voltar</button>
+            <button type="submit" class="btn btn-primary" *ngIf="!aulaDTO.id">Salvar</button>
+            <button type="submit" class="btn btn-primary" *ngIf="aulaDTO.id">Atualizar</button>
           </div>
        </form>
    </div>
