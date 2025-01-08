@@ -5,6 +5,8 @@ import { Usuario } from 'src/app/login/usuario';
 import { Permissao } from 'src/app/login/Permissao';
 import { AuthService } from 'src/app/services/auth.service';
 
+import { CategoriaAula } from '../painel-de-aulas/enums/categoriaaula';
+
 @Component({
   selector: 'app-cadastro-de-aulas',
   templateUrl: './cadastro-de-aulas.component.html',
@@ -21,6 +23,8 @@ export class CadastroDeAulasComponent implements OnInit {
   selectedImage: string='';
   uploadedImage: string='';
   fotoPreviews: { [key: string]: string | ArrayBuffer | null } = {};
+
+   categoriaAula: string[] = Object.values(CategoriaAula);
 
   constructor(
     private authService: AuthService,
