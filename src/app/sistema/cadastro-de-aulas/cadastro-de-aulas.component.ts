@@ -6,6 +6,8 @@ import { Permissao } from 'src/app/login/Permissao';
 import { AuthService } from 'src/app/services/auth.service';
 
 import { CategoriaAula } from '../painel-de-aulas/enums/categoriaaula';
+import { Aula } from '../painel-de-aulas/aula';
+import { AulasService } from 'src/app/services/aulas.service';
 
 @Component({
   selector: 'app-cadastro-de-aulas',
@@ -16,20 +18,23 @@ export class CadastroDeAulasComponent implements OnInit {
 
   usuario: Usuario | null = null;
   Permissao = Permissao;
+  formData = new FormData();
+  aulaDTO = new Aula();
   successMessage: string | null = null;
   errorMessage: string | null = null;
 
-  fotoDaQuestao: File | null = null;
+  videoaula: File | null = null;
   selectedImage: string='';
   uploadedImage: string='';
   fotoPreviews: { [key: string]: string | ArrayBuffer | null } = {};
 
-   categoriaAula: string[] = Object.values(CategoriaAula);
+  categoriaAula: string[] = Object.values(CategoriaAula);
 
   constructor(
     private authService: AuthService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
+    private aulasService: AulasService,
   ) { }
 
   ngOnInit(): void {
@@ -41,8 +46,8 @@ export class CadastroDeAulasComponent implements OnInit {
     const file = event.target.files[0];
     if (file) {
       switch (field) {
-        case 'fotoDaQuestao':
-          this.fotoDaQuestao = file;
+        case 'videoaula':
+          this.videoaula = file;
           break;
         default:
           break;
@@ -103,6 +108,28 @@ export class CadastroDeAulasComponent implements OnInit {
 
   onSubmit(): void {
     console.log('Form submitted');
+    this.formData = new FormData();
+    const objetoJson = JSON.stringify(this.aulaDTO);
+    this.formData.append('aulaDTO', objetoJson);
+  
+    if (this.videoaula) {
+      this.formData.append('videoaulaArquivo', this.videoaula);
+    }
+
+    if (!this.aulaDTO.id) {
+      this.aulasService.salvar(this.formData).subscribe(
+        response => {
+          this.successMessage = 'Aula salva com sucesso!';
+          this.errorMessage = null;
+          console.debug('Aula salva com sucesso:', response);
+        },
+        error => {
+          this.errorMessage = 'Erro ao salvar a aula.';
+          this.successMessage = null;
+          console.error('Erro ao salvar a aula:', error);
+        }
+      );
+    }
   }
 
 }

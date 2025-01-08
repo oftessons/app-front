@@ -5,20 +5,20 @@
          <h2>Cadastro de aulas</h2>
        </div>
        <form class="form-cad" #aulaForm="ngForm" (ngSubmit)="onSubmit()">
-         <!-- <div class="row">
+         <div class="row" *ngIf="aulaDTO.id">
            <div class="col-md-6">
              <div class="form-group">
                <label>ID:</label>
-               <input type="text" class="form-control" name="id"  disabled>
+               <input type="text" class="form-control" name="id" [(ngModel)]="aulaDTO.id" disabled>
              </div>
            </div>
            <div class="col-md-6">
              <div class="form-group">
                <label>Data Cadastro:</label>
-               <input type="text" class="form-control" name="diaDoCadastro" disabled>
+               <input type="text" class="form-control" name="diaDoCadastro" [(ngModel)]="aulaDTO.diaDoCadastro" disabled>
              </div>
            </div>
-         </div> -->
+         </div>
    
          <div>
            <hr class="line">
@@ -33,6 +33,7 @@
               <app-select-padrao
                 label="Módulo"
                 [options]="categoriaAula"
+                [(selectedValue)]="aulaDTO.categoriaAula"
                 [customStyles]="{'background': '#EFEFEF'}">
               </app-select-padrao>
             </div>
@@ -47,16 +48,16 @@
          </div>
          <div class="cont-imgs">
            <div class="form-group">
-             <div class="image-upload" (drop)="onDrop($event, 'fotoDaQuestao')" (dragover)="onDragOver($event)">
-               <input type="file" id="fotoDaQuestao" name="fotoDaQuestao"
-                 (change)="onFileSelected($event, 'fotoDaQuestao')" accept="image/*,video/*" style="display: none;" />
-               <label for="fotoDaQuestao">
+             <div class="image-upload" (drop)="onDrop($event, 'videoaula')" (dragover)="onDragOver($event)">
+               <input type="file" id="videoaula" name="videoaula"
+                 (change)="onFileSelected($event, 'videoaula')" accept="image/*,video/*" style="display: none;" />
+               <label for="videoaula">
                  <div class="foto-preview" id="fotoPreview">
-                   <ng-container *ngIf="fotoPreviews['fotoDaQuestao']">
-                     <img *ngIf="isPreviewImage(fotoPreviews['fotoDaQuestao'])" [src]="fotoPreviews['fotoDaQuestao']" alt="Image Preview" />
-                     <video *ngIf="isPreviewVideo(fotoPreviews['fotoDaQuestao'])" [src]="fotoPreviews['fotoDaQuestao']" controls></video>
+                   <ng-container *ngIf="fotoPreviews['videoaula']">
+                     <img *ngIf="isPreviewImage(fotoPreviews['videoaula'])" [src]="fotoPreviews['videoaula']" alt="Image Preview" />
+                     <video *ngIf="isPreviewVideo(fotoPreviews['videoaula'])" [src]="fotoPreviews['videoaula']" controls></video>
                    </ng-container>
-                   <span *ngIf="!fotoPreviews['fotoDaQuestao']" class="upload-placeholder">
+                   <span *ngIf="!fotoPreviews['videoaula']" class="upload-placeholder">
                      <img src="assets/imagens/img-foto.svg" style="width: 50px; opacity: 0.5;" class="upload-icon">
                      Clique para fazer upload do vídeo
                    </span>
@@ -68,11 +69,13 @@
          
          <div class="form-group">
             <label for="titulo">Título:</label>
-            <input type="text" id="titulo" name="titulo" class="form-control" placeholder="Digite o título da aula" required>
+            <input type="text" id="titulo" name="tituloAula" class="form-control" placeholder="Digite o título da aula" 
+            [(ngModel)]="aulaDTO.tituloAula" required>
           </div>
           <div class="form-group">
             <label for="descricao">Descrição:</label>
-            <textarea id="descricao" name="descricao" class="form-control" rows="3" placeholder="Digite a descrição da aula" required></textarea>
+            <textarea id="descricao" name="descricaoDaAula" class="form-control" rows="3" placeholder="Digite a descrição da aula" 
+            [(ngModel)]="aulaDTO.descricaoDaAula" required></textarea>
           </div>
 
           <div class="container mt-4 container-btn">
