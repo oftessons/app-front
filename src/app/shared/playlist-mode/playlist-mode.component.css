@@ -1,0 +1,98 @@
+/* Estilos do modal */
+.playlist {
+  width: 570px;
+  max-height: 580px;
+  background: #ffffff;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #696D79;
+  border-radius: 8px;
+}
+
+.playlist-title {
+  padding: 15px;
+}
+
+.playlist-title h2 {
+  font-size: 24px;
+  font-weight: 400;
+  margin: 0;
+  color: #041E4E;
+}
+
+.playlist-title span {
+  font-weight: 12px;
+}
+
+.modal-content {
+  background-color: #fff;
+  width: 90%;
+  max-width: 400px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.modal-header {
+  padding: 15px;
+  background-color: #007bff;
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.modal-body {
+  padding: 15px;
+}
+
+.lesson {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+}
+
+.lesson:last-child {
+  border-bottom: none;
+}
+
+.lesson img {
+  width: 40px;
+  height: 40px;
+  background-color: #ccc;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+.lesson-title {
+  flex-grow: 1;
+}
+
+.lesson.completed .lesson-title {
+  text-decoration: line-through;
+  color: #6c757d;
+}
+
+.lesson .check-icon {
+  color: green;
+  display: none;
+}
+
+.lesson.completed .check-icon {
+  display: inline;
+}
+
+.modal-footer {
+  padding: 10px;
+  text-align: right;
+  border-top: 1px solid #ddd;
+}
+
+.close-modal-btn {
+  padding: 5px 15px;
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}

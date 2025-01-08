@@ -8,12 +8,14 @@ import { ImageResizeModule } from './image-resize/image-resize.module';
 import { MatIconModule } from "@angular/material/icon";
 import { FormsModule } from '@angular/forms';
 import { ModuloAulasComponent } from './modulo-aulas/modulo-aulas.component';
+import { PlaylistModeComponent } from './playlist-mode/playlist-mode.component';
 
 @NgModule({
   declarations: [
     SelectPadraoComponent,
     InputPadraoComponent,
-    ModuloAulasComponent
+    ModuloAulasComponent,
+    PlaylistModeComponent
   ],
   imports: [
     CommonModule,
@@ -25,7 +27,8 @@ import { ModuloAulasComponent } from './modulo-aulas/modulo-aulas.component';
     SelectPadraoComponent,
     ImageResizeModule,
     InputPadraoComponent,
-    ModuloAulasComponent
+    ModuloAulasComponent,
+    PlaylistModeComponent
   ]
 })
 export class SharedModule { }
