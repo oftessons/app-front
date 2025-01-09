@@ -5,7 +5,7 @@ import { Usuario } from 'src/app/login/usuario';
 import { Permissao } from 'src/app/login/Permissao';
 import { AuthService } from 'src/app/services/auth.service';
 
-import { CategoriaAula } from '../painel-de-aulas/enums/categoriaaula';
+import { Categoria } from '../painel-de-aulas/enums/categoria';
 import { Aula } from '../painel-de-aulas/aula';
 import { AulasService } from 'src/app/services/aulas.service';
 
@@ -23,12 +23,12 @@ export class CadastroDeAulasComponent implements OnInit {
   successMessage: string | null = null;
   errorMessage: string | null = null;
 
-  videoaula: File | null = null;
+  video: File | null = null;
   selectedImage: string='';
   uploadedImage: string='';
   fotoPreviews: { [key: string]: string | ArrayBuffer | null } = {};
 
-  categoriaAula: string[] = Object.values(CategoriaAula);
+  categoria: string[] = Object.values(Categoria);
 
   constructor(
     private authService: AuthService,
@@ -46,8 +46,8 @@ export class CadastroDeAulasComponent implements OnInit {
     const file = event.target.files[0];
     if (file) {
       switch (field) {
-        case 'videoaula':
-          this.videoaula = file;
+        case 'video':
+          this.video = file;
           break;
         default:
           break;
@@ -112,8 +112,8 @@ export class CadastroDeAulasComponent implements OnInit {
     const objetoJson = JSON.stringify(this.aulaDTO);
     this.formData.append('aulaDTO', objetoJson);
   
-    if (this.videoaula) {
-      this.formData.append('videoaulaArquivo', this.videoaula);
+    if (this.video) {
+      this.formData.append('videoaulaArquivo', this.video);
     }
 
     if (!this.aulaDTO.id) {

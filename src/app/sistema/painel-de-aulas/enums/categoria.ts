@@ -1,4 +1,4 @@
-export enum CategoriaAula {
+export enum Categoria {
     CATARATA = 'CATARATA',
     CIRURGIA_REFRATIVA = 'CIRURGIA_REFRATIVA',
     CORNEA_CONJUNTIVA_E_ESCLERA = 'CORNEA_CONJUNTIVA_E_ESCLERA',

@@ -32,8 +32,8 @@
             <div class="form-group">
               <app-select-padrao
                 label="Módulo"
-                [options]="categoriaAula"
-                [(selectedValue)]="aulaDTO.categoriaAula"
+                [options]="categoria"
+                [(selectedValue)]="aulaDTO.categoria"
                 [customStyles]="{'background': '#EFEFEF'}">
               </app-select-padrao>
             </div>
@@ -48,16 +48,16 @@
          </div>
          <div class="cont-imgs">
            <div class="form-group">
-             <div class="image-upload" (drop)="onDrop($event, 'videoaula')" (dragover)="onDragOver($event)">
-               <input type="file" id="videoaula" name="videoaula"
-                 (change)="onFileSelected($event, 'videoaula')" accept="image/*,video/*" style="display: none;" />
-               <label for="videoaula">
+             <div class="image-upload" (drop)="onDrop($event, 'video')" (dragover)="onDragOver($event)">
+               <input type="file" id="video" name="video"
+                 (change)="onFileSelected($event, 'video')" accept="image/*,video/*" style="display: none;" />
+               <label for="video">
                  <div class="foto-preview" id="fotoPreview">
-                   <ng-container *ngIf="fotoPreviews['videoaula']">
-                     <img *ngIf="isPreviewImage(fotoPreviews['videoaula'])" [src]="fotoPreviews['videoaula']" alt="Image Preview" />
-                     <video *ngIf="isPreviewVideo(fotoPreviews['videoaula'])" [src]="fotoPreviews['videoaula']" controls></video>
+                   <ng-container *ngIf="fotoPreviews['video']">
+                     <img *ngIf="isPreviewImage(fotoPreviews['video'])" [src]="fotoPreviews['video']" alt="Image Preview" />
+                     <video *ngIf="isPreviewVideo(fotoPreviews['video'])" [src]="fotoPreviews['video']" controls></video>
                    </ng-container>
-                   <span *ngIf="!fotoPreviews['videoaula']" class="upload-placeholder">
+                   <span *ngIf="!fotoPreviews['video']" class="upload-placeholder">
                      <img src="assets/imagens/img-foto.svg" style="width: 50px; opacity: 0.5;" class="upload-icon">
                      Clique para fazer upload do vídeo
                    </span>
@@ -70,12 +70,12 @@
          <div class="form-group">
             <label for="titulo">Título:</label>
             <input type="text" id="titulo" name="tituloAula" class="form-control" placeholder="Digite o título da aula" 
-            [(ngModel)]="aulaDTO.tituloAula" required>
+            [(ngModel)]="aulaDTO.titulo" required>
           </div>
           <div class="form-group">
             <label for="descricao">Descrição:</label>
             <textarea id="descricao" name="descricaoDaAula" class="form-control" rows="3" placeholder="Digite a descrição da aula" 
-            [(ngModel)]="aulaDTO.descricaoDaAula" required></textarea>
+            [(ngModel)]="aulaDTO.descricao" required></textarea>
           </div>
 
           <div class="container mt-4 container-btn">

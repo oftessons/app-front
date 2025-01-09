@@ -1,15 +1,15 @@
-import { CategoriaAula } from './enums/categoriaaula';
+import { Categoria } from './enums/categoria';
 
 export class Aula {
   id!: number;
   diaDoCadastro!: string;
   idUser!: number;
   title!: string;
-  videoaula!: File;
-  videoaulaUrl!: string;
-  categoriaAula!: CategoriaAula;
-  tituloAula!: string;
-  descricaoDaAula!: string;
+  video!: File;
+  videoUrl!: string;
+  categoria!: Categoria;
+  titulo!: string;
+  descricao!: string;
 
   toJson(): string {
     return JSON.stringify({
@@ -17,11 +17,11 @@ export class Aula {
       diaDoCadastro: this.diaDoCadastro,
       idUser: this.idUser,
       title: this.title,
-      videoaula: this.videoaula,
-      videoaulaUrl: this.videoaulaUrl,
-      categoriaAula: this.categoriaAula,
-      tituloAula: this.tituloAula,
-      descricaoDaAula: this.descricaoDaAula,
+      videoaula: this.video,
+      videoaulaUrl: this.videoUrl,
+      categoriaAula: this.categoria,
+      tituloAula: this.titulo,
+      descricaoDaAula: this.descricao,
     });
   }
 }
