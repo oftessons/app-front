@@ -106,12 +106,12 @@ export class CadastroDeAulasComponent implements OnInit {
     console.log('Form submitted');
     this.formData = new FormData();
     const objetoJson = JSON.stringify(this.aulaDTO);
-    this.formData.append('aulaDTO', objetoJson);
-  
+    
     if (this.video) {
       console.log('Vídeo selecionado:', this.video);
-      this.formData.append('videoArquivo', this.video);
+      this.formData.append('vídeo', this.video);
     }
+    this.formData.append('aulaDTO', objetoJson);
 
     if (!this.aulaDTO.id) {
       this.aulasService.salvar(this.formData).subscribe(
