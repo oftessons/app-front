@@ -43,4 +43,36 @@ export class AulasService {
         })
       );
   }
+
+  listarAulasPorCategoria(categoria: string): Observable<Aula[]> {
+    return this.http.get<Aula[]>(`${this.apiURL}/${categoria}`).pipe(
+      catchError((error) => {
+        let errorMessage = '';
+
+        if (error.error instanceof ErrorEvent) {
+          errorMessage = `Erro: ${error.error.message}`;
+        } else {
+          errorMessage = `Erro no servidor: ${error.status}, ${error.message}`;
+        }
+        console.error(errorMessage);
+        return throwError(errorMessage);
+      })
+    );
+  }
+
+  listarTodasAulas(): Observable<Aula[]> {
+    return this.http.get<Aula[]>(this.apiURL).pipe(
+      catchError((error) => {
+        let errorMessage = '';
+
+        if (error.error instanceof ErrorEvent) {
+          errorMessage = `Erro: ${error.error.message}`;
+        } else {
+          errorMessage = `Erro no servidor: ${error.status}, ${error.message}`;
+        }
+        console.error(errorMessage);
+        return throwError(errorMessage);
+      })
+    );
+  }
 }

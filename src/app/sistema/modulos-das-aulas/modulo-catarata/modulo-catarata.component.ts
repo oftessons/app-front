@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AulasService } from 'src/app/services/aulas.service';
+import { Aula } from 'src/app/sistema/painel-de-aulas/aula';
 
 @Component({
   selector: 'app-modulo-catarata',
@@ -6,10 +8,26 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./modulo-catarata.component.css']
 })
 export class ModuloCatarataComponent implements OnInit {
+  aulas: Aula[] = [];
+  categoria: string = 'Catarata';
 
-  constructor() { }
+  constructor(
+    private aulasService: AulasService
+  ) { }
 
   ngOnInit(): void {
+    this.listarAulasPorCategoria(this.categoria);
+  }
+
+  listarAulasPorCategoria(categoria: string): void {
+    this.aulasService.listarAulasPorCategoria(categoria).subscribe(
+      (data: Aula[]) => {
+        this.aulas = data;
+      },
+      (error) => {
+        console.error('Erro ao listar aulas:', error);
+      }
+    );
   }
 
 }
