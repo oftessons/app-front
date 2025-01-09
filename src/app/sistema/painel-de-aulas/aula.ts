@@ -17,11 +17,11 @@ export class Aula {
       diaDoCadastro: this.diaDoCadastro,
       idUser: this.idUser,
       title: this.title,
-      videoaula: this.video,
-      videoaulaUrl: this.videoUrl,
-      categoriaAula: this.categoria,
-      tituloAula: this.titulo,
-      descricaoDaAula: this.descricao,
+      video: this.video,
+      videoUrl: this.videoUrl,
+      categoria: this.categoria,
+      titulo: this.titulo,
+      descricao: this.descricao,
     });
   }
 }
