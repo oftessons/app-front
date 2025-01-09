@@ -45,12 +45,8 @@ export class CadastroDeAulasComponent implements OnInit {
   onFileSelected(event: any, field: string) {
     const file = event.target.files[0];
     if (file) {
-      switch (field) {
-        case 'video':
-          this.video = file;
-          break;
-        default:
-          break;
+      if (field === 'video') {
+        this.video = file;
       }
       const reader = new FileReader();
       reader.onload = () => {
@@ -113,7 +109,8 @@ export class CadastroDeAulasComponent implements OnInit {
     this.formData.append('aulaDTO', objetoJson);
   
     if (this.video) {
-      this.formData.append('videoaulaArquivo', this.video);
+      console.log('Vídeo selecionado:', this.video);
+      this.formData.append('videoArquivo', this.video);
     }
 
     if (!this.aulaDTO.id) {
