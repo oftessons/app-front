@@ -283,18 +283,25 @@
       </div>
     </div>
 
+    <div>
+      <hr class="line">
+      <span class="div-section">
+        Vídeo para o gabarito da questão:
+      </span>
+      <hr class="line">
+    </div>
     <div class="form-group">
       <label>Vídeo da Questão:</label>
-      <div class="image-upload" (drop)="onDrop($event, 'videodaquestao')" (dragover)="onDragOver($event)">
-        <input type="file" id="videodaquestao" name="videodaquestao"
+      <div class="image-upload" (drop)="onDrop($event, 'videoDaQuestao')" (dragover)="onDragOver($event)">
+        <input type="file" id="videoDaQuestao" name="videoDaQuestao"
           (change)="onFileSelected($event, 'videodaquestao')" accept="image/*,video/*" style="display: none;" />
-        <label for="videodaquestao">
+        <label for="videoDaQuestao">
           <div class="foto-preview" id="fotoPreviewQuatro">
-            <ng-container *ngIf="fotoPreviews['videodaquestao']">
-              <img *ngIf="isPreviewImage(fotoPreviews['videodaquestao'])" [src]="fotoPreviews['videodaquestao']" alt="Image Preview" />
-              <video *ngIf="isPreviewVideo(fotoPreviews['videodaquestao'])" [src]="fotoPreviews['videodaquestao']" controls></video>
+            <ng-container *ngIf="fotoPreviews['videoDaQuestao']">
+              <img *ngIf="isPreviewImage(fotoPreviews['videoDaQuestao'])" [src]="fotoPreviews['videoDaQuestao']" alt="Image Preview" />
+              <video *ngIf="isPreviewVideo(fotoPreviews['videoDaQuestao'])" [src]="fotoPreviews['videoDaQuestao']" controls></video>
             </ng-container>
-            <span *ngIf="!fotoPreviews['videodaquestao']" class="upload-placeholder">
+            <span *ngIf="!fotoPreviews['videoDaQuestao']" class="upload-placeholder">
               <img src="assets/imagens/filme.svg" class="upload-icon">
               <p>Clique para fazer upload do vídeo</p>
             </span>
