@@ -109,7 +109,7 @@ export class CadastroDeAulasComponent implements OnInit {
     
     if (this.video) {
       console.log('Vídeo selecionado:', this.video);
-      this.formData.append('vídeo', this.video);
+      this.formData.append('video', this.video);
     }
     this.formData.append('aulaDTO', objetoJson);
 
