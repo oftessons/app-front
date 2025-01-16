@@ -25,6 +25,7 @@ import { ModuloOpticaRefratometriaVisaoSubnormalComponent } from './modulos-das-
 import { ModuloPlasticaEOrbitaComponent } from './modulos-das-aulas/modulo-plastica-e-orbita/modulo-plastica-e-orbita.component';
 import { ModuloRetinaComponent } from './modulos-das-aulas/modulo-retina/modulo-retina.component';
 import { ModuloUveiteOncologiaOcularComponent } from './modulos-das-aulas/modulo-uveite-oncologia-ocular/modulo-uveite-oncologia-ocular.component';
+import { PermissaoAdminComponent } from './permissao-admin/permissao-admin.component';
 
 const routes: Routes = [
   { 
@@ -77,6 +78,12 @@ const routes: Routes = [
       { 
         path: 'buscar-questão', 
         component: ListaQuestoesComponent, 
+        canActivate: [AuthGuard], 
+        data: { role: 'ADMIN' }
+      },
+      {
+        path: 'permissao-admin', 
+        component: PermissaoAdminComponent, 
         canActivate: [AuthGuard], 
         data: { role: 'ADMIN' }
       }
