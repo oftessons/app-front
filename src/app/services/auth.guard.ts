@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
+import { Permissao } from '../login/Permissao';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +22,7 @@ export class AuthGuard implements CanActivate {
       const role = usuario.permissao;
   
       // Verifica se o usuário tem a permissão necessária
-      if (role === 'ROLE_ADMIN' || role === 'ROLE_USER') {
+      if (role === Permissao.ADMIN || role === Permissao.PROFESSOR || role === Permissao.USER) {
         return true;
       }
     }

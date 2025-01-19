@@ -1,0 +1,232 @@
+<div class="container pt-5">
+    <div class="container mt-4 container-geral">
+      <div class="header-container">
+        <h2>Cadastro de Usuários</h2>
+      </div>
+  
+      <!-- Formulário de Cadastro -->
+      <form class="form-cad" (submit)="cadastrar()">
+        <div class="row">
+          <div class="form-group col-sm-12 col-md-6">
+            <label for="username" class="small mb-1">Login *</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              autocomplete="off"
+              [(ngModel)]="username"
+              class="form-control py-2 responsive-input"
+              placeholder="Digite seu username"
+              required
+            />
+          </div>
+  
+          <div class="form-group col-sm-12 col-md-6">
+            <label for="password" class="small mb-1">Senha *</label>
+            <div class="input-group">
+              <input
+                type="password"
+                id="password"
+                name="password"
+                [(ngModel)]="password"
+                class="form-control py-2 responsive-input"
+                placeholder="Digite sua senha"
+                required
+                (input)="validatePassword()"
+                (focus)="showTooltip = true"
+                (blur)="showTooltip = false"
+              />
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" (click)="togglePasswordVisibility('password')">
+                  <img src="assets/imagens/view.svg" alt="Mostrar senha" width="16" height="16" />
+                </button>
+              </div>
+            </div>
+          </div>
+            
+          <div *ngIf="showTooltip" class="password-tooltip">
+              <p class="tooltip-title">A senha precisa ter:</p>
+              <ul>
+              <li [class.valid]="passwordValidations.minLength">
+                  <i class="fas fa-exclamation-circle"></i>
+                  Ao menos 8 caracteres
+              </li>
+              <li [class.valid]="passwordValidations.uppercase">
+                  <i class="fas fa-exclamation-circle"></i>
+                  1 letra maiúscula
+              </li>
+              <li [class.valid]="passwordValidations.lowercase">
+                  <i class="fas fa-exclamation-circle"></i>
+                  1 letra minúscula
+              </li>
+              <li [class.valid]="passwordValidations.number">
+                  <i class="fas fa-exclamation-circle"></i>
+                  1 número
+              </li>
+              <li [class.valid]="passwordValidations.specialChar">
+                  <i class="fas fa-exclamation-circle"></i>
+                  1 caractere especial
+              </li>
+              </ul>
+          </div>
+          
+
+          <div class="form-group col-sm-12 col-md-6">
+            <label for="confirmPassword" class="small mb-1">Confirmar Senha *</label>
+            <div class="input-group">
+              <input
+                type="password"
+                id="confirmPassword"
+                name="confirmPassword"
+                [(ngModel)]="confirmPassword"
+                class="form-control py-2 responsive-input"
+                placeholder="Confirme sua senha"
+              />
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" (click)="togglePasswordVisibility('confirmPassword')">
+                  <img src="assets/imagens/view.svg" alt="Mostrar senha" width="16" height="16" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+        <div class="row">
+          <div class="form-group col-sm-12 col-md-6">
+            <label for="nome" class="small mb-1">Nome *</label>
+            <input
+              type="text"
+              id="nome"
+              name="nome"
+              [(ngModel)]="nome"
+              class="form-control py-2 responsive-input"
+              placeholder="Digite o nome"
+              required
+            />
+          </div>
+  
+          <div class="form-group col-sm-12 col-md-6">
+            <label for="email" class="small mb-1">Email *</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              [(ngModel)]="email"
+              class="form-control py-2 responsive-input"
+              placeholder="Digite o email"
+              required
+            />
+          </div>
+        </div>
+  
+        <div class="row">
+          <div class="form-group col-sm-12 col-md-6">
+            <label for="telefone" class="small mb-1">Telefone</label>
+            <input
+              type="text"
+              id="telefone"
+              name="telefone"
+              [(ngModel)]="telefone"
+              class="form-control py-2 responsive-input"
+              placeholder="Digite o celular"
+            />
+          </div>
+  
+          <div class="form-group col-sm-12 col-md-6">
+            <label for="cidade" class="small mb-1">Cidade</label>
+            <input
+              type="text"
+              id="cidade"
+              name="cidade"
+              [(ngModel)]="cidade"
+              class="form-control py-2 responsive-input"
+              placeholder="Digite sua cidade"
+            />
+          </div>
+  
+          <div class="form-group col-sm-12 col-md-6">
+            <label for="estado" class="small mb-1">Estado</label>
+            <input
+              type="text"
+              id="estado"
+              name="estado"
+              [(ngModel)]="estado"
+              class="form-control py-2 responsive-input"
+              placeholder="Digite seu estado"
+            />
+          </div>
+  
+          <div *ngIf="isAdmin()" class="form-group col-sm-12 col-md-6">
+            <label for="tipoUsuario" class="small mb-1">Tipo de Usuário *</label>
+            <select
+              id="tipoUsuario"
+              name="tipoUsuario"
+              [(ngModel)]="tipoUsuario"
+              class="form-control py-2 responsive-input"
+              required
+            >
+              <option value="" disabled selected>Selecione o tipo de usuário</option>
+              <option *ngFor="let tipo of tiposPermissao" (value)="tipo">{{ tipo }}</option>
+            </select>
+          </div>
+        </div>
+  
+        <!-- Consentimento dos Termos -->
+        <div class="col-sm-12 mt-3 termos">
+          <label for="consentimento" class="ms-2">
+            Eu concordo com os
+            <a href="assets/docs/pp.pdf" target="_blank">Termos de Uso</a> e a
+            <a href="assets/docs/pp.pdf" target="_blank">Política de Privacidade</a>.
+          </label>
+          <input type="checkbox" id="consentimento" name="consentimento" [(ngModel)]="consentimento" required />
+
+        </div>
+  
+        <div class="form-group align-items-center justify-content-between mt-4 mb-0 d-flex">
+          <button type="button" class="btn btn-danger btn-lg me-2 btn-custom">Voltar</button>
+          <button type="submit" class="btn btn-success btn-lg me-2 btn-custom" [disabled]="!consentimento">Cadastrar</button>
+        </div>
+      </form>
+  
+      <!-- Lista de Usuários -->
+      <div class="search-container mt-5">
+        <label for="search" class="small mb-1">Pesquisar Usuário:</label>
+        <input
+          type="text"
+          id="search"
+          class="form-control py-2 responsive-input"
+          placeholder="Digite nome ou email para buscar"
+        />
+      </div>
+  
+      <table class="table mt-4">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Telefone</th>
+            <th>Cidade</th>
+            <th>Estado</th>
+            <th>Tipo</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Usuários listados aqui -->
+        </tbody>
+      </table>
+  
+      <!-- Mensagens de Erro -->
+      <div class="alert alert-danger mt-4" style="display: none;">
+        <ul>
+          <li><!-- Mensagem de erro --></li>
+        </ul>
+      </div>
+  
+      <!-- Mensagem de Sucesso -->
+      <div class="alert alert-success mt-4" style="display: none;">
+        <!-- Mensagem de sucesso -->
+      </div>
+    </div>
+  </div>
+  

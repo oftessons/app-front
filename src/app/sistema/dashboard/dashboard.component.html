@@ -85,7 +85,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 mb-4" *ngIf="isAdmin()">
+            <div class="col-md-3 mb-4" *ngIf="isAdmin() || isProfessor()">
                 <div class="card">
                     <div class="card-body text-center">
                         <h5 class="card-title"> Cadastro de Aulas</h5>
@@ -96,7 +96,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 mb-4" *ngIf="isAdmin()">
+            <div class="col-md-3 mb-4" *ngIf="isAdmin() || isProfessor()">
                 <div class="card">
                     <div class="card-body text-center">
                         <h5 class="card-title">Cadastro de Questão</h5>
@@ -107,7 +107,7 @@
                     </div>
                 </div>
             </div>              
-            <div class="col-md-3 mb-4" *ngIf="isAdmin()">
+            <div class="col-md-3 mb-4" *ngIf="isAdmin() || isProfessor()">
                 <div class="card">
                     <div class="card-body text-center">
                         <h5 class="card-title">Buscar Questão/Aula</h5>
@@ -115,6 +115,17 @@
                             <img src="assets/imagens/bu.svg" alt="Ícone de Buscar" class="icon">
                         </div>
                         <a routerLink="/usuario/buscar-questão" class="btn btn-primary">Acessar ></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4" *ngIf="isAdmin() || isProfessor()">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Gerenciar usuários</h5>
+                        <div class="card-icon">
+                            <img src="assets/imagens/bu.svg" alt="Ícone de Buscar" class="icon">
+                        </div>
+                        <span routerLink="/usuario/gerencia-usuarios" class="btn btn-primary">Acessar ></span>
                     </div>
                 </div>
             </div>
@@ -138,3 +149,5 @@
         </div>
     </div>
 </div>
+
+  

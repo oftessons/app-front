@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { Usuario } from './usuario';
+import { Permissao } from './Permissao';
 
 @Component({
   selector: 'app-login',
@@ -22,10 +23,12 @@ export class LoginComponent {
   forgotEmail: string = '';
   showForgotPassword: boolean = false;
   usuario!: Usuario | null;
+  tiposPermissao = [Permissao.USER, Permissao.PROFESSOR]
 
   confirmPasswordError: string | null = null;
   confirmPassword: string = '';
   consentimento: boolean = false;  
+  tipoUsuario: string = '';
 
   showTooltip: boolean = false;
   passwordValidations = {
@@ -49,7 +52,6 @@ export class LoginComponent {
   onSubmit() {
     this.authService.tentarLogar(this.username, this.password).subscribe(
         (response: any) => {
-          
             // Salva o token de acesso no localStorage
             const access_token = response.access_token;
             localStorage.setItem('access_token', access_token);
@@ -70,14 +72,18 @@ export class LoginComponent {
                 estado: response.estado || '',
                 nome: response.nome || '',
                 confirmPassword: '', 
-                permissao: response.authorities.length > 0 ? response.authorities[0] : null 
+                permissao: response.authorities.length > 0 ? response.authorities[0] : null,
+                planoId: response.planoId || '',
+                stripeCustomerId: response.stripeCustomerId || ''
+                
             };
             localStorage.setItem('usuario', JSON.stringify(usuario));
             
             // Redireciona com base na permissão do usuário
-            if (usuario.permissao === 'ROLE_ADMIN' || usuario.permissao === 'ROLE_USER') {
+            if (usuario.permissao === Permissao.ADMIN || usuario.permissao === Permissao.PROFESSOR || usuario.permissao === Permissao.USER) {
               this.router.navigate(['/usuario/dashboard']);
             } else {
+              console.log(usuario.permissao);
               this.router.navigate(['/forbidden']); // Caso não tenha permissão
             }
 
@@ -99,6 +105,8 @@ export class LoginComponent {
   }
 
   cadastrar(){
+  console.log(this.tipoUsuario);
+
   this.errors = []; // Limpa os erros anteriores
   const passwordValidationErrors: string[] = [];
 
@@ -156,7 +164,7 @@ export class LoginComponent {
     usuario.cidade = this.cidade;
     usuario.estado = this.estado;
     this.authService
-        .salvar(usuario)
+        .salvar(usuario, this.tipoUsuario)
         .subscribe( response => {
           this.mensagemSucesso = "Cadastro realizado com sucesso! Efetue o login.";
           this.cadastrando = false;
@@ -237,6 +245,10 @@ export class LoginComponent {
     if (passwordInput) {
       passwordInput.setAttribute('type', this.passwordVisible[field] ? 'text' : 'password');
     }
+  }
+
+  isAdmin(): boolean {
+    return this.authService.isAdmin();
   }
 
   validateConfirmPassword() {

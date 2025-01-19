@@ -25,6 +25,7 @@ import { ModuloOpticaRefratometriaVisaoSubnormalComponent } from './modulos-das-
 import { ModuloPlasticaEOrbitaComponent } from './modulos-das-aulas/modulo-plastica-e-orbita/modulo-plastica-e-orbita.component';
 import { ModuloRetinaComponent } from './modulos-das-aulas/modulo-retina/modulo-retina.component';
 import { ModuloUveiteOncologiaOcularComponent } from './modulos-das-aulas/modulo-uveite-oncologia-ocular/modulo-uveite-oncologia-ocular.component';
+import { CadastroUsuariosComponent } from './cadastro-de-usuarios/cadastro-de-usuarios.component';
 
 const routes: Routes = [
   { 
@@ -52,6 +53,7 @@ const routes: Routes = [
       { path: 'simulados', component: PageSimuladoComponent },
       { path: 'simulados/:id', component: PageSimuladoComponent },
       { path: 'meus-simulados', component: MeusSimuladosComponent },
+      { path: 'gerencia-usuarios', component: CadastroUsuariosComponent },
       { 
         path: 'forbidden', 
         component: ForbiddenComponent // Certifique-se de criar este componente
@@ -60,25 +62,25 @@ const routes: Routes = [
         path: 'cadastro-questao', 
         component: CadastroQuestaoComponent, 
         canActivate: [AuthGuard], 
-        data: { role: 'ADMIN' }
+        data: { roles: ['ADMIN', 'PROFESSOR'] }
       },
       { 
         path: 'cadastro-questao/:id', 
         component: CadastroQuestaoComponent, 
         canActivate: [AuthGuard], 
-        data: { role: 'ADMIN' }
+        data: { roles: ['ADMIN', 'PROFESSOR'] }
       },
       { 
         path: 'cadastro-aulas', 
         component: CadastroDeAulasComponent, 
         canActivate: [AuthGuard], 
-        data: { role: 'ADMIN' }
+        data: { roles: ['ADMIN', 'PROFESSOR'] }
       },
       { 
         path: 'buscar-questão', 
         component: ListaQuestoesComponent, 
         canActivate: [AuthGuard], 
-        data: { role: 'ADMIN' }
+        data: { roles: ['ADMIN', 'PROFESSOR'] }
       }
     ]
   }

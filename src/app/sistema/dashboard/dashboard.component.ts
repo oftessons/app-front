@@ -35,7 +35,11 @@ export class DashboardComponent implements OnInit {
   }
 
   isAdmin(): boolean {
-    return this.usuarioLogado?.permissao === 'ROLE_ADMIN'; // Verifica se o usuário é admin
+    return this.usuarioLogado?.permissao === Permissao.ADMIN; // Verifica se o usuário é admin
+  }
+
+  isProfessor(): boolean {
+    return this.usuarioLogado?.permissao === Permissao.PROFESSOR;  // Verificando se o usuário é professor
   }
 
   ngOnDestroy() {

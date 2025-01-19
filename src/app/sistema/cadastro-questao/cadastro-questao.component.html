@@ -1,4 +1,4 @@
-<div *ngIf="usuario && usuario.permissao === Permissao.ADMIN">
+<div *ngIf="usuario && (usuario.permissao === Permissao.ADMIN || usuario.permissao === Permissao.PROFESSOR)">
  <div class="container pt-5">
   <div class="container mt-4 container-geral">
     <div class="header-container">

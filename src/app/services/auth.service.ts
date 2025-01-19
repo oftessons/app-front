@@ -7,6 +7,7 @@ import { JwtHelperService } from '@auth0/angular-jwt'
 import { environment } from 'src/environments/environment';
 import { Usuario } from '../login/usuario';
 import { map } from 'rxjs/internal/operators/map';
+import { Permissao } from '../login/Permissao';
 
 @Injectable({
   providedIn: 'root'
@@ -91,7 +92,6 @@ obterNomeUsuario(): Observable<string> {
     }
   }
 
- 
 
   isAuthenticated() : boolean {
     const token = this.obterToken();
@@ -103,8 +103,38 @@ obterNomeUsuario(): Observable<string> {
     return false;
   }
 
-  salvar(usuario: Usuario): Observable<any> {
-    return this.http.post<any>(`${this.apiURL}/cadastro`, usuario);
+  isAdmin(): boolean {
+    const usuarioAutenticado = this.getUsuarioAutenticado();
+    return usuarioAutenticado?.permissao === Permissao.ADMIN;
+  }
+
+  salvar(usuario: Usuario, permissao: string): Observable<any> {
+    const usuarioAutenticado:Usuario | null = this.getUsuarioAutenticado();
+    
+    if(usuarioAutenticado) {
+      const permissaoUsuario = usuarioAutenticado.permissao;
+
+      // controle do admin
+      if(permissaoUsuario === Permissao.ADMIN) {
+        if(permissao === Permissao.PROFESSOR) {
+          return this.cadastrarProfessor(usuario);
+        } else if(permissao === Permissao.USER) {
+          return this.cadastrarAluno(usuario);
+        }
+      }
+
+    }
+      return this.cadastrarAluno(usuario);
+
+  }
+  
+  private cadastrarAluno(usuario: Usuario): Observable<any> {
+    return this.http.post(`${this.apiURL}/cadastro/aluno`, usuario);
+  }
+
+  // Função para cadastrar professor
+  private cadastrarProfessor(usuario: Usuario): Observable<any> {
+    return this.http.post(`${this.apiURL}/cadastro/professor`, usuario);
   }
 
   tentarLogar( username: string, password: string ) : Observable<any> {

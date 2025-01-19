@@ -12,4 +12,7 @@ export class Usuario {
   nome!: string;
   confirmPassword!: string;
   permissao!: Permissao;  // Atualize para usar a enum Permissao
+  planoId!: string;
+  stripeCustomerId!: string;
+
 }

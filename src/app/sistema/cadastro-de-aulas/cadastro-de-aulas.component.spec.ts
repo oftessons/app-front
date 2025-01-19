@@ -1,7 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CadastroDeAulasComponent } from './cadastro-de-aulas.component';
-
+import { CadastroDeAulasComponent
+    
+ } from './cadastro-de-aulas.component';
 describe('CadastroDeAulasComponent', () => {
   let component: CadastroDeAulasComponent;
   let fixture: ComponentFixture<CadastroDeAulasComponent>;

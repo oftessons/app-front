@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Permissao } from 'src/app/login/Permissao';
 import { Usuario } from 'src/app/login/usuario';
 import { AuthService } from 'src/app/services/auth.service';
+import { StripeService } from 'src/app/services/stripe/stripe.service';
 
 @Component({
   selector: 'app-page-meu-perfil',
@@ -12,22 +14,37 @@ export class PageMeuPerfilComponent implements OnInit {
   usuario!: Usuario;
   editMode: boolean = false;
   selectedFile!: File;
+  tiposPermissao = [Permissao.PROFESSOR, Permissao.USER];
+  tipoUsuario: String = '';
 
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(private router: Router, private authService: AuthService, private stripeService: StripeService) {}
 
   ngOnInit(): void {
     this.obterPerfilUsuario();
+    this.obterPriceDoPlanoUsuario();
+
   }
 
   obterPerfilUsuario() {
     this.authService.obterUsuarioAutenticadoDoBackend().subscribe(
       (data) => {
         this.usuario = data;
+        
       },
       (error) => {
        // console.error('Erro ao obter perfil do usuário:', error);
       }
     );
+  }
+
+  obterPriceDoPlanoUsuario() {
+    const dadosUsuarios = this.authService.obterUsuarioAutenticadoDoBackend().subscribe(
+      (data) => {
+        const price_id = data.planoId;
+        console.log(this.stripeService.getPlanByPrice(price_id));
+      }
+    );
+
   }
 
   editarPerfil() {
@@ -61,4 +78,5 @@ export class PageMeuPerfilComponent implements OnInit {
   voltarPerfil(): void {
     this.router.navigate(['/usuario/dashboard']);
   }
+
 }

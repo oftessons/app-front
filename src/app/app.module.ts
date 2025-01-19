@@ -21,12 +21,14 @@ import { EditorModule } from '@tinymce/tinymce-angular';
 import { SharedModule } from './shared/shared.module';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { QuillModule } from 'ngx-quill';
+import { CadastroUsuariosComponent } from './sistema/cadastro-de-usuarios/cadastro-de-usuarios.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LayoutComponent,
     LoginComponent,
+    CadastroUsuariosComponent
   ],
   imports: [
     BrowserModule,
