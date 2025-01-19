@@ -4,6 +4,8 @@ import { Permissao } from 'src/app/login/Permissao';
 import { Usuario } from 'src/app/login/usuario';
 import { AuthService } from 'src/app/services/auth.service';
 import { StripeService } from 'src/app/services/stripe/stripe.service';
+import { Plano } from '../stripePlanDTO';
+import { runInThisContext } from 'vm';
 
 @Component({
   selector: 'app-page-meu-perfil',
@@ -12,16 +14,17 @@ import { StripeService } from 'src/app/services/stripe/stripe.service';
 })
 export class PageMeuPerfilComponent implements OnInit {
   usuario!: Usuario;
+  planName!: string;
   editMode: boolean = false;
   selectedFile!: File;
   tiposPermissao = [Permissao.PROFESSOR, Permissao.USER];
   tipoUsuario: String = '';
-
+  
   constructor(private router: Router, private authService: AuthService, private stripeService: StripeService) {}
 
   ngOnInit(): void {
     this.obterPerfilUsuario();
-    this.obterPriceDoPlanoUsuario();
+    this.obterPlanoDoUsuarioByPriceId();
 
   }
 
@@ -32,19 +35,29 @@ export class PageMeuPerfilComponent implements OnInit {
         
       },
       (error) => {
-       // console.error('Erro ao obter perfil do usuário:', error);
+       console.error('Erro ao obter perfil do usuário:', error);
       }
     );
   }
 
-  obterPriceDoPlanoUsuario() {
-    const dadosUsuarios = this.authService.obterUsuarioAutenticadoDoBackend().subscribe(
+  obterPlanoDoUsuarioByPriceId() {
+    this.authService.obterUsuarioAutenticadoDoBackend().subscribe(
       (data) => {
         const price_id = data.planoId;
-        console.log(this.stripeService.getPlanByPrice(price_id));
+
+        this.stripeService.getPlanByPrice(price_id).then((plan: Plano | null) => {
+          if(plan) {
+            this.planName = plan.name;
+            console.log("Nome do plano: ", this.planName);
+
+          } else {
+            this.planName = "FREE";
+            console.error("Não foi possível encontrar um plano para esse usuário");
+          }
+        })
+        
       }
     );
-
   }
 
   editarPerfil() {
