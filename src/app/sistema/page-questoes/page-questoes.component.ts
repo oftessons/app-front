@@ -334,11 +334,10 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       .filter((enumAno) => enumAno !== undefined);
 
       if (anosSelecionados.length > 0) {
-        filtros.anos = anosSelecionados;
+        filtros.ano = anosSelecionados;
       }
     }
 
-    console.log("Anos: " + filtros.anos);
 
     if (this.multSelecDificuldade.length) {
       const dificuldadeSelecionada = this.multSelecDificuldade
@@ -350,8 +349,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       }
     }
 
-    console.log("Dificuldade: " + filtros.dificuldade);
-
     if (this.multSelectTipoDeProva.length) {
       const tipoDeProvaSelecionado = this.multSelectTipoDeProva
       .map((tipoDeProva) => this.obterTipoDeProvaEnum(tipoDeProva))
@@ -362,7 +359,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       }
     }
 
-    console.log("tipoDeProva: " + filtros.tipoDeProva);
 
     if (this.multSelectSubtema.length) {
       const subtemaSelecionado = this.multSelectSubtema
@@ -374,7 +370,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       }
     }
 
-    console.log("tipoDeProva: " + filtros.subtema);
 
     if (this.multSelectTema.length) {
       const temaSelecionado = this.multSelectTema
@@ -386,48 +381,47 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       }
     }
 
-    console.log("Tema: " + filtros.tema);
-    // // Verificar se a palavra-chave está preenchida
-    // if (this.palavraChave && this.palavraChave.trim() !== '') {
-    //   filtros.palavraChave = this.palavraChave.trim();
-    // }
+    // Verificar se a palavra-chave está preenchida
+    if (this.palavraChave && this.palavraChave.trim() !== '') {
+      filtros.palavraChave = this.palavraChave.trim();
+    }
   
-    // if (Object.keys(filtros).length === 0) {
-    //   this.message = 'Por favor, selecione pelo menos um filtro.';
-    //   this.questoes = [];
-    //   return;
-    // }
+    if (Object.keys(filtros).length === 0) {
+      this.message = 'Por favor, selecione pelo menos um filtro.';
+      this.questoes = [];
+      return;
+    }
 
   
-    // this.questoesService.filtrarQuestoes(this.usuarioId, filtros, 0, 100).subscribe(
-    //   (questoes: Questao[]) => {
-    //     if (questoes.length === 0) {
-    //       this.message = this.getMensagemNenhumaQuestaoEncontrada(filtros);
-    //       this.questoes = [];
-    //       this.questaoAtual = null;
-    //     } else {
-    //       this.message = '';
-    //       this.questoes = questoes;
-    //       this.paginaAtual = 0;
-    //       this.questaoAtual = this.questoes[this.paginaAtual];
+    this.questoesService.filtrarQuestoes(this.usuarioId, filtros, 0, 100).subscribe(
+      (questoes: Questao[]) => {
+        if (questoes.length === 0) {
+          this.message = this.getMensagemNenhumaQuestaoEncontrada(filtros);
+          this.questoes = [];
+          this.questaoAtual = null;
+        } else {
+          this.message = '';
+          this.questoes = questoes;
+          this.paginaAtual = 0;
+          this.questaoAtual = this.questoes[this.paginaAtual];
 
-    //       this.navegacaoPorQuestao = this.questoes.map((questao, index) => ({
-    //         questao: questao,
-    //         index: index,
-    //       }));
-    //     }
+          this.navegacaoPorQuestao = this.questoes.map((questao, index) => ({
+            questao: questao,
+            index: index,
+          }));
+        }
   
-    //     this.resposta = '';
-    //     this.mostrarGabarito = false;
-    //     this.numeroDeQuestoes = questoes.length;
-    //   },
-    //   (error) => {
-    //     console.error('Erro ao filtrar questões:', error);
-    //     this.message = 'Ocorreu um erro ao filtrar questões. Por favor, tente novamente mais tarde.';
-    //   }
-    // );
+        this.resposta = '';
+        this.mostrarGabarito = false;
+        this.numeroDeQuestoes = questoes.length;
+      },
+      (error) => {
+        console.error('Erro ao filtrar questões:', error);
+        this.message = 'Ocorreu um erro ao filtrar questões. Por favor, tente novamente mais tarde.';
+      }
+    );
 
-    //this.toggleFiltros();
+    this.toggleFiltros();
   }
 
   selecionarQuestao(event: Event): void {

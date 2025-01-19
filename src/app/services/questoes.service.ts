@@ -152,7 +152,13 @@ export class QuestoesService {
     // Adicione os filtros como parâmetros de consulta
     for (const filtro in filtros) {
       if (filtros.hasOwnProperty(filtro) && filtros[filtro] !== null) {
-        params = params.set(filtro, filtros[filtro]);
+        if (Array.isArray(filtros[filtro])) {
+          filtros[filtro].forEach((value: string) => {
+            params = params.append(filtro, value);
+          });
+        } else {
+          params = params.set(filtro, filtros[filtro]);
+        }
       }
     }
 
