@@ -99,7 +99,13 @@
   grid-template-columns: 1fr 1fr;
   margin-bottom: 20px;
   justify-items: start;
-  width: 40%;
+  width: 100%;
+}
+
+.profile-photo-container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
 }
 
 .profile-photo {
@@ -112,7 +118,7 @@
 }
 
 .profile-info {
-  width: 400px;
+  width: 100%;
 }
 
 .input-group {
