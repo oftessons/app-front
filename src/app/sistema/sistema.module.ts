@@ -37,6 +37,7 @@ import { ModuloFarmacologiaComponent } from './modulos-das-aulas/modulo-farmacol
 import { ModuloOpticaRefratometriaVisaoSubnormalComponent } from './modulos-das-aulas/modulo-optica-refratometria-visao-subnormal/modulo-optica-refratometria-visao-subnormal.component';
 import { ModuloUveiteOncologiaOcularComponent } from './modulos-das-aulas/modulo-uveite-oncologia-ocular/modulo-uveite-oncologia-ocular.component';
 import { PermissaoAdminComponent } from './permissao-admin/permissao-admin.component';
+import { PermissaoProfessorComponent } from './permissao-professor/permissao-professor.component';
 
 @NgModule({
   declarations: [
@@ -65,6 +66,7 @@ import { PermissaoAdminComponent } from './permissao-admin/permissao-admin.compo
     ModuloOpticaRefratometriaVisaoSubnormalComponent,
     ModuloUveiteOncologiaOcularComponent,
     PermissaoAdminComponent,
+    PermissaoProfessorComponent,
   ],
   imports: [
     CommonModule,

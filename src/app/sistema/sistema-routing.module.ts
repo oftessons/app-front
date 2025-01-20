@@ -26,6 +26,7 @@ import { ModuloPlasticaEOrbitaComponent } from './modulos-das-aulas/modulo-plast
 import { ModuloRetinaComponent } from './modulos-das-aulas/modulo-retina/modulo-retina.component';
 import { ModuloUveiteOncologiaOcularComponent } from './modulos-das-aulas/modulo-uveite-oncologia-ocular/modulo-uveite-oncologia-ocular.component';
 import { PermissaoAdminComponent } from './permissao-admin/permissao-admin.component';
+import { PermissaoProfessorComponent } from './permissao-professor/permissao-professor.component';
 
 const routes: Routes = [
   { 
@@ -86,6 +87,12 @@ const routes: Routes = [
         component: PermissaoAdminComponent, 
         canActivate: [AuthGuard], 
         data: { role: 'ADMIN' }
+      },
+      {
+        path: 'permissao-professor',
+        component: PermissaoProfessorComponent, 
+        canActivate: [AuthGuard], 
+        data: { role: 'PROFESSOR' }
       }
     ]
   }
