@@ -68,7 +68,7 @@
 }
 
 .profile-container {
-  width: 100%;
+  width: 700px;
   margin: 0 auto;
   padding: 20px;
   border: 1px solid #ccc;
@@ -176,6 +176,7 @@
   font-size: 16px;
   color: #333;
   transition: background-color 0.3s, color 0.3s;
+  border-radius: 4px;
 }
 
 .menu-account button:hover {
