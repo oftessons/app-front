@@ -9,6 +9,7 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./page-meu-perfil.component.css'],
 })
 export class PageMeuPerfilComponent implements OnInit {
+  conteudoAtual: string = 'perfil';
   usuario!: Usuario;
   editMode: boolean = false;
   selectedFile!: File;
@@ -17,6 +18,10 @@ export class PageMeuPerfilComponent implements OnInit {
 
   ngOnInit(): void {
     this.obterPerfilUsuario();
+  }
+
+  mostrarConteudo(conteudo: string) {
+    this.conteudoAtual = conteudo;
   }
 
   obterPerfilUsuario() {

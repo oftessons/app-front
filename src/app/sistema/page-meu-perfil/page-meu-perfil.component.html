@@ -1,50 +1,97 @@
 <div class="container pt-5">
-  <div class="container mt-4">
-    <h1 class="mt-4"><span> | </span> Meu Perfil</h1>
+  <div class="minha-conta">
+    <div class="menu-account">
+      <h1>Minha conta</h1>
+      <ul>
+        <li>
+          <button [ngClass]="{'active': conteudoAtual === 'perfil'}" (click)="mostrarConteudo('perfil')">Meu Perfil</button>
+        </li>
+        <li>
+          <button [ngClass]="{'active': conteudoAtual === 'assinaturas'}" (click)="mostrarConteudo('assinaturas')">Assinaturas</button>
+        </li>
+      </ul>
+    </div>
   </div>
 
-  <div class="profile-container">
-    <div class="profile-header">
-      <div class="profile-photo-container">
-        <img [src]="usuario.fotoUrl || 'assets/imagens/foto.svg'" alt="Foto do Usuário" class="profile-photo">
-        <div *ngIf="editMode" class="profile-photo-upload">
-          <label for="file-upload" class="custom-file-upload">
-            Escolher Foto
-          </label>
-          <input id="file-upload" type="file" (change)="onFileSelected($event)" />
+  <div class="container-geral" *ngIf="conteudoAtual === 'perfil'">
+    <div class="profile-container">
+      <h1 class="mt-4"><span> | </span>Meu perfil</h1>
+      <div class="profile-header">
+        <div class="profile-photo-container">
+          <img [src]="usuario.fotoUrl || 'assets/imagens/foto.svg'" alt="Foto do Usuário" class="profile-photo">
+          <div *ngIf="editMode" class="profile-photo-upload">
+            <label for="file-upload" class="custom-file-upload">
+              Escolher Foto
+            </label>
+            <input id="file-upload" type="file" (change)="onFileSelected($event)" />
+          </div>
+        </div>
+        <div class="profile-info">
+         
+          <p><strong>Username: </strong>
+            <span *ngIf="!editMode"> {{ usuario.username }}</span>
+            <input *ngIf="editMode" [(ngModel)]="usuario.username" class="form-control" />
+          </p>
+          <p><strong>Nome: </strong>
+            <span *ngIf="!editMode"> {{ usuario.nome }}</span>
+            <input *ngIf="editMode" [(ngModel)]="usuario.nome" class="form-control" />
+          </p>
+          <p><strong>E-mail: </strong>
+            <span *ngIf="!editMode"> {{ usuario.email }}</span>
+            <input *ngIf="editMode" [(ngModel)]="usuario.email" class="form-control" />
+          </p>
+          <p><strong>Telefone: </strong>
+            <span *ngIf="!editMode"> {{ usuario.telefone }}</span>
+            <input *ngIf="editMode" [(ngModel)]="usuario.telefone" class="form-control" />
+          </p>
+          <p><strong>Cidade: </strong>
+            <span *ngIf="!editMode"> {{ usuario.cidade }}</span>
+            <input *ngIf="editMode" [(ngModel)]="usuario.cidade" class="form-control" />
+          </p>
+          <p><strong>Estado: </strong>
+            <span *ngIf="!editMode"> {{ usuario.estado }}</span>
+            <input *ngIf="editMode" [(ngModel)]="usuario.estado" class="form-control" />
+          </p>
         </div>
       </div>
-      <div class="profile-info">
-       
-        <p><strong>Username: </strong>
-          <span *ngIf="!editMode"> {{ usuario.username }}</span>
-          <input *ngIf="editMode" [(ngModel)]="usuario.username" class="form-control" />
-        </p>
-        <p><strong>Nome: </strong>
-          <span *ngIf="!editMode"> {{ usuario.nome }}</span>
-          <input *ngIf="editMode" [(ngModel)]="usuario.nome" class="form-control" />
-        </p>
-        <p><strong>E-mail: </strong>
-          <span *ngIf="!editMode"> {{ usuario.email }}</span>
-          <input *ngIf="editMode" [(ngModel)]="usuario.email" class="form-control" />
-        </p>
-        <p><strong>Telefone: </strong>
-          <span *ngIf="!editMode"> {{ usuario.telefone }}</span>
-          <input *ngIf="editMode" [(ngModel)]="usuario.telefone" class="form-control" />
-        </p>
-        <p><strong>Cidade: </strong>
-          <span *ngIf="!editMode"> {{ usuario.cidade }}</span>
-          <input *ngIf="editMode" [(ngModel)]="usuario.cidade" class="form-control" />
-        </p>
-        <p><strong>Estado: </strong>
-          <span *ngIf="!editMode"> {{ usuario.estado }}</span>
-          <input *ngIf="editMode" [(ngModel)]="usuario.estado" class="form-control" />
-        </p>
+      <div class="profile-actions">
+        <button (click)="voltarPerfil()" class="btn btn-secondary btn-small">Voltar</button>
+        <button (click)="editarPerfil()" class="btn btn-primary btn-small">{{ editMode ? 'Salvar' : 'Editar' }}</button>
       </div>
     </div>
-    <div class="profile-actions">
-      <button (click)="voltarPerfil()" class="btn btn-secondary btn-small">Voltar</button>
-      <button (click)="editarPerfil()" class="btn btn-primary btn-small">{{ editMode ? 'Salvar' : 'Editar' }}</button>
+  </div>
+  
+  <div class="container-geral">
+    <div *ngIf="conteudoAtual === 'assinaturas'">
+      <!-- Conteúdo das assinaturas -->
+      <h1 class="mt-4"><span> | </span>Assinatura</h1>
+       <div class="cont-assinatura">
+        <div class="line-dados">
+          <h3>Plano</h3>
+          <span>Premium</span>
+        </div>
+        <hr>
+        <div class="line-dados">
+          <h3>Intervalo de renovação</h3>
+          <span>Mensal</span>
+        </div>
+        <hr>
+        <div class="line-dados">
+          <h3>Status</h3>
+          <span>Ativo</span>
+        </div>
+        <hr>
+        <div class="line-dados">
+          <h3>Próxima renovação</h3>
+          <span>dd/mm/aaaa</span>
+        </div>
+        <hr>
+        <div class="line-dados">
+          <h3>Válido até</h3>
+          <span>dd/mm/aaaa</span>
+        </div>
+      </div>
+      <button  class="btn-assinatura">Abrir Portal de Assinatura e Pagamentos</button>
     </div>
   </div>
 </div>
