@@ -188,17 +188,24 @@
         </div>
       </form>
   
-      <!-- Lista de Usuários -->
+      <!-- Formulário de Busca de Usuários -->
       <div class="search-container mt-5">
-        <label for="search" class="small mb-1">Pesquisar Usuário:</label>
-        <input
-          type="text"
-          id="search"
-          class="form-control py-2 responsive-input"
-          placeholder="Digite nome ou email para buscar"
-        />
+        <form (ngSubmit)="consultarUsuario(idUsuario)">
+          <label for="search" class="small mb-1">Pesquisar Usuário:</label>
+          <input
+            type="number"
+            id="search"
+            [(ngModel)]="idUsuario"
+            name="idUsuario"
+            class="form-control py-2 responsive-input"
+            placeholder="ID do usuário"
+            required
+          />
+          <button type="submit" class="btn btn-primary mt-2">Buscar</button>
+        </form>
       </div>
-  
+
+      <!-- Tabela de Usuários -->
       <table class="table mt-4">
         <thead>
           <tr>
@@ -212,10 +219,63 @@
           </tr>
         </thead>
         <tbody>
-          <!-- Usuários listados aqui -->
+          <tr *ngIf="usuario">
+            <td>{{ usuario.nome }}</td>
+            <td>{{ usuario.email }}</td>
+            <td>{{ usuario.telefone }}</td>
+            <td>{{ usuario.cidade }}</td>
+            <td>{{ usuario.estado }}</td>
+            <td>{{ usuario.permissao }}</td>
+            <td>
+              <button class="btn btn-secondary" (click)="preparaEdit($event)">Editar</button>
+              <button class="btn btn-danger"(click)="removerUsuario()">Deletar</button>
+            </td>
+          </tr>
+          <tr *ngIf="!usuario">
+            <td colspan="7" class="text-center">Nenhum usuário encontrado.</td>
+          </tr>
         </tbody>
       </table>
-  
+      <!-- Formulário de Atualização de Usuário -->
+      <form *ngIf="editando" (submit)="editarUsuario()">
+
+        <div class="form-group col-sm-12 col-md-6">
+          <label class="small mb-1" style="font-size: 1.2em;">Login *</label>
+          <input type="text" name="username" [(ngModel)]="usuarioEdit.username" autocomplete="off" class="form-control py-2 responsive-input" placeholder="Digite seu username" required />
+        </div>
+
+        <div class="form-group col-sm-12 col-md-6">
+          <label class="small mb-1" style="font-size: 1.2em;">Nome *</label>
+          <input type="text" name="nome" [(ngModel)]="usuarioEdit.nome" class="form-control py-2 responsive-input" placeholder="Digite o seu nome" required />
+        </div>
+
+        <div class="form-group col-sm-12 col-md-6">
+          <label class="small mb-1" style="font-size: 1.2em;">E-mail *</label>
+          <input type="email" name="email" [(ngModel)]="usuarioEdit.email" class="form-control py-2 responsive-input" placeholder="Digite seu e-mail" required />
+        </div>
+
+        <div class="form-group col-sm-12 col-md-6">
+          <label class="small mb-1" style="font-size: 1.2em;">Celular</label>
+          <input type="text" name="telefone" [(ngModel)]="usuarioEdit.telefone" class="form-control py-2 responsive-input" placeholder="Digite o Celular (XX) XXXX-XXX" required />
+        </div>
+
+        <div class="form-group col-sm-12 col-md-6">
+          <label class="small mb-1" style="font-size: 1.2em;">Cidade</label>
+          <input type="text" name="cidade" [(ngModel)]="usuarioEdit.cidade" class="form-control py-2 responsive-input" placeholder="Digite sua cidade" required />
+        </div>
+
+        <div class="form-group col-sm-12 col-md-6">
+          <label class="small mb-1" style="font-size: 1.2em;">Estado</label>
+          <input type="text" name="estado" [(ngModel)]="usuarioEdit.estado" class="form-control py-2 responsive-input" placeholder="Digite seu Estado" required />
+        </div>
+
+        <div class="form-group align-items-center justify-content-between mt-4 mb-0 d-flex">
+          <button type="button" class="btn btn-danger btn-lg me-2 btn-custom" (click)="cancelaEdit()">Voltar</button>
+          <button type="submit" class="btn btn-success btn-lg me-2 btn-custom">Salvar</button>
+        </div>
+
+      </form>
+
       <!-- Mensagens de Erro -->
       <div class="alert alert-danger mt-4" style="display: none;">
         <ul>

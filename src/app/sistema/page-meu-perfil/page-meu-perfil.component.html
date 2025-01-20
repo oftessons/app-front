@@ -42,7 +42,7 @@
         </p>
         <p><strong>Plano de assinatura: </strong>
           <span *ngIf="!editMode"> {{ planName }}</span>
-          <input *ngIf="editMode" [(ngModel)]="usuario.estado" class="form-control" />
+          <input *ngIf="editMode" value="{{ planName}}" disabled class="form-control" />
         </p>
       </div>
     </div>

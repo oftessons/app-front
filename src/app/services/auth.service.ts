@@ -48,7 +48,7 @@ export class AuthService {
   }
   
 
-  atualizarUsuario(usuario: Usuario, fotoDoPerfil?: File): Observable<Usuario> {
+  atualizarUsuario(usuario: Usuario, fotoDoPerfil?: File | null): Observable<Usuario> {
     const formData: FormData = new FormData();
     formData.append('usuario', new Blob([JSON.stringify(usuario)], { type: 'application/json' }));
   
@@ -77,11 +77,21 @@ export class AuthService {
   }
 
   // Método para obter o nome do usuário autenticado no AuthService
-obterNomeUsuario(): Observable<string> {
-  return this.http.get<{ nome: string }>(`${this.apiURL}/nome`).pipe(
-    map(response => response.nome)  // Extrai a propriedade 'nome' do objeto retornado
-  );
-}
+  obterNomeUsuario(): Observable<string> {
+    return this.http.get<{ nome: string }>(`${this.apiURL}/nome`).pipe(
+      map(response => response.nome)  // Extrai a propriedade 'nome' do objeto retornado
+    );
+  }
+
+  obterUsuario(id: number): Observable<Usuario> {
+    return this.http.get<Usuario>(`${this.apiURL}/buscar-usuario/${id}`);
+    
+  } 
+
+  removerUsuario(usuario: Usuario): Observable<Usuario> {
+    return this.http.delete<Usuario>(`${this.apiURL}/delete/${usuario.id as unknown as number}`);
+ 
+  }
 
   
   salvarUsuarioAutenticado(usuario: Usuario) {
@@ -91,7 +101,6 @@ obterNomeUsuario(): Observable<string> {
 
     }
   }
-
 
   isAuthenticated() : boolean {
     const token = this.obterToken();

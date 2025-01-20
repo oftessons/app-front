@@ -1,9 +1,9 @@
-import { Component } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import { Usuario } from "src/app/login/usuario";
 import { Permissao } from "src/app/login/Permissao";
 import { Router } from "@angular/router";
 import { AuthService } from "src/app/services/auth.service";
-
+import { StripeService } from "src/app/services/stripe.service";
 
 @Component({
   selector: 'app-cadastro-de-usuarios',
@@ -22,12 +22,15 @@ export class CadastroUsuariosComponent {
   estado: string = '';
   mensagemSucesso: string = '';
   errors: string[] = [];
-  usuario!: Usuario | null;
+  usuario!: Usuario;
   tiposPermissao = [ Permissao.USER, Permissao.PROFESSOR ];
   confirmPassword: string = '';
   tipoUsuario: string = '';
   filtro: string = ''; 
   consentimento: boolean = false;
+  idUsuario!: number;
+  editando: boolean = false;
+  usuarioEdit: Usuario = new Usuario();
 
 
   showTooltip: boolean = false;
@@ -45,7 +48,7 @@ export class CadastroUsuariosComponent {
     confirmPassword: false,
   };
 
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(private router: Router, private authService: AuthService, private stripeService: StripeService) {}
 
 
   togglePasswordVisibility(field: string) {
@@ -144,13 +147,66 @@ export class CadastroUsuariosComponent {
 
   }
 
-  editarUsuario(id: string): void {
-  
+  consultarUsuario(id: number): void {
+    this.authService.obterUsuario(id).subscribe(
+      (user: Usuario) => {
+        console.log(user);
+        this.usuario = user;
+        this.usuarioEdit = {... user};
+
+      }, (error) => {
+        console.error('Erro ao consultar usuário:', error);
+      })
   }
 
-  removerUsuario(id: string): void {
-    
+  preparaEdit(event: Event): void {
+    event.preventDefault();
+    this.editando = true;
   }
+  
+ 
+  cancelaEdit(): void{
+    this.editando = false;
+  }
+
+ 
+  editarUsuario(): void {
+    	this.authService
+        .atualizarUsuario(this.usuarioEdit)
+        .subscribe((data) => {
+          console.log("Atualizado com sucesso");
+          this.consultarUsuario(this.usuarioEdit.id as unknown as number);
+          this.cancelaEdit();
+          this.limpaCampos();
+
+        }, (error) => { 
+          console.error("Houve algum erro ", error);
+        })
+  }
+
+  removerUsuario(): void {
+    if (confirm("Você tem certeza que deseja remover este usuário?")) {
+        this.authService.removerUsuario(this.usuario).subscribe(
+            (response) => {
+                console.log("Removido com sucesso", response);
+                this.limpaCampos(); // Limpa os campos após a remoção
+            },
+            (error) => {
+                if (error.status === 404) {
+                    console.error("Usuário não encontrado:", error.message);
+                } else {
+                    console.error("Houve algum erro:", error.message);
+                }
+            }
+        );
+    }
+}
+
+
+  limpaCampos(): void {
+    this.usuarioEdit = new Usuario(); 
+
+}
 
 
   isAdmin(): boolean {
