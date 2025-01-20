@@ -50,7 +50,7 @@ const routes: Routes = [
       { path:'modulo-retina', component:ModuloRetinaComponent},
       { path:'modulo-uveite-oncologia-ocular', component:ModuloUveiteOncologiaOcularComponent},
       { path: 'desempenho', component: PageDesempenhoComponent },
-      { path: 'meu-perfil', component: PageMeuPerfilComponent },
+      { path: 'minha-conta', component: PageMeuPerfilComponent },
       { path: 'simulados', component: PageSimuladoComponent },
       { path: 'simulados/:id', component: PageSimuladoComponent },
       { path: 'meus-simulados', component: MeusSimuladosComponent },
