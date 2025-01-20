@@ -11,6 +11,7 @@
   min-width: 250px;
   padding: 24px;
   margin-right: 24px;
+  border-radius: 8px;
 }
 
 .container-geral {
@@ -19,6 +20,7 @@
   padding: 48px;
   background: #fff;
   width: 100%;
+  border-radius: 8px;
 }
 
 .cont-assinatura {
