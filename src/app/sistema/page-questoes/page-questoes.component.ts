@@ -22,6 +22,11 @@ import { Usuario } from 'src/app/login/usuario';
 import { FiltroDTO } from '../filtroDTO';
 
 import { DomSanitizer, SafeHtml, SafeResourceUrl } from '@angular/platform-browser';
+import { AnoDescricoes } from './enums/ano-descricoes';
+import { DificuldadeDescricoes } from './enums/dificuldade-descricao';
+import { TipoDeProvaDescricoes } from './enums/tipodeprova-descricao';
+import { SubtemaDescricoes } from './enums/subtema-descricao';
+import { TemaDescricoes } from './enums/tema-descricao';
 
 declare var bootstrap: any;
 
@@ -95,6 +100,12 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   dificuldadesDescricoes: string[] = [];
   subtemasDescricoes: string[] = [];
   temasDescricoes: string[] = [];
+
+  multSelectAno: Ano[] = [];
+  multSelecDificuldade: Dificuldade[] = [];
+  multSelectTipoDeProva: TipoDeProva[] = [];
+  multSelectSubtema: Subtema[] = [];
+  multSelectTema: Tema[] = [];
 
   comentarioDaQuestaoSanitizado: SafeHtml = '';
   sanitizerEnunciado: SafeHtml = '';
@@ -259,6 +270,43 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     return getDescricaoTema(tema);
   }
 
+  obterAnoEnum(ano: string): Ano | undefined {
+    const anoEnum = Object.keys(AnoDescricoes).find(
+      (key) => AnoDescricoes[key as Ano] === ano
+    );
+  
+    return anoEnum as Ano | undefined;
+  }
+
+  obterDificuldadeEnum(descricao: string): Dificuldade | undefined {
+    const chave = Object.keys(DificuldadeDescricoes).find(
+      (key) => DificuldadeDescricoes[key as Dificuldade] === descricao
+    );
+    return chave ? Dificuldade[chave as Dificuldade] : undefined;
+  }
+
+  obterTipoDeProvaEnum(descricao: string): TipoDeProva | undefined {
+    const chave = Object.keys(TipoDeProvaDescricoes).find(
+      (key) => TipoDeProvaDescricoes[key as TipoDeProva] === descricao
+    );
+    return chave ? TipoDeProva[chave as TipoDeProva] : undefined;
+  }
+
+  obterSubtemaEnum(descricao: string): Subtema | undefined {
+    const chave = Object.keys(SubtemaDescricoes).find(
+      (key) => SubtemaDescricoes[key as Subtema] === descricao
+    );
+    return chave ? Subtema[chave as Subtema] : undefined;
+  }
+
+  obterTemaEnum(descricao: string): Tema | undefined {
+    const chave = Object.keys(TemaDescricoes).find(
+      (key) => TemaDescricoes[key as Tema] === descricao
+    );
+    return chave ? Tema[chave as Tema] : undefined;
+  }
+  
+
   LimparFiltro() {
     this.selectedAno = null;
     this.selectedDificuldade = null;
@@ -279,49 +327,60 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
   filtrarQuestoes(): void {
     const filtros: any = {};
-  
-    if (this.selectedAno) {
-      const anoSelecionado = this.anos.find(
-        (ano) => this.getDescricaoAno(ano) === this.selectedAno
-      );
-      if (anoSelecionado) {
-        filtros.ano = anoSelecionado;
+
+    if (this.multSelectAno.length) {
+      const anosSelecionados = this.multSelectAno
+      .map((ano) => this.obterAnoEnum(ano))
+      .filter((enumAno) => enumAno !== undefined);
+
+      if (anosSelecionados.length > 0) {
+        filtros.ano = anosSelecionados;
       }
     }
-    if (this.selectedDificuldade) {
-      const dificuldadeSelecionada = this.dificuldades.find(
-        (dificuldade) =>
-          this.getDescricaoDificuldade(dificuldade) === this.selectedDificuldade
-      );
+
+
+    if (this.multSelecDificuldade.length) {
+      const dificuldadeSelecionada = this.multSelecDificuldade
+      .map((dificuldade) => this.obterDificuldadeEnum(dificuldade))
+      .filter((enumDificuldade) => enumDificuldade!== undefined);
+
       if (dificuldadeSelecionada) {
         filtros.dificuldade = dificuldadeSelecionada;
       }
     }
-    if (this.selectedTipoDeProva) {
-      const tipoDeProvaSelecionado = this.tiposDeProva.find(
-        (tipoDeProva) =>
-          this.getDescricaoTipoDeProva(tipoDeProva) === this.selectedTipoDeProva
-      );
+
+    if (this.multSelectTipoDeProva.length) {
+      const tipoDeProvaSelecionado = this.multSelectTipoDeProva
+      .map((tipoDeProva) => this.obterTipoDeProvaEnum(tipoDeProva))
+      .filter((enumTipoDeProva) => enumTipoDeProva!== undefined);
+
       if (tipoDeProvaSelecionado) {
         filtros.tipoDeProva = tipoDeProvaSelecionado;
       }
     }
-    if (this.selectedSubtema) {
-      const subtemaSelecionado = this.subtemas.find(
-        (subtema) => this.getDescricaoSubtema(subtema) === this.selectedSubtema
-      );
+
+
+    if (this.multSelectSubtema.length) {
+      const subtemaSelecionado = this.multSelectSubtema
+      .map((subtema) => this.obterSubtemaEnum(subtema))
+      .filter((enumSubtema) => enumSubtema!== undefined);
+
       if (subtemaSelecionado) {
         filtros.subtema = subtemaSelecionado;
       }
     }
-    if (this.selectedTema) {
-      const temaSelecionado = this.temas.find(
-        (tema) => this.getDescricaoTema(tema) === this.selectedTema
-      );
+
+
+    if (this.multSelectTema.length) {
+      const temaSelecionado = this.multSelectTema
+      .map((tema) => this.obterTemaEnum(tema))
+      .filter((enumTema) => enumTema!== undefined);
+      
       if (temaSelecionado) {
         filtros.tema = temaSelecionado;
       }
     }
+
     // Verificar se a palavra-chave está preenchida
     if (this.palavraChave && this.palavraChave.trim() !== '') {
       filtros.palavraChave = this.palavraChave.trim();
@@ -332,6 +391,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       this.questoes = [];
       return;
     }
+
   
     this.questoesService.filtrarQuestoes(this.usuarioId, filtros, 0, 100).subscribe(
       (questoes: Questao[]) => {
@@ -727,5 +787,9 @@ exibirMensagem(texto: string, tipo: 'sucesso' | 'erro'): void {
 
   toggleFiltros() {
     this.mostrarFiltros = !this.mostrarFiltros;
+  }
+
+  removeAno(ano: any): void {
+    this.multSelectAno = this.multSelectAno.filter(item => item !== ano);
   }
 }

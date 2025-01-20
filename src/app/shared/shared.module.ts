@@ -8,12 +8,17 @@ import { ImageResizeModule } from './image-resize/image-resize.module';
 import { MatIconModule } from "@angular/material/icon";
 import { FormsModule } from '@angular/forms';
 import { ModuloAulasComponent } from './modulo-aulas/modulo-aulas.component';
+import { PlaylistModeComponent } from './playlist-mode/playlist-mode.component';
+import { MultiploSelectComponent } from './multiplo-select/multiplo-select.component';
+
 
 @NgModule({
   declarations: [
     SelectPadraoComponent,
     InputPadraoComponent,
-    ModuloAulasComponent
+    ModuloAulasComponent,
+    PlaylistModeComponent,
+    MultiploSelectComponent
   ],
   imports: [
     CommonModule,
@@ -25,7 +30,9 @@ import { ModuloAulasComponent } from './modulo-aulas/modulo-aulas.component';
     SelectPadraoComponent,
     ImageResizeModule,
     InputPadraoComponent,
-    ModuloAulasComponent
+    ModuloAulasComponent,
+    PlaylistModeComponent,
+    MultiploSelectComponent
   ]
 })
 export class SharedModule { }

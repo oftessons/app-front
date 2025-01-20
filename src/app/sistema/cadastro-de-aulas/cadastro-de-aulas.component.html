@@ -1,1 +1,100 @@
-<p>cadastro-de-aulas works!</p>
+<div *ngIf="usuario && usuario.permissao === Permissao.ADMIN">
+    <div class="container pt-5">
+     <div class="container mt-4 container-geral">
+       <div class="header-container">
+         <h2>Cadastro de aulas</h2>
+       </div>
+       <form class="form-cad" #aulaForm="ngForm" (ngSubmit)="onSubmit()">
+         <div class="row" *ngIf="aulaDTO.id">
+           <div class="col-md-6">
+             <div class="form-group">
+               <label>ID:</label>
+               <input type="text" class="form-control" name="id" [(ngModel)]="aulaDTO.id" disabled>
+             </div>
+           </div>
+           <div class="col-md-6">
+             <div class="form-group">
+               <label>Data Cadastro:</label>
+               <input type="text" class="form-control" name="diaDoCadastro" [(ngModel)]="aulaDTO.diaDoCadastro" disabled>
+             </div>
+           </div>
+         </div>
+   
+         <div>
+           <hr class="line">
+           <span class="div-section">
+             Selecione o módulo da aula:
+           </span>
+           <hr class="line">
+         </div>
+
+         <div class="col-md-6">
+            <div class="form-group">
+              <app-select-padrao
+                label="Módulo"
+                [options]="categoria"
+                [(selectedValue)]="aulaDTO.categoria"
+                [customStyles]="{'background': '#EFEFEF'}">
+              </app-select-padrao>
+            </div>
+          </div>
+   
+         <div>
+           <hr class="line">
+           <span class="div-section">
+             Digite os dados da vídeoaula:
+           </span>
+           <hr class="line">
+         </div>
+         <div class="cont-imgs">
+           <div class="form-group">
+             <div class="image-upload" (drop)="onDrop($event, 'video')" (dragover)="onDragOver($event)">
+               <input type="file" id="video" name="video"
+                 (change)="onFileSelected($event, 'video')" accept="image/*,video/*" style="display: none;" />
+               <label for="video">
+                 <div class="foto-preview" id="fotoPreview">
+                   <ng-container *ngIf="fotoPreviews['video']">
+                     <img *ngIf="isPreviewImage(fotoPreviews['video'])" [src]="fotoPreviews['video']" alt="Image Preview" />
+                     <video *ngIf="isPreviewVideo(fotoPreviews['video'])" [src]="fotoPreviews['video']" controls></video>
+                   </ng-container>
+                   <span *ngIf="!fotoPreviews['video']" class="upload-placeholder">
+                     <img src="assets/imagens/img-foto.svg" style="width: 50px; opacity: 0.5;" class="upload-icon">
+                     Clique para fazer upload do vídeo
+                   </span>
+                 </div>
+               </label>
+             </div>
+           </div>
+         </div>
+         
+         <div class="form-group">
+            <label for="titulo">Título:</label>
+            <input type="text" id="titulo" name="tituloAula" class="form-control" placeholder="Digite o título da aula" 
+            [(ngModel)]="aulaDTO.titulo" required>
+          </div>
+          <div class="form-group">
+            <label for="descricao">Descrição:</label>
+            <textarea id="descricao" name="descricaoDaAula" class="form-control" rows="3" placeholder="Digite a descrição da aula" 
+            [(ngModel)]="aulaDTO.descricao" required></textarea>
+          </div>
+
+          <div class="container mt-4 container-btn">
+            <button type="button" class="btn btn-secundary" routerLink="/usuario/dashboard" *ngIf="!aulaDTO.id">Voltar</button>
+            <button type="submit" class="btn btn-primary" *ngIf="!aulaDTO.id">Salvar</button>
+            <button type="submit" class="btn btn-primary" *ngIf="aulaDTO.id">Atualizar</button>
+          </div>
+       </form>
+   </div>
+   
+       <div class="row">
+         <div class="col-md-12">
+           <div *ngIf="successMessage" class="alert alert-success" role="alert">
+             {{ successMessage }}
+           </div>
+           <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+             {{ errorMessage }}
+           </div>
+         </div>
+       </div>
+   </div>
+</div>
