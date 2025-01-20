@@ -16,7 +16,8 @@
   <div class="container-geral" *ngIf="conteudoAtual === 'perfil'">
     <div class="profile-container">
       <h1 class="mt-4"><span> | </span>Meu perfil</h1>
-      <div class="profile-header">
+
+      <div class="profile-dados">
         <div class="profile-photo-container">
           <img [src]="usuario.fotoUrl || 'assets/imagens/foto.svg'" alt="Foto do Usuário" class="profile-photo">
           <div *ngIf="editMode" class="profile-photo-upload">
@@ -26,8 +27,8 @@
             <input id="file-upload" type="file" (change)="onFileSelected($event)" />
           </div>
         </div>
+
         <div class="profile-info">
-         
           <p><strong>Username: </strong>
             <span *ngIf="!editMode"> {{ usuario.username }}</span>
             <input *ngIf="editMode" [(ngModel)]="usuario.username" class="form-control" />
