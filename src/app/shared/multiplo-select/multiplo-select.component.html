@@ -1,0 +1,37 @@
+<!-- select.component.html -->
+<div class="select-container">
+  <label [class.active]="selectedValue.length > 0">{{ label }}</label>
+
+  <div
+    [ngStyle]="customStyles"
+    class="select-dropdown"
+    (click)="toggleDropdown()"
+  >
+    <!-- Exibe os valores selecionados quando "multiple" for true -->
+    <div *ngIf="multiple && selectedValue.length > 0" class="selected-values">
+      <span *ngFor="let value of selectedValue" class="selected-value">
+        {{ value }}
+        <!-- Botão de remover -->
+        <span class="remove-value" (click)="removeValue(value)">x</span>
+      </span>
+    </div>
+
+    <!-- Exibe a indicação de seleção se não houver nada selecionado -->
+    <div *ngIf="multiple && selectedValue.length === 0" class="selected-value">
+      
+    </div>
+
+    <div class="arrow-down"></div>
+  </div>
+
+  <div class="options-container" *ngIf="isOpen">
+    <div
+      class="option"
+      *ngFor="let option of options"
+      (click)="onSelect(option)"
+      [class.selected]="selectedValue.includes(option)"
+    >
+      {{ option }}
+    </div>
+  </div>
+</div>
