@@ -27,6 +27,7 @@ import { ModuloRetinaComponent } from './modulos-das-aulas/modulo-retina/modulo-
 import { ModuloUveiteOncologiaOcularComponent } from './modulos-das-aulas/modulo-uveite-oncologia-ocular/modulo-uveite-oncologia-ocular.component';
 import { PermissaoAdminComponent } from './permissao-admin/permissao-admin.component';
 import { PermissaoProfessorComponent } from './permissao-professor/permissao-professor.component';
+import { InicioComponent } from './inicio/inicio.component';
 
 const routes: Routes = [
   { 
@@ -35,6 +36,7 @@ const routes: Routes = [
     canActivate: [AuthGuard], 
     children: [
       { path: 'dashboard', component: DashboardComponent },
+      { path: 'inicio', component: InicioComponent},
       { path: 'questoes', component: PageQuestoesComponent },
       { path: 'filtro', component: PageFiltroComponent },
       { path: 'painel-de-aulas', component: PainelDeAulasComponent},

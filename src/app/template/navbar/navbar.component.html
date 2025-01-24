@@ -22,6 +22,11 @@
         <mat-nav-list class="pt-5">
             <div class="heading-home">Home</div>
 
+            <a mat-list-item routerLink="/usuario/inicio" [ngClass]="{'active-link': isActive('/usuario/inicio')}">
+                <img src="assets/imagens/painel.svg" alt="Ícone de Painel de Controle" class="icon">
+                <span class="ml-2">Início</span>
+            </a>  
+
             <a mat-list-item routerLink="/usuario/dashboard" [ngClass]="{'active-link': isActive('/usuario/dashboard')}">
                 <img src="assets/imagens/painel.svg" alt="Ícone de Painel de Controle" class="icon">
                 <span class="ml-2">Painel de Controle</span>
