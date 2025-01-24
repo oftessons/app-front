@@ -91,8 +91,6 @@ obterNomeUsuario(): Observable<string> {
     }
   }
 
- 
-
   isAuthenticated() : boolean {
     const token = this.obterToken();
     if(token){

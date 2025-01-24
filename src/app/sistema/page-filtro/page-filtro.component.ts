@@ -10,6 +10,7 @@ import { Usuario } from 'src/app/login/usuario';
   templateUrl: './page-filtro.component.html',
   styleUrls: ['./page-filtro.component.css'],
 })
+
 export class PageFiltroComponent implements OnInit {
   filtros: FiltroDTO[] = [];
   usuario!: Usuario;
@@ -74,7 +75,6 @@ export class PageFiltroComponent implements OnInit {
     );
   }
   
-
   editarFiltro(id: number): void {
     this.filtroService.getFiltroById(id).subscribe(
       (data) => {
@@ -87,5 +87,4 @@ export class PageFiltroComponent implements OnInit {
       }
     )
   }
-
 }

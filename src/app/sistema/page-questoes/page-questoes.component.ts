@@ -26,6 +26,7 @@ import { DificuldadeDescricoes } from './enums/dificuldade-descricao';
 import { TipoDeProvaDescricoes } from './enums/tipodeprova-descricao';
 import { SubtemaDescricoes } from './enums/subtema-descricao';
 import { TemaDescricoes } from './enums/tema-descricao';
+import { throwToolbarMixedModesError } from '@angular/material/toolbar';
 
 declare var bootstrap: any;
 
@@ -79,15 +80,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   @ViewChild('confirmacaoModalRef', { static: false })
   confirmacaoModal!: ElementRef;
 
-  nomeFiltro: string = '';
-  descricaoFiltro: string = '';
-  selectedAno: Ano | null = null;
-  selectedDificuldade: Dificuldade | null = null;
-  selectedTipoDeProva: TipoDeProva | null = null;
-  selectedSubtema: Subtema | null = null;
-  selectedTema: Tema | null = null;
-  palavraChave: string = '';
-
   questoes: Questao[] = [];
   isFiltered = false;
   p: number = 1;
@@ -101,6 +93,8 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   subtemasDescricoes: string[] = [];
   temasDescricoes: string[] = [];
 
+  descricaoFiltro: string = '';
+  palavraChave: string = '';
   multSelectAno: Ano[] = [];
   multSelecDificuldade: Dificuldade[] = [];
   multSelectTipoDeProva: TipoDeProva[] = [];
@@ -140,13 +134,14 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     this.obterPerfilUsuario();
     this.loadQuestao();
     const meuFiltro = history.state.questao;
+    console.log(meuFiltro);
     if(meuFiltro){
-      this.selectedAno = meuFiltro.ano;
-      this.selectedTipoDeProva = meuFiltro.tipoDeProva;
-      this.selectedTema = meuFiltro.tema;
-      this.selectedSubtema = meuFiltro.subtema;
-      this.selectedDificuldade = meuFiltro.dificuldade;
-  }
+      this.multSelectAno = meuFiltro.ano;
+      this.multSelectTipoDeProva = meuFiltro.tipoDeProva;
+      this.multSelectTema = meuFiltro.tema;
+      this.multSelectSubtema = meuFiltro.subtema;
+      this.multSelecDificuldade = meuFiltro.dificuldade;
+    }
     this.tiposDeProvaDescricoes = this.tiposDeProva.map((tipoDeProva) =>
       this.getDescricaoTipoDeProva(tipoDeProva)
     );
@@ -348,8 +343,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
   filtrarQuestoes(): void {
     const filtros: any = {};
-
-    console.log(this.multSelectAno);
 
     if (this.multSelectAno.length) {
       const anosSelecionados = this.multSelectAno
@@ -678,13 +671,15 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   }
   
  confirmarSalvarFiltro(nomeFiltro: string, descricaoFiltro: string): void {
-  // Validação de campos obrigatórios
   if (!nomeFiltro) {
     this.exibirMensagem('O campo "Nome" é obrigatório.', 'erro');
     return;
   }
 
-  // Inicializa o filtro apenas uma vez
+  if(!this.filtroASalvar) {
+    this.filtroASalvar = {} as FiltroDTO;
+  }
+
   this.filtroASalvar = {
     nome: nomeFiltro,
     assunto: descricaoFiltro,
@@ -694,25 +689,27 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     subtema: this.mapearDescricoesParaEnums(this.multSelectSubtema, SubtemaDescricoes),
     tema: this.mapearDescricoesParaEnums(this.multSelectTema, TemaDescricoes),
   };
+  
+  if(this.filtroASalvar) {
+    const idUser = parseInt(this.usuario.id);
+    
+    this.filtroService.salvarFiltro(this.filtroASalvar, idUser).subscribe(
+      (response) => {
+        this.exibirMensagem('O filtro foi salvo com sucesso!', 'sucesso');
 
-  const idUser = parseInt(this.usuario.id);
-
-  this.filtroService.salvarFiltro(this.filtroASalvar, idUser).subscribe(
-    (response) => {
-      this.exibirMensagem('O filtro foi salvo com sucesso!', 'sucesso');
-
-      // Fecha o modal automaticamente
-      const modalElement = document.getElementById('confirmacaoModal');
-      if (modalElement) {
-        const modalInstance = bootstrap.Modal.getInstance(modalElement);
-        modalInstance?.hide();
+        // Fechar modal automaticamente
+        const modalElement = document.getElementById('confirmacaoModal');
+        if(modalElement) {
+          const modalInstance = bootstrap.Modal.getInstance(modalElement);
+          modalInstance?.hide();
+        }
+      },
+      (error) => {
+        const errorMessage = error?.error?.message || 'Erro ao salvar o filtro. Por favor, tente novamente.';
+        this.exibirMensagem(errorMessage, 'erro');
       }
-    },
-    (error) => {
-      const errorMessage = error?.error?.message || 'Erro ao salvar o filtro. Por favor, tente novamente.';
-      this.exibirMensagem(errorMessage, 'erro');
-    }
-  );
+    )
+  }
 }
 
   private mapearDescricoesParaEnums(selecoes: string[], descricoesEnum: any): string[] {
