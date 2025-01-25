@@ -16,19 +16,23 @@ import { Tema } from '../page-questoes/enums/tema';
 import { Questao } from '../page-questoes/questao';
 import { QuestoesService } from 'src/app/services/questoes.service';
 import { Filtro } from '../filtro';
+import { DificuldadeDescricoes } from '../page-questoes/enums/dificuldade-descricao';
+import { TipoDeProvaDescricoes } from '../page-questoes/enums/tipodeprova-descricao';
+import { SubtemaDescricoes } from '../page-questoes/enums/subtema-descricao';
+import { AnoDescricoes } from '../page-questoes/enums/ano-descricoes';
+import { TemaDescricoes } from '../page-questoes/enums/tema-descricao';
 import { FiltroService } from 'src/app/services/filtro.service';
 import { RespostaDTO } from '../RespostaDTO';
 import { Resposta } from '../Resposta';
 import { AuthService } from 'src/app/services/auth.service';
 import { Usuario } from 'src/app/login/usuario';
-import { Simulado } from '../simulado';
 import { SimuladoService } from 'src/app/services/simulado.service';
 import { QuantidadeDeQuestoesSelecionadas } from '../page-questoes/enums/quant-questoes';
 import { RespostasSimulado } from '../page-questoes/enums/resp-simu';
 import Chart from 'chart.js';
 import { Router } from '@angular/router';
-import {QuantidadeDeQuestõesSelecionadasDescricoes} from '../page-questoes/enums/quant-que-descricao';
 import { DomSanitizer, SafeHtml, SafeResourceUrl } from '@angular/platform-browser';
+
 
 declare var bootstrap: any;
 
@@ -94,11 +98,11 @@ export class PageSimuladoComponent implements OnInit {
 
   mostrarGabarito: boolean = false;
 
-  selectedAno: Ano | null = null;
-  selectedDificuldade: Dificuldade | null = null;
-  selectedTipoDeProva: TipoDeProva | null = null;
-  selectedSubtema: Subtema | null = null;
-  selectedTema: Tema | null = null;
+  multiSelectedAno: Ano[] = [];
+  multiSelectedDificuldade: Dificuldade[] = [];
+  multiSelectedTipoDeProva: TipoDeProva[] =[];
+  multiSelectedSubtema: Subtema[] = [];
+  multiSelectedTema: Tema[] = [];
   palavraChave: string = '';
   selectedQuantidadeDeQuestoesSelecionadas: QuantidadeDeQuestoesSelecionadas | null = null;
   selectedRespostasSimulado: RespostasSimulado | null = null;
@@ -143,11 +147,11 @@ export class PageSimuladoComponent implements OnInit {
     this.dados = this.obterDados();
     this.obterPerfilUsuario();
     if(meuSimulado){
-        this.selectedAno = meuSimulado.ano;
-        this.selectedTipoDeProva = meuSimulado.tipoDeProva;
-        this.selectedTema = meuSimulado.tema;
-        this.selectedSubtema = meuSimulado.subtema;
-        this.selectedDificuldade = meuSimulado.dificuldade;
+        this.multiSelectedAno = meuSimulado.ano;
+        this.multiSelectedTipoDeProva = meuSimulado.tipoDeProva;
+        this.multiSelectedTema = meuSimulado.tema;
+        this.multiSelectedSubtema = meuSimulado.subtema;
+        this.multiSelectedDificuldade = meuSimulado.dificuldade;
         this.selectedQuantidadeDeQuestoesSelecionadas = meuSimulado.qtdQuestoes;
         this.selectedRespostasSimulado = meuSimulado.respostasSimulado;
     }
@@ -217,7 +221,6 @@ export class PageSimuladoComponent implements OnInit {
     }
     return '';
   }
-
 
 
   obterPerfilUsuario() {
@@ -311,12 +314,48 @@ export class PageSimuladoComponent implements OnInit {
     return getDescricaoRespostasSimulado(respostasSimulado);
   }
 
+   obterAnoEnum(ano: string): Ano | undefined {
+      const anoEnum = Object.keys(AnoDescricoes).find(
+        (key) => AnoDescricoes[key as Ano] === ano
+      );
+    
+      return anoEnum as Ano | undefined;
+    }
+
+  obterDificuldadeEnum(descricao: string): Dificuldade | undefined {
+    const chave = Object.keys(DificuldadeDescricoes).find(
+      (key) => DificuldadeDescricoes[key as Dificuldade] === descricao
+    );
+    return chave ? Dificuldade[chave as Dificuldade] : undefined;
+  }
+  
+  obterTipoDeProvaEnum(descricao: string): TipoDeProva | undefined {
+    const chave = Object.keys(TipoDeProvaDescricoes).find(
+      (key) => TipoDeProvaDescricoes[key as TipoDeProva] === descricao
+    );
+    return chave ? TipoDeProva[chave as TipoDeProva] : undefined;
+  }
+
+  obterSubtemaEnum(descricao: string): Subtema | undefined {
+    const chave = Object.keys(SubtemaDescricoes).find(
+      (key) => SubtemaDescricoes[key as Subtema] === descricao
+    );
+    return chave ? Subtema[chave as Subtema] : undefined;
+  }
+
+  obterTemaEnum(descricao: string): Tema | undefined {
+    const chave = Object.keys(TemaDescricoes).find(
+      (key) => TemaDescricoes[key as Tema] === descricao
+    );
+    return chave ? Tema[chave as Tema] : undefined;
+  }
+
   LimparFiltro() {
-    this.selectedAno = null;
-    this.selectedDificuldade = null;
-    this.selectedTipoDeProva = null;
-    this.selectedSubtema = null;
-    this.selectedTema = null;
+    this.multiSelectedAno = [];
+    this.multiSelectedDificuldade = [];
+    this.multiSelectedTipoDeProva =[];
+    this.multiSelectedSubtema = [];
+    this.multiSelectedTema = [];
     this.selectedQuantidadeDeQuestoesSelecionadas = null;
     this.palavraChave = '';
     this.filtros = {
@@ -333,32 +372,36 @@ export class PageSimuladoComponent implements OnInit {
   filtrarQuestoes(): void {
     const filtros: any = {};
 
-    if (this.selectedAno) {
-      const anoSelecionado = this.anos.find(
-        (ano) => this.getDescricaoAno(ano) === this.selectedAno
-      );
-      if (anoSelecionado) {
-        filtros.ano = anoSelecionado;
+    if (this.multiSelectedAno.length) {
+      const anosSelecionados = this.multiSelectedAno
+      .map((ano) => this.obterAnoEnum(ano))
+      .filter((enumAno) => enumAno !== undefined);
+
+      if(anosSelecionados.length > 0) {
+        filtros.ano = anosSelecionados;
+      } 
+    }
+
+    if (this.multiSelectedDificuldade.length) {
+      const dificuldadeSelecionadas = this.multiSelectedDificuldade
+      .map((dificuldade) => this.obterDificuldadeEnum(dificuldade))
+      .filter((enumDificuldade) => enumDificuldade !== undefined);
+
+      if(dificuldadeSelecionadas.length > 0) {
+        filtros.dificuldade = dificuldadeSelecionadas;
       }
     }
-    if (this.selectedDificuldade) {
-      const dificuldadeSelecionada = this.dificuldades.find(
-        (dificuldade) =>
-          this.getDescricaoDificuldade(dificuldade) === this.selectedDificuldade
-      );
-      if (dificuldadeSelecionada) {
-        filtros.dificuldade = dificuldadeSelecionada;
+
+    if (this.multiSelectedTipoDeProva.length) {
+      const tipoDeProvaSelecionado = this.multiSelectedTipoDeProva
+      .map((tipoDeProva) => this.obterTipoDeProvaEnum(tipoDeProva))
+      .filter((enumTipoDeProva) => enumTipoDeProva !== undefined);
+
+      if(tipoDeProvaSelecionado.length > 0) {
+        filtros.tipodeprova = tipoDeProvaSelecionado;
       }
     }
-    if (this.selectedTipoDeProva) {
-      const tipoDeProvaSelecionado = this.tiposDeProva.find(
-        (tipoDeProva) =>
-          this.getDescricaoTipoDeProva(tipoDeProva) === this.selectedTipoDeProva
-      );
-      if (tipoDeProvaSelecionado) {
-        filtros.tipoDeProva = tipoDeProvaSelecionado;
-      }
-    }
+
     if (this.selectedRespostasSimulado) {
       const respostaSimuladoSelecionado = this.respostasSimulado.find(
         (respostaSimulado) =>
@@ -368,19 +411,23 @@ export class PageSimuladoComponent implements OnInit {
         filtros.questaoRespondida = respostaSimuladoSelecionado;
       }
     }
-    if (this.selectedSubtema) {
-      const subtemaSelecionado = this.subtemas.find(
-        (subtema) => this.getDescricaoSubtema(subtema) === this.selectedSubtema
-      );
-      if (subtemaSelecionado) {
+
+    if (this.multiSelectedSubtema.length) {
+      const subtemaSelecionado = this.multiSelectedSubtema
+      .map((subtema) => this.obterSubtemaEnum(subtema))
+      .filter((enumSubtema) => enumSubtema !== undefined);
+
+      if(subtemaSelecionado.length > 0) {
         filtros.subtema = subtemaSelecionado;
       }
     }
-    if (this.selectedTema) {
-      const temaSelecionado = this.temas.find(
-        (tema) => this.getDescricaoTema(tema) === this.selectedTema
-      );
-      if (temaSelecionado) {
+
+    if (this.multiSelectedAno.length) {
+      const temaSelecionado = this.multiSelectedAno
+      .map((tema) => this.obterTemaEnum(tema))
+      .filter((enumTema) => enumTema !== undefined);
+      
+      if(temaSelecionado.length > 0) {
         filtros.tema = temaSelecionado;
       }
     }
@@ -490,11 +537,11 @@ export class PageSimuladoComponent implements OnInit {
       nomeSimulado,
       assunto: descricaoSimulado,
       qtdQuestoes: qtdQuestoesValue,
-      ano: this.selectedAno,
-      tema: this.selectedTema,
-      dificuldade: this.selectedDificuldade,
-      tipoDeProva: this.selectedTipoDeProva,
-      subtema: this.selectedSubtema,
+      ano: this.mapearDescricoesParaEnums(this.multiSelectedAno, AnoDescricoes),
+      tema: this.mapearDescricoesParaEnums(this.multiSelectedTema, TemaDescricoes),
+      dificuldade: this.mapearDescricoesParaEnums(this.multiSelectedDificuldade, DificuldadeDescricoes),
+      tipoDeProva: this.mapearDescricoesParaEnums(this.multiSelectedTipoDeProva, TipoDeProvaDescricoes),
+      subtema: this.mapearDescricoesParaEnums(this.multiSelectedSubtema, SubtemaDescricoes),
       questaoIds: this.idsQuestoes,
       respostasSimulado: this.selectedRespostasSimulado,
     };
@@ -523,8 +570,14 @@ export class PageSimuladoComponent implements OnInit {
       }
     );
   }
-  
 
+  private mapearDescricoesParaEnums(selecoes: string[], descricoesEnum: any): string[] {
+    if (!selecoes || selecoes.length === 0) return [];
+    return selecoes
+      .map((descricao) => Object.keys(descricoesEnum).find((key) => descricoesEnum[key] === descricao))
+      .filter((enumValue) => enumValue !== undefined) as string[];
+  }
+  
   mensagem: { texto: string; tipo: string } | null = null;
 
 exibirMensagem(texto: string, tipo: 'sucesso' | 'erro'): void {

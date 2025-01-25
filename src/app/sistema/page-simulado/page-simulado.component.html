@@ -30,43 +30,48 @@
           </div>
           <div class="row">
             <div class="col col-12 col-md-6 espaco-select">
-              <app-select-padrao
+              <app-multiplo-select
                     label="Ano"
                     [options]="anosDescricoes"
-                    [(selectedValue)]="selectedAno">
-              </app-select-padrao>
+                    [(selectedValue)]="multiSelectedAno"
+                    [multiple]="true">
+              </app-multiplo-select>
             </div>
             <div class="col col-12 col-md-6 espaco-select">
-              <app-select-padrao
+              <app-multiplo-select
                     label="Tipo de Prova"
                     [options]="tiposDeProvaDescricoes"
-                    [(selectedValue)]="selectedTipoDeProva">
-              </app-select-padrao>
+                    [(selectedValue)]="multiSelectedDificuldade"
+                    [multiple]="true">
+              </app-multiplo-select>
             </div>
           </div>
           <div class="row">
             <div class="col col-12 col-md-6 espaco-select">
-              <app-select-padrao
+              <app-multiplo-select
                   label="Tema"
                   [options]="temasDescricoes"
-                  [(selectedValue)]="selectedTema">
-              </app-select-padrao>
+                  [(selectedValue)]="multiSelectedTema"
+                  [multiple]="true">
+              </app-multiplo-select>
             </div>
             <div class="col col-12 col-md-6 espaco-select">
-              <app-select-padrao
+              <app-multiplo-select
                     label="Subtema"
                     [options]="subtemasDescricoes"
-                    [(selectedValue)]="selectedSubtema">
-              </app-select-padrao>
+                    [(selectedValue)]="multiSelectedSubtema"
+                    [multiple]="true">  
+              </app-multiplo-select>
             </div>
           </div>
           <div class="row">
             <div class="col col-12 col-md-6 espaco-select">
-              <app-select-padrao
+              <app-multiplo-select
                     label="Dificuldade"
                     [options]="dificuldadesDescricoes"
-                    [(selectedValue)]="selectedDificuldade">
-              </app-select-padrao>
+                    [(selectedValue)]="multiSelectedDificuldade"
+                    [multiple]="true">
+              </app-multiplo-select>
             </div>
             <div class="col col-12 col-md-6 espaco-select">
               <app-input-padrao
