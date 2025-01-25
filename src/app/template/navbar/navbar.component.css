@@ -230,3 +230,9 @@
 }
 
 
+.mat-list-base {
+    padding-top: 8px;
+    display: block;
+    -webkit-tap-highlight-color: transparent;
+    margin-bottom: 50px;
+}

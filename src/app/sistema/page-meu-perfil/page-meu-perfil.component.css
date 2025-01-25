@@ -1,17 +1,78 @@
 .container {
   max-width: 1300px;
   padding: 10px;
-  font-family: 'Nunito Sans', sans-serif;
+  margin: 48px;
+  font-family: "Nunito Sans", sans-serif;
+  display: flex;
+}
+
+.minha-conta {
+  background: #fff;
+  min-width: 250px;
+  padding: 24px;
+  margin-right: 24px;
+  border-radius: 8px;
+}
+
+.container-geral {
+  display: flex;
+  flex-direction: column;
+  padding: 48px;
+  background: #fff;
+  width: 100%;
+  border-radius: 8px;
+}
+
+.cont-assinatura {
+  display: flex;
+  flex-direction: column;
+  margin-top: 24px;
+  padding: 24px;
+  background: #eeeeee;
+  border: 1px solid #b9b9b9;
+  border-radius: 8px;
+  width: 100%;
+}
+
+.line-dados {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  justify-items: start;
+}
+
+.line-dados h3 {
+  margin: 0;
+  font-weight: 500;
+  font-size: 18px;
+}
+
+.line-dados span {
+  font-size: 16px;
+}
+
+.btn-assinatura {
+  background: #edb120;
+  color: #000000;
+  font-size: 16px;
+  border: none;
+  font-weight: 700;
+  border-radius: 8px;
+  padding: 12px;
+  width: 100%;
+  margin-top: 24px;
+}
+
+.btn-assinatura:hover {
+  background: #f2c93e;
 }
 
 .profile-container {
-  max-width: 560px;
+  width: 700px;
   margin: 0 auto;
-  padding: 20px;
-  border: 1px solid #ccc;
   border-radius: 5px;
-  background: #b6bed3;
 }
+
 .profile-photo-upload input[type="file"] {
   display: none;
 }
@@ -32,11 +93,19 @@
   background-color: #0056b3;
 }
 
-.profile-header {
-  display: flex;
-  align-items: center;
+.profile-dados {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   margin-bottom: 20px;
-  margin-right: 30px;
+  justify-items: start;
+  width: 100%;
+}
+
+.profile-photo-container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+  width: 30%;
 }
 
 .profile-photo {
@@ -46,11 +115,10 @@
   object-fit: cover;
   border: 2px solid #ccc;
   margin-right: 50px;
-  margin-left: 80px;
 }
 
 .profile-info {
-  flex: 1; /* Ocupa o espaço restante */
+  width: 100%;
 }
 
 .input-group {
@@ -66,15 +134,15 @@
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
-
 .btn {
-  padding: 5px 15px;
-  background-color: #0F1934;
+  padding: 8px 16px;
+  background-color: #0f1934;
   color: #fff;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   font-size: 14px;
+  width: 120px;
 }
 
 .btn-small {
@@ -84,12 +152,42 @@
 }
 
 .btn-secondary {
-  background-color: #EDB120;
+  background-color: #edb120;
   color: #000000;
   margin-left: 10px;
 }
 
 .profile-actions {
-  text-align: center;
-  margin-top: 20px;
+  margin-top: 24px;
+}
+
+.menu-account ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.menu-account li {
+  margin-bottom: 10px;
+}
+
+.menu-account button {
+  width: 100%;
+  padding: 10px;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: #333;
+  transition: background-color 0.3s, color 0.3s;
+  border-radius: 4px;
+}
+
+.menu-account button:hover {
+  background-color: #f0f0f0;
+}
+
+.menu-account button.active {
+  background-color: #007bff;
+  color: #fff;
 }

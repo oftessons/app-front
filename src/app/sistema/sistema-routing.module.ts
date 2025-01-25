@@ -25,6 +25,9 @@ import { ModuloOpticaRefratometriaVisaoSubnormalComponent } from './modulos-das-
 import { ModuloPlasticaEOrbitaComponent } from './modulos-das-aulas/modulo-plastica-e-orbita/modulo-plastica-e-orbita.component';
 import { ModuloRetinaComponent } from './modulos-das-aulas/modulo-retina/modulo-retina.component';
 import { ModuloUveiteOncologiaOcularComponent } from './modulos-das-aulas/modulo-uveite-oncologia-ocular/modulo-uveite-oncologia-ocular.component';
+import { PermissaoAdminComponent } from './permissao-admin/permissao-admin.component';
+import { PermissaoProfessorComponent } from './permissao-professor/permissao-professor.component';
+import { InicioComponent } from './inicio/inicio.component';
 
 const routes: Routes = [
   { 
@@ -33,6 +36,7 @@ const routes: Routes = [
     canActivate: [AuthGuard], 
     children: [
       { path: 'dashboard', component: DashboardComponent },
+      { path: 'inicio', component: InicioComponent},
       { path: 'questoes', component: PageQuestoesComponent },
       { path: 'filtro', component: PageFiltroComponent },
       { path: 'painel-de-aulas', component: PainelDeAulasComponent},
@@ -48,7 +52,7 @@ const routes: Routes = [
       { path:'modulo-retina', component:ModuloRetinaComponent},
       { path:'modulo-uveite-oncologia-ocular', component:ModuloUveiteOncologiaOcularComponent},
       { path: 'desempenho', component: PageDesempenhoComponent },
-      { path: 'meu-perfil', component: PageMeuPerfilComponent },
+      { path: 'minha-conta', component: PageMeuPerfilComponent },
       { path: 'simulados', component: PageSimuladoComponent },
       { path: 'simulados/:id', component: PageSimuladoComponent },
       { path: 'meus-simulados', component: MeusSimuladosComponent },
@@ -79,6 +83,18 @@ const routes: Routes = [
         component: ListaQuestoesComponent, 
         canActivate: [AuthGuard], 
         data: { role: 'ADMIN' }
+      },
+      {
+        path: 'permissao-admin', 
+        component: PermissaoAdminComponent, 
+        canActivate: [AuthGuard], 
+        data: { role: 'ADMIN' }
+      },
+      {
+        path: 'permissao-professor',
+        component: PermissaoProfessorComponent, 
+        canActivate: [AuthGuard], 
+        data: { role: 'PROFESSOR' }
       }
     ]
   }

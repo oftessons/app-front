@@ -22,6 +22,11 @@
         <mat-nav-list class="pt-5">
             <div class="heading-home">Home</div>
 
+            <a mat-list-item routerLink="/usuario/inicio" [ngClass]="{'active-link': isActive('/usuario/inicio')}">
+                <img src="assets/Icons/inicio-of.svg" alt="Ícone de Início" class="icon">
+                <span class="ml-2">Início</span>
+            </a>  
+
             <a mat-list-item routerLink="/usuario/dashboard" [ngClass]="{'active-link': isActive('/usuario/dashboard')}">
                 <img src="assets/imagens/painel.svg" alt="Ícone de Painel de Controle" class="icon">
                 <span class="ml-2">Painel de Controle</span>
@@ -54,9 +59,9 @@
             </a>
             
             <div class="heading-home">Configurações</div>
-            <a mat-list-item routerLink="/usuario/meu-perfil" routerLinkActive="active-link">
+            <a mat-list-item routerLink="/usuario/minha-conta" routerLinkActive="active-link">
                 <img src="assets/imagens/perfil.svg" alt="Ícone de Meu Perfil" class="icon">
-                <span class="ml-2">Meu Perfil</span>
+                <span class="ml-2">Minha Conta</span>
             </a>
 
             <div class="mat-drawer-footer" mat-list-item>
