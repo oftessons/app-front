@@ -26,7 +26,6 @@ import { DificuldadeDescricoes } from './enums/dificuldade-descricao';
 import { TipoDeProvaDescricoes } from './enums/tipodeprova-descricao';
 import { SubtemaDescricoes } from './enums/subtema-descricao';
 import { TemaDescricoes } from './enums/tema-descricao';
-import { throwToolbarMixedModesError } from '@angular/material/toolbar';
 
 declare var bootstrap: any;
 
@@ -134,7 +133,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     this.obterPerfilUsuario();
     this.loadQuestao();
     const meuFiltro = history.state.questao;
-    console.log(meuFiltro);
     if(meuFiltro){
       this.multSelectAno = meuFiltro.ano;
       this.multSelectTipoDeProva = meuFiltro.tipoDeProva;
