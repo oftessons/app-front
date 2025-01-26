@@ -1,19 +1,25 @@
 <div class="container pt-5">
     <div class="container mt-4">
         <div class="header">
-            <h1 class="mt-4"><span> | </span> Catarata</h1>
+            <h1 class="mt-4"><span> | </span> {{ categoria }} </h1>
         </div>
 
         <div class="grid-container">
-            <div class="video-container">
-              <video controls class="video-player">
-                <source src="path/to/your/video.mp4" type="video/mp4">
-                Seu navegador não suporta o elemento de vídeo.
-              </video>
-            </div>
+              <div class="video-container">
+                <video controls class="video-player">
+                  <source src="path/to/your/video.mp4" type="video/mp4">
+                  Seu navegador não suporta o elemento de vídeo.
+                </video>
+              </div>
             <div class="playlist-container">
               <app-playlist-mode></app-playlist-mode>
             </div>
+        </div>
+        <div class="info-aula">
+          <div *ngFor="let aula of aulas">
+            <h3>{{ aula.titulo }}</h3>
+            <p>{{ aula.descricao }}</p>
+          </div>
         </div>
     </div>
   </div>
