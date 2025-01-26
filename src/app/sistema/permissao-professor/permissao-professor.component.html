@@ -1,1 +1,41 @@
-<p>permissao-professor works!</p>
+<div class="container pt-5">
+    <div class="container mt-4">
+      <h1 class="mt-4"> <span> | </span> Professor </h1>
+    </div>
+  
+    <div class="container">
+      <div class="header-cont">
+        <h1>Cadastrar alunos</h1>
+        <div class="btn">
+            <button>Adicionar +</button>
+        </div>
+    </div>
+  
+      <h2>Alunos</h2>
+      <div class="table-responsive">
+        <table class="tabela">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Email</th>
+              <th>Cidade</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let aluno of paginatedAlunos">
+                <td><a href="#">{{ aluno.nome }}</a></td>
+                <td>{{ aluno.email }}</td>
+                <td>{{ aluno.cidade }}</td>
+                <td>{{ aluno.estado }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="pagination-controls">
+            <button class="nav-button" (click)="previousPageAlunos()" [disabled]="pageIndexAlunos === 0">&lt;</button>
+            <button class="page-number" *ngFor="let page of [].constructor(totalPagesAlunos); let i = index" (click)="goToPageAlunos(i)" [class.active]="i === pageIndexAlunos">{{ i + 1 }}</button>
+            <button class="nav-button" (click)="nextPageAlunos()" [disabled]="pageIndexAlunos >= totalPagesAlunos - 1">&gt;</button>
+        </div>
+      </div>
+    </div>
+</div>
