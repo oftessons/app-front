@@ -38,6 +38,7 @@ export class CadastroQuestaoComponent implements OnInit,  AfterViewInit {
   fotoDaRespostaDois: File | null = null;
   fotoDaRespostaTres: File | null = null;
   fotoDaRespostaQuatro: File | null = null;
+  videoDaQuestao: File | null = null;
   imagePreviews: { [key: string]: string | ArrayBuffer | null } = {};
   id!: number;
   selectedAlternativa: number | undefined;
@@ -155,6 +156,9 @@ editorConfig4 = {
             }
             if (this.questaoDTO.fotoDaRespostaQuatroUrl){
               this.fotoPreviews['fotoDaRespostaQuatro'] = this.questaoDTO.fotoDaRespostaQuatroUrl;
+            }
+            if (this.questaoDTO.videoDaQuestaoUrl){
+              this.fotoPreviews['videoDaQuestao'] = this.questaoDTO.videoDaQuestaoUrl;
             }
           },
           (error) => {
@@ -295,6 +299,9 @@ editorConfig4 = {
           case 'fotoDaRespostaQuatro':
           this.fotoDaRespostaQuatro = file;
           break;
+          case 'videoDaQuestao':
+            this.videoDaQuestao = file;
+          break;
         default:
           break;
       }
@@ -417,6 +424,9 @@ onSubmit(): void {
     if (this.fotoDaRespostaQuatro) {
      // console.log("fotoDaRespostaQuatro: passo");
       this.formData.append('fotoDaRespostaQuatroArquivo', this.fotoDaRespostaQuatro);
+    }
+    if (this.videoDaQuestao) {
+      this.formData.append('videoDaQuestaoArquivo', this.videoDaQuestao);
     }
     if(this.questaoDTO.id != null){
       this.questaoDTO.alternativas.forEach((alt, index) => {

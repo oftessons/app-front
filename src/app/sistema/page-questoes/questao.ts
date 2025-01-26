@@ -27,7 +27,8 @@ export class Questao {
   fotoDaRespostaDoisUrl!: string;
   fotoDaRespostaTresUrl!: string;
   fotoDaRespostaQuatroUrl!: string;
-  // fotoDaResposta!: File;
+  videoDaQuestaoUrl!: string;
+  videoDaQuestao!: File;
   fotoDaRespostaUm!: File;
   fotoDaRespostaDois!: File;
   fotoDaRespostaTres!: File;
@@ -73,6 +74,7 @@ export class Questao {
       fotoDaRespostaDois: this.fotoDaRespostaDois,
       fotoDaRespopstaTres: this.fotoDaRespostaTres,
       fotoDaRespostaQuatro: this.fotoAfirmacaoQuatro,
+      videoDaQuestao: this.videoDaQuestao,
 
 
       fotoDaQuestaoUrl: this.fotoDaQuestaoUrl,
@@ -80,6 +82,7 @@ export class Questao {
       fotoDaRespostaDoisUrl: this.fotoDaRespostaDoisUrl,
       fotoDaRespostaTresUrl: this.fotoDaRespostaTresUrl,
       fotoDaRespostaQuatroUrl: this.fotoDaRespostaQuatroUrl,
+      videoDaQuestaoUrl: this.videoDaQuestaoUrl,
 
       // fotoDaResposta: this.fotoDaResposta,
       comentarioDaQuestao: this.comentadorDaQuestao,
