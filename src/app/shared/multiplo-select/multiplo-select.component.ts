@@ -52,6 +52,7 @@ export class MultiploSelectComponent {
     }
   }
 
+  
   toggleDropdown() {
     this.isOpen = !this.isOpen;
   }

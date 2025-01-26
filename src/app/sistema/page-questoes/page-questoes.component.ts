@@ -13,7 +13,6 @@ import { Subtema } from './enums/subtema';
 import { Tema } from './enums/tema';
 import { Questao } from './questao';
 import { QuestoesService } from 'src/app/services/questoes.service';
-import { Filtro } from '../filtro';
 import { FiltroService } from 'src/app/services/filtro.service';
 import { RespostaDTO } from '../RespostaDTO'; // Adicione esta importação
 import { Resposta } from '../Resposta'; // Adicione esta importação
@@ -36,7 +35,8 @@ declare var bootstrap: any;
   styleUrls: ['./page-questoes.component.css'],
 })
 export class PageQuestoesComponent implements OnInit, AfterViewChecked {
-  
+
+  filtroSelecionado: any;
   questao: Questao = new Questao();
   selectedOption: string = '';
   usuario!: Usuario;
@@ -79,15 +79,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   @ViewChild('confirmacaoModalRef', { static: false })
   confirmacaoModal!: ElementRef;
 
-  nomeFiltro: string = '';
-  descricaoFiltro: string = '';
-  selectedAno: Ano | null = null;
-  selectedDificuldade: Dificuldade | null = null;
-  selectedTipoDeProva: TipoDeProva | null = null;
-  selectedSubtema: Subtema | null = null;
-  selectedTema: Tema | null = null;
-  palavraChave: string = '';
-
   questoes: Questao[] = [];
   isFiltered = false;
   p: number = 1;
@@ -101,6 +92,8 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   subtemasDescricoes: string[] = [];
   temasDescricoes: string[] = [];
 
+  descricaoFiltro: string = '';
+  palavraChave: string = '';
   multSelectAno: Ano[] = [];
   multSelecDificuldade: Dificuldade[] = [];
   multSelectTipoDeProva: TipoDeProva[] = [];
@@ -132,7 +125,8 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     private questoesService: QuestoesService,
     private filtroService: FiltroService,
     private authService: AuthService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+     
   ) {}
 
   ngOnInit(): void {
@@ -140,12 +134,12 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     this.loadQuestao();
     const meuFiltro = history.state.questao;
     if(meuFiltro){
-      this.selectedAno = meuFiltro.ano;
-      this.selectedTipoDeProva = meuFiltro.tipoDeProva;
-      this.selectedTema = meuFiltro.tema;
-      this.selectedSubtema = meuFiltro.subtema;
-      this.selectedDificuldade = meuFiltro.dificuldade;
-  }
+      this.multSelectAno = meuFiltro.ano;
+      this.multSelectTipoDeProva = meuFiltro.tipoDeProva;
+      this.multSelectTema = meuFiltro.tema;
+      this.multSelectSubtema = meuFiltro.subtema;
+      this.multSelecDificuldade = meuFiltro.dificuldade;
+    }
     this.tiposDeProvaDescricoes = this.tiposDeProva.map((tipoDeProva) =>
       this.getDescricaoTipoDeProva(tipoDeProva)
     );
@@ -254,20 +248,40 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     return getDescricaoTipoDeProva(tipoDeProva);
   }
 
+  getDescricoesTipoDeProva(tiposDeProva: TipoDeProva[]): string {
+    return tiposDeProva.map(this.getDescricaoTipoDeProva).join('; ');
+  }
+
   getDescricaoAno(ano: Ano): string {
     return getDescricaoAno(ano);
+  }
+
+  getDescricoesAno(anos: Ano[]): string {
+    return anos.map(this.getDescricaoAno).join('; ');
   }
 
   getDescricaoDificuldade(dificuldade: Dificuldade): string {
     return getDescricaoDificuldade(dificuldade);
   }
 
+  getDescricoesDificuldade(dificuldades: Dificuldade[]): string {
+    return dificuldades.map(this.getDescricaoDificuldade).join('; ');
+  }
+
   getDescricaoSubtema(subtema: Subtema): string {
     return getDescricaoSubtema(subtema);
   }
 
+  getDescricoesSubtema(subtemas: Subtema[]): string {
+    return subtemas.map(this.getDescricaoSubtema).join('; ');
+  }
+
   getDescricaoTema(tema: Tema): string {
     return getDescricaoTema(tema);
+  }
+
+  getDescricoesTema(temas: Tema[]): string {
+    return temas.map(this.getDescricaoTema).join('; ');
   }
 
   obterAnoEnum(ano: string): Ano | undefined {
@@ -308,11 +322,11 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   
 
   LimparFiltro() {
-    this.selectedAno = null;
-    this.selectedDificuldade = null;
-    this.selectedTipoDeProva = null;
-    this.selectedSubtema = null;
-    this.selectedTema = null;
+    this.multSelectAno = [];
+    this.multSelecDificuldade = [];
+    this.multSelectTipoDeProva = [];
+    this.multSelectSubtema = [];
+    this.multSelectTema = [];
     this.palavraChave = '';
     this.filtros = {
       ano: null,
@@ -414,14 +428,14 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
         this.resposta = '';
         this.mostrarGabarito = false;
         this.numeroDeQuestoes = questoes.length;
+        this.toggleFiltros();
+
       },
       (error) => {
         console.error('Erro ao filtrar questões:', error);
         this.message = 'Ocorreu um erro ao filtrar questões. Por favor, tente novamente mais tarde.';
       }
     );
-
-    this.toggleFiltros();
   }
 
   selecionarQuestao(event: Event): void {
@@ -432,24 +446,23 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   }  
   
   
-
   getMensagemNenhumaQuestaoEncontrada(filtros: any): string {
     let mensagemUsuarioTratamento = 'Nenhuma questão encontrada com os filtros selecionados: ';
   
     if (filtros.ano) {
-      mensagemUsuarioTratamento += `Ano: ${this.getDescricaoAno(filtros.ano)}, `;
+      mensagemUsuarioTratamento += `Ano: ${this.getDescricoesAno(filtros.ano)}, `;
     }
     if (filtros.dificuldade) {
-      mensagemUsuarioTratamento += `Dificuldade: ${this.getDescricaoDificuldade(filtros.dificuldade)}, `;
+      mensagemUsuarioTratamento += `Dificuldade: ${this.getDescricoesDificuldade(filtros.dificuldade)}, `;
     }
     if (filtros.tipoDeProva) {
-      mensagemUsuarioTratamento += `Tipo de Prova: ${this.getDescricaoTipoDeProva(filtros.tipoDeProva)}, `;
+      mensagemUsuarioTratamento += `Tipo de Prova: ${this.getDescricoesTipoDeProva(filtros.tipoDeProva)}, `;
     }
     if (filtros.subtema) {
-      mensagemUsuarioTratamento += `Subtema: ${this.getDescricaoSubtema(filtros.subtema)}, `;
+      mensagemUsuarioTratamento += `Subtema: ${this.getDescricoesSubtema(filtros.subtema)}, `;
     }
     if (filtros.tema) {
-      mensagemUsuarioTratamento += `Tema: ${this.getDescricaoTema(filtros.tema)}, `;
+      mensagemUsuarioTratamento += `Tema: ${this.getDescricoesTema(filtros.tema)}, `;
     }
     if (filtros.palavraChave) {
       mensagemUsuarioTratamento += `Palavra-chave: ${filtros.palavraChave}, `;
@@ -530,8 +543,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
      // this.mensagemErro = 'Você já está na primeira questão.';
     }
   }
-  
-  
   
   
   proximaQuestao() {
@@ -656,100 +667,65 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       this.fecharCardConfirmacao();
     });
   }
+  
+ confirmarSalvarFiltro(nomeFiltro: string, descricaoFiltro: string): void {
+  if (!nomeFiltro) {
+    this.exibirMensagem('O campo "Nome" é obrigatório.', 'erro');
+    return;
+  }
 
-  confirmarSalvarFiltro(nomeFiltro: string, descricaoFiltro: string): void {
-    if (!this.filtroASalvar) {
-      this.filtroASalvar = {} as FiltroDTO;
-    }
-    if (this.selectedAno) {
-      const anoSelecionado = this.anos.find(
-        (ano) => this.getDescricaoAno(ano) === this.selectedAno
-      );
-      if (anoSelecionado) {
-        this.filtroASalvar.ano = anoSelecionado;
-      }
-    }
-    if (this.selectedDificuldade) {
-      const dificuldadeSelecionada = this.dificuldades.find(
-        (dificuldade) =>
-          this.getDescricaoDificuldade(dificuldade) === this.selectedDificuldade
-      );
-      if (dificuldadeSelecionada) {
-        this.filtroASalvar.dificuldade = dificuldadeSelecionada;
-      }
-    }
+  if(!this.filtroASalvar) {
+    this.filtroASalvar = {} as FiltroDTO;
+  }
+
+  this.filtroASalvar = {
+    nome: nomeFiltro,
+    assunto: descricaoFiltro,
+    ano: this.mapearDescricoesParaEnums(this.multSelectAno, AnoDescricoes),
+    dificuldade: this.mapearDescricoesParaEnums(this.multSelecDificuldade, DificuldadeDescricoes),
+    tipoDeProva: this.mapearDescricoesParaEnums(this.multSelectTipoDeProva, TipoDeProvaDescricoes),
+    subtema: this.mapearDescricoesParaEnums(this.multSelectSubtema, SubtemaDescricoes),
+    tema: this.mapearDescricoesParaEnums(this.multSelectTema, TemaDescricoes),
+  };
   
-    if (this.selectedTipoDeProva) {
-      const tipoDeProvaSelecionado = this.tiposDeProva.find(
-        (tipoDeProva) =>
-          this.getDescricaoTipoDeProva(tipoDeProva) === this.selectedTipoDeProva
-      );
-      if (tipoDeProvaSelecionado) {
-        this.filtroASalvar.tipoDeProva = tipoDeProvaSelecionado;
-      }
-    }
-  
-    if (this.selectedSubtema) {
-      const subtemaSelecionado = this.subtemas.find(
-        (subtema) => this.getDescricaoSubtema(subtema) === this.selectedSubtema
-      );
-      if (subtemaSelecionado) {
-        this.filtroASalvar.subtema = subtemaSelecionado;
-      }
-    }
-  
-    if (this.selectedTema) {
-      const temaSelecionado = this.temas.find(
-        (tema) => this.getDescricaoTema(tema) === this.selectedTema
-      );
-      if (temaSelecionado) {
-        this.filtroASalvar.tema = temaSelecionado;
-      }
-    }
-  
-    if (nomeFiltro) {
-      this.filtroASalvar.nome = nomeFiltro;
-    }
-    if (descricaoFiltro) {
-      this.filtroASalvar.assunto = descricaoFiltro;
-    }
-  
-    // Validação de campos obrigatórios
-    if (!nomeFiltro) {
-      this.exibirMensagem('O campo "Nome" é obrigatório.', 'erro');
-      return;
-    }
-  
-    if (this.filtroASalvar) {
-      const idUser = parseInt(this.usuario.id);
-  
-      this.filtroService.salvarFiltro(this.filtroASalvar, idUser).subscribe(
-        (response) => {
-          this.exibirMensagem('O filtro foi salvo com sucesso!', 'sucesso');
-  
-          // Fechar modal automaticamente
-          const modalElement = document.getElementById('confirmacaoModal');
-          if (modalElement) {
-            const modalInstance = bootstrap.Modal.getInstance(modalElement);
-            modalInstance?.hide();
-          }
-        },
-        (error) => {
-          const errorMessage = error?.error?.message || 'Erro ao salvar o filtro. Por favor, tente novamente.';
-          this.exibirMensagem(errorMessage, 'erro');
+  if(this.filtroASalvar) {
+    const idUser = parseInt(this.usuario.id);
+    
+    this.filtroService.salvarFiltro(this.filtroASalvar, idUser).subscribe(
+      (response) => {
+        this.exibirMensagem('O filtro foi salvo com sucesso!', 'sucesso');
+
+        // Fechar modal automaticamente
+        const modalElement = document.getElementById('confirmacaoModal');
+        if(modalElement) {
+          const modalInstance = bootstrap.Modal.getInstance(modalElement);
+          modalInstance?.hide();
         }
-      );
-    }
+      },
+      (error) => {
+        const errorMessage = error?.error?.message || 'Erro ao salvar o filtro. Por favor, tente novamente.';
+        this.exibirMensagem(errorMessage, 'erro');
+      }
+    )
+  }
+}
+
+  private mapearDescricoesParaEnums(selecoes: string[], descricoesEnum: any): string[] {
+    if (!selecoes || selecoes.length === 0) return [];
+    return selecoes
+      .map((descricao) => Object.keys(descricoesEnum).find((key) => descricoesEnum[key] === descricao))
+      .filter((enumValue) => enumValue !== undefined) as string[];
   }
   
-mensagem: { texto: string; tipo: string } | null = null;
+  
+  mensagem: { texto: string; tipo: string } | null = null;
 
-exibirMensagem(texto: string, tipo: 'sucesso' | 'erro'): void {
-  this.mensagem = { texto, tipo };
-  setTimeout(() => {
-    this.mensagem = null;
-  }, 5000); // A mensagem desaparece após 5 segundos
-}
+  exibirMensagem(texto: string, tipo: 'sucesso' | 'erro'): void {
+    this.mensagem = { texto, tipo };
+    setTimeout(() => {
+      this.mensagem = null;
+    }, 5000); // A mensagem desaparece após 5 segundos
+  }
 
 
   fecharCardConfirmacao(): void {

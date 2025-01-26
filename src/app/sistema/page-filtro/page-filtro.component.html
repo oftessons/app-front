@@ -24,11 +24,11 @@
               </p>
             </div>
             <div>
-              <button class="btn btn-transparent-primary me-2" (click)="editarFiltro(filtro.id)">
+              <button class="btn btn-transparent-primary me-2" *ngIf="filtro.id !== undefined" (click)="editarFiltro(filtro.id)">
                 Visualizar Filtro
                 <img src="assets/imagens/fil.svg" alt="Ícone de Visualizar" class="icon me-1">
               </button>
-              <button class="btn btn-transparent-danger" (click)="deletarFiltro(filtro.id)">
+              <button class="btn btn-transparent-danger" *ngIf="filtro.id !== undefined" (click)="deletarFiltro(filtro.id)">
                 Deletar
                 <img src="assets/imagens/excluir.svg" alt="Ícone de Deletar" class="icon me-1">
               </button>

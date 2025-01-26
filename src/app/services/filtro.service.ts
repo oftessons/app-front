@@ -17,7 +17,7 @@ export class FiltroService {
   // Método para cadastrar um novo filtro
   salvarFiltro(filtro: FiltroDTO, userId: number): Observable<string> {
     return this.http
-      .post<string>(`${this.apiURL}/${userId}`, filtro)
+      .post<string>(`${this.apiURL}/${userId}`, filtro, { responseType: 'text' as 'json' }) 
       .pipe(catchError(this.handleError<string>('salvarFiltro')));
   }
 
