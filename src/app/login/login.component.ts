@@ -76,7 +76,7 @@ export class LoginComponent {
             
             // Redireciona com base na permissão do usuário
             if (usuario.permissao === 'ROLE_ADMIN' || usuario.permissao === 'ROLE_USER') {
-              this.router.navigate(['/usuario/dashboard']);
+              this.router.navigate(['/usuario/inicio']);
             } else {
               this.router.navigate(['/forbidden']); // Caso não tenha permissão
             }
@@ -190,7 +190,7 @@ export class LoginComponent {
       (usuario: Usuario) => {
         this.usuario = usuario;
         localStorage.setItem('idUser', usuario.id);
-        this.router.navigate(['/usuario/dashboard']);
+        this.router.navigate(['/usuario/inicio']);
         localStorage.setItem('usuario', usuario.username);
       },
       error => {
