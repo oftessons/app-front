@@ -47,14 +47,11 @@
                                             </div>
                                         </div>
                                         
-                                         <!-- BTN ESQUECEU A SENHA 
                                         <div class="form-group col-sm-12 col-md-6 text-center"> 
                                             <a href="#" class="small mb-1 text-decoration-none text-primary forgot-password-link" (click)="forgotPassword($event)">
                                                 <span>Esqueceu sua senha?</span> Recupere aqui!
                                             </a>
                                         </div>
-                                     -->                                        
-
                                     </form>
 
                                     <!-- Register Form -->
@@ -183,6 +180,9 @@
 
                                 <div class="card-footer text-center">
                                     <div class="small">
+                                        <a href="#" (click)="preparaCadastrar($event)" *ngIf="!cadastrando && !showForgotPassword">
+                                            <span class="white-text">Ainda não possui uma conta? </span> <span class="green-text">Crie agora!</span>
+                                        </a>
                                     </div>
                                 </div> 
                             </div>
