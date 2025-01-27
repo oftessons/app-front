@@ -72,6 +72,32 @@ h2 {
   text-decoration: underline;
 }
 
+.icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+  margin-bottom: 10px;
+  margin-top: 6px;
+}
+
+.btn-danger {
+  margin-right: 10px;
+  border: #dc3545;
+  background-color: #dc3545;
+}
+.btn-primary {
+  margin-right: 10px;
+  border: #5c8be2;
+  background-color: #5c8be2;
+}
+
+.btn-danger:hover {
+  background-color: #a10212;
+}
+.btn-primary:hover {
+  background-color: #134383;
+}
+
 /* Paginação */
 .pagination-controls {
   display: flex;
