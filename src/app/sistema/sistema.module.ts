@@ -39,6 +39,7 @@ import { ModuloUveiteOncologiaOcularComponent } from './modulos-das-aulas/modulo
 import { PermissaoAdminComponent } from './permissao-admin/permissao-admin.component';
 import { PermissaoProfessorComponent } from './permissao-professor/permissao-professor.component';
 import { InicioComponent } from './inicio/inicio.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -82,6 +83,7 @@ import { InicioComponent } from './inicio/inicio.component';
     NgxPaginationModule,
     EditorModule,
     SharedModule,
+    ReactiveFormsModule
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA, // Permite o uso de elementos personalizados

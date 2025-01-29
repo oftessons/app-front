@@ -10,6 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { ModuloAulasComponent } from './modulo-aulas/modulo-aulas.component';
 import { PlaylistModeComponent } from './playlist-mode/playlist-mode.component';
 import { MultiploSelectComponent } from './multiplo-select/multiplo-select.component';
+import { ModalComponent } from './modal/modal.component';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { MultiploSelectComponent } from './multiplo-select/multiplo-select.compo
     InputPadraoComponent,
     ModuloAulasComponent,
     PlaylistModeComponent,
-    MultiploSelectComponent
+    MultiploSelectComponent,
+    ModalComponent
   ],
   imports: [
     CommonModule,
@@ -32,7 +34,8 @@ import { MultiploSelectComponent } from './multiplo-select/multiplo-select.compo
     InputPadraoComponent,
     ModuloAulasComponent,
     PlaylistModeComponent,
-    MultiploSelectComponent
+    MultiploSelectComponent,
+    ModalComponent
   ]
 })
 export class SharedModule { }

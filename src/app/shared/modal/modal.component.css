@@ -1,0 +1,69 @@
+.modal-geral {
+  position: relative;
+  z-index: 12;
+}
+
+.modal-geral[aria-modal="false"] {
+  visibility: hidden;
+  transition: opacity 0.5s ease-in;
+  opacity: 0;
+}
+
+.modal-geral[aria-modal="true"] {
+  visibility: visible;
+  transition: opacity 0.3s ease-out;
+  opacity: 1;
+}
+
+.modal-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(15, 28, 52, 0.75);
+  transition: opacity 0.3s;
+}
+
+.modal-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  width: 100vw;
+  overflow-y: auto;
+}
+
+.modal-container {
+  display: flex;
+  min-height: 100%;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  text-align: center;
+}
+
+.modal-box {
+  position: relative;
+  transform: translateY(0) scale(1);
+  overflow: hidden;
+  border-radius: 1rem;
+  background-color: white;
+  text-align: left;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s;
+}
+
+.modal-geral[aria-modal="true"] .modal-box {
+  transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.modal-geral[aria-modal="false"] .modal-box {
+  transition: opacity 0.2s ease-in, transform 0.2s ease-in;
+  opacity: 0;
+  transform: translateY(1rem) scale(0.95);
+}

@@ -1,0 +1,21 @@
+<div *ngIf="show" class="modal-geral" role="dialog" [attr.aria-labelledby]="title" [attr.aria-modal]="show ? 'true' : 'false'">
+    <div class="modal-bg" (click)="onModalClose()"></div>
+    <div class="modal-wrapper">
+      <div class="modal-container">
+        <div class="modal-box" [ngClass]="size">
+          <div class="bg-white pb-4 sm:p-6 sm:pb-4 custom-pad">
+            <ng-content></ng-content>
+          </div>
+          <div class="modal-footer" *ngIf="footer">
+            <button type="button" (click)="handleSave()" class="btn-save">
+              Salvar
+            </button>
+            <button type="button" (click)="onModalClose()" class="btn-cancel">
+              Cancelar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
