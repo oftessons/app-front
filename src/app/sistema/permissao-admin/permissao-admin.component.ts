@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-permissao-admin',
@@ -41,8 +42,26 @@ export class PermissaoAdminComponent implements OnInit {
   pageIndexAlunos = 0;
   totalPagesAlunos = Math.ceil(this.alunos.length / this.pageSizeAlunos);
 
+  usuarioForm =  this.formBuilder.group({
+    id: new FormControl(0,),
+    nome: new FormControl('', {validators: [Validators.required]}),
+    email: new FormControl('', {validators: [Validators.required]}),
+    estado: new FormControl('', ),
+    cidade: new FormControl('', ),
+  });
 
-  constructor() {}
+  showModal: boolean = false;
+  submited: boolean = false;
+
+
+  constructor(private formBuilder: FormBuilder,) { 
+    this.usuarioForm = this.formBuilder.group({
+      nome: [''],
+      email: [''],
+      cidade: [''],
+      estado: [''],
+    });
+  }
 
   ngOnInit(): void {
     this.updatePaginatedData('professores');
@@ -94,5 +113,18 @@ export class PermissaoAdminComponent implements OnInit {
       this.pageIndexAlunos = pageIndex;
     }
     this.updatePaginatedData(type);
+  }
+
+  openModal() {
+    this.showModal = true;
+    console.log("Valor de showModal:", this.showModal);
+  }
+
+  closeModal() {
+    console.log("Fechando modal...");
+    this.showModal = false;
+  }
+
+  onFormSubmitHandler(): void {
   }
 }
