@@ -7,7 +7,7 @@ import {
   getDescricaoTema,
   getDescricaoTipoDeProva,
   getDescricaoQuantidadeDeQuestoesSelecionadas,
-  getDescricaoRespostasSimulado
+  getDescricaoRespostasSimulado,
 } from '../page-questoes/enums/enum-utils';
 import { Ano } from '../page-questoes/enums/ano';
 import { Dificuldade } from '../page-questoes/enums/dificuldade';
@@ -31,8 +31,11 @@ import { QuantidadeDeQuestoesSelecionadas } from '../page-questoes/enums/quant-q
 import { RespostasSimulado } from '../page-questoes/enums/resp-simu';
 import Chart from 'chart.js';
 import { Router } from '@angular/router';
-import { DomSanitizer, SafeHtml, SafeResourceUrl } from '@angular/platform-browser';
-
+import {
+  DomSanitizer,
+  SafeHtml,
+  SafeResourceUrl,
+} from '@angular/platform-browser';
 
 declare var bootstrap: any;
 
@@ -69,7 +72,9 @@ export class PageSimuladoComponent implements OnInit {
   dificuldades = Object.values(Dificuldade);
   subtemas = Object.values(Subtema);
   temas = Object.values(Tema);
-  quantidadeDeQuestoesSelecionadas = Object.values(QuantidadeDeQuestoesSelecionadas);
+  quantidadeDeQuestoesSelecionadas = Object.values(
+    QuantidadeDeQuestoesSelecionadas
+  );
   respostasSimulado = Object.values(RespostasSimulado);
 
   message: string = '';
@@ -100,11 +105,12 @@ export class PageSimuladoComponent implements OnInit {
 
   multiSelectedAno: Ano[] = [];
   multiSelectedDificuldade: Dificuldade[] = [];
-  multiSelectedTipoDeProva: TipoDeProva[] =[];
+  multiSelectedTipoDeProva: TipoDeProva[] = [];
   multiSelectedSubtema: Subtema[] = [];
   multiSelectedTema: Tema[] = [];
   palavraChave: string = '';
-  selectedQuantidadeDeQuestoesSelecionadas: QuantidadeDeQuestoesSelecionadas | null = null;
+  selectedQuantidadeDeQuestoesSelecionadas: QuantidadeDeQuestoesSelecionadas | null =
+    null;
   selectedRespostasSimulado: RespostasSimulado | null = null;
 
   questoes: Questao[] = [];
@@ -132,6 +138,7 @@ export class PageSimuladoComponent implements OnInit {
 
   mostrarFiltros: boolean = false;
 
+  isMeuSimulado: boolean = false;
 
   constructor(
     private questoesService: QuestoesService,
@@ -142,43 +149,64 @@ export class PageSimuladoComponent implements OnInit {
     private sanitizer: DomSanitizer
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     const meuSimulado = history.state.simulado;
     this.dados = this.obterDados();
-    this.obterPerfilUsuario();
-    if(meuSimulado){
-        this.multiSelectedAno = meuSimulado.ano;
-        this.multiSelectedTipoDeProva = meuSimulado.tipoDeProva;
-        this.multiSelectedTema = meuSimulado.tema;
-        this.multiSelectedSubtema = meuSimulado.subtema;
-        this.multiSelectedDificuldade = meuSimulado.dificuldade;
-        this.selectedQuantidadeDeQuestoesSelecionadas = meuSimulado.qtdQuestoes;
-        this.selectedRespostasSimulado = meuSimulado.respostasSimulado;
-        this.questoes = meuSimulado.questoes;
-        if(this.questoes){
-          this.idsQuestoes = this.questoes.map((q) => q.id);
-          this.paginaAtual = 0;
-          this.questaoAtual = this.questoes[this.paginaAtual];
-          this.resposta = '';
-          this.mostrarGabarito = false;
-        }
+    await this.obterPerfilUsuario();
+    if (meuSimulado) {
+      this.isMeuSimulado = true;
+      this.multiSelectedAno = meuSimulado.ano;
+      this.multiSelectedTipoDeProva = meuSimulado.tipoDeProva;
+      this.multiSelectedTema = meuSimulado.tema;
+      this.multiSelectedSubtema = meuSimulado.subtema;
+      this.multiSelectedDificuldade = meuSimulado.dificuldade;
+      this.selectedQuantidadeDeQuestoesSelecionadas = meuSimulado.qtdQuestoes;
+      this.selectedRespostasSimulado = meuSimulado.respostasSimulado;
+      this.questoes = meuSimulado.questoes;
+      if (this.questoes) {
+        console.log('questoes: ', this.questoes);
+        this.idsQuestoes = this.questoes.map((q) => q.id);
+        this.paginaAtual = 0;
+        this.questaoAtual = this.questoes[this.paginaAtual];
+        this.resposta = '';
+        console.log('userID: ', this.usuarioId);
+        this.respostaQuestao(this.questoes[this.paginaAtual].id);
+        this.visualizarSimulado();
+      }
     }
-    this.tiposDeProvaDescricoes = this.tiposDeProva.map(tipoDeProva => this.getDescricaoTipoDeProva(tipoDeProva));
-    this.anosDescricoes = this.anos.map(ano => this.getDescricaoAno(ano));
-    this.dificuldadesDescricoes = this.dificuldades.map(dificuldade => this.getDescricaoDificuldade(dificuldade));
-    this.subtemasDescricoes = this.subtemas.map(subtema => this.getDescricaoSubtema(subtema));
-    this.temasDescricoes = this.temas.map(tema => this.getDescricaoTema(tema));
-    this.quantidadeDeQuestoesSelecionadasDescricoes = this.quantidadeDeQuestoesSelecionadas.map(
-        quantidadeDeQuestoesSelecionadas => this.getDescricaoQuantidadeDeQuestoesSelecionadas(quantidadeDeQuestoesSelecionadas));
-      
+    this.tiposDeProvaDescricoes = this.tiposDeProva.map((tipoDeProva) =>
+      this.getDescricaoTipoDeProva(tipoDeProva)
+    );
+    this.anosDescricoes = this.anos.map((ano) => this.getDescricaoAno(ano));
+    this.dificuldadesDescricoes = this.dificuldades.map((dificuldade) =>
+      this.getDescricaoDificuldade(dificuldade)
+    );
+    this.subtemasDescricoes = this.subtemas.map((subtema) =>
+      this.getDescricaoSubtema(subtema)
+    );
+    this.temasDescricoes = this.temas.map((tema) =>
+      this.getDescricaoTema(tema)
+    );
+    this.quantidadeDeQuestoesSelecionadasDescricoes =
+      this.quantidadeDeQuestoesSelecionadas.map(
+        (quantidadeDeQuestoesSelecionadas) =>
+          this.getDescricaoQuantidadeDeQuestoesSelecionadas(
+            quantidadeDeQuestoesSelecionadas
+          )
+      );
+
     this.respostasSimuladoDescricao = this.respostasSimulado.map(
-      respostasSimulado => this.getDescricaoRespostasSimulado(respostasSimulado));
+      (respostasSimulado) =>
+        this.getDescricaoRespostasSimulado(respostasSimulado)
+    );
   }
 
   finalizarSimulado() {
-    this.simuladoService.finalizarSimulado(this.usuarioId, this.respostasList).subscribe((resultado) => {
-      this.gerarGrafico(resultado.acertos, resultado.erros);
-    });
+    this.simuladoService
+      .finalizarSimulado(this.usuarioId, this.respostasList)
+      .subscribe((resultado) => {
+        this.gerarGrafico(resultado.acertos, resultado.erros);
+      });
     this.simuladoIniciado = false;
     this.simuladoFinalizado = true;
     this.tempoTotal = this.tempo; // Tempo total em segundos
@@ -192,23 +220,24 @@ export class PageSimuladoComponent implements OnInit {
       type: 'pie',
       data: {
         labels: ['Acertos', 'Erros'],
-        datasets: [{
-          label: 'Quantidade',
-          data: [acertos, erros],
-          backgroundColor: ['#4CAF50', '#F44336'],
-        }]
+        datasets: [
+          {
+            label: 'Quantidade',
+            data: [acertos, erros],
+            backgroundColor: ['#4CAF50', '#F44336'],
+          },
+        ],
       },
       options: {
         responsive: true,
         plugins: {
           legend: {
             position: 'top',
-          }
-        }
-      }
+          },
+        },
+      },
     });
   }
-  
 
   obterDados() {
     // Simula a obtenção de dados
@@ -224,32 +253,40 @@ export class PageSimuladoComponent implements OnInit {
 
   getLetraAlternativa(alternativaTexto: string): string {
     if (this.questaoAtual) {
-      const index = this.questaoAtual.alternativas.findIndex(alt => alt.texto === alternativaTexto);
+      const index = this.questaoAtual.alternativas.findIndex(
+        (alt) => alt.texto === alternativaTexto
+      );
       return String.fromCharCode(65 + index);
     }
     return '';
   }
 
-
-  obterPerfilUsuario() {
-    this.authService.obterUsuarioAutenticadoDoBackend().subscribe(
-      (data) => {
-        this.usuario = data; // Armazenar os dados do perfil do usuário na variável 'usuario'
-        this.usuarioId = parseInt(this.usuario.id);
-      },
-      (error) => {
-        console.error('Erro ao obter perfil do usuário:', error);
+  async obterPerfilUsuario() {
+    try {
+      const data = await this.authService.obterUsuarioAutenticadoDoBackend().toPromise();
+      
+      if (data?.id) {
+        this.usuario = data;
+        this.usuarioId = parseInt(this.usuario.id, 10);
+        console.log('Perfil do usuário:', this.usuarioId);
+      } else {
+        console.error('Erro: ID do usuário não encontrado.');
       }
-    );
+    } catch (error) {
+      console.error('Erro ao obter perfil do usuário:', error);
+    }
   }
 
   responderQuestao(questao: Questao | null): void {
     if (this.selectedOption) {
-      this.mensagemDeAviso = `Você marcou a letra ${this.getLetraAlternativa(this.selectedOption)} como resposta, continue seus estudos e vá para a próxima questão 😃.`;
+      this.mensagemDeAviso = `Você marcou a letra ${this.getLetraAlternativa(
+        this.selectedOption
+      )} como resposta, continue seus estudos e vá para a próxima questão 😃.`;
       // Armazena a resposta para a questão atual
       this.respostas[this.paginaAtual] = this.selectedOption;
     } else {
-      this.mensagemDeAviso = 'Por favor, selecione uma alternativa antes de responder.';
+      this.mensagemDeAviso =
+        'Por favor, selecione uma alternativa antes de responder.';
     }
 
     if (!questao) {
@@ -257,12 +294,12 @@ export class PageSimuladoComponent implements OnInit {
       this.resposta = 'Nenhuma questão selecionada.';
       return;
     }
-  
+
     const respostaDTO: RespostaDTO = {
       questaoId: questao.id,
       selecionarOpcao: this.selectedOption,
     };
-  
+
     this.questoesService
       .checkAnswer(questao.id, this.usuarioId, respostaDTO)
       .subscribe(
@@ -273,12 +310,12 @@ export class PageSimuladoComponent implements OnInit {
           } else {
             this.resposta = 'Resposta incorreta. Tente novamente.';
           }
-  
+
           // Adicionar a resposta à lista de respostas do simulado
           this.respostasList.push({
             questaoId: questao.id,
             selecionarOpcao: this.selectedOption,
-            correta: resposta.correct
+            correta: resposta.correct,
           });
         },
         (error) => {
@@ -314,21 +351,24 @@ export class PageSimuladoComponent implements OnInit {
   }
 
   getDescricaoQuantidadeDeQuestoesSelecionadas(
-    quantidadeDeQuestoesSelecionadas: QuantidadeDeQuestoesSelecionadas): string {
-    return  getDescricaoQuantidadeDeQuestoesSelecionadas(quantidadeDeQuestoesSelecionadas);
+    quantidadeDeQuestoesSelecionadas: QuantidadeDeQuestoesSelecionadas
+  ): string {
+    return getDescricaoQuantidadeDeQuestoesSelecionadas(
+      quantidadeDeQuestoesSelecionadas
+    );
   }
 
   getDescricaoRespostasSimulado(respostasSimulado: RespostasSimulado): string {
     return getDescricaoRespostasSimulado(respostasSimulado);
   }
 
-   obterAnoEnum(ano: string): Ano | undefined {
-      const anoEnum = Object.keys(AnoDescricoes).find(
-        (key) => AnoDescricoes[key as Ano] === ano
-      );
-    
-      return anoEnum as Ano | undefined;
-    }
+  obterAnoEnum(ano: string): Ano | undefined {
+    const anoEnum = Object.keys(AnoDescricoes).find(
+      (key) => AnoDescricoes[key as Ano] === ano
+    );
+
+    return anoEnum as Ano | undefined;
+  }
 
   obterDificuldadeEnum(descricao: string): Dificuldade | undefined {
     const chave = Object.keys(DificuldadeDescricoes).find(
@@ -336,7 +376,7 @@ export class PageSimuladoComponent implements OnInit {
     );
     return chave ? Dificuldade[chave as Dificuldade] : undefined;
   }
-  
+
   obterTipoDeProvaEnum(descricao: string): TipoDeProva | undefined {
     const chave = Object.keys(TipoDeProvaDescricoes).find(
       (key) => TipoDeProvaDescricoes[key as TipoDeProva] === descricao
@@ -361,7 +401,7 @@ export class PageSimuladoComponent implements OnInit {
   LimparFiltro() {
     this.multiSelectedAno = [];
     this.multiSelectedDificuldade = [];
-    this.multiSelectedTipoDeProva =[];
+    this.multiSelectedTipoDeProva = [];
     this.multiSelectedSubtema = [];
     this.multiSelectedTema = [];
     this.selectedQuantidadeDeQuestoesSelecionadas = null;
@@ -382,30 +422,30 @@ export class PageSimuladoComponent implements OnInit {
 
     if (this.multiSelectedAno.length) {
       const anosSelecionados = this.multiSelectedAno
-      .map((ano) => this.obterAnoEnum(ano))
-      .filter((enumAno) => enumAno !== undefined);
+        .map((ano) => this.obterAnoEnum(ano))
+        .filter((enumAno) => enumAno !== undefined);
 
-      if(anosSelecionados.length > 0) {
+      if (anosSelecionados.length > 0) {
         filtros.ano = anosSelecionados;
-      } 
+      }
     }
 
     if (this.multiSelectedDificuldade.length) {
       const dificuldadeSelecionadas = this.multiSelectedDificuldade
-      .map((dificuldade) => this.obterDificuldadeEnum(dificuldade))
-      .filter((enumDificuldade) => enumDificuldade !== undefined);
+        .map((dificuldade) => this.obterDificuldadeEnum(dificuldade))
+        .filter((enumDificuldade) => enumDificuldade !== undefined);
 
-      if(dificuldadeSelecionadas.length > 0) {
+      if (dificuldadeSelecionadas.length > 0) {
         filtros.dificuldade = dificuldadeSelecionadas;
       }
     }
 
     if (this.multiSelectedTipoDeProva.length) {
       const tipoDeProvaSelecionado = this.multiSelectedTipoDeProva
-      .map((tipoDeProva) => this.obterTipoDeProvaEnum(tipoDeProva))
-      .filter((enumTipoDeProva) => enumTipoDeProva !== undefined);
+        .map((tipoDeProva) => this.obterTipoDeProvaEnum(tipoDeProva))
+        .filter((enumTipoDeProva) => enumTipoDeProva !== undefined);
 
-      if(tipoDeProvaSelecionado.length > 0) {
+      if (tipoDeProvaSelecionado.length > 0) {
         filtros.tipodeprova = tipoDeProvaSelecionado;
       }
     }
@@ -413,7 +453,8 @@ export class PageSimuladoComponent implements OnInit {
     if (this.selectedRespostasSimulado) {
       const respostaSimuladoSelecionado = this.respostasSimulado.find(
         (respostaSimulado) =>
-          this.getDescricaoRespostasSimulado(respostaSimulado) === this.selectedRespostasSimulado
+          this.getDescricaoRespostasSimulado(respostaSimulado) ===
+          this.selectedRespostasSimulado
       );
       if (respostaSimuladoSelecionado) {
         filtros.questaoRespondida = respostaSimuladoSelecionado;
@@ -422,27 +463,29 @@ export class PageSimuladoComponent implements OnInit {
 
     if (this.multiSelectedSubtema.length) {
       const subtemaSelecionado = this.multiSelectedSubtema
-      .map((subtema) => this.obterSubtemaEnum(subtema))
-      .filter((enumSubtema) => enumSubtema !== undefined);
+        .map((subtema) => this.obterSubtemaEnum(subtema))
+        .filter((enumSubtema) => enumSubtema !== undefined);
 
-      if(subtemaSelecionado.length > 0) {
+      if (subtemaSelecionado.length > 0) {
         filtros.subtema = subtemaSelecionado;
       }
     }
 
     if (this.multiSelectedAno.length) {
       const temaSelecionado = this.multiSelectedAno
-      .map((tema) => this.obterTemaEnum(tema))
-      .filter((enumTema) => enumTema !== undefined);
-      
-      if(temaSelecionado.length > 0) {
+        .map((tema) => this.obterTemaEnum(tema))
+        .filter((enumTema) => enumTema !== undefined);
+
+      if (temaSelecionado.length > 0) {
         filtros.tema = temaSelecionado;
       }
     }
     if (this.quantidadeDeQuestoesSelecionadas) {
       const quantidadeSelecionada = this.quantidadeDeQuestoesSelecionadas.find(
-        (quantidadeDeQuestoesSelecionadas) => getDescricaoQuantidadeDeQuestoesSelecionadas(quantidadeDeQuestoesSelecionadas)
-         === this.selectedQuantidadeDeQuestoesSelecionadas
+        (quantidadeDeQuestoesSelecionadas) =>
+          getDescricaoQuantidadeDeQuestoesSelecionadas(
+            quantidadeDeQuestoesSelecionadas
+          ) === this.selectedQuantidadeDeQuestoesSelecionadas
       );
       if (quantidadeSelecionada) {
         filtros.quantidadeDeQuestoesSelecionadas = quantidadeSelecionada;
@@ -452,7 +495,10 @@ export class PageSimuladoComponent implements OnInit {
     if (this.palavraChave && this.palavraChave.trim() !== '') {
       filtros.palavraChave = this.palavraChave.trim();
     } else {
-      console.error('Quantidade de questões selecionada é inválida:', this.quantidadeDeQuestoesSelecionadas);
+      console.error(
+        'Quantidade de questões selecionada é inválida:',
+        this.quantidadeDeQuestoesSelecionadas
+      );
     }
 
     if (Object.keys(filtros).length === 0) {
@@ -467,22 +513,86 @@ export class PageSimuladoComponent implements OnInit {
       .subscribe(
         (questoes: Questao[]) => {
           if (questoes.length === 0) {
-            if (filtros.ano && !filtros.tipoDeProva && !filtros.dificuldade && !filtros.subtema && !filtros.tema && !filtros.palavraChave && !filtros.qtdQuestoes) {
-              this.message = 'Nenhuma questão encontrada para o ano selecionado.';
-            } else if (filtros.tipoDeProva && !filtros.ano && !filtros.dificuldade && !filtros.subtema && !filtros.tema && !filtros.palavraChave && !filtros.qtdQuestoes) {
-              this.message = 'Nenhuma questão encontrada para o tipo de prova selecionado.';
-            } else if (filtros.dificuldade && !filtros.ano && !filtros.tipoDeProva && !filtros.subtema && !filtros.tema && !filtros.palavraChave && !filtros.qtdQuestoes) {
-              this.message = 'Nenhuma questão encontrada para a dificuldade selecionada.';
-            } else if (filtros.subtema && !filtros.ano && !filtros.tipoDeProva && !filtros.dificuldade && !filtros.tema && !filtros.palavraChave && !filtros.qtdQuestoes) {
-              this.message = 'Nenhuma questão encontrada para o subtema selecionado.';
-            } else if (filtros.tema && !filtros.ano && !filtros.tipoDeProva && !filtros.dificuldade && !filtros.subtema && !filtros.palavraChave && !filtros.qtdQuestoes) {
-              this.message = 'Nenhuma questão encontrada para o tema selecionado.';
-            } else if (filtros.palavraChave && !filtros.ano && !filtros.tipoDeProva && !filtros.dificuldade && !filtros.subtema && !filtros.tema && !filtros.qtdQuestoes) {
-              this.message = 'Nenhuma questão encontrada para a palavra-chave informada.';
-            } else if (filtros.qtdQuestoes && !filtros.ano && !filtros.tipoDeProva && !filtros.dificuldade && !filtros.subtema && !filtros.tema && !filtros.palavraChave) {
-              this.message = 'Nenhuma questão encontrada para a quantidade de questões selecionada.';
+            if (
+              filtros.ano &&
+              !filtros.tipoDeProva &&
+              !filtros.dificuldade &&
+              !filtros.subtema &&
+              !filtros.tema &&
+              !filtros.palavraChave &&
+              !filtros.qtdQuestoes
+            ) {
+              this.message =
+                'Nenhuma questão encontrada para o ano selecionado.';
+            } else if (
+              filtros.tipoDeProva &&
+              !filtros.ano &&
+              !filtros.dificuldade &&
+              !filtros.subtema &&
+              !filtros.tema &&
+              !filtros.palavraChave &&
+              !filtros.qtdQuestoes
+            ) {
+              this.message =
+                'Nenhuma questão encontrada para o tipo de prova selecionado.';
+            } else if (
+              filtros.dificuldade &&
+              !filtros.ano &&
+              !filtros.tipoDeProva &&
+              !filtros.subtema &&
+              !filtros.tema &&
+              !filtros.palavraChave &&
+              !filtros.qtdQuestoes
+            ) {
+              this.message =
+                'Nenhuma questão encontrada para a dificuldade selecionada.';
+            } else if (
+              filtros.subtema &&
+              !filtros.ano &&
+              !filtros.tipoDeProva &&
+              !filtros.dificuldade &&
+              !filtros.tema &&
+              !filtros.palavraChave &&
+              !filtros.qtdQuestoes
+            ) {
+              this.message =
+                'Nenhuma questão encontrada para o subtema selecionado.';
+            } else if (
+              filtros.tema &&
+              !filtros.ano &&
+              !filtros.tipoDeProva &&
+              !filtros.dificuldade &&
+              !filtros.subtema &&
+              !filtros.palavraChave &&
+              !filtros.qtdQuestoes
+            ) {
+              this.message =
+                'Nenhuma questão encontrada para o tema selecionado.';
+            } else if (
+              filtros.palavraChave &&
+              !filtros.ano &&
+              !filtros.tipoDeProva &&
+              !filtros.dificuldade &&
+              !filtros.subtema &&
+              !filtros.tema &&
+              !filtros.qtdQuestoes
+            ) {
+              this.message =
+                'Nenhuma questão encontrada para a palavra-chave informada.';
+            } else if (
+              filtros.qtdQuestoes &&
+              !filtros.ano &&
+              !filtros.tipoDeProva &&
+              !filtros.dificuldade &&
+              !filtros.subtema &&
+              !filtros.tema &&
+              !filtros.palavraChave
+            ) {
+              this.message =
+                'Nenhuma questão encontrada para a quantidade de questões selecionada.';
             } else {
-              this.message = 'Nenhuma questão encontrada para os filtros selecionados.';
+              this.message =
+                'Nenhuma questão encontrada para os filtros selecionados.';
             }
             this.questoes = [];
             this.idsQuestoes = [];
@@ -505,12 +615,17 @@ export class PageSimuladoComponent implements OnInit {
         }
       );
   }
-  
+
   carregarRespostaAnterior() {
     const respostaAnterior = this.respostas[this.paginaAtual];
     if (respostaAnterior) {
       this.selectedOption = respostaAnterior;
-      this.mensagemDeAviso = `Você respondeu anteriormente a letra ${this.getLetraAlternativa(respostaAnterior)}.`; // Exibe mensagem apenas ao voltar
+      if(this.isMeuSimulado){
+        this.respostaQuestao(this.questoes[this.paginaAtual].id);
+      }
+      this.mensagemDeAviso = `Você respondeu anteriormente a letra ${this.getLetraAlternativa(
+        respostaAnterior
+      )}.`; // Exibe mensagem apenas ao voltar
     } else {
       this.selectedOption = '';
     }
@@ -525,7 +640,7 @@ export class PageSimuladoComponent implements OnInit {
       this.carregarRespostaAnterior(); // Chame a função para carregar a resposta anterior
     }
   }
-  
+
   proximaQuestao() {
     if (this.paginaAtual < this.questoes.length - 1) {
       this.paginaAtual++;
@@ -534,37 +649,65 @@ export class PageSimuladoComponent implements OnInit {
       this.resposta = '';
       this.selectedOption = '';
       this.mensagemDeAviso = ''; // Limpa a mensagem ao clicar em "próxima"
+      if(this.isMeuSimulado){
+        this.respostaQuestao(this.questoes[this.paginaAtual].id);
+      }
     }
   }
-  
-  confirmarSalvarSimulado(nomeSimulado: string, descricaoSimulado: string): void {
+
+  confirmarSalvarSimulado(
+    nomeSimulado: string,
+    descricaoSimulado: string
+  ): void {
     const qtdQuestoesValue = this.selectedQuantidadeDeQuestoesSelecionadas;
-    
+
     // Montando o objeto simulado
-    const simulado: any = { 
+    const simulado: any = {
       nomeSimulado,
       assunto: descricaoSimulado,
       qtdQuestoes: qtdQuestoesValue,
       ano: this.mapearDescricoesParaEnums(this.multiSelectedAno, AnoDescricoes),
-      tema: this.mapearDescricoesParaEnums(this.multiSelectedTema, TemaDescricoes),
-      dificuldade: this.mapearDescricoesParaEnums(this.multiSelectedDificuldade, DificuldadeDescricoes),
-      tipoDeProva: this.mapearDescricoesParaEnums(this.multiSelectedTipoDeProva, TipoDeProvaDescricoes),
-      subtema: this.mapearDescricoesParaEnums(this.multiSelectedSubtema, SubtemaDescricoes),
+      tema: this.mapearDescricoesParaEnums(
+        this.multiSelectedTema,
+        TemaDescricoes
+      ),
+      dificuldade: this.mapearDescricoesParaEnums(
+        this.multiSelectedDificuldade,
+        DificuldadeDescricoes
+      ),
+      tipoDeProva: this.mapearDescricoesParaEnums(
+        this.multiSelectedTipoDeProva,
+        TipoDeProvaDescricoes
+      ),
+      subtema: this.mapearDescricoesParaEnums(
+        this.multiSelectedSubtema,
+        SubtemaDescricoes
+      ),
       questaoIds: this.idsQuestoes,
       respostasSimulado: this.selectedRespostasSimulado,
     };
-  
+
     // Validação básica
-    if (!simulado.nomeSimulado || !simulado.assunto || simulado.qtdQuestoes == null) {
-      this.exibirMensagem('Preencha todos os campos obrigatórios: Nome, Assunto e Quantidade de Questões.', 'erro');
+    if (
+      !simulado.nomeSimulado ||
+      !simulado.assunto ||
+      simulado.qtdQuestoes == null
+    ) {
+      this.exibirMensagem(
+        'Preencha todos os campos obrigatórios: Nome, Assunto e Quantidade de Questões.',
+        'erro'
+      );
       return;
     }
-  
+
     // Chamada ao serviço
     this.simuladoService.cadastrarSimulado(this.usuarioId, simulado).subscribe(
       (response) => {
-        this.exibirMensagem('Seu simulado foi cadastrado com sucesso!', 'sucesso');
-        
+        this.exibirMensagem(
+          'Seu simulado foi cadastrado com sucesso!',
+          'sucesso'
+        );
+
         // Fechar modal automaticamente (usando Bootstrap ou outro método)
         const modalElement = document.getElementById('confirmacaoModal');
         if (modalElement) {
@@ -573,28 +716,36 @@ export class PageSimuladoComponent implements OnInit {
         }
       },
       (error) => {
-        const errorMessage = error?.error?.message || 'Erro ao cadastrar o simulado. Tente novamente.';
+        const errorMessage =
+          error?.error?.message ||
+          'Erro ao cadastrar o simulado. Tente novamente.';
         this.exibirMensagem(errorMessage, 'erro');
       }
     );
   }
 
-  private mapearDescricoesParaEnums(selecoes: string[], descricoesEnum: any): string[] {
+  private mapearDescricoesParaEnums(
+    selecoes: string[],
+    descricoesEnum: any
+  ): string[] {
     if (!selecoes || selecoes.length === 0) return [];
     return selecoes
-      .map((descricao) => Object.keys(descricoesEnum).find((key) => descricoesEnum[key] === descricao))
+      .map((descricao) =>
+        Object.keys(descricoesEnum).find(
+          (key) => descricoesEnum[key] === descricao
+        )
+      )
       .filter((enumValue) => enumValue !== undefined) as string[];
   }
-  
+
   mensagem: { texto: string; tipo: string } | null = null;
 
-exibirMensagem(texto: string, tipo: 'sucesso' | 'erro'): void {
-  this.mensagem = { texto, tipo };
-  setTimeout(() => {
-    this.mensagem = null;
-  }, 5000); // Mensagem desaparece após 5 segundos
-}
-
+  exibirMensagem(texto: string, tipo: 'sucesso' | 'erro'): void {
+    this.mensagem = { texto, tipo };
+    setTimeout(() => {
+      this.mensagem = null;
+    }, 5000); // Mensagem desaparece após 5 segundos
+  }
 
   abrirModal(): void {
     const modalElement = document.getElementById('confirmacaoModal');
@@ -613,7 +764,6 @@ exibirMensagem(texto: string, tipo: 'sucesso' | 'erro'): void {
   fecharAlerta() {
     this.alertaVisivel = false;
   }
- 
 
   fecharCardConfirmacao(): void {
     this.mostrarCardConfirmacao = false;
@@ -626,6 +776,15 @@ exibirMensagem(texto: string, tipo: 'sucesso' | 'erro'): void {
       this.intervalId = setInterval(() => {
         this.tempo++;
       }, 1000); // Atualiza o tempo a cada segundo
+    }
+    this.simuladoIniciado = true;
+    this.simuladoFinalizado = false;
+  }
+
+  visualizarSimulado(): void {
+    if (!this.isSimuladoIniciado) {
+      this.isSimuladoIniciado = true;
+      this.tempo = 0;
     }
     this.simuladoIniciado = true;
     this.simuladoFinalizado = false;
@@ -664,5 +823,26 @@ exibirMensagem(texto: string, tipo: 'sucesso' | 'erro'): void {
 
   toggleFiltros() {
     this.mostrarFiltros = !this.mostrarFiltros;
+  }
+  respostaQuestao(questaoAtual: number) {
+    this.questoesService
+      .questaoRespondida(this.usuarioId, questaoAtual)
+      .subscribe({
+        next: (resposta) => {
+          if (resposta) {
+            this.verificarRespostaUsuario(resposta);
+          }
+        },
+        error: (erro) => {
+          console.error('Erro ao verificar a resposta:', erro);
+        },
+      });
+  }
+
+  verificarRespostaUsuario(resposta: Resposta) {
+    console.log('Verificar');
+    this.selectedOption = resposta.opcaoSelecionada; // Alternativa escolhida
+    console.log('Resposta:', this.selectedOption);
+    this.isRespostaCorreta = resposta.correct; // Se está correta ou não
   }
 }
