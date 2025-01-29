@@ -154,6 +154,14 @@ export class PageSimuladoComponent implements OnInit {
         this.multiSelectedDificuldade = meuSimulado.dificuldade;
         this.selectedQuantidadeDeQuestoesSelecionadas = meuSimulado.qtdQuestoes;
         this.selectedRespostasSimulado = meuSimulado.respostasSimulado;
+        this.questoes = meuSimulado.questoes;
+        if(this.questoes){
+          this.idsQuestoes = this.questoes.map((q) => q.id);
+          this.paginaAtual = 0;
+          this.questaoAtual = this.questoes[this.paginaAtual];
+          this.resposta = '';
+          this.mostrarGabarito = false;
+        }
     }
     this.tiposDeProvaDescricoes = this.tiposDeProva.map(tipoDeProva => this.getDescricaoTipoDeProva(tipoDeProva));
     this.anosDescricoes = this.anos.map(ano => this.getDescricaoAno(ano));
