@@ -7,7 +7,7 @@
       <div class="header-cont">
         <h1>Cadastrar alunos</h1>
         <div class="btn">
-            <button>Adicionar +</button>
+          <button type="button" (click)="openModal()">Adicionar +</button>
         </div>
     </div>
   
@@ -49,4 +49,64 @@
         </div>
       </div>
     </div>
+
+    <app-modal [show]="showModal" (closeModal)="closeModal()" size="max-w-7xl" [footer]="false">
+      <div class="container-modal sm:items-start">
+        <div class="modal-header">
+          <div class="content-header">
+            <div class="close-modal">
+              <button type="button" class="close" aria-label="Close" (click)="closeModal()">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <h3 id="modal-title">
+              Cadastrar usuário
+            </h3>
+          </div>
+        </div>
+  
+        <form [formGroup]="usuarioForm" class="form-content">
+          <div class="grid grid-cols-12 gap-x-6 space-y-4">
+            <div class="form-group">
+                <label class="small mb-1" style="font-size: 1.2em;">Login *</label>
+                <input type="text" name="username" autocomplete="off" class="form-control py-2 responsive-input" placeholder="Digite seu username" required />
+            </div>
+
+            <div class="form-group">
+                <label class="small mb-1" style="font-size: 1.2em;">Nome *</label>
+                <input type="text" name="nome" class="form-control py-2 responsive-input" placeholder="Digite o seu nome"  />
+            </div>
+
+            <div class="form-group">
+                <label class="small mb-1" style="font-size: 1.2em;">E-mail *</label>
+                <input type="email" name="email" class="form-control py-2 responsive-input" placeholder="Digite seu e-mail" required />
+            </div>
+
+            <div class="form-group">
+                <label class="small mb-1" style="font-size: 1.2em;">Celular</label>
+                <input type="text" name="telefone" class="form-control py-2 responsive-input" placeholder="Digite o Celular (XX) XXXX-XXX" required />
+            </div>
+
+            <div class="form-group">
+                <label class="small mb-1" style="font-size: 1.2em;">Cidade</label>
+                <input type="text" name="cidade" class="form-control py-2 responsive-input" placeholder="Digite sua cidade" required />
+            </div>
+
+            <div class="form-group">
+                <label class="small mb-1" style="font-size: 1.2em;">Estado</label>
+                <input type="text" name="estado" class="form-control py-2 responsive-input" placeholder="Digite seu Estado" required />
+            </div>
+          </div>
+        </form>
+      </div>
+  
+      <div class="button-container">
+        <button type="button" class="btn button-cancel" (click)="closeModal()">
+          Cancelar
+        </button>
+        <button type="button" class="btn button-confirm" (click)="onFormSubmitHandler()">
+            Cadastrar
+        </button>
+      </div>
+    </app-modal>
 </div>
