@@ -143,7 +143,7 @@
         </div>
 
         <div class="conteudo-questao">
-          <div class="timer-container">
+          <div *ngIf="!isMeuSimulado" class="timer-container">
             <h3>
               <span>Tempo:</span> 
               {{ formatarTempo(tempo) }}
@@ -192,11 +192,11 @@
           <div class="button-row">
             <div class="right-buttons">
               <button class="btn-anterior" (click)="anteriorQuestao()" [disabled]="paginaAtual === 0">Anterior</button>
-              <button class="btn-responder" (click)="questaoAtual && responderQuestao(questaoAtual)">Responder</button>
+              <button *ngIf="!isMeuSimulado" class="btn-responder" (click)="questaoAtual && responderQuestao(questaoAtual)">Responder</button>
             </div>
             <div class="right-buttons">
               <button class="btn-proxima" (click)="proximaQuestao()">Próxima</button>
-              <button class="btn-finalizar" (click)="finalizarSimulado()">Finalizar</button>
+              <button *ngIf="!isMeuSimulado" class="btn-finalizar" (click)="finalizarSimulado()">Finalizar</button>
             </div>
           </div>          
         </div>      
