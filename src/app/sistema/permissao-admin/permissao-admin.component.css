@@ -176,7 +176,8 @@ h2 {
   width: 580px;
 }
 
-.content-header, .form-content {
+.content-header,
+.form-content {
   padding: 1rem;
   width: 100%;
 }
@@ -219,4 +220,8 @@ h2 {
 .form-label span {
   color: #686868;
   font-size: 10px;
+}
+
+input {
+  background: #EFEFEF;
 }
