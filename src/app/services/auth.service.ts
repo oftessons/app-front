@@ -7,6 +7,7 @@ import { JwtHelperService } from '@auth0/angular-jwt'
 import { environment } from 'src/environments/environment';
 import { Usuario } from '../login/usuario';
 import { map } from 'rxjs/internal/operators/map';
+import { Permissao } from '../login/Permissao';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,7 @@ export class AuthService {
   clientID: string = environment.clientId;
   clientSecret: string = environment.clientSecret;
   jwtHelper: JwtHelperService = new JwtHelperService();
+  
 
   constructor(
     private http: HttpClient
@@ -35,7 +37,6 @@ export class AuthService {
     return this.http.post(`${this.apiURL}/forgot-password`, { email });
   }
 
-
   obterUsuarioAutenticadoDoBackend(): Observable<Usuario> {
     return this.http.get<Usuario>(`${this.apiURL}/perfil`).pipe(
       map(usuario => {
@@ -46,8 +47,7 @@ export class AuthService {
     );
   }
   
-
-  atualizarUsuario(usuario: Usuario, fotoDoPerfil?: File): Observable<Usuario> {
+  atualizarUsuario(usuario: Usuario, fotoDoPerfil?: File | null): Observable<Usuario> {
     const formData: FormData = new FormData();
     formData.append('usuario', new Blob([JSON.stringify(usuario)], { type: 'application/json' }));
   
@@ -56,6 +56,10 @@ export class AuthService {
     }
   
     return this.http.put<Usuario>(`${this.apiURL}/update/${usuario.id}`, formData);
+  }
+
+  removerUsuario(id: string): Observable<string> {
+    return this.http.delete<string>(`${this.apiURL}/delete/${id}`);
   }
 
   getUsuarioAutenticado(): Usuario | null {
@@ -101,12 +105,41 @@ obterNomeUsuario(): Observable<string> {
     return false;
   }
 
-  salvar(usuario: Usuario): Observable<any> {
-    return this.http.post<any>(`${this.apiURL}/cadastro`, usuario);
+  salvar(usuario: Usuario, perm: Permissao): Observable<any> {
+    const { permissao: permissao } = this.getUsuarioAutenticado() || {};
+
+    if(permissao === Permissao.ADMIN && perm === Permissao.PROFESSOR.valueOf()) {
+      return this.cadastrarProfessor(usuario);
+    }
+
+    return this.cadastrarAluno(usuario);
   }
 
-  tentarLogar( username: string, password: string ) : Observable<any> {
-    const params = new HttpParams()
+  private cadastrarAluno(usuario: Usuario): Observable<any> { 
+      return this.http.post(`${this.apiURL}/cadastro/USER`, usuario)
+
+  }
+
+  private cadastrarProfessor(usuario: Usuario): Observable<any> {
+    return this.http.post(`${this.apiURL}/cadastro/PROFESSOR`, usuario)
+
+  }
+
+  public visualizarAlunos(): Observable<Usuario[]> {
+    return this.http.get<Usuario[]>(`${this.apiURL}/visualizar/PROFESSOR`)
+
+   }
+   
+  public visualizarUsuarios(): Observable<Usuario[]> {
+    return this.http.get<Usuario[]>(`${this.apiURL}/visualizar/ADMIN`)
+
+  }
+
+  public visualizarUsuarioPorId(id: string): Observable<Usuario> {
+    return this.http.get<Usuario>(`${this.apiURL}/visualizarUsuario/${id}`)
+  }
+  
+  tentarLogar( username: string, password: string ) : Observable<any> {    const params = new HttpParams()
                         .set('username', username)
                         .set('password', password)
                         .set('grant_type', 'password')
