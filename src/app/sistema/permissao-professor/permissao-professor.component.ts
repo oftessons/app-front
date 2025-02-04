@@ -21,12 +21,20 @@ export class PermissaoProfessorComponent implements OnInit {
   totalPagesAlunos = Math.ceil(this.alunos.length / this.pageSizeAlunos); 
   mensagemSucesso: string = ''; 
   errors: string[] = [];
+  apiMessages: string[] = [];
   apiErrors: string[] = [];
+
   
   showModalCadastro: boolean = false;
   showModalAtualizar: boolean = false;
 
   submited: boolean = false;
+
+  passwordVisible: { [key: string]: boolean } = {
+    password: false,
+    confirmPassword: false
+  };
+
 
   usuarioForm =  this.formBuilder.group({
       id: null,
@@ -119,22 +127,21 @@ export class PermissaoProfessorComponent implements OnInit {
     usuario.estado = userData.estado;
     
     this.authService.salvar(usuario, this.permissaoAluno).subscribe((response) => {
-      this.mensagemSucesso = "Cadastro realizado com sucesso!";
-      this.usuarioForm.setValue({
-        username:  '',
-        password: '',
-        confirmPassword: '',
-        nome: '',
-        email: '',
-        telefone: '',
-        cidade: '',
-        estado: ''
-      })
+      const novoUsuario = usuario;
+      
+      this.alunos.push(novoUsuario);
+
+      this.carregarAlunos();
+
+      this.limparTela();
+      
+      this.mensagemSucesso = response.message;
+      
       this.errors = []
 
-      
+
     }, (error) => {
-      console.error(error);
+      this.apiErrors.push(error);
     })  
   } 
 
@@ -159,16 +166,19 @@ export class PermissaoProfessorComponent implements OnInit {
  
 
   carregarAlunos() {
-    this.authService.visualizarAlunos().subscribe((data) => {
-      this.alunos = [... data];
-      this.paginatedAlunos = this.alunos;
-      this.totalPagesAlunos = Math.ceil(this.alunos.length / this.pageSizeAlunos);  
+    this.authService.visualizarAlunos().subscribe((data: Usuario[] | null) => {
+      if(data) {
+        this.apiErrors = [];
+        this.alunos = [... data as Usuario[]];
+        this.paginatedAlunos = this.alunos;
+        this.totalPagesAlunos = Math.ceil(this.alunos.length / this.pageSizeAlunos);  
+        return;
+       }
 
+       this.apiErrors.push("Nenhum aluno cadastrado foi encontrado na base de dados.")
+      
     }, (error) => {
-      if(error.status === 404) {
-        this.apiErrors.push("Nenhum usuário encontrado na base de dados");
-      } 
-
+      this.apiErrors.push(error);
     })
   }
 
@@ -176,28 +186,47 @@ export class PermissaoProfessorComponent implements OnInit {
     this.userData = { ... this.usuarioForm.value };
 
     this.authService.atualizarUsuario(this.userData).subscribe((response) => {
+      const updateUser = response;
+      const index = this.alunos.findIndex((user) => user.id === updateUser.id);
+
+      if(index != -1) {
+        this.alunos[index] = updateUser;
+      }
+
       this.closeModalAtualizar();
 
     }, (error) => {
-      console.error("Houve algum erro ao atualizar o usuário");
+      this.apiErrors.push(error);
     })
   }
 
   removerUsuario(id: string): void {
     if (confirm("Você tem certeza que deseja remover este usuário?")) {
-        this.authService.removerUsuario(id).subscribe(
-            (response) => {
-                console.log("Removido com sucesso", response);
-            },
-            (error) => {
-                if (error.status === 404) {
-                    console.error("Usuário não encontrado:", error.message);
-                } else {
-                    console.error("Houve algum erro:", error.message);
-                }
-            }
+        this.authService.removerUsuario(id).subscribe((response) => {
+          
+          this.alunos = this.alunos.filter((user) => user.id !== id);
+          this.apiMessages.push(response);
+                
+        },
+        (error) => {
+          console.log(error);
+          this.apiErrors.push(error);  
+        }
         );
     }
+  }
+
+  limparTela() {
+    this.usuarioForm.patchValue({
+      username:  '',
+      password: '',
+      confirmPassword: '',
+      nome: '',
+      email: '',
+      telefone: '',
+      cidade: '',
+      estado: ''
+    })
   }
 
   updatePaginatedAlunos(): void {
@@ -232,6 +261,7 @@ export class PermissaoProfessorComponent implements OnInit {
 
   closeModalCadastro() {
     console.log("Fechando modal...");
+    this.limparTela();
     this.showModalCadastro = false;
   }
 
@@ -244,5 +274,13 @@ export class PermissaoProfessorComponent implements OnInit {
   closeModalAtualizar() {
     console.log("Fechando modal...");
     this.showModalAtualizar = false;
+  }
+
+  togglePasswordVisibility(field: string) {
+    this.passwordVisible[field] = !this.passwordVisible[field];
+    const passwordInput = document.querySelector(`input[name="${field}"]`);
+    if (passwordInput) {
+      passwordInput.setAttribute('type', this.passwordVisible[field] ? 'text' : 'password');
+    }
   }
 }

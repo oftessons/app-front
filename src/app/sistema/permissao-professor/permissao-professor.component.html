@@ -10,6 +10,11 @@
           <button type="button" (click)="openModalCadastro()">Adicionar +</button>
         </div>
     </div>
+
+       <!--Mensagem de erros-->
+       <div class="alert alert-danger" *ngFor="let error of apiErrors" >
+        {{ error }}
+      </div>
   
       <h2>Alunos</h2>
       <div class="table-responsive">
@@ -24,10 +29,6 @@
             </tr>
           </thead>
           <tbody>
-             <!--Mensagem de erros-->
-             <div class="alert alert-danger" *ngFor="let error of apiErrors" >
-              {{ error }}
-            </div>
             <tr *ngFor="let aluno of paginatedAlunos">
                 <td><a href="#">{{ aluno.nome }}</a></td>
                 <td>{{ aluno.email }}</td>
@@ -92,7 +93,16 @@
 
             <div class="form-group">
               <label class="small mb-1" style="font-size: 1.2em;">Senha *</label>
-              <input type="password" name="password" formControlName="password" autocomplete="off" class="form-control py-2 responsive-input" placeholder="Digite seu username" required />
+              <div class="input-group">
+                <input type="password" name="password" formControlName="password" autocomplete="off" class="form-control py-2 responsive-input" placeholder="Digite seu username" required />
+                <div class="input-group-append">
+                    <div class="btn btn-outline-secondary" type="button" (click)="togglePasswordVisibility('password')">
+                    <img *ngIf="!passwordVisible.password" src="assets/imagens/view.svg" alt="Mostrar senha" width="16" height="16">
+                    <img *ngIf="passwordVisible.password" src="assets/imagens/view-off.svg" alt="Ocultar senha" width="16" height="16">
+                    </div>
+                </div>
+            </div>
+              <!--<input type="password" name="password" formControlName="password" autocomplete="off" class="form-control py-2 responsive-input" placeholder="Digite seu username" required />-->
             </div>
 
             <div class="form-group">

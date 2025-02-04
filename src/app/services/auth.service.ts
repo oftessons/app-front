@@ -8,6 +8,9 @@ import { environment } from 'src/environments/environment';
 import { Usuario } from '../login/usuario';
 import { map } from 'rxjs/internal/operators/map';
 import { Permissao } from '../login/Permissao';
+import { catchError } from 'rxjs/operators';
+import { HttpErrorResponse } from '@angular/common/http';
+import { throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -58,8 +61,8 @@ export class AuthService {
     return this.http.put<Usuario>(`${this.apiURL}/update/${usuario.id}`, formData);
   }
 
-  removerUsuario(id: string): Observable<string> {
-    return this.http.delete<string>(`${this.apiURL}/delete/${id}`);
+  removerUsuario(id: string): Observable<any> {
+    return this.http.delete<any>(`${this.apiURL}/delete/${id}`);
   }
 
   getUsuarioAutenticado(): Usuario | null {
@@ -125,10 +128,23 @@ obterNomeUsuario(): Observable<string> {
 
   }
 
-  public visualizarAlunos(): Observable<Usuario[]> {
-    return this.http.get<Usuario[]>(`${this.apiURL}/visualizar/PROFESSOR`)
-
-   }
+  public visualizarAlunos(): Observable<Usuario[] | null> {
+    return this.http.get<Usuario[]>(`${this.apiURL}/visualizar/PROFESSOR`, { observe: 'response' }).pipe(
+      map((response) => {
+        if (response.status === 204) {
+          return null;
+        }
+        return response.body || null; 
+      }),
+      catchError((error: HttpErrorResponse) => {
+        console.error('Erro ao visualizar alunos:', error);
+        return throwError(
+          'Erro ao visualizar alunos. Por favor, tente novamente.'
+        );
+      })
+    );
+  }
+  
    
   public visualizarUsuarios(): Observable<Usuario[]> {
     return this.http.get<Usuario[]>(`${this.apiURL}/visualizar/ADMIN`)
