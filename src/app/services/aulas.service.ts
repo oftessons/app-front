@@ -45,7 +45,9 @@ export class AulasService {
   }
 
   listarAulasPorCategoria(categoria: string): Observable<Aula[]> {
-    return this.http.get<Aula[]>(`${this.apiURL}/${categoria}`).pipe(
+    const url = `${this.apiURL}/${categoria}`;
+    console.log('URL da solicitação:', url);
+    return this.http.get<Aula[]>(`${this.apiURL}/categoria/${categoria}`).pipe(
       catchError((error) => {
         let errorMessage = '';
 

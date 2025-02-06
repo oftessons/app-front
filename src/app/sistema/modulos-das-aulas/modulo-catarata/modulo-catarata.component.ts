@@ -20,8 +20,10 @@ export class ModuloCatarataComponent implements OnInit {
   }
 
   listarAulasPorCategoria(categoria: string): void {
+    console.log('Categoria enviada:', categoria); 
     this.aulasService.listarAulasPorCategoria(categoria).subscribe(
       (data: Aula[]) => {
+        console.log('Aulas recebidas:', data); 
         this.aulas = data;
       },
       (error) => {

@@ -5,9 +5,9 @@
         </div>
 
         <div class="grid-container">
-              <div class="video-container">
+              <div *ngIf="aulas.length > 0" class="video-container">
                 <video controls class="video-player">
-                  <source src="path/to/your/video.mp4" type="video/mp4">
+                  <source [src]="aulas[0].urlVideo" type="video/mp4">
                   Seu navegador não suporta o elemento de vídeo.
                 </video>
               </div>
@@ -16,9 +16,9 @@
             </div>
         </div>
         <div class="info-aula">
-          <div *ngFor="let aula of aulas">
-            <h3>{{ aula.titulo }}</h3>
-            <p>{{ aula.descricao }}</p>
+          <div *ngIf="aulas.length > 0">
+            <h3>{{ aulas[0].titulo }}</h3>
+            <p>{{ aulas[0].descricao }}</p>
           </div>
         </div>
     </div>
