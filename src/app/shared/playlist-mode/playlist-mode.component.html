@@ -1,16 +1,21 @@
-<div class="playlist">
-    <div class="playlist-title">
-        <h2>{{ titulo }}</h2>
-        <span>aulas {{ videoAtualIndex + 1 }}/{{ aulas.length }}</span>
+<div class="playlist" [ngClass]="{'open': playlistAberta, 'closed': !playlistAberta}">
+    <div class="playlist-title" (click)="togglePlaylist()">
+        <div>
+            <h2>{{ titulo }}</h2>
+            <span>aulas {{ videoAtualIndex + 1 }}/{{ aulas.length }}</span>
+        </div>
+        <button class="toggle-button">
+            <span [ngClass]="{'arrow-down': playlistAberta, 'arrow-right': !playlistAberta}"></span>
+        </button>
     </div>
 
-        <div class="modal-content">
-            <div class="modal-body">
-                <div class="lesson" *ngFor="let aula of aulas; let i = index" (click)="selecionarAula(aula, i)">
-                    <video class="video-preview" [src]="aula.urlVideo" muted></video>
-                    <span class="lesson-title">{{ aula.titulo }}</span>
-                    <span class="check-icon" *ngIf="videosAssistidos[i]">assistido</span>
-                </div>
+    <div class="modal-content">
+        <div class="modal-body">
+            <div class="lesson" *ngFor="let aula of aulas; let i = index" (click)="selecionarAula(aula, i)">
+                <video class="video-preview" [src]="aula.urlVideo" muted></video>
+                <span class="lesson-title">{{ aula.titulo }}</span>
+                <span class="check-icon" *ngIf="videosAssistidos[i]">assistido</span>
             </div>
         </div>
     </div>
+</div>

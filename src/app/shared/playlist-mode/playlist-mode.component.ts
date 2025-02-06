@@ -14,13 +14,15 @@ export class PlaylistModeComponent implements OnInit {
   @Output() aulaSelecionada = new EventEmitter<{ aula: Aula, index: number }>();
   @Input() videosAssistidos: boolean[] = [];
 
+  playlistAberta: boolean = true;
+
   constructor() {}
 
   ngOnInit(): void {}
 
   isModalOpen = false;
   lessons = [
-    { title: 'Introdução', completed: false },
+    { title: 'Introdução', completed: true },
     { title: 'Subtema de retina', completed: false },
     { title: 'Subtema de retina', completed: false },
   ];
@@ -41,5 +43,9 @@ export class PlaylistModeComponent implements OnInit {
 
   selecionarAula(aula: Aula, index: number): void {
     this.aulaSelecionada.emit({ aula, index });
+  }
+
+  togglePlaylist(): void {
+    this.playlistAberta = !this.playlistAberta;
   }
 }
