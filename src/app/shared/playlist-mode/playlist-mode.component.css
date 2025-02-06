@@ -5,7 +5,7 @@
   background: #ffffff;
   justify-content: center;
   align-items: center;
-  border: 1px solid #696d79;
+  border: 1px solid #b3b3b3;
   border-radius: 8px;
   overflow: hidden;
   transition: max-height 0.3s ease-out;
@@ -45,14 +45,6 @@
   overflow: hidden;
 }
 
-.modal-header {
-  padding: 15px;
-  background-color: #007bff;
-  color: #fff;
-  font-size: 18px;
-  font-weight: bold;
-}
-
 .modal-body {
   padding: 15px;
 }
@@ -61,20 +53,12 @@
   display: flex;
   align-items: center;
   padding: 10px;
-  border-bottom: 1px solid #ddd;
   cursor: pointer;
 }
 
-.lesson:last-child {
-  border-bottom: none;
-}
-
-.lesson img {
-  width: 40px;
-  height: 40px;
-  background-color: #ccc;
-  border-radius: 5px;
-  margin-right: 10px;
+.lesson:hover {
+  background: #0000000e;
+  border-radius: 4px;
 }
 
 .lesson-title {
@@ -115,7 +99,8 @@
   height: 60px;
   margin-right: 10px;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 6px;
+  border: 1px solid #e8e8e8;
 }
 
 .toggle-button {
