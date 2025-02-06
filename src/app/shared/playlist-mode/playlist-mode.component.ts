@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Aula } from 'src/app/sistema/painel-de-aulas/aula';
 
 @Component({
   selector: 'app-playlist-mode',
@@ -6,6 +7,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./playlist-mode.component.css'],
 })
 export class PlaylistModeComponent implements OnInit {
+  @Input() aulas: Aula[] = [];
+  @Input() titulo: string = '';
+  @Input() categoria: string = '';
+  @Input() videoAtualIndex: number = 0;
+  @Output() aulaSelecionada = new EventEmitter<{ aula: Aula, index: number }>();
+  @Input() videosAssistidos: boolean[] = [];
+
   constructor() {}
 
   ngOnInit(): void {}
@@ -29,5 +37,9 @@ export class PlaylistModeComponent implements OnInit {
 
   toggleLesson(lesson: any) {
     lesson.completed = !lesson.completed;
+  }
+
+  selecionarAula(aula: Aula, index: number): void {
+    this.aulaSelecionada.emit({ aula, index });
   }
 }

@@ -5,20 +5,25 @@
         </div>
 
         <div class="grid-container">
-              <div *ngIf="aulas.length > 0" class="video-container">
-                <video controls class="video-player">
-                  <source [src]="aulas[0].urlVideo" type="video/mp4">
+              <div class="video-container">
+                <video controls class="video-player" [src]="videoAtual?.urlVideo" *ngIf="videoAtual" (ended)="marcarComoAssistido(videoAtualIndex)">
                   Seu navegador não suporta o elemento de vídeo.
                 </video>
               </div>
             <div class="playlist-container">
-              <app-playlist-mode></app-playlist-mode>
+              <app-playlist-mode
+                [aulas]="aulas"
+                [titulo]="categoria"
+                [categoria]="categoria"
+                [videoAtualIndex]="videoAtualIndex"
+                (aulaSelecionada)="reproduzirVideo($event.aula, $event.index)">
+              </app-playlist-mode>
             </div>
         </div>
         <div class="info-aula">
           <div *ngIf="aulas.length > 0">
-            <h3>{{ aulas[0].titulo }}</h3>
-            <p>{{ aulas[0].descricao }}</p>
+            <h3>{{ videoAtual?.titulo }}</h3>
+            <p>{{ videoAtual?.descricao }}</p>
           </div>
         </div>
     </div>

@@ -10,6 +10,9 @@ import { Aula } from 'src/app/sistema/painel-de-aulas/aula';
 export class ModuloCatarataComponent implements OnInit {
   aulas: Aula[] = [];
   categoria: string = 'Catarata';
+  videoAtual: Aula | null = null;
+  videoAtualIndex: number = 0;
+  videosAssistidos: boolean[] = [];
 
   constructor(
     private aulasService: AulasService
@@ -20,16 +23,29 @@ export class ModuloCatarataComponent implements OnInit {
   }
 
   listarAulasPorCategoria(categoria: string): void {
-    console.log('Categoria enviada:', categoria); 
     this.aulasService.listarAulasPorCategoria(categoria).subscribe(
-      (data: Aula[]) => {
-        console.log('Aulas recebidas:', data); 
-        this.aulas = data;
+      (response: Aula[]) => {
+        this.aulas = response;
+        this.videosAssistidos = new Array(this.aulas.length).fill(false);
+        if (this.aulas.length > 0) {
+          this.videoAtual = this.aulas[0]; // Reproduz o primeiro vídeo por padrão
+          this.videoAtualIndex = 0;
+        }
+        console.log('Aulas recebidas:', this.aulas);
       },
       (error) => {
         console.error('Erro ao listar aulas:', error);
       }
     );
+  }
+
+  reproduzirVideo(aula: Aula, index: number): void {
+    this.videoAtual = aula;
+    this.videoAtualIndex = index;
+  }
+
+  marcarComoAssistido(index: number): void {
+    this.videosAssistidos[index] = true;
   }
 
 }

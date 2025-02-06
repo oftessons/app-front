@@ -1,25 +1,15 @@
 <div class="playlist">
     <div class="playlist-title">
-        <h2>TÍTULO RETINA E SUAS...</h2>
-        <span>Retina 1/10</span>
+        <h2>{{ titulo }}</h2>
+        <span>{{ categoria }} {{ videoAtualIndex + 1 }}/{{ aulas.length }}</span>
     </div>
 
         <div class="modal-content">
             <div class="modal-body">
-                <div class="lesson">
-                    <img src="" alt="">
-                    <span class="lesson-title">Introdução</span>
-                    <span class="check-icon">✔</span>
-                </div>
-                <div class="lesson">
-                    <img src="" alt="">
-                    <span class="lesson-title">Subtema de retina</span>
-                    <span class="check-icon">✔</span>
-                </div>
-                <div class="lesson">
-                    <img src="" alt="">
-                    <span class="lesson-title">Subtema de retina</span>
-                    <span class="check-icon">✔</span>
+                <div class="lesson" *ngFor="let aula of aulas; let i = index" (click)="selecionarAula(aula, i)">
+                    <img alt="{{ aula.titulo }}">
+                    <span class="lesson-title">{{ aula.titulo }}</span>
+                    <span class="check-icon" *ngIf="videosAssistidos[i]">✔</span>
                 </div>
             </div>
         </div>
