@@ -1,25 +1,47 @@
 <div class="container pt-5">
-    <div class="container mt-4">
-        <div class="header">
-            <h1 class="mt-4"><span> | </span> {{ categoria }} </h1>
-        </div>
+  <div class="container mt-4">
+      <div class="header">
+          <h1 class="mt-4"><span> | </span>Modulo de {{ categoria }} </h1>
+      </div>
 
-        <div class="grid-container">
-              <div *ngIf="aulas.length > 0" class="video-container">
-                <video controls class="video-player">
-                  <source [src]="aulas[0].urlVideo" type="video/mp4">
-                  Seu navegador não suporta o elemento de vídeo.
-                </video>
-              </div>
-            <div class="playlist-container">
-              <app-playlist-mode></app-playlist-mode>
+      <div class="grid-container">
+          <div class="principal-info">
+            <div class="video-container">
+              <video
+                #videoPlayer
+                controls
+                class="video-player"
+                [src]="videoAtual?.urlVideo"
+                *ngIf="videoAtual"
+                (ended)="marcarComoAssistido(videoAtualIndex)"
+                (ended)="onVideoEnded()">
+                Seu navegador não suporta o elemento de vídeo.
+              </video>
             </div>
-        </div>
-        <div class="info-aula">
-          <div *ngIf="aulas.length > 0">
-            <h3>{{ aulas[0].titulo }}</h3>
-            <p>{{ aulas[0].descricao }}</p>
+            <div class="info-aula">
+              <div *ngIf="aulas.length > 0">
+                <h3>{{ videoAtual?.titulo }}</h3>
+                <p>{{ videoAtual?.descricao }}</p>
+              </div>
+              <div class="arquivos-aula">
+                <h4>Material da Aula</h4>
+                <hr>
+                <div>
+                  <span>Nenhum material adicionado</span>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-    </div>
+          <div class="playlist-container">
+            <app-playlist-mode
+              [aulas]="aulas"
+              [titulo]="categoria"
+              [categoria]="categoria"
+              [videoAtualIndex]="videoAtualIndex"
+              [videosAssistidos]="videosAssistidos"
+              (aulaSelecionada)="reproduzirVideo($event.aula, $event.index)">
+            </app-playlist-mode>
+          </div>
+      </div>
   </div>
+</div>

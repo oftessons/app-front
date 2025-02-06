@@ -55,5 +55,4 @@ export class ModuloCatarataComponent implements OnInit {
       this.reproduzirVideo(this.aulas[nextIndex], nextIndex);
     }
   }
-
 }

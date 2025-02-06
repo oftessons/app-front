@@ -15,11 +15,47 @@
   align-items: start;
 }
 
+.principal-info {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  background: #f8f9fa;
+  padding: 24px;
+  border-radius: 8px;
+  min-height: 780px;
+  margin-bottom: 40px;
+}
+
 .video-container {
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: #f8f9fa;
+}
+
+.info-aula h3 {
+  font-size: 24px;
+  font-weight: 500;
+  color: #041e4e;
+  margin: 0 0 8px;
+}
+
+.info-aula p {
+  font-size: 16px;
+  color: #3f3f3f;
+}
+
+.arquivos-aula {
+  display: flex;
+  flex-direction: column;
+  padding-top: 24px;
+}
+
+.arquivos-aula h4 {
+  font-size: 16px;
+  font-weight: 500;
+  color: #041e4e;
+  margin: 0;
 }
 
 .video-player {

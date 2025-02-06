@@ -5,32 +5,52 @@ import { Aula } from 'src/app/sistema/painel-de-aulas/aula';
 @Component({
   selector: 'app-modulo-cirurgia-refrativa',
   templateUrl: './modulo-cirurgia-refrativa.component.html',
-  styleUrls: ['./modulo-cirurgia-refrativa.component.css']
+  styleUrls: ['./modulo-cirurgia-refrativa.component.css'],
 })
 export class ModuloCirurgiaRefrativaComponent implements OnInit {
-
   aulas: Aula[] = [];
-    categoria: string = 'Cirurgia Refrativa';
-  
-    constructor(
-      private aulasService: AulasService
-    ) { }
-  
-    ngOnInit(): void {
-      this.listarAulasPorCategoria(this.categoria);
-    }
-  
-    listarAulasPorCategoria(categoria: string): void {
-      console.log('Categoria enviada:', categoria); 
-      this.aulasService.listarAulasPorCategoria(categoria).subscribe(
-        (data: Aula[]) => {
-          console.log('Aulas recebidas:', data); 
-          this.aulas = data;
-        },
-        (error) => {
-          console.error('Erro ao listar aulas:', error);
-        }
-      );
-    }
+  categoria: string = 'Cirurgia Refrativa';
+  videoAtual: Aula | null = null;
+  videoAtualIndex: number = 0;
+  videosAssistidos: boolean[] = [];
 
+  constructor(private aulasService: AulasService) {}
+
+  ngOnInit(): void {
+    this.listarAulasPorCategoria(this.categoria);
+  }
+
+  listarAulasPorCategoria(categoria: string): void {
+    this.aulasService.listarAulasPorCategoria(categoria).subscribe(
+      (response: Aula[]) => {
+        this.aulas = response;
+        this.videosAssistidos = new Array(this.aulas.length).fill(false);
+        if (this.aulas.length > 0) {
+          this.videoAtual = this.aulas[0];
+          this.videoAtualIndex = 0;
+        }
+        console.log('Aulas recebidas:', this.aulas);
+      },
+      (error) => {
+        console.error('Erro ao listar aulas:', error);
+      }
+    );
+  }
+
+  reproduzirVideo(aula: Aula, index: number): void {
+    this.videoAtual = aula;
+    this.videoAtualIndex = index;
+  }
+
+  marcarComoAssistido(index: number): void {
+    this.videosAssistidos[index] = true;
+  }
+
+  onVideoEnded(): void {
+    this.marcarComoAssistido(this.videoAtualIndex);
+    const nextIndex = this.videoAtualIndex + 1;
+    if (nextIndex < this.aulas.length) {
+      this.reproduzirVideo(this.aulas[nextIndex], nextIndex);
+    }
+  }
 }
