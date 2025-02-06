@@ -61,6 +61,11 @@
   border-radius: 4px;
 }
 
+.current-video {
+  background-color: #0000000e;
+  border-radius: 4px;
+}
+
 .lesson-title {
   flex-grow: 1;
 }

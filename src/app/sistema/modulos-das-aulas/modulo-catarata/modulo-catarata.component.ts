@@ -48,4 +48,12 @@ export class ModuloCatarataComponent implements OnInit {
     this.videosAssistidos[index] = true;
   }
 
+  onVideoEnded(): void {
+    this.marcarComoAssistido(this.videoAtualIndex);
+    const nextIndex = this.videoAtualIndex + 1;
+    if (nextIndex < this.aulas.length) {
+      this.reproduzirVideo(this.aulas[nextIndex], nextIndex);
+    }
+  }
+
 }

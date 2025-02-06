@@ -8,11 +8,13 @@
             <div class="principal-info">
               <div class="video-container">
                 <video
+                  #videoPlayer
                   controls
                   class="video-player"
                   [src]="videoAtual?.urlVideo"
                   *ngIf="videoAtual"
-                  (ended)="marcarComoAssistido(videoAtualIndex)">
+                  (ended)="marcarComoAssistido(videoAtualIndex)"
+                  (ended)="onVideoEnded()">
                   Seu navegador não suporta o elemento de vídeo.
                 </video>
               </div>

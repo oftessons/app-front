@@ -11,7 +11,7 @@
 
     <div class="modal-content">
         <div class="modal-body">
-            <div class="lesson" *ngFor="let aula of aulas; let i = index" (click)="selecionarAula(aula, i)">
+            <div class="lesson" *ngFor="let aula of aulas; let i = index" (click)="selecionarAula(aula, i)" [ngClass]="{'current-video': i === videoAtualIndex}">
                 <video class="video-preview" [src]="aula.urlVideo" muted></video>
                 <span class="lesson-title">{{ aula.titulo }}</span>
                 <img src="assets/Icons/confirmar-vazio.svg" class="check-icon" *ngIf="!videosAssistidos[i]">
