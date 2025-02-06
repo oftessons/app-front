@@ -14,7 +14,8 @@
             <div class="lesson" *ngFor="let aula of aulas; let i = index" (click)="selecionarAula(aula, i)">
                 <video class="video-preview" [src]="aula.urlVideo" muted></video>
                 <span class="lesson-title">{{ aula.titulo }}</span>
-                <span class="check-icon" *ngIf="videosAssistidos[i]">assistido</span>
+                <img src="assets/Icons/confirmar-vazio.svg" class="check-icon" *ngIf="!videosAssistidos[i]">
+                <img src="assets/Icons/confirmar-verde.svg" class="check-icon" *ngIf="videosAssistidos[i]">
             </div>
         </div>
     </div>

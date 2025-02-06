@@ -7,7 +7,12 @@
         <div class="grid-container">
             <div class="principal-info">
               <div class="video-container">
-                <video controls class="video-player" [src]="videoAtual?.urlVideo" *ngIf="videoAtual" (ended)="marcarComoAssistido(videoAtualIndex)">
+                <video
+                  controls
+                  class="video-player"
+                  [src]="videoAtual?.urlVideo"
+                  *ngIf="videoAtual"
+                  (ended)="marcarComoAssistido(videoAtualIndex)">
                   Seu navegador não suporta o elemento de vídeo.
                 </video>
               </div>
@@ -31,6 +36,7 @@
                 [titulo]="categoria"
                 [categoria]="categoria"
                 [videoAtualIndex]="videoAtualIndex"
+                [videosAssistidos]="videosAssistidos"
                 (aulaSelecionada)="reproduzirVideo($event.aula, $event.index)">
               </app-playlist-mode>
             </div>

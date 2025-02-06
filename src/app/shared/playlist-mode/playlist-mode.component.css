@@ -39,7 +39,7 @@
 
 .modal-content {
   background-color: #fff;
-  width: 90%;
+  width: 100%;
   max-width: 400px;
   border-radius: 10px;
   overflow: hidden;
@@ -71,8 +71,7 @@
 }
 
 .lesson .check-icon {
-  color: green;
-  display: none;
+  width: 20px;
 }
 
 .lesson.completed .check-icon {

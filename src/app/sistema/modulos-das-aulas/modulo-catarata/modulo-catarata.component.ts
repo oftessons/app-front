@@ -28,7 +28,7 @@ export class ModuloCatarataComponent implements OnInit {
         this.aulas = response;
         this.videosAssistidos = new Array(this.aulas.length).fill(false);
         if (this.aulas.length > 0) {
-          this.videoAtual = this.aulas[0]; // Reproduz o primeiro vídeo por padrão
+          this.videoAtual = this.aulas[0];
           this.videoAtualIndex = 0;
         }
         console.log('Aulas recebidas:', this.aulas);

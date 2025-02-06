@@ -21,11 +21,6 @@ export class PlaylistModeComponent implements OnInit {
   ngOnInit(): void {}
 
   isModalOpen = false;
-  lessons = [
-    { title: 'Introdução', completed: true },
-    { title: 'Subtema de retina', completed: false },
-    { title: 'Subtema de retina', completed: false },
-  ];
 
   openModal() {
     this.isModalOpen = true;
@@ -35,10 +30,6 @@ export class PlaylistModeComponent implements OnInit {
     if (!event || event.target === event.currentTarget) {
       this.isModalOpen = false;
     }
-  }
-
-  toggleLesson(lesson: any) {
-    lesson.completed = !lesson.completed;
   }
 
   selecionarAula(aula: Aula, index: number): void {
