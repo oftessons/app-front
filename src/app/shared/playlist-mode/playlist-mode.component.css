@@ -109,13 +109,16 @@
   cursor: pointer;
   font-size: 1em;
   padding: 0;
-  color: #041e4e;
 }
 
-.toggle-button .arrow-down::before {
-  content: "▼";
+.toggle-button img {
+  transition: transform 0.3s ease-in-out;
 }
 
-.toggle-button .arrow-right::before {
-  content: "▶";
+.toggle-button .arrow-up {
+  transform: rotate(180deg);
+}
+
+.toggle-button .arrow-down {
+  transform: rotate(0deg);
 }

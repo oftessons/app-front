@@ -5,7 +5,7 @@
             <span>aulas {{ videoAtualIndex + 1 }}/{{ aulas.length }}</span>
         </div>
         <button class="toggle-button">
-            <span [ngClass]="{'arrow-down': playlistAberta, 'arrow-right': !playlistAberta}"></span>
+            <img src="assets/Icons/arrow-updown.svg" [ngClass]="{'arrow-up': playlistAberta, 'arrow-down': !playlistAberta}">
         </button>
     </div>
 
