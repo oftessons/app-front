@@ -1,15 +1,15 @@
 <div class="playlist">
     <div class="playlist-title">
         <h2>{{ titulo }}</h2>
-        <span>{{ categoria }} {{ videoAtualIndex + 1 }}/{{ aulas.length }}</span>
+        <span>aulas {{ videoAtualIndex + 1 }}/{{ aulas.length }}</span>
     </div>
 
         <div class="modal-content">
             <div class="modal-body">
                 <div class="lesson" *ngFor="let aula of aulas; let i = index" (click)="selecionarAula(aula, i)">
-                    <img alt="{{ aula.titulo }}">
+                    <video class="video-preview" [src]="aula.urlVideo" muted></video>
                     <span class="lesson-title">{{ aula.titulo }}</span>
-                    <span class="check-icon" *ngIf="videosAssistidos[i]">✔</span>
+                    <span class="check-icon" *ngIf="videosAssistidos[i]">assistido</span>
                 </div>
             </div>
         </div>

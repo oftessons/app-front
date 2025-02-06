@@ -96,3 +96,11 @@
   border-radius: 5px;
   cursor: pointer;
 }
+
+.video-preview {
+  width: 90px;
+  height: 60px;
+  margin-right: 10px;
+  object-fit: cover;
+  border-radius: 8px;
+}
