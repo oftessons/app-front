@@ -137,7 +137,7 @@ obterNomeUsuario(): Observable<string> {
         return response.body || null; 
       }),
       catchError((error: HttpErrorResponse) => {
-        console.error('Erro ao visualizar alunos:', error);
+        console.error('Erro ao visualizar alunos: ', error);
         return throwError(
           'Erro ao visualizar alunos. Por favor, tente novamente.'
         );
@@ -145,12 +145,25 @@ obterNomeUsuario(): Observable<string> {
     );
   }
   
-   
-  public visualizarUsuarios(): Observable<Usuario[]> {
-    return this.http.get<Usuario[]>(`${this.apiURL}/visualizar/ADMIN`)
 
+  public visualizarUsuarios(): Observable<Usuario[] | null> {
+    return this.http.get<Usuario[]>(`${this.apiURL}/visualizar/ADMIN`, { observe: 'response' }).pipe(
+      map((response) => {
+        if(response.status === 204) {
+          return null;
+        }
+        return response.body || null;
+      }),
+      catchError((error: HttpErrorResponse) => {
+        console.error('Erro ao visualizar os usuários: ', error);
+        return throwError(
+          'Erro ao visualizar os usuários. Por favor, tente novamente.'
+        )
+      })
+    )
   }
-
+   
+  
   public visualizarUsuarioPorId(id: string): Observable<Usuario> {
     return this.http.get<Usuario>(`${this.apiURL}/visualizarUsuario/${id}`)
   }

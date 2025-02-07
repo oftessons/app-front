@@ -1,13 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Permissao } from 'src/app/login/Permissao';
 import { Usuario } from 'src/app/login/usuario';
 import { AuthService } from 'src/app/services/auth.service';
+import { ChangeDetectorRef } from '@angular/core';
+
 
 @Component({
   selector: 'app-permissao-professor',
   templateUrl: './permissao-professor.component.html',
-  styleUrls: ['./permissao-professor.component.css']
+  styleUrls: ['./permissao-professor.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PermissaoProfessorComponent implements OnInit {
 
@@ -32,7 +35,9 @@ export class PermissaoProfessorComponent implements OnInit {
 
   passwordVisible: { [key: string]: boolean } = {
     password: false,
-    confirmPassword: false
+    confirmPassword: false,
+    currentPassword: false,
+    newPassword: false
   };
 
 
@@ -49,7 +54,9 @@ export class PermissaoProfessorComponent implements OnInit {
     });
 
 
-    constructor(private formBuilder: FormBuilder, private authService: AuthService) { 
+    constructor(private formBuilder: FormBuilder, private authService: AuthService,
+      private cdRef: ChangeDetectorRef
+    ) { 
       this.usuarioForm = this.formBuilder.group({
         id: [null],
         username: [''],
@@ -60,7 +67,7 @@ export class PermissaoProfessorComponent implements OnInit {
         telefone: [''],
         cidade: [''],
         estado: [''],
-      });
+      })
     }
 
   ngOnInit(): void {
@@ -68,7 +75,6 @@ export class PermissaoProfessorComponent implements OnInit {
     this.carregarAlunos();
     
    }
-
    
   cadastrarAlunos() {
     const userData = this.usuarioForm.value;
@@ -128,17 +134,12 @@ export class PermissaoProfessorComponent implements OnInit {
     
     this.authService.salvar(usuario, this.permissaoAluno).subscribe((response) => {
       const novoUsuario = usuario;
-      
       this.alunos.push(novoUsuario);
-
       this.carregarAlunos();
-
       this.limparTela();
-      
       this.mensagemSucesso = response.message;
-      
       this.errors = []
-
+      this.cdRef.markForCheck();
 
     }, (error) => {
       this.apiErrors.push(error);
@@ -147,34 +148,38 @@ export class PermissaoProfessorComponent implements OnInit {
 
   consultarUsuario(id: string): void {
     this.authService.visualizarUsuarioPorId(id).subscribe((data: Usuario) => {
+      
       this.usuarioForm.patchValue({
         id: id,
         username:  data.username,
         nome: data.nome,
         email: data.email,
         password: data.password,
-        confirmPassword: data.confirmPassword,
+        confirmPassword: data.confirmPassword,  
         telefone: data.telefone,
-        cidade: data.cidade,
-        estado: data.estado        
-      })
+        cidade:  data.cidade,
+        estado: data.estado    
+      });
+
+      this.cdRef.markForCheck();
       
     }, (error) => {
-      console.error("Não foi possível fazer essa manipulacao ", error);
+      console.error("Não foi possível fazer essa consulta ", error);
     } )
   }
  
 
   carregarAlunos() {
     this.authService.visualizarAlunos().subscribe((data: Usuario[] | null) => {
+      this.apiErrors = [];
+
       if(data) {
-        this.apiErrors = [];
-        this.alunos = [... data as Usuario[]];
-        this.paginatedAlunos = this.alunos;
-        this.totalPagesAlunos = Math.ceil(this.alunos.length / this.pageSizeAlunos);  
+        this.alunos = data
+        this.updatePaginatedAlunos();
         return;
        }
-
+       
+       this.alunos = []
        this.apiErrors.push("Nenhum aluno cadastrado foi encontrado na base de dados.")
       
     }, (error) => {
@@ -183,19 +188,24 @@ export class PermissaoProfessorComponent implements OnInit {
   }
 
   editarUsuario() {    
-    this.userData = { ... this.usuarioForm.value };
-
+    this.mensagemSucesso = "";
+    this.userData = {... this.usuarioForm.value};
+    
     this.authService.atualizarUsuario(this.userData).subscribe((response) => {
       const updateUser = response;
-      const index = this.alunos.findIndex((user) => user.id === updateUser.id);
-
+      const index = this.alunos.findIndex(user => user.id === updateUser.id);
+      
       if(index != -1) {
         this.alunos[index] = updateUser;
+        this.updatePaginatedAlunos();
       }
+
+      this.mensagemSucesso = "Editado com sucesso";
 
       this.closeModalAtualizar();
 
     }, (error) => {
+      console.log(error);
       this.apiErrors.push(error);
     })
   }
@@ -205,8 +215,10 @@ export class PermissaoProfessorComponent implements OnInit {
         this.authService.removerUsuario(id).subscribe((response) => {
           
           this.alunos = this.alunos.filter((user) => user.id !== id);
-          this.apiMessages.push(response);
-                
+          this.updatePaginatedAlunos();
+          this.mensagemSucesso = "Excluído com sucesso";
+          this.cdRef.markForCheck();  
+          
         },
         (error) => {
           console.log(error);
@@ -217,22 +229,16 @@ export class PermissaoProfessorComponent implements OnInit {
   }
 
   limparTela() {
-    this.usuarioForm.patchValue({
-      username:  '',
-      password: '',
-      confirmPassword: '',
-      nome: '',
-      email: '',
-      telefone: '',
-      cidade: '',
-      estado: ''
-    })
+    this.usuarioForm.reset();
   }
 
   updatePaginatedAlunos(): void {
     const startIndex = this.pageIndexAlunos * this.pageSizeAlunos;
     const endIndex = startIndex + this.pageSizeAlunos;
     this.paginatedAlunos = this.alunos.slice(startIndex, endIndex);
+    this.totalPagesAlunos = Math.ceil(this.alunos.length / this.pageSizeAlunos);
+    this.cdRef.markForCheck();
+
   }
 
   nextPageAlunos(): void {
@@ -261,6 +267,7 @@ export class PermissaoProfessorComponent implements OnInit {
 
   closeModalCadastro() {
     console.log("Fechando modal...");
+    this.mensagemSucesso = "";
     this.limparTela();
     this.showModalCadastro = false;
   }
