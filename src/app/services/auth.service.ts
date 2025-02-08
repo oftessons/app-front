@@ -109,23 +109,47 @@ obterNomeUsuario(): Observable<string> {
   }
 
   salvar(usuario: Usuario, perm: Permissao): Observable<any> {
-    const { permissao: permissao } = this.getUsuarioAutenticado() || {};
-
-    if(permissao === Permissao.ADMIN && perm === Permissao.PROFESSOR.valueOf()) {
-      return this.cadastrarProfessor(usuario);
+    const { permissao: userPermissao } = this.getUsuarioAutenticado() || {};
+  
+    let request: Observable<any>;
+    if (userPermissao === Permissao.ADMIN && perm === Permissao.PROFESSOR.valueOf()) {
+      request = this.cadastrarProfessor(usuario);
+    } else {
+      request = this.cadastrarAluno(usuario);
     }
-
-    return this.cadastrarAluno(usuario);
+  
+    return request.pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 422) {
+          return throwError('usuário já cadastrado na base de dados');
+        }
+        return throwError(error);
+      })
+    );
   }
 
   private cadastrarAluno(usuario: Usuario): Observable<any> { 
-      return this.http.post(`${this.apiURL}/cadastro/USER`, usuario)
-
+    return this.http.post(`${this.apiURL}/cadastro/USER`, usuario)
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 422) {
+            return throwError('Usuário já cadastrado na base de dados');
+          }
+          return throwError("O servidor não está funcionando corretamente.");
+        })
+      );
   }
-
+  
   private cadastrarProfessor(usuario: Usuario): Observable<any> {
     return this.http.post(`${this.apiURL}/cadastro/PROFESSOR`, usuario)
-
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 422) {
+            return throwError('Usuário já cadastrado na base de dados');
+          }
+          return throwError("O servidor não está funcionando corretamente.");
+        })
+      );
   }
 
   public visualizarAlunos(): Observable<Usuario[] | null> {
@@ -137,7 +161,7 @@ obterNomeUsuario(): Observable<string> {
         return response.body || null; 
       }),
       catchError((error: HttpErrorResponse) => {
-        console.error('Erro ao visualizar alunos: ', error);
+       
         return throwError(
           'Erro ao visualizar alunos. Por favor, tente novamente.'
         );

@@ -24,9 +24,9 @@ export class PermissaoProfessorComponent implements OnInit {
   totalPagesAlunos = Math.ceil(this.alunos.length / this.pageSizeAlunos); 
   mensagemSucesso: string = ''; 
   errors: string[] = [];
+  modalErrors: string[] = [];
   apiMessages: string[] = [];
-  apiErrors: string[] = [];
-
+  
   
   showModalCadastro: boolean = false;
   showModalAtualizar: boolean = false;
@@ -78,9 +78,141 @@ export class PermissaoProfessorComponent implements OnInit {
    
   cadastrarAlunos() {
     const userData = this.usuarioForm.value;
-    this.errors = [];
-    const passwordValidationErrors: string[] = [];
+    this.modalErrors = [];
+    
+    this.validadaoDeCadastro(userData)
 
+    if(this.modalErrors.length > 0) {
+      return;
+    }
+    
+    let usuario: Usuario = new Usuario();
+    usuario.username = userData.username;
+    usuario.password = userData.password;
+    usuario.confirmPassword = userData.confirmPassword;
+    usuario.nome = userData.nome;
+    usuario.email = userData.email;
+    usuario.telefone = userData.telefone;
+    usuario.cidade = userData.cidade;
+    usuario.estado = userData.estado;
+    
+    this.authService.salvar(usuario, this.permissaoAluno).subscribe((response) => {
+      const novoUsuario = usuario;
+      this.alunos.push(novoUsuario);
+      this.carregarAlunos();
+      this.limparTela();
+      this.mensagemSucesso = response.message;
+      this.modalErrors = [];
+      this.closeModalCadastro();
+      this.cdRef.markForCheck();
+
+    }, (error) => {
+      this.modalErrors.push(error);
+      this.cdRef.markForCheck();
+    })  
+  } 
+
+  consultarUsuario(id: string): void {
+    this.authService.visualizarUsuarioPorId(id).subscribe((data: Usuario) => {
+      
+      this.usuarioForm.patchValue({
+        id: id,
+        username:  data.username,
+        nome: data.nome,
+        email: data.email,
+        password: data.password,
+        confirmPassword: data.confirmPassword,  
+        telefone: data.telefone,
+        cidade:  data.cidade,
+        estado: data.estado    
+      });
+
+      this.cdRef.markForCheck();
+      
+    }, (error) => {
+      this.errors.push(error);
+      this.cdRef.markForCheck();
+      
+    } )
+  }
+ 
+
+  carregarAlunos() {
+    this.authService.visualizarAlunos().subscribe((data: Usuario[] | null) => {
+      this.errors = [];
+      
+      if(data) {
+        this.alunos = data
+        this.updatePaginatedAlunos();
+        return;
+       }
+       
+       this.errors.push("Nenhum aluno cadastrado.")
+       this.cdRef.markForCheck();
+       
+    }, (error) => {
+      this.errors.push(error);
+      this.cdRef.markForCheck();
+    })
+  }
+
+  editarUsuario() {    
+    this.mensagemSucesso = "";
+    this.userData = {... this.usuarioForm.value};
+    
+    this.authService.atualizarUsuario(this.userData).subscribe((response) => {
+      const updateUser = response;
+      const index = this.alunos.findIndex(user => user.id === updateUser.id);
+      
+      if(index != -1) {
+        this.alunos[index] = updateUser;
+        this.updatePaginatedAlunos();
+      }
+
+      this.mensagemSucesso = "Editado com sucesso";
+
+      this.closeModalAtualizar();
+
+    }, (error) => {
+        this.errors.push(error);
+        this.cdRef.markForCheck();
+    })
+  }
+
+  removerUsuario(id: string): void {
+    if (confirm("Você tem certeza que deseja remover este usuário?")) {
+        this.authService.removerUsuario(id).subscribe((response) => {
+          
+          this.alunos = this.alunos.filter((user) => user.id !== id);
+          this.updatePaginatedAlunos();
+          this.mensagemSucesso = "Excluído com sucesso";
+          this.cdRef.markForCheck();  
+          
+        },
+        (error) => {
+          this.errors.push(error);  
+          this.cdRef.markForCheck();
+        }
+        );
+    }
+  }
+
+  limparTela() {
+    this.usuarioForm.patchValue({
+      id: '',
+      username: '',
+      password: '',
+      confirmPassword: '',
+      nome: '',
+      email: '',
+      telefone: '',
+      cidade: '',
+      estado: '',
+    });
+  }
+
+  validadaoDeCadastro(userData: Usuario) {
+    const passwordValidationErrors: string[] = [];
     if (userData.password.length < 8) {
       passwordValidationErrors.push("A senha deve ter pelo menos 8 caracteres.");
     }
@@ -103,7 +235,6 @@ export class PermissaoProfessorComponent implements OnInit {
   
     if (!userData.email) {
       passwordValidationErrors.push("O campo de email é obrigatório.");
-      console.log(this.errors);
 
     }
   
@@ -111,126 +242,18 @@ export class PermissaoProfessorComponent implements OnInit {
       passwordValidationErrors.push("O campo de nome é obrigatório.");
     }
     
-    
     if (passwordValidationErrors.length > 0) {
-      this.errors = passwordValidationErrors;
+      this.modalErrors = passwordValidationErrors;
       return; 
     }
   
     if (userData.password !== userData.confirmPassword) {
-        this.errors.push("As senhas não coincidem.");
+        this.modalErrors.push("As senhas não coincidem.");
         return; 
     }
 
-    let usuario: Usuario = new Usuario();
-    usuario.username = userData.username;
-    usuario.password = userData.password;
-    usuario.confirmPassword = userData.confirmPassword;
-    usuario.nome = userData.nome;
-    usuario.email = userData.email;
-    usuario.telefone = userData.telefone;
-    usuario.cidade = userData.cidade;
-    usuario.estado = userData.estado;
-    
-    this.authService.salvar(usuario, this.permissaoAluno).subscribe((response) => {
-      const novoUsuario = usuario;
-      this.alunos.push(novoUsuario);
-      this.carregarAlunos();
-      this.limparTela();
-      this.mensagemSucesso = response.message;
-      this.errors = []
-      this.cdRef.markForCheck();
-
-    }, (error) => {
-      this.apiErrors.push(error);
-    })  
-  } 
-
-  consultarUsuario(id: string): void {
-    this.authService.visualizarUsuarioPorId(id).subscribe((data: Usuario) => {
-      
-      this.usuarioForm.patchValue({
-        id: id,
-        username:  data.username,
-        nome: data.nome,
-        email: data.email,
-        password: data.password,
-        confirmPassword: data.confirmPassword,  
-        telefone: data.telefone,
-        cidade:  data.cidade,
-        estado: data.estado    
-      });
-
-      this.cdRef.markForCheck();
-      
-    }, (error) => {
-      console.error("Não foi possível fazer essa consulta ", error);
-    } )
-  }
- 
-
-  carregarAlunos() {
-    this.authService.visualizarAlunos().subscribe((data: Usuario[] | null) => {
-      this.apiErrors = [];
-
-      if(data) {
-        this.alunos = data
-        this.updatePaginatedAlunos();
-        return;
-       }
-       
-       this.alunos = []
-       this.apiErrors.push("Nenhum aluno cadastrado foi encontrado na base de dados.")
-      
-    }, (error) => {
-      this.apiErrors.push(error);
-    })
   }
 
-  editarUsuario() {    
-    this.mensagemSucesso = "";
-    this.userData = {... this.usuarioForm.value};
-    
-    this.authService.atualizarUsuario(this.userData).subscribe((response) => {
-      const updateUser = response;
-      const index = this.alunos.findIndex(user => user.id === updateUser.id);
-      
-      if(index != -1) {
-        this.alunos[index] = updateUser;
-        this.updatePaginatedAlunos();
-      }
-
-      this.mensagemSucesso = "Editado com sucesso";
-
-      this.closeModalAtualizar();
-
-    }, (error) => {
-      console.log(error);
-      this.apiErrors.push(error);
-    })
-  }
-
-  removerUsuario(id: string): void {
-    if (confirm("Você tem certeza que deseja remover este usuário?")) {
-        this.authService.removerUsuario(id).subscribe((response) => {
-          
-          this.alunos = this.alunos.filter((user) => user.id !== id);
-          this.updatePaginatedAlunos();
-          this.mensagemSucesso = "Excluído com sucesso";
-          this.cdRef.markForCheck();  
-          
-        },
-        (error) => {
-          console.log(error);
-          this.apiErrors.push(error);  
-        }
-        );
-    }
-  }
-
-  limparTela() {
-    this.usuarioForm.reset();
-  }
 
   updatePaginatedAlunos(): void {
     const startIndex = this.pageIndexAlunos * this.pageSizeAlunos;
@@ -262,12 +285,9 @@ export class PermissaoProfessorComponent implements OnInit {
 
   openModalCadastro() {
     this.showModalCadastro = true;
-    console.log("Valor de showModal:", this.showModalCadastro);
   }
 
   closeModalCadastro() {
-    console.log("Fechando modal...");
-    this.mensagemSucesso = "";
     this.limparTela();
     this.showModalCadastro = false;
   }
@@ -275,11 +295,9 @@ export class PermissaoProfessorComponent implements OnInit {
   openModalAtualizar(id: string) {
     this.consultarUsuario(id);
     this.showModalAtualizar = true;
-    console.log("Valor de showModal:", this.showModalAtualizar);
   }
 
   closeModalAtualizar() {
-    console.log("Fechando modal...");
     this.showModalAtualizar = false;
   }
 

@@ -74,6 +74,7 @@ export class LoginComponent {
                 estado: response.estado || '',
                 nome: response.nome || '',
                 confirmPassword: '', 
+                tipoUsuario: '',
                 permissao: response.authorities.length > 0 ? response.authorities[0] : null 
             };
             localStorage.setItem('usuario', JSON.stringify(usuario));

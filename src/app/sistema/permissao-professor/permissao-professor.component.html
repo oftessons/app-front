@@ -11,16 +11,17 @@
         </div>
     </div>
 
-      <!--Mensagem de erros-->
+      <!--Mensagem de sucesso-->
       <div class="alert alert-success" *ngIf="mensagemSucesso" >
         {{ mensagemSucesso }}
       </div>
 
-       <!--Mensagem de erros-->
-       <div class="alert alert-danger" *ngFor="let error of apiErrors" >
+      <!--Mensagem de erros-->
+      <div class="alert" *ngFor="let error of errors">
         {{ error }}
+        
       </div>
-  
+
       <h2>Alunos</h2>
       <div class="table-responsive">
         <table class="tabela">
@@ -78,14 +79,9 @@
   
         <form [formGroup]="usuarioForm" class="form-content">
           <div class="grid grid-cols-12 gap-x-6 space-y-4">
-        
-            <!--Mensagem de sucesso-->
-            <div class="alert alert-success" *ngIf="mensagemSucesso">
-              {{ mensagemSucesso }}
-            </div>
-
+      
             <!--Mensagem de erros-->
-            <div class="alert alert-danger" *ngFor="let error of errors" >
+            <div class="alert alert-danger" *ngFor="let error of modalErrors" >
               {{ error }}
             </div>
 
@@ -233,14 +229,7 @@
                 <label class="small mb-1" style="font-size: 1.2em;">Estado</label>
                 <input type="text" name="estado" formControlName="estado" class="form-control py-2 responsive-input" placeholder="Digite seu Estado" required />
             </div>
-            
-            <div class="form-group">
-              <label class="small mb-1" style="font-size: 1.2em;">Alterar senha</label>
-              <div class="input-group">
-                <input type="password" name="currentPassword" formControlName="newPassword" autocomplete="off" class="form-control py-2 responsive-input" placeholder="Digite a nova senha"/> 
-                           
-            </div>
-          </div>
+   
           </div>
         </form>
       </div>

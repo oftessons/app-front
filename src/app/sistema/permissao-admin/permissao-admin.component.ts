@@ -1,4 +1,3 @@
-import { FnParam } from '@angular/compiler/src/output/output_ast';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Permissao } from 'src/app/login/Permissao';
@@ -31,7 +30,6 @@ export class PermissaoAdminComponent implements OnInit {
   tiposPermissao =  [PermissaoDescricoes.ROLE_PROFESSOR, PermissaoDescricoes.ROLE_USER];
   mensagemSucesso: string = '';
   userData: Usuario = new Usuario(); 
-  apiErrors: string[] = [];
   
   usuarioForm =  this.formBuilder.group({
     id: new FormControl(0,),
@@ -50,6 +48,7 @@ export class PermissaoAdminComponent implements OnInit {
   showModalAtualizar: boolean = false;
   submited: boolean = false;
   errors: string[] = [];
+  modalErrors: string[] = [];
 
   passwordVisible: { [key: string]: boolean } = {
     password: false,
@@ -82,8 +81,12 @@ export class PermissaoAdminComponent implements OnInit {
 
   carregarUsuarios() {
     this.authService.visualizarUsuarios().subscribe((data: Usuario[] | null) => {
-      if(!Array.isArray(data)) return;
-      
+      if(!Array.isArray(data)) {
+        this.errors.push("Nenhum aluno cadastrado.")
+        this.cdRef.markForCheck();
+        return;
+      };
+
       this.alunos = data.filter((dataFilter) => {     
         return String(dataFilter.permissao) === "USER";
       })
@@ -94,57 +97,24 @@ export class PermissaoAdminComponent implements OnInit {
 
       this.updatePaginatedData('alunos');
       this.updatePaginatedData('professores');
-
+      
+      this.cdRef.markForCheck();
+   
+      
+    }, (error) => {
+      this.errors.push(error);
+      this.cdRef.markForCheck();
     })
   }
 
   cadastrarUsuarios() {
     const userData = this.usuarioForm.value;
     this.errors = [];
+    this.modalErrors = [];
+    this.validadaoDeCadastro(userData);
 
-    const passwordValidationErrors: string[] = [];
-    if (userData.password.length < 8) {
-      passwordValidationErrors.push("A senha deve ter pelo menos 8 caracteres.");
-    }
-    if (!/[A-Z]/.test(userData.password)) {
-      passwordValidationErrors.push("A senha deve conter pelo menos uma letra maiúscula.");
-    }
-    if (!/[a-z]/.test(userData.password)) {
-      passwordValidationErrors.push("A senha deve conter pelo menos uma letra minúscula.");
-    }
-    if (!/[0-9]/.test(userData.password)) {
-      passwordValidationErrors.push("A senha deve conter pelo menos um número.");
-    }
-    if (!/[!@#$%^&*]/.test(userData.password)) {
-      passwordValidationErrors.push("A senha deve conter pelo menos um caractere especial (por exemplo, !@#$%^&*).");
-    }
-  
-    if (!userData.username) {
-      passwordValidationErrors.push("O campo de login é obrigatório.");
-    }
-  
-    if (!userData.email) {
-      passwordValidationErrors.push("O campo de email é obrigatório.");
-      console.log(this.errors);
-
-    }
-  
-    if (!userData.nome) {
-      passwordValidationErrors.push("O campo de nome é obrigatório.");
-    }
-
-    if(!userData.tipoUsuario) {
-      passwordValidationErrors.push("O campo de seleção de permissão de usuário é obrigatório.");
-    }
-    
-    if (passwordValidationErrors.length > 0) {
-      this.errors = passwordValidationErrors;
-      return; 
-    }
-  
-    if (userData.password !== userData.confirmPassword) {
-        this.errors.push("As senhas não coincidem.");
-        return; 
+    if(this.modalErrors.length > 0) {
+      return;
     }
 
     const usuario = new Usuario();
@@ -156,7 +126,7 @@ export class PermissaoAdminComponent implements OnInit {
     usuario.telefone = userData.telefone;
     usuario.cidade = userData.cidade;
     usuario.estado = userData.estado;
-
+    usuario.tipoUsuario = userData.tipoUsuario;
     const permissao = this.mapearDescricaoParaEnum(userData.tipoUsuario);
 
     this.authService.salvar(usuario, permissao).subscribe((response) => {
@@ -166,16 +136,16 @@ export class PermissaoAdminComponent implements OnInit {
 
       this.limparTela();
 
-      this.closeModalAtualizar();
+      this.closeModalCadastrar();
 
       this.cdRef.detectChanges();
       
 
     },(error => {
-      console.log("ERROR:")
-      console.error(error);
+      this.modalErrors.push(error);
+      this.cdRef.detectChanges();
+      
     }))
-
   }
 
 
@@ -218,6 +188,8 @@ export class PermissaoAdminComponent implements OnInit {
       this.mensagemSucesso = "Editado com sucesso";
 
       this.closeModalAtualizar();
+
+      this.cdRef.markForCheck();
     })
   }
 
@@ -234,8 +206,8 @@ export class PermissaoAdminComponent implements OnInit {
         
       },
       (error) => {
-        console.log(error);
-        this.apiErrors.push(error);  
+        this.errors.push(error);
+        this.cdRef.markForCheck();  
       }
       );
     }
@@ -253,7 +225,66 @@ export class PermissaoAdminComponent implements OnInit {
   } 
 
   limparTela() {
-    this.usuarioForm.reset();
+    this.usuarioForm.patchValue({
+      id: '',
+      username: '',
+      password: '',
+      confirmPassword: '',
+      nome: '',
+      email: '',
+      telefone: '',
+      estado: '',
+      cidade: '',
+      tipoUsuario: ''
+    });
+    
+  }
+
+  validadaoDeCadastro(userData: Usuario) {
+    const passwordValidationErrors: string[] = [];
+    if (userData.password.length < 8) {
+      passwordValidationErrors.push("A senha deve ter pelo menos 8 caracteres.");
+    }
+    if (!/[A-Z]/.test(userData.password)) {
+      passwordValidationErrors.push("A senha deve conter pelo menos uma letra maiúscula.");
+    }
+    if (!/[a-z]/.test(userData.password)) {
+      passwordValidationErrors.push("A senha deve conter pelo menos uma letra minúscula.");
+    }
+    if (!/[0-9]/.test(userData.password)) {
+      passwordValidationErrors.push("A senha deve conter pelo menos um número.");
+    }
+    if (!/[!@#$%^&*]/.test(userData.password)) {
+      passwordValidationErrors.push("A senha deve conter pelo menos um caractere especial (por exemplo, !@#$%^&*).");
+    }
+  
+    if (!userData.username) {
+      passwordValidationErrors.push("O campo de login é obrigatório.");
+    }
+  
+    if (!userData.email) {
+      passwordValidationErrors.push("O campo de email é obrigatório.");
+
+    }
+  
+    if (!userData.nome) {
+      passwordValidationErrors.push("O campo de nome é obrigatório.");
+    }
+
+    if(!userData.tipoUsuario) {
+      passwordValidationErrors.push("O campo de seleção de permissão de usuário é obrigatório.");
+    }
+    
+    if (passwordValidationErrors.length > 0) {
+      this.modalErrors = passwordValidationErrors;
+      return; 
+    }
+  
+    if (userData.password !== userData.confirmPassword) {
+        this.modalErrors.push("As senhas não coincidem.");
+        return; 
+    }
+
   }
 
   updatePaginatedData(type: 'professores' | 'alunos'): void {
@@ -311,22 +342,20 @@ export class PermissaoAdminComponent implements OnInit {
 
   openModalCadastrar() {
     this.showModalCadastrar  = true;
-    console.log("Valor de showModal:", this.showModalCadastrar);
   }
 
   closeModalCadastrar() {
-    console.log("Fechando modal...");
+    this.modalErrors = [];
     this.showModalCadastrar = false;
   }
 
   openModalAtualizar(id: string) {
     this.consultarUsuario(id);
     this.showModalAtualizar = true;
-    console.log("Valor de showModal:", this.showModalAtualizar);
   }
 
   closeModalAtualizar() {
-    console.log("Fechando modal...");
+    this.limparTela();
     this.showModalAtualizar = false;
   }
 

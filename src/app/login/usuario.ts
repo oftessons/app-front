@@ -13,5 +13,6 @@ export class Usuario {
   estado!: string;
   nome!: string;
   confirmPassword!: string;
+  tipoUsuario!: string;
   permissao!: Permissao;  // Atualize para usar a enum Permissao
 }
