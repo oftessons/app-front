@@ -5,6 +5,7 @@ import { PermissaoDescricoes } from 'src/app/login/Permissao-descricao';
 import { Usuario } from 'src/app/login/usuario';
 import { AuthService } from 'src/app/services/auth.service';
 import { ChangeDetectorRef } from '@angular/core';
+import { UnaryOperator } from '@angular/compiler';
 
 @Component({
   selector: 'app-permissao-admin',
@@ -58,6 +59,7 @@ export class PermissaoAdminComponent implements OnInit {
     currentPassword: false,
     newPassword: false
   };
+  
 
   constructor(private formBuilder: FormBuilder, private authService: AuthService, 
     private cdRef: ChangeDetectorRef) { 
@@ -183,18 +185,21 @@ export class PermissaoAdminComponent implements OnInit {
 
     this.authService.atualizarUsuario(this.userData).subscribe((response) => {
       const updateUser = response;
-      const indexAluno = this.alunos.findIndex((user) => user.id === updateUser.id);
-      const indexProfessor = this.professores.findIndex((user) => user.id === updateUser.id);
 
+      const tiposUsuarios = {
+        alunos: this.alunos,
+        professores: this.professores
+      };
+           
+      for (const key of Object.keys(tiposUsuarios) as (keyof typeof tiposUsuarios)[]) {
+        const usuarios = tiposUsuarios[key];
+        const index = tiposUsuarios[key].findIndex((user) => user.id === updateUser.id);
 
-      if(indexAluno != -1) {
-        this.alunos[indexAluno] = updateUser;
-        this.updatePaginatedData('alunos');
+        if(index != -1) {
+          usuarios[index] = updateUser;
+          this.updatePaginatedData(key);
 
-      } else if(indexProfessor != -1) {
-        this.professores[indexProfessor] = updateUser;
-        this.updatePaginatedData('professores');
-
+        }
       }
 
       this.mensagemSucesso = "Editado com sucesso";
@@ -361,6 +366,7 @@ export class PermissaoAdminComponent implements OnInit {
   }
 
   closeModalCadastrar() {
+    this.limparTela();
     this.modalErrors = [];
     this.showModalCadastrar = false;
   }
