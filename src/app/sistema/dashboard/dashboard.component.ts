@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Permissao } from 'src/app/login/Permissao';
 import { Usuario } from 'src/app/login/usuario';
 import { AuthService } from 'src/app/services/auth.service';
 
@@ -30,12 +29,15 @@ export class DashboardComponent implements OnInit {
       err => console.error('Erro ao buscar nome do usuário', err)
     );
     this.usuarioLogado = this.authService.getUsuarioAutenticado();
-    //console.log(this.usuarioLogado); // Verifica se o usuário está sendo carregado corretamente
     this.iniciarContador();
   }
 
   isAdmin(): boolean {
     return this.usuarioLogado?.permissao === 'ROLE_ADMIN'; // Verifica se o usuário é admin
+  }
+
+  isProf(): boolean {
+    return this.usuarioLogado?.permissao === 'ROLE_PROFESSOR'; 
   }
 
   ngOnDestroy() {

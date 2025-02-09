@@ -80,7 +80,8 @@ export class LoginComponent {
             localStorage.setItem('usuario', JSON.stringify(usuario));
             
             // Redireciona com base na permissão do usuário
-            if (usuario.permissao === 'ROLE_ADMIN' || usuario.permissao === 'ROLE_USER') {
+            if (usuario.permissao === 'ROLE_ADMIN' || usuario.permissao === 'ROLE_USER' || 
+              usuario.permissao === 'ROLE_PROFESSOR') {
               this.router.navigate(['/usuario/inicio']);
             } else {
               this.router.navigate(['/forbidden']); // Caso não tenha permissão

@@ -26,6 +26,7 @@ export class PermissaoProfessorComponent implements OnInit {
   errors: string[] = [];
   modalErrors: string[] = [];
   apiMessages: string[] = [];
+  cadastrando: boolean = false;
   
   
   showModalCadastro: boolean = false;
@@ -77,6 +78,7 @@ export class PermissaoProfessorComponent implements OnInit {
    }
    
   cadastrarAlunos() {
+    this.cadastrando = true; 
     const userData = this.usuarioForm.value;
     this.modalErrors = [];
     
@@ -156,15 +158,23 @@ export class PermissaoProfessorComponent implements OnInit {
     })
   }
 
-  editarUsuario() {    
+  editarUsuario() {  
+    this.cadastrando = false;  
+    this.modalErrors = [];
+    this.errors = [];
     this.mensagemSucesso = "";
     this.userData = {... this.usuarioForm.value};
+    this.validadaoDeCadastro(this.userData);
+
+    if(this.modalErrors.length > 0) {
+      return;
+    }
     
     this.authService.atualizarUsuario(this.userData).subscribe((response) => {
       const updateUser = response;
       const index = this.alunos.findIndex(user => user.id === updateUser.id);
       
-      if(index != -1) {
+      if(index != -1) { 
         this.alunos[index] = updateUser;
         this.updatePaginatedAlunos();
       }
@@ -174,7 +184,7 @@ export class PermissaoProfessorComponent implements OnInit {
       this.closeModalAtualizar();
 
     }, (error) => {
-        this.errors.push(error);
+        this.modalErrors.push(error);
         this.cdRef.markForCheck();
     })
   }
@@ -247,7 +257,7 @@ export class PermissaoProfessorComponent implements OnInit {
       return; 
     }
   
-    if (userData.password !== userData.confirmPassword) {
+    if (userData.password !== userData.confirmPassword && this.cadastrando) {
         this.modalErrors.push("As senhas não coincidem.");
         return; 
     }

@@ -58,7 +58,15 @@ export class AuthService {
       formData.append('fotoDoPerfil', fotoDoPerfil);
     }
   
-    return this.http.put<Usuario>(`${this.apiURL}/update/${usuario.id}`, formData);
+    return this.http.put<Usuario>(`${this.apiURL}/update/${usuario.id}`, formData)
+    .pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 422) {
+          return throwError('Já existe um usuário com este username na nossa base de dados. Tente outro');
+        }
+        return throwError("O servidor não está funcionando corretamente.");
+      })
+    );
   }
 
   removerUsuario(id: string): Observable<any> {

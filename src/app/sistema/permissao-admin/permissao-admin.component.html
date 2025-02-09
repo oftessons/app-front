@@ -191,7 +191,6 @@
                 <option *ngFor="let tipo of tiposPermissao" (value)="tipo">{{ tipo }}</option>
               </select>
             </div>
-
           </div>
         </form>
       </div>
@@ -224,6 +223,11 @@
   
         <form [formGroup]="usuarioForm" class="form-content">
           <div class="grid grid-cols-12 gap-x-6 space-y-4">
+            
+            <div class="alert alert-danger" *ngFor="let error of modalErrors" >
+              {{ error }}
+            </div>
+
             <div class="form-group">
                 <label class="small mb-1" style="font-size: 1.2em;">Login *</label>
                 <input type="text" formControlName="username" name="username" autocomplete="off" class="form-control py-2 responsive-input" placeholder="Digite seu username" required />

@@ -15,6 +15,7 @@ import { ChangeDetectorRef } from '@angular/core';
 export class PermissaoAdminComponent implements OnInit {
   displayedColumns: string[] = ['nome', 'email', 'cidade', 'estado'];
 
+  usuarios: Usuario[] = [];
 
   professores: Usuario[]  = []
   paginatedProfessores = this.professores.slice(0, 6);
@@ -29,6 +30,7 @@ export class PermissaoAdminComponent implements OnInit {
   totalPagesAlunos = Math.ceil(this.alunos.length / this.pageSizeAlunos);
   tiposPermissao =  [PermissaoDescricoes.ROLE_PROFESSOR, PermissaoDescricoes.ROLE_USER];
   mensagemSucesso: string = '';
+  cadastrando: boolean = false;
   userData: Usuario = new Usuario(); 
   
   usuarioForm =  this.formBuilder.group({
@@ -87,13 +89,9 @@ export class PermissaoAdminComponent implements OnInit {
         return;
       };
 
-      this.alunos = data.filter((dataFilter) => {     
-        return String(dataFilter.permissao) === "USER";
-      })
-
-      this.professores = data.filter((dataFilter) => {
-        return String(dataFilter.permissao) === "PROFESSOR"
-      })
+      this.usuarios = data;
+      this.alunos = this.filtrarUsuariosPorPermissao('USER'); 
+      this.professores = this.filtrarUsuariosPorPermissao('PROFESSOR');
 
       this.updatePaginatedData('alunos');
       this.updatePaginatedData('professores');
@@ -108,6 +106,7 @@ export class PermissaoAdminComponent implements OnInit {
   }
 
   cadastrarUsuarios() {
+    this.cadastrando = true;
     const userData = this.usuarioForm.value;
     this.errors = [];
     this.modalErrors = [];
@@ -143,7 +142,7 @@ export class PermissaoAdminComponent implements OnInit {
 
     },(error => {
       this.modalErrors.push(error);
-      this.cdRef.detectChanges();
+      this.cdRef.markForCheck();
       
     }))
   }
@@ -171,16 +170,29 @@ export class PermissaoAdminComponent implements OnInit {
 
 
   editarUsuarios() {
+    this.cadastrando = false;
     this.mensagemSucesso = "";
+    this.errors = [];
+    this.modalErrors = [];
     this.userData = {... this.usuarioForm.value};
+    this.validadaoDeCadastro(this.userData);
+    
+    if(this.modalErrors.length > 0) {
+      return;
+    }
 
     this.authService.atualizarUsuario(this.userData).subscribe((response) => {
       const updateUser = response;
-      const index = this.alunos.findIndex((user) => user.id === updateUser.id);
+      const indexAluno = this.alunos.findIndex((user) => user.id === updateUser.id);
+      const indexProfessor = this.professores.findIndex((user) => user.id === updateUser.id);
 
-      if(index != -1) {
-        this.alunos[index] = updateUser;
+
+      if(indexAluno != -1) {
+        this.alunos[indexAluno] = updateUser;
         this.updatePaginatedData('alunos');
+
+      } else if(indexProfessor != -1) {
+        this.professores[indexProfessor] = updateUser;
         this.updatePaginatedData('professores');
 
       }
@@ -188,7 +200,10 @@ export class PermissaoAdminComponent implements OnInit {
       this.mensagemSucesso = "Editado com sucesso";
 
       this.closeModalAtualizar();
+      this.cdRef.markForCheck();
 
+    }, (error) => {
+      this.modalErrors.push(error);
       this.cdRef.markForCheck();
     })
   }
@@ -271,7 +286,7 @@ export class PermissaoAdminComponent implements OnInit {
       passwordValidationErrors.push("O campo de nome é obrigatório.");
     }
 
-    if(!userData.tipoUsuario) {
+    if(!userData.tipoUsuario && this.cadastrando) {
       passwordValidationErrors.push("O campo de seleção de permissão de usuário é obrigatório.");
     }
     
@@ -280,16 +295,20 @@ export class PermissaoAdminComponent implements OnInit {
       return; 
     }
   
-    if (userData.password !== userData.confirmPassword) {
+    if (userData.password !== userData.confirmPassword && this.cadastrando) {
         this.modalErrors.push("As senhas não coincidem.");
         return; 
     }
 
   }
 
+  filtrarUsuariosPorPermissao(permissao: 'USER' | 'PROFESSOR'): Usuario[] {
+    return this.usuarios.filter(user => String(user.permissao) === permissao);
+  }
+
   updatePaginatedData(type: 'professores' | 'alunos'): void {
     const pageIndex = type === 'professores' ? this.pageIndexProfessores : this.pageIndexAlunos;
-    const pageSize = type === 'professores' ? this.pageSizeProfessores : this.pageSizeAlunos;
+    const pageSize =  type === 'professores' ? this.pageSizeProfessores : this.pageSizeAlunos;
     const data = type === 'professores' ? this.professores : this.alunos;
     const startIndex = pageIndex * pageSize;
     const endIndex = startIndex + pageSize;
@@ -301,9 +320,6 @@ export class PermissaoAdminComponent implements OnInit {
       this.totalPagesAlunos = Math.ceil(this.alunos.length / this.pageSizeAlunos);
 
     }
-
-    this.cdRef.markForCheck();
-
   }
 
   nextPage(type: 'professores' | 'alunos'): void {
@@ -355,6 +371,7 @@ export class PermissaoAdminComponent implements OnInit {
   }
 
   closeModalAtualizar() {
+    this.modalErrors = [];
     this.limparTela();
     this.showModalAtualizar = false;
   }
