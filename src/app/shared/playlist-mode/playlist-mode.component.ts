@@ -39,4 +39,12 @@ export class PlaylistModeComponent implements OnInit {
   togglePlaylist(): void {
     this.playlistAberta = !this.playlistAberta;
   }
+
+  truncateTitle(title: string, maxLength: number): string {
+    if (title.length > maxLength) {
+      return title.substring(0, maxLength) + '...';
+    } else {
+      return title;
+    }
+  }
 }

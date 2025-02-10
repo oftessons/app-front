@@ -37,6 +37,19 @@
   font-weight: 12px;
 }
 
+.title-container {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.playlist.closed .title-container h2 {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+}
+
 .modal-content {
   background-color: #fff;
   width: 100%;
@@ -87,15 +100,6 @@
   padding: 10px;
   text-align: right;
   border-top: 1px solid #ddd;
-}
-
-.close-modal-btn {
-  padding: 5px 15px;
-  background-color: #dc3545;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
 }
 
 .video-preview {

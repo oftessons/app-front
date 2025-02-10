@@ -1,7 +1,7 @@
 <div class="playlist" [ngClass]="{'open': playlistAberta, 'closed': !playlistAberta}">
     <div class="playlist-title" (click)="togglePlaylist()">
-        <div>
-            <h2>{{ titulo }}</h2>
+        <div class="title-container">
+            <h2>{{ playlistAberta ? titulo : truncateTitle(titulo, 20) }}</h2>
             <span>aulas {{ videoAtualIndex + 1 }}/{{ aulas.length }}</span>
         </div>
         <button class="toggle-button">
