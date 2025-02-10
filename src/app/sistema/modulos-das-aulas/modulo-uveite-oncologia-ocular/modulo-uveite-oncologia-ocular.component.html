@@ -6,7 +6,7 @@
 
         <div class="grid-container">
             <div class="principal-info">
-              <div class="video-container">
+              <div class="video-container" *ngIf="aulas.length > 0; else noDataTemplate">
                 <video
                   #videoPlayer
                   controls
@@ -19,6 +19,12 @@
                   Seu navegador não suporta o elemento de vídeo.
                 </video>
               </div>
+              <ng-template #noDataTemplate>
+                <div class="no-data">
+                  <img src="assets/imagens/not-data-aulas.png" alt="No Data">
+                  <p>Não há nenhuma aula cadastrada</p>
+                </div>
+              </ng-template>
               <div class="info-aula">
                 <div *ngIf="aulas.length > 0">
                   <h3>{{ videoAtual?.titulo }}</h3>

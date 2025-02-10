@@ -69,6 +69,24 @@
   height: 100%;
 }
 
+/* Data mensagem */
+.no-data {
+  text-align: center;
+  margin-top: 80px;
+  margin-bottom: 40px;
+}
+
+.no-data img {
+  width: 180px;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.no-data p {
+  font-size: 1.2em;
+  color: #666;
+}
+
 @media (max-width: 768px) {
   .grid-container {
     grid-template-columns: 1fr;
