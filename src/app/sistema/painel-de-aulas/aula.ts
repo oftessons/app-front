@@ -10,6 +10,9 @@ export class Aula {
   categoria!: Categoria;
   titulo!: string;
   descricao!: string;
+  arquivo!: File;
+  urlArquivo!: string;
+  keyArquivo!: string;
 
   toJson(): string {
     return JSON.stringify({
@@ -22,6 +25,9 @@ export class Aula {
       categoria: this.categoria,
       titulo: this.titulo,
       descricao: this.descricao,
+      arquivo: this.arquivo,
+      urlArquivo: this.urlArquivo,
+      keyArquivo: this.keyArquivo,
     });
   }
 }

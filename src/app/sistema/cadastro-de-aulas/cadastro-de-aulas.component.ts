@@ -29,6 +29,7 @@ export class CadastroDeAulasComponent implements OnInit {
   fotoPreviews: { [key: string]: string | ArrayBuffer | null } = {};
 
   categoria: string[] = Object.values(Categoria);
+  arquivo: File | null = null;
 
   constructor(
     private authService: AuthService,
@@ -113,6 +114,10 @@ export class CadastroDeAulasComponent implements OnInit {
     }
     this.formData.append('aulaDTO', objetoJson);
 
+    if (this.arquivo) {
+        this.formData.append('arquivo', this.arquivo);
+    }
+
     if (!this.aulaDTO.id) {
       this.aulasService.salvar(this.formData).subscribe(
         response => {
@@ -127,6 +132,17 @@ export class CadastroDeAulasComponent implements OnInit {
         }
       );
     }
+  }
+
+  onPdfSelected(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.arquivo = file;
+    }
+  }
+
+  removePdf(): void {
+    this.arquivo = null;
   }
 
 }
