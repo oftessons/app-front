@@ -1,83 +1,329 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Permissao } from 'src/app/login/Permissao';
+import { PermissaoDescricoes } from 'src/app/login/Permissao-descricao';
+import { Usuario } from 'src/app/login/usuario';
+import { AuthService } from 'src/app/services/auth.service';
+import { ChangeDetectorRef } from '@angular/core';
+import { UnaryOperator } from '@angular/compiler';
 
 @Component({
   selector: 'app-permissao-admin',
   templateUrl: './permissao-admin.component.html',
   styleUrls: ['./permissao-admin.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PermissaoAdminComponent implements OnInit {
   displayedColumns: string[] = ['nome', 'email', 'cidade', 'estado'];
-  professores = [
-    { nome: 'Professor 1', email: 'prof1@example.com', cidade: 'Cidade 1', estado: 'Estado 1' },
-    { nome: 'Professor 2', email: 'prof2@example.com', cidade: 'Cidade 2', estado: 'Estado 2' },
-    { nome: 'Professor 3', email: 'prof3@example.com', cidade: 'Cidade 3', estado: 'Estado 3' },
-    { nome: 'Professor 4', email: 'prof4@example.com', cidade: 'Cidade 4', estado: 'Estado 4' },
-    { nome: 'Professor 5', email: 'prof5@example.com', cidade: 'Cidade 5', estado: 'Estado 5' },
-    { nome: 'Professor 6', email: 'prof6@example.com', cidade: 'Cidade 6', estado: 'Estado 6' },
-    { nome: 'Professor 7', email: 'prof7@example.com', cidade: 'Cidade 7', estado: 'Estado 7' },
-    { nome: 'Professor 8', email: 'prof8@example.com', cidade: 'Cidade 8', estado: 'Estado 8' },
-    { nome: 'Professor 9', email: 'prof9@example.com', cidade: 'Cidade 9', estado: 'Estado 9' },
-  ];
 
-  alunos = [
-    { nome: 'Aluno 1', email: 'aluno1@example.com', cidade: 'Cidade 1', estado: 'Estado 1' },
-    { nome: 'Aluno 2', email: 'aluno2@example.com', cidade: 'Cidade 2', estado: 'Estado 2' },
-    { nome: 'Aluno 3', email: 'aluno3@example.com', cidade: 'Cidade 3', estado: 'Estado 3' },
-    { nome: 'Aluno 4', email: 'aluno4@example.com', cidade: 'Cidade 4', estado: 'Estado 4' },
-    { nome: 'Aluno 5', email: 'aluno5@example.com', cidade: 'Cidade 5', estado: 'Estado 5' },
-    { nome: 'Aluno 6', email: 'aluno6@example.com', cidade: 'Cidade 6', estado: 'Estado 6' },
-    { nome: 'Aluno 7', email: 'aluno7@example.com', cidade: 'Cidade 7', estado: 'Estado 7' },
-    { nome: 'Aluno 8', email: 'aluno8@example.com', cidade: 'Cidade 8', estado: 'Estado 8' },
-    { nome: 'Aluno 9', email: 'aluno9@example.com', cidade: 'Cidade 9', estado: 'Estado 9' },
-  ];
+  usuarios: Usuario[] = [];
 
+  professores: Usuario[]  = []
   paginatedProfessores = this.professores.slice(0, 6);
   pageSizeProfessores = 6;
   pageIndexProfessores = 0;
   totalPagesProfessores = Math.ceil(this.professores.length / this.pageSizeProfessores);
 
+  alunos: Usuario[] = []
   paginatedAlunos = this.alunos.slice(0, 6);
   pageSizeAlunos = 6;
   pageIndexAlunos = 0;
   totalPagesAlunos = Math.ceil(this.alunos.length / this.pageSizeAlunos);
-
+  tiposPermissao =  [PermissaoDescricoes.ROLE_PROFESSOR, PermissaoDescricoes.ROLE_USER];
+  mensagemSucesso: string = '';
+  cadastrando: boolean = false;
+  userData: Usuario = new Usuario(); 
+  
   usuarioForm =  this.formBuilder.group({
     id: new FormControl(0,),
-    nome: new FormControl('', {validators: [Validators.required]}),
+    username: new FormControl('', {validators: [Validators.required]}),
+    password: new FormControl('', {validators: [Validators.required]}),
+    confirmPassword: new FormControl('', {validators: [Validators.required]}),
+    nome: new FormControl('', [Validators.required]),
     email: new FormControl('', {validators: [Validators.required]}),
+    telefone: new FormControl('', {validators: [Validators.required]}),
     estado: new FormControl('', ),
     cidade: new FormControl('', ),
+    tipoUsuario: new FormControl('', {validators: [Validators.required]})
   });
 
-  showModal: boolean = false;
+  showModalCadastrar: boolean = false;
+  showModalAtualizar: boolean = false;
   submited: boolean = false;
+  errors: string[] = [];
+  modalErrors: string[] = [];
 
+  passwordVisible: { [key: string]: boolean } = {
+    password: false,
+    confirmPassword: false,
+    currentPassword: false,
+    newPassword: false
+  };
+  
 
-  constructor(private formBuilder: FormBuilder,) { 
+  constructor(private formBuilder: FormBuilder, private authService: AuthService, 
+    private cdRef: ChangeDetectorRef) { 
     this.usuarioForm = this.formBuilder.group({
+      id: null,
+      username: [''],
+      password: [''],
+      confirmPassword: [''],
       nome: [''],
       email: [''],
+      telefone: [''],
       cidade: [''],
       estado: [''],
+      tipoUsuario: ['']
     });
   }
 
   ngOnInit(): void {
     this.updatePaginatedData('professores');
     this.updatePaginatedData('alunos');
+    this.carregarUsuarios();
+  }
+
+  carregarUsuarios() {
+    this.authService.visualizarUsuarios().subscribe((data: Usuario[] | null) => {
+      if(!Array.isArray(data)) {
+        this.errors.push("Nenhum aluno cadastrado.")
+        this.cdRef.markForCheck();
+        return;
+      };
+
+      this.usuarios = data;
+      this.alunos = this.filtrarUsuariosPorPermissao('USER'); 
+      this.professores = this.filtrarUsuariosPorPermissao('PROFESSOR');
+
+      this.updatePaginatedData('alunos');
+      this.updatePaginatedData('professores');
+      
+      this.cdRef.markForCheck();
+   
+      
+    }, (error) => {
+      this.errors.push(error);
+      this.cdRef.markForCheck();
+    })
+  }
+
+  cadastrarUsuarios() {
+    this.cadastrando = true;
+    const userData = this.usuarioForm.value;
+    this.errors = [];
+    this.modalErrors = [];
+    this.validadaoDeCadastro(userData);
+
+    if(this.modalErrors.length > 0) {
+      return;
+    }
+
+    const usuario = new Usuario();
+    usuario.username = userData.username;
+    usuario.password = userData.password;
+    usuario.confirmPassword = userData.confirmPassword;
+    usuario.nome = userData.nome;
+    usuario.email = userData.email;
+    usuario.telefone = userData.telefone;
+    usuario.cidade = userData.cidade;
+    usuario.estado = userData.estado;
+    usuario.tipoUsuario = userData.tipoUsuario;
+    const permissao = this.mapearDescricaoParaEnum(userData.tipoUsuario);
+
+    this.authService.salvar(usuario, permissao).subscribe((response) => {
+      this.mensagemSucesso = response.message;
+  
+      this.carregarUsuarios();
+
+      this.limparTela();
+
+      this.closeModalCadastrar();
+
+      this.cdRef.detectChanges();
+      
+
+    },(error => {
+      this.modalErrors.push(error);
+      this.cdRef.markForCheck();
+      
+    }))
+  }
+
+
+  consultarUsuario(id: string) {
+    this.authService.visualizarUsuarioPorId(id).subscribe((response: Usuario) => {
+      
+      this.usuarioForm.patchValue({
+        id: id,
+        username: response.username,
+        nome: response.nome,
+        email: response.email,
+        password: response.password,
+        confirmPassword: undefined,
+        telefone: response.telefone,
+        cidade: response.cidade,
+        estado: response.estado,
+        tipoUsuario: undefined
+      })
+
+      this.cdRef.markForCheck();
+    })
+  }
+
+
+  editarUsuarios() {
+    this.cadastrando = false;
+    this.mensagemSucesso = "";
+    this.errors = [];
+    this.modalErrors = [];
+    this.userData = {... this.usuarioForm.value};
+    this.validadaoDeCadastro(this.userData);
+    
+    if(this.modalErrors.length > 0) {
+      return;
+    }
+
+    this.authService.atualizarUsuario(this.userData).subscribe((response) => {
+      const updateUser = response;
+
+      const tiposUsuarios = {
+        alunos: this.alunos,
+        professores: this.professores
+      };
+           
+      for (const key of Object.keys(tiposUsuarios) as (keyof typeof tiposUsuarios)[]) {
+        const usuarios = tiposUsuarios[key];
+        const index = tiposUsuarios[key].findIndex((user) => user.id === updateUser.id);
+
+        if(index != -1) {
+          usuarios[index] = updateUser;
+          this.updatePaginatedData(key);
+
+        }
+      }
+
+      this.mensagemSucesso = "Editado com sucesso";
+
+      this.closeModalAtualizar();
+      this.cdRef.markForCheck();
+
+    }, (error) => {
+      this.modalErrors.push(error);
+      this.cdRef.markForCheck();
+    })
+  }
+
+  removerUsuario(id: string) {
+    if (confirm("Você tem certeza que deseja remover este usuário?")) {
+      this.authService.removerUsuario(id).subscribe((response) => {
+        
+        this.alunos = this.alunos.filter((user) => user.id !== id);
+        this.professores = this.professores.filter((prof) => prof.id !== id);
+        this.updatePaginatedData('alunos');
+        this.updatePaginatedData('professores');
+        this.mensagemSucesso = "Excluído com sucesso";
+        this.cdRef.markForCheck();  
+        
+      },
+      (error) => {
+        this.errors.push(error);
+        this.cdRef.markForCheck();  
+      }
+      );
+    }
+  }
+
+  mapearDescricaoParaEnum(selecao: string): Permissao {
+
+    const enumeracao: Record<string, Permissao> = {
+      "USER": Permissao.USER,
+      "PROFESSOR": Permissao.PROFESSOR
+    }
+
+    return enumeracao[selecao] || Permissao.USER;
+
+  } 
+
+  limparTela() {
+    this.usuarioForm.patchValue({
+      id: '',
+      username: '',
+      password: '',
+      confirmPassword: '',
+      nome: '',
+      email: '',
+      telefone: '',
+      estado: '',
+      cidade: '',
+      tipoUsuario: ''
+    });
+    
+  }
+
+  validadaoDeCadastro(userData: Usuario) {
+    const passwordValidationErrors: string[] = [];
+    if (userData.password.length < 8) {
+      passwordValidationErrors.push("A senha deve ter pelo menos 8 caracteres.");
+    }
+    if (!/[A-Z]/.test(userData.password)) {
+      passwordValidationErrors.push("A senha deve conter pelo menos uma letra maiúscula.");
+    }
+    if (!/[a-z]/.test(userData.password)) {
+      passwordValidationErrors.push("A senha deve conter pelo menos uma letra minúscula.");
+    }
+    if (!/[0-9]/.test(userData.password)) {
+      passwordValidationErrors.push("A senha deve conter pelo menos um número.");
+    }
+    if (!/[!@#$%^&*]/.test(userData.password)) {
+      passwordValidationErrors.push("A senha deve conter pelo menos um caractere especial (por exemplo, !@#$%^&*).");
+    }
+  
+    if (!userData.username) {
+      passwordValidationErrors.push("O campo de login é obrigatório.");
+    }
+  
+    if (!userData.email) {
+      passwordValidationErrors.push("O campo de email é obrigatório.");
+
+    }
+  
+    if (!userData.nome) {
+      passwordValidationErrors.push("O campo de nome é obrigatório.");
+    }
+
+    if(!userData.tipoUsuario && this.cadastrando) {
+      passwordValidationErrors.push("O campo de seleção de permissão de usuário é obrigatório.");
+    }
+    
+    if (passwordValidationErrors.length > 0) {
+      this.modalErrors = passwordValidationErrors;
+      return; 
+    }
+  
+    if (userData.password !== userData.confirmPassword && this.cadastrando) {
+        this.modalErrors.push("As senhas não coincidem.");
+        return; 
+    }
+
+  }
+
+  filtrarUsuariosPorPermissao(permissao: 'USER' | 'PROFESSOR'): Usuario[] {
+    return this.usuarios.filter(user => String(user.permissao) === permissao);
   }
 
   updatePaginatedData(type: 'professores' | 'alunos'): void {
     const pageIndex = type === 'professores' ? this.pageIndexProfessores : this.pageIndexAlunos;
-    const pageSize = type === 'professores' ? this.pageSizeProfessores : this.pageSizeAlunos;
+    const pageSize =  type === 'professores' ? this.pageSizeProfessores : this.pageSizeAlunos;
     const data = type === 'professores' ? this.professores : this.alunos;
     const startIndex = pageIndex * pageSize;
     const endIndex = startIndex + pageSize;
     if (type === 'professores') {
       this.paginatedProfessores = data.slice(startIndex, endIndex);
+      this.totalPagesProfessores = Math.ceil(this.professores.length / this.pageSizeProfessores);
     } else {
       this.paginatedAlunos = data.slice(startIndex, endIndex);
+      this.totalPagesAlunos = Math.ceil(this.alunos.length / this.pageSizeAlunos);
+
     }
   }
 
@@ -115,16 +361,32 @@ export class PermissaoAdminComponent implements OnInit {
     this.updatePaginatedData(type);
   }
 
-  openModal() {
-    this.showModal = true;
-    console.log("Valor de showModal:", this.showModal);
+  openModalCadastrar() {
+    this.showModalCadastrar  = true;
   }
 
-  closeModal() {
-    console.log("Fechando modal...");
-    this.showModal = false;
+  closeModalCadastrar() {
+    this.limparTela();
+    this.modalErrors = [];
+    this.showModalCadastrar = false;
   }
 
-  onFormSubmitHandler(): void {
+  openModalAtualizar(id: string) {
+    this.consultarUsuario(id);
+    this.showModalAtualizar = true;
+  }
+
+  closeModalAtualizar() {
+    this.modalErrors = [];
+    this.limparTela();
+    this.showModalAtualizar = false;
+  }
+
+  togglePasswordVisibility(field: string) {
+    this.passwordVisible[field] = !this.passwordVisible[field];
+    const passwordInput = document.querySelector(`input[name="${field}"]`);
+    if (passwordInput) {
+      passwordInput.setAttribute('type', this.passwordVisible[field] ? 'text' : 'password');
+    }
   }
 }

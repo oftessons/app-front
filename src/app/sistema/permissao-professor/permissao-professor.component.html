@@ -7,10 +7,21 @@
       <div class="header-cont">
         <h1>Cadastrar alunos</h1>
         <div class="btn">
-          <button type="button" (click)="openModal()">Adicionar +</button>
+          <button type="button" (click)="openModalCadastro()">Adicionar +</button>
         </div>
     </div>
-  
+
+      <!--Mensagem de sucesso-->
+      <div class="alert alert-success" *ngIf="mensagemSucesso" >
+        {{ mensagemSucesso }}
+      </div>
+
+      <!--Mensagem de erros-->
+      <div class="alert" *ngFor="let error of errors">
+        {{ error }}
+        
+      </div>
+
       <h2>Alunos</h2>
       <div class="table-responsive">
         <table class="tabela">
@@ -30,11 +41,11 @@
                 <td>{{ aluno.cidade }}</td>
                 <td>{{ aluno.estado }}</td>
                 <td>
-                  <button class="btn-editar btn-primary btn">
+                  <button class="btn-editar btn-primary btn" (click)="openModalAtualizar(aluno.id)">
                     Editar
                     <img src="assets/imagens/pencil.svg" alt="Ícone de Editar" class="icon" />
                   </button>
-                  <button class="btn-excluir btn-danger btn">
+                  <button class="btn-excluir btn-danger btn" (click)="removerUsuario(aluno.id)">
                     Excluir
                     <img src="assets/imagens/de.svg" alt="Ícone de Deletar" class="icon" />
                   </button>
@@ -43,19 +54,20 @@
           </tbody>
         </table>
         <div class="pagination-controls">
-            <button class="nav-button" (click)="previousPageAlunos()" [disabled]="pageIndexAlunos === 0">&lt;</button>
+            <button class="nav-butt      console.log(response)on" (click)="previousPageAlunos()" [disabled]="pageIndexAlunos === 0">&lt;</button>
             <button class="page-number" *ngFor="let page of [].constructor(totalPagesAlunos); let i = index" (click)="goToPageAlunos(i)" [class.active]="i === pageIndexAlunos">{{ i + 1 }}</button>
             <button class="nav-button" (click)="nextPageAlunos()" [disabled]="pageIndexAlunos >= totalPagesAlunos - 1">&gt;</button>
         </div>
       </div>
     </div>
-
-    <app-modal [show]="showModal" (closeModal)="closeModal()" size="max-w-7xl" [footer]="false">
+    
+    <!-- Modal para cadastrar o usuário -->
+    <app-modal [show]="showModalCadastro" (closeModal)="closeModalCadastro()" size="max-w-7xl" [footer]="false">
       <div class="container-modal sm:items-start">
         <div class="modal-header">
           <div class="content-header">
             <div class="close-modal">
-              <button type="button" class="close" aria-label="Close" (click)="closeModal()">
+              <button type="button" class="close" aria-label="Close" (click)="closeModalCadastro()">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
@@ -67,46 +79,169 @@
   
         <form [formGroup]="usuarioForm" class="form-content">
           <div class="grid grid-cols-12 gap-x-6 space-y-4">
+      
+            <!--Mensagem de erros-->
+            <div class="alert alert-danger" *ngFor="let error of modalErrors" >
+              {{ error }}
+            </div>
+
+            <input type="hidden" formControlName="id"> 
+            
             <div class="form-group">
                 <label class="small mb-1" style="font-size: 1.2em;">Login *</label>
-                <input type="text" name="username" autocomplete="off" class="form-control py-2 responsive-input" placeholder="Digite seu username" required />
+                <input type="text" name="username" formControlName="username" autocomplete="off" class="form-control py-2 responsive-input" placeholder="Digite seu username" required />
+            </div>
+
+            <div class="form-group">
+              <label class="small mb-1" style="font-size: 1.2em;">Senha *</label>
+              <div class="input-group">
+                <input type="password" name="password" formControlName="password" autocomplete="off" class="form-control py-2 responsive-input" placeholder="Digite sua senha" required />
+                <div class="input-group-append">
+                    <div class="btn btn-outline-secondary" type="button" (click)="togglePasswordVisibility('password')">
+                    <img *ngIf="!passwordVisible.password" src="assets/imagens/view.svg" alt="Mostrar senha" width="16" height="16">
+                    <img *ngIf="passwordVisible.password" src="assets/imagens/view-off.svg" alt="Ocultar senha" width="16" height="16">
+                    </div>
+                </div>
+            </div>
+            </div>
+
+            <div class="form-group">
+              <label class="small mb-1" style="font-size: 1.2em;">Confirme sua senha *</label>
+              <div class="input-group">
+                <input type="password" name="confirmPassword" formControlName="confirmPassword" autocomplete="off" class="form-control py-2 responsive-input" placeholder="Confirme sua senha" required />
+                <div class="input-group-append">
+                    <div class="btn btn-outline-secondary" type="button" (click)="togglePasswordVisibility('confirmPassword')">
+                    <img *ngIf="!passwordVisible.confirmPassword" src="assets/imagens/view.svg" alt="Mostrar senha" width="16" height="16">
+                    <img *ngIf="passwordVisible.confirmPassword" src="assets/imagens/view-off.svg" alt="Ocultar senha" width="16" height="16">
+                    </div>
+                </div>
+            </div>
             </div>
 
             <div class="form-group">
                 <label class="small mb-1" style="font-size: 1.2em;">Nome *</label>
-                <input type="text" name="nome" class="form-control py-2 responsive-input" placeholder="Digite o seu nome"  />
+                <input type="text" name="nome" formControlName="nome" class="form-control py-2 responsive-input" placeholder="Digite o seu nome"  />
             </div>
 
             <div class="form-group">
                 <label class="small mb-1" style="font-size: 1.2em;">E-mail *</label>
-                <input type="email" name="email" class="form-control py-2 responsive-input" placeholder="Digite seu e-mail" required />
+                <input type="email" name="email" formControlName="email" class="form-control py-2 responsive-input" placeholder="Digite seu e-mail" required />
             </div>
 
             <div class="form-group">
                 <label class="small mb-1" style="font-size: 1.2em;">Celular</label>
-                <input type="text" name="telefone" class="form-control py-2 responsive-input" placeholder="Digite o Celular (XX) XXXX-XXX" required />
+                <input type="text" name="telefone" formControlName="telefone" class="form-control py-2 responsive-input" placeholder="Digite o Celular (XX) XXXX-XXX" required />
             </div>
 
             <div class="form-group">
                 <label class="small mb-1" style="font-size: 1.2em;">Cidade</label>
-                <input type="text" name="cidade" class="form-control py-2 responsive-input" placeholder="Digite sua cidade" required />
+                <input type="text" name="cidade" formControlName="cidade" class="form-control py-2 responsive-input" placeholder="Digite sua cidade" required />
             </div>
 
             <div class="form-group">
                 <label class="small mb-1" style="font-size: 1.2em;">Estado</label>
-                <input type="text" name="estado" class="form-control py-2 responsive-input" placeholder="Digite seu Estado" required />
+                <input type="text" name="estado" formControlName="estado" class="form-control py-2 responsive-input" placeholder="Digite seu Estado" required />
             </div>
           </div>
         </form>
       </div>
   
       <div class="button-container">
-        <button type="button" class="btn button-cancel" (click)="closeModal()">
+        <button type="button" class="btn button-cancel" (click)="closeModalCadastro()">
           Cancelar
         </button>
-        <button type="button" class="btn button-confirm" (click)="onFormSubmitHandler()">
-            Cadastrar
+        <button type="button" class="btn button-confirm" (click)="cadastrarAlunos()">
+          Cadastrar
         </button>
       </div>
     </app-modal>
+
+    <!-- Modal para atualizar o usuário -->
+         <app-modal [show]="showModalAtualizar" (closeModal)="closeModalAtualizar()" size="max-w-7xl" [footer]="false">
+      <div class="container-modal sm:items-start">
+        <div class="modal-header">
+          <div class="content-header">
+            <div class="close-modal">
+              <button type="button" class="close" aria-label="Close" (click)="closeModalAtualizar()">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <h3 id="modal-title">
+              Atualizar usuário
+            </h3>
+          </div>
+        </div>
+  
+        <form [formGroup]="usuarioForm" class="form-content">
+          <div class="grid grid-cols-12 gap-x-6 space-y-4">
+        
+            <!--Mensagem de sucesso-->
+            <div class="alert alert-success" *ngIf="mensagemSucesso">
+              {{ mensagemSucesso }}
+            </div>
+
+            <!--Mensagem de erros-->
+            <div class="alert alert-danger" *ngFor="let error of modalErrors" >
+              {{ error }}
+            </div>
+
+            <div class="form-group">
+                <label class="small mb-1" style="font-size: 1.2em;">Login</label>
+                <input type="text" name="username" formControlName="username" autocomplete="off" class="form-control py-2 responsive-input" placeholder="Digite seu username" required />
+            </div>
+
+        
+            <div class="form-group">
+                <label class="small mb-1" style="font-size: 1.2em;">Nome</label>
+                <input type="text" name="nome" formControlName="nome" class="form-control py-2 responsive-input" placeholder="Digite o seu nome"  />
+            </div>
+
+            <div class="form-group">
+              <label class="small mb-1" style="font-size: 1.2em;">Senha atual</label>
+              <div class="input-group">
+                <input type="password" name="currentPassword" formControlName="password" autocomplete="off" class="form-control py-2 responsive-input" 
+                />
+                <div class="input-group-append">
+                    <div class="btn btn-outline-secondary" type="button" (click)="togglePasswordVisibility('currentPassword')">
+                    <img *ngIf="!passwordVisible.currentPassword" src="assets/imagens/view.svg" alt="Mostrar senha" width="16" height="16">
+                    <img *ngIf="passwordVisible.currentPassword" src="assets/imagens/view-off.svg" alt="Ocultar senha" width="16" height="16">
+                    </div>
+                </div>
+            </div>
+            </div>
+
+            <div class="form-group">
+                <label class="small mb-1" style="font-size: 1.2em;">E-mail</label>
+                <input type="email" name="email" formControlName="email" class="form-control py-2 responsive-input" placeholder="Digite seu e-mail" required />
+            </div>
+
+            <div class="form-group">
+                <label class="small mb-1" style="font-size: 1.2em;">Celular</label>
+                <input type="text" name="telefone" formControlName="telefone" class="form-control py-2 responsive-input" placeholder="Digite o Celular (XX) XXXX-XXX" required />
+            </div>
+
+            <div class="form-group">
+                <label class="small mb-1" style="font-size: 1.2em;">Cidade</label>
+                <input type="text" name="cidade" formControlName="cidade" class="form-control py-2 responsive-input" placeholder="Digite sua cidade" required />
+            </div>
+
+            <div class="form-group">
+                <label class="small mb-1" style="font-size: 1.2em;">Estado</label>
+                <input type="text" name="estado" formControlName="estado" class="form-control py-2 responsive-input" placeholder="Digite seu Estado" required />
+            </div>
+   
+          </div>
+        </form>
+      </div>
+  
+      <div class="button-container">
+        <button type="button" class="btn button-cancel" (click)="closeModalAtualizar()">
+          Cancelar
+        </button>
+        <button type="button" class="btn button-confirm" (click)="editarUsuario()">
+          Gravar alterações
+        </button>
+      </div>
+    </app-modal>
+
 </div>

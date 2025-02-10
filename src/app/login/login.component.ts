@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { Usuario } from './usuario';
+import { Permissao } from './Permissao';
 
 @Component({
   selector: 'app-login',
@@ -22,6 +23,7 @@ export class LoginComponent {
   forgotEmail: string = '';
   showForgotPassword: boolean = false;
   usuario!: Usuario | null;
+  permissaoUsuario: Permissao = Permissao.USER;
 
   confirmPasswordError: string | null = null;
   confirmPassword: string = '';
@@ -65,17 +67,21 @@ export class LoginComponent {
                 username: response.username, 
                 password: '', 
                 email: response.email || '',
+                planoId: response.planoId || '',
+                stripeCustomerId: response.stripeCustomerId || '',                
                 telefone: response.telefone || '',
                 cidade: response.cidade || '',
                 estado: response.estado || '',
                 nome: response.nome || '',
                 confirmPassword: '', 
+                tipoUsuario: '',
                 permissao: response.authorities.length > 0 ? response.authorities[0] : null 
             };
             localStorage.setItem('usuario', JSON.stringify(usuario));
             
             // Redireciona com base na permissão do usuário
-            if (usuario.permissao === 'ROLE_ADMIN' || usuario.permissao === 'ROLE_USER') {
+            if (usuario.permissao === 'ROLE_ADMIN' || usuario.permissao === 'ROLE_USER' || 
+              usuario.permissao === 'ROLE_PROFESSOR') {
               this.router.navigate(['/usuario/inicio']);
             } else {
               this.router.navigate(['/forbidden']); // Caso não tenha permissão
@@ -156,7 +162,7 @@ export class LoginComponent {
     usuario.cidade = this.cidade;
     usuario.estado = this.estado;
     this.authService
-        .salvar(usuario)
+        .salvar(usuario, this.permissaoUsuario)
         .subscribe( response => {
           this.mensagemSucesso = "Cadastro realizado com sucesso! Efetue o login.";
           this.cadastrando = false;

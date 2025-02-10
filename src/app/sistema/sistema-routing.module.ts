@@ -64,25 +64,25 @@ const routes: Routes = [
         path: 'cadastro-questao', 
         component: CadastroQuestaoComponent, 
         canActivate: [AuthGuard], 
-        data: { role: 'ADMIN' }
+        data: { roles: ['ADMIN', 'PROFESSOR'] }
       },
       { 
         path: 'cadastro-questao/:id', 
         component: CadastroQuestaoComponent, 
         canActivate: [AuthGuard], 
-        data: { role: 'ADMIN' }
+        data: { roles: ['ADMIN', 'PROFESSOR'] }
       },
       { 
         path: 'cadastro-aulas', 
         component: CadastroDeAulasComponent, 
         canActivate: [AuthGuard], 
-        data: { role: 'ADMIN' }
+        data: { roles: ['ADMIN', 'PROFESSOR'] }
       },
       { 
         path: 'buscar-questão', 
         component: ListaQuestoesComponent, 
         canActivate: [AuthGuard], 
-        data: { role: 'ADMIN' }
+        data: { roles: ['ADMIN', 'PROFESSOR'] }
       },
       {
         path: 'permissao-admin', 

@@ -7,6 +7,10 @@ import { JwtHelperService } from '@auth0/angular-jwt'
 import { environment } from 'src/environments/environment';
 import { Usuario } from '../login/usuario';
 import { map } from 'rxjs/internal/operators/map';
+import { Permissao } from '../login/Permissao';
+import { catchError } from 'rxjs/operators';
+import { HttpErrorResponse } from '@angular/common/http';
+import { throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +22,7 @@ export class AuthService {
   clientID: string = environment.clientId;
   clientSecret: string = environment.clientSecret;
   jwtHelper: JwtHelperService = new JwtHelperService();
+  
 
   constructor(
     private http: HttpClient
@@ -35,7 +40,6 @@ export class AuthService {
     return this.http.post(`${this.apiURL}/forgot-password`, { email });
   }
 
-
   obterUsuarioAutenticadoDoBackend(): Observable<Usuario> {
     return this.http.get<Usuario>(`${this.apiURL}/perfil`).pipe(
       map(usuario => {
@@ -46,8 +50,7 @@ export class AuthService {
     );
   }
   
-
-  atualizarUsuario(usuario: Usuario, fotoDoPerfil?: File): Observable<Usuario> {
+  atualizarUsuario(usuario: Usuario, fotoDoPerfil?: File | null): Observable<Usuario> {
     const formData: FormData = new FormData();
     formData.append('usuario', new Blob([JSON.stringify(usuario)], { type: 'application/json' }));
   
@@ -55,7 +58,19 @@ export class AuthService {
       formData.append('fotoDoPerfil', fotoDoPerfil);
     }
   
-    return this.http.put<Usuario>(`${this.apiURL}/update/${usuario.id}`, formData);
+    return this.http.put<Usuario>(`${this.apiURL}/update/${usuario.id}`, formData)
+    .pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 422) {
+          return throwError('Já existe um usuário com este username na nossa base de dados. Tente outro');
+        }
+        return throwError("O servidor não está funcionando corretamente.");
+      })
+    );
+  }
+
+  removerUsuario(id: string): Observable<any> {
+    return this.http.delete<any>(`${this.apiURL}/delete/${id}`);
   }
 
   getUsuarioAutenticado(): Usuario | null {
@@ -101,12 +116,91 @@ obterNomeUsuario(): Observable<string> {
     return false;
   }
 
-  salvar(usuario: Usuario): Observable<any> {
-    return this.http.post<any>(`${this.apiURL}/cadastro`, usuario);
+  salvar(usuario: Usuario, perm: Permissao): Observable<any> {
+    const { permissao: userPermissao } = this.getUsuarioAutenticado() || {};
+  
+    let request: Observable<any>;
+    if (userPermissao === Permissao.ADMIN && perm === Permissao.PROFESSOR.valueOf()) {
+      request = this.cadastrarProfessor(usuario);
+    } else {
+      request = this.cadastrarAluno(usuario);
+    }
+  
+    return request.pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 422) {
+          return throwError('usuário já cadastrado na base de dados');
+        }
+        return throwError(error);
+      })
+    );
   }
 
-  tentarLogar( username: string, password: string ) : Observable<any> {
-    const params = new HttpParams()
+  private cadastrarAluno(usuario: Usuario): Observable<any> { 
+    return this.http.post(`${this.apiURL}/cadastro/USER`, usuario)
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 422) {
+            return throwError('Usuário já cadastrado na base de dados');
+          }
+          return throwError("O servidor não está funcionando corretamente.");
+        })
+      );
+  }
+  
+  private cadastrarProfessor(usuario: Usuario): Observable<any> {
+    return this.http.post(`${this.apiURL}/cadastro/PROFESSOR`, usuario)
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 422) {
+            return throwError('Usuário já cadastrado na base de dados');
+          }
+          return throwError("O servidor não está funcionando corretamente.");
+        })
+      );
+  }
+
+  public visualizarAlunos(): Observable<Usuario[] | null> {
+    return this.http.get<Usuario[]>(`${this.apiURL}/visualizar/PROFESSOR`, { observe: 'response' }).pipe(
+      map((response) => {
+        if (response.status === 204) {
+          return null;
+        }
+        return response.body || null; 
+      }),
+      catchError((error: HttpErrorResponse) => {
+       
+        return throwError(
+          'Erro ao visualizar alunos. Por favor, tente novamente.'
+        );
+      })
+    );
+  }
+  
+
+  public visualizarUsuarios(): Observable<Usuario[] | null> {
+    return this.http.get<Usuario[]>(`${this.apiURL}/visualizar/ADMIN`, { observe: 'response' }).pipe(
+      map((response) => {
+        if(response.status === 204) {
+          return null;
+        }
+        return response.body || null;
+      }),
+      catchError((error: HttpErrorResponse) => {
+        console.error('Erro ao visualizar os usuários: ', error);
+        return throwError(
+          'Erro ao visualizar os usuários. Por favor, tente novamente.'
+        )
+      })
+    )
+  }
+   
+  
+  public visualizarUsuarioPorId(id: string): Observable<Usuario> {
+    return this.http.get<Usuario>(`${this.apiURL}/visualizarUsuario/${id}`)
+  }
+  
+  tentarLogar( username: string, password: string ) : Observable<any> {    const params = new HttpParams()
                         .set('username', username)
                         .set('password', password)
                         .set('grant_type', 'password')

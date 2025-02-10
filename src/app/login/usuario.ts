@@ -8,8 +8,11 @@ export class Usuario {
   email!: string;
   telefone!: string;
   cidade!: string;
+  planoId!: any;
+  stripeCustomerId!: any;
   estado!: string;
   nome!: string;
   confirmPassword!: string;
+  tipoUsuario!: string;
   permissao!: Permissao;  // Atualize para usar a enum Permissao
 }

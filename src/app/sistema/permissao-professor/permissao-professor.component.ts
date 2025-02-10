@@ -1,58 +1,277 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Permissao } from 'src/app/login/Permissao';
+import { Usuario } from 'src/app/login/usuario';
+import { AuthService } from 'src/app/services/auth.service';
+import { ChangeDetectorRef } from '@angular/core';
+
 
 @Component({
   selector: 'app-permissao-professor',
   templateUrl: './permissao-professor.component.html',
-  styleUrls: ['./permissao-professor.component.css']
+  styleUrls: ['./permissao-professor.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PermissaoProfessorComponent implements OnInit {
 
-  alunos = [
-    { nome: 'Aluno 1', email: 'aluno1@example.com', cidade: 'Cidade 1', estado: 'Estado 1' },
-    { nome: 'Aluno 2', email: 'aluno2@example.com', cidade: 'Cidade 2', estado: 'Estado 2' },
-    { nome: 'Aluno 3', email: 'aluno3@example.com', cidade: 'Cidade 3', estado: 'Estado 3' },
-    { nome: 'Aluno 4', email: 'aluno4@example.com', cidade: 'Cidade 4', estado: 'Estado 4' },
-    { nome: 'Aluno 5', email: 'aluno5@example.com', cidade: 'Cidade 5', estado: 'Estado 5' },
-    { nome: 'Aluno 6', email: 'aluno6@example.com', cidade: 'Cidade 6', estado: 'Estado 6' },
-    { nome: 'Aluno 7', email: 'aluno7@example.com', cidade: 'Cidade 7', estado: 'Estado 7' },
-    { nome: 'Aluno 8', email: 'aluno8@example.com', cidade: 'Cidade 8', estado: 'Estado 8' },
-    { nome: 'Aluno 9', email: 'aluno9@example.com', cidade: 'Cidade 9', estado: 'Estado 9' },
-  ];
 
+  alunos: Usuario[] = [];
+  userData: Usuario = new Usuario;
+  permissaoAluno: Permissao = Permissao.USER;
   paginatedAlunos = this.alunos.slice(0, 6);
   pageSizeAlunos = 12;
   pageIndexAlunos = 0;
-  totalPagesAlunos = Math.ceil(this.alunos.length / this.pageSizeAlunos);
+  totalPagesAlunos = Math.ceil(this.alunos.length / this.pageSizeAlunos); 
+  mensagemSucesso: string = ''; 
+  errors: string[] = [];
+  modalErrors: string[] = [];
+  apiMessages: string[] = [];
+  cadastrando: boolean = false;
+  
+  
+  showModalCadastro: boolean = false;
+  showModalAtualizar: boolean = false;
 
-  showModal: boolean = false;
   submited: boolean = false;
 
+  passwordVisible: { [key: string]: boolean } = {
+    password: false,
+    confirmPassword: false,
+    currentPassword: false,
+    newPassword: false
+  };
+
+
   usuarioForm =  this.formBuilder.group({
-      id: new FormControl(0,),
+      id: null,
+      username: new FormControl('', {validators: [Validators.required]}),
+      password: new FormControl('', {validators: [Validators.required]}),
+      confirmPassword: new FormControl('', {validators: [Validators.required]}),
       nome: new FormControl('', {validators: [Validators.required]}),
       email: new FormControl('', {validators: [Validators.required]}),
-      estado: new FormControl('', ),
+      telefone: new FormControl('', {validators: [Validators.required]}),
       cidade: new FormControl('', ),
+      estado: new FormControl('', ),
     });
 
-    constructor(private formBuilder: FormBuilder,) { 
+
+    constructor(private formBuilder: FormBuilder, private authService: AuthService,
+      private cdRef: ChangeDetectorRef
+    ) { 
       this.usuarioForm = this.formBuilder.group({
+        id: [null],
+        username: [''],
+        password: [''],
+        confirmPassword: [''],
         nome: [''],
         email: [''],
+        telefone: [''],
         cidade: [''],
         estado: [''],
-      });
+      })
     }
 
   ngOnInit(): void {
     this.updatePaginatedAlunos();
+    this.carregarAlunos();
+    
+   }
+   
+  cadastrarAlunos() {
+    this.cadastrando = true; 
+    const userData = this.usuarioForm.value;
+    this.modalErrors = [];
+    
+    this.validadaoDeCadastro(userData)
+
+    if(this.modalErrors.length > 0) {
+      return;
+    }
+    
+    let usuario: Usuario = new Usuario();
+    usuario.username = userData.username;
+    usuario.password = userData.password;
+    usuario.confirmPassword = userData.confirmPassword;
+    usuario.nome = userData.nome;
+    usuario.email = userData.email;
+    usuario.telefone = userData.telefone;
+    usuario.cidade = userData.cidade;
+    usuario.estado = userData.estado;
+    
+    this.authService.salvar(usuario, this.permissaoAluno).subscribe((response) => {
+      const novoUsuario = usuario;
+      this.alunos.push(novoUsuario);
+      this.carregarAlunos();
+      this.limparTela();
+      this.mensagemSucesso = response.message;
+      this.modalErrors = [];
+      this.closeModalCadastro();
+      this.cdRef.markForCheck();
+
+    }, (error) => {
+      this.modalErrors.push(error);
+      this.cdRef.markForCheck();
+    })  
+  } 
+
+  consultarUsuario(id: string): void {
+    this.authService.visualizarUsuarioPorId(id).subscribe((data: Usuario) => {
+      
+      this.usuarioForm.patchValue({
+        id: id,
+        username:  data.username,
+        nome: data.nome,
+        email: data.email,
+        password: data.password,
+        confirmPassword: data.confirmPassword,  
+        telefone: data.telefone,
+        cidade:  data.cidade,
+        estado: data.estado    
+      });
+
+      this.cdRef.markForCheck();
+      
+    }, (error) => {
+      this.errors.push(error);
+      this.cdRef.markForCheck();
+      
+    } )
   }
+ 
+
+  carregarAlunos() {
+    this.authService.visualizarAlunos().subscribe((data: Usuario[] | null) => {
+      this.errors = [];
+      
+      if(data) {
+        this.alunos = data
+        this.updatePaginatedAlunos();
+        return;
+       }
+       
+       this.errors.push("Nenhum aluno cadastrado.")
+       this.cdRef.markForCheck();
+       
+    }, (error) => {
+      this.errors.push(error);
+      this.cdRef.markForCheck();
+    })
+  }
+
+  editarUsuario() {  
+    this.cadastrando = false;  
+    this.modalErrors = [];
+    this.errors = [];
+    this.mensagemSucesso = "";
+    this.userData = {... this.usuarioForm.value};
+    this.validadaoDeCadastro(this.userData);
+
+    if(this.modalErrors.length > 0) {
+      return;
+    }
+    
+    this.authService.atualizarUsuario(this.userData).subscribe((response) => {
+      const updateUser = response;
+      const index = this.alunos.findIndex(user => user.id === updateUser.id);
+      
+      if(index != -1) { 
+        this.alunos[index] = updateUser;
+        this.updatePaginatedAlunos();
+      }
+
+      this.mensagemSucesso = "Editado com sucesso";
+
+      this.closeModalAtualizar();
+
+    }, (error) => {
+        this.modalErrors.push(error);
+        this.cdRef.markForCheck();
+    })
+  }
+
+  removerUsuario(id: string): void {
+    if (confirm("Você tem certeza que deseja remover este usuário?")) {
+        this.authService.removerUsuario(id).subscribe((response) => {
+          
+          this.alunos = this.alunos.filter((user) => user.id !== id);
+          this.updatePaginatedAlunos();
+          this.mensagemSucesso = "Excluído com sucesso";
+          this.cdRef.markForCheck();  
+          
+        },
+        (error) => {
+          this.errors.push(error);  
+          this.cdRef.markForCheck();
+        }
+        );
+    }
+  }
+
+  limparTela() {
+    this.usuarioForm.patchValue({
+      id: '',
+      username: '',
+      password: '',
+      confirmPassword: '',
+      nome: '',
+      email: '',
+      telefone: '',
+      cidade: '',
+      estado: '',
+    });
+  }
+
+  validadaoDeCadastro(userData: Usuario) {
+    const passwordValidationErrors: string[] = [];
+    if (userData.password.length < 8) {
+      passwordValidationErrors.push("A senha deve ter pelo menos 8 caracteres.");
+    }
+    if (!/[A-Z]/.test(userData.password)) {
+      passwordValidationErrors.push("A senha deve conter pelo menos uma letra maiúscula.");
+    }
+    if (!/[a-z]/.test(userData.password)) {
+      passwordValidationErrors.push("A senha deve conter pelo menos uma letra minúscula.");
+    }
+    if (!/[0-9]/.test(userData.password)) {
+      passwordValidationErrors.push("A senha deve conter pelo menos um número.");
+    }
+    if (!/[!@#$%^&*]/.test(userData.password)) {
+      passwordValidationErrors.push("A senha deve conter pelo menos um caractere especial (por exemplo, !@#$%^&*).");
+    }
+  
+    if (!userData.username) {
+      passwordValidationErrors.push("O campo de login é obrigatório.");
+    }
+  
+    if (!userData.email) {
+      passwordValidationErrors.push("O campo de email é obrigatório.");
+
+    }
+  
+    if (!userData.nome) {
+      passwordValidationErrors.push("O campo de nome é obrigatório.");
+    }
+    
+    if (passwordValidationErrors.length > 0) {
+      this.modalErrors = passwordValidationErrors;
+      return; 
+    }
+  
+    if (userData.password !== userData.confirmPassword && this.cadastrando) {
+        this.modalErrors.push("As senhas não coincidem.");
+        return; 
+    }
+
+  }
+
 
   updatePaginatedAlunos(): void {
     const startIndex = this.pageIndexAlunos * this.pageSizeAlunos;
     const endIndex = startIndex + this.pageSizeAlunos;
     this.paginatedAlunos = this.alunos.slice(startIndex, endIndex);
+    this.totalPagesAlunos = Math.ceil(this.alunos.length / this.pageSizeAlunos);
+    this.cdRef.markForCheck();
+
   }
 
   nextPageAlunos(): void {
@@ -74,17 +293,29 @@ export class PermissaoProfessorComponent implements OnInit {
     this.updatePaginatedAlunos();
   }
 
-  openModal() {
-    this.showModal = true;
-    console.log("Valor de showModal:", this.showModal);
+  openModalCadastro() {
+    this.showModalCadastro = true;
   }
 
-  closeModal() {
-    console.log("Fechando modal...");
-    this.showModal = false;
+  closeModalCadastro() {
+    this.limparTela();
+    this.showModalCadastro = false;
   }
 
-  onFormSubmitHandler(): void {
+  openModalAtualizar(id: string) {
+    this.consultarUsuario(id);
+    this.showModalAtualizar = true;
   }
 
+  closeModalAtualizar() {
+    this.showModalAtualizar = false;
+  }
+
+  togglePasswordVisibility(field: string) {
+    this.passwordVisible[field] = !this.passwordVisible[field];
+    const passwordInput = document.querySelector(`input[name="${field}"]`);
+    if (passwordInput) {
+      passwordInput.setAttribute('type', this.passwordVisible[field] ? 'text' : 'password');
+    }
+  }
 }
