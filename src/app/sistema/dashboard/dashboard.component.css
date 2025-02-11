@@ -15,15 +15,18 @@
   font-family: "Nunito Sans", sans-serif;
   font-weight: bold;
 }
+
 .span {
   font-size: 16px;
   color: #0f1934;
 }
+
 .text-p {
   font-size: 20px;
   margin-top: 10px;
   font-family: "Nunito Sans", sans-serif;
 }
+
 .card {
   margin-top: 10px;
   background: #0f1934;
@@ -49,7 +52,9 @@
   font-weight: 700;
   font-family: "Nunito Sans", sans-serif;
 }
-.icon {
+
+.icon 
+{
   margin-bottom: 5px;
   margin-top: 10px;
 }
@@ -58,11 +63,13 @@
   height: 55px;
   margin-top: 5px;
 }
+
 .btn {
   margin-top: 10px;
   background-color: transparent;
   border-color: transparent;
 }
+
 .btn:hover {
   color: #6be26b;
 }
@@ -71,6 +78,7 @@
   color: #080808;
   font-weight: 500;
 }
+
 .btn-pesquisa:hover {
   color: #256cd0;
 }
@@ -92,4 +100,23 @@
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
   padding: 10px;
   backdrop-filter: blur(10px);
+}
+
+/* Responsividade */
+@media (max-width: 920px) {
+
+  .card, .card-pesquisa {
+    margin-top: 0;
+    width: 100% !important;
+  }
+
+  .col-md-3 {
+    width: 50% !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .col-md-3 {
+    width: 100% !important;
+  }
 }
