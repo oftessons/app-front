@@ -15,6 +15,10 @@ import { FiltroService } from 'src/app/services/filtro.service';
 import { Usuario } from 'src/app/login/usuario';
 import { Permissao } from 'src/app/login/Permissao';
 
+import { Aula } from 'src/app/sistema/painel-de-aulas/aula';
+import { AulasService } from 'src/app/services/aulas.service';
+import { Categoria } from '../painel-de-aulas/enums/categoria';
+
 @Component({
   selector: 'app-lista-questoes',
   templateUrl: './lista-questoes.component.html',
@@ -57,11 +61,16 @@ export class ListaQuestoesComponent implements OnInit {
   modalTitle: string = '';
   modalType: string = '';
 
+  aulaDTO = new Aula();
+  categoria: string[] = Object.values(Categoria);
+  categoriaSelecionada: Categoria | null = null; 
+
   constructor(
     private questoesService: QuestoesService,
     private filtroService: FiltroService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private aulasService: AulasService
   ) {}
 
   ngOnInit(): void {
