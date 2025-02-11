@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Aula } from 'src/app/sistema/painel-de-aulas/aula';
 
 @Component({
   selector: 'app-playlist-mode',
@@ -6,16 +7,20 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./playlist-mode.component.css'],
 })
 export class PlaylistModeComponent implements OnInit {
+  @Input() aulas: Aula[] = [];
+  @Input() titulo: string = '';
+  @Input() categoria: string = '';
+  @Input() videoAtualIndex: number = 0;
+  @Output() aulaSelecionada = new EventEmitter<{ aula: Aula, index: number }>();
+  @Input() videosAssistidos: boolean[] = [];
+
+  playlistAberta: boolean = true;
+
   constructor() {}
 
   ngOnInit(): void {}
 
   isModalOpen = false;
-  lessons = [
-    { title: 'Introdução', completed: false },
-    { title: 'Subtema de retina', completed: false },
-    { title: 'Subtema de retina', completed: false },
-  ];
 
   openModal() {
     this.isModalOpen = true;
@@ -27,7 +32,19 @@ export class PlaylistModeComponent implements OnInit {
     }
   }
 
-  toggleLesson(lesson: any) {
-    lesson.completed = !lesson.completed;
+  selecionarAula(aula: Aula, index: number): void {
+    this.aulaSelecionada.emit({ aula, index });
+  }
+
+  togglePlaylist(): void {
+    this.playlistAberta = !this.playlistAberta;
+  }
+
+  truncateTitle(title: string, maxLength: number): string {
+    if (title.length > maxLength) {
+      return title.substring(0, maxLength) + '...';
+    } else {
+      return title;
+    }
   }
 }

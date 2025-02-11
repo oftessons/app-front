@@ -1,1 +1,64 @@
-<p>modulo-optica-refratometria-visao-subnormal works!</p>
+<div class="container pt-5">
+    <div class="container mt-4">
+        <div class="header">
+            <h1 class="mt-4"><span> | </span>Modulo de {{ categoria }} </h1>
+        </div>
+
+        <div class="grid-container">
+            <div class="principal-info">
+              <div class="video-container" *ngIf="aulas.length > 0; else noDataTemplate">
+                <video
+                  #videoPlayer
+                  controls
+                  controlsList="nodownload"
+                  class="video-player"
+                  [src]="videoAtual?.urlVideo"
+                  *ngIf="videoAtual"
+                  (ended)="marcarComoAssistido(videoAtualIndex)"
+                  (ended)="onVideoEnded()">
+                  Seu navegador não suporta o elemento de vídeo.
+                </video>
+              </div>
+              <ng-template #noDataTemplate>
+                <div class="no-data">
+                  <img src="assets/imagens/not-data-aulas.png" alt="No Data">
+                  <p>Não há nenhuma aula cadastrada</p>
+                </div>
+              </ng-template>
+              <div class="info-aula">
+                <div *ngIf="aulas.length > 0">
+                  <h3>{{ videoAtual?.titulo }}</h3>
+                  <p>{{ videoAtual?.descricao }}</p>
+                </div>
+                <div class="arquivos-aula">
+                  <h4>Material da Aula</h4>
+                  <hr>
+                  <div *ngIf="videoAtual?.urlArquivo; else noMaterialTemplate">
+                    <div class="list-group">
+                      <div class="list-group-item">
+                        <span>{{ formatFileName(videoAtual?.keyArquivo ?? '') }}</span>
+                        <div>
+                          <button class="btn-vizualizar" (click)="viewPdf(videoAtual?.urlArquivo ?? '')"><i class="fas fa-eye"></i>Visualizar</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <ng-template #noMaterialTemplate>
+                    <span>Nenhum material adicionado</span>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+            <div class="playlist-container">
+              <app-playlist-mode
+                [aulas]="aulas"
+                [titulo]="categoria"
+                [categoria]="categoria"
+                [videoAtualIndex]="videoAtualIndex"
+                [videosAssistidos]="videosAssistidos"
+                (aulaSelecionada)="reproduzirVideo($event.aula, $event.index)">
+              </app-playlist-mode>
+            </div>
+        </div>
+    </div>
+  </div>

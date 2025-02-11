@@ -78,6 +78,24 @@
             [(ngModel)]="aulaDTO.descricao" required></textarea>
           </div>
 
+          <!-- Input para upload de PDF -->
+          <div class="form-group">
+            <label for="arquivo">Upload de PDF:</label>
+            <input type="file" id="arquivo" name="arquivo" class="form-control" accept="application/pdf" (change)="onPdfSelected($event)">
+            <small class="form-text text-muted">Você pode enviar um arquivo PDF.</small>
+          </div>
+
+          <!-- Exibir PDF enviado -->
+          <div class="form-group" *ngIf="arquivo">
+            <label>Arquivo PDF para envio:</label>
+            <ul class="list-group">
+              <li class="list-group-item">
+                {{ arquivo.name }}
+                <button type="button" class="btn btn-danger btn-sm float-right" (click)="removePdf()">Remover</button>
+              </li>
+            </ul>
+          </div>
+
           <div class="container mt-4 container-btn">
             <button type="button" class="btn btn-secundary" routerLink="/usuario/dashboard" *ngIf="!aulaDTO.id">Voltar</button>
             <button type="submit" class="btn btn-primary" *ngIf="!aulaDTO.id">Salvar</button>

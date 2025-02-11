@@ -1,26 +1,22 @@
-<div class="playlist">
-    <div class="playlist-title">
-        <h2>TÍTULO RETINA E SUAS...</h2>
-        <span>Retina 1/10</span>
+<div class="playlist" [ngClass]="{'open': playlistAberta, 'closed': !playlistAberta}">
+    <div class="playlist-title" (click)="togglePlaylist()">
+        <div class="title-container">
+            <h2>{{ playlistAberta ? titulo : truncateTitle(titulo, 20) }}</h2>
+            <span>aulas {{ videoAtualIndex + 1 }}/{{ aulas.length }}</span>
+        </div>
+        <button class="toggle-button">
+            <img src="assets/Icons/arrow-updown.svg" [ngClass]="{'arrow-up': playlistAberta, 'arrow-down': !playlistAberta}">
+        </button>
     </div>
 
-        <div class="modal-content">
-            <div class="modal-body">
-                <div class="lesson">
-                    <img src="" alt="">
-                    <span class="lesson-title">Introdução</span>
-                    <span class="check-icon">✔</span>
-                </div>
-                <div class="lesson">
-                    <img src="" alt="">
-                    <span class="lesson-title">Subtema de retina</span>
-                    <span class="check-icon">✔</span>
-                </div>
-                <div class="lesson">
-                    <img src="" alt="">
-                    <span class="lesson-title">Subtema de retina</span>
-                    <span class="check-icon">✔</span>
-                </div>
+    <div class="modal-content">
+        <div class="modal-body">
+            <div class="lesson" *ngFor="let aula of aulas; let i = index" (click)="selecionarAula(aula, i)" [ngClass]="{'current-video': i === videoAtualIndex}">
+                <video class="video-preview" [src]="aula.urlVideo" muted></video>
+                <span class="lesson-title">{{ aula.titulo }}</span>
+                <img src="assets/Icons/confirmar-vazio.svg" class="check-icon" *ngIf="!videosAssistidos[i]">
+                <img src="assets/Icons/confirmar-verde.svg" class="check-icon" *ngIf="videosAssistidos[i]">
             </div>
         </div>
     </div>
+</div>

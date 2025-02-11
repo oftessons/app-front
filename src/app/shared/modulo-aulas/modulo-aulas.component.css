@@ -53,3 +53,9 @@
 .card-button:hover {
   background-color: #004080;
 }
+
+@media (max-width: 768px) {
+  .card {
+    width: 100%;
+  }
+}

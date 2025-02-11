@@ -5,39 +5,57 @@
   background: #ffffff;
   justify-content: center;
   align-items: center;
-  border: 1px solid #696D79;
+  border: 1px solid #d4d4d4;
   border-radius: 8px;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+}
+
+.playlist.closed {
+  max-height: 80px;
+}
+
+.playlist.open {
+  max-height: 620px;
+  overflow-y: auto;
 }
 
 .playlist-title {
   padding: 15px;
+  display: flex;
+  justify-content: space-between;
 }
 
 .playlist-title h2 {
   font-size: 24px;
   font-weight: 400;
   margin: 0;
-  color: #041E4E;
+  color: #041e4e;
 }
 
 .playlist-title span {
   font-weight: 12px;
 }
 
-.modal-content {
-  background-color: #fff;
-  width: 90%;
-  max-width: 400px;
-  border-radius: 10px;
+.title-container {
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
 }
 
-.modal-header {
-  padding: 15px;
-  background-color: #007bff;
-  color: #fff;
-  font-size: 18px;
-  font-weight: bold;
+.playlist.closed .title-container h2 {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+}
+
+.modal-content {
+  background-color: #fff;
+  width: 100%;
+  max-width: 400px;
+  border-radius: 10px;
+  overflow: hidden;
 }
 
 .modal-body {
@@ -48,20 +66,17 @@
   display: flex;
   align-items: center;
   padding: 10px;
-  border-bottom: 1px solid #ddd;
   cursor: pointer;
 }
 
-.lesson:last-child {
-  border-bottom: none;
+.lesson:hover {
+  background: #0000000e;
+  border-radius: 4px;
 }
 
-.lesson img {
-  width: 40px;
-  height: 40px;
-  background-color: #ccc;
-  border-radius: 5px;
-  margin-right: 10px;
+.current-video {
+  background-color: #0000000e;
+  border-radius: 4px;
 }
 
 .lesson-title {
@@ -74,8 +89,7 @@
 }
 
 .lesson .check-icon {
-  color: green;
-  display: none;
+  width: 20px;
 }
 
 .lesson.completed .check-icon {
@@ -88,11 +102,37 @@
   border-top: 1px solid #ddd;
 }
 
-.close-modal-btn {
-  padding: 5px 15px;
-  background-color: #dc3545;
-  color: #fff;
+.video-preview {
+  width: 90px;
+  height: 60px;
+  margin-right: 10px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid #e8e8e8;
+}
+
+.toggle-button {
+  background: none;
   border: none;
-  border-radius: 5px;
   cursor: pointer;
+  font-size: 1em;
+  padding: 0;
+}
+
+.toggle-button img {
+  transition: transform 0.3s ease-in-out;
+}
+
+.toggle-button .arrow-up {
+  transform: rotate(180deg);
+}
+
+.toggle-button .arrow-down {
+  transform: rotate(0deg);
+}
+
+@media screen and (max-width: 920px) { 
+  .playlist.open {
+    max-height: 550px;
+  }
 }
