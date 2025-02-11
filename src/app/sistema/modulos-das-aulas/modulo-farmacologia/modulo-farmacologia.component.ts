@@ -55,4 +55,13 @@ aulas: Aula[] = [];
       this.reproduzirVideo(this.aulas[nextIndex], nextIndex);
     }
   }
+
+  formatFileName(fileName: string): string {
+    // Remove numeração e underscores do nome do arquivo
+    return fileName.replace(/^\d+_/, '').replace(/_/g, ' ');
+  }
+
+  viewPdf(url: string): void {
+    window.open(url, '_blank');
+  }
 }
