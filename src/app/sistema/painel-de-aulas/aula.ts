@@ -13,6 +13,7 @@ export class Aula {
   arquivo!: File;
   urlArquivo!: string;
   keyArquivo!: string;
+  documentos?: { id: number; url: string; key: string }[];
 
   toJson(): string {
     return JSON.stringify({
@@ -28,6 +29,7 @@ export class Aula {
       arquivo: this.arquivo,
       urlArquivo: this.urlArquivo,
       keyArquivo: this.keyArquivo,
+      documentos: this.documentos,
     });
   }
 }
