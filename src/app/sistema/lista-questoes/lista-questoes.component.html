@@ -106,10 +106,12 @@
     <form #consultaAulaForm="ngForm" (submit)="buscarAulas()" class="consulta-form">
       <div class="row align-items-center">
         <div class="col-md-4">
-          <mat-form-field appearance="fill" class="full-width">
-            <mat-label>ID da Aula</mat-label>
-            <input matInput name="aulaId" [(ngModel)]="aulaId" placeholder="Digite o ID da aula" />
-          </mat-form-field>
+          <app-select-padrao
+                label="Módulo"
+                [options]="categoria"
+                [(selectedValue)]="aulaDTO.categoria"
+                [customStyles]="{'background': '#E9E9E9'}">
+          </app-select-padrao>
         </div>
         <div class="col-md-4 text-center btn-container">
           <button type="submit" class="btn btn-primary">

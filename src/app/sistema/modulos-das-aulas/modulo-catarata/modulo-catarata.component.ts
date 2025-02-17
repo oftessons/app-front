@@ -57,7 +57,6 @@ export class ModuloCatarataComponent implements OnInit {
   }
 
   formatFileName(fileName: string): string {
-    // Remove numeração e underscores do nome do arquivo
     return fileName.replace(/^\d+_/, '').replace(/_/g, ' ');
   }
 

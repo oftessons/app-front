@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment.prod';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
 import { Aula } from '../sistema/painel-de-aulas/aula';
 
@@ -14,40 +14,32 @@ export class AulasService {
   constructor(private http: HttpClient) {}
 
   salvar(formData: FormData): Observable<any> {
-    const headers = new HttpHeaders();
-
-    return this.http
-      .post<any>(`${this.apiURL}/cadastro`, formData, {
-        headers,
-        responseType: 'text' as 'json',
+    return this.http.post(`${this.apiURL}/cadastro`, formData, {
+      responseType: 'text'
+    }).pipe(
+      map((response) => ({ message: response })),
+      catchError((error) => {
+        let errorMessage = 'Erro ao salvar a aula.';
+  
+        if (error.error instanceof ErrorEvent) {
+          errorMessage = `Erro: ${error.error.message}`;
+        } else if (error.status) {
+          errorMessage = `Erro no servidor: ${error.status} - ${error.message}`;
+        }
+        console.error(errorMessage);
+        return throwError(() => new Error(errorMessage));
       })
-      .pipe(
-        map((response) => {
-          try {
-            const jsonResponse = JSON.parse(response);
-            return jsonResponse || { message: 'Aula salva com sucesso!' };
-          } catch (e) {
-            return { message: 'Aula salva com sucesso!' };
-          }
-        }),
-        catchError((error) => {
-          let errorMessage = '';
-
-          if (error.error instanceof ErrorEvent) {
-            errorMessage = `Erro: ${error.error.message}`;
-          } else {
-            errorMessage = `Erro no servidor: ${error.status}, ${error.message}`;
-          }
-          console.error(errorMessage);
-          return throwError(errorMessage);
-        })
-      );
+    );
   }
+  
 
   listarAulasPorCategoria(categoria: string): Observable<Aula[]> {
     const url = `${this.apiURL}/${categoria}`;
     console.log('URL da solicitação:', url);
     return this.http.get<Aula[]>(`${this.apiURL}/categoria/${categoria}`).pipe(
+      tap((response) => {
+        console.log('Resposta das aulas por categoria:', response);
+      }),
       catchError((error) => {
         let errorMessage = '';
 
