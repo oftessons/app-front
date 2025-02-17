@@ -214,15 +214,22 @@ export class LoginComponent {
   sendForgotPasswordEmail() {
     this.authService.forgotPassword(this.forgotEmail).subscribe(
       (response: any) => {
-        this.mensagemSucesso = 'E-mail de recuperação de senha enviado com sucesso!';
+        this.mensagemSucesso = response.message;
         this.showForgotPassword = false; 
         this.forgotEmail = '';
       },
-      error => {
-        this.errors = ['Erro ao enviar e-mail de recuperação de senha.'];
+      (error) => {
+        console.log(error);
+        if (error.status === 400) {
+          this.errors = ['E-mail não encontrado ou inválido.'];
+        } else if (error.status === 500) {
+          this.errors = ['Erro ao enviar e-mail de recuperação de senha.'];
+        } else {
+          this.errors = ['Erro desconhecido ao enviar e-mail de recuperação de senha.'];
+        }
       }
     );
-  }
+  }  
 
   cancelForgotPassword() {
     this.showForgotPassword = false;
