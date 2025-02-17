@@ -25,6 +25,7 @@ import Quill from 'quill';
 })
 
 export class CadastroQuestaoComponent implements OnInit,  AfterViewInit {
+  loading: boolean = false;
   usuario: Usuario | null = null;
   Permissao = Permissao;
   formData = new FormData();
@@ -378,6 +379,7 @@ editorConfig4 = {
   }
 
 onSubmit(): void {
+  this.loading = true; 
     const quillEditor4 = document.querySelector('#editor4 .ql-editor');
     if (quillEditor4) {
       this.questaoDTO.comentarioDaQuestaoQuatro = quillEditor4.innerHTML;
@@ -470,11 +472,13 @@ onSubmit(): void {
         response => {
           this.successMessage = 'Questão salva com sucesso!';
           this.errorMessage = null;
+          this.loading = false; // Desativa carregamento
         //  console.debug('Questão salva com sucesso:', response);
         },
         error => {
           this.errorMessage = error;
           this.successMessage = null;
+          this.loading = false; // Desativa carregamento
           console.error('Erro ao salvar a questão:', error);
         }
       );
@@ -496,11 +500,13 @@ onSubmit(): void {
         response => {
           this.successMessage = 'Questão atualizada com sucesso!';
           this.errorMessage = null;
+          this.loading = false; // Desativa carregamento
           console.debug('Questão atualizada com sucesso:', response);
         },
         error => {
           this.errorMessage = error;
           this.successMessage = null;
+          this.loading = false; // Desativa carregamento
           console.error('Erro ao atualizar a questão:', error);
         }
       );
