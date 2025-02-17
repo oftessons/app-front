@@ -33,12 +33,12 @@
               <div class="arquivos-aula">
                 <h4>Material da Aula</h4>
                 <hr>
-                <div *ngIf="videoAtual?.urlArquivo; else noMaterialTemplate">
+                <div *ngIf="videoAtual && videoAtual.documentos && videoAtual.documentos.length > 0; else noMaterialTemplate">
                   <div class="list-group">
-                    <div class="list-group-item">
-                      <span>{{ formatFileName(videoAtual?.keyArquivo ?? '') }}</span>
+                    <div class="list-group-item" *ngFor="let documento of videoAtual?.documentos">
+                      <span>{{ formatFileName(documento.key) }}</span>
                       <div>
-                        <button class="btn-vizualizar" (click)="viewPdf(videoAtual?.urlArquivo ?? '')"><i class="fas fa-eye"></i>Visualizar</button>
+                        <button class="btn-vizualizar" (click)="viewPdf(documento.url)"><i class="fas fa-eye"></i>Visualizar</button>
                       </div>
                     </div>
                   </div>
