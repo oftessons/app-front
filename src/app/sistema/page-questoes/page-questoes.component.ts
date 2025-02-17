@@ -52,6 +52,9 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
   jaRespondeu: boolean = false;
 
+  fotoPreviews: { [key: string]: string } = {};
+
+
   respostaVerificada: boolean = false;
   respostaFoiSubmetida: boolean = false;
   respostaCorreta: string | null = null;
@@ -172,6 +175,11 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   ngAfterViewChecked(): void {
     this.resizeImages();
   }
+
+  isPreviewVideo(url: string | boolean): boolean {
+    return typeof url === 'string' && url.endsWith('.mp4');
+  }
+  
 
   resizeImages(): void {
     const imgElements = document.querySelectorAll('.img-comentario img');

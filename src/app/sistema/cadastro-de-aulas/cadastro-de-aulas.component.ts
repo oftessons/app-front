@@ -31,6 +31,8 @@ export class CadastroDeAulasComponent implements OnInit {
   categoria: string[] = Object.values(Categoria);
   arquivo: File | null = null;
 
+  loading: boolean = false;
+
   constructor(
     private authService: AuthService,
     private router: Router,
@@ -104,31 +106,30 @@ export class CadastroDeAulasComponent implements OnInit {
   }
 
   onSubmit(): void {
-    console.log('Form submitted');
+    this.loading = true; // Ativa o loading ao clicar no botão
     this.formData = new FormData();
     const objetoJson = JSON.stringify(this.aulaDTO);
-    
+  
     if (this.video) {
-      console.log('Vídeo selecionado:', this.video);
       this.formData.append('video', this.video);
     }
     this.formData.append('aulaDTO', objetoJson);
-
+  
     if (this.arquivo) {
-        this.formData.append('arquivo', this.arquivo);
+      this.formData.append('arquivo', this.arquivo);
     }
-
+  
     if (!this.aulaDTO.id) {
       this.aulasService.salvar(this.formData).subscribe(
         response => {
           this.successMessage = 'Aula salva com sucesso!';
           this.errorMessage = null;
-          console.debug('Aula salva com sucesso:', response);
+          this.loading = false; // Desativa o loading após resposta do backend
         },
         error => {
           this.errorMessage = 'Erro ao salvar a aula.';
           this.successMessage = null;
-          console.error('Erro ao salvar a aula:', error);
+          this.loading = false; // Desativa o loading em caso de erro
         }
       );
     }

@@ -200,6 +200,13 @@
                   </div>
                 </div>
               </div>
+
+
+              <div *ngIf="isPreviewVideo(fotoPreviews['videoDaQuestao'])" class="video-preview-container">
+                <h4>Vídeo da Questão:</h4>
+                <video [src]="fotoPreviews['videoDaQuestao']" controls></video>
+              </div>
+
         
               <div *ngIf="message" class="alert alert-info mt-3 alert-custom" role="alert">
                 {{ message }}

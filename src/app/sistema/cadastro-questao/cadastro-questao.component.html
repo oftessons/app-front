@@ -617,6 +617,7 @@
       </div>
     </div>
 
+    <!--
     <div>
       <hr class="line">
       <span class="div-section">
@@ -641,8 +642,18 @@
         </div>
       </div>
     </div>
+  -->
+
+   
+
+
+
+
     <div class="row">
       <div class="col-md-12">
+        <div *ngIf="loading" class="alert alert-info" role="alert">
+          Carregando...
+        </div>
         <div *ngIf="successMessage" class="alert alert-success" role="alert">
           {{ successMessage }}
         </div>
@@ -651,13 +662,22 @@
         </div>
       </div>
     </div>
-  
+    
     <div class="container mt-4 container-btn">
       <button type="button" class="btn btn-secundary" routerLink="/usuario/dashboard"
-        *ngIf="!questaoDTO.id">Voltar</button>
-      <button type="submit" class="btn btn-primary" *ngIf="!questaoDTO.id">Salvar</button>
-      <button type="submit" class="btn btn-primary" *ngIf="questaoDTO.id">Atualizar</button>
+        *ngIf="!questaoDTO.id" [disabled]="loading">Voltar</button>
+    
+      <button type="submit" class="btn btn-primary" *ngIf="!questaoDTO.id" [disabled]="loading">
+        <span *ngIf="loading" class="spinner-border spinner-border-sm"></span>
+        Salvar
+      </button>
+    
+      <button type="submit" class="btn btn-primary" *ngIf="questaoDTO.id" [disabled]="loading">
+        <span *ngIf="loading" class="spinner-border spinner-border-sm"></span>
+        Atualizar
+      </button>
     </div>
+    
   </form>
 </div>
 </div>
