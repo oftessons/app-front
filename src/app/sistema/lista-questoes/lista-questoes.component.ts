@@ -18,6 +18,7 @@ import { Permissao } from 'src/app/login/Permissao';
 import { Aula } from 'src/app/sistema/painel-de-aulas/aula';
 import { AulasService } from 'src/app/services/aulas.service';
 import { Categoria } from '../painel-de-aulas/enums/categoria';
+import { CategoriaDescricoes } from '../painel-de-aulas/enums/categoria-descricao';
 
 @Component({
   selector: 'app-lista-questoes',
@@ -188,32 +189,24 @@ export class ListaQuestoesComponent implements OnInit {
   }
 
   buscarAulas(): void {
-    this.authService.obterUsuarioAutenticadoDoBackend().subscribe(
-      (usuario) => {
-        const idUser = parseInt(usuario.id); // Pegando o ID do usuário
-        if (this.aulaId) {
-          this.questoesService.buscarAulaPorId(idUser, this.aulaId).subscribe(
-            (aula: any | null) => {
-              if (!aula) {
-                this.mensagemAula = 'Nenhuma aula encontrada com o ID informado.';
-                this.aulas = [];
-              } else {
-                this.aulas = [aula];
-                this.mensagemAula = '';
-              }
-            },
-            (error) => {
-              this.mensagemAula = 'Erro ao buscar aula. Por favor, tente novamente.';
-            }
-          );
-        } else {
-          this.mensagemAula = 'Por favor, insira o ID da aula.';
+    if (this.categoriaSelecionada) {
+      const categoriaDescricao = CategoriaDescricoes[this.categoriaSelecionada];
+      console.log('Categoria selecionada:', categoriaDescricao);
+      this.aulasService.listarAulasPorCategoria(categoriaDescricao).subscribe(
+        (response: Aula[]) => {
+          this.aulas = response;
+          this.mensagemSucessoAula = 'Aulas encontradas com sucesso!';
+          this.mensagemAula = '';
+        },
+        (error) => {
+          this.mensagemAula = 'Erro ao buscar aulas. Por favor, tente novamente.';
+          this.mensagemSucessoAula = '';
+          console.error('Erro ao buscar aulas:', error);
         }
-      },
-      (error) => {
-        console.error('Erro ao obter usuário autenticado:', error);
-      }
-    );
+      );
+    } else {
+      this.mensagemAula = 'Por favor, selecione uma categoria.';
+    }
   }
   
   limparFiltrosAula(): void {

@@ -109,7 +109,7 @@
           <app-select-padrao
                 label="Módulo"
                 [options]="categoria"
-                [(selectedValue)]="aulaDTO.categoria"
+                [(selectedValue)]="categoriaSelecionada"
                 [customStyles]="{'background': '#E9E9E9'}">
           </app-select-padrao>
         </div>
@@ -146,8 +146,8 @@
         <tbody>
           <tr *ngFor="let aula of aulas | paginate: { itemsPerPage: pageSizeAula, currentPage: pageAula }">
             <td>{{ aula.id }}</td>
-            <td>{{ aula.dataCadastro }}</td>
-            <td>{{ aula.nome }}</td>
+            <td>{{ aula.diaDoCadastro }}</td>
+            <td>{{ aula.titulo }}</td>
             <td>
               <button class="btn btn-primary btn-custom-editar" routerLink="/usuario/cadastro-aula/{{ aula.id }}">
                 Editar <img src="assets/imagens/pencil.svg" alt="Ícone de Editar" class="icon" />
