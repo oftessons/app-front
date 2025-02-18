@@ -149,7 +149,7 @@
             <td>{{ aula.diaDoCadastro }}</td>
             <td>{{ aula.titulo }}</td>
             <td>
-              <button class="btn btn-primary btn-custom-editar" routerLink="/usuario/cadastro-aula/{{ aula.id }}">
+              <button class="btn btn-primary btn-custom-editar" (click)="editarAula(aula.id)">
                 Editar <img src="assets/imagens/pencil.svg" alt="Ícone de Editar" class="icon" />
               </button>
               <button class="btn btn-danger btn-custom-deletar" (click)="preparaDelecaoAula(aula)" data-toggle="modal" data-target="#modalDelecaoAula">

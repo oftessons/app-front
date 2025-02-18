@@ -79,6 +79,12 @@ const routes: Routes = [
         data: { roles: ['ADMIN', 'PROFESSOR'] }
       },
       { 
+        path: 'cadastro-aulas/:id', 
+        component: CadastroDeAulasComponent, 
+        canActivate: [AuthGuard], 
+        data: { roles: ['ADMIN', 'PROFESSOR'] }
+      },
+      { 
         path: 'buscar-questão', 
         component: ListaQuestoesComponent, 
         canActivate: [AuthGuard], 
