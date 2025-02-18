@@ -169,6 +169,8 @@ export class CadastroDeAulasComponent implements OnInit {
       this.aulasService.buscarAulaPorId(idUser, id).subscribe(
         (response: Aula) => {
           this.aula = response;
+          this.aulaDTO = new Aula();
+          Object.assign(this.aulaDTO, response);
         },
         (error) => {
           console.error('Erro ao carregar aula:', error);
