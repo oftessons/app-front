@@ -22,6 +22,7 @@ export class CadastroDeAulasComponent implements OnInit {
   aulaDTO = new Aula();
   successMessage: string | null = null;
   errorMessage: string | null = null;
+  isLoading: boolean = false;
 
   video: File | null = null;
   selectedImage: string = '';
@@ -104,12 +105,15 @@ export class CadastroDeAulasComponent implements OnInit {
   }
 
   onSubmit(): void {
-    console.log('Form submitted');
+    console.log('Formulário enviado');
+    this.isLoading = true; 
+    this.successMessage = null;
+    this.errorMessage = null;
+
     this.formData = new FormData();
     const objetoJson = JSON.stringify(this.aulaDTO);
 
     if (this.video) {
-      console.log('Vídeo selecionado:', this.video);
       this.formData.append('video', this.video);
     }
     this.formData.append('aulaDTO', objetoJson);
@@ -123,11 +127,13 @@ export class CadastroDeAulasComponent implements OnInit {
     if (!this.aulaDTO.id) {
       this.aulasService.salvar(this.formData).subscribe(
         (response) => {
+          this.isLoading = false; // Finaliza o carregamento
           this.successMessage = 'Aula salva com sucesso!';
           this.errorMessage = null;
           console.debug('Aula salva com sucesso:', response);
         },
         (error) => {
+          this.isLoading = false; // Finaliza o carregamento
           this.errorMessage = 'Erro ao salvar a aula.';
           this.successMessage = null;
           console.error('Erro ao salvar a aula:', error);

@@ -96,23 +96,32 @@
             </ul>
           </div>
 
-          <div class="container mt-4 container-btn">
-            <button type="button" class="btn btn-secundary" routerLink="/usuario/dashboard" *ngIf="!aulaDTO.id">Voltar</button>
-            <button type="submit" class="btn btn-primary" *ngIf="!aulaDTO.id">Salvar</button>
-            <button type="submit" class="btn btn-primary" *ngIf="aulaDTO.id">Atualizar</button>
-          </div>
+            <div *ngIf="isLoading" class="loading-overlay">
+              <div class="loading-spinner"></div>
+              <p>Salvando aula, aguarde...</p>
+            </div>
+
+          
+            <div *ngIf="successMessage" class="alert alert-success">
+              {{ successMessage }}
+            </div>
+            <div *ngIf="errorMessage" class="alert alert-danger">
+              {{ errorMessage }}
+            </div>
+
+          
+            <div class="container mt-4 container-btn">
+              <button type="button" class="btn btn-secondary" routerLink="/usuario/dashboard" *ngIf="!aulaDTO.id">
+                Voltar
+              </button>
+              <button type="submit" class="btn btn-primary" *ngIf="!aulaDTO.id" [disabled]="isLoading">
+                Salvar
+              </button>
+              <button type="submit" class="btn btn-primary" *ngIf="aulaDTO.id" [disabled]="isLoading">
+                Atualizar
+              </button>
+            </div>
        </form>
    </div>
-   
-       <div class="row">
-         <div class="col-md-12">
-           <div *ngIf="successMessage" class="alert alert-success" role="alert">
-             {{ successMessage }}
-           </div>
-           <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
-             {{ errorMessage }}
-           </div>
-         </div>
-       </div>
    </div>
 </div>
