@@ -63,6 +63,11 @@
   height: 55px;
   margin-top: 5px;
 }
+.icon-t{
+  width: 55px;
+  height: 55px;
+  margin-top: 5px;
+}
 
 .btn {
   margin-top: 10px;
@@ -119,4 +124,41 @@
   .col-md-3 {
     width: 100% !important;
   }
+}
+
+.modal-open .modal {
+  overflow-x: hidden;
+  overflow-y: auto;
+  background-color: rgba(0, 0, 0, 0.5) !important;
+}
+
+
+.modal.show .modal-backdrop {
+  background-color: rgba(0, 0, 0, 0.5) !important; /* Cinza escuro com transparência */
+}
+
+/* Garante que o modal fique centralizado corretamente */
+.modal.show .modal-dialog {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh; /* Garante que ocupe toda a tela */
+}
+
+.modal.show .modal-content {
+  max-width: 600px; /* Define um tamanho máximo para o modal */
+  margin: auto;
+  border-radius: 10px; /* Bordas arredondadas para um design mais bonito */
+  margin-bottom: 300px;
+}
+
+
+.btn-close {
+  background-color: white;
+  border: none; /* Remove qualquer borda, se houver */
+  color: black; /* Altera a cor do ícone de fechar, se necessário */
+}
+
+.btn-close:hover {
+  color: gray; /* Cor do ícone ao passar o mouse */
 }

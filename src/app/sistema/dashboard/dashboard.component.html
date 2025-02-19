@@ -129,6 +129,7 @@
                     </div>
                 </div>
             </div>
+            
             <div class="col-md-3 mb-4" *ngIf="isProf()">
                 <div class="card">
                     <div class="card-body text-center">
@@ -140,23 +141,53 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 mb-4">
-                <div class="card card-pesquisa">
+
+            <div class="col-md-3 mb-4" *ngIf="isAdmin() || isProf()">
+                <div class="card">
                     <div class="card-body text-center">
-                      <h5 class="p-title">Pesquisa de Satisfação</h5>
-                      <div class="card-icon">
-                        <img src="assets/Icons/pes.svg" alt="Ícone de Pesquisa" class="icon" style="width: 50px; height: 50px;">
-                      </div>
-                      <a 
-                        href="https://forms.gle/owp46GkkmZDNq4sq9" 
-                        class="btn btn-primary btn-pesquisa" 
-                        target="_blank" 
-                        rel="noopener noreferrer">
-                        Acessar >
-                      </a>
+                        <h5 class="card-title">Tutorial de Cadastro</h5>
+                        <div class="card-icon">
+                            <img src="assets/Icons/tuo.svg" alt="Ícone de Tutorial" class="icon-t">
+                        </div>
+                        <button class="btn btn-primary" (click)="openModal()">Acessar ></button>
                     </div>
-                  </div>                  
+                </div>
             </div>
+            
+            <!-- Modal -->
+            <div class="modal fade" id="tutorialModal" tabindex="-1" aria-labelledby="tutorialModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="tutorialModalLabel">Tutorial de cadastro de questão</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-center">
+                            <video controls width="100%">
+                                <source src="assets/videos/tutorial.mp4" type="video/mp4">
+                                Seu navegador não suporta vídeos.
+                            </video>
+                        </div>
+                    </div>
+                </div>
+        </div>
+
+        <div class="col-md-3 mb-4">
+            <div class="card card-pesquisa">
+                <div class="card-body text-center">
+                  <h5 class="p-title">Pesquisa de Satisfação</h5>
+                  <div class="card-icon">
+                    <img src="assets/Icons/pes.svg" alt="Ícone de Pesquisa" class="icon" style="width: 50px; height: 50px;">
+                  </div>
+                  <a 
+                    href="https://forms.gle/owp46GkkmZDNq4sq9" 
+                    class="btn btn-primary btn-pesquisa" 
+                    target="_blank" 
+                    rel="noopener noreferrer">
+                    Acessar >
+                  </a>
+                </div>
+              </div>                  
         </div>
     </div>
 </div>

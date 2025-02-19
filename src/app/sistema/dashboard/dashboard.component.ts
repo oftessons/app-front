@@ -3,6 +3,9 @@ import { Router } from '@angular/router';
 import { Usuario } from 'src/app/login/usuario';
 import { AuthService } from 'src/app/services/auth.service';
 
+declare var bootstrap: any;
+
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -33,11 +36,19 @@ export class DashboardComponent implements OnInit {
   }
 
   isAdmin(): boolean {
-    return this.usuarioLogado?.permissao === 'ROLE_ADMIN'; // Verifica se o usuário é admin
+    return this.usuarioLogado?.permissao === 'ROLE_ADMIN'; 
   }
 
   isProf(): boolean {
     return this.usuarioLogado?.permissao === 'ROLE_PROFESSOR'; 
+  }
+
+  openModal() {
+    const modalElement = document.getElementById('tutorialModal');
+    if (modalElement) {
+      const myModal = new bootstrap.Modal(modalElement);
+      myModal.show();
+    }
   }
 
   ngOnDestroy() {

@@ -5465,6 +5465,34 @@ a.close.disabled {
   opacity: 0.8;
 }
 
+
+.modal-open .modal {
+  overflow-x: hidden;
+  overflow-y: auto;
+  background-color: rgba(0, 0, 0, 0.5) !important;
+}
+
+
+
+/* Garante que o modal fique centralizado corretamente */
+.modal.show .modal-dialog {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh; /* Garante que ocupe toda a tela */
+}
+
+.modal.show .modal-content {
+  max-width: 600px; /* Define um tamanho máximo para o modal */
+  margin: auto;
+  border-radius: 10px; /* Bordas arredondadas para um design mais bonito */
+  margin-bottom: 300px;
+}
+
+
+
+
+
 @media (prefers-reduced-motion: reduce) {
   .modal.fade .modal-dialog {
     transition: none;
