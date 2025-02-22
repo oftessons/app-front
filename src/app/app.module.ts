@@ -22,6 +22,8 @@ import { SharedModule } from './shared/shared.module';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { QuillModule } from 'ngx-quill';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { PlanosComponent } from './planos/planos/planos.component';
+import { DetalhesPlanosComponent } from './planos/detalhes-planos/detalhes-planos.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +31,8 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
     LayoutComponent,
     LoginComponent,
     ResetPasswordComponent,
+    PlanosComponent,
+    DetalhesPlanosComponent,
   ],
   imports: [
     BrowserModule,
