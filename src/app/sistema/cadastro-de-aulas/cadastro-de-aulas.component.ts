@@ -24,6 +24,9 @@ export class CadastroDeAulasComponent implements OnInit {
   errorMessage: string | null = null;
   isLoading: boolean = false;
 
+  aula: Aula = new Aula();
+  idAula: number | null = null;
+
   video: File | null = null;
   selectedImage: string = '';
   uploadedImage: string = '';
@@ -42,6 +45,13 @@ export class CadastroDeAulasComponent implements OnInit {
   ngOnInit(): void {
 
     this.usuario = this.authService.getUsuarioAutenticado();
+
+    this.activatedRoute.params.subscribe(params => {
+      this.idAula = params['id'];
+      if (this.idAula && this.usuario?.id) {
+        this.carregarAula(parseInt(this.usuario.id), this.idAula);
+      }
+    });
   }
 
   onFileSelected(event: any, field: string) {
@@ -158,5 +168,20 @@ export class CadastroDeAulasComponent implements OnInit {
 
   removePdf(index: number): void {
     this.arquivos.splice(index, 1);
+  }
+
+  carregarAula(idUser: number | undefined, id: number): void {
+    if (idUser) {
+      this.aulasService.buscarAulaPorId(idUser, id).subscribe(
+        (response: Aula) => {
+          this.aula = response;
+          this.aulaDTO = new Aula();
+          Object.assign(this.aulaDTO, response);
+        },
+        (error) => {
+          console.error('Erro ao carregar aula:', error);
+        }
+      );
+    }
   }
 }
