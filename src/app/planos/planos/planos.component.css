@@ -90,8 +90,6 @@
 
 @media (min-width: 769px) and (max-width: 1300px) {
   .main-container {
-    margin: 16px;
-    padding: 24px;
     justify-items: center;
   }
 
