@@ -3,7 +3,8 @@
   border-radius: 16px;
   text-align: center;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-  max-width: 350px;
+  max-width: 100%;
+  width: 350px;
   min-height: 455px;
 }
 
@@ -101,4 +102,14 @@
 
 .btn-plano:hover {
   background: #e69f00;
+}
+
+@media (max-width: 768px) {
+  .card {
+    width: 100%;
+  }
+
+  .card-header {
+    width: 70%;
+  }
 }

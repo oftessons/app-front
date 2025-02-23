@@ -30,7 +30,9 @@
 }
 
 .planos-container {
-  display: flex;
+  display: grid;
+  justify-items: center;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   gap: 48px;
   justify-content: center;
   margin: 40px;
@@ -79,11 +81,21 @@
   }
 
   .planos-container {
-    flex-direction: column;
-    gap: 32px;
+    gap: 40px;
+    margin: 16px;
+    justify-items: center;
+    grid-template-columns: 1fr; 
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1300px) {
+  .main-container {
+    margin: 16px;
+    padding: 24px;
+    justify-items: center;
   }
 
-  .plano {
-    width: 100%;
+  .planos-container {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
