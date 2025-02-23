@@ -143,6 +143,8 @@ export class CadastroDeAulasComponent implements OnInit {
           console.error('Erro ao salvar a aula:', error);
         }
       );
+    } else {
+      this.atualizarAula();
     }
   }
 
@@ -177,5 +179,27 @@ export class CadastroDeAulasComponent implements OnInit {
         }
       );
     }
+  }
+
+  atualizarAula(){
+
+    if (this.aulaDTO.documentos != null) {
+      this.aulaDTO.documentos.forEach((doc) => {
+        this.formData.append('keysExistentes', doc.key);
+      });
+    }    
+
+    this.aulasService.atualizar(this.formData, this.aulaDTO.id).subscribe(
+      (response) => {
+        this.successMessage = 'Aula atualizada com sucesso!';
+        this.errorMessage = null;
+        console.debug('Aula atualizada com sucesso:', response);
+      },
+      (error) => {
+        this.errorMessage = 'Erro ao atualizar a aula.';
+        this.successMessage = null;
+        console.error('Erro ao atualizar a aula:', error);
+      }
+    );
   }
 }

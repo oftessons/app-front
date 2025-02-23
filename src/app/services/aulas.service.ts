@@ -31,6 +31,25 @@ export class AulasService {
       })
     );
   }
+
+  atualizar(formData: FormData, id: number): Observable<any> {
+    return this.http.put(`${this.apiURL}/${id}`, formData, {
+      responseType: 'text'
+    }).pipe(
+      map((response) => ({ message: response })),
+      catchError((error) => {
+        let errorMessage = 'Erro ao atualizar a aula.';
+  
+        if (error.error instanceof ErrorEvent) {
+          errorMessage = `Erro: ${error.error.message}`;
+        } else if (error.status) {
+          errorMessage = `Erro no servidor: ${error.status} - ${error.message}`;
+        }
+        console.error(errorMessage);
+        return throwError(() => new Error(errorMessage));
+      })
+    );
+  }
   
 
   listarAulasPorCategoria(categoria: string): Observable<Aula[]> {
