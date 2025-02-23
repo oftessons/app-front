@@ -1,1 +1,19 @@
-<p>card-plano works!</p>
+<div class="card">
+    <span *ngIf="recomendado" class="badge badge-recomendado">Recomendado</span>
+    <div class="card-header" [ngStyle]="{'background-color': corCabecalho}">
+      <h3>{{ titulo }}</h3>
+    </div>
+    <div class="card-body">
+        <div class="value">
+            <h4>
+                {{ preco | currency:'BRL' }}
+                <span>/mês</span>
+            </h4>
+            <p *ngIf="textoAdicional" class="texto-adicional">{{ textoAdicional }}</p>
+        </div>
+        <ul>
+            <li *ngFor="let ponto of descricao">{{ ponto }}</li>
+        </ul>
+        <button class="btn-plano" [routerLink]="rota">{{ textoBotao }}</button>
+    </div>
+  </div>

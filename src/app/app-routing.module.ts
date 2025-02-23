@@ -5,10 +5,12 @@ import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './sistema/dashboard/dashboard.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { AuthGuard } from './services/auth.guard';
+import { PlanosComponent } from './planos/planos/planos.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'reset-password', component: ResetPasswordComponent },
+  { path: 'planos', component: PlanosComponent },
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: '', component: LayoutComponent, children: [
     { path : 'usuario/dashboard', component: DashboardComponent, canActivate: [AuthGuard] },

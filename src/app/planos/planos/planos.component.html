@@ -1,1 +1,56 @@
-<p>planos works!</p>
+<div class="main-container">
+  <div class="title-planos">
+    <h2>Planos acessíveis para todos os perfis</h2>
+    <p>
+      Escolha um plano e tenha acesso ilimitado a questões e aulas para turbinar
+      seus estudos. Resolva exercícios sem restrições, assista a videoaulas e
+      acompanhe seu progresso.
+    </p>
+  </div>
+
+  <div class="planos-container">
+    <app-card-plano
+        titulo="Mensal"
+        [descricao]="['Revisão rápida sobre qualquer tema ou assunto.', 'Ideal para quem busca agilidade no aprendizado.', 'Acesso flexível ao conteúdo essencial.']"
+        [preco]="397.00"
+        textoBotao="Escolher plano"
+        [recomendado]="false"
+        textoAdicional=""
+        (botaoClicado)="onBotaoClicado()"
+        rota="">
+    </app-card-plano>
+
+    <app-card-plano
+        titulo="Semestral"
+        [descricao]="['Exploração detalhada do acervo da plataforma.', 'Estudo com tempo para absorver conhecimento.', 'Perfeito para uma aprendizagem profunda e completa.']"
+        [preco]="116.16"
+        textoBotao="Escolher plano"
+        [recomendado]="false"
+        textoAdicional="R$697,00 por 6 meses"
+        corCabecalho="#041E4E"
+        (botaoClicado)="onBotaoClicado()"
+        rota="">
+    </app-card-plano>
+
+    <app-card-plano
+        titulo="Anual"
+        [descricao]="['Utilize todas as funcionalidades da plataforma.', 'Melhore seu aprendizado de forma abrangente.', 'Acesso ao banco de questões com reset duas vezes ao ano.']"
+        [preco]="99.75"
+        textoBotao="Escolher plano"
+        [recomendado]="true"
+        textoAdicional="R$1.197,00  por 1 ano"
+        corCabecalho="#0F1934"
+        (botaoClicado)="onBotaoClicado()"
+        rota="">
+    </app-card-plano>
+  </div>
+
+  <div class="planos-footer">
+    <span>
+        Sujeito às condições estabelecidas em nossos 
+        <a>Termos de Uso</a> e
+        <a>Política de Assinaturas.</a>
+    </span
+    >
+  </div>
+</div>

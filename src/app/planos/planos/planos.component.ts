@@ -12,4 +12,8 @@ export class PlanosComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  onBotaoClicado(): void {
+    console.log('Botão do card clicado!');
+  }
+
 }

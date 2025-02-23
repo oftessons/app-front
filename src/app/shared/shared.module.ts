@@ -12,6 +12,7 @@ import { PlaylistModeComponent } from './playlist-mode/playlist-mode.component';
 import { MultiploSelectComponent } from './multiplo-select/multiplo-select.component';
 import { ModalComponent } from './modal/modal.component';
 import { CardPlanoComponent } from './card-plano/card-plano.component';
+import { AppRoutingModule } from '../app-routing.module';
 
 
 @NgModule({
@@ -29,6 +30,7 @@ import { CardPlanoComponent } from './card-plano/card-plano.component';
     MatIconModule,
     ImageResizeModule,
     FormsModule,
+    AppRoutingModule
   ],
   exports: [
     SelectPadraoComponent,
