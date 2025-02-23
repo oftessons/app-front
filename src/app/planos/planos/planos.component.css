@@ -35,7 +35,7 @@
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   gap: 48px;
   justify-content: center;
-  margin: 40px;
+  margin: 40px 120px;
   padding-top: 32px;
 }
 
@@ -95,5 +95,9 @@
 
   .planos-container {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .title-planos p {
+    width: 70%;
   }
 }
