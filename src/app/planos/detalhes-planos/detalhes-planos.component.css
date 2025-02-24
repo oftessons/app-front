@@ -42,7 +42,7 @@
 .planos-container {
   display: flex;
   justify-items: center;
-  gap: 80px;
+  gap: 120px;
   justify-content: center;
   margin: 40px 120px;
   padding-top: 32px;
