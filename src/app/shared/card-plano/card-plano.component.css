@@ -44,6 +44,13 @@
   font-weight: 500;
 }
 
+.value .texto-parcelas {
+  margin: 0;
+  color: #041e4e;
+  font-size: 33px;
+  font-weight: 500;
+}
+
 .value span {
   font-size: 16px;
   color: #041e4e;

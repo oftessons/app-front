@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-card-plano',
@@ -13,17 +14,27 @@ export class CardPlanoComponent {
   @Input() recomendado: boolean = false;
   @Input() corCabecalho: string = '';
   @Input() textoAdicional: string = '';
+  @Input() mostrarPorMes: boolean = true;
+  @Input() textoParcelas: string = '';
 
   @Output() botaoClicado = new EventEmitter<void>();
-  @Input() rota: string = '';
+  @Input() rota!: string;
 
-  constructor() { }
+  constructor(
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
   }
 
   acao(): void {
     this.botaoClicado.emit();
+  }
+
+  navegarParaPlano() {
+    if (this.rota) {
+      this.router.navigate([this.rota]);
+    }
   }
 
 }

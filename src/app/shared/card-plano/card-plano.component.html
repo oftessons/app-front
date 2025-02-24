@@ -6,14 +6,15 @@
     <div class="card-body">
         <div class="value">
             <h4>
+                <span *ngIf="textoParcelas" class="texto-parcelas">{{ textoParcelas }}</span>
                 {{ preco | currency:'BRL' }}
-                <span>/mês</span>
+                <span *ngIf="mostrarPorMes">/mês</span>
             </h4>
             <p *ngIf="textoAdicional" class="texto-adicional">{{ textoAdicional }}</p>
         </div>
         <ul>
             <li *ngFor="let ponto of descricao">{{ ponto }}</li>
         </ul>
-        <button class="btn-plano" [routerLink]="rota">{{ textoBotao }}</button>
+        <button class="btn-plano" (click)="navegarParaPlano()">{{ textoBotao }}</button>
     </div>
   </div>
