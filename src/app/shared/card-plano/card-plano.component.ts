@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
+import { StripeService } from 'src/app/services/stripe.service';
 
 @Component({
   selector: 'app-card-plano',
@@ -19,9 +20,12 @@ export class CardPlanoComponent {
 
   @Output() botaoClicado = new EventEmitter<void>();
   @Input() rota!: string;
+  @Input() usarServicoPagamento: boolean = false;
+  @Input() planoSelecionado: string = '';
 
   constructor(
-    private router: Router
+    private router: Router,
+    private stripeService: StripeService
   ) { }
 
   ngOnInit(): void {
@@ -32,7 +36,16 @@ export class CardPlanoComponent {
   }
 
   navegarParaPlano() {
-    if (this.rota) {
+    if (this.usarServicoPagamento) {
+      this.stripeService.createCheckoutSession(this.planoSelecionado).subscribe(
+        (response: any) => {
+          window.location.href = response.url; // Redireciona para o link de pagamento
+        },
+        (error) => {
+          console.error('Erro ao gerar link de pagamento:', error);
+        }
+      );
+    } else if (this.rota) {
       this.router.navigate([this.rota]);
     }
   }
