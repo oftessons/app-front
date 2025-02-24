@@ -16,6 +16,6 @@ export class StripeService {
   createCheckoutSession(planoSelecionado: String) {
     const url = `${this.apiURL}/create-checkout-session?plano=${planoSelecionado}`;
 
-    return this.http.get<Usuario>(url);
+    return this.http.post<Usuario>(url, planoSelecionado);
   }
 }

@@ -39,7 +39,8 @@ export class CardPlanoComponent {
     if (this.usarServicoPagamento) {
       this.stripeService.createCheckoutSession(this.planoSelecionado).subscribe(
         (response: any) => {
-          window.location.href = response.url; // Redireciona para o link de pagamento
+          console.log(response);
+          window.location.href = response.url_checkout; // Redireciona para o link de pagamento
         },
         (error) => {
           console.error('Erro ao gerar link de pagamento:', error);
