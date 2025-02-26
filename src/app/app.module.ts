@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core'; 
 import { BrowserModule } from '@angular/platform-browser';
-
+import { ChatBotComponent } from './chat-bot/chat-bot.component'; 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { TemplateModule } from './template/template.module';
@@ -29,6 +29,7 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
     LayoutComponent,
     LoginComponent,
     ResetPasswordComponent,
+    ChatBotComponent,
   ],
   imports: [
     BrowserModule,
