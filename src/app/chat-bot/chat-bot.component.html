@@ -1,0 +1,18 @@
+<!-- Chatbot Container -->
+<div class="chatbot-container" [@chatBotAnimation]="isOpen ? 'open' : 'closed'">
+  <div class="chatbot-header">
+    <button class="close-btn" (click)="toggleChat()">×</button>
+    Suporte
+  </div>
+  <div class="chatbot-body">
+    <!-- Conteúdo do bot -->
+  </div>
+  <div class="chatbot-footer">
+    <!-- Rodapé do chatbot -->
+  </div>
+</div>
+
+<!-- Botão para abrir o chat -->
+<button class="chatbot-toggle-button" (click)="toggleChat()" *ngIf="!isOpen">
+  Dúvidas?
+</button>
