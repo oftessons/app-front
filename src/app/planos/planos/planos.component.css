@@ -1,0 +1,103 @@
+.main-container {
+  margin: 48px;
+  max-width: 100%;
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.title-planos {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title-planos h2 {
+  font-size: 32px;
+  font-weight: 500;
+  color: #3b5fa0;
+  margin: 16px;
+  text-align: center;
+}
+
+.title-planos p {
+  font-size: 16px;
+  color: #1a1918;
+  margin: 16px;
+  width: 50%;
+  text-align: center;
+}
+
+.planos-container {
+  display: grid;
+  justify-items: center;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 48px;
+  justify-content: center;
+  margin: 40px 120px;
+  padding-top: 32px;
+}
+
+.planos-footer {
+  display: flex;
+  justify-content: center;
+  margin-top: 32px;
+  text-align: center;
+}
+
+.planos-footer span {
+  font-size: 14px;
+  color: #1a1918;
+  margin: 16px;
+}
+
+.planos-footer a {
+  font-size: 14px;
+  color: #2f7ce0;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.planos-footer a:hover {
+  color: #006eff;
+}
+
+@media (max-width: 768px) {
+  .main-container {
+    margin: 16px;
+    padding: 24px;
+  }
+
+  .title-planos h2 {
+    font-size: 24px;
+    margin: 14px;
+  }
+
+  .title-planos p {
+    width: 100%;
+    font-size: 14px;
+    margin: 14px;
+  }
+
+  .planos-container {
+    gap: 40px;
+    margin: 16px;
+    justify-items: center;
+    grid-template-columns: 1fr; 
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1300px) {
+  .main-container {
+    justify-items: center;
+  }
+
+  .planos-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .title-planos p {
+    width: 70%;
+  }
+}

@@ -1,0 +1,33 @@
+<div class="main-container">
+    <div class="title-planos">
+        <button (click)="voltar()">
+            <img src="assets/Icons/arrow-left.svg" alt="Voltar" />
+        </button>
+        <h2>Escolha o melhor plano para você</h2>
+    </div>
+  
+    <div class="planos-container">
+        <app-card-plano
+          *ngFor="let plano of planos"
+          [titulo]="plano.titulo"
+          [descricao]="plano.descricao"
+          [preco]="plano.preco"
+          textoBotao="Escolher plano"
+          [recomendado]="false"
+          [textoAdicional]="plano.textoAdicional"
+          [corCabecalho]="plano.corCabecalho"
+          (botaoClicado)="onBotaoClicado()"
+          [textoParcelas]="plano.textoParcelas"
+          [mostrarPorMes]="plano.mostrarPorMes">
+        </app-card-plano>
+    </div>
+  
+    <div class="planos-footer">
+      <span>
+          Sujeito às condições estabelecidas em nossos 
+          <a>Termos de Uso</a> e
+          <a>Política de Assinaturas.</a>
+      </span
+      >
+    </div>
+  </div>  
