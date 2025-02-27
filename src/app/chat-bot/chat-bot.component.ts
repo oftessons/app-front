@@ -11,6 +11,7 @@ import { ChatBotStateService } from '../services/chat-bot-state.service';
       state('closed', style({
         transform: 'translateY(100%)',  // Fora da tela quando fechado
         opacity: 0,
+        display: 'none'
       })),
       state('open', style({
         transform: 'translateY(0)',  // Posição normal quando aberto
@@ -19,7 +20,7 @@ import { ChatBotStateService } from '../services/chat-bot-state.service';
       transition('closed <=> open', [
         animate('1000ms ease-in-out')  // Animação mais lenta de 1000ms
       ]),
-    ])
+    ]),
   ]
 })
 export class ChatBotComponent implements OnInit {
@@ -29,19 +30,23 @@ export class ChatBotComponent implements OnInit {
   constructor(private chatBotStateService: ChatBotStateService) {}
 
   ngOnInit(): void {
-
     // Subscribing to the state of the chat
     this.chatBotStateService.isChatOpen$.subscribe((isOpen) => {
       this.isOpen = isOpen;
+
+      // Se o chat for fechado, iniciar o delay de 5 segundos
+      if (!isOpen) {
+        setTimeout(() => {
+          this.showButton = true;  
+        }, 3000);
+      } else {
+        this.showButton = false; 
+      }
     });
   }
 
   toggleChat(): void {
     // Se o chat estiver aberto, fecha imediatamente
-    if (this.isOpen) {
-      this.chatBotStateService.toggleChat();  // Fecha o chat imediatamente
-    } else {
-      this.chatBotStateService.toggleChat();  // Abre o chat
-    }
+    this.chatBotStateService.toggleChat();  // Fecha o chat imediatamente
   }
 }
