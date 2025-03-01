@@ -15,6 +15,7 @@ export const TemaDescricoes: Record<Tema, string> = {
   [Tema.NEUROFTALMOLOGIA]: 'Neuroftalmologia',
   [Tema.OPTICA]: 'Óptica',
   [Tema.OUTROS]: 'Outros',
+  [Tema.ORBITA]: 'Órbita',
   [Tema.PATOLOGIA_OCULAR]: 'Patologia Ocular',
   [Tema.PLASTICA_OCULAR_E_SISTEMA_LACRIMAL]: 'Plástica Ocular e Sistema Lacrimal',
   [Tema.REFRACAO]: 'Refração',
