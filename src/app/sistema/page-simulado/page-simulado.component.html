@@ -168,7 +168,12 @@
           <div class="row">
             <div class="col-md-12">
               <div class="form-group">
-                <div *ngFor="let alternativa of questaoAtual.alternativas; let i = index" class="alternativa">
+                <div *ngFor="let alternativa of questaoAtual.alternativas; let i = index" class="alternativa"
+                [ngClass]="{ 
+                  'alternativa-certa': respostaVerificada && alternativa.texto === respostaCorreta,
+                  'alternativa-errada': respostaVerificada && alternativa.texto === respostaErrada
+
+                }">
                   <div class="alternativa-input-group">
                     <input 
                       type="radio" 
@@ -177,7 +182,7 @@
                       [(ngModel)]="selectedOption" 
                       (change)="onOptionChange(alternativa.texto)"
                       [checked]="alternativa.texto === selectedOption">
-                    <span class="alternativa-texto">{{ alternativa.texto }} ) </span>
+                    <span class="alternativa-texto">{{ alternativa.texto }}  </span>
                     <span class="alternativa-comentario">{{ alternativa.comentario }}</span>
                   </div>
                 </div>
@@ -190,6 +195,9 @@
           </div>
           
           <div class="button-row">
+            <div class="left-buttons">
+              <button *ngIf="jaRespondeu" class="btn-gabarito" (click)="exibirGabarito()">Gabarito</button>
+            </div>
             <div class="right-buttons">
               <button class="btn-anterior" (click)="anteriorQuestao()" [disabled]="paginaAtual === 0">Anterior</button>
               <button *ngIf="!isMeuSimulado" class="btn-responder" (click)="questaoAtual && responderQuestao(questaoAtual)">Responder</button>

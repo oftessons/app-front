@@ -119,6 +119,10 @@ export class PageSimuladoComponent implements OnInit {
   mensagemSucesso: string = '';
 
   isRespostaCorreta: boolean = false;
+  respostaCorreta: string = '';
+  respostaErrada: string = '';
+  respostaVerificada: boolean = false;
+  jaRespondeu: boolean = false;
 
   dados: any;
   questaoDTO = new Questao();
@@ -154,6 +158,7 @@ export class PageSimuladoComponent implements OnInit {
     this.dados = this.obterDados();
     await this.obterPerfilUsuario();
     if (meuSimulado) {
+      this.jaRespondeu = true;
       this.isMeuSimulado = true;
       this.multiSelectedAno = meuSimulado.ano;
       this.multiSelectedTipoDeProva = meuSimulado.tipoDeProva;
@@ -170,6 +175,7 @@ export class PageSimuladoComponent implements OnInit {
         this.questaoAtual = this.questoes[this.paginaAtual];
         this.resposta = '';
         console.log('userID: ', this.usuarioId);
+        this.carregarRespostasPreviamente();
         this.respostaQuestao(this.questoes[this.paginaAtual].id);
         this.visualizarSimulado();
       }
@@ -306,8 +312,12 @@ export class PageSimuladoComponent implements OnInit {
         (resposta: Resposta) => {
           if (resposta.correct) {
             this.isRespostaCorreta = resposta.correct;
+            this.respostaCorreta = this.selectedOption;
+            this.respostaErrada = '';
             this.resposta = 'Resposta correta!';
           } else {
+            this.respostaErrada = this.selectedOption;
+            this.respostaCorreta = resposta.opcaoCorreta;
             this.resposta = 'Resposta incorreta. Tente novamente.';
           }
 
@@ -419,7 +429,7 @@ export class PageSimuladoComponent implements OnInit {
 
   filtrarQuestoes(): void {
     const filtros: any = {};
-
+ 
     if (this.multiSelectedAno.length) {
       const anosSelecionados = this.multiSelectedAno
         .map((ano) => this.obterAnoEnum(ano))
@@ -618,6 +628,7 @@ export class PageSimuladoComponent implements OnInit {
 
   carregarRespostaAnterior() {
     const respostaAnterior = this.respostas[this.paginaAtual];
+    console.log(this.paginaAtual);
     if (respostaAnterior) {
       this.selectedOption = respostaAnterior;
       if(this.isMeuSimulado){
@@ -637,6 +648,9 @@ export class PageSimuladoComponent implements OnInit {
       this.paginaAtual--;
       this.questaoAtual = this.questoes[this.paginaAtual];
       this.mostrarGabarito = false;
+      this.respostaCorreta = '';
+      this.respostaErrada = '';
+      this.respostaVerificada = false;
       this.carregarRespostaAnterior(); // Chame a função para carregar a resposta anterior
     }
   }
@@ -649,6 +663,9 @@ export class PageSimuladoComponent implements OnInit {
       this.resposta = '';
       this.selectedOption = '';
       this.mensagemDeAviso = ''; // Limpa a mensagem ao clicar em "próxima"
+      this.respostaCorreta = '';
+      this.respostaErrada = '';
+      this.respostaVerificada = false;
       if(this.isMeuSimulado){
         this.respostaQuestao(this.questoes[this.paginaAtual].id);
       }
@@ -824,6 +841,26 @@ export class PageSimuladoComponent implements OnInit {
   toggleFiltros() {
     this.mostrarFiltros = !this.mostrarFiltros;
   }
+
+  carregarRespostasPreviamente(): void {
+    this.questoes.forEach((questao, index) => {
+      this.questoesService.questaoRespondida(this.usuarioId, questao.id).subscribe({
+        next: (resposta) => {
+          if (resposta) {
+            this.respostas[index] = resposta.opcaoSelecionada;
+            if (index === this.paginaAtual) {
+              this.selectedOption = resposta.opcaoSelecionada;
+              this.verificarRespostaUsuario(resposta);
+            }
+          }
+        },
+        error: (erro) => {
+          console.error(`Erro ao carregar resposta para a questão ${questao.id}:`, erro);
+        }
+      });
+    });
+  }
+
   respostaQuestao(questaoAtual: number) {
     this.questoesService
       .questaoRespondida(this.usuarioId, questaoAtual)
@@ -831,6 +868,7 @@ export class PageSimuladoComponent implements OnInit {
         next: (resposta) => {
           if (resposta) {
             this.verificarRespostaUsuario(resposta);
+            console.log(resposta);
           }
         },
         error: (erro) => {
@@ -840,9 +878,17 @@ export class PageSimuladoComponent implements OnInit {
   }
 
   verificarRespostaUsuario(resposta: Resposta) {
-    console.log('Verificar');
     this.selectedOption = resposta.opcaoSelecionada; // Alternativa escolhida
-    console.log('Resposta:', this.selectedOption);
     this.isRespostaCorreta = resposta.correct; // Se está correta ou não
+  
+    if (resposta.correct) {
+      this.respostaCorreta = this.selectedOption;
+      this.respostaErrada = '';
+    } else {
+      this.respostaErrada = this.selectedOption;
+      this.respostaCorreta = resposta.opcaoCorreta; // Alternativa correta
+    }
+    this.respostaVerificada = true; // Marca como verificada
+    
   }
 }

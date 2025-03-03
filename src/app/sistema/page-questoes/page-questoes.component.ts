@@ -51,6 +51,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   mensagemSucesso: string = '';
 
   jaRespondeu: boolean = false;
+  respondendo: boolean = false;
 
   fotoPreviews: { [key: string]: string } = {};
 
@@ -349,6 +350,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
   filtrarQuestoes(): void {
     const filtros: any = {};
+    this.respondendo = true;
 
     if (this.multSelectAno.length) {
       const anosSelecionados = this.multSelectAno
@@ -518,7 +520,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     if (this.paginaAtual > 0) {
       this.paginaAtual--;
       this.questaoAtual = this.questoes[this.paginaAtual];
-  
+
       // Resetar variáveis relacionadas à resposta
       this.selectedOption = '';
       this.isRespostaCorreta = false;
@@ -529,26 +531,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   
       this.mostrarPorcentagem = false; // Reseta a barra de progresso
       this.porcentagemAcertos = 0;
-  
-      // Recuperar resposta anterior, se existir
-      this.questoesService.questaoRespondida(this.usuarioId, this.questaoAtual.id).subscribe({
-        next: (resposta) => {
-          if (resposta) {
-            // Recupera os dados da resposta, mas não exibe o gabarito automaticamente
-            this.verificarRespostaUsuario(resposta);
-            this.jaRespondeu = true; // Atualiza o estado para indicar que a questão foi respondida
-  
-            // Atualiza apenas a exibição da barra de progresso
-            this.mostrarPorcentagem = true;
-          }
-        },
-        error: (erro) => {
-          console.error('Erro ao verificar a resposta:', erro);
-        //  this.mensagemErro = 'Erro ao recuperar a resposta da questão anterior.';
-        },
-      });
-    } else {
-     // this.mensagemErro = 'Você já está na primeira questão.';
     }
   }
   
@@ -573,28 +555,8 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       this.mostrarPorcentagem = false; // Reseta a barra de progresso
       this.porcentagemAcertos = 0;
   
-      // Verificar se a questão já foi respondida
-      this.questoesService.questaoRespondida(this.usuarioId, this.questaoAtual.id).subscribe({
-        next: (resposta) => {
-          if (resposta) {
-            // Recupera os dados da resposta anterior, mas não exibe o gabarito diretamente
-            this.verificarRespostaUsuario(resposta);
-            this.jaRespondeu = true; // Atualiza o estado para indicar que já foi respondida
-  
-            // Atualiza somente a barra de progresso
-            this.mostrarPorcentagem = true;
-          }
-        },
-        error: (erro) => {
-          console.error('Erro ao verificar a resposta:', erro);
-         // this.mensagemErro = 'Erro ao recuperar a resposta da próxima questão.';
-        },
-      });
-    } else {
-      this.mensagemErro = 'Não há mais questões, mas em breve novas questões estarão disponíveis. 📘';
     }
   }
-  
   
     
   responderQuestao(questao: Questao | null): void {
