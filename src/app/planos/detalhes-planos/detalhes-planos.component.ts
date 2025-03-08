@@ -34,7 +34,8 @@ export class DetalhesPlanosComponent implements OnInit {
           textoAdicional: 'Valor a vista',
           corCabecalho: '#0F1934',
           textoParcelas: '',
-          mostrarPorMes: false
+          mostrarPorMes: false,
+          planoSelecionado: 'assinatura_anual'.toUpperCase()
         },
         {
           titulo: 'Anual',
@@ -47,7 +48,8 @@ export class DetalhesPlanosComponent implements OnInit {
           textoAdicional: 'Preço total R$1,197.00',
           corCabecalho: '#102040',
           textoParcelas: '12x',
-          mostrarPorMes: true
+          mostrarPorMes: true,
+          planoSelecionado: 'assinatura_anual_parcelada'.toUpperCase()
         }
       ];
     } else if (this.tipoPlano === 'semestral') {
@@ -63,7 +65,8 @@ export class DetalhesPlanosComponent implements OnInit {
           textoAdicional: 'Valor a vista',
           corCabecalho: '#041E4E',
           textoParcelas: '',
-          mostrarPorMes: false
+          mostrarPorMes: false,
+          planoSelecionado: 'assinatura_semestral'.toUpperCase()
         },
         {
           titulo: 'Semestral',
@@ -76,7 +79,8 @@ export class DetalhesPlanosComponent implements OnInit {
           textoAdicional: 'Preço total R$697,00',
           corCabecalho: '#041E4E',
           textoParcelas: '6x',
-          mostrarPorMes: true
+          mostrarPorMes: true,
+          planoSelecionado: 'assinatura_semestral_parcelada'.toUpperCase()
         }
       ];
     }

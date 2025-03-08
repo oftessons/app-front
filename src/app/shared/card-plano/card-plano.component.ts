@@ -35,7 +35,7 @@ export class CardPlanoComponent {
     this.botaoClicado.emit();
   }
 
-  navegarParaPlano() {
+  navegarParaPlano(): void {
     if (this.usarServicoPagamento) {
       this.stripeService.createCheckoutSession(this.planoSelecionado).subscribe(
         (response: any) => {
