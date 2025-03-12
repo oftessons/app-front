@@ -174,7 +174,6 @@ export class PageSimuladoComponent implements OnInit {
         this.paginaAtual = 0;
         this.questaoAtual = this.questoes[this.paginaAtual];
         this.resposta = '';
-        console.log('userID: ', this.usuarioId);
         this.carregarRespostasPreviamente();
         this.respostaQuestao(this.questoes[this.paginaAtual].id);
         this.visualizarSimulado();
@@ -337,7 +336,7 @@ export class PageSimuladoComponent implements OnInit {
   }
 
   exibirGabarito() {
-    this.mostrarGabarito = true;
+    this.mostrarGabarito = !this.mostrarGabarito;
   }
 
   getDescricaoTipoDeProva(tipoDeProva: TipoDeProva): string {
@@ -626,6 +625,25 @@ export class PageSimuladoComponent implements OnInit {
       );
   }
 
+  carregarRespostasPreviamente(): void {
+    this.questoes.forEach((questao, index) => {
+      this.questoesService.questaoRespondida(this.usuarioId, questao.id).subscribe({
+        next: (resposta) => {
+          if (resposta) {
+            this.respostas[index] = resposta.opcaoSelecionada;
+            if (index === this.paginaAtual) {
+              this.selectedOption = resposta.opcaoSelecionada;
+              this.verificarRespostaUsuario(resposta);
+            }
+          }
+        },
+        error: (erro) => {
+          console.error(`Erro ao carregar resposta para a questão ${questao.id}:`, erro);
+        }
+      });
+    });
+  }
+
   carregarRespostaAnterior() {
     const respostaAnterior = this.respostas[this.paginaAtual];
     console.log(this.paginaAtual);
@@ -634,9 +652,6 @@ export class PageSimuladoComponent implements OnInit {
       if(this.isMeuSimulado){
         this.respostaQuestao(this.questoes[this.paginaAtual].id);
       }
-      this.mensagemDeAviso = `Você respondeu anteriormente a letra ${this.getLetraAlternativa(
-        respostaAnterior
-      )}.`; // Exibe mensagem apenas ao voltar
     } else {
       this.selectedOption = '';
     }
@@ -840,25 +855,6 @@ export class PageSimuladoComponent implements OnInit {
 
   toggleFiltros() {
     this.mostrarFiltros = !this.mostrarFiltros;
-  }
-
-  carregarRespostasPreviamente(): void {
-    this.questoes.forEach((questao, index) => {
-      this.questoesService.questaoRespondida(this.usuarioId, questao.id).subscribe({
-        next: (resposta) => {
-          if (resposta) {
-            this.respostas[index] = resposta.opcaoSelecionada;
-            if (index === this.paginaAtual) {
-              this.selectedOption = resposta.opcaoSelecionada;
-              this.verificarRespostaUsuario(resposta);
-            }
-          }
-        },
-        error: (erro) => {
-          console.error(`Erro ao carregar resposta para a questão ${questao.id}:`, erro);
-        }
-      });
-    });
   }
 
   respostaQuestao(questaoAtual: number) {

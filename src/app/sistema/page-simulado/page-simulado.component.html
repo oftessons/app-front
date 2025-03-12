@@ -193,12 +193,80 @@
               </div>
             </div>
           </div>
+
+          <div *ngIf="mostrarGabarito && questaoAtual">
+            <h2 style="margin-top: 10px;">Comentário da Questão</h2>
+            <!-- Exibe o comentário da Questão com HTML Sanitizado -->
+            <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestao | safeHtml"></div>
+            <ng-container *ngIf="questaoAtual?.fotoDaQuestaoUrl">
+              <img 
+                *ngIf="isImage(questaoAtual.fotoDaRespostaUmUrl)" 
+                [src]="questaoAtual.fotoDaRespostaUmUrl" 
+                alt="Foto da questão" 
+                class="questao-foto">
+              <video 
+                *ngIf="isVideo(questaoAtual.fotoDaRespostaUmUrl)" 
+                [src]="questaoAtual.fotoDaRespostaUmUrl" 
+                controls
+                controlsList="nodownload"  
+                class="questao-video">
+              </video>
+            </ng-container>
+            <!-- Exibe o comentário da Questão com HTML Sanitizado -->
+            <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestaoDois | safeHtml"></div>
+            <ng-container *ngIf="questaoAtual?.fotoDaQuestaoUrl">
+              <img 
+                *ngIf="isImage(questaoAtual.fotoDaRespostaDoisUrl)" 
+                [src]="questaoAtual.fotoDaRespostaDoisUrl" 
+                alt="Foto da questão" 
+                class="questao-foto">
+              <video 
+                *ngIf="isVideo(questaoAtual.fotoDaRespostaDoisUrl)" 
+                [src]="questaoAtual.fotoDaRespostaDoisUrl" 
+                controls
+                controlsList="nodownload"  
+                class="questao-video">
+              </video>
+            </ng-container>
+            <!-- Exibe o comentário da Questão com HTML Sanitizado -->
+            <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestaoTres | safeHtml"></div>
+            <ng-container *ngIf="questaoAtual?.fotoDaQuestaoUrl">
+              <img 
+                *ngIf="isImage(questaoAtual.fotoDaRespostaTresUrl)" 
+                [src]="questaoAtual.fotoDaRespostaTresUrl" 
+                alt="Foto da questão" 
+                class="questao-foto">
+              <video 
+                *ngIf="isVideo(questaoAtual.fotoDaRespostaTresUrl)" 
+                [src]="questaoAtual.fotoDaRespostaTresUrl" 
+                controls
+                controlsList="nodownload"  
+                class="questao-video">
+              </video>
+            </ng-container>
+            <!-- Exibe o comentário da Questão com HTML Sanitizado -->
+            <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestaoQuatro | safeHtml"></div>
+            <ng-container *ngIf="questaoAtual?.fotoDaQuestaoUrl">
+              <img 
+                *ngIf="isImage(questaoAtual.fotoDaRespostaQuatroUrl)" 
+                [src]="questaoAtual.fotoDaRespostaQuatroUrl" 
+                alt="Foto da questão" 
+                class="questao-foto">
+              <video 
+                *ngIf="isVideo(questaoAtual.fotoDaRespostaQuatroUrl)" 
+                [src]="questaoAtual.fotoDaRespostaQuatroUrl" 
+                controls
+                controlsList="nodownload"  
+                class="questao-video">
+              </video>
+            </ng-container>
+            <p *ngIf="questaoAtual?.referenciaBi">Referência: {{ questaoAtual.referenciaBi }}</p>
+            <p *ngIf="questaoAtual?.comentadorDaQuestao">Comentado por: {{ questaoAtual.comentadorDaQuestao }}</p>
+          </div>
           
           <div class="button-row">
-            <div class="left-buttons">
-              <button *ngIf="jaRespondeu" class="btn-gabarito" (click)="exibirGabarito()">Gabarito</button>
-            </div>
             <div class="right-buttons">
+              <button *ngIf="jaRespondeu" class="btn-gabarito" (click)="exibirGabarito()">Gabarito</button>
               <button class="btn-anterior" (click)="anteriorQuestao()" [disabled]="paginaAtual === 0">Anterior</button>
               <button *ngIf="!isMeuSimulado" class="btn-responder" (click)="questaoAtual && responderQuestao(questaoAtual)">Responder</button>
             </div>

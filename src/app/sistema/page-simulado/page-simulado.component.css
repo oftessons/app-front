@@ -345,34 +345,19 @@
   margin-top: 20px;
 }
 
-.left-buttons,
-.right-buttons {
-  display: flex;
-  justify-content: flex-end; /* Alinha os botões à direita */
-  gap: 10px;
-}
 
 .left-buttons {
   display: flex;
-  justify-content: flex-start;
+  justify-content: flex-start; /* Alinha os botões à esquerda */
+  gap: 10px; /* Espaçamento entre botões */
 }
 
-.btn-gabarito {
-  padding: 10px 20px;
-  width: 130px;
-  border: 2px solid #3b5fa0;
-  border-radius: 5px;
-  background-color: transparent;
-  color: #000;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: bold;
+.right-buttons {
+  display: flex;
+  justify-content: flex-end; /* Alinha os botões à direita */
+  gap: 10px; /* Espaçamento entre botões */
 }
 
-.btn-gabarito:hover {
-  background-color: #0056b3;
-  color: #ccc;
-}
 
 .btn-anterior,
 .btn-proxima,
