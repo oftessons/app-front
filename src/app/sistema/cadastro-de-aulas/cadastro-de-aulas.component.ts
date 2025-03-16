@@ -127,6 +127,10 @@ export class CadastroDeAulasComponent implements OnInit {
     this.errorMessage = null;
 
     this.formData = new FormData();
+    // Remove 'documentos' from aulaDTO if it's an edit operation
+    if (this.isEditMode) {
+      delete this.aulaDTO.documentos;
+    }
     const objetoJson = JSON.stringify(this.aulaDTO);
 
     if (this.video) {
@@ -139,6 +143,11 @@ export class CadastroDeAulasComponent implements OnInit {
         this.formData.append(`arquivos`, arquivo);
       });
     }
+
+    // Log the formData content
+    this.formData.forEach((value, key) => {
+      console.log(key, value);
+    });
 
     if (!this.aulaDTO.id) {
       this.aulasService.salvar(this.formData).subscribe(
@@ -199,12 +208,12 @@ export class CadastroDeAulasComponent implements OnInit {
         this.aula = response;
         this.aulaDTO = new Aula();
         Object.assign(this.aulaDTO, response);
-        // Popula os campos do formulário com os dados da aula carregada
+
         if (this.aula.urlVideo) {
           this.fotoPreviews['video'] = this.aula.urlVideo;
         }
-        this.video = null; // Resetar o vídeo para evitar conflitos
-        this.arquivos = []; // Resetar os arquivos para evitar conflitos
+        this.video = null;
+        this.arquivos = [];
       },
       (error) => {
         console.error('Erro ao carregar aula:', error);
