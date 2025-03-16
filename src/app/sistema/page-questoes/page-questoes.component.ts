@@ -498,20 +498,32 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   }
   
 
-  exibirGabarito() {
+ 
+
+  exibirGabarito(): void {
+    if (!this.questaoAtual) {
+      console.warn('Nenhuma questão atual disponível.');
+      return;
+    }
+    
     this.mostrarGabarito = true;
   
-    if (this.questaoAtual) {
-      this.respostaCorreta =
-        this.questaoAtual.alternativas.find(
-          (a) => a.texto === this.respostaCorreta
-        )?.texto || '';
-      this.respostaErrada =
-        this.questaoAtual.alternativas.find(
-          (a) => a.texto === this.respostaErrada
-        )?.texto || '';
-    }
+    const imagens = [
+      this.questaoAtual.fotoDaRespostaUmUrl,
+      this.questaoAtual.fotoDaRespostaDoisUrl,
+      this.questaoAtual.fotoDaRespostaTresUrl,
+      this.questaoAtual.fotoDaRespostaQuatroUrl
+    ];
+    
+    imagens.forEach((url, index) => {
+      if (url) {
+        console.log(`Imagem ${index + 1} carregada:`, url);
+      } else {
+        console.warn(`Imagem ${index + 1} não disponível.`);
+      }
+    });
   }
+  
   
   anteriorQuestao() {
     this.jaRespondeu = false;
@@ -719,9 +731,13 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     );
   }
 
+ 
+
   isImage(url: string): boolean {
-    return url.match(/\.(jpeg|jpg|gif|png)$/) != null;
+    //console.log(`Verificando imagem: ${url}`);
+    return url ? url.includes('.jpeg') || url.includes('.jpg') || url.includes('.gif') || url.includes('.png') : false;
   }
+  
 
   isVideo(url: string): boolean {
     return url.match(/\.(mp4|webm|ogg)$/) != null;
