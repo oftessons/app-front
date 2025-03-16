@@ -35,6 +35,8 @@ export class CadastroDeAulasComponent implements OnInit {
   categoria: string[] = Object.values(Categoria);
   arquivos: File[] = [];
 
+  isEditMode: boolean = false;
+
   constructor(
     private authService: AuthService,
     private router: Router,
@@ -43,13 +45,17 @@ export class CadastroDeAulasComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-
+    console.log('ngOnInit chamado');
     this.usuario = this.authService.getUsuarioAutenticado();
+    console.log('Usuário autenticado:', this.usuario);
 
     this.activatedRoute.params.subscribe(params => {
       this.idAula = params['id'];
-      if (this.idAula && this.usuario?.id) {
-        this.carregarAula(parseInt(this.usuario.id), this.idAula);
+      console.log('ID da aula:', this.idAula);
+      if (this.idAula) {
+        this.isEditMode = true;
+        console.log('Modo de edição ativado');
+        this.carregarAula(this.idAula);
       }
     });
   }
@@ -149,6 +155,21 @@ export class CadastroDeAulasComponent implements OnInit {
           console.error('Erro ao salvar a aula:', error);
         }
       );
+    } else {
+      this.aulasService.atualizar(this.aulaDTO.id, this.formData).subscribe(
+        (response) => {
+          this.isLoading = false; // Finaliza o carregamento
+          this.successMessage = 'Aula atualizada com sucesso!';
+          this.errorMessage = null;
+          console.debug('Aula atualizada com sucesso:', response);
+        },
+        (error) => {
+          this.isLoading = false; // Finaliza o carregamento
+          this.errorMessage = 'Erro ao atualizar a aula.';
+          this.successMessage = null;
+          console.error('Erro ao atualizar a aula:', error);
+        }
+      );
     }
   }
 
@@ -170,18 +191,24 @@ export class CadastroDeAulasComponent implements OnInit {
     this.arquivos.splice(index, 1);
   }
 
-  carregarAula(idUser: number | undefined, id: number): void {
-    if (idUser) {
-      this.aulasService.buscarAulaPorId(idUser, id).subscribe(
-        (response: Aula) => {
-          this.aula = response;
-          this.aulaDTO = new Aula();
-          Object.assign(this.aulaDTO, response);
-        },
-        (error) => {
-          console.error('Erro ao carregar aula:', error);
+  carregarAula(id: number): void {
+    console.log('carregarAula chamado com id:', id);
+    this.aulasService.buscarAulaPorId(id).subscribe(
+      (response: Aula) => {
+        console.log('Dados da aula recebidos:', response);
+        this.aula = response;
+        this.aulaDTO = new Aula();
+        Object.assign(this.aulaDTO, response);
+        // Popula os campos do formulário com os dados da aula carregada
+        if (this.aula.urlVideo) {
+          this.fotoPreviews['video'] = this.aula.urlVideo;
         }
-      );
-    }
+        this.video = null; // Resetar o vídeo para evitar conflitos
+        this.arquivos = []; // Resetar os arquivos para evitar conflitos
+      },
+      (error) => {
+        console.error('Erro ao carregar aula:', error);
+      }
+    );
   }
 }
