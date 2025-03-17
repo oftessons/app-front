@@ -85,8 +85,6 @@
   vertical-align: middle; /* Alinha verticalmente com o texto */
 }
 
-
-
 .example-radio-group {
   display: flex;
   flex-direction: column;
@@ -157,7 +155,6 @@
   margin-top: 20px;
 }
 
-
 .button-row {
   display: flex;
   justify-content: space-between; /* Distribui as áreas à esquerda e à direita */
@@ -171,6 +168,7 @@
   display: flex;
   gap: 10px; /* Espaçamento entre botões */
 }
+
 
 .right-buttons button {
   flex: 1; /* Faz os botões se adaptarem ao espaço disponível */
@@ -475,7 +473,6 @@ p {
 }
 
 
-
 .btn-anterior,
 .btn-proxima,
 .btn-responder {
@@ -512,6 +509,7 @@ p {
   font-size: 16px;
   border-color: #F5004F;
 }
+
 .alternativa {
   display: flex;
   align-items: center;
@@ -551,7 +549,6 @@ p {
   background-size: cover;
   margin-left: 8px
 }
-
 
 .alternativa-input-group {
   display: flex;

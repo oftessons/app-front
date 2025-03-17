@@ -174,7 +174,7 @@
                 [(ngModel)]="selectedOption" 
                 (change)="onOptionChange(alternativa.texto)"
                 [checked]="alternativa.texto === selectedOption">
-              <span class="letra-parenteses">{{ alternativa.texto }})</span>
+              <span class="letra-parenteses">{{ alternativa.texto }}</span>
               <span *ngIf="alternativa.imagemUrl; else comentarioTexto" class="img-alternativas">
                 <img [src]="alternativa.imagemUrl" alt="Imagem da Alternativa" class="alternativa-foto">
               </span>
@@ -191,7 +191,7 @@
                 <h3>Porcentagens de Respostas:</h3>
                 <div class="itens-progresso" *ngFor="let key of porcentagens.keys()">
                   <div class="progress-label">
-                    {{ key }})
+                    {{ key }}
                   </div>
                   <div class="progress">
                     <div class="progress-inner" [ngStyle]="{'width.%': porcentagens.get(key) | slice:0:-1}">
@@ -216,7 +216,7 @@
                 <h2 style="margin-top: 10px;">Comentário da Questão</h2>
                 <!-- Exibe o comentário da Questão com HTML Sanitizado -->
                 <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestao | safeHtml"></div>
-                <ng-container *ngIf="questaoAtual?.fotoDaQuestaoUrl">
+                <ng-container *ngIf="questaoAtual?.fotoDaRespostaUmUrl">
                   <img 
                     *ngIf="isImage(questaoAtual.fotoDaRespostaUmUrl)" 
                     [src]="questaoAtual.fotoDaRespostaUmUrl" 
@@ -232,7 +232,7 @@
                 </ng-container>
                 <!-- Exibe o comentário da Questão com HTML Sanitizado -->
                 <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestaoDois | safeHtml"></div>
-                <ng-container *ngIf="questaoAtual?.fotoDaQuestaoUrl">
+                <ng-container *ngIf="questaoAtual?.fotoDaRespostaDoisUrl">
                   <img 
                     *ngIf="isImage(questaoAtual.fotoDaRespostaDoisUrl)" 
                     [src]="questaoAtual.fotoDaRespostaDoisUrl" 
@@ -248,7 +248,7 @@
                 </ng-container>
                 <!-- Exibe o comentário da Questão com HTML Sanitizado -->
                 <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestaoTres | safeHtml"></div>
-                <ng-container *ngIf="questaoAtual?.fotoDaQuestaoUrl">
+                <ng-container *ngIf="questaoAtual?.fotoDaRespostaTresUrl">
                   <img 
                     *ngIf="isImage(questaoAtual.fotoDaRespostaTresUrl)" 
                     [src]="questaoAtual.fotoDaRespostaTresUrl" 
@@ -264,7 +264,7 @@
                 </ng-container>
                 <!-- Exibe o comentário da Questão com HTML Sanitizado -->
                 <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestaoQuatro | safeHtml"></div>
-                <ng-container *ngIf="questaoAtual?.fotoDaQuestaoUrl">
+                <ng-container *ngIf="questaoAtual?.fotoDaRespostaQuatroUrl">
                   <img 
                     *ngIf="isImage(questaoAtual.fotoDaRespostaQuatroUrl)" 
                     [src]="questaoAtual.fotoDaRespostaQuatroUrl" 

@@ -10,11 +10,14 @@
           <div class="card-body text-center">
             <h5 class="card-title">Aulas</h5>
             <div class="card-icon">
-                <img src="assets/Icons/au-bra.svg" alt="Ícone de Aulas" class="icon" style="width: 50px; height: 50px;">
+              <img src="assets/Icons/au-bra.svg" alt="Ícone de Aulas" class="icon" style="width: 50px; height: 50px;">
             </div>
-            <a routerLink="/usuario/painel-de-aulas" class="btn btn-primary">
+            <button (click)="exibirMensagem('aulas')" class="btn btn-primary">
               Acessar >
-            </a>
+            </button>
+            <div *ngIf="mostrarMensagemAulas" class="mensagem">
+              Em breve novas funcionalidades disponíveis para você 😃.
+            </div>
           </div>
         </div>
       </div>
@@ -36,13 +39,16 @@
       <div class="mb-4">
         <div class="card">
           <div class="card-body text-center">
-            <h5 class="card-title">Flashcard</h5>
+            <h5 class="card-title">Flashcards</h5>
             <div class="card-icon">
-              <img src="assets/Icons/flashcards.svg" alt="Ícone de Empresa de Engenharia" class="icon"/>
+              <img src="assets/Icons/flashcards.svg" alt="Ícone de Flashcard" class="icon"/>
             </div>
-            <a routerLink="/usuario/questoes" class="btn btn-primary">
+            <button (click)="exibirMensagem('flashcard')" class="btn btn-primary">
               Acessar >
-            </a>
+            </button>
+            <div *ngIf="mostrarMensagemFlashcard" class="mensagem">
+              Em breve novas funcionalidades disponíveis para você 😃.
+            </div>
           </div>
         </div>
       </div>

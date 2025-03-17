@@ -1,0 +1,123 @@
+.card {
+  border: 1px solid #f0f0f0;
+  background: #e5ebff44;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  max-width: 100%;
+  width: 350px;
+  min-height: 455px;
+}
+
+.card-header {
+  margin-bottom: 16px;
+  margin-right: 40px;
+  background: #253c66;
+  border-radius: 16px 0 24px 0;
+  height: 50px;
+  width: 60%;
+  display: flex;
+}
+
+.card-body {
+  margin: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card h3 {
+  margin: 4px;
+  font-size: 24px;
+  color: #ffffff;
+}
+
+.value {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.value h4 {
+  margin: 0;
+  color: #041e4e;
+  font-size: 33px;
+  font-weight: 500;
+}
+
+.value .texto-parcelas {
+  margin: 0;
+  color: #041e4e;
+  font-size: 33px;
+  font-weight: 500;
+}
+
+.value span {
+  font-size: 16px;
+  color: #041e4e;
+}
+
+.value p {
+  margin: 0;
+  color: #010204;
+  font-size: 16px;
+}
+
+.card .btn {
+  padding: 10px 20px;
+  font-size: 1em;
+}
+
+.card-body ul {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0;
+  margin-bottom: 40px;
+  margin-top: 24px;
+}
+
+.card-body li {
+  margin: 8px 0;
+  font-size: 16px;
+  text-align: start;
+  width: 80%;
+}
+
+.badge-recomendado {
+  position: absolute;
+  top: -22px;
+  right: 14px;
+  background-color: #ffbf23;
+  color: #0f1934;
+  padding: 8px 20px;
+  border-radius: 4px;
+  font-size: 22px;
+  font-weight: 500;
+}
+
+.btn-plano {
+  width: 100%;
+  background: #ffbf23;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.btn-plano:hover {
+  background: #e69f00;
+}
+
+@media (max-width: 768px) {
+  .card {
+    width: 100%;
+  }
+
+  .card-header {
+    width: 70%;
+  }
+}

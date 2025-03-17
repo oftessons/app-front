@@ -345,33 +345,19 @@
   margin-top: 20px;
 }
 
+
 .left-buttons {
   display: flex;
-  justify-content: flex-start;
+  justify-content: flex-start; /* Alinha os botões à esquerda */
+  gap: 10px; /* Espaçamento entre botões */
 }
 
 .right-buttons {
   display: flex;
   justify-content: flex-end; /* Alinha os botões à direita */
-  gap: 10px;
+  gap: 10px; /* Espaçamento entre botões */
 }
 
-.btn-gabarito {
-  padding: 10px 20px;
-  width: 130px;
-  border: 2px solid #3b5fa0;
-  border-radius: 5px;
-  background-color: transparent;
-  color: #000;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: bold;
-}
-
-.btn-gabarito:hover {
-  background-color: #0056b3;
-  color: #ccc;
-}
 
 .btn-anterior,
 .btn-proxima,
@@ -383,6 +369,18 @@
   cursor: pointer;
   font-size: 16px;
   color: #fff;
+}
+
+.btn-gabarito {
+  padding: 10px 20px;
+  width: 130px;
+  border: 2px solid #f4a261; /* Borda da cor especificada */
+  border-radius: 5px;
+  background-color: #f4a261; /* Background transparente */
+  color: #000; /* Cor do texto preto */
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
 }
 
 .btn-anterior {
@@ -535,7 +533,38 @@ canvas {
   }
 }
 
+.alternativa {
+  display: flex;
+  align-items: center;
+  border-radius: 5px; /* Border radius for rounded corners */
+  padding: 10px; /* Padding for better spacing */
+  transition: background-color 0.3s, border-color 0.3s; /* Smooth transitions for background and border color */
+}
+
+
+.alternativa-certa::after {
+  content: '';
+  display: inline-block;
+  width: 25px; 
+  height: 25px; 
+  background-image: url('src/assets/Icons/confirmar.png');
+  background-size: cover;
+  margin-left: 8px;
+}
+
+.alternativa-errada::after {
+  content: '';
+  display: inline-block;
+  width: 25px; 
+  height: 25px;
+  background-image: url('src/assets/Icons/Error.png');
+  background-size: cover;
+  margin-left: 8px
+}
+
 .alternativa-input-group {
+  display: flex;
+  align-items: center;
   margin-bottom: 8px;
 }
 

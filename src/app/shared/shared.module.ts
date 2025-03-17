@@ -11,6 +11,8 @@ import { ModuloAulasComponent } from './modulo-aulas/modulo-aulas.component';
 import { PlaylistModeComponent } from './playlist-mode/playlist-mode.component';
 import { MultiploSelectComponent } from './multiplo-select/multiplo-select.component';
 import { ModalComponent } from './modal/modal.component';
+import { CardPlanoComponent } from './card-plano/card-plano.component';
+import { AppRoutingModule } from '../app-routing.module';
 
 
 @NgModule({
@@ -20,13 +22,15 @@ import { ModalComponent } from './modal/modal.component';
     ModuloAulasComponent,
     PlaylistModeComponent,
     MultiploSelectComponent,
-    ModalComponent
+    ModalComponent,
+    CardPlanoComponent
   ],
   imports: [
     CommonModule,
     MatIconModule,
     ImageResizeModule,
     FormsModule,
+    AppRoutingModule
   ],
   exports: [
     SelectPadraoComponent,
@@ -35,7 +39,8 @@ import { ModalComponent } from './modal/modal.component';
     ModuloAulasComponent,
     PlaylistModeComponent,
     MultiploSelectComponent,
-    ModalComponent
+    ModalComponent,
+    CardPlanoComponent
   ]
 })
 export class SharedModule { }
