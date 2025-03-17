@@ -156,6 +156,9 @@ export class ListaQuestoesComponent implements OnInit {
       this.deletarQuestao();
     } else if (this.modalType === 'deleteFiltro') {
       this.deletarFiltro(this.filtroSelecionado.id);
+    } 
+    else if (this.modalType === 'deleteAula') {
+      this.deletarAula();
     }
   }
 

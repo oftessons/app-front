@@ -129,8 +129,8 @@ export class CadastroDeAulasComponent implements OnInit {
     this.formData = new FormData();
     
     const objetoJson = this.aulaDTO.id 
-  ? this.aulaDTO.toJsonUpdate() 
-  : JSON.stringify(this.aulaDTO.toJson());
+      ? this.aulaDTO.toJsonUpdate() 
+      : JSON.stringify(this.aulaDTO);
 
     console.log('Objeto JSON', objetoJson);
 
