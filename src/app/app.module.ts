@@ -25,6 +25,7 @@ import { QuillModule } from 'ngx-quill';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { PlanosComponent } from './planos/planos/planos.component';
 import { DetalhesPlanosComponent } from './planos/detalhes-planos/detalhes-planos.component';
+import { PagamentoConcluidoComponent } from './planos/pagamento-concluido/pagamento-concluido.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { DetalhesPlanosComponent } from './planos/detalhes-planos/detalhes-plano
     ResetPasswordComponent,
     PlanosComponent,
     DetalhesPlanosComponent,
+    PagamentoConcluidoComponent,
   ],
   imports: [
     BrowserModule,

@@ -7,12 +7,14 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
 import { AuthGuard } from './services/auth.guard';
 import { PlanosComponent } from './planos/planos/planos.component';
 import { DetalhesPlanosComponent } from './planos/detalhes-planos/detalhes-planos.component';
+import { PagamentoConcluidoComponent } from './planos/pagamento-concluido/pagamento-concluido.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'reset-password', component: ResetPasswordComponent },
   { path: 'planos', component: PlanosComponent },
   { path: 'plano/:slug', component: DetalhesPlanosComponent },
+  { path: 'pagamento-concluido', component: PagamentoConcluidoComponent },
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: '', component: LayoutComponent, children: [
     { path : 'usuario/dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
