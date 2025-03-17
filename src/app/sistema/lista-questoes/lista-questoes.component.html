@@ -85,6 +85,11 @@
           <ng-container *ngSwitchCase="'deleteFiltro'">
             Deseja realmente excluir a questão {{ filtroSelecionado?.id }}?
           </ng-container>
+          <ng-container *ngSwitchCase="'deleteAula'">
+            <ng-container *ngIf="aulaSelecionada">
+              Deseja realmente excluir a aula {{ aulaSelecionada.id }}?
+            </ng-container>
+          </ng-container>
         </ng-container>
       </div>
       <div class="modal-footer">
