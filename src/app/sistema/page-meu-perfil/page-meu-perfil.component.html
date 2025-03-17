@@ -69,27 +69,27 @@
        <div class="cont-assinatura">
         <div class="line-dados">
           <h3>Plano</h3>
-          <span>Premium</span>
+          <span>{{ planInformation.name }}</span>
         </div>
         <hr>
         <div class="line-dados">
           <h3>Intervalo de renovação</h3>
-          <span>Mensal</span>
+          <span>{{ planInformation.intervaloRenovacao }}</span>
         </div>
         <hr>
         <div class="line-dados">
           <h3>Status</h3>
-          <span>Ativo</span>
+          <span>{{ planInformation.status }}</span>
         </div>
         <hr>
         <div class="line-dados">
           <h3>Próxima renovação</h3>
-          <span>dd/mm/aaaa</span>
+          <span>{{ planInformation.proximaRenovacao }}</span>
         </div>
         <hr>
         <div class="line-dados">
           <h3>Válido até</h3>
-          <span>dd/mm/aaaa</span>
+          <span>{{ planInformation.validoAte }}</span>
         </div>
       </div>
       <button  class="btn-assinatura">Abrir Portal de Assinatura e Pagamentos</button>
