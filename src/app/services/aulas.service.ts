@@ -92,7 +92,7 @@ export class AulasService {
   }
 
   deletar(id: number): Observable<any> {
-    return this.http.delete(`${this.apiURL}/${id}`).pipe(
+    return this.http.delete(`${this.apiURL}/${id}`, {responseType: 'text'}).pipe(
       map((response) => ({ message: response })),
       catchError((error) => {
         let errorMessage = 'Erro ao deletar a aula.';
