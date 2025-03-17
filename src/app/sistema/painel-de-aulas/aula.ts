@@ -32,4 +32,10 @@ export class Aula {
       documentos: this.documentos,
     });
   }
+  toJsonUpdate(): string {
+    const { id, documentos, ...rest } = this;
+    return JSON.stringify({
+      ...rest,
+    });
+  }
 }
