@@ -121,22 +121,30 @@ export class CadastroDeAulasComponent implements OnInit {
   }
 
   onSubmit(): void {
-    console.log('Formulário enviado');
+    console.log('FormulÃ¡rio enviado');
     this.isLoading = true; 
     this.successMessage = null;
     this.errorMessage = null;
 
     this.formData = new FormData();
-    // Remove 'documentos' from aulaDTO if it's an edit operation
-    if (this.isEditMode) {
-      delete this.aulaDTO.documentos;
-    }
-    const objetoJson = JSON.stringify(this.aulaDTO);
+    
+    const objetoJson = this.aulaDTO.id 
+  ? this.aulaDTO.toJsonUpdate() 
+  : JSON.stringify(this.aulaDTO.toJson());
+
+    console.log('Objeto JSON', objetoJson);
 
     if (this.video) {
       this.formData.append('video', this.video);
     }
-    this.formData.append('aulaDTO', objetoJson);
+
+    if(!this.aulaDTO.id){
+      this.formData.append('aulaDTO', objetoJson);
+    }else{
+      const jsonBlob = new Blob([objetoJson], { type: 'application/json' });
+      this.formData.append('aulaDTO', jsonBlob);
+      console.log('Objeto JSON Blob', jsonBlob);
+    }
 
     if (this.arquivos.length > 0) {
       this.arquivos.forEach((arquivo) => {
@@ -214,6 +222,14 @@ export class CadastroDeAulasComponent implements OnInit {
         }
         this.video = null;
         this.arquivos = [];
+
+        // Carregar documentos existentes
+        if (this.aula.documentos && this.aula.documentos.length > 0) {
+          this.aula.documentos.forEach((doc) => {
+            const file = new File([doc.url], doc.key, { type: 'application/pdf' });
+            this.arquivos.push(file);
+          });
+        }
       },
       (error) => {
         console.error('Erro ao carregar aula:', error);
