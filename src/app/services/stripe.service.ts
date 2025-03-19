@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment.prod';
 import { catchError, map, tap } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
-import { Plano } from '../sistema/page-meu-perfil/plano';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -12,16 +12,16 @@ export class StripeService {
 
   constructor(private http: HttpClient) {}
 
-  createCheckoutSession(planoSelecionado: String) {
+  createCheckoutSession(planoSelecionado: String): Observable<any> {
     const url = `${this.apiURL}/create-checkout-session?plano=${planoSelecionado}`;
 
-    return this.http.post<Plano>(url, planoSelecionado);
+    return this.http.post(url, planoSelecionado);
   }
 
-  createPortalSession() {
+  createPortalSession(): Observable<any> {
     const url = `${this.apiURL}/create-portal-session`;
 
-    return this.http.post<Plano>(url, {});
+    return this.http.post(url, {});
   }
 
   getPlanInformation(): Observable<any>{ 
