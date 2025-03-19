@@ -85,6 +85,11 @@
           <ng-container *ngSwitchCase="'deleteFiltro'">
             Deseja realmente excluir a questão {{ filtroSelecionado?.id }}?
           </ng-container>
+          <ng-container *ngSwitchCase="'deleteAula'">
+            <ng-container *ngIf="aulaSelecionada">
+              Deseja realmente excluir a aula {{ aulaSelecionada.id }}?
+            </ng-container>
+          </ng-container>
         </ng-container>
       </div>
       <div class="modal-footer">
@@ -138,7 +143,6 @@
         <thead>
           <tr>
             <th>ID</th>
-            <th>Data de Cadastro</th>
             <th>Nome da Aula</th>
             <th>Ações</th>
           </tr>
@@ -146,7 +150,6 @@
         <tbody>
           <tr *ngFor="let aula of aulas | paginate: { itemsPerPage: pageSizeAula, currentPage: pageAula }">
             <td>{{ aula.id }}</td>
-            <td>{{ aula.diaDoCadastro }}</td>
             <td>{{ aula.titulo }}</td>
             <td>
               <button class="btn btn-primary btn-custom-editar" (click)="editarAula(aula.id)">
