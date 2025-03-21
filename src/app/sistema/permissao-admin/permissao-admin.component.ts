@@ -5,7 +5,6 @@ import { PermissaoDescricoes } from 'src/app/login/Permissao-descricao';
 import { Usuario } from 'src/app/login/usuario';
 import { AuthService } from 'src/app/services/auth.service';
 import { ChangeDetectorRef } from '@angular/core';
-import { UnaryOperator } from '@angular/compiler';
 
 @Component({
   selector: 'app-permissao-admin',
@@ -44,7 +43,9 @@ export class PermissaoAdminComponent implements OnInit {
     telefone: new FormControl('', {validators: [Validators.required]}),
     estado: new FormControl('', ),
     cidade: new FormControl('', ),
-    tipoUsuario: new FormControl('', {validators: [Validators.required]})
+    tipoUsuario: new FormControl('', {validators: [Validators.required]}),
+    bolsa: new FormControl(false, {validators: [Validators.required]}),
+    quantidadeDiasBolsa: new FormControl( [null, [Validators.required, Validators.min(1)]])
   });
 
   showModalCadastrar: boolean = false;
@@ -73,7 +74,9 @@ export class PermissaoAdminComponent implements OnInit {
       telefone: [''],
       cidade: [''],
       estado: [''],
-      tipoUsuario: ['']
+      tipoUsuario: [''],
+      bolsa: [''],
+      quantidadeDiasBolsa: ['']
     });
   }
 
@@ -129,6 +132,9 @@ export class PermissaoAdminComponent implements OnInit {
     usuario.estado = userData.estado;
     usuario.tipoUsuario = userData.tipoUsuario;
     const permissao = this.mapearDescricaoParaEnum(userData.tipoUsuario);
+
+    usuario.bolsaAssinatura = userData.bolsa;
+    usuario.diasDeTeste = userData.quantidadeDiasBolsa;
 
     this.authService.salvar(usuario, permissao).subscribe((response) => {
       this.mensagemSucesso = response.message;

@@ -191,6 +191,19 @@
                 <option *ngFor="let tipo of tiposPermissao" (value)="tipo">{{ tipo }}</option>
               </select>
             </div>
+            
+            <div *ngIf="usuarioForm.get('tipoUsuario')?.value === 'ALUNO'">
+              <div class="form-group">
+                <label for="bolsa" class="small mb-1">Possui Bolsa?</label>
+                <input type="checkbox" formControlName="bolsa" />
+              </div>
+  
+              <div *ngIf="usuarioForm.get('bolsa')?.value">
+                <label for="quantidadeDiasBolsa" class="small mb-1">Quantidade de Dias da Bolsa</label>
+                <input type="number" formControlName="quantidadeDiasBolsa" placeholder="Informe a quantidade de dias da bolsa" class="form-control py-2 responsive-input" />
+              </div>
+            </div>
+          
           </div>
         </form>
       </div>
@@ -200,7 +213,7 @@
           Cancelar
         </button>
         <button type="button" class="btn button-confirm" (click)="cadastrarUsuarios()">
-            Cadastrar
+          Cadastrar
         </button>
       </div>
     </app-modal>
@@ -255,7 +268,7 @@
             <div class="form-group">
                 <label class="small mb-1" style="font-size: 1.2em;">E-mail *</label>
                 <input type="email" formControlName="email" name="email" class="form-control py-2 responsive-input" placeholder="Digite seu e-mail" required />
-            </div>
+            </div>astrar usuário
 
             <div class="form-group">
                 <label class="small mb-1" style="font-size: 1.2em;">Celular</label>
@@ -282,7 +295,7 @@
           Cancelar
         </button>
         <button type="button" class="btn button-confirm" (click)="editarUsuarios()">
-            Gravar alterações
+          Gravar alterações
         </button>
       </div>
     </app-modal>

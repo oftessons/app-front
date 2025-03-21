@@ -8,7 +8,6 @@ import { StatusAssinatura } from './enums/status-assinatura';
 import { StatusAssinaturaDescricao } from './enums/status-assinatura-descricao';
 import { PeriodoAssinatura } from './enums/periodo-assinatura';
 import { PeriodoAssinaturaDescricao } from './enums/periodo-assinatura-descricao';
-import { InteractionModeRegistry } from 'chart.js';
 
 @Component({
   selector: 'app-page-meu-perfil',
