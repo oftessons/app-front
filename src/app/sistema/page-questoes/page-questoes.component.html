@@ -11,7 +11,25 @@
   <div [ngClass]="{'filtros-container': true, 'filtros-container-open': mostrarFiltros}">
     <div class="container">
       <div class="filters-container">
-        <form #filtroForm="ngForm" (ngSubmit)="filtrarQuestoes()" class="consulta-form">
+        <form #filtroForm="ngForm" (ngSubmit)="filtrarQuestoes()" class="consulta-form">  
+          <div class="row">
+            <div class="col col-12 col-md-6 espaco-select">
+              <app-multiplo-select
+                label="Respostas"
+                [options]="respSimuladoDescricoes"
+                [(selectedValue)]="multiSelectRespSimu"
+                [multiple]="true">
+              </app-multiplo-select>
+            </div>
+            <div class="col col-12 col-md-6 espaco-select">
+              <app-multiplo-select
+                label="Questões"
+                [options]="questoesCertasErradas"
+                [(selectedValue)]="multiSelectCertoErrado"
+                [multiple]="true">
+              </app-multiplo-select>
+            </div>
+          </div>
           <div class="row">
             <div class="col col-12 col-md-6 espaco-select">
               <app-multiplo-select

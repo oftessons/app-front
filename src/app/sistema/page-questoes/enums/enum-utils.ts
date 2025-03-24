@@ -7,6 +7,7 @@ import { SubtemaDescricoes } from "./subtema-descricao"
 import { Dificuldade } from "./dificuldade" 
 import { DificuldadeDescricoes } from "./dificuldade-descricao" 
 import { Ano } from "./ano"
+import { CertasErradas } from "./certas-erradas"
 import { AnoDescricoes } from "./ano-descricoes" 
 import { Relevancia } from "./relevancia"
 import { RelevanciaDescricao } from "./relevancia-descricao"
@@ -14,6 +15,7 @@ import { QuantidadeDeQuestoesSelecionadas } from "./quant-questoes"
 import { QuantidadeDeQuestõesSelecionadasDescricoes } from "./quant-que-descricao"
 import { RespostasSimulado } from "./resp-simu"
 import { RespostasSimuladosDescricao } from "./resp-simu-descricao"
+import { CertasErradasDescricao } from "./certas-errads-descricao"
 
 export function getQuantidadeDeQuestõesSelecionadasDescricoes( quantidadeDeQuestoesSelecionadas:QuantidadeDeQuestoesSelecionadas): string{
   return QuantidadeDeQuestõesSelecionadasDescricoes[quantidadeDeQuestoesSelecionadas];
@@ -44,4 +46,8 @@ export function getDescricaoQuantidadeDeQuestoesSelecionadas(quantidadeDeQuestoe
 
 export function getDescricaoRespostasSimulado(respostasSimulado: RespostasSimulado): string {
   return RespostasSimuladosDescricao[respostasSimulado];
+}
+
+export function getDescricaoCertoErrado(certoErrado: CertasErradas): string {
+  return CertasErradasDescricao[certoErrado];
 }
