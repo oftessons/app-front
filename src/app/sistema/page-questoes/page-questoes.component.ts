@@ -2,7 +2,9 @@ import { Component, OnInit, ElementRef, ViewChild, AfterViewChecked, PipeTransfo
 import { TipoDeProva } from './enums/tipoDeProva';
 import {
   getDescricaoAno,
+  getDescricaoCertoErrado,
   getDescricaoDificuldade,
+  getDescricaoRespostasSimulado,
   getDescricaoSubtema,
   getDescricaoTema,
   getDescricaoTipoDeProva,
@@ -12,6 +14,7 @@ import { Dificuldade } from './enums/dificuldade';
 import { Subtema } from './enums/subtema';
 import { Tema } from './enums/tema';
 import { Questao } from './questao';
+import { RespostasSimulado } from './enums/resp-simu';
 import { QuestoesService } from 'src/app/services/questoes.service';
 import { FiltroService } from 'src/app/services/filtro.service';
 import { RespostaDTO } from '../RespostaDTO'; // Adicione esta importação
@@ -26,6 +29,9 @@ import { DificuldadeDescricoes } from './enums/dificuldade-descricao';
 import { TipoDeProvaDescricoes } from './enums/tipodeprova-descricao';
 import { SubtemaDescricoes } from './enums/subtema-descricao';
 import { TemaDescricoes } from './enums/tema-descricao';
+import { CertasErradas } from './enums/certas-erradas';
+import { CertasErradasDescricao } from './enums/certas-errads-descricao';
+import { RespostasSimuladosDescricao } from './enums/resp-simu-descricao';
 
 declare var bootstrap: any;
 
@@ -48,6 +54,8 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   dificuldades = Object.values(Dificuldade);
   subtemas = Object.values(Subtema);
   temas = Object.values(Tema);
+  respSimulado = Object.values(RespostasSimulado);
+  certoErrado = Object.values(CertasErradas);
   mensagemSucesso: string = '';
 
   jaRespondeu: boolean = false;
@@ -73,6 +81,8 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     tipoDeProva: null,
     subtema: null,
     tema: null,
+    certoErrado: null,
+    respSimulado: null, 
     palavraChave: null,
   };
 
@@ -95,6 +105,8 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   dificuldadesDescricoes: string[] = [];
   subtemasDescricoes: string[] = [];
   temasDescricoes: string[] = [];
+  respSimuladoDescricoes: string[] = [];
+  questoesCertasErradas: string[] = [];
 
   descricaoFiltro: string = '';
   palavraChave: string = '';
@@ -103,6 +115,8 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   multSelectTipoDeProva: TipoDeProva[] = [];
   multSelectSubtema: Subtema[] = [];
   multSelectTema: Tema[] = [];
+  multiSelectRespSimu: RespostasSimulado[] = [];
+  multiSelectCertoErrado: CertasErradas[] = [];
 
   comentarioDaQuestaoSanitizado: SafeHtml = '';
   sanitizerEnunciado: SafeHtml = '';
@@ -170,6 +184,12 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     );
     this.temasDescricoes = this.temas.map((tema) =>
       this.getDescricaoTema(tema)
+    );
+    this.respSimuladoDescricoes = this.respSimulado.map((respSimulado) =>
+      this.getDescricaoRespSimulado(respSimulado)
+    );
+    this.questoesCertasErradas = this.certoErrado.map((certasErradas) =>
+      this.getDescricaoCertoErrado(certasErradas)
     );
   }
 
@@ -293,6 +313,22 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     return temas.map(this.getDescricaoTema).join('; ');
   }
 
+  getDescricaoRespSimulado(respSimulado: RespostasSimulado): string {
+    return getDescricaoRespostasSimulado(respSimulado);
+  }
+
+  getDescricoesRespSimulado(respSimulados: RespostasSimulado[]): string {
+    return respSimulados.map(this.getDescricaoRespSimulado).join('; ');
+  } 
+
+  getDescricaoCertoErrado(certoErrado: CertasErradas): string {
+    return getDescricaoCertoErrado(certoErrado);
+  }
+
+  getDescricoesCertoErrado(certasErradas: CertasErradas[]): string {
+    return certasErradas.map(this.getDescricaoCertoErrado).join('; ');
+  }
+
   obterAnoEnum(ano: string): Ano | undefined {
     const anoEnum = Object.keys(AnoDescricoes).find(
       (key) => AnoDescricoes[key as Ano] === ano
@@ -329,6 +365,20 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     return chave ? Tema[chave as Tema] : undefined;
   }
   
+  obterCertoErradoEnum(descricao: string): CertasErradas | undefined {
+    const chave = Object.keys(CertasErradasDescricao).find(
+      (key) => CertasErradasDescricao[key as CertasErradas] === descricao
+    );
+    return chave ? CertasErradas[chave as CertasErradas] : undefined;
+  }
+
+  obterRespSimuladoEnum(descricao: string): RespostasSimulado | undefined {
+    const chave = Object.keys(RespostasSimuladosDescricao).find(
+      (key) => RespostasSimuladosDescricao[key as RespostasSimulado] === descricao
+    );
+    return chave ? RespostasSimulado[chave as RespostasSimulado] : undefined;
+  }
+
 
   LimparFiltro() {
     this.multSelectAno = [];
@@ -336,6 +386,8 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     this.multSelectTipoDeProva = [];
     this.multSelectSubtema = [];
     this.multSelectTema = [];
+    this.multiSelectCertoErrado = [];
+    this.multiSelectRespSimu = [];
     this.palavraChave = '';
     this.filtros = {
       ano: null,
@@ -343,6 +395,8 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       tipoDeProva: null,
       subtema: null,
       tema: null,
+      certoErrado: null,
+      respSimulado: null,
       palavraChave: null,
     };
     this.paginaAtual = 0;
@@ -361,7 +415,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
         filtros.ano = anosSelecionados;
       }
     }
-
 
     if (this.multSelecDificuldade.length) {
       const dificuldadeSelecionada = this.multSelecDificuldade
@@ -383,7 +436,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       }
     }
 
-
     if (this.multSelectSubtema.length) {
       const subtemaSelecionado = this.multSelectSubtema
       .map((subtema) => this.obterSubtemaEnum(subtema))
@@ -393,7 +445,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
         filtros.subtema = subtemaSelecionado;
       }
     }
-
 
     if (this.multSelectTema.length) {
       const temaSelecionado = this.multSelectTema
@@ -405,6 +456,27 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       }
     }
 
+    if (this.multiSelectCertoErrado.length){
+      const certoErradoSelecionado = this.multiSelectCertoErrado
+      .map((certoErrado) => this.obterCertoErradoEnum(certoErrado))
+      .filter((enumCertoErrado) => enumCertoErrado!== undefined);
+
+      if(certoErradoSelecionado) {
+        filtros.certoErrado = certoErradoSelecionado;
+      }
+    }
+
+    if (this.multiSelectRespSimu.length){
+      const respSimuladoSelecionado = this.multiSelectRespSimu
+      .map((respSimu) => this.obterRespSimuladoEnum(respSimu))
+      .filter((enumRespSimu) => enumRespSimu!== undefined);
+
+      if(respSimuladoSelecionado) {
+        filtros.respSimulado = respSimuladoSelecionado;
+      }
+      
+    } 
+
     // Verificar se a palavra-chave está preenchida
     if (this.palavraChave && this.palavraChave.trim() !== '') {
       filtros.palavraChave = this.palavraChave.trim();
@@ -415,7 +487,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       this.questoes = [];
       return;
     }
-
   
     this.questoesService.filtrarQuestoes(this.usuarioId, filtros, 0, 100).subscribe(
       (questoes: Questao[]) => {
@@ -477,6 +548,13 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     if (filtros.palavraChave) {
       mensagemUsuarioTratamento += `Palavra-chave: ${filtros.palavraChave}, `;
     }
+    if (filtros.respSimulado) {
+      mensagemUsuarioTratamento += `Respostas: ${this.getDescricoesRespSimulado(filtros.respSimulado)}, `;
+    }
+    if (filtros.certoErrado) {
+      mensagemUsuarioTratamento += `Questões: ${this.getDescricaoCertoErrado(filtros.certoErrado)}, `;
+    }
+
   
     // Remover a última vírgula e espaço
     return mensagemUsuarioTratamento.slice(0, -2) + '.';
@@ -689,8 +767,8 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
         this.exibirMensagem(errorMessage, 'erro');
       }
     )
+   }
   }
-}
 
   private mapearDescricoesParaEnums(selecoes: string[], descricoesEnum: any): string[] {
     if (!selecoes || selecoes.length === 0) return [];
@@ -731,14 +809,11 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     );
   }
 
- 
-
   isImage(url: string): boolean {
     //console.log(`Verificando imagem: ${url}`);
     return url ? url.includes('.jpeg') || url.includes('.jpg') || url.includes('.gif') || url.includes('.png') : false;
   }
   
-
   isVideo(url: string): boolean {
     return url.match(/\.(mp4|webm|ogg)$/) != null;
   }
