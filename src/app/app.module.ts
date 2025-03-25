@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core'; 
 import { BrowserModule } from '@angular/platform-browser';
-
+import { ChatBotComponent } from './chat-bot/chat-bot.component'; 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { TemplateModule } from './template/template.module';
@@ -33,6 +33,7 @@ import { PagamentoConcluidoComponent } from './planos/pagamento-concluido/pagame
     LayoutComponent,
     LoginComponent,
     ResetPasswordComponent,
+    ChatBotComponent,
     PlanosComponent,
     DetalhesPlanosComponent,
     PagamentoConcluidoComponent,
