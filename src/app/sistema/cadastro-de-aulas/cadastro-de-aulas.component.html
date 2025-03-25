@@ -12,12 +12,6 @@
                <input type="text" class="form-control" name="id" [(ngModel)]="aulaDTO.id" disabled>
              </div>
            </div>
-           <div class="col-md-6">
-             <div class="form-group">
-               <label>Data Cadastro:</label>
-               <input type="text" class="form-control" name="diaDoCadastro" [(ngModel)]="aulaDTO.diaDoCadastro" disabled>
-             </div>
-           </div>
          </div>
    
          <div>
@@ -47,25 +41,25 @@
            <hr class="line">
          </div>
          <div class="cont-imgs">
-           <div class="form-group">
-             <div class="image-upload" (drop)="onDrop($event, 'video')" (dragover)="onDragOver($event)">
-               <input type="file" id="video" name="video"
-                 (change)="onFileSelected($event, 'video')" accept="image/*,video/*" style="display: none;" />
-               <label for="video">
-                 <div class="foto-preview" id="fotoPreview">
-                   <ng-container *ngIf="fotoPreviews['video']">
-                     <img *ngIf="isPreviewImage(fotoPreviews['video'])" [src]="fotoPreviews['video']" alt="Image Preview" />
-                     <video *ngIf="isPreviewVideo(fotoPreviews['video'])" [src]="fotoPreviews['video']" controls></video>
-                   </ng-container>
-                   <span *ngIf="!fotoPreviews['video']" class="upload-placeholder">
-                     <img src="assets/imagens/filme.svg" style="width: 50px; opacity: 0.5;" class="upload-icon">
-                     Clique para fazer upload do vídeo
-                   </span>
-                 </div>
-               </label>
-             </div>
-           </div>
-         </div>
+          <div class="form-group">
+            <div class="image-upload" (drop)="onDrop($event, 'video')" (dragover)="onDragOver($event)">
+              <input type="file" id="video" name="video"
+                (change)="onFileSelected($event, 'video')" accept="image/*,video/*" style="display: none;" />
+              <label for="video">
+                <div class="foto-preview" id="fotoPreview">
+                  <ng-container *ngIf="fotoPreviews['video']">
+                    <img *ngIf="isPreviewImage(fotoPreviews['video'])" [src]="fotoPreviews['video']" alt="Image Preview" />
+                    <video *ngIf="isPreviewVideo(fotoPreviews['video'])" [src]="fotoPreviews['video']" controls></video>
+                  </ng-container>
+                  <span *ngIf="!fotoPreviews['video']" class="upload-placeholder">
+                    <img src="assets/imagens/filme.svg" style="width: 50px; opacity: 0.5;" class="upload-icon">
+                    Clique para fazer upload do vídeo
+                  </span>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
          
          <div class="form-group">
             <label for="titulo">Título:</label>

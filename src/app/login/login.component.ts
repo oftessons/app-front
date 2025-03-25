@@ -75,6 +75,8 @@ export class LoginComponent {
                 nome: response.nome || '',
                 confirmPassword: '', 
                 tipoUsuario: '',
+                bolsaAssinatura: response.bolsa || false,
+                diasDeTeste: response.quantidadeDiasBolsa || 0,
                 permissao: response.authorities.length > 0 ? response.authorities[0] : null 
             };
             localStorage.setItem('usuario', JSON.stringify(usuario));

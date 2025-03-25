@@ -12,7 +12,7 @@
 }
 
 .container-logo img {
-  width: 600px;
+  width: 540px;
   height: auto;
 }
 
@@ -79,4 +79,14 @@
   .container-logo img {
     width: 100%;
   }
+}
+
+.mensagem {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #cfe2ff; 
+  color: #000;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: bold;
 }

@@ -254,7 +254,7 @@ export class QuestoesService {
   }
 
   // Método correto para buscar questão por ID
-  buscarQuestaoPorId(
+  buscarQuestaoPorId( 
     usuarioId: number,
     questaoId: number
   ): Observable<Questao | null> {

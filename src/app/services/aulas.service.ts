@@ -70,8 +70,8 @@ export class AulasService {
     );
   }
 
-  buscarAulaPorId(idUser: number, aulaId: number): Observable<Aula> {
-    const url = `${this.apiURL}/${aulaId}`;
+  buscarAulaPorId(id: number): Observable<Aula> {
+    const url = `${this.apiURL}/${id}`;
     console.log('URL da solicitação:', url);
     return this.http.get<Aula>(url).pipe(
       tap((response) => {
@@ -92,10 +92,29 @@ export class AulasService {
   }
 
   deletar(id: number): Observable<any> {
-    return this.http.delete(`${this.apiURL}/${id}`).pipe(
+    return this.http.delete(`${this.apiURL}/${id}`, {responseType: 'text'}).pipe(
       map((response) => ({ message: response })),
       catchError((error) => {
         let errorMessage = 'Erro ao deletar a aula.';
+  
+        if (error.error instanceof ErrorEvent) {
+          errorMessage = `Erro: ${error.error.message}`;
+        } else if (error.status) {
+          errorMessage = `Erro no servidor: ${error.status} - ${error.message}`;
+        }
+        console.error(errorMessage);
+        return throwError(() => new Error(errorMessage));
+      })
+    );
+  }
+
+  atualizar(id: number, formData: FormData): Observable<any> {
+    return this.http.put(`${this.apiURL}/${id}`, formData, {
+      responseType: 'text'
+    }).pipe(
+      map((response) => ({ message: response })),
+      catchError((error) => {
+        let errorMessage = 'Erro ao atualizar a aula.';
   
         if (error.error instanceof ErrorEvent) {
           errorMessage = `Erro: ${error.error.message}`;
