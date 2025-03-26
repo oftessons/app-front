@@ -91,8 +91,12 @@ export class LoginComponent {
 
         },
         errorResponse => {
+          if (errorResponse.status === 401 && errorResponse.error === 'CadastroIncompleto') {
+            this.errors = ['Faça o seu cadastro, entre e ative o seu plano para acessar a plataforma.'];
+          } else {
             this.errors = ['Usuário e/ou senha incorreto(s).'];
-        }
+          }
+        }        
     );
 }
 

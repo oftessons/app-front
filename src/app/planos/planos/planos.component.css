@@ -63,6 +63,34 @@
   color: #006eff;
 }
 
+
+.texto-informativo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 16px;
+  color: #1a1918;
+  margin-top: 24px;
+}
+
+.texto-informativo p {
+  margin-bottom: 8px;
+}
+
+.texto-informativo a {
+  font-size: 16px;
+  color: #2f7ce0;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.texto-informativo a:hover {
+  color: #006eff;
+}
+
+
 @media (max-width: 768px) {
   .main-container {
     margin: 16px;
