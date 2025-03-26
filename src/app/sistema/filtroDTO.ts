@@ -7,4 +7,6 @@ export class FiltroDTO {
   dificuldade!: string[] | null;
   tipoDeProva!: string[] | null;
   subtema!: string[] | null;
+  certasErradas!: string[] | null;
+  respostasSimulado!: string[] | null;
 }

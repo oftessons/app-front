@@ -157,6 +157,9 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       this.multSelectTema = meuFiltro.tema;
       this.multSelectSubtema = meuFiltro.subtema;
       this.multSelecDificuldade = meuFiltro.dificuldade;
+      this.multSelectTipoDeProva = meuFiltro.tipoDeProva;
+      this.multiSelectRespSimu = meuFiltro.respostasSimulado;
+      this.multiSelectCertoErrado = meuFiltro.certasErradas;
     }
     this.tiposDeProvaDescricoes = this.tiposDeProva.map((tipoDeProva) =>
       this.getDescricaoTipoDeProva(tipoDeProva)
@@ -746,7 +749,11 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     tipoDeProva: this.mapearDescricoesParaEnums(this.multSelectTipoDeProva, TipoDeProvaDescricoes),
     subtema: this.mapearDescricoesParaEnums(this.multSelectSubtema, SubtemaDescricoes),
     tema: this.mapearDescricoesParaEnums(this.multSelectTema, TemaDescricoes),
+    respostasSimulado: this.mapearDescricoesParaEnums(this.multiSelectRespSimu, RespostasSimuladosDescricao),
+
+    certasErradas: this.mapearDescricoesParaEnums(this.multiSelectCertoErrado, CertasErradasDescricao),
   };
+
   
   if(this.filtroASalvar) {
     const idUser = parseInt(this.usuario.id);
