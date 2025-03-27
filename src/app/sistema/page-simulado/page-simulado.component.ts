@@ -621,6 +621,7 @@ export class PageSimuladoComponent implements OnInit {
           }
           this.resposta = '';
           this.mostrarGabarito = false;
+          this.toggleFiltros();
         },
         (error) => {
           console.error('Erro ao filtrar questões:', error);
