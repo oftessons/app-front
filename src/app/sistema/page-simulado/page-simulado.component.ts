@@ -797,9 +797,7 @@ export class PageSimuladoComponent implements OnInit {
 
     modalElement?.addEventListener('hidden.bs.modal', () => {
       this.fecharCardConfirmacao();
-      this.finalizarSimulado();
-      alert('Para realizar seu simulado é necessário salvar antes.');
-      
+            
     });
   }
 
