@@ -158,11 +158,10 @@ export class PageSimuladoComponent implements OnInit {
   async ngOnInit() {
     const meuSimulado = history.state.simulado;
     this.simuladoIdInicial = meuSimulado?.id;
-    //console.log("Ele ta aqui: ")
-    console.log(meuSimulado);
     this.dados = this.obterDados();
     await this.obterPerfilUsuario();
     if (meuSimulado) {
+      this.toggleFiltros();
       this.jaRespondeu = true;
       this.isMeuSimulado = true;
       this.multiSelectedAno = meuSimulado.ano;
@@ -799,6 +798,9 @@ export class PageSimuladoComponent implements OnInit {
 
     modalElement?.addEventListener('hidden.bs.modal', () => {
       this.fecharCardConfirmacao();
+      this.finalizarSimulado();
+      alert('Para realizar seu simulado é necessário salvar antes.');
+      
     });
   }
 

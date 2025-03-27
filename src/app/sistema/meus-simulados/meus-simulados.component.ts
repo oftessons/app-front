@@ -16,6 +16,7 @@ export class MeusSimuladosComponent implements OnInit {
   usuarioId!: number;
   carregando: boolean = true;  // Variável para indicar o estado de carregamento
   mensagemSucesso: string = '';
+  ocultarFiltros: boolean = false;
 
 
   constructor(
@@ -55,7 +56,8 @@ export class MeusSimuladosComponent implements OnInit {
     this.simuladoService.obterSimuladoPorId(id).subscribe(
       (data) => {
        // console.log('Simulado:', data);
-        this.router.navigate(['/usuario/simulados'], { state: { simulado: data } });
+        this.ocultarFiltros = true;
+        this.router.navigate(['/usuario/simulados'], { state: { simulado: data }});
       },
       (error) => {
         alert('Erro ao obter simulado por ID');
