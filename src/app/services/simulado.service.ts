@@ -17,7 +17,7 @@ export class SimuladoService {
   }
 
   // Método para cadastrar um novo simulado
-  cadastrarSimulado(idUser: number, simulado: Simulado): Observable<string> {
+  cadastrarSimulado(idUser: number, simulado: Simulado): Observable<any> {
     return this.http.post<string>(`${this.apiURL}/${idUser}`, simulado);
   }
 

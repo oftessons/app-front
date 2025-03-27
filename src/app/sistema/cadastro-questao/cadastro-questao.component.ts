@@ -465,7 +465,8 @@ onSubmit(): void {
     //console.debug('Enviando formulário com dados da questão:', this.formData);
    // console.log('CLASSE ', objetoJson);
     this.formData.append('questaoDTO', objetoJson);
-    console.log('objetoJson ', objetoJson);
+    //console.log('objetoJson ', objetoJson);
+
 
     if(!this.questaoDTO.id){
       this.questoesService.salvar(this.formData).subscribe(
