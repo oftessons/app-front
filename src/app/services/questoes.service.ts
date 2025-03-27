@@ -229,13 +229,14 @@ export class QuestoesService {
 
   questaoRespondida(
     idUser: number,
-    questaoId: number
+    questaoId: number,
+    simuladoId: number
   ): Observable<{
     opcaoSelecionada: string;
     correct: boolean;
     opcaoCorreta: string;
   } | null> {
-    const url = `${this.apiURL}/respondido/${idUser}?questaoId=${questaoId}`;
+    const url = `${this.apiURL}/respondido/${idUser}?questaoId=${questaoId}&simuladoId=${simuladoId}`;
     return this.http
       .get<{
         opcaoSelecionada: string;

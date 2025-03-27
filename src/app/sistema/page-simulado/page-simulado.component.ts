@@ -131,6 +131,8 @@ export class PageSimuladoComponent implements OnInit {
   simuladoIniciado = false;
   simuladoFinalizado = false;
   tempoTotal: number = 0;
+  simuladoIdInicial: number = 0;
+  simuladoIdRespondendo: number = 0;
 
   tiposDeProvaDescricoes: string[] = [];
   anosDescricoes: string[] = [];
@@ -155,6 +157,9 @@ export class PageSimuladoComponent implements OnInit {
 
   async ngOnInit() {
     const meuSimulado = history.state.simulado;
+    this.simuladoIdInicial = meuSimulado?.id;
+    //console.log("Ele ta aqui: ")
+    console.log(meuSimulado);
     this.dados = this.obterDados();
     await this.obterPerfilUsuario();
     if (meuSimulado) {
@@ -175,7 +180,7 @@ export class PageSimuladoComponent implements OnInit {
         this.questaoAtual = this.questoes[this.paginaAtual];
         this.resposta = '';
         this.carregarRespostasPreviamente();
-        this.respostaQuestao(this.questoes[this.paginaAtual].id);
+        this.respostaQuestao(this.questoes[this.paginaAtual].id, this.simuladoIdInicial);
         this.visualizarSimulado();
       }
     }
@@ -303,6 +308,7 @@ export class PageSimuladoComponent implements OnInit {
     const respostaDTO: RespostaDTO = {
       questaoId: questao.id,
       selecionarOpcao: this.selectedOption,
+      simuladoId: this.simuladoIdRespondendo
     };
 
     this.questoesService
@@ -627,7 +633,7 @@ export class PageSimuladoComponent implements OnInit {
 
   carregarRespostasPreviamente(): void {
     this.questoes.forEach((questao, index) => {
-      this.questoesService.questaoRespondida(this.usuarioId, questao.id).subscribe({
+      this.questoesService.questaoRespondida(this.usuarioId, questao.id, this.simuladoIdInicial).subscribe({
         next: (resposta) => {
           if (resposta) {
             this.respostas[index] = resposta.opcaoSelecionada;
@@ -650,7 +656,7 @@ export class PageSimuladoComponent implements OnInit {
     if (respostaAnterior) {
       this.selectedOption = respostaAnterior;
       if(this.isMeuSimulado){
-        this.respostaQuestao(this.questoes[this.paginaAtual].id);
+        this.respostaQuestao(this.questoes[this.paginaAtual].id, this.simuladoIdInicial);
       }
     } else {
       this.selectedOption = '';
@@ -682,7 +688,7 @@ export class PageSimuladoComponent implements OnInit {
       this.respostaErrada = '';
       this.respostaVerificada = false;
       if(this.isMeuSimulado){
-        this.respostaQuestao(this.questoes[this.paginaAtual].id);
+        this.respostaQuestao(this.questoes[this.paginaAtual].id, this.simuladoIdInicial);
       }
     }
   }
@@ -739,6 +745,8 @@ export class PageSimuladoComponent implements OnInit {
           'Seu simulado foi cadastrado com sucesso!',
           'sucesso'
         );
+        
+        this.simuladoIdRespondendo = response.id;
 
         // Fechar modal automaticamente (usando Bootstrap ou outro método)
         const modalElement = document.getElementById('confirmacaoModal');
@@ -802,6 +810,7 @@ export class PageSimuladoComponent implements OnInit {
   }
 
   iniciarSimulado(): void {
+    this.abrirModal();
     if (!this.isSimuladoIniciado) {
       this.isSimuladoIniciado = true;
       this.tempo = 0;
@@ -857,9 +866,9 @@ export class PageSimuladoComponent implements OnInit {
     this.mostrarFiltros = !this.mostrarFiltros;
   }
 
-  respostaQuestao(questaoAtual: number) {
+  respostaQuestao(questaoAtual: number, simuladoAtual: number) {
     this.questoesService
-      .questaoRespondida(this.usuarioId, questaoAtual)
+      .questaoRespondida(this.usuarioId, questaoAtual, simuladoAtual)
       .subscribe({
         next: (resposta) => {
           if (resposta) {
