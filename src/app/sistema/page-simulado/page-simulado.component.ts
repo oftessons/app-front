@@ -173,7 +173,6 @@ export class PageSimuladoComponent implements OnInit {
       this.selectedRespostasSimulado = meuSimulado.respostasSimulado;
       this.questoes = meuSimulado.questoes;
       if (this.questoes) {
-        console.log('questoes: ', this.questoes);
         this.idsQuestoes = this.questoes.map((q) => q.id);
         this.paginaAtual = 0;
         this.questaoAtual = this.questoes[this.paginaAtual];
