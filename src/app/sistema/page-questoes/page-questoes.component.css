@@ -107,7 +107,14 @@
 .header {
   display: flex;
   justify-content: space-between;
+  flex-wrap: nowrap;
   align-items: center;
+  gap: 12px;
+}
+.header h1 {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 5px;
 }
 .btn-filters {
   padding: 10px 20px;
@@ -225,6 +232,24 @@
   color: #fff;
   font-weight: 700;
   font-size: 14px;
+}
+
+.navigation-fixed {
+  position: fixed;
+  bottom: 0;
+  left: 200px;
+  right: 0;
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 12px 20px;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.content-with-fixed-buttons {
+  padding-bottom: 80px;
 }
 
 /* Ajuste para telas menores */
@@ -451,6 +476,7 @@ p {
   align-items: center;
   margin-top: 20px;
 }
+
 .left-buttons {
   display: flex;
   justify-content: flex-start;
@@ -461,8 +487,7 @@ p {
   gap: 10px; /* Espaço entre os botões da direita */
 }
 .btn-gabarito {
-  padding: 10px 20px;
-  width: 130px;
+  padding: 6px 20px;
   border: 2px solid #f4a261; /* Borda da cor especificada */
   border-radius: 5px;
   background-color: #f4a261; /* Background transparente */
@@ -470,13 +495,19 @@ p {
   cursor: pointer;
   font-size: 16px;
   font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 
 .btn-anterior,
 .btn-proxima,
 .btn-responder {
-  padding: 10px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 6px 20px;
   width: 130px;
   border: none;
   border-radius: 5px;
@@ -514,8 +545,13 @@ p {
   display: flex;
   align-items: center;
   border-radius: 5px; /* Border radius for rounded corners */
-  padding: 10px; /* Padding for better spacing */
+  padding: 5px;
   transition: background-color 0.3s, border-color 0.3s; /* Smooth transitions for background and border color */
+}
+
+.alternativa:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 5px;
 }
 
 .error-message {
@@ -537,7 +573,8 @@ p {
   height: 25px; 
   background-image: url('src/assets/Icons/confirmar.png');
   background-size: cover;
-  margin-left: 8px;
+  padding-right: 25px;
+  margin-left: 15px;
 }
 
 .alternativa-errada::after {
@@ -547,21 +584,34 @@ p {
   height: 25px;
   background-image: url('src/assets/Icons/Error.png');
   background-size: cover;
-  margin-left: 8px
+  padding-right: 25px;
+    margin-left: 15px;
+}
+
+.alternativa-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  width: 100%;
+  padding: 8px 0;
+  margin: 0;
 }
 
 .alternativa-input-group {
   display: flex;
   align-items: center;
 }
+
 .alternativa-input-group input[type="radio"] {
-  margin-right: 10px;
+  margin-right: 5px;
 }
+
 .alternativa-texto {
   font-weight: bold;
   font-size: 14px;
   margin-right: 10px;
 }
+
 .alternativa-comentario {
   font-size: 16px;
   color: #000000;
@@ -569,6 +619,12 @@ p {
 
 .img-alternativas img {
   width: 200px;
+}
+
+@media (max-width: 900px) {
+  .navigation-fixed {
+    left: 0 !important;
+  }
 }
 
 /* Responsividade para tablets */
@@ -586,6 +642,10 @@ p {
     margin-bottom: 0; /* Remove o espaçamento vertical */
     max-width: 30%; /* Limita a largura para não exceder 30% */
   }
+}
+
+@media (max-width: 480px) {
+
 }
 
 

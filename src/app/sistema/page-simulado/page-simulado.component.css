@@ -116,17 +116,68 @@
   border-radius: 5px;
 }
 
-.button-row {
+.alternativa-label {
   display: flex;
-  justify-content: flex-end; /* Alinha os botões à direita */
   align-items: center;
-  margin-top: 20px;
+  cursor: pointer;
+  width: 100%;
+  padding: 8px 0;
+  margin: 0;
 }
 
-.right-buttons {
+.alternativa:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 5px;
+}
+
+.alternativa-input-group {
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+}
+
+.alternativa-input-group input[type="radio"] {
+  margin-right: 5px;
+}
+
+.alternativa-texto {
+  font-weight: bold;
+  font-size: 14px;
+  margin-right: 10px;
+}
+
+.alternativa-comentario {
+  font-size: 16px;
+  color: #000000;
+}
+
+
+.content-with-fixed-buttons {
+  padding-bottom: 80px;
+}
+
+.navigation-fixed {
+  position: fixed;
+  bottom: 0;
+  left: 200px;
+  right: 0;
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 15px 20px;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.navigation-buttons {
+  display: flex;
+  justify-content: center;
   gap: 10px;
+}
+
+/* Ajustes para posicionamento do chatbot */
+body.has-fixed-buttons .chatbot-toggle-button {
+  bottom: 90px; /* Posicionar acima da barra de navegação fixa */
 }
 
 .btn-anterior,
@@ -140,6 +191,7 @@
   cursor: pointer;
   font-size: 16px;
   color: #fff;
+  margin: 0;
 }
 
 .btn-anterior {
@@ -280,6 +332,12 @@
   border-radius: 8px;
 }
 
+@media (max-width: 900px) {
+  .navigation-fixed {
+    left: 0 !important;
+  }
+}
+
 @media (max-width: 768px) {
   .col {
     width: 80%;
@@ -389,7 +447,6 @@
 
 .btn-proxima {
   background-color: #3b5fa0;
-  margin-left: 10px;
 }
 
 .btn-responder {
@@ -536,9 +593,9 @@ canvas {
 .alternativa {
   display: flex;
   align-items: center;
-  border-radius: 5px; /* Border radius for rounded corners */
-  padding: 10px; /* Padding for better spacing */
-  transition: background-color 0.3s, border-color 0.3s; /* Smooth transitions for background and border color */
+  border-radius: 5px;
+  padding: 5px;
+  transition: background-color 0.3s, border-color 0.3s;
 }
 
 
@@ -565,7 +622,6 @@ canvas {
 .alternativa-input-group {
   display: flex;
   align-items: center;
-  margin-bottom: 8px;
 }
 
 .btn-back {
@@ -580,12 +636,6 @@ canvas {
   background: #3b5fa0;
 }
 
-.alternativa-texto {
-  font-weight: bold;
-  font-size: 14px;
-  margin-right: 5px;
-  margin-left: 5px;
-}
 .alternativa-comentario {
   font-size: 14px;
   color: #000000;
@@ -622,6 +672,5 @@ canvas {
   .btn-proxima,
   .btn-finalizar {
     width: 48%; /* Largura de cada botão em uma linha (2 botões por linha) */
-    margin-bottom: 10px; /* Adiciona espaçamento entre os botões verticais */
   }
 }
