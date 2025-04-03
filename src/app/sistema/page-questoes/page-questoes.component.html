@@ -177,34 +177,35 @@
         <!-- <img *ngIf="questaoAtual?.fotoDaQuestaoUrl" [src]="questaoAtual?.fotoDaQuestaoUrl" alt="Foto da questão" class="questao-foto"> -->
         <div class="row">
           <div class="col-md-12">
-            <div class="form-group">
+            <div class="form-group content-with-fixed-buttons">
               <!-- <label class="selecione-text">Selecione a Alternativa:</label> -->
               <div *ngFor="let alternativa of questaoAtual.alternativas; let i = index" class="alternativa"
               [ngClass]="{
                 'alternativa-certa': respostaVerificada && alternativa.texto === respostaCorreta,
                 'alternativa-errada': respostaVerificada && alternativa.texto === respostaErrada
               }">
-            <div class="alternativa-input-group">
-              <input 
-                type="radio" 
-                name="alternativa" 
-                [value]="alternativa.texto"
-                [(ngModel)]="selectedOption" 
-                (change)="onOptionChange(alternativa.texto)"
-                [checked]="alternativa.texto === selectedOption">
-              <span class="letra-parenteses">{{ alternativa.texto }}</span>
-              <span *ngIf="alternativa.imagemUrl; else comentarioTexto" class="img-alternativas">
-                <img [src]="alternativa.imagemUrl" alt="Imagem da Alternativa" class="alternativa-foto">
-              </span>
-              <ng-template #comentarioTexto>
-                <span class="alternativa-comentario">{{ alternativa.comentario }}</span>
-              </ng-template>
-            </div>
-          </div>
-
+                <div class="alternativa-input-group">
+                  <input 
+                    type="radio" 
+                    name="alternativa" 
+                    [id]="'alternativa-' + i"
+                    [value]="alternativa.texto"
+                    [(ngModel)]="selectedOption" 
+                    (change)="onOptionChange(alternativa.texto)"
+                    [checked]="alternativa.texto === selectedOption">
+                  <label [for]="'alternativa-' + i" class="alternativa-label">
+                    <span class="letra-parenteses">{{ alternativa.texto }}</span>
+                    <span *ngIf="alternativa.imagemUrl; else comentarioTexto" class="img-alternativas">
+                      <img [src]="alternativa.imagemUrl" alt="Imagem da Alternativa" class="alternativa-foto">
+                    </span>
+                    <ng-template #comentarioTexto>
+                      <span class="alternativa-comentario">{{ alternativa.comentario }}</span>
+                    </ng-template>
+                  </label>
+                </div>
+              </div>
 
               <!-- Adicione a exibição das porcentagens -->
-               
               <div class="progress-container" *ngIf="mostrarPorcentagem && porcentagens">
                 <h3>Porcentagens de Respostas:</h3>
                 <div class="itens-progresso" *ngFor="let key of porcentagens.keys()">
@@ -219,17 +220,15 @@
                 </div>
               </div>
 
-
               <div *ngIf="isPreviewVideo(fotoPreviews['videoDaQuestao'])" class="video-preview-container">
                 <h4>Vídeo da Questão:</h4>
                 <video [src]="fotoPreviews['videoDaQuestao']" controls></video>
               </div>
-
-        
+              
               <div *ngIf="message" class="alert alert-info mt-3 alert-custom" role="alert">
                 {{ message }}
               </div>   
-        
+
               <div *ngIf="mostrarGabarito && questaoAtual">
                 <h2 style="margin-top: 10px;">Comentário da Questão</h2>
                 <!-- Exibe o comentário da Questão com HTML Sanitizado -->
@@ -300,20 +299,17 @@
                 <p *ngIf="questaoAtual?.comentadorDaQuestao">Comentado por: {{ questaoAtual.comentadorDaQuestao }}</p>
               </div>
               <div class="error-message" *ngIf="mensagemErro">{{ mensagemErro }}</div>
-              <div class="button-row">
-                <div class="left-buttons">
-                  <button *ngIf="jaRespondeu" class="btn-gabarito" (click)="exibirGabarito()">Comentário da Questão</button>
-                </div>
+              <div class="navigation-fixed">
                 <div class="right-buttons">
                   <button class="btn-anterior" 
                           (click)="anteriorQuestao()" 
                           [disabled]="paginaAtual === 0">
                     Anterior
                   </button>
-                  <button class="btn-responder" 
-                          (click)="questaoAtual && responderQuestao(questaoAtual)" 
-                          [disabled]="jaRespondeu">
-                    Responder
+                  <button 
+                    [ngClass]="jaRespondeu ? 'btn-gabarito' : 'btn-responder'" 
+                    (click)="jaRespondeu ? exibirGabarito() : (questaoAtual && responderQuestao(questaoAtual))">
+                    {{ jaRespondeu ? 'Comentário da Questão' : 'Responder' }}
                   </button>
                   <button class="btn-proxima" 
                           (click)="proximaQuestao()">

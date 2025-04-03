@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewChecked, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewChecked, ElementRef, AfterViewInit, OnDestroy } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { ChatBotStateService } from '../services/chat-bot-state.service';
 
@@ -23,13 +23,15 @@ import { ChatBotStateService } from '../services/chat-bot-state.service';
     ]),
   ]
 })
-export class ChatBotComponent implements OnInit, AfterViewChecked {
+export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit, OnDestroy {
   isOpen: boolean = false;
   showButton: boolean = false;
   userMessage: string = '';
   botResponse: string = '';
   messages: Array<{ text: string, type: string }> = [];
   welcomeMessageSent: boolean = false;
+  isNavigationBarActive = false;
+  private navCheckInterval: any;
 
   @ViewChild('chatBody') chatBody!: ElementRef;
 
@@ -54,6 +56,30 @@ export class ChatBotComponent implements OnInit, AfterViewChecked {
 
   ngAfterViewChecked(): void {
     this.scrollToBottom();
+  }
+
+  ngAfterViewInit(): void {
+    // Set up interval to check for navigation bar visibility
+    this.navCheckInterval = setInterval(() => {
+      this.checkNavigationBar();
+    }, 500); // Check every 500ms
+  }
+
+  ngOnDestroy(): void {
+    // Clear the interval when component is destroyed
+    if (this.navCheckInterval) {
+      clearInterval(this.navCheckInterval);
+    }
+  }
+
+  private checkNavigationBar(): void {
+    // Check if any navigation-fixed elements are visible
+    const navElements = document.querySelectorAll('.navigation-fixed');
+    this.isNavigationBarActive = navElements.length > 0 && 
+      Array.from(navElements).some(el => {
+        const style = window.getComputedStyle(el);
+        return style.display !== 'none' && style.visibility !== 'hidden';
+      });
   }
 
   sendWelcomeMessage(): void {

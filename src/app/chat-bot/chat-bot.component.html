@@ -1,5 +1,4 @@
-
-<button class="chatbot-toggle-button" (click)="toggleChat()" *ngIf="showButton">
+<button class="chatbot-toggle-button" [class.nav-active]="isNavigationBarActive" (click)="toggleChat()" *ngIf="showButton">
   <img src="assets/imagens/logo-iconnavegador.svg" alt="Chatbot Logo" class="chatbot-logo">
 </button>
 

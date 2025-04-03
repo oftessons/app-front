@@ -196,7 +196,7 @@
 }
 
 ::ng-deep .mat-drawer.mat-drawer-side {
-    z-index: 0 !important; /* ou 0, dependendo do comportamento desejado */
+    z-index: 1000 !important;
 }
 
 /* Estilo para dispositivos móveis e tablets */

@@ -1,4 +1,4 @@
-<div class="container pt-5">
+<div class="container pt-5 content-with-fixed-buttons">
   <div class="container mt-4">
     <div class="header">
       <h1 class="mt-4"> <span> | </span> Simulados</h1>
@@ -178,12 +178,15 @@
                     <input 
                       type="radio" 
                       name="alternativa" 
+                      [id]="'alternativa' + i"
                       [value]="alternativa.texto"
                       [(ngModel)]="selectedOption" 
                       (change)="onOptionChange(alternativa.texto)"
                       [checked]="alternativa.texto === selectedOption">
-                    <span class="alternativa-texto">{{ alternativa.texto }}  </span>
-                    <span class="alternativa-comentario">{{ alternativa.comentario }}</span>
+                    <label [for]="'alternativa' + i" class="alternativa-label">
+                      <span class="alternativa-texto">{{ alternativa.texto }}  </span>
+                      <span class="alternativa-comentario">{{ alternativa.comentario }}</span>
+                    </label>
                   </div>
                 </div>
               </div>
@@ -264,18 +267,16 @@
             <p *ngIf="questaoAtual?.comentadorDaQuestao">Comentado por: {{ questaoAtual.comentadorDaQuestao }}</p>
           </div>
           
-          <div class="button-row">
-            <div class="right-buttons">
+          <div class="navigation-fixed">
+            <div class="navigation-buttons">
+              <button *ngIf="!isMeuSimulado" class="btn-finalizar" (click)="finalizarSimulado()">Finalizar</button>
               <button *ngIf="jaRespondeu" class="btn-gabarito" (click)="exibirGabarito()">Comentário da Questão</button>
               <!--
               <button class="btn-anterior" (click)="anteriorQuestao()" [disabled]="paginaAtual === 0">Anterior</button>
               
             -->
               <button *ngIf="!isMeuSimulado" class="btn-responder" (click)="questaoAtual && responderQuestao(questaoAtual)">Responder</button>
-            </div>
-            <div class="right-buttons">
               <button class="btn-proxima" (click)="proximaQuestao()">Próxima</button>
-              <button *ngIf="!isMeuSimulado" class="btn-finalizar" (click)="finalizarSimulado()">Finalizar</button>
             </div>
           </div>          
         </div>      
