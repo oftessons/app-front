@@ -3,12 +3,15 @@ import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { Usuario } from './usuario';
 import { Permissao } from './Permissao';
+import { TipoUsuario } from './enums/tipo-usuario';
+import { TipoUsuarioDescricao } from './enums/tipo-usuario-descricao';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
+
 export class LoginComponent {
   username: string = '';
   password: string = '';
@@ -22,9 +25,16 @@ export class LoginComponent {
   errors: string[] = [];
   forgotEmail: string = '';
   showForgotPassword: boolean = false;
+  tipoDeEstudante: string = '';
   usuario!: Usuario | null;
   permissaoUsuario: Permissao = Permissao.USER;
-
+  
+  tiposUsuario = Object.keys(TipoUsuario).map(key => ({
+    key,
+    value: TipoUsuario[key as keyof typeof TipoUsuario],
+    description: TipoUsuarioDescricao[TipoUsuario[key as keyof typeof TipoUsuario]]
+  }));
+  
   confirmPasswordError: string | null = null;
   confirmPassword: string = '';
   consentimento: boolean = false;  
@@ -38,6 +48,7 @@ export class LoginComponent {
     specialChar: false,
   };
 
+  
   passwordVisible: { [key: string]: boolean } = {
     password: false,
     confirmPassword: false
@@ -77,7 +88,8 @@ export class LoginComponent {
                 tipoUsuario: '',
                 bolsaAssinatura: response.bolsa || false,
                 diasDeTeste: response.quantidadeDiasBolsa || 0,
-                permissao: response.authorities.length > 0 ? response.authorities[0] : null 
+                permissao: response.authorities.length > 0 ? response.authorities[0] : null,
+                tipoDeEstudante: response.tipoDeEstudante || '' 
             };
             localStorage.setItem('usuario', JSON.stringify(usuario));
             
@@ -146,6 +158,10 @@ export class LoginComponent {
     passwordValidationErrors.push("O campo de nome é obrigatório.");
   }
 
+  if(!this.tipoDeEstudante) {
+    passwordValidationErrors.push("Selecione o tipo de usuário.");
+  }
+
   // Se houver erros de validação, armazene-os em this.errors e não prossiga
   if (passwordValidationErrors.length > 0) {
     this.errors = passwordValidationErrors;
@@ -167,6 +183,8 @@ export class LoginComponent {
     usuario.telefone = this.telefone;
     usuario.cidade = this.cidade;
     usuario.estado = this.estado;
+    usuario.tipoDeEstudante = this.tipoDeEstudante;
+
     this.authService
         .salvar(usuario, this.permissaoUsuario)
         .subscribe( response => {
@@ -180,17 +198,17 @@ export class LoginComponent {
           this.telefone = '';
           this.cidade = '';
           this.estado = '';
-          this.errors = []
+          this.errors = [];
         },  errorResponse => {
           if (errorResponse.status === 401) {
               // Trata o erro de token expirado
               this.errors = ['Sessão expirada. Por favor, faça login novamente.'];
               localStorage.removeItem('access_token'); // Remove o token expirado
               this.router.navigate(['/login']); // Redireciona para a página de login
-          }else if (errorResponse.status === 400) {
+          } else if (errorResponse.status === 400) {
             // Exibe a mensagem de erro vinda do back-end
             this.errors = [errorResponse.error];
-          }else {
+          } else {
               this.errors = ['Erro ao cadastrar o usuário.'];
           }
       }

@@ -143,16 +143,26 @@
                                             <label class="small mb-1" style="font-size: 1.2em;">Estado</label>
                                             <input type="text" name="estado" [(ngModel)]="estado" class="form-control py-2 responsive-input" placeholder="Digite seu Estado" required />
                                         </div>
+                                        
+                                        <div class="form-group col-sm-12 col-md-6">
+                                            <label class="small mb-1" style="font-size: 1.2em;">Você é?</label>
+                                            <select name="tipoEstudante" [(ngModel)]="tipoDeEstudante" class="form-select py-2 responsive-input" required>
+                                                <option value="" disabled selected>Selecione o tipo de usuário</option>
+                                                <option *ngFor="let tipo of tiposUsuario" [value]="tipo.key">
+                                                    {{ tipo.description }}
+                                                </option>
+                                            </select>                                              
+                                        </div>
 
-                                            <!-- Checkbox para consentimento dos termos -->
-                                            <div class="col-sm-12 mt-3 termos">
-                                                <input type="checkbox" id="consentimento" [(ngModel)]="consentimento" name="consentimento" required />
-                                                <label for="consentimento" class="ms-2">
-                                                    Eu concordo com os 
-                                                    <a href="assets/docs/pp.pdf" target="_blank">Termos de Uso</a> e a 
-                                                    <a href="assets/docs/pp.pdf" target="_blank">Política de Privacidade</a>.
-                                                  </label>
-                                            </div>
+                                        <!-- Checkbox para consentimento dos termos -->
+                                        <div class="col-sm-12 mt-3 termos">
+                                            <input type="checkbox" id="consentimento" [(ngModel)]="consentimento" name="consentimento" required />
+                                            <label for="consentimento" class="ms-2">
+                                                Eu concordo com os 
+                                                <a href="assets/docs/pp.pdf" target="_blank">Termos de Uso</a> e a 
+                                                <a href="assets/docs/pp.pdf" target="_blank">Política de Privacidade</a>.
+                                            </label>
+                                        </div>
 
                                         <div class="form-group align-items-center justify-content-between mt-4 mb-0 d-flex">
                                             <button type="button" class="btn btn-danger btn-lg me-2  btn-custom" (click)="cancelaCadastro()">Voltar</button>
