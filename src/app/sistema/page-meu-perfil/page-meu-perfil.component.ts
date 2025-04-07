@@ -8,6 +8,8 @@ import { StatusAssinatura } from './enums/status-assinatura';
 import { StatusAssinaturaDescricao } from './enums/status-assinatura-descricao';
 import { PeriodoAssinatura } from './enums/periodo-assinatura';
 import { PeriodoAssinaturaDescricao } from './enums/periodo-assinatura-descricao';
+import { TipoUsuario } from 'src/app/login/enums/tipo-usuario';
+import { TipoUsuarioDescricao } from 'src/app/login/enums/tipo-usuario-descricao';
 
 @Component({
   selector: 'app-page-meu-perfil',
@@ -31,6 +33,7 @@ export class PageMeuPerfilComponent implements OnInit {
 
   }
 
+  
   mostrarConteudo(conteudo: string) {
     this.conteudoAtual = conteudo;
   }
@@ -38,12 +41,17 @@ export class PageMeuPerfilComponent implements OnInit {
   obterPerfilUsuario() {
     this.authService.obterUsuarioAutenticadoDoBackend().subscribe(
       (data) => {
+        data.tipoDeEstudante = this.obterDescricaoTipoUsuario(data.tipoDeEstudante as TipoUsuario);
         this.usuario = data;
       },
       (error) => {
-       // console.error('Erro ao obter perfil do usuário:', error);
+       console.error('Erro ao obter perfil do usuário:', error);
       }
     );
+  }
+
+  obterDescricaoTipoUsuario(tipoUsuario: TipoUsuario) {
+    return TipoUsuarioDescricao [tipoUsuario] || 'Descrição não disponível';
   }
 
   editarPerfil() {

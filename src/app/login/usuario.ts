@@ -17,4 +17,5 @@ export class Usuario {
   permissao!: Permissao;  // Atualize para usar a enum Permissao
   bolsaAssinatura!: boolean;
   diasDeTeste!: Number;
+  tipoDeEstudante!: string;
 }
