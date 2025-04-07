@@ -406,6 +406,14 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   }
 
   filtrarQuestoes(): void {
+
+    this.selectedOption = '';
+    this.respostaCorreta = null;
+    this.respostaErrada = null;
+    this.mostrarPorcentagem = false;
+    this.porcentagemAcertos = 0;
+  
+
     const filtros: any = {};
     this.respondendo = true;
 
