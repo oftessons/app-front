@@ -15,6 +15,10 @@ export class InicioComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  redirecionarFlashcard() {
+    window.open('https://www.brainscape.com/', '_blank');
+  }
+  
   exibirMensagem(tipo: string): void {
     if (tipo === 'aulas') {
       this.mostrarMensagemAulas = true;
