@@ -59,21 +59,18 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
   }
 
   ngAfterViewInit(): void {
-    // Set up interval to check for navigation bar visibility
     this.navCheckInterval = setInterval(() => {
       this.checkNavigationBar();
-    }, 500); // Check every 500ms
+    }, 500);
   }
 
   ngOnDestroy(): void {
-    // Clear the interval when component is destroyed
     if (this.navCheckInterval) {
       clearInterval(this.navCheckInterval);
     }
   }
 
   private checkNavigationBar(): void {
-    // Check if any navigation-fixed elements are visible
     const navElements = document.querySelectorAll('.navigation-fixed');
     this.isNavigationBarActive = navElements.length > 0 && 
       Array.from(navElements).some(el => {
