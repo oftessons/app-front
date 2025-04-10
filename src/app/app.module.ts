@@ -26,6 +26,7 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
 import { PlanosComponent } from './planos/planos/planos.component';
 import { DetalhesPlanosComponent } from './planos/detalhes-planos/detalhes-planos.component';
 import { PagamentoConcluidoComponent } from './planos/pagamento-concluido/pagamento-concluido.component';
+import { ChatBotWhatsappComponent } from './chat-bot-whatsapp/chat-bot-whatsapp.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { PagamentoConcluidoComponent } from './planos/pagamento-concluido/pagame
     PlanosComponent,
     DetalhesPlanosComponent,
     PagamentoConcluidoComponent,
+    ChatBotWhatsappComponent,
   ],
   imports: [
     BrowserModule,
