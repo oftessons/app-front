@@ -499,7 +499,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       return;
     }
   
-    this.questoesService.filtrarQuestoes(this.usuarioId, filtros, 0, 100).subscribe(
+    this.questoesService.filtrarQuestoes(this.usuarioId, filtros, 0, 0).subscribe(
       (questoes: Questao[]) => {
         if (questoes.length === 0) {
           this.message = this.getMensagemNenhumaQuestaoEncontrada(filtros);
@@ -758,7 +758,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     subtema: this.mapearDescricoesParaEnums(this.multSelectSubtema, SubtemaDescricoes),
     tema: this.mapearDescricoesParaEnums(this.multSelectTema, TemaDescricoes),
     respostasSimulado: this.mapearDescricoesParaEnums(this.multiSelectRespSimu, RespostasSimuladosDescricao),
-
     certasErradas: this.mapearDescricoesParaEnums(this.multiSelectCertoErrado, CertasErradasDescricao),
   };
 
