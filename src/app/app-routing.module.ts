@@ -8,9 +8,11 @@ import { AuthGuard } from './services/auth.guard';
 import { PlanosComponent } from './planos/planos/planos.component';
 import { DetalhesPlanosComponent } from './planos/detalhes-planos/detalhes-planos.component';
 import { PagamentoConcluidoComponent } from './planos/pagamento-concluido/pagamento-concluido.component';
+import { ChatBotWhatsappComponent } from './chat-bot-whatsapp/chat-bot-whatsapp.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
+  {path: 'whatsapp-support', component: ChatBotWhatsappComponent},
   { path: 'reset-password', component: ResetPasswordComponent },
   { path: 'planos', component: PlanosComponent },
   { path: 'plano/:slug', component: DetalhesPlanosComponent },
