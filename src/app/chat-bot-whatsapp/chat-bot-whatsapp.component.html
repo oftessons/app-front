@@ -1,0 +1,21 @@
+<button class="chatbot-toggle-button" [class.nav-active]="isNavigationBarActive" (click)="toggleChat()" *ngIf="showButton">
+    <img src="assets/imagens/logo-iconnavegador.svg" alt="WhatsApp Chat" class="chatbot-logo">
+  </button>
+  
+  <div class="chatbot-container" [@chatBotAnimation]="isOpen ? 'open' : 'closed'">
+    <div class="chatbot-header">
+        <button class="close-btn" (click)="toggleChat()">×</button>
+        Suporte
+    </div>
+    <div class="chatbot-body" #chatBody>
+      <div class="bot-message">
+        Olá. Está precisando de ajuda? Entre em contato com o nosso suporte pelo nosso WhatsApp 😃
+      </div>
+    </div>
+    <div class="chatbot-footer">
+        <button class="whatsapp-button" (click)="sendMessage()">
+            <img src="assets/Icons/whatsapp.svg" alt="whatsapp logo" class="whatsapp-logo">
+            Fale conosco
+        </button>
+    </div>
+  </div>
