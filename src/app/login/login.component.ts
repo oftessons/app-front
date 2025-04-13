@@ -5,6 +5,7 @@ import { Usuario } from './usuario';
 import { Permissao } from './Permissao';
 import { TipoUsuario } from './enums/tipo-usuario';
 import { TipoUsuarioDescricao } from './enums/tipo-usuario-descricao';
+import { LoginDTO } from '../sistema/LoginDTO';
 
 @Component({
   selector: 'app-login',
@@ -60,57 +61,29 @@ export class LoginComponent {
   ) {}
 
   onSubmit() {
-    this.authService.tentarLogar(this.username, this.password).subscribe(
-        (response: any) => {
-          
-            // Salva o token de acesso no localStorage
-            const access_token = response.access_token;
-            localStorage.setItem('access_token', access_token);
+    const loginData: LoginDTO = {
+      username: this.username,
+      password: this.password
+    };
+    localStorage.setItem('username', this.username);
+    localStorage.setItem('password', this.password);
 
-            // Obtém e salva o ID do usuário
-            const userId = this.authService.getUserIdFromToken() ?? ''; // Garante que será uma string vazia se for null
-            localStorage.setItem('user_id', userId || '');
-
-            // Cria o objeto usuário
-            const usuario: Usuario = {
-                id: userId,  
-                fotoUrl: null, 
-                username: response.username, 
-                password: '', 
-                email: response.email || '',
-                planoId: response.planoId || '',
-                stripeCustomerId: response.stripeCustomerId || '',                
-                telefone: response.telefone || '',
-                cidade: response.cidade || '',
-                estado: response.estado || '',
-                nome: response.nome || '',
-                confirmPassword: '', 
-                tipoUsuario: '',
-                bolsaAssinatura: response.bolsa || false,
-                diasDeTeste: response.quantidadeDiasBolsa || 0,
-                permissao: response.authorities.length > 0 ? response.authorities[0] : null,
-                tipoDeEstudante: response.tipoDeEstudante || '' 
-            };
-            localStorage.setItem('usuario', JSON.stringify(usuario));
-            
-            // Redireciona com base na permissão do usuário
-            if (usuario.permissao === 'ROLE_ADMIN' || usuario.permissao === 'ROLE_USER' || 
-              usuario.permissao === 'ROLE_PROFESSOR') {
-              this.router.navigate(['/usuario/inicio']);
-            } else {
-              this.router.navigate(['/forbidden']); // Caso não tenha permissão
-            }
-
-        },
-        errorResponse => {
-          if (errorResponse.status === 401 && errorResponse.error === 'CadastroIncompleto') {
-            this.errors = ['Faça o seu cadastro, entre e ative o seu plano para acessar a plataforma.'];
-          } else {
-            this.errors = ['Usuário e/ou senha incorreto(s).'];
-          }
-        }        
-    );
-}
+    this.authService.send2FACode(loginData).subscribe({
+      next: (res) => {
+        if (res.status === 200) {
+          console.log('Código de autenticação enviado com sucesso!');
+          this.router.navigate(['/validacao-acesso']);
+        } else {
+          console.log('Erro ao enviar o código de autenticação:', res.statusText);
+          this.errors = ['Erro ao enviar o código de autenticação.'];
+        }
+      },
+      error: () => {
+        console.log('Erro ao enviar o código de autenticação');
+        this.errors = ['Erro ao enviar o código de autenticação.'];
+      }
+    });
+  }
 
   preparaCadastrar(event: Event) {
     event.preventDefault();

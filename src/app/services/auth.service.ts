@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 
@@ -9,8 +9,10 @@ import { Usuario } from '../login/usuario';
 import { map } from 'rxjs/internal/operators/map';
 import { Permissao } from '../login/Permissao';
 import { catchError } from 'rxjs/operators';
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpResponse  } from '@angular/common/http';
 import { throwError } from 'rxjs';
+import { LoginDTO } from '../sistema/LoginDTO';
+import { MFACodigoDTO } from '../sistema/MFACodigoDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -207,6 +209,17 @@ obterNomeUsuario(): Observable<string> {
   
   public visualizarUsuarioPorId(id: string): Observable<Usuario> {
     return this.http.get<Usuario>(`${this.apiURL}/visualizarUsuario/${id}`)
+  }
+
+  send2FACode(loginData: LoginDTO): Observable<HttpResponse<any>> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.post<any>(`${this.apiURL}/2fa/send-code`, loginData, { headers, observe: 'response' });
+  }
+
+  verify2FACode(codeMFA: MFACodigoDTO): Observable<any>{
+    const headers = new HttpHeaders({'Content-Type': 'application/json'});
+
+    return this.http.post<boolean>(`${this.apiURL}/2fa/verify-code`, codeMFA, { headers });
   }
   
   tentarLogar( username: string, password: string ) : Observable<any> {    const params = new HttpParams()
