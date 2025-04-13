@@ -33,7 +33,7 @@ export class PermissaoAdminComponent implements OnInit {
   cadastrando: boolean = false;
   userData: Usuario = new Usuario(); 
   
-  usuarioForm =  this.formBuilder.group({
+  usuarioFormCadastro =  this.formBuilder.group({
     id: new FormControl(0,),
     username: new FormControl('', {validators: [Validators.required]}),
     password: new FormControl('', {validators: [Validators.required]}),
@@ -44,8 +44,20 @@ export class PermissaoAdminComponent implements OnInit {
     estado: new FormControl('', ),
     cidade: new FormControl('', ),
     tipoUsuario: new FormControl('', {validators: [Validators.required]}),
-    bolsa: new FormControl(false, {validators: [Validators.required]}),
+    bolsa: new FormControl(false),
     quantidadeDiasBolsa: new FormControl( [null, [Validators.required, Validators.min(1)]])
+  });
+
+  usuarioFormUpdate =  this.formBuilder.group({
+    id: new FormControl(0,),
+    username: new FormControl('', {validators: [Validators.required]}),
+    password: new FormControl('', {validators: [Validators.required]}),
+    confirmPassword: new FormControl('', {validators: [Validators.required]}),
+    nome: new FormControl('', [Validators.required]),
+    email: new FormControl('', {validators: [Validators.required]}),
+    telefone: new FormControl('', {validators: [Validators.required]}),
+    estado: new FormControl('', ),
+    cidade: new FormControl('', ),
   });
 
   showModalCadastrar: boolean = false;
@@ -64,7 +76,7 @@ export class PermissaoAdminComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder, private authService: AuthService, 
     private cdRef: ChangeDetectorRef) { 
-    this.usuarioForm = this.formBuilder.group({
+    this.usuarioFormCadastro = this.formBuilder.group({
       id: null,
       username: [''],
       password: [''],
@@ -78,6 +90,18 @@ export class PermissaoAdminComponent implements OnInit {
       bolsa: [''],
       quantidadeDiasBolsa: ['']
     });
+
+    this.usuarioFormUpdate = this.formBuilder.group({
+      id: null,
+      username: [''],
+      password: [''],
+      confirmPassword: [''],
+      nome: [''],
+      email: [''],
+      telefone: [''],
+      cidade: [''],
+      estado: [''],
+    })
   }
 
   ngOnInit(): void {
@@ -112,7 +136,7 @@ export class PermissaoAdminComponent implements OnInit {
 
   cadastrarUsuarios() {
     this.cadastrando = true;
-    const userData = this.usuarioForm.value;
+    const userData = this.usuarioFormCadastro.value;
     this.errors = [];
     this.modalErrors = [];
     this.validadaoDeCadastro(userData);
@@ -131,10 +155,9 @@ export class PermissaoAdminComponent implements OnInit {
     usuario.cidade = userData.cidade;
     usuario.estado = userData.estado;
     usuario.tipoUsuario = userData.tipoUsuario;
-    const permissao = this.mapearDescricaoParaEnum(userData.tipoUsuario);
-
     usuario.bolsaAssinatura = userData.bolsa;
     usuario.diasDeTeste = userData.quantidadeDiasBolsa;
+    const permissao = this.mapearDescricaoParaEnum(userData.tipoUsuario);
 
     this.authService.salvar(usuario, permissao).subscribe((response) => {
       this.mensagemSucesso = response.message;
@@ -159,7 +182,7 @@ export class PermissaoAdminComponent implements OnInit {
   consultarUsuario(id: string) {
     this.authService.visualizarUsuarioPorId(id).subscribe((response: Usuario) => {
       
-      this.usuarioForm.patchValue({
+      this.usuarioFormUpdate.patchValue({
         id: id,
         username: response.username,
         nome: response.nome,
@@ -169,7 +192,6 @@ export class PermissaoAdminComponent implements OnInit {
         telefone: response.telefone,
         cidade: response.cidade,
         estado: response.estado,
-        tipoUsuario: undefined
       })
 
       this.cdRef.markForCheck();
@@ -182,7 +204,7 @@ export class PermissaoAdminComponent implements OnInit {
     this.mensagemSucesso = "";
     this.errors = [];
     this.modalErrors = [];
-    this.userData = {... this.usuarioForm.value};
+    this.userData = {... this.usuarioFormUpdate.value};
     this.validadaoDeCadastro(this.userData);
     
     if(this.modalErrors.length > 0) {
@@ -251,7 +273,7 @@ export class PermissaoAdminComponent implements OnInit {
   } 
 
   limparTela() {
-    this.usuarioForm.patchValue({
+    this.usuarioFormCadastro.patchValue({
       id: '',
       username: '',
       password: '',
