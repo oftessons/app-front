@@ -26,10 +26,6 @@ export class ValidacaoAcessoComponent {
       codigo: this.codigo
     };
 
-    console.log("username", this.username);
-    console.log("password", this.password);
-    console.log("codigo", this.codigo);
-
     this.authService.verify2FACode(dto).subscribe({
       next: (res: boolean) => {
         if (res) {

@@ -71,15 +71,12 @@ export class LoginComponent {
     this.authService.send2FACode(loginData).subscribe({
       next: (res) => {
         if (res.status === 200) {
-          console.log('Código de autenticação enviado com sucesso!');
           this.router.navigate(['/validacao-acesso']);
         } else {
-          console.log('Erro ao enviar o código de autenticação:', res.statusText);
           this.errors = ['Erro ao enviar o código de autenticação.'];
         }
       },
       error: () => {
-        console.log('Erro ao enviar o código de autenticação');
         this.errors = ['Erro ao enviar o código de autenticação.'];
       }
     });
