@@ -42,7 +42,21 @@ export class PermissaoProfessorComponent implements OnInit {
   };
 
 
-  usuarioForm =  this.formBuilder.group({
+  usuarioFormCadastro =  this.formBuilder.group({
+      id: null,
+      username: new FormControl('', {validators: [Validators.required]}),
+      password: new FormControl('', {validators: [Validators.required]}),
+      confirmPassword: new FormControl('', {validators: [Validators.required]}),
+      nome: new FormControl('', {validators: [Validators.required]}),
+      email: new FormControl('', {validators: [Validators.required]}),
+      telefone: new FormControl('', {validators: [Validators.required]}),
+      cidade: new FormControl('', ),
+      estado: new FormControl('', ),
+      bolsa: new FormControl(false),
+      quantidadeDiasBolsa: new FormControl([null, [Validators.required, Validators.min(1)]])
+    });
+
+    usuarioFormAtualizar =  this.formBuilder.group({
       id: null,
       username: new FormControl('', {validators: [Validators.required]}),
       password: new FormControl('', {validators: [Validators.required]}),
@@ -58,7 +72,21 @@ export class PermissaoProfessorComponent implements OnInit {
     constructor(private formBuilder: FormBuilder, private authService: AuthService,
       private cdRef: ChangeDetectorRef
     ) { 
-      this.usuarioForm = this.formBuilder.group({
+      this.usuarioFormCadastro = this.formBuilder.group({
+        id: [null],
+        username: [''],
+        password: [''],
+        confirmPassword: [''],
+        nome: [''],
+        email: [''],
+        telefone: [''],
+        cidade: [''],
+        estado: [''],
+        bolsa: [''],
+        quantidadeDiasBolsa: ['']
+      })
+
+      this.usuarioFormAtualizar = this.formBuilder.group({
         id: [null],
         username: [''],
         password: [''],
@@ -79,7 +107,7 @@ export class PermissaoProfessorComponent implements OnInit {
    
   cadastrarAlunos() {
     this.cadastrando = true; 
-    const userData = this.usuarioForm.value;
+    const userData = this.usuarioFormCadastro.value;
     this.modalErrors = [];
     
     this.validadaoDeCadastro(userData)
@@ -97,6 +125,8 @@ export class PermissaoProfessorComponent implements OnInit {
     usuario.telefone = userData.telefone;
     usuario.cidade = userData.cidade;
     usuario.estado = userData.estado;
+    usuario.bolsaAssinatura = userData.bolsa;
+    usuario.diasDeTeste = userData.quantidadeDiasBolsa;
     
     this.authService.salvar(usuario, this.permissaoAluno).subscribe((response) => {
       const novoUsuario = usuario;
@@ -117,7 +147,7 @@ export class PermissaoProfessorComponent implements OnInit {
   consultarUsuario(id: string): void {
     this.authService.visualizarUsuarioPorId(id).subscribe((data: Usuario) => {
       
-      this.usuarioForm.patchValue({
+      this.usuarioFormAtualizar.patchValue({
         id: id,
         username:  data.username,
         nome: data.nome,
@@ -163,7 +193,7 @@ export class PermissaoProfessorComponent implements OnInit {
     this.modalErrors = [];
     this.errors = [];
     this.mensagemSucesso = "";
-    this.userData = {... this.usuarioForm.value};
+    this.userData = {... this.usuarioFormAtualizar.value};
     this.validadaoDeCadastro(this.userData);
 
     if(this.modalErrors.length > 0) {
@@ -208,7 +238,7 @@ export class PermissaoProfessorComponent implements OnInit {
   }
 
   limparTela() {
-    this.usuarioForm.patchValue({
+    this.usuarioFormCadastro.patchValue({
       id: '',
       username: '',
       password: '',

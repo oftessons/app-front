@@ -128,6 +128,21 @@ export class LoginComponent {
     passwordValidationErrors.push("O campo de nome é obrigatório.");
   }
 
+  if(!this.cidade) {
+    passwordValidationErrors.push("O campo de cidade é obrigatório.");
+
+  }
+
+  if(!this.estado) {
+    passwordValidationErrors.push("O campo de estado é obrigatório.");
+
+  }
+
+  if(!this.telefone) {
+    passwordValidationErrors.push("O campo de telefone é obrigatório.");
+
+  }
+
   if(!this.tipoDeEstudante) {
     passwordValidationErrors.push("Selecione o tipo de usuário.");
   }

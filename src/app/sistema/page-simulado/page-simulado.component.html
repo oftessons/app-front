@@ -271,10 +271,10 @@
             <div class="navigation-buttons">
               <button *ngIf="!isMeuSimulado" class="btn-finalizar" (click)="finalizarSimulado()">Finalizar</button>
               <button *ngIf="jaRespondeu" class="btn-gabarito" (click)="exibirGabarito()">Comentário da Questão</button>
-              <!--
-              <button class="btn-anterior" (click)="anteriorQuestao()" [disabled]="paginaAtual === 0">Anterior</button>
               
-            -->
+              <button *ngIf="visualizando" class="btn-anterior" (click)="anteriorQuestao()" [disabled]="paginaAtual === 0">Anterior</button>
+              
+
               <button *ngIf="!isMeuSimulado" class="btn-responder" (click)="questaoAtual && responderQuestao(questaoAtual)">Responder</button>
               <button class="btn-proxima" (click)="proximaQuestao()">Próxima</button>
             </div>
