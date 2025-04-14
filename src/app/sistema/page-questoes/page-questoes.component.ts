@@ -69,9 +69,10 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   respostaCorreta: string | null = null;
   respostaErrada: string | null = null;
   isRespostaCorreta: boolean = false;
-
   message: string = '';
   resposta: string = ''; // Adiciona esta variável para armazenar a resposta
+  respondidasAgora: Set<Number> = new Set();
+
 
   questaoAtual: Questao | null = null;
   paginaAtual: number = 0;
@@ -537,7 +538,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     this.questaoAtual = this.questoes[this.paginaAtual];
   }  
   
-  
+
   getMensagemNenhumaQuestaoEncontrada(filtros: any): string {
     let mensagemUsuarioTratamento = 'Nenhuma questão encontrada com os filtros selecionados: ';
   
@@ -586,9 +587,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     this.respostaVerificada = true; // Marca como verificada
   }
   
-
  
-
   exibirGabarito(): void {
     if (!this.questaoAtual) {
       console.warn('Nenhuma questão atual disponível.');
@@ -632,6 +631,23 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   
       this.mostrarPorcentagem = false; // Reseta a barra de progresso
       this.porcentagemAcertos = 0;
+      
+      if(this.respondidasAgora.has(this.questaoAtual.id)) {
+      this.questoesService.questaoRespondida(this.usuarioId, this.questaoAtual.id, 0).subscribe({
+        next: (resposta) => {
+          if(resposta) {
+            this.verificarRespostaUsuario(resposta);
+            this.jaRespondeu = true;
+            this.mostrarPorcentagem = true;
+          }
+        },
+        error: (error) => {
+          console.error("Erro ao verificar a resposta do usuário", error);
+        }
+      });
+    }
+    } else {
+      this.mensagemErro = 'Voce já está na primeira questão';
     }
   }
   
@@ -655,7 +671,25 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   
       this.mostrarPorcentagem = false; // Reseta a barra de progresso
       this.porcentagemAcertos = 0;
-  
+
+      if(this.respondidasAgora.has(this.questaoAtual.id)) {
+      this.questoesService.questaoRespondida(this.usuarioId, this.questaoAtual.id, 0).subscribe({
+        next: (resposta) => {
+          if(resposta) {
+            this.verificarRespostaUsuario(resposta);
+            this.jaRespondeu = true;
+
+            this.mostrarPorcentagem = true
+          }
+
+        },
+        error: (error) => {
+          console.error(error);
+        }
+      });
+    }
+    } else {
+      this.mensagemErro = 'Não há mais questões, mas em breve novas questões estarão disponíveis.'
     }
   }
   
@@ -680,6 +714,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
           };
   
           const idUser = parseInt(this.usuario.id);
+          this.respondidasAgora.add(questao.id);
   
           // Chamamos o serviço para verificar a resposta
           this.questoesService.checkAnswer(questao.id, idUser, respostaDTO).subscribe(

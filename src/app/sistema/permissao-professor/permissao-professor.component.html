@@ -77,7 +77,7 @@
           </div>
         </div>
   
-        <form [formGroup]="usuarioForm" class="form-content">
+        <form [formGroup]="usuarioFormCadastro" class="form-content">
           <div class="grid grid-cols-12 gap-x-6 space-y-4">
       
             <!--Mensagem de erros-->
@@ -142,6 +142,19 @@
                 <label class="small mb-1" style="font-size: 1.2em;">Estado</label>
                 <input type="text" name="estado" formControlName="estado" class="form-control py-2 responsive-input" placeholder="Digite seu Estado" required />
             </div>
+
+            <div>
+              <div class="form-group">
+                <label for="bolsa" class="small mb-1">Possui Bolsa?</label>
+                <input type="checkbox" formControlName="bolsa" />
+              </div>
+  
+              <div *ngIf="usuarioFormCadastro.get('bolsa')?.value">
+                <label for="quantidadeDiasBolsa" class="small mb-1">Quantidade de Dias da Bolsa</label>
+                <input type="number" formControlName="quantidadeDiasBolsa" placeholder="Informe a quantidade de dias da bolsa" class="form-control py-2 responsive-input" />
+              </div>
+            </div>
+
           </div>
         </form>
       </div>
@@ -172,7 +185,7 @@
           </div>
         </div>
   
-        <form [formGroup]="usuarioForm" class="form-content">
+        <form [formGroup]="usuarioFormAtualizar" class="form-content">
           <div class="grid grid-cols-12 gap-x-6 space-y-4">
         
             <!--Mensagem de sucesso-->
@@ -190,7 +203,6 @@
                 <input type="text" name="username" formControlName="username" autocomplete="off" class="form-control py-2 responsive-input" placeholder="Digite seu username" required />
             </div>
 
-        
             <div class="form-group">
                 <label class="small mb-1" style="font-size: 1.2em;">Nome</label>
                 <input type="text" name="nome" formControlName="nome" class="form-control py-2 responsive-input" placeholder="Digite o seu nome"  />
@@ -229,7 +241,6 @@
                 <label class="small mb-1" style="font-size: 1.2em;">Estado</label>
                 <input type="text" name="estado" formControlName="estado" class="form-control py-2 responsive-input" placeholder="Digite seu Estado" required />
             </div>
-   
           </div>
         </form>
       </div>

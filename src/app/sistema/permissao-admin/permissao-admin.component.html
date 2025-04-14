@@ -115,7 +115,7 @@
           </div>
         </div>
   
-        <form [formGroup]="usuarioForm" class="form-content">
+        <form [formGroup]="usuarioFormCadastro" class="form-content">
           <div class="grid grid-cols-12 gap-x-6 space-y-4">
             <!--Mensagem de erros-->
             <div class="alert alert-danger" *ngFor="let error of modalErrors" >
@@ -192,13 +192,13 @@
               </select>
             </div>
             
-            <div *ngIf="usuarioForm.get('tipoUsuario')?.value === 'ALUNO'">
+            <div *ngIf="usuarioFormCadastro.get('tipoUsuario')?.value === 'ALUNO'">
               <div class="form-group">
                 <label for="bolsa" class="small mb-1">Possui Bolsa?</label>
                 <input type="checkbox" formControlName="bolsa" />
               </div>
   
-              <div *ngIf="usuarioForm.get('bolsa')?.value">
+              <div *ngIf="usuarioFormCadastro.get('bolsa')?.value">
                 <label for="quantidadeDiasBolsa" class="small mb-1">Quantidade de Dias da Bolsa</label>
                 <input type="number" formControlName="quantidadeDiasBolsa" placeholder="Informe a quantidade de dias da bolsa" class="form-control py-2 responsive-input" />
               </div>
@@ -234,7 +234,7 @@
           </div>
         </div>
   
-        <form [formGroup]="usuarioForm" class="form-content">
+        <form [formGroup]="usuarioFormUpdate" class="form-content">
           <div class="grid grid-cols-12 gap-x-6 space-y-4">
             
             <div class="alert alert-danger" *ngFor="let error of modalErrors" >
@@ -268,8 +268,8 @@
             <div class="form-group">
                 <label class="small mb-1" style="font-size: 1.2em;">E-mail *</label>
                 <input type="email" formControlName="email" name="email" class="form-control py-2 responsive-input" placeholder="Digite seu e-mail" required />
-            </div>astrar usuário
-
+            </div>
+            
             <div class="form-group">
                 <label class="small mb-1" style="font-size: 1.2em;">Celular</label>
                 <input type="text" formControlName="telefone" name="telefone" class="form-control py-2 responsive-input" placeholder="Digite o Celular (XX) XXXX-XXX" required />
