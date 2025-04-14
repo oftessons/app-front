@@ -8,6 +8,7 @@ import { AuthGuard } from './services/auth.guard';
 import { PlanosComponent } from './planos/planos/planos.component';
 import { DetalhesPlanosComponent } from './planos/detalhes-planos/detalhes-planos.component';
 import { PagamentoConcluidoComponent } from './planos/pagamento-concluido/pagamento-concluido.component';
+import { ValidacaoAcessoComponent } from './validacao-acesso/validacao-acesso.component';
 import { ChatBotWhatsappComponent } from './chat-bot-whatsapp/chat-bot-whatsapp.component';
 
 const routes: Routes = [
@@ -21,7 +22,8 @@ const routes: Routes = [
   { path: '', component: LayoutComponent, children: [
     { path : 'usuario/dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
     { path: '', redirectTo: 'usuario/dashboard', pathMatch: 'full' }
-  ]}
+  ]},
+  {path: 'validacao-acesso', component: ValidacaoAcessoComponent}
 ];
 
 @NgModule({

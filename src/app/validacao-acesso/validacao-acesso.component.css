@@ -1,0 +1,382 @@
+#layoutAuthentication #layoutAuthentication_content {
+    background-image: url("src/assets/imagens/tela-ofi.png");
+    background-size: cover;
+    background-position: center;
+  }
+  
+  .btn-primary {
+    color: #fff;
+    background-color: #3b5fa0;
+    border-color: #3b5fa0;
+    font-family: "Nunito Sans", sans-serif;
+    margin-top: 5px;
+  }
+  
+  .alert-success {
+    background-color: #88c273;
+    color: rgb(0, 0, 0);
+    border: 1px solid #88c273;
+    border-radius: 5px;
+    font-size: 14px;
+    padding: 15px;
+  }
+  
+  .form-control {
+    font-size: 12px;
+  }
+  
+  .text-primary {
+    margin-top: 5px;
+    color: #000000; /* Cor primária desejada */
+    font-size: 13px;
+    font-weight: 200px;
+    font-weight: 700;
+  }
+  
+  .form-group-senha {
+    margin-bottom: 20px; /* Ajuste a margem inferior conforme necessário */
+  }
+  
+  .form-group-senha .form-control {
+    border-color: #ced4da; /* Cor da borda do campo de entrada */
+    border-radius: 10px; /* Raio do canto da borda */
+    padding: 12px; /* Ajuste do preenchimento interno */
+    font-size: 16px; /* Tamanho da fonte */
+    color: #495057; /* Cor do texto */
+    height: 50px;
+    font-size: 13px;
+  }
+  
+  .form-group-senha .senha {
+    font-weight: bold; /* Texto em negrito */
+    text-transform: uppercase; /* Transformação de texto para maiúsculas */
+  }
+  
+  .form-control,
+  .btn-lg {
+    width: 100%;
+  }
+  
+  .btn-lg {
+    font-size: 14px;
+    font-family: "Nunito Sans", sans-serif;
+    width: 100%;
+  }
+  
+  .forgot-password-link {
+    color: #3b5fa0 !important;
+    font-weight: 700; /* Negrito opcional */
+    font-size: 14px; /* Tamanho da fonte opcional */
+    text-decoration: none; /* Remove sublinhado */
+    cursor: pointer; /* Adiciona cursor pointer ao passar o mouse */
+  }
+  
+  .forgot-password-link:hover {
+    color: #333; /* Cor do texto ao passar o mouse, opcional */
+  }
+  
+  .forgot-password-link span {
+    color: #111111;
+  }
+  
+  .form-group.align-items-center.justify-content-between.d-flex {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .btn-lg {
+    padding: 10px 20px;
+    font-size: 17px;
+    width: auto;
+  }
+  
+  .btn-custom {
+    padding: 5px 10px;
+    font-size: 14px;
+    height: 45px;
+    width: auto;
+  }
+  
+  .termos {
+    font-size: 15px;
+    font-family: "Nunito Sans", serif;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+    padding-top: 8px;
+    margin-bottom: 16px;
+  }
+  
+  .termos a {
+    color: #4773c4;
+    text-decoration: none;
+  }
+  
+  .termos a:hover {
+    color: #003185;
+  }
+  
+  .termos label {
+      margin: 0;
+  }   
+  
+  @media screen and (min-width: 1024px) {
+    .form-group.align-items-center.justify-content-between.d-flex {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+  
+  @media (max-width: 767px) {
+    .form-group.align-items-center.justify-content-between.d-flex {
+      flex-direction: column;
+      padding: 10px;
+    }
+    .btn-lg {
+      padding: 10px 20px;
+      font-size: 17px;
+      margin: 5px;
+      width: 100%;
+    }
+  }
+  
+  .alert.alert-danger {
+    background-color: #cc3939;
+    color: #fff;
+    border-color: #cc3939;
+  }
+  
+  .responsive-input {
+    width: 100%;
+    height: 45px;
+    font-size: 13px;
+  }
+  
+  .form-group {
+    margin-bottom: 0.1rem;
+    flex-direction: column;
+    align-items: start;
+    width: 100%;
+  }
+  
+  .col-md-6 {
+    width: 100%;
+  }
+  
+  .password-errors {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .error-tooltip {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  
+  .password-errors:hover .error-tooltip {
+    visibility: visible;
+    opacity: 1;
+  }
+  
+  @media screen and (min-width: 1024px) {
+    .btn-lg {
+      width: 100%;
+    }
+  
+    .responsive-input {
+      width: 100%;
+      padding-right: 0.75rem;
+      padding-left: 0.75rem;
+    }
+  
+    .col-md-6 {
+      max-width: 100%;
+    }
+  }
+  
+  /* Responsive styles for smaller screens */
+  @media (min-width: 767px) {
+    .responsive-input {
+      width: 100%;
+      padding-right: 0.75rem;
+      padding-left: 0.75rem;
+    }
+  
+    .col-md-6 {
+      max-width: 100%;
+    }
+  }
+  
+  .card-body {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+  }
+  
+  .card-header {
+    background: #0f1934;
+  }
+  
+  .card-footer {
+    background: #0f1934;
+  }
+  
+  .row.justify-content-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Ocupa pelo menos a altura da viewport */
+  }
+  
+  .card {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background: rgb(226 225 220 / 94%);
+  }
+  
+  .text-center {
+    color: #000000;
+    font-family: "Nunito Sans", sans-serif;
+    font-weight: bold;
+    font-size: 15px;
+    align-items: center;
+  }
+  
+  .btn-success {
+    background-color: #28a745; /* Cor de fundo para o botão Enviar */
+    border-color: #28a745; /* Cor da borda para o botão Enviar */
+    color: #fff; /* Cor do texto para o botão Enviar */
+  }
+  
+  .btn-danger {
+    color: #fff;
+    background-color: #113462;
+    border-color: #113462;
+    padding: 10px 20px; /* Ajuste o padding conforme necessário */
+  }
+  
+  .btn-lg {
+    padding: 10px 20px; /* Ajuste o padding conforme necessário */
+    font-size: 17px; /* Ajuste o tamanho da fonte conforme necessário */
+  }
+  
+  input::placeholder {
+    color: rgb(118, 118, 118);
+  }
+  
+  .green-text {
+    color: #3b5fa0;
+    font-weight: bold;
+    font-size: 14px;
+  }
+  
+  .white-text {
+    color: white;
+    font-size: 14px;
+  }
+  
+  .small {
+    padding: 8px;
+    font-family: "Nunito Sans";
+  }
+  
+  .small a {
+    text-decoration: none; /* Remove a linha de sublinhado apenas dos links dentro da classe .small */
+  }
+  
+  .password-tooltip {
+    position: absolute;
+    background-color: #ffffff;
+    border: 1px solid #a0a0a0;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 200px;
+    margin-top: 6px;
+    z-index: 10;
+    font-size: 0.9rem;
+  }
+  
+  .password-tooltip p {
+    font-size: 1rem;
+    color: #a0a0a0;
+  }
+  
+  .password-tooltip ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .password-tooltip li {
+    color: #c60404;
+    margin: 5px 0;
+  }
+  
+  .password-tooltip li.valid {
+    color: #027902;
+    font-weight: 400;
+  }
+  
+  .input-group-append .btn {
+    background: none;
+    border: none !important;
+    padding: 0;
+    margin-left: -40px;
+    z-index: 2;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+  
+  .input-group-append .btn svg {
+    width: 20px;
+    height: 20px;
+  }
+  
+  /* Garante que o botão permaneça visível quando o input estiver em foco */
+  .input-group .form-control:focus {
+    z-index: 1;
+  }
+  
+  /* Remove o arredondamento dos cantos direitos do input, exceto o último filho */
+  .input-group:not(.has-validation)
+    > :not(:last-child):not(.dropdown-toggle):not(.dropdown-menu):not(
+      .form-floating
+    ) {
+    border-radius: 8px;
+  }
+  
+  .logo-qbank {
+    padding: 10px;
+    height: 85px;
+  }
+  
+  .codigo-label {
+    font-size: 1.2em;
+    margin-bottom: 0.5rem;
+  }
+  
+  .codigo-input {
+    letter-spacing: 8px;
+    font-size: 1.5em;
+    text-align: center;
+    padding: 0.75rem;
+  }
+  
