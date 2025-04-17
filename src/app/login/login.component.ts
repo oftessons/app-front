@@ -65,15 +65,18 @@ export class LoginComponent {
       username: this.username,
       password: this.password
     };
-    localStorage.setItem('username', this.username);
-    localStorage.setItem('password', this.password);
+    
+    sessionStorage.setItem('pending_login_data', JSON.stringify(loginData));
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('user_id');
+    localStorage.removeItem('usuario');
 
     this.authService.send2FACode(loginData).subscribe({
       next: (res) => {
         if (res.status === 200) {
           this.router.navigate(['/validacao-acesso']);
         } else {
-          this.errors = ['Erro ao enviar o código de autenticação.'];
+          this.errors = ['Realize a limpeza dos cookies e tente novamente.'];
         }
       },
       error: () => {
@@ -81,6 +84,7 @@ export class LoginComponent {
       }
     });
   }
+
 
   preparaCadastrar(event: Event) {
     event.preventDefault();
