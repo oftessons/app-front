@@ -42,7 +42,6 @@ export class ValidacaoAcessoComponent {
         }
       },
       error: (res) => {
-        console.log(res);
         this.errors = ['Erro ao validar o código.'];
       }
     });
