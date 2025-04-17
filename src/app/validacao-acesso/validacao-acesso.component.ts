@@ -4,7 +4,7 @@ import { AuthService } from '../services/auth.service';
 import { Usuario } from '../login/usuario';
 import { MFACodigoDTO } from '../sistema/MFACodigoDTO';
 import { HttpErrorResponse } from '@angular/common/http';
-import type { LoginDTO } from '../sistema/LoginDTO';
+import { LoginDTO } from '../sistema/LoginDTO';
 
 @Component({
   selector: 'app-validacao-acesso',
