@@ -4,6 +4,7 @@ import { AuthService } from '../services/auth.service';
 import { Usuario } from '../login/usuario';
 import { MFACodigoDTO } from '../sistema/MFACodigoDTO';
 import { HttpErrorResponse } from '@angular/common/http';
+import type { LoginDTO } from '../sistema/LoginDTO';
 
 @Component({
   selector: 'app-validacao-acesso',
@@ -15,33 +16,42 @@ export class ValidacaoAcessoComponent {
   errors: string[] = [];
   mensagemSucesso: string | null = null;
 
-  username: string = localStorage.getItem('username') ?? '';
-  password: string = localStorage.getItem('password') ?? '';
-
   constructor(private authService: AuthService, private router: Router) {}
 
   onSubmit() {
+    const rawData = sessionStorage.getItem('pending_login_data');
+    if (!rawData) {
+      this.errors = ['Não foi possível recuperar os dados de login.'];
+      return;
+    }
+
+    const loginData: LoginDTO = JSON.parse(rawData);
+
     const dto: MFACodigoDTO = {
-      username: this.username,
+      username: loginData.username,
       codigo: this.codigo
     };
 
     this.authService.verify2FACode(dto).subscribe({
       next: (res: boolean) => {
         if (res) {
-          this.realizarLogin();
+          sessionStorage.removeItem('pending_login_data');
+          this.realizarLogin(loginData);
         } else {
           this.errors = ['Código inválido. Tente novamente.'];
         }
       },
-      error: () => {
+      error: (res) => {
+        console.log(res);
         this.errors = ['Erro ao validar o código.'];
       }
     });
   }
 
-  realizarLogin() {
-    this.authService.tentarLogar(this.username, this.password).subscribe(
+  realizarLogin(loginData: LoginDTO) {
+    const { username, password } = loginData;
+
+    this.authService.tentarLogar(username, password).subscribe(
       (response: any) => {
         const access_token = response.access_token;
         localStorage.setItem('access_token', access_token);
