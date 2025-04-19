@@ -14,7 +14,9 @@
     </div>
   </div>
   <div class="chatbot-footer">
-    <input [(ngModel)]="userMessage" (keydown.enter)="sendMessage()" placeholder="Escreva sua mensagem...">
-    <button (click)="sendMessage()">Enviar</button>
+    <textarea class="user-text-input" [(ngModel)]="userMessage" (keydown.enter)="sendMessage()" placeholder="Escreva sua mensagem..."></textarea>
+    <button (click)="sendMessage()" [disabled]="!userMessage">
+      <img src="assets/Icons/enviar.svg" alt="Enviar" class="send-icon">
+    </button>
   </div>
 </div>

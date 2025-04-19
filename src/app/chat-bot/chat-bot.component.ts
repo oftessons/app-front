@@ -49,13 +49,13 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
       } else {
         setTimeout(() => {
           this.showButton = true;
-        }, 2000);
+        }, 1000);
       }
     });
   }
 
   ngAfterViewChecked(): void {
-    this.scrollToBottom();
+    //this.scrollToBottom();
   }
 
   ngAfterViewInit(): void {
@@ -92,15 +92,17 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
   sendMessage(): void {
     if (this.userMessage.trim()) {
       this.messages.push({ text: this.userMessage, type: 'user' });
-  
+      this.userMessage = '';
+      this.scrollToBottom();
       this.chatBotStateService.sendMessageToBot(this.userMessage).subscribe(
         (response) => {
           this.messages.push({ text: response.response, type: 'bot' });
-          this.userMessage = '';
+          this.scrollToBottom();
         },
         (error) => {
           console.error('Erro ao enviar mensagem:', error);
           this.messages.push({ text: '⚠️ Erro ao conectar ao suporte. Tente novamente mais tarde.', type: 'bot' });
+          this.scrollToBottom();
         }
       );
     }
@@ -112,6 +114,8 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
 
   scrollToBottom(): void {
     const chatBodyElement = this.chatBody.nativeElement;
-    chatBodyElement.scrollTop = chatBodyElement.scrollHeight;
+    setTimeout(() => {
+      chatBodyElement.scrollTop = chatBodyElement.scrollHeight;
+    }, 100);
   }
 }
