@@ -10,12 +10,13 @@
     background-color: #fff;
     border-radius: 20px;
     overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     transition: transform 1s ease-in-out;
 }
 
 .chatbot-header {
-    background: linear-gradient(to right, #f6d365, #febf25);
-    color: white;
+    background: linear-gradient(to right, #f5ce50, #febf25);
+    color: #0f1934;
     padding: 15px;
     text-align: center;
     position: relative;
@@ -45,7 +46,7 @@
     padding: 15px;
     overflow-y: auto;
     font-family: "Roboto", sans-serif;
-    background-color: #e3eaf0;
+    background-color: #ffffff;
     display: flex;
     flex-direction: column;
     scroll-behavior: smooth;
@@ -55,7 +56,7 @@
     display: flex;
     justify-content: center;
     padding: 10px;
-    background-color: #e3eaf0;
+    background-color: #ffffff;
     text-align: center;
     padding-bottom: 10px;
 }
@@ -76,6 +77,14 @@
     transition: all 0.3s ease;
     border: none;
     cursor: pointer;
+}
+
+.whatsapp-button:hover {
+    transform: scale(1.02);
+}
+
+.whatsapp-button:active {
+    transform: scale(0.98);
 }
 
 .whatsapp-logo {
@@ -143,7 +152,6 @@
     font-size: 14px;
     word-wrap: break-word;
     display: block;
-    white-space: pre-wrap;
 }
 
 .bot-message {
@@ -156,7 +164,6 @@
     font-size: 14px;
     word-wrap: break-word;
     display: block;
-    white-space: pre-wrap;
 }
 
 .chatbot-body::-webkit-scrollbar {
