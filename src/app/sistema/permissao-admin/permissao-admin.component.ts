@@ -28,7 +28,14 @@ export class PermissaoAdminComponent implements OnInit {
   pageSizeAlunos = 6;
   pageIndexAlunos = 0;
   totalPagesAlunos = Math.ceil(this.alunos.length / this.pageSizeAlunos);
-  tiposPermissao =  [PermissaoDescricoes.ROLE_PROFESSOR, PermissaoDescricoes.ROLE_USER];
+
+  bolsistas: Usuario[] = []
+  paginatedBolsistas = this.bolsistas.slice(0, 6);
+  pageSizeBolsistas = 6;
+  pageIndexBolsistas = 0;
+  totalPagesBolsistas = Math.ceil(this.bolsistas.length / this.pageSizeBolsistas);
+
+  tiposPermissao =  [PermissaoDescricoes.ROLE_PROFESSOR, PermissaoDescricoes.ROLE_USER, PermissaoDescricoes.ROLE_BOLSISTA];
   mensagemSucesso: string = '';
   cadastrando: boolean = false;
   userData: Usuario = new Usuario(); 
@@ -121,13 +128,15 @@ export class PermissaoAdminComponent implements OnInit {
       this.usuarios = data;
       this.alunos = this.filtrarUsuariosPorPermissao('USER'); 
       this.professores = this.filtrarUsuariosPorPermissao('PROFESSOR');
+      this.bolsistas = this.filtrarUsuariosPorPermissao('BOLSISTA');
+      console.log(this.bolsistas);
+      console.log(data);
 
       this.updatePaginatedData('alunos');
       this.updatePaginatedData('professores');
+      this.updatePaginatedData('bolsistas');
       
       this.cdRef.markForCheck();
-   
-      
     }, (error) => {
       this.errors.push(error);
       this.cdRef.markForCheck();
@@ -216,9 +225,10 @@ export class PermissaoAdminComponent implements OnInit {
 
       const tiposUsuarios = {
         alunos: this.alunos,
-        professores: this.professores
+        professores: this.professores,
+        bolsistas: this.bolsistas
       };
-           
+      
       for (const key of Object.keys(tiposUsuarios) as (keyof typeof tiposUsuarios)[]) {
         const usuarios = tiposUsuarios[key];
         const index = tiposUsuarios[key].findIndex((user) => user.id === updateUser.id);
@@ -247,8 +257,10 @@ export class PermissaoAdminComponent implements OnInit {
         
         this.alunos = this.alunos.filter((user) => user.id !== id);
         this.professores = this.professores.filter((prof) => prof.id !== id);
+        this.bolsistas = this.bolsistas.filter((bolsista) => bolsista.id !== id);
         this.updatePaginatedData('alunos');
         this.updatePaginatedData('professores');
+        this.updatePaginatedData('bolsistas');
         this.mensagemSucesso = "Excluído com sucesso";
         this.cdRef.markForCheck();  
         
@@ -265,11 +277,11 @@ export class PermissaoAdminComponent implements OnInit {
 
     const enumeracao: Record<string, Permissao> = {
       "USER": Permissao.USER,
-      "PROFESSOR": Permissao.PROFESSOR
+      "PROFESSOR": Permissao.PROFESSOR,
+      "BOLSISTA": Permissao.BOLSISTA,
     }
 
     return enumeracao[selecao] || Permissao.USER;
-
   } 
 
   limparTela() {
@@ -335,56 +347,74 @@ export class PermissaoAdminComponent implements OnInit {
 
   }
 
-  filtrarUsuariosPorPermissao(permissao: 'USER' | 'PROFESSOR'): Usuario[] {
+  filtrarUsuariosPorPermissao(permissao: 'USER' | 'PROFESSOR' | 'BOLSISTA'): Usuario[] {
     return this.usuarios.filter(user => String(user.permissao) === permissao);
   }
 
-  updatePaginatedData(type: 'professores' | 'alunos'): void {
-    const pageIndex = type === 'professores' ? this.pageIndexProfessores : this.pageIndexAlunos;
-    const pageSize =  type === 'professores' ? this.pageSizeProfessores : this.pageSizeAlunos;
-    const data = type === 'professores' ? this.professores : this.alunos;
-    const startIndex = pageIndex * pageSize;
-    const endIndex = startIndex + pageSize;
-    if (type === 'professores') {
-      this.paginatedProfessores = data.slice(startIndex, endIndex);
-      this.totalPagesProfessores = Math.ceil(this.professores.length / this.pageSizeProfessores);
-    } else {
-      this.paginatedAlunos = data.slice(startIndex, endIndex);
+  updatePaginatedData(type: 'professores' | 'alunos' | 'bolsistas'): void { 
+    if (type === 'alunos') {
+      const startIndex = this.pageIndexAlunos * this.pageSizeAlunos;
+      const endIndex = startIndex + this.pageSizeAlunos;
+      this.paginatedAlunos = this.alunos.slice(startIndex, endIndex);
       this.totalPagesAlunos = Math.ceil(this.alunos.length / this.pageSizeAlunos);
-
+    } else if (type === 'professores') {
+      const startIndex = this.pageIndexProfessores * this.pageSizeProfessores;
+      const endIndex = startIndex + this.pageSizeProfessores;
+      this.paginatedProfessores = this.professores.slice(startIndex, endIndex);
+      this.totalPagesProfessores = Math.ceil(this.professores.length / this.pageSizeProfessores);
+    } else if (type === 'bolsistas') {
+      const startIndex = this.pageIndexBolsistas * this.pageSizeBolsistas;
+      const endIndex = startIndex + this.pageSizeBolsistas;
+      this.paginatedBolsistas = this.bolsistas.slice(startIndex, endIndex);
+      this.totalPagesBolsistas = Math.ceil(this.bolsistas.length / this.pageSizeBolsistas);
     }
   }
 
-  nextPage(type: 'professores' | 'alunos'): void {
-    const pageIndex = type === 'professores' ? this.pageIndexProfessores : this.pageIndexAlunos;
-    const totalPages = type === 'professores' ? this.totalPagesProfessores : this.totalPagesAlunos;
-    if (pageIndex < totalPages - 1) {
-      if (type === 'professores') {
+  nextPage(type: 'professores' | 'alunos' | 'bolsistas'): void {
+    if (type === 'professores') {
+      if (this.pageIndexProfessores < this.totalPagesProfessores - 1) {
         this.pageIndexProfessores++;
-      } else {
+        this.updatePaginatedData(type);
+      }
+    } else if (type === 'alunos') {
+      if (this.pageIndexAlunos < this.totalPagesAlunos - 1) {
         this.pageIndexAlunos++;
+        this.updatePaginatedData(type);
       }
-      this.updatePaginatedData(type);
+    } else if (type === 'bolsistas') {
+      if (this.pageIndexBolsistas < this.totalPagesBolsistas - 1) {
+        this.pageIndexBolsistas++;
+        this.updatePaginatedData(type);
+      }
     }
   }
 
-  previousPage(type: 'professores' | 'alunos'): void {
-    const pageIndex = type === 'professores' ? this.pageIndexProfessores : this.pageIndexAlunos;
-    if (pageIndex > 0) {
-      if (type === 'professores') {
-        this.pageIndexProfessores--;
-      } else {
-        this.pageIndexAlunos--;
+  previousPage(type: 'professores' | 'alunos' | 'bolsistas'): void {
+    if (type === 'professores') {
+      if (this.pageIndexProfessores < this.totalPagesProfessores - 1) {
+        this.pageIndexProfessores++;
+        this.updatePaginatedData(type);
       }
-      this.updatePaginatedData(type);
+    } else if (type === 'alunos') {
+      if (this.pageIndexAlunos < this.totalPagesAlunos - 1) {
+        this.pageIndexAlunos++;
+        this.updatePaginatedData(type);
+      }
+    } else if (type === 'bolsistas') {
+      if (this.pageIndexBolsistas < this.totalPagesBolsistas - 1) {
+        this.pageIndexBolsistas++;
+        this.updatePaginatedData(type);
+      }
     }
   }
 
-  goToPage(type: 'professores' | 'alunos', pageIndex: number): void {
+  goToPage(type: 'professores' | 'alunos' | 'bolsistas', pageIndex: number): void {
     if (type === 'professores') {
       this.pageIndexProfessores = pageIndex;
-    } else {
+    } else if (type === 'alunos') {
       this.pageIndexAlunos = pageIndex;
+    } else if (type === 'bolsistas') {
+      this.pageIndexBolsistas = pageIndex;
     }
     this.updatePaginatedData(type);
   }

@@ -133,6 +133,8 @@ obterNomeUsuario(): Observable<string> {
     let request: Observable<any>;
     if (userPermissao === Permissao.ADMIN && perm === Permissao.PROFESSOR.valueOf()) {
       request = this.cadastrarProfessor(usuario);
+    } else if (userPermissao === Permissao.ADMIN && perm === Permissao.BOLSISTA.valueOf()) {
+      request = this.cadastrarBolsista(usuario);
     } else {
       request = this.cadastrarAluno(usuario);
     }
@@ -149,6 +151,18 @@ obterNomeUsuario(): Observable<string> {
 
   private cadastrarAluno(usuario: Usuario): Observable<any> { 
     return this.http.post(`${this.apiURL}/cadastro/USER`, usuario)
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 422) {
+            return throwError('Usuário já cadastrado na base de dados');
+          }
+          return throwError("O servidor não está funcionando corretamente.");
+        })
+      );
+  }
+
+  private cadastrarBolsista(usuario: Usuario): Observable<any> {
+    return this.http.post(`${this.apiURL}/cadastro/BOLSISTA`, usuario)
       .pipe(
         catchError((error: HttpErrorResponse) => {
           if (error.status === 422) {

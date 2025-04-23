@@ -59,45 +59,83 @@
         </div>
     </div>
   
-      <h2>Alunos</h2>
-      <div class="table-responsive">
-        <table class="tabela">
-          <thead>
-            <tr>
-              <th>Nome</th>
-              <th>Email</th>
-              <th>Cidade</th>
-              <th>Estado</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let aluno of paginatedAlunos">
-                <td><a href="#">{{ aluno.nome }}</a></td>
-                <td>{{ aluno.email }}</td>
-                <td>{{ aluno.cidade }}</td>
-                <td>{{ aluno.estado }}</td>
-                <td>
-                  <button class="btn-editar btn-primary btn" (click)="openModalAtualizar(aluno.id)">
-                    Editar
-                    <img src="assets/imagens/pencil.svg" alt="Ícone de Editar" class="icon" />
-                  </button>
-                  <button class="btn-excluir btn-danger btn" (click)="removerUsuario(aluno.id)">
-                    Excluir
-                    <img src="assets/imagens/de.svg" alt="Ícone de Deletar" class="icon" />
-                  </button>
-                </td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="pagination-controls">
-            <button class="nav-button" (click)="previousPage('alunos')" [disabled]="pageIndexAlunos === 0">&lt;</button>
-            <button class="page-number" *ngFor="let page of [].constructor(totalPagesAlunos); let i = index" (click)="goToPage('alunos', i)" [class.active]="i === pageIndexAlunos">{{ i + 1 }}</button>
-            <button class="nav-button" (click)="nextPage('alunos')" [disabled]="pageIndexAlunos >= totalPagesAlunos - 1">&gt;</button>
-        </div>
+    <h2>Alunos</h2>
+    <div class="table-responsive">
+      <table class="tabela">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Cidade</th>
+            <th>Estado</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let aluno of paginatedAlunos">
+              <td><a href="#">{{ aluno.nome }}</a></td>
+              <td>{{ aluno.email }}</td>
+              <td>{{ aluno.cidade }}</td>
+              <td>{{ aluno.estado }}</td>
+              <td>
+                <button class="btn-editar btn-primary btn" (click)="openModalAtualizar(aluno.id)">
+                  Editar
+                  <img src="assets/imagens/pencil.svg" alt="Ícone de Editar" class="icon" />
+                </button>
+                <button class="btn-excluir btn-danger btn" (click)="removerUsuario(aluno.id)">
+                  Excluir
+                  <img src="assets/imagens/de.svg" alt="Ícone de Deletar" class="icon" />
+                </button>
+              </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="pagination-controls">
+          <button class="nav-button" (click)="previousPage('alunos')" [disabled]="pageIndexAlunos === 0">&lt;</button>
+          <button class="page-number" *ngFor="let page of [].constructor(totalPagesAlunos); let i = index" (click)="goToPage('alunos', i)" [class.active]="i === pageIndexAlunos">{{ i + 1 }}</button>
+          <button class="nav-button" (click)="nextPage('alunos')" [disabled]="pageIndexAlunos >= totalPagesAlunos - 1">&gt;</button>
       </div>
     </div>
+  
 
+    <h2>Bolsistas</h2>
+    <div class="table-responsive">
+      <table class="tabela">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Cidade</th>
+            <th>Estado</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let bolsista of paginatedBolsistas">
+              <td><a href="#">{{ bolsista.nome }}</a></td>
+              <td>{{ bolsista.email }}</td>
+              <td>{{ bolsista.cidade }}</td>
+              <td>{{ bolsista.estado }}</td>
+              <td>
+                <button class="btn-editar btn-primary btn" (click)="openModalAtualizar(bolsista.id)">
+                  Editar
+                  <img src="assets/imagens/pencil.svg" alt="Ícone de Editar" class="icon" />
+                </button>
+                <button class="btn-excluir btn-danger btn" (click)="removerUsuario(bolsista.id)">
+                  Excluir
+                  <img src="assets/imagens/de.svg" alt="Ícone de Deletar" class="icon" />
+                </button>
+              </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="pagination-controls">
+        <button class="nav-button" (click)="previousPage('bolsistas')" [disabled]="pageIndexBolsistas === 0">&lt;</button>
+        <button class="page-number" *ngFor="let page of [].constructor(totalPagesBolsistas); let i = index" (click)="goToPage('bolsistas', i)" [class.active]="i === pageIndexBolsistas">{{ i + 1 }}</button>
+        <button class="nav-button" (click)="nextPage('bolsistas')" [disabled]="pageIndexBolsistas >= totalPagesBolsistas - 1">&gt;</button>
+      </div>
+    </div>
+  </div>
     <!-- Modal para cadastrar usuários -->
 
     <app-modal [show]="showModalCadastrar" (closeModal)="closeModalCadastrar()" size="max-w-7xl" [footer]="false">
@@ -192,13 +230,8 @@
               </select>
             </div>
             
-            <div *ngIf="usuarioFormCadastro.get('tipoUsuario')?.value === 'ALUNO'">
-              <div class="form-group">
-                <label for="bolsa" class="small mb-1">Possui Bolsa?</label>
-                <input type="checkbox" formControlName="bolsa" />
-              </div>
-  
-              <div *ngIf="usuarioFormCadastro.get('bolsa')?.value">
+            <div *ngIf="usuarioFormCadastro.get('tipoUsuario')?.value === 'BOLSISTA'">
+              <div>
                 <label for="quantidadeDiasBolsa" class="small mb-1">Quantidade de Dias da Bolsa</label>
                 <input type="number" formControlName="quantidadeDiasBolsa" placeholder="Informe a quantidade de dias da bolsa" class="form-control py-2 responsive-input" />
               </div>
