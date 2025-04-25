@@ -114,6 +114,7 @@ export class PermissaoAdminComponent implements OnInit {
   ngOnInit(): void {
     this.updatePaginatedData('professores');
     this.updatePaginatedData('alunos');
+    this.updatePaginatedData('bolsistas');
     this.carregarUsuarios();
   }
 
