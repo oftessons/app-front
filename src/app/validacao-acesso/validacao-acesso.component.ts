@@ -84,7 +84,8 @@ export class ValidacaoAcessoComponent {
         if (
           usuario.permissao === 'ROLE_ADMIN' ||
           usuario.permissao === 'ROLE_USER' ||
-          usuario.permissao === 'ROLE_PROFESSOR'
+          usuario.permissao === 'ROLE_PROFESSOR' ||
+          usuario.permissao === 'ROLE_BOLSISTA'
         ) {
           this.router.navigate(['/usuario/inicio']);
         } else {
