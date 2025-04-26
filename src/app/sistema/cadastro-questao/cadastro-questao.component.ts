@@ -17,6 +17,12 @@ import { Permissao } from 'src/app/login/Permissao';
 import { AuthService } from 'src/app/services/auth.service';
 
 import Quill from 'quill';
+import { AnoDescricoes } from '../page-questoes/enums/ano-descricoes';
+import { DificuldadeDescricoes } from '../page-questoes/enums/dificuldade-descricao';
+import { TemaDescricoes } from '../page-questoes/enums/tema-descricao';
+import { SubtemaDescricoes } from '../page-questoes/enums/subtema-descricao';
+import { TipoDeProvaDescricoes } from '../page-questoes/enums/tipodeprova-descricao';
+import { RelevanciaDescricao } from '../page-questoes/enums/relevancia-descricao';
 
 @Component({
   selector: 'app-cadastro-questao',
@@ -46,12 +52,12 @@ export class CadastroQuestaoComponent implements OnInit,  AfterViewInit {
 
   selectedAlternativeIndex: number = -3;
 
-  anos: string[] = Object.values(Ano);
-  dificuldades: string[] = Object.values(Dificuldade);
-  temas: string[] = Object.values(Tema);
-  subtemas: string[] = Object.values(Subtema);
-  tiposDeProva: string[] = Object.values(TipoDeProva);
-  relevancias: string[] = Object.values(Relevancia);
+  anos: string[] = Object.values(AnoDescricoes);
+  dificuldades: string[] = Object.values(DificuldadeDescricoes);
+  temas: string[] = Object.values(TemaDescricoes);
+  subtemas: string[] = Object.values(SubtemaDescricoes);
+  tiposDeProva: string[] = Object.values(TipoDeProvaDescricoes);
+  relevancias: string[] = Object.values(RelevanciaDescricao);
 
   selectedImage: string='';
   uploadedImage: string='';
