@@ -23,6 +23,7 @@ import { ChatBotStateService } from '../services/chat-bot-state.service';
     ]),
   ]
 })
+
 export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit, OnDestroy {
   isOpen: boolean = false;
   showButton: boolean = false;
@@ -55,7 +56,6 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
   }
 
   ngAfterViewChecked(): void {
-    //this.scrollToBottom();
   }
 
   ngAfterViewInit(): void {
@@ -80,13 +80,21 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
   }
 
   sendWelcomeMessage(): void {
+    const welcomeMsg = { 
+      text: "Olá esse é o canal de suporte da Oftlessons, seja bem-vindo!", 
+      type: 'bot' 
+    };
+    this.messages.push(welcomeMsg);
+    this.chatBotStateService.addMessage(welcomeMsg);
+    
     setTimeout(() => {
-      this.messages.push({ text: "Olá esse é o canal de suporte da Oftlessons, seja bem-vindo!", type: 'bot' });
-    }, 1000); 
-  
-    setTimeout(() => {
-      this.messages.push({ text: "Insira seu email!", type: 'bot' });
-    }, 2000); 
+      const initialBotResponse = { 
+        text: "Selecione um dos tópicos abaixo para iniciar o atendimento:", 
+        type: 'bot' 
+      };
+      this.messages.push(initialBotResponse);
+      this.chatBotStateService.addMessage(initialBotResponse);
+    }, 2000);
   }
 
   sendMessage(): void {
@@ -95,23 +103,67 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
     }
     const message = this.userMessage.trim();
     if (message) {
-      this.messages.push({ text: message, type: 'user' });
+      const userMessage = { text: message, type: 'user' };
+      this.messages.push(userMessage);
+      this.chatBotStateService.addMessage(userMessage);
+      
       this.scrollToBottom();
       this.userMessage = '';
-      this.chatBotStateService.sendMessageToBot(message).subscribe(
+      
+      this.chatBotStateService.sendMessageToBot(
+        message,
+        this.selectedTopic ? this.selectedTopic.name : null
+      ).subscribe(
         response => {
-          this.messages.push({ text: response.response, type: 'bot' });
+          const botMessage = { text: response.response, type: 'bot' };
+          this.messages.push(botMessage);
+          this.chatBotStateService.addMessage(botMessage);
+
+          if(response.action) {
+            this.handleBotAction(response.action, response.data);
+          }
           this.scrollToBottom();
         },
         error => {
           console.error('Erro ao enviar mensagem:', error);
-          this.messages.push({ text: '⚠️ Erro ao conectar ao suporte. Tente novamente mais tarde.', type: 'bot' });
+          const errorMsg = { 
+            text: '⚠️ Erro ao conectar ao suporte. Tente novamente mais tarde.', 
+            type: 'bot' 
+          };
+          this.messages.push(errorMsg);
+          this.chatBotStateService.addMessage(errorMsg);
           this.scrollToBottom();
         }
       );
     }
   }
-  
+
+  handleBotAction(action: string, data: any): void {
+    switch (action) {
+      case 'RESET_PASSWORD':
+        if(data && data.resetLink) {
+          const resetMsg = {
+            text: '🔗 Clique aqui para redefinir sua senha: ' + data.resetLink,
+            type: 'bot'
+          };
+          this.messages.push(resetMsg);
+          this.chatBotStateService.addMessage(resetMsg);
+        }
+        break;
+      
+      case 'PLAN_INFO':
+        if(data && data.planInfo) {
+          const planMsg = {
+            text: '📋 Informações do plano: ' + data.planInfo,
+            type: 'bot'
+          };
+          this.messages.push(planMsg);
+          this.chatBotStateService.addMessage(planMsg);
+        }
+        break;
+    }
+  }
+
   toggleChat(): void {
     this.chatBotStateService.toggleChat();
   }
@@ -146,16 +198,43 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
   }
 
   selectSubTopic(sub: string): void {
-    this.messages.push({ text: sub, type: 'user' });
+    const userMsg = { text: sub, type: 'user' };
+    this.messages.push(userMsg);
+    this.chatBotStateService.addMessage(userMsg);
     this.scrollToBottom();
+
+    if(sub === 'Entrar em contato via WhatsApp') {
+      const phoneNumber = '5511920909632';
+      const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent('Olá! Preciso de suporte para a Oftlessons.')}`;
+      window.open(whatsappUrl, '_blank');
+      
+      const botMsg = { 
+        text: 'Redirecionando você para o WhatsApp do suporte...', 
+        type: 'bot' 
+      };
+      this.messages.push(botMsg);
+      this.chatBotStateService.addMessage(botMsg);
+      return;
+    }
+
     this.chatBotStateService.sendMessageToBot(sub).subscribe(
       response => {
-        this.messages.push({ text: response.response, type: 'bot' });
+        const botMsg = { text: response.response, type: 'bot' };
+        this.messages.push(botMsg);
+        this.chatBotStateService.addMessage(botMsg);
+        if(response.action) {
+          this.handleBotAction(response.action, response.data);
+        }
         this.scrollToBottom();
       },
       error => {
-        console.error('Erro ao enviar tópico:', error);
-        this.messages.push({ text: '⚠️ Erro ao conectar ao suporte. Tente novamente mais tarde.', type: 'bot' });
+        console.error('Erro ao enviar mensagem:', error);
+        const errorMsg = { 
+          text: '⚠️ Erro ao conectar ao suporte. Tente novamente mais tarde.', 
+          type: 'bot' 
+        };
+        this.messages.push(errorMsg);
+        this.chatBotStateService.addMessage(errorMsg);
         this.scrollToBottom();
         this.goBackMain();
       }
