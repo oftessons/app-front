@@ -43,7 +43,7 @@
 }
 
 .chatbot-body {
-  height: calc(100% - 130px);
+  height: 300px;
   padding: 15px;
   overflow-y: auto;
   font-family: "Roboto", sans-serif;
@@ -56,7 +56,7 @@
 .chatbot-footer {
   display: flex;
   justify-content: center;
-  padding: 10px;
+  padding: 27px 10px;
   background-color: #ffffff;
   text-align: center;
   padding-bottom: 10px;
@@ -219,6 +219,60 @@
 
 .chatbot-body::-webkit-scrollbar-thumb:hover {
   background: #f6d365;
+}
+
+.quick-replies {
+  padding: 10px;
+  background-color: #f2f2f2;
+  border-top: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 93px;
+}
+
+.quick-replies .main-topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.quick-replies .main-topics button,
+.quick-replies .sub-topics button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  background-color: #3b5fa0;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.quick-replies .main-topics button:hover,
+.quick-replies .sub-topics button:hover {
+  background-color: #2a4d7b;
+}
+
+.quick-replies .sub-topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.quick-replies .sub-topics .back-btn {
+  background-color: #6c757d;
+}
+.quick-replies .sub-topics .back-btn:hover {
+  background-color: #5a6268;
+}
+
+/* Disabled textarea style */
+.user-text-input:disabled {
+  background-color: #e9ecef;
+  cursor: not-allowed;
+}
+.chatbot-footer button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 @media (max-width: 768px) {

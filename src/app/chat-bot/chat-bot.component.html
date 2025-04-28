@@ -13,9 +13,21 @@
       {{ message.text }}
     </div>
   </div>
+
+  <div class="quick-replies" *ngIf="conversationStep < 2">
+    <div *ngIf="conversationStep === 0" class="main-topics">
+      <button *ngFor="let topic of topics" (click)="selectMainTopic(topic)">{{ topic.name }}</button>
+    </div>
+    <div *ngIf="conversationStep === 1" class="sub-topics">
+      <button class="back-btn" (click)="goBackMain()">Voltar</button>
+      <button *ngFor="let sub of selectedTopic.subtopics" (click)="selectSubTopic(sub)">{{ sub }}</button>
+    </div>
+  </div>
+
   <div class="chatbot-footer">
-    <textarea class="user-text-input" [(ngModel)]="userMessage" (keydown.enter)="sendMessage()" placeholder="Escreva sua mensagem..."></textarea>
-    <button (click)="sendMessage()" [disabled]="!userMessage">
+    <textarea class="user-text-input" [(ngModel)]="userMessage" (keydown.enter)="sendMessage()"
+      placeholder="Escreva sua mensagem..." [disabled]="!enableInput"></textarea>
+    <button (click)="sendMessage()" [disabled]="!userMessage.trim() || !enableInput">
       <img src="assets/Icons/enviar.svg" alt="Enviar" class="send-icon">
     </button>
   </div>

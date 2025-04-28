@@ -90,16 +90,20 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
   }
 
   sendMessage(): void {
-    if (this.userMessage.trim()) {
-      this.messages.push({ text: this.userMessage, type: 'user' });
-      this.userMessage = '';
+    if (!this.enableInput) {
+      return;
+    }
+    const message = this.userMessage.trim();
+    if (message) {
+      this.messages.push({ text: message, type: 'user' });
       this.scrollToBottom();
-      this.chatBotStateService.sendMessageToBot(this.userMessage).subscribe(
-        (response) => {
+      this.userMessage = '';
+      this.chatBotStateService.sendMessageToBot(message).subscribe(
+        response => {
           this.messages.push({ text: response.response, type: 'bot' });
           this.scrollToBottom();
         },
-        (error) => {
+        error => {
           console.error('Erro ao enviar mensagem:', error);
           this.messages.push({ text: '⚠️ Erro ao conectar ao suporte. Tente novamente mais tarde.', type: 'bot' });
           this.scrollToBottom();
@@ -117,5 +121,46 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
     setTimeout(() => {
       chatBodyElement.scrollTop = chatBodyElement.scrollHeight;
     }, 100);
+  }
+
+  topics = [
+    { name: 'Acesso', subtopics: ['Perdi o acesso', 'Não consigo acessar'] },
+    { name: 'Pagamento', subtopics: ['Pagamento incorreto', 'Pagamento não processado', 'Não consigo pagar'] },
+    { name: 'Dúvidas', subtopics: ['Questões', 'Plataforma'] },
+    { name: 'Reclamações', subtopics: ['Questões', 'Plataforma'] },
+    { name: 'Sugestões', subtopics: ['Questões', 'Plataforma'] },
+    { name: 'Outros', subtopics: ['Entrar em contato via WhatsApp'] },
+  ];
+  conversationStep = 0; 
+  selectedTopic: any = null;
+  enableInput = false;
+
+  selectMainTopic(topic: any): void {
+    this.selectedTopic = topic;
+    this.conversationStep = 1;
+  }
+
+  goBackMain(): void {
+    this.selectedTopic = null;
+    this.conversationStep = 0;
+  }
+
+  selectSubTopic(sub: string): void {
+    this.messages.push({ text: sub, type: 'user' });
+    this.scrollToBottom();
+    this.chatBotStateService.sendMessageToBot(sub).subscribe(
+      response => {
+        this.messages.push({ text: response.response, type: 'bot' });
+        this.scrollToBottom();
+      },
+      error => {
+        console.error('Erro ao enviar tópico:', error);
+        this.messages.push({ text: '⚠️ Erro ao conectar ao suporte. Tente novamente mais tarde.', type: 'bot' });
+        this.scrollToBottom();
+        this.goBackMain();
+      }
+    );
+    this.enableInput = true;
+    this.conversationStep = 2;
   }
 }
