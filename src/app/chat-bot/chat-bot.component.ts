@@ -153,14 +153,40 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
       
       case 'PLAN_INFO':
         if(data && data.planInfo) {
+          // Format the plan information in a readable way
+          const planInfo = data.planInfo;
+          const planStatus = planInfo.status === 'active' ? 'ativo' : planInfo.status;
+          
+          let planText = `📋 *Informações do seu plano:*\n\n` +
+                        `📝 Nome: ${planInfo.name}\n` +
+                        `🔄 Intervalo de renovação: ${planInfo.intervaloRenovacao}\n` +
+                        `📊 Status: ${planStatus}\n` +
+                        `📅 Próxima renovação: ${this.formatDate(planInfo.proximaRenovacao)}\n` +
+                        `⏱️ Válido até: ${this.formatDate(planInfo.validoAte)}`;
+  
           const planMsg = {
-            text: '📋 Informações do plano: ' + data.planInfo,
+            text: planText,
             type: 'bot'
           };
           this.messages.push(planMsg);
           this.chatBotStateService.addMessage(planMsg);
         }
         break;
+    }
+  }
+
+  formatDate(dateString: string): string {
+    if (!dateString) return 'N/A';
+    
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('pt-BR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      });
+    } catch (e) {
+      return dateString;
     }
   }
 

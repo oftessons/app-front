@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +15,7 @@ export class ChatBotStateService {
   private messageHistory: Array<{ text: string, type: string }> = [];
   private conversationId: string | null = null;
 
-  private apiUrl = 'http://localhost:5000/chat'; 
+  apiURL: string = environment.apiURLBase + "/chat"; 
 
   constructor(
     private http: HttpClient,
@@ -53,11 +54,11 @@ export class ChatBotStateService {
       } : null,
     };
 
-    return this.http.post<any>(this.apiUrl, { message });
+    return this.http.post<any>(this.apiURL, { message });
   }
 
   requestPasswordRecovery(email: string): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/password-recovery`, { email });
+    return this.http.post<any>(`${this.apiURL}/password-recovery`, { email });
   }
 
   getPlanInformation(): Observable<any> {
@@ -68,6 +69,6 @@ export class ChatBotStateService {
       });
     }
     
-    return this.http.get<any>(`${this.apiUrl}/plan-info/${user.id}`);
+    return this.http.get<any>(`${this.apiURL}/plan-info/${user.id}`);
   }
 }
