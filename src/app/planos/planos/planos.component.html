@@ -44,10 +44,22 @@
         (botaoClicado)="onBotaoClicado()"
         rota="plano/anual">
     </app-card-plano>
+    
+    <app-card-plano
+        titulo="Flashcards"
+        [descricao]="['Revisão rápida sobre qualquer tema ou assunto.', 'Ideal para quem busca agilidade no aprendizado.', 'Acesso flexível ao conteúdo essencial.']"
+        [preco]="789.00"
+        textoBotao="Escolher plano"
+        [recomendado]="false"
+        textoAdicional=""
+        (botaoClicado)="onBotaoClicado()"
+        [usarServicoPagamento]="true"
+        planoSelecionado="ASSINATURA_FLASHCARDS">
+    </app-card-plano>
+
   </div>
 
   <div class="planos-footer">
-    
     <span>
       <div class="texto-informativo">
         <p>Para acessar a plataforma selecione o plano que desejar 😃. | <a href="/login">Voltar para a página de login</a></p>
