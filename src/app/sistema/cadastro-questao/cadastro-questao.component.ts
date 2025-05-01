@@ -583,5 +583,70 @@ onFileSelectedImageEditar(event: any, alternativaIndex: string) {
   }
 }
 
+  cadastrarNovaQuestao(): void {
+    this.successMessage = null;
+    this.errorMessage = null;
+
+    this.questaoDTO = new Questao();
+
+    this.questaoDTO.alternativas = [
+      {id: 1, texto: 'A', correta: false, comentario: ''},
+      {id: 2, texto: 'B', correta: false, comentario: ''},
+      {id: 3, texto: 'C', correta: false, comentario: ''},
+      {id: 4, texto: 'D', correta: false, comentario: ''}
+    ];
+
+    this.questaoDTO.alternativaImagems = [
+      { id: 1, texto: 'A', correta: false },
+      { id: 2, texto: 'B', correta: false },
+      { id: 3, texto: 'C', correta: false },
+      { id: 4, texto: 'D', correta: false }
+    ];
+
+    this.questaoDTO.tipoItemQuestao = 'texto';
+    this.questaoDTO.tipoItemQuestaoImagem = 'texto';
+    this.fotoDaQuestao = null;
+    this.fotoDaRespostaUm = null;
+    this.fotoDaRespostaDois = null;
+    this.fotoDaRespostaTres = null;
+    this.fotoDaRespostaQuatro = null;
+    this.videoDaQuestao = null;
+    this.imagePreviews = {};
+    this.fotoPreviews = {};
+
+    this.formData = new FormData();
+
+    this.limparEditores();
+
+    
+    setTimeout(() => {
+      const drawerContentEl = document.querySelector('mat-drawer-content') as HTMLElement;
+      const innerEl = drawerContentEl?.querySelector('.mat-drawer-content') as HTMLElement;
+  
+      if (drawerContentEl) {
+        drawerContentEl.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      if (innerEl) {
+        innerEl.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }, 50);
+      
+    
+  }
+
+  private limparEditores(): void {
+    setTimeout(() => {
+      const editors = ['#editor', '#editor1', '#editor2', '#editor3', '#editor4'];
+      editors.forEach(selector => {
+        const editorElement = document.querySelector(selector);
+        if (editorElement) {
+          const quill = (editorElement as any).__quill;
+          if (quill) {
+            quill.setText('');
+          }
+        }
+      });
+    });
+  }
 
 }
