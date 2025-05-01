@@ -44,7 +44,6 @@ export class ChatBotStateService {
 
     const payload = {
       message,
-      conversationId: this.conversationId,
       topic,
       userContext: user ? {
         id: user.id,
@@ -54,7 +53,7 @@ export class ChatBotStateService {
       } : null,
     };
 
-    return this.http.post<any>(this.apiURL, { message });
+    return this.http.post<any>(this.apiURL, payload);
   }
 
   requestPasswordRecovery(email: string): Observable<any> {

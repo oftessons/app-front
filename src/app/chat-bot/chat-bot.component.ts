@@ -106,15 +106,22 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
       const userMessage = { text: message, type: 'user' };
       this.messages.push(userMessage);
       this.chatBotStateService.addMessage(userMessage);
-      
+
+      const typingMsg = { text: "Digitando...", type: 'typing' };
+      this.messages.push(typingMsg);
       this.scrollToBottom();
       this.userMessage = '';
+      setTimeout(() => {
+        this.userMessage = '';
+      }, 0);
       
       this.chatBotStateService.sendMessageToBot(
         message,
         this.selectedTopic ? this.selectedTopic.name : null
       ).subscribe(
         response => {
+          this.messages = this.messages.filter(msg => msg !== typingMsg); // Remove typing message
+          
           const botMessage = { text: response.response, type: 'bot' };
           this.messages.push(botMessage);
           this.chatBotStateService.addMessage(botMessage);
@@ -122,9 +129,15 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
           if(response.action) {
             this.handleBotAction(response.action, response.data);
           }
+
+          if(response.quickReplies) {
+            this.addQuickReplyOptions(response.quickReplies);
+          }
+
           this.scrollToBottom();
         },
         error => {
+          this.messages = this.messages.filter(msg => msg !== typingMsg);
           console.error('Erro ao enviar mensagem:', error);
           const errorMsg = { 
             text: '⚠️ Erro ao conectar ao suporte. Tente novamente mais tarde.', 
@@ -133,8 +146,21 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
           this.messages.push(errorMsg);
           this.chatBotStateService.addMessage(errorMsg);
           this.scrollToBottom();
+
+          this.goBackMain();
         }
       );
+    }
+  }
+
+  addQuickReplyOptions(quickReplies: string[]): void {
+    if (quickReplies && quickReplies.length > 0) {
+      const quickReplyMsg = {
+        text: 'Opções rápidas:',
+        type: 'quickReplies',
+        options: quickReplies
+      };
+      this.messages.push(quickReplyMsg);
     }
   }
 
@@ -143,17 +169,17 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
       case 'RESET_PASSWORD':
         if(data && data.resetLink) {
           const resetMsg = {
-            text: '🔗 Clique aqui para redefinir sua senha: ' + data.resetLink,
+            text: '🔗 Clique aqui para redefinir sua senha: ' + `<a href="${data.resetLink}">Redefinir senha.</a>`,
             type: 'bot'
           };
           this.messages.push(resetMsg);
           this.chatBotStateService.addMessage(resetMsg);
         }
+        this.goBackMain();
         break;
       
       case 'PLAN_INFO':
         if(data && data.planInfo) {
-          // Format the plan information in a readable way
           const planInfo = data.planInfo;
           const planStatus = planInfo.status === 'active' ? 'ativo' : planInfo.status;
           
@@ -221,6 +247,17 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
   goBackMain(): void {
     this.selectedTopic = null;
     this.conversationStep = 0;
+    this.enableInput = false;
+
+    setTimeout(() => {
+      const menuMsg = {
+        text: "Selecione um dos tópicos abaixo:",
+        type: 'bot'
+      };
+      this.messages.push(menuMsg);
+      this.chatBotStateService.addMessage(menuMsg);
+      this.scrollToBottom();
+    }, 1000);
   }
 
   selectSubTopic(sub: string): void {
@@ -268,4 +305,13 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
     this.enableInput = true;
     this.conversationStep = 2;
   }
+
+  handleKeydown(event: KeyboardEvent): void {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      this.sendMessage();
+    }
+  }
 }
+
+
