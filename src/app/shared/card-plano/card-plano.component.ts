@@ -36,11 +36,16 @@ export class CardPlanoComponent {
   }
 
   navegarParaPlano(): void {
+    if (this.planoSelecionado === 'ASSINATURA_FLASHCARDS') {
+      window.location.href = 'https://pay.hotmart.com/C98718020G?bid=1746047727261';
+      return;
+    }
+  
     if (this.usarServicoPagamento) {
       this.stripeService.createCheckoutSession(this.planoSelecionado).subscribe(
         (response: any) => {
           console.log(response);
-          window.location.href = response.url_checkout; // Redireciona para o link de pagamento
+          window.location.href = response.url_checkout; 
         },
         (error) => {
           console.error('Erro ao gerar link de pagamento:', error);
@@ -50,5 +55,5 @@ export class CardPlanoComponent {
       this.router.navigate([this.rota]);
     }
   }
-
+  
 }

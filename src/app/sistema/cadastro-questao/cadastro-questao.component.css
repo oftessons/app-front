@@ -134,7 +134,17 @@ textarea {
   cursor: pointer;
 }
 
-.btn-secundary {
+.btn-secondary {
+  margin-top: 12px;
+  padding: 10px 20px;
+  width: 150px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 16px !important;
+}
+
+.btn-nova-questao {
   margin-top: 12px;
   padding: 10px 20px;
   width: 150px;
@@ -145,6 +155,16 @@ textarea {
   cursor: pointer;
   margin-right: 16px !important;
 }
+
+.btn-nova-questao:hover {
+  background-color: #2a3d6b;
+}
+
+.btn-nova-questao:active {
+  background-color: #1a2b4d;
+  color: #fff;
+}
+
 
 .button-envio {
   display: flex;
@@ -390,19 +410,6 @@ input[type="checkbox"] {
 
 .btn-primary:hover {
   background-color: #021838;
-}
-
-.btn-secundary {
-  background-color: #3b5fa0;
-  color: #ffffff;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.btn-secundary:hover {
-  background-color: #324a7d;
 }
 
 .image-container {

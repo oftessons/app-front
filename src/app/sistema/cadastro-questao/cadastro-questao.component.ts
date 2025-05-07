@@ -17,6 +17,12 @@ import { Permissao } from 'src/app/login/Permissao';
 import { AuthService } from 'src/app/services/auth.service';
 
 import Quill from 'quill';
+import { AnoDescricoes } from '../page-questoes/enums/ano-descricoes';
+import { DificuldadeDescricoes } from '../page-questoes/enums/dificuldade-descricao';
+import { TemaDescricoes } from '../page-questoes/enums/tema-descricao';
+import { SubtemaDescricoes } from '../page-questoes/enums/subtema-descricao';
+import { TipoDeProvaDescricoes } from '../page-questoes/enums/tipodeprova-descricao';
+import { RelevanciaDescricao } from '../page-questoes/enums/relevancia-descricao';
 
 @Component({
   selector: 'app-cadastro-questao',
@@ -46,12 +52,12 @@ export class CadastroQuestaoComponent implements OnInit,  AfterViewInit {
 
   selectedAlternativeIndex: number = -3;
 
-  anos: string[] = Object.values(Ano);
-  dificuldades: string[] = Object.values(Dificuldade);
-  temas: string[] = Object.values(Tema);
-  subtemas: string[] = Object.values(Subtema);
-  tiposDeProva: string[] = Object.values(TipoDeProva);
-  relevancias: string[] = Object.values(Relevancia);
+  anos: string[] = Object.values(AnoDescricoes);
+  dificuldades: string[] = Object.values(DificuldadeDescricoes);
+  temas: string[] = Object.values(TemaDescricoes);
+  subtemas: string[] = Object.values(SubtemaDescricoes);
+  tiposDeProva: string[] = Object.values(TipoDeProvaDescricoes);
+  relevancias: string[] = Object.values(RelevanciaDescricao);
 
   selectedImage: string='';
   uploadedImage: string='';
@@ -577,5 +583,70 @@ onFileSelectedImageEditar(event: any, alternativaIndex: string) {
   }
 }
 
+  cadastrarNovaQuestao(): void {
+    this.successMessage = null;
+    this.errorMessage = null;
+
+    this.questaoDTO = new Questao();
+
+    this.questaoDTO.alternativas = [
+      {id: 1, texto: 'A', correta: false, comentario: ''},
+      {id: 2, texto: 'B', correta: false, comentario: ''},
+      {id: 3, texto: 'C', correta: false, comentario: ''},
+      {id: 4, texto: 'D', correta: false, comentario: ''}
+    ];
+
+    this.questaoDTO.alternativaImagems = [
+      { id: 1, texto: 'A', correta: false },
+      { id: 2, texto: 'B', correta: false },
+      { id: 3, texto: 'C', correta: false },
+      { id: 4, texto: 'D', correta: false }
+    ];
+
+    this.questaoDTO.tipoItemQuestao = 'texto';
+    this.questaoDTO.tipoItemQuestaoImagem = 'texto';
+    this.fotoDaQuestao = null;
+    this.fotoDaRespostaUm = null;
+    this.fotoDaRespostaDois = null;
+    this.fotoDaRespostaTres = null;
+    this.fotoDaRespostaQuatro = null;
+    this.videoDaQuestao = null;
+    this.imagePreviews = {};
+    this.fotoPreviews = {};
+
+    this.formData = new FormData();
+
+    this.limparEditores();
+
+    
+    setTimeout(() => {
+      const drawerContentEl = document.querySelector('mat-drawer-content') as HTMLElement;
+      const innerEl = drawerContentEl?.querySelector('.mat-drawer-content') as HTMLElement;
+  
+      if (drawerContentEl) {
+        drawerContentEl.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      if (innerEl) {
+        innerEl.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }, 50);
+      
+    
+  }
+
+  private limparEditores(): void {
+    setTimeout(() => {
+      const editors = ['#editor', '#editor1', '#editor2', '#editor3', '#editor4'];
+      editors.forEach(selector => {
+        const editorElement = document.querySelector(selector);
+        if (editorElement) {
+          const quill = (editorElement as any).__quill;
+          if (quill) {
+            quill.setText('');
+          }
+        }
+      });
+    });
+  }
 
 }

@@ -44,10 +44,28 @@
         (botaoClicado)="onBotaoClicado()"
         rota="plano/anual">
     </app-card-plano>
+    
+    <app-card-plano
+      titulo="Flashcards"
+      [descricao]="[
+        'Estude de forma rápida e eficiente com cartões de memorização.',
+        'Ideal para revisar conceitos importantes em poucos minutos.',
+        'Acesse o conteúdo essencial de qualquer lugar, a qualquer hora.',
+        'Método comprovado para melhorar a fixação e a recordação de informações.',
+        'Perfeito para quem tem pouco tempo e precisa de agilidade no aprendizado.'
+      ]"
+      [preco]="789.00"
+      textoBotao="Escolher plano"
+      [recomendado]="false"
+      textoAdicional=""
+      (botaoClicado)="onBotaoClicado()"
+      [usarServicoPagamento]="true"
+      planoSelecionado="ASSINATURA_FLASHCARDS">
+    </app-card-plano>
+  
   </div>
 
   <div class="planos-footer">
-    
     <span>
       <div class="texto-informativo">
         <p>Para acessar a plataforma selecione o plano que desejar 😃. | <a href="/login">Voltar para a página de login</a></p>

@@ -664,8 +664,15 @@
     </div>
     
     <div class="container mt-4 container-btn">
-      <button type="button" class="btn btn-secundary" routerLink="/usuario/dashboard"
-        *ngIf="!questaoDTO.id" [disabled]="loading">Voltar</button>
+      <button type="button" class="btn btn-secondary" routerLink="/usuario/dashboard"
+        *ngIf="!questaoDTO.id" [disabled]="loading">
+        Voltar
+      </button>
+
+      <button type="button" class="btn btn-nova-questao" *ngIf="!questaoDTO.id" [disabled]="loading" (click)="cadastrarNovaQuestao()" >
+        <span *ngIf="loading" class="spinner-border spinner-border-sm"></span>
+        Nova Questão
+      </button>
     
       <button type="submit" class="btn btn-primary" *ngIf="!questaoDTO.id" [disabled]="loading">
         <span *ngIf="loading" class="spinner-border spinner-border-sm"></span>

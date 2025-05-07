@@ -860,7 +860,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
   isImage(url: string): boolean {
     //console.log(`Verificando imagem: ${url}`);
-    return url ? url.includes('.jpeg') || url.includes('.jpg') || url.includes('.gif') || url.includes('.png') : false;
+    return url ? ['.jpeg', '.jpg', '.gif', '.png'].some(ext => url.toLowerCase().includes(ext)) : false;
   }
   
   isVideo(url: string): boolean {
