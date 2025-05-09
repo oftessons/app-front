@@ -532,15 +532,41 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   }
 
   selecionarQuestao(event: Event): void {
-    this.limparQuestaoRespondida();
+    this.jaRespondeu = false;
+    this.resposta = '';
+    this.mensagemErro = '';
+
+    this.selectedOption = '';
+    this.isRespostaCorreta = false;
+    this.mostrarGabarito = false; // Gabarito só será exibido ao clicar no botão
+    this.respostaCorreta = '';
+    this.respostaErrada = '';
+    this.respostaVerificada = false;
+    this.mostrarPorcentagem = false; // Reseta a barra de progresso
+    this.porcentagemAcertos = 0;
+    
 
     const target = event.target as HTMLSelectElement;
     const index = Number(target.value);
     this.paginaAtual = index;
     this.questaoAtual = this.questoes[this.paginaAtual];
 
-    this.verificarQuestaoRespondida();
+    if(this.respondidasAgora.has(this.questaoAtual.id)) {
+          this.questoesService.questaoRespondida(this.usuarioId, this.questaoAtual.id, 0).subscribe({
+            next: (resposta) => {
+              if(resposta) {
+                this.verificarRespostaUsuario(resposta);
+                this.jaRespondeu = true;
 
+                this.mostrarPorcentagem = true
+              }
+
+            },
+            error: (error) => {
+              console.error(error);
+            }
+          });
+      }
   }  
   
 
@@ -619,13 +645,38 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   
   
   anteriorQuestao() {
+    this.jaRespondeu = false;
+    this.mensagemErro = ''; // Limpa a mensagem de erro ao voltar para uma questão anterior
+  
     if (this.paginaAtual > 0) {
       this.paginaAtual--;
       this.questaoAtual = this.questoes[this.paginaAtual];
-      this.limparQuestaoRespondida();
-      this.verificarQuestaoRespondida();
+
+      // Resetar variáveis relacionadas à resposta
+      this.selectedOption = '';
+      this.isRespostaCorreta = false;
+      this.mostrarGabarito = false; // O gabarito não é exibido automaticamente
+      this.respostaCorreta = '';
+      this.respostaErrada = '';
+      this.respostaVerificada = false;
+  
+      this.mostrarPorcentagem = false; // Reseta a barra de progresso
+      this.porcentagemAcertos = 0;
       
-      
+      if(this.respondidasAgora.has(this.questaoAtual.id)) {
+      this.questoesService.questaoRespondida(this.usuarioId, this.questaoAtual.id, 0).subscribe({
+        next: (resposta) => {
+          if(resposta) {
+            this.verificarRespostaUsuario(resposta);
+            this.jaRespondeu = true;
+            this.mostrarPorcentagem = true;
+          }
+        },
+        error: (error) => {
+          console.error("Erro ao verificar a resposta do usuário", error);
+        }
+      });
+    }
     } else {
       this.mensagemErro = 'Voce já está na primeira questão';
     }
@@ -633,18 +684,47 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   
   
   proximaQuestao() {
+    this.jaRespondeu = false;
+    this.resposta = '';
+    this.mensagemErro = ''; // Limpa qualquer mensagem de erro anterior
+  
     if (this.paginaAtual < this.questoes.length - 1) {
       this.paginaAtual++;
       this.questaoAtual = this.questoes[this.paginaAtual];
-      this.limparQuestaoRespondida();
-      this.verificarQuestaoRespondida();
+  
+      // Resetar variáveis relacionadas à resposta
+      this.selectedOption = '';
+      this.isRespostaCorreta = false;
+      this.mostrarGabarito = false; // Gabarito só será exibido ao clicar no botão
+      this.respostaCorreta = '';
+      this.respostaErrada = '';
+      this.respostaVerificada = false;
+  
+      this.mostrarPorcentagem = false; // Reseta a barra de progresso
+      this.porcentagemAcertos = 0;
 
+      if(this.respondidasAgora.has(this.questaoAtual.id)) {
+      this.questoesService.questaoRespondida(this.usuarioId, this.questaoAtual.id, 0).subscribe({
+        next: (resposta) => {
+          if(resposta) {
+            this.verificarRespostaUsuario(resposta);
+            this.jaRespondeu = true;
+
+            this.mostrarPorcentagem = true
+          }
+
+        },
+        error: (error) => {
+          console.error(error);
+        }
+      });
+    }
     } else {
       this.mensagemErro = 'Não há mais questões, mas em breve novas questões estarão disponíveis.'
     }
   }
   
-
+    
   responderQuestao(questao: Questao | null): void {
     if (!this.jaRespondeu) {  // Verificar se o usuário já respondeu
       if (!questao) {
@@ -809,52 +889,9 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     );
   }
 
-  limparQuestaoRespondida() {
-    this.jaRespondeu = false;
-    this.resposta = '';
-    this.mensagemErro = ''; 
-
-    this.selectedOption = '';
-    this.isRespostaCorreta = false;
-    this.mostrarGabarito = false;
-    this.respostaCorreta = '';
-    this.respostaErrada = '';
-    this.respostaVerificada = false;
-  
-    this.mostrarPorcentagem = false; 
-    this.porcentagemAcertos = 0;
-
-  }
-
-  verificarQuestaoRespondida() {
-  if (this.questaoAtual && this.respondidasAgora.has(this.questaoAtual.id)) {
-    this.questoesService.questaoRespondida(this.usuarioId, this.questaoAtual.id, 0).subscribe({
-      next: (resposta) => {
-        if (resposta) {
-          this.verificarRespostaUsuario(resposta);
-          this.jaRespondeu = true;
-          this.mostrarPorcentagem = true;
-        }
-      },
-      error: (error) => {
-        console.error(error);
-      }
-    });
-  }
-}
-
-
   isImage(url: string): boolean {
-    //console.log(`Verificando imagem: ${url}`); this.selectedOption = '';
-      this.isRespostaCorreta = false;
-      this.mostrarGabarito = false; // Gabarito só será exibido ao clicar no botão
-      this.respostaCorreta = '';
-      this.respostaErrada = '';
-      this.respostaVerificada = false;
-  
-      this.mostrarPorcentagem = false; // Reseta a barra de progresso
-      this.porcentagemAcertos = 0;
-    return url ? ['.jpeg', '.jpg', '.gif', '.png'].some(ext => url.toLowerCase().includes(ext)) : false;
+    //console.log(`Verificando imagem: ${url}`);
+    return url ? url.includes('.jpeg') || url.includes('.jpg') || url.includes('.gif') || url.includes('.png') : false;
   }
   
   isVideo(url: string): boolean {
