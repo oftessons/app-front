@@ -532,6 +532,21 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   }
 
   selecionarQuestao(event: Event): void {
+    // controle de variaveis
+    this.jaRespondeu = false;
+    this.resposta = '';
+    this.mensagemErro = ''; 
+
+    this.selectedOption = '';
+    this.isRespostaCorreta = false;
+    this.mostrarGabarito = false; 
+    this.respostaCorreta = '';
+    this.respostaErrada = '';
+    this.respostaVerificada = false;
+
+    this.mostrarPorcentagem = false;
+    this.porcentagemAcertos = 0;
+
     const target = event.target as HTMLSelectElement;
     const index = Number(target.value);
     this.paginaAtual = index;
