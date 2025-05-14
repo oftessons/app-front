@@ -9,6 +9,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root',
 })
 export class ChatBotStateService {
+  user: any = null;
   private chatState = new BehaviorSubject<boolean>(false); 
   isChatOpen$ = this.chatState.asObservable();
 
@@ -40,25 +41,28 @@ export class ChatBotStateService {
   }
 
   sendMessageToBot(message: string, topic?: string): Observable<any> {
-    const user = this.authService.getUsuarioAutenticado();
+    this.authService.obterUsuarioAutenticadoDoBackend().subscribe(
+      (data) => {
+        this.user = data;
+      }, (error) => {
+        console.error('Erro ao obter perfil do usuário:', error);
+      }
+    )
 
     const payload = {
       message,
       topic,
-      userContext: user ? {
-        id: user.id,
-        name: user.username,
-        email: user.email,
-        role: user.permissao,
+      userContext: this.user ? {
+        id: this.user.id,
+        name: this.user.username,
+        email: this.user.email,
+        role: this.user.permissao,
       } : null,
     };
 
     return this.http.post<any>(this.apiURL, payload);
   }
 
-  requestPasswordRecovery(email: string): Observable<any> {
-    return this.http.post<any>(`${this.apiURL}/password-recovery`, { email });
-  }
 
   getPlanInformation(): Observable<any> {
     const user = this.authService.getUsuarioAutenticado();

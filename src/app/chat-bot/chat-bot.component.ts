@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild, AfterViewChecked, ElementRef, AfterViewInit, OnDestroy } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { ChatBotStateService } from '../services/chat-bot-state.service';
+import { AuthService } from '../services/auth.service';
+import { Usuario } from '../login/usuario';
 
 @Component({
   selector: 'chat-bot',
@@ -29,14 +31,20 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
   showButton: boolean = false;
   userMessage: string = '';
   botResponse: string = '';
+  forgotEmail: string = '';
+  errors: string[] = [];
   messages: Array<{ text: string, type: string }> = [];
   welcomeMessageSent: boolean = false;
   isNavigationBarActive = false;
   private navCheckInterval: any;
+  usuario!: Usuario;
 
   @ViewChild('chatBody') chatBody!: ElementRef;
 
-  constructor(private chatBotStateService: ChatBotStateService) {}
+  constructor(
+    private chatBotStateService: ChatBotStateService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
     this.chatBotStateService.isChatOpen$.subscribe((isOpen) => {
@@ -94,13 +102,14 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
       };
       this.messages.push(initialBotResponse);
       this.chatBotStateService.addMessage(initialBotResponse);
-    }, 2000);
+    }, 1000);
   }
 
   sendMessage(): void {
     if (!this.enableInput) {
       return;
     }
+
     const message = this.userMessage.trim();
     if (message) {
       const userMessage = { text: message, type: 'user' };
@@ -117,10 +126,10 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
       
       this.chatBotStateService.sendMessageToBot(
         message,
-        this.selectedTopic ? this.selectedTopic.name : null
+        this.selectedTopic ? this.selectedTopic.name : null,
       ).subscribe(
         response => {
-          this.messages = this.messages.filter(msg => msg !== typingMsg); // Remove typing message
+          this.messages = this.messages.filter(msg => msg !== typingMsg);
           
           const botMessage = { text: response.response, type: 'bot' };
           this.messages.push(botMessage);
@@ -128,10 +137,6 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
 
           if(response.action) {
             this.handleBotAction(response.action, response.data);
-          }
-
-          if(response.quickReplies) {
-            this.addQuickReplyOptions(response.quickReplies);
           }
 
           this.scrollToBottom();
@@ -153,31 +158,8 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
     }
   }
 
-  addQuickReplyOptions(quickReplies: string[]): void {
-    if (quickReplies && quickReplies.length > 0) {
-      const quickReplyMsg = {
-        text: 'Opções rápidas:',
-        type: 'quickReplies',
-        options: quickReplies
-      };
-      this.messages.push(quickReplyMsg);
-    }
-  }
-
   handleBotAction(action: string, data: any): void {
     switch (action) {
-      case 'RESET_PASSWORD':
-        if(data && data.resetLink) {
-          const resetMsg = {
-            text: '🔗 Clique aqui para redefinir sua senha: ' + `<a href="${data.resetLink}">Redefinir senha.</a>`,
-            type: 'bot'
-          };
-          this.messages.push(resetMsg);
-          this.chatBotStateService.addMessage(resetMsg);
-        }
-        this.goBackMain();
-        break;
-      
       case 'PLAN_INFO':
         if(data && data.planInfo) {
           const planInfo = data.planInfo;
@@ -189,7 +171,7 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
                         `📊 Status: ${planStatus}\n` +
                         `📅 Próxima renovação: ${this.formatDate(planInfo.proximaRenovacao)}\n` +
                         `⏱️ Válido até: ${this.formatDate(planInfo.validoAte)}`;
-  
+          
           const planMsg = {
             text: planText,
             type: 'bot'
@@ -197,7 +179,11 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
           this.messages.push(planMsg);
           this.chatBotStateService.addMessage(planMsg);
         }
+        this.goBackMain();
         break;
+
+      case 'RETURN_TO_MAIN_MENU':
+        this.goBackMain();
     }
   }
 
@@ -228,11 +214,11 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
   }
 
   topics = [
-    { name: 'Acesso', subtopics: ['Perdi o acesso', 'Não consigo acessar'] },
-    { name: 'Pagamento', subtopics: ['Pagamento incorreto', 'Pagamento não processado', 'Não consigo pagar'] },
-    { name: 'Dúvidas', subtopics: ['Questões', 'Plataforma'] },
-    { name: 'Reclamações', subtopics: ['Questões', 'Plataforma'] },
-    { name: 'Sugestões', subtopics: ['Questões', 'Plataforma'] },
+    { name: 'Acesso', subtopics: ['Esqueci minha senha'] },
+    { name: 'Pagamento', subtopics: ['Plano Atual'] },
+    { name: 'Dúvida', subtopics: ['Questão Atual', 'Plataforma'] },
+    { name: 'Reclamação', subtopics: ['Questão Atual', 'Plataforma'] },
+    { name: 'Sugestão', subtopics: ['Questão Atual', 'Plataforma'] },
     { name: 'Outros', subtopics: ['Entrar em contato via WhatsApp'] },
   ];
   conversationStep = 0; 
@@ -260,6 +246,75 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
     }, 1000);
   }
 
+  processForgotPassword(): void {
+    this.authService.obterUsuarioAutenticadoDoBackend().subscribe(
+      (data: Usuario) => {
+        this.forgotEmail = data.email;
+        console.log('Email do usuário:', this.forgotEmail);
+        
+        const userMsg = { text: this.forgotEmail, type: 'user' };
+        this.messages.push(userMsg);
+        this.chatBotStateService.addMessage(userMsg);
+        
+        const typingMsg = { text: "Processando...", type: 'typing' };
+        this.messages.push(typingMsg);
+        this.scrollToBottom();
+        this.userMessage = '';
+
+        this.authService.forgotPassword(this.forgotEmail).subscribe(
+          (response: any) => {
+            this.messages = this.messages.filter(msg => msg !== typingMsg);
+            
+            const successMsg = { 
+              text: `✅ Um email com instruções para recuperação de senha foi enviado para ${this.forgotEmail}. Por favor, verifique sua caixa de entrada.`, 
+              type: 'bot' 
+            };
+            this.messages.push(successMsg);
+            this.chatBotStateService.addMessage(successMsg);
+            this.scrollToBottom();
+
+            setTimeout(() => {
+              this.goBackMain();
+            }, 5000);
+          },
+          (error) => {
+            this.messages = this.messages.filter(msg => msg !== typingMsg);
+            
+            let errorMessage = '❌ Não foi possível processar sua solicitação.';
+            
+            if (error.status === 400) {
+              errorMessage = '❌ Email não encontrado ou inválido.';
+            } else if (error.status === 500) {
+              errorMessage = '❌ Erro ao enviar email de recuperação de senha. Por favor, tente novamente mais tarde.';
+            }
+            
+            const errorMsg = { text: errorMessage, type: 'bot' };
+            this.messages.push(errorMsg);
+            this.chatBotStateService.addMessage(errorMsg);
+            this.scrollToBottom();
+            
+            setTimeout(() => {
+              this.goBackMain();
+            }, 5000);
+          }
+        );
+      },
+      (error) => {
+        console.error('Erro ao obter email do usuário:', error);
+        const errorMsg = { 
+          text: '❌ Não foi possível obter seu email. Tente novamente mais tarde.', 
+          type: 'bot' 
+        };
+        this.messages.push(errorMsg);
+        this.chatBotStateService.addMessage(errorMsg);
+        this.scrollToBottom();
+      }
+    );
+
+
+    
+  }
+
   selectSubTopic(sub: string): void {
     const userMsg = { text: sub, type: 'user' };
     this.messages.push(userMsg);
@@ -277,6 +332,11 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
       };
       this.messages.push(botMsg);
       this.chatBotStateService.addMessage(botMsg);
+      return;
+    }
+
+    if(sub === 'Esqueci minha senha') {
+      this.processForgotPassword();
       return;
     }
 
