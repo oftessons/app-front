@@ -4,7 +4,7 @@ export class Alternativa {
   texto!: string;
   correta!: boolean;
   questao?: Questao; // Adiciona a relação com Questao
-  imagemUrl?: string;
+  imagemUrl?: string | null;
   comentario?: string;  // Adiciona o campo para armazenar o comentário de cada alternativa
   foto?: File;
 }

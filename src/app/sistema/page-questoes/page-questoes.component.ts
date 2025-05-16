@@ -844,12 +844,12 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   }
 
 
-  isImage(url: string): boolean {
-    return url ? url.includes('.jpeg') || url.includes('.jpg') || url.includes('.gif') || url.includes('.png') : false;
+  isImage(url: string | null): boolean {
+    return typeof url === 'string' && /\.(jpeg|jpg|gif|png)$/i.test(url);
   }
   
-  isVideo(url: string): boolean {
-    return url.match(/\.(mp4|webm|ogg)$/) != null;
+  isVideo(url: string | null): boolean {
+    return typeof url === 'string' && /\.(mp4|webm|ogg)$/i.test(url);
   }
 
   sanitizeVideoUrl(url: string): SafeResourceUrl {

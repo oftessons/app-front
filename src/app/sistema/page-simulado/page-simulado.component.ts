@@ -852,12 +852,12 @@ export class PageSimuladoComponent implements OnInit {
     this.router.navigate(['usuario/dashboard']);
   }
 
-  isImage(url: string): boolean {
-    return url.match(/\.(jpeg|jpg|gif|png)$/) != null;
+  isImage(url: string | null): boolean {
+    return typeof url === 'string' && /\.(jpeg|jpg|png|gif)$/i.test(url);
   }
 
-  isVideo(url: string): boolean {
-    return url.match(/\.(mp4|webm|ogg)$/) != null;
+  isVideo(url: string | null): boolean {
+    return typeof url === 'string' && /\.(mp4|webm|ogg)$/i.test(url);
   }
 
   sanitizeVideoUrl(url: string): SafeResourceUrl {

@@ -329,11 +329,11 @@ editorConfig4 = {
     return typeof fileUrl === 'string' && fileUrl.startsWith('data:video/');
   }
   
-  urlIsImage(url: string): boolean {
+  urlIsImage(url: string | null): boolean {
     return typeof url === 'string' && /\.(jpeg|jpg|png|gif)$/i.test(url);
   }
   
-  urlIsVideo(url: string): boolean {
+  urlIsVideo(url: string | null): boolean {
     return typeof url === 'string' && /\.(mp4|webm|ogg)$/i.test(url);
   }
   
@@ -502,13 +502,14 @@ onSubmit(): void {
           console.log(`foto${index}`, alt.foto);
         }
       });
-
+      console.log("Saida para o backend: ", this.questaoDTO);
       this.questoesService.atualizarQuestao(this.formData, this.questaoDTO.id).subscribe(
         response => {
           this.successMessage = 'Questão atualizada com sucesso!';
           this.errorMessage = null;
           this.loading = false; // Desativa carregamento
           console.debug('Questão atualizada com sucesso:', response);
+          this.router.navigate(['/usuario/buscar-questão']);
         },
         error => {
           this.errorMessage = error;
@@ -659,26 +660,27 @@ onFileSelectedImageEditar(event: any, alternativaIndex: string) {
     
     if (this.questaoDTO.id) {
     if (fieldName === 'fotoDaQuestao') {
-      this.questaoDTO.fotoDaQuestaoUrl = '';
+      this.fotoPreviews['fotoDaQuestao'] = null;
+      this.questaoDTO.fotoDaQuestaoUrl = null;
+      this.fotoDaQuestao = null;
       
     } else if (fieldName === 'fotoDaRespostaUm') {
-      this.questaoDTO.fotoDaRespostaUmUrl = '';
+      this.questaoDTO.fotoDaRespostaUmUrl = null;
     } else if (fieldName === 'fotoDaRespostaDois') {
-      this.questaoDTO.fotoDaRespostaDoisUrl = '';
+      this.questaoDTO.fotoDaRespostaDoisUrl = null;
     } else if (fieldName === 'fotoDaRespostaTres') {
-      this.questaoDTO.fotoDaRespostaTresUrl = '';
+      this.questaoDTO.fotoDaRespostaTresUrl = null;
     } else if (fieldName === 'fotoDaRespostaQuatro') {
-      this.questaoDTO.fotoDaRespostaQuatroUrl = '';
+      this.questaoDTO.fotoDaRespostaQuatroUrl = null;
     } else if (fieldName === 'videoDaQuestao') {
-      this.questaoDTO.videoDaQuestaoUrl = '';
+      this.questaoDTO.videoDaQuestaoUrl = null;
     } else if (fieldName.startsWith('fotoDaAlternativa')) {
       const index = parseInt(fieldName.replace('fotoDaAlternativa', ''), 10);
       if (!isNaN(index) && index >= 0 && index < 4) {
-        // Define qual alternativa deve ter a imagem apagada
-        if (index === 0) this.questaoDTO.fotoAfirmacaoUm = '';
-        if (index === 1) this.questaoDTO.fotoAfirmacaoDois = '';
-        if (index === 2) this.questaoDTO.fotoAfirmacaoTres = '';
-        if (index === 3) this.questaoDTO.fotoAfirmacaoQuatro = '';
+        if (index === 0) this.questaoDTO.alternativas[0].imagemUrl = null;
+        if (index === 1) this.questaoDTO.alternativas[1].imagemUrl = null;
+        if (index === 2) this.questaoDTO.alternativas[2].imagemUrl = null;
+        if (index === 3) this.questaoDTO.alternativas[3].imagemUrl = null;
       }
     }
   }
