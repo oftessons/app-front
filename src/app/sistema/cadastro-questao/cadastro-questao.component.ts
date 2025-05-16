@@ -649,4 +649,63 @@ onFileSelectedImageEditar(event: any, alternativaIndex: string) {
     });
   }
 
+  removeFile(fieldName: string, event?: Event): void {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    
+    this.fotoPreviews[fieldName] = null;
+    
+    if (this.questaoDTO.id) {
+    if (fieldName === 'fotoDaQuestao') {
+      this.questaoDTO.fotoDaQuestaoUrl = '';
+      
+    } else if (fieldName === 'fotoDaRespostaUm') {
+      this.questaoDTO.fotoDaRespostaUmUrl = '';
+    } else if (fieldName === 'fotoDaRespostaDois') {
+      this.questaoDTO.fotoDaRespostaDoisUrl = '';
+    } else if (fieldName === 'fotoDaRespostaTres') {
+      this.questaoDTO.fotoDaRespostaTresUrl = '';
+    } else if (fieldName === 'fotoDaRespostaQuatro') {
+      this.questaoDTO.fotoDaRespostaQuatroUrl = '';
+    } else if (fieldName === 'videoDaQuestao') {
+      this.questaoDTO.videoDaQuestaoUrl = '';
+    } else if (fieldName.startsWith('fotoDaAlternativa')) {
+      const index = parseInt(fieldName.replace('fotoDaAlternativa', ''), 10);
+      if (!isNaN(index) && index >= 0 && index < 4) {
+        // Define qual alternativa deve ter a imagem apagada
+        if (index === 0) this.questaoDTO.fotoAfirmacaoUm = '';
+        if (index === 1) this.questaoDTO.fotoAfirmacaoDois = '';
+        if (index === 2) this.questaoDTO.fotoAfirmacaoTres = '';
+        if (index === 3) this.questaoDTO.fotoAfirmacaoQuatro = '';
+      }
+    }
+  }
+    
+    if (fieldName === 'fotoDaQuestao') {
+      this.fotoDaQuestao = null;
+    } else if (fieldName === 'videoDaQuestao') {
+      this.videoDaQuestao = null;
+    } else if (fieldName.startsWith('fotoDaResposta')) {
+      if (fieldName === 'fotoDaRespostaUm') this.fotoDaRespostaUm = null;
+      if (fieldName === 'fotoDaRespostaDois') this.fotoDaRespostaDois = null;
+      if (fieldName === 'fotoDaRespostaTres') this.fotoDaRespostaTres = null;
+      if (fieldName === 'fotoDaRespostaQuatro') this.fotoDaRespostaQuatro = null;
+    } else if (fieldName.startsWith('afirmacao')) {
+      const index = parseInt(fieldName.replace('afirmacao', ''), 10);
+      if (!isNaN(index) && this.questaoDTO.alternativas[index]) {
+        this.imagePreviews[fieldName] = null;
+        this.questaoDTO.alternativas[index].foto = undefined;
+      }
+      
+    } else if (fieldName.startsWith('fotoDaAlternativa')) {
+      const index = parseInt(fieldName.replace('fotoDaAlternativa', ''), 10);
+      if (!isNaN(index) && this.questaoDTO.alternativas[index]) {
+        this.fotoPreviews[fieldName] = null;
+        this.questaoDTO.alternativas[index].foto = undefined;
+      }
+    }
+  }
+
 }
