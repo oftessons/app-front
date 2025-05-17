@@ -659,31 +659,31 @@ onFileSelectedImageEditar(event: any, alternativaIndex: string) {
     this.fotoPreviews[fieldName] = null;
     
     if (this.questaoDTO.id) {
-    if (fieldName === 'fotoDaQuestao') {
-      this.fotoPreviews['fotoDaQuestao'] = null;
-      this.questaoDTO.fotoDaQuestaoUrl = null;
-      this.fotoDaQuestao = null;
-      
-    } else if (fieldName === 'fotoDaRespostaUm') {
-      this.questaoDTO.fotoDaRespostaUmUrl = null;
-    } else if (fieldName === 'fotoDaRespostaDois') {
-      this.questaoDTO.fotoDaRespostaDoisUrl = null;
-    } else if (fieldName === 'fotoDaRespostaTres') {
-      this.questaoDTO.fotoDaRespostaTresUrl = null;
-    } else if (fieldName === 'fotoDaRespostaQuatro') {
-      this.questaoDTO.fotoDaRespostaQuatroUrl = null;
-    } else if (fieldName === 'videoDaQuestao') {
-      this.questaoDTO.videoDaQuestaoUrl = null;
-    } else if (fieldName.startsWith('fotoDaAlternativa')) {
-      const index = parseInt(fieldName.replace('fotoDaAlternativa', ''), 10);
-      if (!isNaN(index) && index >= 0 && index < 4) {
-        if (index === 0) this.questaoDTO.alternativas[0].imagemUrl = null;
-        if (index === 1) this.questaoDTO.alternativas[1].imagemUrl = null;
-        if (index === 2) this.questaoDTO.alternativas[2].imagemUrl = null;
-        if (index === 3) this.questaoDTO.alternativas[3].imagemUrl = null;
+      if (fieldName === 'fotoDaQuestao') {
+        this.fotoPreviews['fotoDaQuestao'] = null;
+        this.questaoDTO.fotoDaQuestaoUrl = null;
+        this.fotoDaQuestao = null;
+        
+      } else if (fieldName === 'fotoDaRespostaUm') {
+        this.questaoDTO.fotoDaRespostaUmUrl = null;
+      } else if (fieldName === 'fotoDaRespostaDois') {
+        this.questaoDTO.fotoDaRespostaDoisUrl = null;
+      } else if (fieldName === 'fotoDaRespostaTres') {
+        this.questaoDTO.fotoDaRespostaTresUrl = null;
+      } else if (fieldName === 'fotoDaRespostaQuatro') {
+        this.questaoDTO.fotoDaRespostaQuatroUrl = null;
+      } else if (fieldName === 'videoDaQuestao') {
+        this.questaoDTO.videoDaQuestaoUrl = null;
+      } else if (fieldName.startsWith('fotoDaAlternativa')) {
+        const index = parseInt(fieldName.replace('fotoDaAlternativa', ''), 10);
+        if (!isNaN(index) && index >= 0 && index < 4) {
+          if (index === 0) this.questaoDTO.alternativas[0].imagemUrl = null;
+          if (index === 1) this.questaoDTO.alternativas[1].imagemUrl = null;
+          if (index === 2) this.questaoDTO.alternativas[2].imagemUrl = null;
+          if (index === 3) this.questaoDTO.alternativas[3].imagemUrl = null;
+        }
       }
     }
-  }
     
     if (fieldName === 'fotoDaQuestao') {
       this.fotoDaQuestao = null;
@@ -709,5 +709,4 @@ onFileSelectedImageEditar(event: any, alternativaIndex: string) {
       }
     }
   }
-
 }
