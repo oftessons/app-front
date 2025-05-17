@@ -1,4 +1,5 @@
 import { Component, OnInit, ElementRef, ViewChild, AfterViewChecked, PipeTransform } from '@angular/core';
+import { Router } from '@angular/router';
 import { TipoDeProva } from './enums/tipoDeProva';
 import {
   getDescricaoAno,
@@ -46,6 +47,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   questao: Questao = new Questao();
   selectedOption: string = '';
   usuario!: Usuario;
+  usuarioLogado: Usuario | null = null;
   usuarioId!: number;
   mensagemErro: string | null = null;
 
@@ -145,10 +147,11 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     private filtroService: FiltroService,
     private authService: AuthService,
     private sanitizer: DomSanitizer,
-     
+    private router: Router,     
   ) {}
 
   ngOnInit(): void {
+    this.usuarioLogado = this.authService.getUsuarioAutenticado();
     this.obterPerfilUsuario();
     this.loadQuestao();
     const meuFiltro = history.state.questao;
@@ -862,5 +865,19 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
   removeAno(ano: any): void {
     this.multSelectAno = this.multSelectAno.filter(item => item !== ano);
+  }
+
+  isAdmin(): boolean {
+    return this.usuarioLogado?.permissao === 'ROLE_ADMIN'; 
+  }
+
+  isProf(): boolean {
+    return this.usuarioLogado?.permissao === 'ROLE_PROFESSOR'; 
+  }
+
+  editQuestao(): void {
+    if (this.questaoAtual?.id) {
+      this.router.navigate(['/usuario/cadastro-questao', this.questaoAtual.id]);
+    }
   }
 }

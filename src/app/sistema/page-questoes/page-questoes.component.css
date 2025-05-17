@@ -311,8 +311,9 @@
 }
 .btn-filtros {
   margin-top: 12px;
+  margin-right: 10px;
   padding: 10px 20px;
-  width: 200px;
+  width: 230px;
   background-color: #041e4e;
   color: #fff;
   border: none;
@@ -352,6 +353,17 @@
   cursor: pointer;
   margin-right: 10px;
 }
+.btn-editar {
+  margin-top: 12px;
+  padding: 10px 20px;
+  width: 230px;
+  background-color: #041e4e;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 10px;
+} 
 .btn {
   padding: 10px 20px;
   color: #fff;
@@ -467,6 +479,7 @@ p {
 .button-row-filtro {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
   margin-top: 20px;
 }
 
