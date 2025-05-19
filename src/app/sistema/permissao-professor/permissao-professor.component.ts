@@ -117,7 +117,6 @@ export class PermissaoProfessorComponent implements OnInit {
     }
     
     let usuario: Usuario = new Usuario();
-    usuario.username = userData.username;
     usuario.password = userData.password;
     usuario.confirmPassword = userData.confirmPassword;
     usuario.nome = userData.nome;
@@ -149,7 +148,6 @@ export class PermissaoProfessorComponent implements OnInit {
       
       this.usuarioFormAtualizar.patchValue({
         id: id,
-        username:  data.username,
         nome: data.nome,
         email: data.email,
         password: data.password,
@@ -267,10 +265,6 @@ export class PermissaoProfessorComponent implements OnInit {
     }
     if (!/[!@#$%^&*]/.test(userData.password)) {
       passwordValidationErrors.push("A senha deve conter pelo menos um caractere especial (por exemplo, !@#$%^&*).");
-    }
-  
-    if (!userData.username) {
-      passwordValidationErrors.push("O campo de login é obrigatório.");
     }
   
     if (!userData.email) {

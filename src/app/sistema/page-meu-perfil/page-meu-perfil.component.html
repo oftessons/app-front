@@ -29,10 +29,6 @@
         </div>
 
         <div class="profile-info">
-          <p><strong>Username: </strong>
-            <span *ngIf="!editMode"> {{ usuario.username }}</span>
-            <input *ngIf="editMode" [(ngModel)]="usuario.username" class="form-control" />
-          </p>
           <p><strong>Nome: </strong>
             <span *ngIf="!editMode"> {{ usuario.nome }}</span>
             <input *ngIf="editMode" [(ngModel)]="usuario.nome" class="form-control" />

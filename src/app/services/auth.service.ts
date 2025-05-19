@@ -102,11 +102,11 @@ export class AuthService {
   }
 
   // Método para obter o nome do usuário autenticado no AuthService
-obterNomeUsuario(): Observable<string> {
-  return this.http.get<{ nome: string }>(`${this.apiURL}/nome`).pipe(
-    map(response => response.nome)  // Extrai a propriedade 'nome' do objeto retornado
-  );
-}
+  obterNomeUsuario(): Observable<string> {
+    return this.http.get<{ nome: string }>(`${this.apiURL}/nome`).pipe(
+      map(response => response.nome)  // Extrai a propriedade 'nome' do objeto retornado
+    );
+  }
 
   
   salvarUsuarioAutenticado(usuario: Usuario) {
@@ -142,7 +142,7 @@ obterNomeUsuario(): Observable<string> {
     return request.pipe(
       catchError((error: HttpErrorResponse) => {
         if (error.status === 422) {
-          return throwError('usuário já cadastrado na base de dados');
+          return throwError('Email já cadastrado na base de dados');
         }
         return throwError(error);
       })
@@ -154,7 +154,7 @@ obterNomeUsuario(): Observable<string> {
       .pipe(
         catchError((error: HttpErrorResponse) => {
           if (error.status === 422) {
-            return throwError('Usuário já cadastrado na base de dados');
+            return throwError('Email já cadastrado na base de dados');
           }
           return throwError("O servidor não está funcionando corretamente.");
         })
@@ -166,7 +166,7 @@ obterNomeUsuario(): Observable<string> {
       .pipe(
         catchError((error: HttpErrorResponse) => {
           if (error.status === 422) {
-            return throwError('Usuário já cadastrado na base de dados');
+            return throwError('Email já cadastrado na base de dados');
           }
           return throwError("O servidor não está funcionando corretamente.");
         })
@@ -178,7 +178,7 @@ obterNomeUsuario(): Observable<string> {
       .pipe(
         catchError((error: HttpErrorResponse) => {
           if (error.status === 422) {
-            return throwError('Usuário já cadastrado na base de dados');
+            return throwError('Email já cadastrado na base de dados');
           }
           return throwError("O servidor não está funcionando corretamente.");
         })
@@ -240,6 +240,7 @@ obterNomeUsuario(): Observable<string> {
                         .set('username', username)
                         .set('password', password)
                         .set('grant_type', 'password')
+
 
     const headers = {
       'Authorization': 'Basic ' + btoa(`${this.clientID}:${this.clientSecret}`),

@@ -24,8 +24,8 @@
                                     <form #loginForm="ngForm" *ngIf="!cadastrando && !showForgotPassword" (submit)="onSubmit()">
 
                                         <div class="form-group col-sm-12 col-md-6">
-                                            <label class="small mb-1" style="font-size: 1.2em;">Login</label>
-                                            <input type="text" name="username" [(ngModel)]="username" autocomplete="off" class="form-control py-2 responsive-input" placeholder="Digite seu username" required />
+                                            <label class="small mb-1" style="font-size: 1.2em;">Email</label>
+                                            <input type="text" name="email" [(ngModel)]="email" autocomplete="off" class="form-control py-2 responsive-input" placeholder="Digite seu email" required />
                                         </div>
 
                                         <div class="form-group col-sm-12 col-md-6">
@@ -57,9 +57,14 @@
                                     <!-- Register Form -->
                                     <form *ngIf="cadastrando" (submit)="cadastrar()">
 
-                                        <div class="form-group col-sm-12 col-md-6">
+                                        <!-- <div class="form-group col-sm-12 col-md-6">
                                             <label class="small mb-1" style="font-size: 1.2em;">Login *</label>
                                             <input type="text" name="username" [(ngModel)]="username" autocomplete="off" class="form-control py-2 responsive-input" placeholder="Digite seu username" required />
+                                        </div> -->
+
+                                        <div class="form-group col-sm-12 col-md-6">
+                                            <label class="small mb-1" style="font-size: 1.2em;">E-mail *</label>
+                                            <input type="email" name="email" [(ngModel)]="email" class="form-control py-2 responsive-input" placeholder="Digite seu e-mail" required />
                                         </div>
 
                                         <div class="form-group col-sm-12 col-md-6">
@@ -122,11 +127,6 @@
                                         <div class="form-group col-sm-12 col-md-6">
                                             <label class="small mb-1" style="font-size: 1.2em;">Nome *</label>
                                             <input type="text" name="nome" [(ngModel)]="nome" class="form-control py-2 responsive-input" placeholder="Digite o seu nome"  />
-                                        </div>
-
-                                        <div class="form-group col-sm-12 col-md-6">
-                                            <label class="small mb-1" style="font-size: 1.2em;">E-mail *</label>
-                                            <input type="email" name="email" [(ngModel)]="email" class="form-control py-2 responsive-input" placeholder="Digite seu e-mail" required />
                                         </div>
 
                                         <div class="form-group col-sm-12 col-md-6">
