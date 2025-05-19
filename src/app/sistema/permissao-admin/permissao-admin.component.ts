@@ -156,7 +156,6 @@ export class PermissaoAdminComponent implements OnInit {
     }
 
     const usuario = new Usuario();
-    usuario.username = userData.username;
     usuario.password = userData.password;
     usuario.confirmPassword = userData.confirmPassword;
     usuario.nome = userData.nome;
@@ -168,6 +167,7 @@ export class PermissaoAdminComponent implements OnInit {
     usuario.bolsaAssinatura = userData.bolsa;
     usuario.diasDeTeste = userData.quantidadeDiasBolsa;
     const permissao = this.mapearDescricaoParaEnum(userData.tipoUsuario);
+
 
     this.authService.salvar(usuario, permissao).subscribe((response) => {
       this.mensagemSucesso = response.message;
@@ -194,7 +194,6 @@ export class PermissaoAdminComponent implements OnInit {
       
       this.usuarioFormUpdate.patchValue({
         id: id,
-        username: response.username,
         nome: response.nome,
         email: response.email,
         password: response.password,
@@ -318,11 +317,7 @@ export class PermissaoAdminComponent implements OnInit {
     if (!/[!@#$%^&*]/.test(userData.password)) {
       passwordValidationErrors.push("A senha deve conter pelo menos um caractere especial (por exemplo, !@#$%^&*).");
     }
-  
-    if (!userData.username) {
-      passwordValidationErrors.push("O campo de login é obrigatório.");
-    }
-  
+   
     if (!userData.email) {
       passwordValidationErrors.push("O campo de email é obrigatório.");
 

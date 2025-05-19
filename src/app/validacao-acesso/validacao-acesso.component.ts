@@ -61,7 +61,6 @@ export class ValidacaoAcessoComponent {
         const usuario: Usuario = {
           id: userId,
           fotoUrl: null,
-          username: response.username,
           password: '',
           email: response.email || '',
           planoId: response.planoId || '',
