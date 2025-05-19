@@ -97,7 +97,6 @@
             <button type="submit" class="btn-filtrar">Filtrar</button>
             <button type="button" class="btn-filtrar-geral" (click)="LimparFiltro()">Limpar Filtro</button>
             <button type="button" class="btn-salvar" (click)="abrirModal()">Salvar Filtro</button>
-            <button type="button" class="btn-editar" (click)="editQuestao()" *ngIf="isAdmin() || isProf()">Editar Questão</button>
           </div>
         </form>
       </div>
@@ -155,6 +154,7 @@
         <h3>Tema: {{ questaoAtual.tema }}</h3>
         <h3>Ano: {{ questaoAtual.ano }}</h3>
         <h3>Tipo de Prova: {{ questaoAtual.tipoDeProva }}</h3>
+        <button type="button" class="btn-editar" (click)="editQuestao()" *ngIf="isAdmin() || isProf()">Editar Questão</button>
       </div>
       <div class="conteudo-questao">
         <!-- Quero se se eu tiver cadastrado o video apareca aqui no enunciado-->
