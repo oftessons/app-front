@@ -42,7 +42,7 @@ declare var bootstrap: any;
   styleUrls: ['./page-questoes.component.css'],
 })
 export class PageQuestoesComponent implements OnInit, AfterViewChecked {
-
+  carregando: boolean = false;
   filtroSelecionado: any;
   questao: Questao = new Questao();
   selectedOption: string = '';
@@ -410,7 +410,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   }
 
   filtrarQuestoes(): void {
-
+    this.carregando = true;
     this.selectedOption = '';
     this.respostaCorreta = null;
     this.respostaErrada = null;
@@ -525,11 +525,12 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
         this.mostrarGabarito = false;
         this.numeroDeQuestoes = questoes.length;
         this.toggleFiltros();
-
+        this.carregando = false;
       },
       (error) => {
         console.error('Erro ao filtrar questões:', error);
         this.message = 'Ocorreu um erro ao filtrar questões. Por favor, tente novamente mais tarde.';
+        this.carregando = false;
       }
     );
   }

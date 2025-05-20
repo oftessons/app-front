@@ -99,12 +99,12 @@
             <button type="button" class="btn-salvar" (click)="abrirModal()">Salvar Filtro</button>
           </div>
         </form>
+        <mat-progress-bar class="progress-bar-spacing" *ngIf="carregando" mode="indeterminate"></mat-progress-bar>
       </div>
     </div>
   </div>
-
-   <!-- Modal de confirmação -->
-   <div>
+  <!-- Modal de confirmação -->
+  <div>
     <div class="modal fade" id="confirmacaoModal" #confirmacaoModalRef tabindex="-1" aria-labelledby="confirmacaoModalLabel" aria-hidden="true">
       <div class="mr-box-save-lista-overlay"></div>
       <div class="modal-dialog">
