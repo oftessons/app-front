@@ -1,4 +1,5 @@
 import { Component, OnInit,  AfterViewInit } from '@angular/core';
+import { Location } from '@angular/common';
 import { Questao } from '../page-questoes/questao';
 import { Ano } from '../page-questoes/enums/ano';
 import { Tema } from '../page-questoes/enums/tema';
@@ -92,7 +93,8 @@ editorConfig4 = {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     public tinymceService: TinymceService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private location: Location
   ) { }
 
   ngOnInit(): void {
@@ -708,5 +710,9 @@ onFileSelectedImageEditar(event: any, alternativaIndex: string) {
         this.questaoDTO.alternativas[index].foto = undefined;
       }
     }
+  }
+
+  voltarPaginaAnterior(): void {
+    this.location.back();
   }
 }

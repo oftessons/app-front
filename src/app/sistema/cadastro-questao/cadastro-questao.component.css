@@ -5,6 +5,32 @@
   font-family: "Nunito Sans", sans-serif;
 }
 
+.btn-voltar {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  margin-left: 16px;
+  margin-top: 32px;
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  color: #495057;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+}
+
+.btn-voltar:hover {
+  background-color: #e9ecef;
+  color: #212529;
+}
+
+.btn-voltar i {
+  margin-right: 8px;
+  font-size: 16px;
+}
+
 .container-geral {
   background-color: #fefefe;
   display: flex;

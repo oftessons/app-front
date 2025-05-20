@@ -354,15 +354,19 @@
   margin-right: 10px;
 }
 
+.progress-bar-spacing {
+  margin-top: 20px;
+}
+
 .btn-editar {
-  padding: 5px 8px;
+  padding: 16px 8px;
   width: 200px;
   background-color: #f6a568;
   color: #000000;
   border: none;
-  border-radius: 18px;
+  border-radius: 14px;
   cursor: pointer;
-  margin-right: 10px;
+  margin-left: auto;
   font-weight: 600;
 } 
 
@@ -660,7 +664,14 @@ p {
 }
 
 @media (max-width: 480px) {
+  .identificadores-questao {
+    flex-wrap: wrap;
+  }
 
+  .btn-editar {
+    width: 100%;
+    padding: 8px;
+  }
 }
 
 
