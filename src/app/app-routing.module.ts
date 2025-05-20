@@ -10,20 +10,21 @@ import { DetalhesPlanosComponent } from './planos/detalhes-planos/detalhes-plano
 import { PagamentoConcluidoComponent } from './planos/pagamento-concluido/pagamento-concluido.component';
 import { ValidacaoAcessoComponent } from './validacao-acesso/validacao-acesso.component';
 import { ChatBotWhatsappComponent } from './chat-bot-whatsapp/chat-bot-whatsapp.component';
+import { PaginaInicialComponent } from './sistema/pagina-inicial/pagina-inicial.component';
 
 const routes: Routes = [
+  { path: '', component: PaginaInicialComponent },
   { path: 'login', component: LoginComponent },
-  {path: 'whatsapp-support', component: ChatBotWhatsappComponent},
+  { path: 'whatsapp-support', component: ChatBotWhatsappComponent},
   { path: 'reset-password', component: ResetPasswordComponent },
   { path: 'planos', component: PlanosComponent },
   { path: 'plano/:slug', component: DetalhesPlanosComponent },
   { path: 'pagamento-concluido', component: PagamentoConcluidoComponent },
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: '', component: LayoutComponent, children: [
     { path : 'usuario/dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
     { path: '', redirectTo: 'usuario/dashboard', pathMatch: 'full' }
   ]},
-  {path: 'validacao-acesso', component: ValidacaoAcessoComponent}
+  { path: 'validacao-acesso', component: ValidacaoAcessoComponent}
 ];
 
 @NgModule({
