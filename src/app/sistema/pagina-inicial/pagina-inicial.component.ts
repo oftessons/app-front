@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -116,6 +116,7 @@ export class PaginaInicialComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.checkActiveSection();
     this.registerForm = this.formBuilder.group({
       nome: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
@@ -246,9 +247,9 @@ export class PaginaInicialComponent implements OnInit {
   }
 
   scrollToSection(sectionId: string) {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+    const section = document.getElementById(sectionId);
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth' });
     }
   }
 
@@ -268,4 +269,32 @@ export class PaginaInicialComponent implements OnInit {
     }
   }
 
+  @HostListener('window:scroll', ['$event'])
+  checkActiveSection() {
+    const sections = document.querySelectorAll('section[id]');
+    const scrollPosition = window.scrollY + window.innerHeight / 3;
+    
+    sections.forEach(section => {
+      const sectionTop = (section as HTMLElement).offsetTop;
+      const sectionHeight = (section as HTMLElement).offsetHeight;
+      const sectionId = section.getAttribute('id');
+      
+      if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+        document.querySelectorAll('.nav-links a').forEach(link => {
+          link.classList.remove('active');
+        });
+        
+        document.querySelectorAll('.section-dot').forEach(dot => {
+          dot.classList.remove('active');
+        });
+        
+        const navLink = document.querySelector(`.nav-links a[href*="${sectionId}"]`);
+        const sectionDot = document.querySelector(`.section-dot[href*="${sectionId}"]`);
+        
+        if (navLink) navLink.classList.add('active');
+
+        if (sectionDot) sectionDot.classList.add('active');
+      }
+    });
+  }
 }

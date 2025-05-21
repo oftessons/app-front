@@ -4,9 +4,9 @@
       <img src="assets/imagens/logoq-bank.svg" alt="Oftlessons Logo" />
     </div>
     <div class="nav-links">
-      <a href="#" (click)="scrollToSection('hero'); $event.preventDefault()">Início</a>
-      <a href="#" (click)="scrollToSection('depoimentos'); $event.preventDefault()">Depoimentos</a>
-      <a href="#" (click)="scrollToSection('plans'); $event.preventDefault()">Planos</a>
+      <a href="#hero" (click)="scrollToSection('hero'); $event.preventDefault()" class="active">Início</a>
+      <a href="#depoimentos" (click)="scrollToSection('depoimentos'); $event.preventDefault()">Depoimentos</a>
+      <a href="#plans" (click)="scrollToSection('plans'); $event.preventDefault()">Planos</a>
     </div>
   </nav>
 
@@ -14,7 +14,7 @@
     <div class="container">
       <div class="hero-content">
         <div class="hero-text">
-          <h1>Domine os conceitos que caem na Prova Nacional de Oftamologia</h1>
+          <h1><span>Domine</span> os conceitos que <span>caem</span> na Prova Nacional de <span>Oftamologia</span></h1>
           <p>Não é sobre estudar tudo, é sobre estudar certo.</p>
         </div>
         <div class="register-card">
@@ -42,30 +42,32 @@
                 </div>
 
                 <div class="form-group">
-                  <label class="small mb-1">Senha *</label>
-                  <div class="input-group">
-                    <input type="password" name="password" [(ngModel)]="password" class="form-control py-2" 
-                      placeholder="Digite sua senha" required 
-                      (input)="validatePassword()" 
-                      (focus)="showTooltip = true" 
-                      (blur)="showTooltip = false"/>
-                    <div class="input-group-append">
-                      <div class="btn btn-outline-secondary" type="button" (click)="togglePasswordVisibility('password')">
-                        <img *ngIf="!passwordVisible.password" src="assets/imagens/view.svg" alt="Mostrar senha" width="16" height="16">
-                        <img *ngIf="passwordVisible.password" src="assets/imagens/view-off.svg" alt="Ocultar senha" width="16" height="16">
+                  <div class="password-container-tooltip">
+                    <label class="small mb-1">Senha *</label>
+                    <div class="input-group">
+                      <input type="password" name="password" [(ngModel)]="password" class="form-control py-2" 
+                        placeholder="Digite sua senha" required 
+                        (input)="validatePassword()" 
+                        (focus)="showTooltip = true" 
+                        (blur)="showTooltip = false"/>
+                      <div class="input-group-append">
+                        <div class="btn btn-outline-secondary" type="button" (click)="togglePasswordVisibility('password')">
+                          <img *ngIf="!passwordVisible.password" src="assets/imagens/view.svg" alt="Mostrar senha" width="16" height="16">
+                          <img *ngIf="passwordVisible.password" src="assets/imagens/view-off.svg" alt="Ocultar senha" width="16" height="16">
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  
-                  <div *ngIf="showTooltip" class="password-tooltip">
-                    <p class="tooltip-title">A senha precisa ter:</p>
-                    <ul>
-                      <li [class.valid]="passwordValidations.minLength">Ao menos 8 caracteres</li>
-                      <li [class.valid]="passwordValidations.uppercase">1 letra maiúscula</li>
-                      <li [class.valid]="passwordValidations.lowercase">1 letra minúscula</li>
-                      <li [class.valid]="passwordValidations.number">1 número</li>
-                      <li [class.valid]="passwordValidations.specialChar">1 caractere especial (!&#64;#$%^&*)</li>
-                    </ul>
+                    
+                    <div *ngIf="showTooltip" class="password-tooltip">
+                      <p class="tooltip-title">A senha precisa ter:</p>
+                      <ul>
+                        <li [class.valid]="passwordValidations.minLength">Ao menos 8 caracteres</li>
+                        <li [class.valid]="passwordValidations.uppercase">1 letra maiúscula</li>
+                        <li [class.valid]="passwordValidations.lowercase">1 letra minúscula</li>
+                        <li [class.valid]="passwordValidations.number">1 número</li>
+                        <li [class.valid]="passwordValidations.specialChar">1 caractere especial (!&#64;#$%^&*)</li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
                 
@@ -170,6 +172,12 @@
       </div>
     </div>
   </section>
+
+  <div class="section-indicator">
+  <a href="#hero" class="section-dot" data-section="hero"></a>
+  <a href="#depoimentos" class="section-dot" data-section="depoimentos"></a>
+  <a href="#plans" class="section-dot" data-section="plans"></a>
+  </div>
 
   <footer class="footer">
     <div class="container">
