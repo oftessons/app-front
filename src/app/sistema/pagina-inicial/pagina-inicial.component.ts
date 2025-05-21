@@ -6,6 +6,7 @@ import { Usuario } from '../../login/usuario';
 import { Permissao } from '../../login/Permissao';
 import { TipoUsuario } from '../../login/enums/tipo-usuario';
 import { TipoUsuarioDescricao } from '../../login/enums/tipo-usuario-descricao';
+import { CardPlanoComponent } from '../../shared/card-plano/card-plano.component';
 
 @Component({
   selector: 'app-pagina-inicial',
@@ -53,7 +54,7 @@ export class PaginaInicialComponent implements OnInit {
     {
       name: 'Dr. Carlos Mendes',
       role: 'Oftalmologista, São Paulo',
-      content: 'A plataforma Oftlessons transformou minha preparação para as provas de residência. O conteúdo é muito bem organizado e as videoaulas são excelentes.',
+      content: 'A plataforma Oftlessons transformou minha preparação para as provas. O conteúdo é muito bem organizado.',
       image: 'assets/imagens/perfil-d.svg'
     },
     {
@@ -65,47 +66,79 @@ export class PaginaInicialComponent implements OnInit {
     {
       name: 'Dr. Rafael Oliveira',
       role: 'Especialista em Retina, Rio de Janeiro',
-      content: 'O módulo de Retina é excepcional. Os vídeos são claros e objetivos, e o material complementar é muito útil para a prática clínica.',
+      content: 'O módulo de Retina é excepcional. O material é muito útil para a prática clínica.',
       image: 'assets/imagens/perfil-d.svg'
     }
   ];
 
-  plans = [
+  planos = [
     {
-      title: 'Mensal',
-      price: 'R$ 397,00',
-      features: [
-        'Acesso a todos os módulos de aulas',
-        'Banco de questões completo',
-        'Simulados personalizados',
-        'Acesso via aplicativo e web'
+      titulo: 'Mensal',
+      preco: 397.00,
+      descricao: [
+        'Revisão rápida sobre qualquer tema ou assunto.',
+        'Ideal para quem busca agilidade no aprendizado.',
+        'Acesso flexível ao conteúdo essencial.'
       ],
-      recommended: false,
-      slug: 'mensal'
+      corCabecalho: '#253c66',
+      recomendado: false,
+      slug: 'ASSINATURA_MENSAL'
     },
     {
-      title: 'Semestral',
-      price: 'R$ 1.797,00',
-      features: [
-        'Todos os benefícios do plano Mensal',
-        'Economia de 25%',
-        'Material de apoio exclusivo',
-        'Suporte premium'
+      titulo: 'Semestral',
+      preco: 116.16,
+      mostrarPorMes: true,
+      descricao: [
+        'Exploração detalhada do acervo da plataforma.',
+        'Estudo com tempo para absorver conhecimento.',
+        'Perfeito para uma aprendizagem profunda e completa.'
       ],
-      recommended: true,
-      slug: 'semestral'
+      corCabecalho: '#041E4E',
+      textoAdicional: 'R$697,00 por 6 meses',
+      recomendado: false,
+      slug: 'plano/semestral'
     },
     {
-      title: 'Anual',
-      price: 'R$ 2.997,00',
-      features: [
-        'Todos os benefícios do plano Semestral',
-        'Economia de 37%',
-        'Mentorias exclusivas',
-        'Acesso vitalício a atualizações do período'
+      titulo: 'Anual',
+      preco: 99.75,
+      mostrarPorMes: true,
+      descricao: [
+        'Utilize todas as funcionalidades da plataforma.',
+        'Melhore seu aprendizado de forma abrangente.',
+        'Acesso ao banco de questões com reset duas vezes ao ano.'
       ],
-      recommended: false,
-      slug: 'anual'
+      corCabecalho: '#0F1934',
+      textoAdicional: 'R$1.197,00 por 1 ano',
+      recomendado: true,
+      slug: 'plano/anual'
+    },
+    {
+      titulo: 'Completo',
+      preco: 132.50,
+      mostrarPorMes: true,
+      descricao: [
+        'Acesso completo a todos os módulos e conteúdos.',
+        '4000 flashcards para estudo rápido.',
+        'Ideal para quem busca uma formação abrangente.',
+      ],
+      corCabecalho: '#253c66',
+      textoAdicional: 'R$ 1.590,00 por 1 ano',
+      recomendado: false,
+      slug: 'plano/completo'
+    },
+    {
+      titulo: 'Flashcards',
+      preco: 263.33,
+      descricao: [
+        'Estude de forma rápida e eficiente com cartões de memorização.',
+        'Ideal para revisar conceitos importantes em poucos minutos.',
+        'Método comprovado para melhorar a fixação e a recordação de informações.',
+        'Perfeito para quem tem pouco tempo e precisa de agilidade no aprendizado.'
+      ],
+      corCabecalho: '#041E4E',
+      textoAdicional: 'R$789,99 por 1 ano',
+      recomendado: false,
+      slug: 'ASSINATURA_FLASHCARDS'
     }
   ];
 

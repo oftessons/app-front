@@ -136,7 +136,7 @@
 
   <section id="depoimentos" class="depoimentos-section">
     <div class="container">
-      <h2 class="section-title">Depoimentos</h2>
+      <h2 class="depoimento-title">Depoimentos</h2>
       <div class="depoimentos-grid">
         <div class="depoimento-card" *ngFor="let depoimento of depoimentos">
           <div class="depoimento-author">
@@ -158,16 +158,23 @@
 
   <section id="plans" class="plans-section">
     <div class="container">
-      <h2 class="section-title">Escolha Seu Plano</h2>
-      <div class="plans-grid">
-        <div class="plan-card" *ngFor="let plan of plans" [class.recommended]="plan.recommended">
-          <div class="plan-badge" *ngIf="plan.recommended">Recomendado</div>
-          <h3 class="plan-title">{{ plan.title }}</h3>
-          <div class="plan-price">{{ plan.price }}</div>
-          <ul class="plan-features">
-            <li *ngFor="let feature of plan.features">{{ feature }}</li>
-          </ul>
-          <button class="btn-plan" (click)="navigateToPlans()">Assinar Agora</button>
+      <div class="plans-border">
+        <div class="plans-header">          
+          <h2 class="plans-title">Planos acessíveis para todos os perfis</h2>
+          <p class="plans-subtitle">Escolha o plano que melhor se adapta a você e comece sua jornada de aprendizado.</p>
+        </div>
+        <div class="plans-grid">
+          <app-card-plano 
+          *ngFor="let plan of planos"
+          [titulo]="plan.titulo"
+          [descricao]="plan.descricao"
+          [preco]="plan.preco"
+          [textoBotao]="'Escolher plano'"
+          [recomendado]="plan.recomendado"
+          [corCabecalho]="plan.corCabecalho || ''"
+          [textoAdicional]="plan.textoAdicional || ''"
+          rota="planos">
+        </app-card-plano>
         </div>
       </div>
     </div>
