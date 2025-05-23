@@ -47,8 +47,11 @@ export class PaginaInicialComponent implements OnInit {
   
   registerForm!: FormGroup;
   errors: string[] = [];
+  camposComErro: string[] = [];
+  mensagensDeErro: { [campo: string]: string } = {};
   mensagemSucesso: string = '';
   submitted = false;
+  anoAtual: number = new Date().getFullYear();
 
   depoimentos = [
     {
@@ -177,98 +180,103 @@ export class PaginaInicialComponent implements OnInit {
   }
 
   cadastrar() {
-  this.errors = []; // Limpa os erros anteriores
-  const passwordValidationErrors: string[] = [];
+    this.errors = [];
+    this.camposComErro = [];
+    this.mensagensDeErro = {};
 
-  // Validações de senha
-  if (this.password.length < 8) {
-    passwordValidationErrors.push("A senha deve ter pelo menos 8 caracteres.");
-  }
-  if (!/[A-Z]/.test(this.password)) {
-    passwordValidationErrors.push("A senha deve conter pelo menos uma letra maiúscula.");
-  }
-  if (!/[a-z]/.test(this.password)) {
-    passwordValidationErrors.push("A senha deve conter pelo menos uma letra minúscula.");
-  }
-  if (!/[0-9]/.test(this.password)) {
-    passwordValidationErrors.push("A senha deve conter pelo menos um número.");
-  }
-  if (!/[!@#$%^&*]/.test(this.password)) {
-    passwordValidationErrors.push("A senha deve conter pelo menos um caractere especial (por exemplo, !@#$%^&*).");
-  }
+    this.validarCampoObrigatorio('nome', 'O campo nome é obrigatório');
+    this.validarCampoObrigatorio('email', 'O campo e-mail é obrigatório');
+    this.validarCampoObrigatorio('telefone', 'O campo telefone é obrigatório');
+    this.validarCampoObrigatorio('cidade', 'O campo cidade é obrigatório');
+    this.validarCampoObrigatorio('estado', 'O campo estado é obrigatório');
 
-  if (!this.email) {
-    passwordValidationErrors.push("O campo de email é obrigatório.");
-  }
-  if (!this.nome) {
-    passwordValidationErrors.push("O campo de nome é obrigatório.");
-  }
-  if (!this.cidade) {
-    passwordValidationErrors.push("O campo de cidade é obrigatório.");
-  }
-  if (!this.estado) {
-    passwordValidationErrors.push("O campo de estado é obrigatório.");
-  }
-  if (!this.telefone) {
-    passwordValidationErrors.push("O campo de telefone é obrigatório.");
-  }
-  if (!this.tipoDeEstudante) {
-    passwordValidationErrors.push("Selecione o tipo de usuário.");
-  }
+    if (!this.tipoDeEstudante) {
+      this.adicionarErro('tipoDeEstudante', 'Selecione o tipo de usuário');
+    }
 
-  // Se houver erros de validação, armazene-os e não prossiga
-  if (passwordValidationErrors.length > 0) {
-    this.errors = passwordValidationErrors;
-    return;
-  }
+    if (this.password.length < 8) {
+      this.adicionarErro('password', 'A senha deve ter pelo menos 8 caracteres');
+    } else if (!/[A-Z]/.test(this.password)) {
+      this.adicionarErro('password', 'A senha deve conter pelo menos uma letra maiúscula');
+    } else if (!/[a-z]/.test(this.password)) {
+      this.adicionarErro('password', 'A senha deve conter pelo menos uma letra minúscula');
+    } else if (!/[0-9]/.test(this.password)) {
+      this.adicionarErro('password', 'A senha deve conter pelo menos um número');
+    } else if (!/[!@#$%^&*]/.test(this.password)) {
+      this.adicionarErro('password', 'A senha deve conter pelo menos um caractere especial');
+    }
+    
+    if (this.password !== this.confirmPassword) {
+      this.adicionarErro('confirmPassword', 'As senhas não coincidem');
+    }
 
-  // Validação de confirmação de senha
-  if (this.password !== this.confirmPassword) {
-    this.errors.push("As senhas não coincidem.");
-    return;
-  }
+    if (this.camposComErro.length > 0) {
+      return;
+    }
 
-  const usuario: Usuario = new Usuario();
-  usuario.password = this.password;
-  usuario.email = this.email;
-  usuario.nome = this.nome;
-  usuario.confirmPassword = this.confirmPassword;
-  usuario.telefone = this.telefone;
-  usuario.cidade = this.cidade;
-  usuario.estado = this.estado;
-  usuario.tipoDeEstudante = this.tipoDeEstudante;
+    const usuario: Usuario = new Usuario();
+    usuario.password = this.password;
+    usuario.email = this.email;
+    usuario.nome = this.nome;
+    usuario.confirmPassword = this.confirmPassword;
+    usuario.telefone = this.telefone;
+    usuario.cidade = this.cidade;
+    usuario.estado = this.estado;
+    usuario.tipoDeEstudante = this.tipoDeEstudante;
 
-  this.authService
-    .salvar(usuario, this.permissaoUsuario)
-    .subscribe({
-      next: (response) => {
-        this.mensagemSucesso = "Cadastro realizado com sucesso! Efetue o login.";
+    this.authService
+      .salvar(usuario, this.permissaoUsuario)
+      .subscribe({
+        next: (response) => {
+          this.mensagemSucesso = "Cadastro realizado com sucesso! Efetue o login.";
 
-        this.password = '';
-        this.email = '';
-        this.nome = '';
-        this.confirmPassword = '';
-        this.telefone = '';
-        this.cidade = '';
-        this.estado = '';
-        this.errors = [];
-        
-        setTimeout(() => {
-          this.router.navigate(['/login']);
-        }, 3000);
-      },
-      error: (errorResponse) => {
-        if (errorResponse.status === 401) {
-          this.errors = ['Sessão expirada. Por favor, faça login novamente.'];
-          localStorage.removeItem('access_token');
-          this.router.navigate(['/login']);
-        } else if (errorResponse.status === 400) {
-          this.errors = [errorResponse.error];
-        } else {
-          this.errors = ['Erro ao cadastrar o usuário.'];
+          this.password = '';
+          this.email = '';
+          this.nome = '';
+          this.confirmPassword = '';
+          this.telefone = '';
+          this.cidade = '';
+          this.estado = '';
+          this.errors = [];
+          
+          setTimeout(() => {
+            this.router.navigate(['/login']);
+          }, 3000);
+        },
+        error: (errorResponse) => {
+          if (errorResponse.status === 401) {
+            this.errors = ['Sessão expirada. Por favor, faça login novamente.'];
+            localStorage.removeItem('access_token');
+            this.router.navigate(['/login']);
+          } else if (errorResponse.status === 400) {
+            if (errorResponse.error.includes('email')) {
+              this.adicionarErro('email', 'Este e-mail já está em uso');
+            } else {
+              this.errors = [errorResponse.error];
+            }
+          } else {
+            this.errors = ['Erro ao cadastrar o usuário.'];
+          }
         }
-      }
-    });
+      });
+  }
+
+  validarCampoObrigatorio(campo: string, mensagem: string) {
+    const valor = this[campo as keyof PaginaInicialComponent];
+    if (!valor || (typeof valor === 'string' && valor.trim() === '')) {
+      this.adicionarErro(campo, mensagem);
+    }
+  }
+
+  adicionarErro(campo: string, mensagem: string) {
+    if (!this.camposComErro.includes(campo)) {
+      this.camposComErro.push(campo);
+    }
+    this.mensagensDeErro[campo] = mensagem;
+  }
+
+  obterMensagemErro(campo: string): string {
+    return this.mensagensDeErro[campo] || '';
   }
 
   navigateToPlans() {
@@ -287,11 +295,11 @@ export class PaginaInicialComponent implements OnInit {
   }
 
   validatePassword() {
-  this.passwordValidations.minLength = this.password.length >= 8;
-  this.passwordValidations.uppercase = /[A-Z]/.test(this.password);
-  this.passwordValidations.lowercase = /[a-z]/.test(this.password);
-  this.passwordValidations.number = /\d/.test(this.password);
-  this.passwordValidations.specialChar = /[!@#$%^&*]/.test(this.password);
+    this.passwordValidations.minLength = this.password.length >= 8;
+    this.passwordValidations.uppercase = /[A-Z]/.test(this.password);
+    this.passwordValidations.lowercase = /[a-z]/.test(this.password);
+    this.passwordValidations.number = /\d/.test(this.password);
+    this.passwordValidations.specialChar = /[!@#$%^&*]/.test(this.password);
   }
 
   togglePasswordVisibility(field: string) {

@@ -212,6 +212,17 @@
   gap: 15px;
 }
 
+.input-error {
+  border-color: #dc3545 !important;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+}
+
+.text-danger {
+  color: #dc3545;
+  font-size: 12px;
+  margin-top: 5px;
+  display: block;
+}
 
 .invalid-feedback {
   color: var(--danger);
@@ -470,6 +481,14 @@ label {
   flex-wrap: wrap;
   justify-content: center;
   gap: 30px;
+}
+
+.plans-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-top: 20px;
 }
 
 .footer {
