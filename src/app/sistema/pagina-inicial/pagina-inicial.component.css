@@ -366,7 +366,7 @@ label {
   border: 1px solid #92979d;
 }
 
-.btn-success {
+.btn-submit {
   background-color: #9baed3;
   width: 100%;
   color: var(--white);
@@ -377,8 +377,13 @@ label {
   transition: background-color 0.3s ease;
 }
 
-.btn-success:enabled {
+.btn-submit:enabled {
   background-color: #3B5FA0;
+}
+
+.btn-submit:active {
+  background-color: #2a3d7f;
+  color: white;
 }
 
 .depoimentos-section {
@@ -608,7 +613,7 @@ label {
     font-size: 16px;
   }
   
-  .btn-success {
+  .btn-submit {
     padding: 8px;
     font-size: 14px;
   }

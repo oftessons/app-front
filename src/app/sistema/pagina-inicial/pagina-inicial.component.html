@@ -179,7 +179,7 @@
               
               <div class="form-group mt-4 mb-0">
                 <div class="d-flex justify-content-between">
-                  <button type="submit" class="btn-success" [disabled]="!consentimento">Cadastrar</button>
+                  <button type="submit" class="btn btn-submit" [disabled]="!consentimento">Cadastrar</button>
                 </div>
               </div>
             </form>
@@ -228,7 +228,7 @@
             [recomendado]="plan.recomendado"
             [corCabecalho]="plan.corCabecalho || ''"
             [textoAdicional]="plan.textoAdicional || ''"
-            rota="planos">
+            rota="#hero">
           </app-card-plano>
         </div>
         <div class="plans-footer">
@@ -249,7 +249,7 @@
   <footer class="footer">
     <div class="container">
       <div class="footer-bottom">
-        <p>&copy; {{ anoAtual }} Oftlessons. Todos os direitos reservados.</p>
+        <p>&copy; 2024-{{ anoAtual }} Oftlessons. Todos os direitos reservados.</p>
       </div>
     </div>
   </footer>

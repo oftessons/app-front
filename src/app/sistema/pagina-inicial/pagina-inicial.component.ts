@@ -85,7 +85,6 @@ export class PaginaInicialComponent implements OnInit {
       ],
       corCabecalho: '#253c66',
       recomendado: false,
-      slug: 'ASSINATURA_MENSAL'
     },
     {
       titulo: 'Semestral',
@@ -99,7 +98,6 @@ export class PaginaInicialComponent implements OnInit {
       corCabecalho: '#041E4E',
       textoAdicional: 'R$697,00 por 6 meses',
       recomendado: false,
-      slug: 'plano/semestral'
     },
     {
       titulo: 'Anual',
@@ -113,7 +111,6 @@ export class PaginaInicialComponent implements OnInit {
       corCabecalho: '#0F1934',
       textoAdicional: 'R$1.197,00 por 1 ano',
       recomendado: true,
-      slug: 'plano/anual'
     },
     {
       titulo: 'Completo',
@@ -127,7 +124,6 @@ export class PaginaInicialComponent implements OnInit {
       corCabecalho: '#253c66',
       textoAdicional: 'R$ 1.590,00 por 1 ano',
       recomendado: false,
-      slug: 'plano/completo'
     },
     {
       titulo: 'Flashcards',
@@ -141,7 +137,6 @@ export class PaginaInicialComponent implements OnInit {
       corCabecalho: '#041E4E',
       textoAdicional: 'R$789,99 por 1 ano',
       recomendado: false,
-      slug: 'ASSINATURA_FLASHCARDS'
     }
   ];
 
@@ -152,6 +147,7 @@ export class PaginaInicialComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    localStorage.removeItem('access_token');
     this.checkActiveSection();
     this.registerForm = this.formBuilder.group({
       nome: ['', [Validators.required, Validators.minLength(3)]],
@@ -229,7 +225,6 @@ export class PaginaInicialComponent implements OnInit {
       .subscribe({
         next: (response) => {
           this.mensagemSucesso = "Cadastro realizado com sucesso! Efetue o login.";
-
           this.password = '';
           this.email = '';
           this.nome = '';
