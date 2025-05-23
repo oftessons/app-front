@@ -239,18 +239,12 @@ export class PaginaInicialComponent implements OnInit {
           }, 3000);
         },
         error: (errorResponse) => {
-          if (errorResponse.status === 401) {
-            this.errors = ['Sessão expirada. Por favor, faça login novamente.'];
-            localStorage.removeItem('access_token');
-            this.router.navigate(['/login']);
-          } else if (errorResponse.status === 400) {
-            if (errorResponse.error.includes('email')) {
-              this.adicionarErro('email', 'Este e-mail já está em uso');
-            } else {
-              this.errors = [errorResponse.error];
-            }
+          this.mensagemSucesso = '';
+          this.errors = [];
+          if (errorResponse.includes('Email já cadastrado')) {
+            this.adicionarErro('email', 'Email já cadastrado');
           } else {
-            this.errors = ['Erro ao cadastrar o usuário.'];
+            this.errors.push(errorResponse);
           }
         }
       });
