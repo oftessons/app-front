@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { Usuario } from './usuario';
@@ -13,7 +13,7 @@ import { LoginDTO } from '../sistema/LoginDTO';
   styleUrls: ['./login.component.css']
 })
 
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   username: string = '';
   password: string = '';
   nome: string = '';
@@ -58,6 +58,13 @@ export class LoginComponent {
     private router: Router,
     private authService: AuthService
   ) {}
+
+  ngOnInit(): void {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('user_id');
+    localStorage.removeItem('usuario');
+
+  }
 
   onSubmit() {
     const loginData: LoginDTO = {
