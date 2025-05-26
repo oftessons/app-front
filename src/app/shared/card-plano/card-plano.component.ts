@@ -60,7 +60,9 @@ export class CardPlanoComponent implements OnInit {
           console.error('Erro ao gerar link de pagamento:', error);
         }
       );
-    } else if (this.rota) {
+    } else if (this.rota.includes('#')) {
+      window.location.href = this.rota;
+    } else {
       this.router.navigate([this.rota]);
     }
   }

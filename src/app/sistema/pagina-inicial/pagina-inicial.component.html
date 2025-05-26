@@ -1,0 +1,256 @@
+<div class="landing-page">
+  <nav class="navbar">
+    <div class="logo">
+      <img src="assets/imagens/logoq-bank.svg" alt="Oftlessons Logo" />
+    </div>
+    <div class="nav-links">
+      <a href="#hero" (click)="scrollToSection('hero'); $event.preventDefault()" class="active">Início</a>
+      <a href="#depoimentos" (click)="scrollToSection('depoimentos'); $event.preventDefault()">Depoimentos</a>
+      <a href="#plans" (click)="scrollToSection('plans'); $event.preventDefault()">Planos</a>
+    </div>
+  </nav>
+
+  <section id="hero" class="hero-section">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-text">
+          <h1><span>Domine</span> os conceitos que <span>caem</span> na Prova Nacional de <span>Oftamologia</span></h1>
+          <p>Não é sobre estudar tudo, é sobre estudar certo.</p>
+        </div>
+        <div class="register-card">
+          <div class="register-header">
+            <h3>Já possui uma conta?</h3>
+            <button class="btn btn-login" (click)="navigateToLogin()">Faça Login</button>
+          </div>
+          <div class="register-body">
+            <div class="alert alert-success" *ngIf="mensagemSucesso">
+              {{ mensagemSucesso }}
+            </div>
+            <div class="alert alert-danger" *ngFor="let erro of errors">
+              {{ erro }}
+            </div>
+            <form (submit)="cadastrar()">
+              <div class="column-form">             
+                <div class="form-group">
+                  <label class="small mb-1">Nome *</label>
+                  <input type="text" name="nome" [(ngModel)]="nome" 
+                    class="form-control py-2" 
+                    [ngClass]="{'input-error': camposComErro.includes('nome')}"
+                    placeholder="Digite o seu nome" required />
+                  <small class="text-danger" *ngIf="camposComErro.includes('nome')">
+                    {{ obterMensagemErro('nome') }}
+                  </small>
+                </div>
+                
+                <div class="form-group">
+                  <label class="small mb-1">E-mail *</label>
+                  <input type="email" name="email" [(ngModel)]="email" 
+                    class="form-control py-2" 
+                    [ngClass]="{'input-error': camposComErro.includes('email')}"
+                    placeholder="Digite seu e-mail" required />
+                  <small class="text-danger" *ngIf="camposComErro.includes('email')">
+                    {{ obterMensagemErro('email') }}
+                  </small>
+                </div>
+
+                <div class="form-group">
+                  <div class="password-container-tooltip">
+                    <label class="small mb-1">Senha *</label>
+                    <div class="input-group">
+                      <input type="password" name="password" [(ngModel)]="password" 
+                        class="form-control py-2" 
+                        [ngClass]="{'input-error': camposComErro.includes('password') || camposComErro.includes('confirmPassword')}"
+                        placeholder="Digite sua senha" required 
+                        (input)="validatePassword()" 
+                        (focus)="showTooltip = true" 
+                        (blur)="showTooltip = false"/>
+                      <div class="input-group-append">
+                        <div class="btn btn-outline-secondary" type="button" (click)="togglePasswordVisibility('password')">
+                          <img *ngIf="!passwordVisible.password" src="assets/imagens/view.svg" alt="Mostrar senha" width="16" height="16">
+                          <img *ngIf="passwordVisible.password" src="assets/imagens/view-off.svg" alt="Ocultar senha" width="16" height="16">
+                        </div>
+                      </div>
+                    </div>
+                    <div *ngIf="showTooltip" class="password-tooltip">
+                      <p class="tooltip-title">A senha precisa ter:</p>
+                      <ul>
+                        <li [class.valid]="passwordValidations.minLength">Ao menos 8 caracteres</li>
+                        <li [class.valid]="passwordValidations.uppercase">1 letra maiúscula</li>
+                        <li [class.valid]="passwordValidations.lowercase">1 letra minúscula</li>
+                        <li [class.valid]="passwordValidations.number">1 número</li>
+                        <li [class.valid]="passwordValidations.specialChar">1 caractere especial (!&#64;#$%^&*)</li>
+                      </ul>
+                    </div>
+                  </div>
+                  <small class="text-danger" *ngIf="camposComErro.includes('password')">
+                    {{ obterMensagemErro('password') }}
+                  </small>
+                  <small class="text-danger" *ngIf="camposComErro.includes('confirmPassword')">
+                    {{ obterMensagemErro('confirmPassword') }}
+                  </small>
+                </div>
+                
+                <div class="form-group">
+                  <label class="small mb-1">Confirmar Senha *</label>
+                  <div class="input-group">
+                    <input type="password" name="confirmPassword" 
+                    [(ngModel)]="confirmPassword" 
+                    [ngClass]="{'input-error': camposComErro.includes('confirmPassword')}"
+                    class="form-control py-2" 
+                    placeholder="Confirme sua senha" 
+                    required />
+                    <div class="input-group-append">
+                      <div class="btn" type="button" (click)="togglePasswordVisibility('confirmPassword')">
+                        <img *ngIf="!passwordVisible.confirmPassword" src="assets/imagens/view.svg" alt="Mostrar senha" width="16" height="16">
+                        <img *ngIf="passwordVisible.confirmPassword" src="assets/imagens/view-off.svg" alt="Ocultar senha" width="16" height="16">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                
+                <div class="form-group">
+                  <label class="small mb-1">Telefone *</label>
+                  <input type="text" name="telefone" 
+                  [(ngModel)]="telefone" 
+                  [ngClass]="{'input-error': camposComErro.includes('telefone')}"
+                  class="form-control py-2" 
+                  placeholder="Digite seu telefone" 
+                  required />
+                  <small class="text-danger" *ngIf="camposComErro.includes('telefone')">
+                    {{ obterMensagemErro('telefone') }}
+                  </small>
+                </div>
+                
+                <div class="form-group">
+                  <label class="small mb-1">Cidade *</label>
+                  <input type="text" name="cidade" 
+                  [(ngModel)]="cidade" 
+                  [ngClass]="{'input-error': camposComErro.includes('cidade')}"
+                  class="form-control py-2" 
+                  placeholder="Digite sua cidade" 
+                  required />
+                  <small class="text-danger" *ngIf="camposComErro.includes('cidade')">
+                    {{ obterMensagemErro('cidade') }}
+                  </small>
+                </div>
+                
+                <div class="form-group">
+                  <label class="small mb-1">Estado *</label>
+                  <input type="text" name="estado" 
+                  [(ngModel)]="estado" 
+                  [ngClass]="{'input-error': camposComErro.includes('estado')}"
+                  class="form-control py-2" 
+                  placeholder="Digite seu Estado" 
+                  required />
+                  <small class="text-danger" *ngIf="camposComErro.includes('estado')">
+                    {{ obterMensagemErro('estado') }}
+                  </small>
+                </div>
+                
+                <div class="form-group">
+                  <label class="small mb-1">Você é: *</label>
+                  <select name="tipoEstudante" 
+                  [(ngModel)]="tipoDeEstudante" 
+                  [ngClass]="{'input-error': camposComErro.includes('tipoDeEstudante')}"
+                  class="form-select py-2" 
+                  required>
+                    <option value="" disabled selected>Selecione o tipo de usuário</option>
+                    <option *ngFor="let tipo of tiposUsuario" [value]="tipo.key">
+                      {{ tipo.description }}
+                    </option>
+                  </select>
+                  <small class="text-danger" *ngIf="camposComErro.includes('tipoDeEstudante')">
+                    {{ obterMensagemErro('tipoDeEstudante') }}
+                  </small>
+                </div>
+                
+                <div class="col-sm-12 mt-3">
+                  <div class="form-check">
+                    <input type="checkbox" id="consentimento" [(ngModel)]="consentimento" name="consentimento" class="form-check-input" required />
+                    <label for="consentimento" class="form-check-label">
+                      Eu concordo com os 
+                      <a href="assets/docs/pp.pdf" target="_blank">Termos de Uso</a> e a 
+                      <a href="assets/docs/pp.pdf" target="_blank">Política de Privacidade</a>.
+                    </label>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="form-group mt-4 mb-0">
+                <div class="d-flex justify-content-between">
+                  <button type="submit" class="btn btn-submit" [disabled]="!consentimento">Cadastrar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="depoimentos" class="depoimentos-section">
+    <div class="container">
+      <h2 class="depoimento-title">Depoimentos</h2>
+      <div class="depoimentos-grid">
+        <div class="depoimento-card" *ngFor="let depoimento of depoimentos">
+          <div class="depoimento-author">
+            <div class="depoimento-avatar">
+              <img [src]="depoimento.image" alt="{{ depoimento.name }}" />
+            </div>
+            <div class="depoimento-info">
+              <h4>{{ depoimento.name }}</h4>
+              <p>{{ depoimento.role }}</p>
+            </div>
+          </div>
+          <div class="depoimento-content">
+            <p>"{{ depoimento.content }}"</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="plans" class="plans-section">
+    <div class="container">
+      <div class="plans-border">
+        <div class="plans-header">          
+          <h2 class="plans-title">Planos acessíveis para todos os perfis</h2>
+          <p class="plans-subtitle">Escolha o plano que melhor se adapta a você e comece sua jornada de aprendizado.</p>
+        </div>
+        <div class="plans-grid">
+          <app-card-plano 
+            *ngFor="let plan of planos"
+            [titulo]="plan.titulo"
+            [descricao]="plan.descricao"
+            [preco]="plan.preco"
+            [textoBotao]="'Escolher plano'"
+            [recomendado]="plan.recomendado"
+            [corCabecalho]="plan.corCabecalho || ''"
+            [textoAdicional]="plan.textoAdicional || ''"
+            rota="#hero">
+          </app-card-plano>
+        </div>
+        <div class="plans-footer">
+          <p>Sujeito às condições estabelecidas nos nossos <a href="assets/docs/pp.pdf" target="_blank">Termos de Uso</a> 
+            e <a href="assets/docs/pp.pdf" target="_blank">Política de Assinatura</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-indicator">
+  <a href="#hero" class="section-dot" data-section="hero"></a>
+  <a href="#depoimentos" class="section-dot" data-section="depoimentos"></a>
+  <a href="#plans" class="section-dot" data-section="plans"></a>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; 2024-{{ anoAtual }} Oftlessons. Todos os direitos reservados.</p>
+      </div>
+    </div>
+  </footer>
+</div>
