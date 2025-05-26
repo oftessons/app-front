@@ -11,10 +11,10 @@ export class HotmartService {
 
     constructor(private http: HttpClient) {}
 
-    obterLinkCompraFlashcard(): Observable<string> {
-        const url = `${this.apiURL}/obter-link-flashcard`;
+    obterLinkCompraFlashcard(planoId: String): Observable<any> {
+        const url = `${this.apiURL}/obter-link-pagamento?planoId=${planoId}`;
 
-        return this.http.get(url, { responseType: 'text' });
+        return this.http.get(url);
     
     }
 
