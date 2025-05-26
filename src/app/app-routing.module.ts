@@ -13,18 +13,27 @@ import { ChatBotWhatsappComponent } from './chat-bot-whatsapp/chat-bot-whatsapp.
 import { PaginaInicialComponent } from './sistema/pagina-inicial/pagina-inicial.component';
 
 const routes: Routes = [
+
   { path: '', component: PaginaInicialComponent },
+
+  { path: 'pagina-inicial', component: PaginaInicialComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'whatsapp-support', component: ChatBotWhatsappComponent},
+  { path: 'whatsapp-support', component: ChatBotWhatsappComponent },
   { path: 'reset-password', component: ResetPasswordComponent },
   { path: 'planos', component: PlanosComponent },
   { path: 'plano/:slug', component: DetalhesPlanosComponent },
   { path: 'pagamento-concluido', component: PagamentoConcluidoComponent },
-  { path: '', component: LayoutComponent, children: [
-    { path : 'usuario/dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
-    { path: '', redirectTo: 'usuario/dashboard', pathMatch: 'full' }
-  ]},
-  { path: 'validacao-acesso', component: ValidacaoAcessoComponent}
+  { path: 'validacao-acesso', component: ValidacaoAcessoComponent },
+
+  {
+    path: 'usuario',
+    component: LayoutComponent,
+    canActivate: [AuthGuard],
+    children: [
+      { path: 'dashboard', component: DashboardComponent },
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
+    ]
+  },
 ];
 
 @NgModule({

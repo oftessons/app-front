@@ -44,6 +44,22 @@
         (botaoClicado)="onBotaoClicado()"
         rota="plano/anual">
     </app-card-plano>
+
+    <app-card-plano
+      titulo="Banco + Flashcards"
+      [descricao]="[
+        'Acesso completo ao banco de questões e flashcards.',
+        'Estude de forma rápida e eficiente com cartões de memorização.',
+        'Ideal para revisar conceitos importantes em poucos minutos.',
+      ]"
+      [preco]=132.50
+      textoBotao="Escolher plano"
+      [recomendado]="false"
+      textoAdicional="R$1.590,00 por 1 ano"
+      corCabecalho="#041E4E"
+      (botaoClicado)="onBotaoClicado()"
+      rota="plano/banco-flashcards">
+    </app-card-plano>
     
     <app-card-plano
       titulo="Flashcards"
