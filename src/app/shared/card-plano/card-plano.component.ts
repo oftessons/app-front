@@ -2,6 +2,8 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { StripeService } from 'src/app/services/stripe.service';
 import { HotmartService } from 'src/app/services/hotmart.service';
+import { PlanosComponent } from 'src/app/planos/planos/planos.component';
+import { Plano } from 'src/app/planos/enums/planos';
 
 @Component({
   selector: 'app-card-plano',
@@ -23,6 +25,7 @@ export class CardPlanoComponent implements OnInit {
   @Input() rota!: string;
   @Input() usarServicoPagamento: boolean = false;
   @Input() planoSelecionado: string = '';
+  @Input() planoHotmart: string = '';
 
   constructor(
     private router: Router,
@@ -37,10 +40,18 @@ export class CardPlanoComponent implements OnInit {
   }
 
   navegarParaPlano(): void {
-    if (this.planoSelecionado === 'ASSINATURA_FLASHCARDS') {
-      this.hotmartService.obterLinkCompraFlashcard().subscribe(
+    const planosPermitidos: String[] = [
+      Plano.FLASHCARDS,
+      Plano.SEMESTRAL_PARCELADO,
+      Plano.ANUAL_PARCELADO,
+      Plano.COMBO
+    ]
+
+    // hotmart
+    if (planosPermitidos.includes(this.planoSelecionado)) {
+      this.hotmartService.obterLinkCompraFlashcard(this.planoHotmart).subscribe(
         (response: any) => {
-          window.location.href = response;
+          window.location.href = response.url_checkout;
         },
         (error) => {
           console.error('Erro ao obter link da Hotmart:', error.message);
@@ -50,10 +61,11 @@ export class CardPlanoComponent implements OnInit {
       return;
     }
 
+
+    // stripe
     if (this.usarServicoPagamento) {
       this.stripeService.createCheckoutSession(this.planoSelecionado).subscribe(
         (response: any) => {
-          console.log(response);
           window.location.href = response.url_checkout;
         },
         (error) => {
