@@ -127,7 +127,7 @@ export class PaginaInicialComponent implements OnInit {
     },
     {
       titulo: 'Flashcards',
-      preco: 263.33,
+      preco: 65.83,
       descricao: [
         'Estude de forma rápida e eficiente com cartões de memorização.',
         'Ideal para revisar conceitos importantes em poucos minutos.',
