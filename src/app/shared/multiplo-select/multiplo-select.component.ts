@@ -18,16 +18,18 @@ export class MultiploSelectComponent {
   constructor(private elementRef: ElementRef) {}
 
   ngOnInit(): void {
-    if (this.multiple && !Array.isArray(this.selectedValue)) {
+    if (this.multiple && (!this.selectedValue || !Array.isArray(this.selectedValue))) {
       this.selectedValue = [];
-    } else if (!this.multiple) {
+    } else if (!this.multiple && Array.isArray(this.selectedValue)) {
       this.selectedValue = null;
     }
   }
 
   onSelect(value: any) {
     if (this.multiple) {
-      if (Array.isArray(this.selectedValue)) {
+      if(!Array.isArray(this.selectedValue)) {
+        this.selectedValue = [];
+      }
         if (this.selectedValue.includes(value)) {
           // Remove o valor se ele já estiver selecionado
           this.selectedValue = this.selectedValue.filter((item: any) => item !== value);
@@ -35,14 +37,16 @@ export class MultiploSelectComponent {
           // Adiciona o valor ao array
           this.selectedValue.push(value);
         }
-      }
+      
       this.selectedValueChange.emit(this.selectedValue); // Emitir o array atualizado
     } else {
       // Comportamento padrão para seleção única
       this.selectedValue = value;
       this.selectedValueChange.emit(value);
     }
-    this.isOpen = false; 
+    if (this.multiple) {
+      this.isOpen = true;
+    }
   }
 
   removeValue(value: any) {
