@@ -12,6 +12,7 @@ export class Questao {
   title!: string;
   videoUrl?: string;
   enunciadoDaQuestao!: string;
+  descricaoDaImagemDoEnunciado!: string;
   afirmacaoUm!: string;
   afirmacaoDois!: string;
   afirmacaoTres!: string;
