@@ -40,6 +40,7 @@ export class CadastroQuestaoComponent implements OnInit,  AfterViewInit {
   successMessage: string | null = null;
   errorMessage: string | null = null;
   fotoDaQuestao: File | null = null;
+  descricaoFotoDaQuestao: string | null = null;
   fotoDaQuestaoDois: File | null = null;
   fotoDaQuestaoTres: File | null = null;
   fotoDaRespostaUm: File | null = null;
@@ -412,12 +413,15 @@ onSubmit(): void {
     if (quillEditor1) {
       this.questaoDTO.enunciadoDaQuestao = quillEditor1.innerHTML;
     }
-    console.log("Alernativas: ", this.questaoDTO.alternativas);
+    console.log("Alternativas: ", this.questaoDTO.alternativas);
     const objetoJson = JSON.stringify(this.questaoDTO);
     this.formData = new FormData();
   
     if (this.fotoDaQuestao) {
       this.formData.append('fotoDaQuestaoArquivo', this.fotoDaQuestao);
+    }
+    if (this.descricaoFotoDaQuestao) {
+      this.formData.append('descricaoDaImagemDoEnunciado', this.descricaoFotoDaQuestao);
     }
     if (this.fotoDaRespostaUm) {
     //  console.log("fotoDaRespostaUm: passo");
