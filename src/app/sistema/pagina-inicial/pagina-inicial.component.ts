@@ -55,23 +55,23 @@ export class PaginaInicialComponent implements OnInit {
 
   depoimentos = [
     {
-      name: 'Dr. Carlos Mendes',
-      role: 'Oftalmologista, São Paulo',
-      content: 'A plataforma Oftlessons transformou minha preparação para as provas. O conteúdo é muito bem organizado.',
-      image: 'assets/imagens/perfil-d.svg'
+      name: 'Paloma Schürmann Ribeiro',
+      role: 'Medicina, Santa Catarina',
+      content: 'A plataforma da Oftlessons têm auxiliado muito na sedimentação do conteúdo estudado, desde a grande variedade de temas, até a organização de questões em diferentes níveis de dificuldade, de forma que possa identificar minhas fragilidades e entender melhor com os comentários das questões.',
+      image: 'assets/imagens/depoimentos/paloma.jpg'
     },
     {
-      name: 'Dra. Amanda Silva',
-      role: 'Residente R3, Belo Horizonte',
-      content: 'As questões disponíveis são de alta qualidade e os simulados me ajudaram muito a identificar pontos de melhoria no meu estudo.',
-      image: 'assets/imagens/perfil-d.svg'
+      name: 'Carla Tavares',
+      role: 'Pernambuco',
+      content: 'Através das questões e comentários, é possível fazer uma boa revisão dos assuntos mais contemplados na prova do CBO. Ótima ferramenta de estudo 👏!',
+      image: 'assets/imagens/depoimentos/carla.jpg'
     },
-    {
-      name: 'Dr. Rafael Oliveira',
-      role: 'Especialista em Retina, Rio de Janeiro',
-      content: 'O módulo de Retina é excepcional. O material é muito útil para a prática clínica.',
-      image: 'assets/imagens/perfil-d.svg'
-    }
+    // {
+    //   name: 'Dr. Rafael Oliveira',
+    //   role: 'Especialista em Retina, Rio de Janeiro',
+    //   content: 'O módulo de Retina é excepcional. O material é muito útil para a prática clínica.',
+    //   image: 'assets/imagens/perfil-d.svg'
+    // }
   ];
 
   planos = [
