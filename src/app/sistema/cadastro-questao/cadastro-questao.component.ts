@@ -504,7 +504,7 @@ onSubmit(): void {
           console.log(`foto${index}`, alt.foto);
         }
       });
-      console.log("Saida para o backend: ", this.questaoDTO);
+
       this.questoesService.atualizarQuestao(this.formData, this.questaoDTO.id).subscribe(
         response => {
           this.successMessage = 'Questão atualizada com sucesso!';
