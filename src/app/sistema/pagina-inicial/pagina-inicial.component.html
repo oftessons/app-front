@@ -23,12 +23,6 @@
             <button class="btn btn-login" (click)="navigateToLogin()">Faça Login</button>
           </div>
           <div class="register-body">
-            <div class="alert alert-success" *ngIf="mensagemSucesso">
-              {{ mensagemSucesso }}
-            </div>
-            <div class="alert alert-danger" *ngFor="let erro of errors">
-              {{ erro }}
-            </div>
             <form (submit)="cadastrar()">
               <div class="column-form">             
                 <div class="form-group">
@@ -180,6 +174,12 @@
               <div class="form-group mt-4 mb-0">
                 <div class="d-flex justify-content-between">
                   <button type="submit" class="btn btn-submit" [disabled]="!consentimento">Cadastrar</button>
+                </div>
+                <div class="alert alert-success" *ngIf="mensagemSucesso">
+                  {{ mensagemSucesso }}
+                </div>
+                <div class="alert alert-danger" *ngFor="let erro of errors">
+                  {{ erro }}
                 </div>
               </div>
             </form>

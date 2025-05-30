@@ -232,8 +232,8 @@
 
 .alert {
   padding: 15px;
-  margin-bottom: 20px;
-  border-radius: var(--border-radius);
+  margin-top: 20px;
+  border-radius: var(--bs-border-radius);
 }
 
 .alert-success {
@@ -400,7 +400,7 @@ label {
 
 .depoimentos-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 30px;
 }
 
