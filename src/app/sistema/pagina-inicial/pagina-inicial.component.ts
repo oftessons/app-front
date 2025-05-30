@@ -56,7 +56,7 @@ export class PaginaInicialComponent implements OnInit {
   depoimentos = [
     {
       name: 'Paloma Schürmann Ribeiro',
-      role: 'Medicina, Santa Catarina',
+      role: 'Santa Catarina',
       content: 'A plataforma da Oftlessons têm auxiliado muito na sedimentação do conteúdo estudado, desde a grande variedade de temas, até a organização de questões em diferentes níveis de dificuldade, de forma que possa identificar minhas fragilidades e entender melhor com os comentários das questões.',
       image: 'assets/imagens/depoimentos/paloma.jpg'
     },
