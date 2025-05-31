@@ -10,6 +10,7 @@ import { PeriodoAssinatura } from './enums/periodo-assinatura';
 import { PeriodoAssinaturaDescricao } from './enums/periodo-assinatura-descricao';
 import { TipoUsuario } from 'src/app/login/enums/tipo-usuario';
 import { TipoUsuarioDescricao } from 'src/app/login/enums/tipo-usuario-descricao';
+import { CombineLatestOperator } from 'rxjs/internal/observable/combineLatest';
 
 @Component({
   selector: 'app-page-meu-perfil',
@@ -54,9 +55,22 @@ export class PageMeuPerfilComponent implements OnInit {
     return TipoUsuarioDescricao [tipoUsuario] || 'Descrição não disponível';
   }
 
+  obterTipoUsuarioPorDescricao(descricao: string): TipoUsuario | string {
+    for (const key in TipoUsuarioDescricao) {
+      if (TipoUsuarioDescricao[key as keyof typeof TipoUsuarioDescricao] === descricao) {
+        return key as TipoUsuario;
+      }
+    }
+      return ''; 
+  }
+
+
   editarPerfil() {
     this.editMode = !this.editMode;
+    const tipoDeEstudanteOriginal = this.obterTipoUsuarioPorDescricao(this.usuario.tipoDeEstudante);
     if (!this.editMode) {
+      
+      this.usuario.tipoDeEstudante = tipoDeEstudanteOriginal;
       this.authService
         .atualizarUsuario(this.usuario, this.selectedFile)
         .subscribe(
@@ -64,7 +78,7 @@ export class PageMeuPerfilComponent implements OnInit {
           //  console.log('Perfil atualizado com sucesso:', data);
           },
           (error) => {
-           // console.error('Erro ao atualizar perfil do usuário:', error);
+           console.error('Erro ao atualizar perfil do usuário:', error);
           }
         );
     }
