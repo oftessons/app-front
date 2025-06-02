@@ -650,7 +650,7 @@ p {
 @media (min-width: 768px) and (max-width: 1024px) {
   .button-row-filtro {
     flex-wrap: nowrap; /* Mantém os botões em uma única linha */
-    justify-content: flex-start; /* Alinha os botões à esquerda */
+    justify-content: center;
     gap: 10px; /* Espaçamento entre os botões */
   }
 
