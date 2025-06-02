@@ -66,12 +66,12 @@ export class PaginaInicialComponent implements OnInit {
       content: 'Através das questões e comentários, é possível fazer uma boa revisão dos assuntos mais contemplados na prova do CBO. Ótima ferramenta de estudo 👏!',
       image: 'assets/imagens/depoimentos/carla.jpg'
     },
-    // {
-    //   name: 'Dr. Rafael Oliveira',
-    //   role: 'Especialista em Retina, Rio de Janeiro',
-    //   content: 'O módulo de Retina é excepcional. O material é muito útil para a prática clínica.',
-    //   image: 'assets/imagens/perfil-d.svg'
-    // }
+    {
+      name: 'Dhiego Carvalho',
+      role: 'Ceará',
+      content: 'Estou extremamente satisfeito com o aplicativo de questões. O conteúdo é bem organizado, com muitas questões, de todos os assuntos, atualizadas e comentadas de forma clara e objetiva. Além disso, a interface é intuitiva e facilita muito o estudo no dia a dia. Tem sido uma ferramenta essencial na minha preparação e formação, pois ajuda a fixar os principais temas cobrados. Recomendo para todos que estão se preparando para a prova de título!',
+      image: 'assets/imagens/depoimentos/dhiego.jpeg'
+    }
   ];
 
   planos = [
