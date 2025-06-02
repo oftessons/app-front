@@ -11,11 +11,16 @@ export class AuthInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(
       catchError((error: HttpErrorResponse) => {
-        // Verifica se o erro é 401 e se a mensagem indica assinatura inativa
         if (error.status === 401 && error.error && error.error.message === 'Assinatura inativa.') {
-          // Redireciona para a rota de planos
+
           this.router.navigate(['/planos']);
+        
+        } else if(error.status === 403) {
+          // exibir uma mensagem de entrada proibida
+          this.router.navigate(['/forbidden']);
+
         }
+
         return throwError(error);
       })
     );
