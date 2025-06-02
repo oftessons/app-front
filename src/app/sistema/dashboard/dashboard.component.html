@@ -8,7 +8,7 @@
         
 
         <div class="row">
-            <div class="col-md-3 mb-4">
+            <div class="col-md-3 mb-4" *ngIf="possuiPermissao">
                 <div class="card">
                     <div class="card-body text-center">
                         <h5 class="card-title">Questões</h5>
@@ -19,7 +19,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 mb-4">
+            <div class="col-md-3 mb-4" *ngIf="possuiPermissao">
                 <div class="card">
                     <div class="card-body text-center">
                         <h5 class="card-title"> Aulas</h5>
@@ -30,7 +30,7 @@
                     </div>
                 </div>
             </div>               
-            <div class="col-md-3 mb-4">
+            <div class="col-md-3 mb-4" *ngIf="possuiPermissao">
                 <div class="card">
                     <div class="card-body text-center">
                         <h5 class="card-title">Meus Filtros</h5>
@@ -41,7 +41,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 mb-4">
+            <div class="col-md-3 mb-4" *ngIf="possuiPermissao">
                 <div class="card">
                     <div class="card-body text-center">
                         <h5 class="card-title">Desempenho</h5>
@@ -63,7 +63,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 mb-4">
+            <div class="col-md-3 mb-4" *ngIf="possuiPermissao">
                 <div class="card">
                     <div class="card-body text-center">
                         <h5 class="card-title">Simulados</h5>
@@ -74,7 +74,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 mb-4">
+            <div class="col-md-3 mb-4" *ngIf="possuiPermissao">
                 <div class="card">
                     <div class="card-body text-center">
                         <h5 class="card-title">Meus simulados</h5>
@@ -85,7 +85,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 mb-4" *ngIf="isAdmin() || isProf()">
+            <div class="col-md-3 mb-4" *ngIf="isAdmin() || isProf() && possuiPermissao">
                 <div class="card">
                     <div class="card-body text-center">
                         <h5 class="card-title"> Cadastro de Aulas</h5>
@@ -96,7 +96,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 mb-4" *ngIf="isAdmin() || isProf()">
+            <div class="col-md-3 mb-4" *ngIf="isAdmin() || isProf() && possuiPermissao">
                 <div class="card">
                     <div class="card-body text-center">
                         <h5 class="card-title">Cadastro de Questão</h5>
@@ -107,7 +107,7 @@
                     </div>
                 </div>
             </div>              
-            <div class="col-md-3 mb-4" *ngIf="isAdmin() || isProf()">
+            <div class="col-md-3 mb-4" *ngIf="isAdmin() || isProf() && possuiPermissao">
                 <div class="card">
                     <div class="card-body text-center">
                         <h5 class="card-title">Buscar Questão/Aula</h5>
@@ -118,7 +118,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 mb-4" *ngIf="isAdmin()">
+            <div class="col-md-3 mb-4" *ngIf="isAdmin() && possuiPermissao">
                 <div class="card">
                     <div class="card-body text-center">
                         <h5 class="card-title">Permissão</h5>
@@ -130,7 +130,7 @@
                 </div>
             </div>
             
-            <div class="col-md-3 mb-4" *ngIf="isProf()">
+            <div class="col-md-3 mb-4" *ngIf="isProf() && possuiPermissao">
                 <div class="card">
                     <div class="card-body text-center">
                         <h5 class="card-title">Professor</h5>
@@ -142,7 +142,7 @@
                 </div>
             </div>
 
-            <div class="col-md-3 mb-4" *ngIf="isAdmin() || isProf()">
+            <div class="col-md-3 mb-4" *ngIf="isAdmin() || isProf() && possuiPermissao">
                 <div class="card">
                     <div class="card-body text-center">
                         <h5 class="card-title">Tutorial de Cadastro</h5>

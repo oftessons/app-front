@@ -13,6 +13,7 @@ import { HttpErrorResponse, HttpResponse  } from '@angular/common/http';
 import { throwError } from 'rxjs';
 import { LoginDTO } from '../sistema/LoginDTO';
 import { MFACodigoDTO } from '../sistema/MFACodigoDTO';
+import { UsuarioDadosAssinatura } from '../login/usuario-dados-assinatura';
 
 @Injectable({
   providedIn: 'root'
@@ -60,7 +61,26 @@ export class AuthService {
       })
     );
   }
-  
+
+  verificarPermissao(): Observable<any> {
+    return this.http.get<UsuarioDadosAssinatura>(`${this.apiURL}/obter-dados-assinatura`).pipe(
+      map(dados =>  {
+        return dados.subscriptionStatus === 'partial' ? { accessGranted: false, message: 'Seu plano atual não permite acesso a este conteúdo.' }
+        : {  accessGranted: true };
+      })
+
+    )
+  }
+
+  obterLinkFlashcard(): Observable<any> {
+    return this.http.get<UsuarioDadosAssinatura>(`${this.apiURL}/obter-dados-assinatura`).pipe(
+      map(dados => {
+        return { linkFlashcard: dados.urlFlashcard };
+      })
+    )
+
+  }
+    
   atualizarUsuario(usuario: Usuario, fotoDoPerfil?: File | null): Observable<Usuario> {
     const formData: FormData = new FormData();
     formData.append('usuario', new Blob([JSON.stringify(usuario)], { type: 'application/json' }));
@@ -68,7 +88,7 @@ export class AuthService {
     if (fotoDoPerfil) {
       formData.append('fotoDoPerfil', fotoDoPerfil);
     }
-  
+    
     return this.http.put<Usuario>(`${this.apiURL}/update/${usuario.id}`, formData)
     .pipe(
       catchError((error: HttpErrorResponse) => {

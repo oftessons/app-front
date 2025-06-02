@@ -19,6 +19,8 @@ export class DashboardComponent implements OnInit {
   horasRestantes: string = '00';
   minutosRestantes: string = '00';
   segundosRestantes: string = '00';
+  possuiPermissao: boolean = true;
+
   private intervalId: any;
 
   constructor(
@@ -33,6 +35,12 @@ export class DashboardComponent implements OnInit {
     );
     this.usuarioLogado = this.authService.getUsuarioAutenticado();
     this.iniciarContador();
+
+    this.authService.verificarPermissao().subscribe(
+      response => this.possuiPermissao = response.accessGranted,
+      err => console.error('Erro ao buscar a permissão ', err)
+    );
+
   }
 
   isAdmin(): boolean {

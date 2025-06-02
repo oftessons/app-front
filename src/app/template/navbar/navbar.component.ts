@@ -12,6 +12,7 @@ import { AuthService } from 'src/app/services/auth.service';
 export class NavbarComponent {
   @ViewChild('sidenav') sidenav!: MatSidenav;
   nomeUsuario: string = ''; // Variável para armazenar o nome do usuário
+  possuiPermissao: boolean = true;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -22,7 +23,7 @@ export class NavbarComponent {
   ngOnInit() {
     this.authService.obterNomeUsuario().subscribe(
       nome => this.nomeUsuario = nome,
-      err => console.error('Erro ao buscar nome do usuário', err)
+      err => console.error('Erro ao buscar nome do usuário ', err)
     );
     
     // Inicializar posição baseado no estado inicial da sidebar
@@ -34,6 +35,12 @@ export class NavbarComponent {
     this.breakpointObserver.observe('(min-width: 901px)').subscribe(() => {
       this.adjustNavigationPosition(this.isSidenavOpen());
     });
+
+    this.authService.verificarPermissao().subscribe(
+        response => this.possuiPermissao = response.accessGranted,
+        err => console.error('Erro ao buscar a permissão ', err)
+    );
+
   }
 
   logout() {
@@ -61,6 +68,7 @@ export class NavbarComponent {
       }
     }
   }
+  
 
   isSidenavOpen() {
     return this.breakpointObserver.isMatched('(min-width: 901px)');
