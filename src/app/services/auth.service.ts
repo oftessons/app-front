@@ -14,6 +14,7 @@ import { throwError } from 'rxjs';
 import { LoginDTO } from '../sistema/LoginDTO';
 import { MFACodigoDTO } from '../sistema/MFACodigoDTO';
 import { UsuarioDadosAssinatura } from '../login/usuario-dados-assinatura';
+import { shareReplay } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -25,8 +26,9 @@ export class AuthService {
   clientID: string = environment.clientId;
   clientSecret: string = environment.clientSecret;
   jwtHelper: JwtHelperService = new JwtHelperService();
-  
+  private cachePermissao$: Observable<any> | null = null;
 
+  
   constructor(
     private http: HttpClient
   ) { }
@@ -63,14 +65,27 @@ export class AuthService {
   }
 
   verificarPermissao(): Observable<any> {
-    return this.http.get<UsuarioDadosAssinatura>(`${this.apiURL}/obter-dados-assinatura`).pipe(
-      map(dados =>  {
-        return dados.subscriptionStatus === 'partial' ? { accessGranted: false, message: 'Seu plano atual não permite acesso a este conteúdo.' }
-        : {  accessGranted: true };
-      })
+    if (this.cachePermissao$) {
+      
+      return this.cachePermissao$;
+    }
 
-    )
+    this.cachePermissao$ = this.http.get<UsuarioDadosAssinatura>(`${this.apiURL}/obter-dados-assinatura`).pipe(
+      map(dados => ({
+        accessGranted: dados.subscriptionStatus !== 'partial',
+        message: dados.subscriptionStatus === 'partial' ? 'Seu plano atual não permite acesso a este conteúdo.' : null
+      })),
+
+      shareReplay(1),
+      catchError(err => {
+        this.cachePermissao$ = null;
+        return throwError(() => err);
+      })
+    );
+
+    return this.cachePermissao$;
   }
+
 
   obterLinkFlashcard(): Observable<any> {
     return this.http.get<UsuarioDadosAssinatura>(`${this.apiURL}/obter-dados-assinatura`).pipe(
