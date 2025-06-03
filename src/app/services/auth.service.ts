@@ -64,21 +64,6 @@ export class AuthService {
     );
   }
 
-  load(): Promise<void> {
-    return new Promise((resolve) => {
-      this.verificarPermissao().subscribe({
-        next: (res) => {
-          resolve();
-        },
-        error: (err) => {
-          console.error('Erro ao verificar permissões ao iniciar a aplicação:', err);
-          resolve(); 
-        }
-      });
-    });
-  }
-
-
   verificarPermissao(): Observable<any> {
     if (this.cachePermissao$) {
       
