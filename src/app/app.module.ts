@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core'; 
+import { APP_INITIALIZER, NgModule } from '@angular/core'; 
 import { BrowserModule } from '@angular/platform-browser';
 import { ChatBotComponent } from './chat-bot/chat-bot.component'; 
 import { AppRoutingModule } from './app-routing.module';
@@ -28,6 +28,14 @@ import { DetalhesPlanosComponent } from './planos/detalhes-planos/detalhes-plano
 import { PagamentoConcluidoComponent } from './planos/pagamento-concluido/pagamento-concluido.component';
 import { ValidacaoAcessoComponent } from './validacao-acesso/validacao-acesso.component';
 import { ChatBotWhatsappComponent } from './chat-bot-whatsapp/chat-bot-whatsapp.component';
+import { TmplAstRecursiveVisitor } from '@angular/compiler';
+
+
+
+export function initApp(authService: AuthService): () => Promise<void> {
+  return () => authService.load();
+}
+
 
 @NgModule({
   declarations: [
@@ -85,6 +93,12 @@ import { ChatBotWhatsappComponent } from './chat-bot-whatsapp/chat-bot-whatsapp.
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true,
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initApp,
+      deps: [AuthService],
+      multi: true
     }
   ],
   bootstrap: [AppComponent],
