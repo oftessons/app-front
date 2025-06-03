@@ -32,10 +32,6 @@ import { TmplAstRecursiveVisitor } from '@angular/compiler';
 
 
 
-export function initApp(authService: AuthService): () => Promise<void> {
-  return () => authService.load();
-}
-
 
 @NgModule({
   declarations: [
@@ -93,12 +89,6 @@ export function initApp(authService: AuthService): () => Promise<void> {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true,
-    },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: initApp,
-      deps: [AuthService],
-      multi: true
     }
   ],
   bootstrap: [AppComponent],
