@@ -125,8 +125,24 @@
     gap: 10px;
     align-items: flex-start;
     margin-top: 10px;
+    overflow: auto;
+    max-height: 66px;
+    scroll-behavior: smooth;
   }
   
+  .selected-values::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .selected-values::-webkit-scrollbar-thumb {
+    background: #b0c4de;
+    border-radius: 10px;
+  }
+
+  .selected-values::-webkit-scrollbar-thumb:hover {
+    background: #a0b0c0;
+  }
+
   .selected-value-multiple {
     background-color: #d0e1f9;
     border: 1px solid #b0c4de;

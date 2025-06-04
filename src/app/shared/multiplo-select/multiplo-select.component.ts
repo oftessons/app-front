@@ -36,6 +36,7 @@ export class MultiploSelectComponent {
         } else {
           // Adiciona o valor ao array
           this.selectedValue.push(value);
+          this.scrollToBottom();
         }
       
       this.selectedValueChange.emit(this.selectedValue); // Emitir o array atualizado
@@ -56,7 +57,15 @@ export class MultiploSelectComponent {
     }
   }
 
-  
+  scrollToBottom() {
+    const element = this.elementRef.nativeElement.querySelector('.selected-values');
+    setTimeout(() => {
+      if (element) {
+        element.scrollTop = element.scrollHeight;
+      }
+    }, 50);
+  }
+
   toggleDropdown() {
     this.isOpen = !this.isOpen;
   }
