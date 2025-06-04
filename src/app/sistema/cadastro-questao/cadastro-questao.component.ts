@@ -511,7 +511,7 @@ onSubmit(): void {
           this.errorMessage = null;
           this.loading = false; // Desativa carregamento
           console.debug('Questão atualizada com sucesso:', response);
-          this.router.navigate(['/usuario/buscar-questão']);
+          this.location.back();
         },
         error => {
           this.errorMessage = error;
