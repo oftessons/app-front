@@ -65,8 +65,7 @@ export class AuthService {
   }
 
   verificarPermissao(): Observable<any> {
-    if (this.cachePermissao$) {
-      
+    if (this.cachePermissao$) {      
       return this.cachePermissao$;
     }
 
