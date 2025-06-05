@@ -395,12 +395,12 @@ label {
   text-align: center;
   font-size: 36px;
   color: white;
-  margin-bottom: 42px;
+  margin-bottom: 74px;
 }
 
 .depoimentos-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 30px;
 }
 
