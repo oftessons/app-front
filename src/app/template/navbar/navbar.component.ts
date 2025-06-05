@@ -3,6 +3,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import { interval, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
@@ -13,6 +14,14 @@ export class NavbarComponent {
   @ViewChild('sidenav') sidenav!: MatSidenav;
   nomeUsuario: string = ''; // Variável para armazenar o nome do usuário
   possuiPermissao: boolean = true;
+
+  mostrarContador: boolean = false;
+  diasRestantes: string = '00';
+  horasRestantes: string = '00';
+  minutosRestantes: string = '00';
+  segundosRestantes: string = '00';
+  private timerSubscription?: Subscription;
+  private dataFimTeste?: Date;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -41,6 +50,56 @@ export class NavbarComponent {
         err => console.error('Erro ao buscar a permissão ', err)
     );
 
+  }
+
+  verificarPeriodoTeste() {
+    // this.authService.getUsuarioAtual().subscribe(usuario => {
+    //   // Verificar se o usuário está em período de teste
+    //   if (usuario && usuario.diasDeTeste > 0) {
+    //     this.mostrarContador = true;
+        
+    //     // Calcular a data de término do período de teste
+    //     // Assumindo que o backend fornece a data de início ou o tempo restante
+    //     const dataInicio = new Date(usuario.dataCriacaoConta);
+    //     this.dataFimTeste = new Date(dataInicio);
+    //     this.dataFimTeste.setDate(dataInicio.getDate() + usuario.diasDeTeste);
+        
+    //     // Iniciar o contador
+    //     this.iniciarContador();
+    //   }
+    // });
+  }
+
+  iniciarContador() {
+    this.timerSubscription = interval(1000).subscribe(() => {
+      if (!this.dataFimTeste) return;
+      
+      const agora = new Date();
+      const diff = this.dataFimTeste.getTime() - agora.getTime();
+      
+      if (diff <= 0) {
+        // Período expirado
+        this.mostrarContador = false;
+        this.timerSubscription?.unsubscribe();
+        return;
+      }
+      
+      // Calcular dias, horas, minutos e segundos restantes
+      const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const horas = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutos = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const segundos = Math.floor((diff % (1000 * 60)) / 1000);
+      
+      // Formatar com dois dígitos
+      this.diasRestantes = dias.toString().padStart(2, '0');
+      this.horasRestantes = horas.toString().padStart(2, '0');
+      this.minutosRestantes = minutos.toString().padStart(2, '0');
+      this.segundosRestantes = segundos.toString().padStart(2, '0');
+    });
+  }
+
+  navegarParaPlanos() {
+    this.router.navigate(['/planos/detalhes-planos']); // Ajuste para a rota correta
   }
 
   logout() {

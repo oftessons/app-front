@@ -1,3 +1,37 @@
+.trial-banner {
+    background-color: #041e4e;
+    color: white;
+    padding: 8px 16px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+    z-index: 1001;
+}
+
+.trial-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-upgrade {
+    background-color: #edb120;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-upgrade:hover {
+    background-color: #d9a31d;
+}
+
 .mat-toolbar-fixed {
     position: fixed;
     top: 0;
