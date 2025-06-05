@@ -1,10 +1,10 @@
 <div *ngIf="usuario && (usuario.permissao === Permissao.ADMIN || usuario.permissao === Permissao.PROFESSOR)">
   <div class="container pt-5">
-    <button type="button" class="btn-voltar" (click)="voltarPaginaAnterior()">
-      <i class="fa fa-arrow-left"></i> &nbsp;Voltar
-    </button>
     <div class="container mt-4 container-geral">
-    <div class="header-container">
+      <div class="header-container">
+      <button type="button" class="btn-voltar" (click)="voltarPaginaAnterior()">
+        <i class="fa fa-arrow-left"></i>
+      </button>
       <h2>{{ questaoDTO.id ? 'Edição da Questão' : 'Cadastro da Questão' }}</h2>
     </div>
     <form class="form-cad" #questaoForm="ngForm" (ngSubmit)="onSubmit()">

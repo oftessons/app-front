@@ -3,7 +3,7 @@
     position: relative;
     display: inline-block;
     width: 100%;
-    height: 48px;
+    min-height: 48px;
   }
   
   label {
@@ -27,19 +27,22 @@
   .select-dropdown {
     background: #fff;
     border: 1px solid #ffffff;
-    padding: 10px;
+    padding: 12px 10px;
     cursor: pointer;
-    height: 100%;
+    min-height: 48px;
+    height: auto;
     border-radius: 8px;
     display: flex;
     align-items: center;
+    gap: 5px;
   }
   
   .selected-value {
     font-size: 14px;
     font-weight: 600;
-    flex-grow: 1;
-    padding-top: 8px;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+    padding: 4px;
   }
   
   .selected-value-multiple {
@@ -51,7 +54,7 @@
   
   .options-container {
     position: absolute;
-    top: 50%;
+    top: 100%;
     left: 0;
     width: 100%;
     background: white;
@@ -60,6 +63,7 @@
     overflow-y: auto;
     z-index: 12;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
+    margin-top: 2px;
   }
   
   .option {
@@ -83,7 +87,12 @@
     border-left: 5px solid transparent;
     border-right: 5px solid transparent;
     border-top: 5px solid #6E7275;
-    transition: border-top-color 0.3s ease;
+    transform: rotate(0deg);
+    transition: border-top-color 0.3s ease, transform 0.3s ease;
+  }
+
+  .arrow-down.rotate {
+    transform: rotate(180deg);
   }
   
   .select-dropdown.active .arrow-down,
@@ -94,11 +103,11 @@
   @media (max-width: 768px) {
     .select-container {
       width: 100%;
-      height: 40px;
+      min-height: 40px;
     }
   
     .select-dropdown {
-      padding: 8px;
+      min-height: 40px;
     }
   
     .selected-value {
@@ -118,9 +127,27 @@
   .selected-values {
     display: flex;
     flex-wrap: wrap;
-    gap: 5px;
+    gap: 10px;
+    align-items: flex-start;
+    margin-top: 10px;
+    overflow: auto;
+    max-height: 66px;
+    scroll-behavior: smooth;
   }
   
+  .selected-values::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .selected-values::-webkit-scrollbar-thumb {
+    background: #b0c4de;
+    border-radius: 10px;
+  }
+
+  .selected-values::-webkit-scrollbar-thumb:hover {
+    background: #a0b0c0;
+  }
+
   .selected-value-multiple {
     background-color: #d0e1f9;
     border: 1px solid #b0c4de;
@@ -132,14 +159,22 @@
   }
   
   .remove-value {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
     color: red;
+    border-radius: 50%;
+    width: 14px;
+    height: 14px; 
     font-weight: bold;
-    font-size: 12px;
-    margin-left: 5px;
+    font-size: 14px;
+    transition: all 0.2s ease;
   }
   
   .remove-value:hover {
-    color: darkred;
+    color: white;
+    background-color: #dc3545;
+    transform: scale(1.1);
   }
   
