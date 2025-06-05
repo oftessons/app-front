@@ -66,14 +66,25 @@ export class MultiploSelectComponent {
     }, 50);
   }
 
+  private updateArrowRotation() {
+    const arrowDown = this.elementRef.nativeElement.querySelector('.arrow-down');
+    if (this.isOpen) {
+      arrowDown.classList.add('rotate');
+    } else {
+      arrowDown.classList.remove('rotate');
+    }
+  }
+
   toggleDropdown() {
     this.isOpen = !this.isOpen;
+    this.updateArrowRotation();
   }
 
   @HostListener('document:click', ['$event'])
   clickout(event: Event) {
     if (!this.elementRef.nativeElement.contains(event.target)) {
       this.isOpen = false;
+      this.updateArrowRotation();
     }
   }
 }
