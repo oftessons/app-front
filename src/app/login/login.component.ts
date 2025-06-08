@@ -60,10 +60,6 @@ export class LoginComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('user_id');
-    localStorage.removeItem('usuario');
-
   }
 
   onSubmit() {
