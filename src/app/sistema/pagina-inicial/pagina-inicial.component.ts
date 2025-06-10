@@ -118,31 +118,31 @@ export class PaginaInicialComponent implements OnInit {
       textoAdicional: 'R$1.197,00 por 1 ano',
       recomendado: true,
     },
-    {
-      titulo: 'Banco + Flashcards',
-      preco: 132.50,
-      mostrarPorMes: true,
-      descricao: [
-        'Acesso completo a todos os módulos e conteúdos.',
-        'Estude de forma rápida e eficiente com cartões de memorização.',
-        'Ideal para quem busca uma formação abrangente e eficiente.',
-      ],
-      corCabecalho: '#253c66',
-      textoAdicional: 'R$ 1.590,00 por 1 ano',
-      recomendado: false,
-    },
-    {
-      titulo: 'Flashcards',
-      preco: 65.83,
-      descricao: [
-        'Estude de forma rápida e eficiente com cartões de memorização.',
-        'Ideal para revisar conceitos importantes em poucos minutos.',
-        'Método comprovado para melhorar a fixação e a recordação de informações.',
-      ],
-      corCabecalho: '#041E4E',
-      textoAdicional: 'R$789,99 por 1 ano',
-      recomendado: false,
-    }
+    //{
+    //  titulo: 'Banco + Flashcards',
+    //  preco: 132.50,
+    //  mostrarPorMes: true,
+    //  descricao: [
+    //    'Acesso completo a todos os módulos e conteúdos.',
+    //    'Estude de forma rápida e eficiente com cartões de memorização.',
+    //    'Ideal para quem busca uma formação abrangente e eficiente.',
+    //  ],
+    //  corCabecalho: '#253c66',
+    //  textoAdicional: 'R$ 1.590,00 por 1 ano',
+    //  recomendado: false,
+    //},
+    //{
+    //  titulo: 'Flashcards',
+    //  preco: 65.83,
+    //  descricao: [
+    //    'Estude de forma rápida e eficiente com cartões de memorização.',
+    //    'Ideal para revisar conceitos importantes em poucos minutos.',
+    //    'Método comprovado para melhorar a fixação e a recordação de informações.',
+    //  ],
+    //  corCabecalho: '#041E4E',
+    //  textoAdicional: 'R$789,99 por 1 ano',
+    //  recomendado: false,
+    //}
   ];
 
   constructor(
