@@ -10,6 +10,17 @@
 
   <div class="planos-container">
     <app-card-plano
+        titulo="Gratuito"
+        [descricao]="['Acesso a um número limitado de questões e aulas.', 'Ideal para quem está começando ou quer experimentar a plataforma.', 'Sem compromisso, totalmente gratuito.']"
+        [preco]="0.00"
+        textoBotao="Escolher plano"
+        [recomendado]="false"
+        textoAdicional=""
+        (botaoClicado)="onBotaoClicado()"
+        planoSelecionado="GRATUITO">
+    </app-card-plano>
+
+    <app-card-plano
         titulo="Mensal"
         [descricao]="['Revisão rápida sobre qualquer tema ou assunto.', 'Ideal para quem busca agilidade no aprendizado.', 'Acesso flexível ao conteúdo essencial.']"
         [preco]="397.00"

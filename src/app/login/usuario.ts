@@ -17,4 +17,5 @@ export class Usuario {
   bolsaAssinatura!: boolean;
   diasDeTeste!: Number;
   tipoDeEstudante!: string;
+  dataFimTeste?: Date;
 }

@@ -195,6 +195,17 @@ export class AuthService {
       );
   }
 
+  iniciarPeriodoTeste(usuario: Usuario): Observable<any> {
+  return this.http.post<any>(`${this.apiURL}/iniciar-teste`, usuario)
+    .pipe(
+      catchError((error: HttpErrorResponse) => {
+        return throwError(
+          'Erro ao iniciar período de teste. Por favor, tente novamente.'
+        );
+      })
+    );
+}
+
   private cadastrarBolsista(usuario: Usuario): Observable<any> {
     return this.http.post(`${this.apiURL}/cadastro/BOLSISTA`, usuario)
       .pipe(

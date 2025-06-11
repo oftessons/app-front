@@ -50,24 +50,28 @@ export class NavbarComponent {
         err => console.error('Erro ao buscar a permissão ', err)
     );
 
+    this.verificarPeriodoTeste();
   }
 
   verificarPeriodoTeste() {
-    // this.authService.getUsuarioAtual().subscribe(usuario => {
-    //   // Verificar se o usuário está em período de teste
-    //   if (usuario && usuario.diasDeTeste > 0) {
-    //     this.mostrarContador = true;
-        
-    //     // Calcular a data de término do período de teste
-    //     // Assumindo que o backend fornece a data de início ou o tempo restante
-    //     const dataInicio = new Date(usuario.dataCriacaoConta);
-    //     this.dataFimTeste = new Date(dataInicio);
-    //     this.dataFimTeste.setDate(dataInicio.getDate() + usuario.diasDeTeste);
-        
-    //     // Iniciar o contador
-    //     this.iniciarContador();
-    //   }
-    // });
+    const usuario = this.authService.getUsuarioAutenticado();
+    if(usuario && !usuario.dataFimTeste && localStorage.getItem('testeIniciado')) {
+      this.router.navigate(['/planos'], { 
+        queryParams: { modeTeste: true }
+      });
+      return;
+    }
+    const dataFimTeste = usuario?.dataFimTeste;
+    if (dataFimTeste) {
+      this.dataFimTeste = new Date(dataFimTeste);
+      this.mostrarContador = true;
+      document.documentElement.querySelector('mat-toolbar')?.classList.add('espacamento-toolbar');
+      document.documentElement.querySelector('mat-drawer-container')?.classList.add('espacamento-toolbar');
+      this.iniciarContador();
+    } else {
+      this.mostrarContador = false;
+      this.timerSubscription?.unsubscribe();
+    }
   }
 
   iniciarContador() {
@@ -99,7 +103,7 @@ export class NavbarComponent {
   }
 
   navegarParaPlanos() {
-    this.router.navigate(['/planos/detalhes-planos']); // Ajuste para a rota correta
+    this.router.navigate(['/planos']);
   }
 
   logout() {

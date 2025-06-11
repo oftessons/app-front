@@ -7,7 +7,11 @@
     justify-content: center;
     align-items: center;
     gap: 16px;
-    position: relative;
+    position: fixed;
+    height: 50px;
+    top: 0;
+    left: 0;
+    right: 0;
     z-index: 1001;
 }
 
@@ -17,19 +21,30 @@
     gap: 8px;
 }
 
+.trial-info strong {
+    font-size: 18px;
+}
+
 .btn-upgrade {
-    background-color: #edb120;
+    background: linear-gradient(90deg, #f0b90b, #d9a31d);
     color: white;
     border: none;
     padding: 6px 12px;
     border-radius: 4px;
     font-weight: 500;
     cursor: pointer;
-    transition: background-color 0.2s;
+    text-wrap: nowrap;
+    transition: all 0.3s ease;
 }
 
 .btn-upgrade:hover {
-    background-color: #d9a31d;
+    background: linear-gradient(90deg, #d9a31d, #f0b90b);
+    transform: scale(1.05);
+}
+
+.btn-upgrade:active {
+    background: linear-gradient(90deg, #f0b90b, #d9a31d);
+    transform: scale(0.95);
 }
 
 .mat-toolbar-fixed {
@@ -41,7 +56,12 @@
     background-color: #0F1934;
     padding: 30px;
     font-family: 'Nunito Sans', sans-serif;
-  }
+}
+
+.espacamento-toolbar {
+    margin-top: 50px;
+}
+
 .ml-2{
     font-size: 15px;
     font-weight: bold;
@@ -125,7 +145,20 @@
 }
 
 /* Adaptações para dispositivos móveis */
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 768px) {    
+    .trial-info span {
+        font-size: 12px;
+    }
+
+    .trial-info strong {
+        font-size: 14px;
+    }
+
+    .btn-upgrade {
+        font-size: 14px;
+        padding: 4px 8px;
+    }
+
     .mat-list-item {
         margin-top: 10px;
         padding: 10px; /* Aumenta o espaço interno para melhor experiência em telas menores */
