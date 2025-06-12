@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-inicio',
@@ -9,14 +10,33 @@ export class InicioComponent implements OnInit {
 
   mostrarMensagemAulas: boolean = false;
   mostrarMensagemFlashcard: boolean = false;
+  linkFlashcard: string = 'www.google.com';
+  possuiPermissao: boolean = true;
 
-  constructor() { }
+
+  constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
+    this.authService.verificarPermissao().subscribe(
+      response => this.possuiPermissao = response.accessGranted,
+      err => console.error('Erro ao buscar a permissão ', err)
+    );
   }
 
   redirecionarFlashcard() {
-    window.open('https://www.brainscape.com/', '_blank');
+    this.authService.obterLinkFlashcard().subscribe((data) => {
+      this.linkFlashcard = data.linkFlashcard;
+      if(this.linkFlashcard != null && this.linkFlashcard !== '') {
+        window.open(this.linkFlashcard, '_blank');
+      
+      } else {
+        window.open('https://www.brainscape.com/', '_blank');
+
+      }
+
+    })
+
+    console.log("nem passei por aqui");
   }
   
   exibirMensagem(tipo: string): void {

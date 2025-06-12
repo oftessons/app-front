@@ -3,7 +3,6 @@ import { Permissao } from "./Permissao";
 export class Usuario {
   id!: string;
   fotoUrl!: any;
-  username!: string;
   password!: string;
   email!: string;
   telefone!: string;

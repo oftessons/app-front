@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { Usuario } from './usuario';
@@ -13,7 +13,7 @@ import { LoginDTO } from '../sistema/LoginDTO';
   styleUrls: ['./login.component.css']
 })
 
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   username: string = '';
   password: string = '';
   nome: string = '';
@@ -49,7 +49,6 @@ export class LoginComponent {
     specialChar: false,
   };
 
-  
   passwordVisible: { [key: string]: boolean } = {
     password: false,
     confirmPassword: false
@@ -60,9 +59,12 @@ export class LoginComponent {
     private authService: AuthService
   ) {}
 
+  ngOnInit(): void {
+  }
+
   onSubmit() {
     const loginData: LoginDTO = {
-      username: this.username,
+      username: this.email,
       password: this.password
     };
     
@@ -118,9 +120,9 @@ export class LoginComponent {
   }
 
   // Validação de campo de login
-  if (!this.username) {
-    passwordValidationErrors.push("O campo de login é obrigatório.");
-  }
+  // if (!this.username) {
+  //   passwordValidationErrors.push("O campo de login é obrigatório.");
+  // }
 
   // Validação de campo de email
   if (!this.email) {
@@ -164,7 +166,6 @@ export class LoginComponent {
   }
 
     const usuario: Usuario = new Usuario();
-    usuario.username = this.username;
     usuario.password = this.password;
     usuario.email = this.email;
     usuario.nome = this.nome;
@@ -210,7 +211,7 @@ export class LoginComponent {
         this.usuario = usuario;
         localStorage.setItem('idUser', usuario.id);
         this.router.navigate(['/usuario/inicio']);
-        localStorage.setItem('usuario', usuario.username);
+        localStorage.setItem('usuario', usuario.email);
       },
       error => {
        // console.error('Erro ao obter dados do usuário:', error);
@@ -232,7 +233,6 @@ export class LoginComponent {
         this.forgotEmail = '';
       },
       (error) => {
-        console.log(error);
         if (error.status === 400) {
           this.errors = ['E-mail não encontrado ou inválido.'];
         } else if (error.status === 500) {

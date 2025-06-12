@@ -45,6 +45,7 @@ declare var bootstrap: any;
   styleUrls: ['./page-simulado.component.css'],
 })
 export class PageSimuladoComponent implements OnInit {
+  carregando: boolean = false;
   nomeSimulado: string = '';
   descricaoSimulado: string = '';
 
@@ -433,6 +434,7 @@ export class PageSimuladoComponent implements OnInit {
   }
 
   filtrarQuestoes(): void {
+    this.carregando = true;
     const filtros: any = {};
  
     if (this.multiSelectedAno.length) {
@@ -622,12 +624,14 @@ export class PageSimuladoComponent implements OnInit {
           this.resposta = '';
           this.mostrarGabarito = false;
           this.toggleFiltros();
+          this.carregando = false;
         },
         (error) => {
           console.error('Erro ao filtrar questões:', error);
           this.message =
             'Ocorreu um erro ao filtrar questões. Por favor, tente novamente mais tarde.';
           this.idsQuestoes = [];
+          this.carregando = false;
         }
       );
   }
@@ -852,12 +856,12 @@ export class PageSimuladoComponent implements OnInit {
     this.router.navigate(['usuario/dashboard']);
   }
 
-  isImage(url: string): boolean {
-    return url.match(/\.(jpeg|jpg|gif|png)$/) != null;
+  isImage(url: string | null): boolean {
+    return typeof url === 'string' && /\.(jpeg|jpg|png|gif)$/i.test(url);
   }
 
-  isVideo(url: string): boolean {
-    return url.match(/\.(mp4|webm|ogg)$/) != null;
+  isVideo(url: string | null): boolean {
+    return typeof url === 'string' && /\.(mp4|webm|ogg)$/i.test(url);
   }
 
   sanitizeVideoUrl(url: string): SafeResourceUrl {

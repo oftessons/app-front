@@ -289,6 +289,10 @@ body.has-fixed-buttons .chatbot-toggle-button {
   background-color: #0056b3;
 }
 
+.progress-bar-spacing {
+  margin-top: 20px;
+}
+
 .mat-form-field-appearance-fill .mat-form-field-flex {
   border-radius: 4px 4px 0 0;
   width: 280px;

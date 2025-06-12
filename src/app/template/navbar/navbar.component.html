@@ -32,8 +32,8 @@
                 <span class="ml-2">Painel de Controle</span>
             </a>            
             
-            <div class="heading-home">Serviços</div>
-            <a mat-list-item routerLink="/usuario/questoes" [ngClass]="{'active-link': isActive('/usuario/questoes')}">
+            <div *ngIf="possuiPermissao" class="heading-home">Serviços</div>
+            <a mat-list-item *ngIf="possuiPermissao" routerLink="/usuario/questoes" [ngClass]="{'active-link': isActive('/usuario/questoes')}">
                 <img src="assets/imagens/caderno.svg" alt="Ícone de Questões" class="icon">
                 <span class="ml-2">Questões</span>
             </a>
@@ -43,19 +43,19 @@
                 <span class="ml-2">Aulas</span>
             </a>
             -->
-            <a mat-list-item routerLink="/usuario/filtro" [ngClass]="{'active-link': isActive('/usuario/filtro')}" >
+            <a mat-list-item routerLink="/usuario/filtro" *ngIf="possuiPermissao" [ngClass]="{'active-link': isActive('/usuario/filtro')}" >
                 <img src="assets/imagens/fi-a.svg" alt="Ícone de Meus Filtros" class="icon">
                 <span class="ml-2">Meus Filtros</span>
             </a>
-            <a mat-list-item routerLink="/usuario/simulados" [ngClass]="{'active-link': isActive('/usuario/simulados')}">
+            <a mat-list-item routerLink="/usuario/simulados" *ngIf="possuiPermissao" [ngClass]="{'active-link': isActive('/usuario/simulados')}">
                 <img src="assets/imagens/simu.svg" alt="Ícone do Simulado" class="icon">
                 <span class="ml-2">Simulados</span>
             </a>           
-            <a mat-list-item routerLink="/usuario/meus-simulados" [ngClass]="{'active-link': isActive('/usuario/meus-simulados')}" >
+            <a mat-list-item routerLink="/usuario/meus-simulados" *ngIf="possuiPermissao" [ngClass]="{'active-link': isActive('/usuario/meus-simulados')}" >
                 <img src="assets/imagens/ibm-simulated-side.svg" alt="Ícone de Meus Simulados" class="icon">
                 <span class="ml-2">Meus Simulados</span>
             </a>
-            <a mat-list-item routerLink="/usuario/desempenho"  [ngClass]="{'active-link': isActive('/usuario/desempenho')}">
+            <a mat-list-item routerLink="/usuario/desempenho" *ngIf="possuiPermissao"  [ngClass]="{'active-link': isActive('/usuario/desempenho')}">
                 <img src="assets/imagens/garfic.svg" alt="Ícone de Desempenho" class="icon">
                 <span class="ml-2">Desempenho</span>
             </a>

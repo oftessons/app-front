@@ -311,8 +311,9 @@
 }
 .btn-filtros {
   margin-top: 12px;
+  margin-right: 10px;
   padding: 10px 20px;
-  width: 200px;
+  width: 230px;
   background-color: #041e4e;
   color: #fff;
   border: none;
@@ -352,6 +353,23 @@
   cursor: pointer;
   margin-right: 10px;
 }
+
+.progress-bar-spacing {
+  margin-top: 20px;
+}
+
+.btn-editar {
+  padding: 9px 8px;
+  width: 200px;
+  background-color: #f6a568;
+  color: #000000;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  margin-left: auto;
+  font-weight: 600;
+} 
+
 .btn {
   padding: 10px 20px;
   color: #fff;
@@ -467,6 +485,7 @@ p {
 .button-row-filtro {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
   margin-top: 20px;
 }
 
@@ -631,7 +650,7 @@ p {
 @media (min-width: 768px) and (max-width: 1024px) {
   .button-row-filtro {
     flex-wrap: nowrap; /* Mantém os botões em uma única linha */
-    justify-content: flex-start; /* Alinha os botões à esquerda */
+    justify-content: center;
     gap: 10px; /* Espaçamento entre os botões */
   }
 
@@ -645,7 +664,14 @@ p {
 }
 
 @media (max-width: 480px) {
+  .identificadores-questao {
+    flex-wrap: wrap;
+  }
 
+  .btn-editar {
+    width: 100%;
+    padding: 8px;
+  }
 }
 
 

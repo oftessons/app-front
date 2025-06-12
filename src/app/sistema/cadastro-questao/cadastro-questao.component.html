@@ -1,7 +1,10 @@
 <div *ngIf="usuario && (usuario.permissao === Permissao.ADMIN || usuario.permissao === Permissao.PROFESSOR)">
- <div class="container pt-5">
-  <div class="container mt-4 container-geral">
-    <div class="header-container">
+  <div class="container pt-5">
+    <div class="container mt-4 container-geral">
+      <div class="header-container">
+      <button type="button" class="btn-voltar" (click)="voltarPaginaAnterior()">
+        <i class="fa fa-arrow-left"></i>
+      </button>
       <h2>{{ questaoDTO.id ? 'Edição da Questão' : 'Cadastro da Questão' }}</h2>
     </div>
     <form class="form-cad" #questaoForm="ngForm" (ngSubmit)="onSubmit()">
@@ -173,8 +176,13 @@
             <label for="fotoDaQuestao">
               <div class="foto-preview" id="fotoPreview">
                 <ng-container *ngIf="fotoPreviews['fotoDaQuestao']">
-                  <img *ngIf="isPreviewImage(fotoPreviews['fotoDaQuestao'])" [src]="fotoPreviews['fotoDaQuestao']" alt="Image Preview" />
-                  <video *ngIf="isPreviewVideo(fotoPreviews['fotoDaQuestao'])" [src]="fotoPreviews['fotoDaQuestao']" controls></video>
+                  <div class="preview-container">
+                    <img *ngIf="isPreviewImage(fotoPreviews['fotoDaQuestao'])" [src]="fotoPreviews['fotoDaQuestao']" alt="Image Preview" />
+                    <video *ngIf="isPreviewVideo(fotoPreviews['fotoDaQuestao'])" [src]="fotoPreviews['fotoDaQuestao']" controls></video>
+                    <button type="button" class="btn-remove-image" (click)="removeFile('fotoDaQuestao', $event)">
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
                 </ng-container>
                 <span *ngIf="!fotoPreviews['fotoDaQuestao']" class="upload-placeholder">
                   <img src="assets/imagens/img-foto.svg" style="width: 50px; opacity: 0.5;" class="upload-icon">
@@ -185,6 +193,12 @@
           </div>
         </div>
       </div>      
+      <div class="form-group mt-2">
+        <label>Descrição da imagem ou vídeo:</label>
+        <textarea class="form-control" name="descricaoDaImagemDoEnunciado" 
+          [(ngModel)]="questaoDTO.descricaoDaImagemDoEnunciado" 
+          placeholder="Descreva esta imagem para acessibilidade" rows="2"></textarea>
+      </div>
     </form>
 </div>
 
@@ -223,35 +237,35 @@
             </div>
           </div>
         </div>
-
+        
         <div *ngIf="questaoDTO.id">
           <h2>{{ questaoDTO.id ? 'Edição da Questão' : 'Cadastro da Questão' }}</h2>
           <div *ngIf="questaoDTO.tipoItemQuestaoImagem === 'imagem'">
             <div *ngFor="let alternativa of questaoDTO.alternativas; let i = index">
               <div class="form-group">
                 <input type="radio" [name]="questaoDTO.tipoItemQuestaoImagem + 'Alternativa'"
-                       (click)="markCorrectImage(i)" [checked]="alternativa.correta" class="checkbox">
-        
+                  (click)="markCorrectImage(i)" [checked]="alternativa.correta" class="checkbox">
                 <div class="image-upload">
-                  <!-- Input de upload de imagem -->
                   <input type="file" id="fotoDaAlternativa{{ i }}" name="fotoDaAlternativa{{ i }}"
-                         (change)="onFileSelectedImageEditar($event, 'fotoDaAlternativa' + i)" 
-                         accept="image/*,video/*" style="display: none;" />
-        
-                         <label for="fotoDaAlternativa{{ i }}">
-                          <div class="foto-preview" id="fotoPreview{{ i }}">
-                            <!-- Mostra pré-visualização se existir -->
-                            <ng-container *ngIf="fotoPreviews['fotoDaAlternativa' + i]">
-                              <img [src]="fotoPreviews['fotoDaAlternativa' + i]" alt="Image Preview" />
-                            </ng-container>
-                            <!-- Placeholder se não houver imagem -->
-                            <span *ngIf="!fotoPreviews['fotoDaAlternativa' + i]" class="upload-placeholder">
-                              <img src="assets/imagens/img-foto.svg" class="upload-icon">
-                              <p>Clique para fazer upload da imagem</p>
-                            </span>
-                          </div>
-                        </label>
-                        
+                    (change)="onFileSelectedImageEditar($event, 'fotoDaAlternativa' + i)" 
+                    accept="image/*,video/*" 
+                    style="display: none;"/>
+                    <label for="fotoDaAlternativa{{ i }}">
+                    <div class="foto-preview" id="fotoPreview{{ i }}">
+                      <ng-container *ngIf="fotoPreviews['fotoDaAlternativa' + i]">
+                        <div class="preview-container">
+                          <img [src]="fotoPreviews['fotoDaAlternativa' + i]" alt="Image Preview" />
+                          <button type="button" class="btn-remove-image" (click)="removeFile('fotoDaAlternativa' + i, $event)">
+                            <i class="fas fa-times"></i>
+                          </button>
+                        </div>
+                      </ng-container>
+                      <span *ngIf="!fotoPreviews['fotoDaAlternativa' + i]" class="upload-placeholder">
+                        <img src="assets/imagens/img-foto.svg" class="upload-icon">
+                        <p>Clique para fazer upload da imagem</p>
+                      </span>
+                    </div>
+                  </label>  
                 </div>
               </div>
             </div>
@@ -269,7 +283,15 @@
                         (change)="onFileSelectedImage($event, 'afirmacao' + i)" accept="image/*" />
                   <label for="afirmacao{{ i }}">
                     <div class="image-preview" id="imagePreview{{ i }}">
-                      <img *ngIf="imagePreviews['afirmacao' + i]" [src]="imagePreviews['afirmacao' + i]" alt="Image Preview" />
+                      <ng-container *ngIf="imagePreviews['afirmacao' + i]">
+                        <div class="preview-container">
+                          <img [src]="imagePreviews['afirmacao' + i]" alt="Image Preview" />
+                          <button type="button" class="btn-remove-image" (click)="removeFile('afirmacao' + i, $event)">
+                            <i class="fas fa-times"></i>
+                          </button>
+                        </div>
+                      </ng-container>
+                      <!-- <img *ngIf="imagePreviews['afirmacao' + i]" [src]="imagePreviews['afirmacao' + i]" alt="Image Preview" /> -->
                       <span *ngIf="!imagePreviews['afirmacao' + i]">
                         <img src="assets/imagens/img-foto.svg" style="width: 50px; opacity: 0.5;"> Clique para fazer upload da imagem
                       </span>
@@ -298,8 +320,13 @@
           <label for="videoDaQuestao">
             <div class="foto-preview" id="fotoPreview">
               <ng-container *ngIf="fotoPreviews['videoDaQuestao']">
-                <img *ngIf="isPreviewImage(fotoPreviews['videoDaQuestao'])" [src]="fotoPreviews['videoDaQuestao']" alt="Image Preview" />
-                <video *ngIf="isPreviewVideo(fotoPreviews['videoDaQuestao'])" [src]="fotoPreviews['videoDaQuestao']" controls></video>
+                <div class="preview-container">
+                  <img *ngIf="isPreviewImage(fotoPreviews['videoDaQuestao'])" [src]="fotoPreviews['videoDaQuestao']" alt="Image Preview" />
+                  <video *ngIf="isPreviewVideo(fotoPreviews['videoDaQuestao'])" [src]="fotoPreviews ['videoDaQuestao']" controls></video>
+                  <button type="button" class="btn-remove-image" (click)="removeFile('videoDaQuestao', $event)">
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
               </ng-container>
               <span *ngIf="!fotoPreviews['videoDaQuestao']" class="upload-placeholder">
                 <img src="assets/imagens/filme.svg" style="width: 50px; opacity: 0.5;" class="upload-icon">
@@ -389,8 +416,13 @@
         <label for="fotoDaRespostaUm">
           <div class="foto-preview" id="fotoPreview">
             <ng-container *ngIf="fotoPreviews['fotoDaRespostaUm']">
-              <img *ngIf="isPreviewImage(fotoPreviews['fotoDaRespostaUm'])" [src]="fotoPreviews['fotoDaRespostaUm']" alt="Image Preview" />
-              <video *ngIf="isPreviewVideo(fotoPreviews['fotoDaRespostaUm'])" [src]="fotoPreviews['fotoDaRespostaUm']" controls></video>
+              <div class="preview-container">
+                <img *ngIf="isPreviewImage(fotoPreviews['fotoDaRespostaUm'])" [src]="fotoPreviews['fotoDaRespostaUm']" alt="Image Preview" />
+                <video *ngIf="isPreviewVideo(fotoPreviews['fotoDaRespostaUm'])" [src]="fotoPreviews['fotoDaRespostaUm']" controls></video>
+                <button type="button" class="btn-remove-image" (click)="removeFile('fotoDaRespostaUm', $event)">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
             </ng-container>
             <span *ngIf="!fotoPreviews['fotoDaRespostaUm']" class="upload-placeholder">
               <img src="assets/imagens/img-foto.svg" class="upload-icon">
@@ -466,8 +498,13 @@
         <label for="fotoDaRespostaDois">
           <div class="foto-preview" id="fotoPreview">
             <ng-container *ngIf="fotoPreviews['fotoDaRespostaDois']">
-              <img *ngIf="isPreviewImage(fotoPreviews['fotoDaRespostaDois'])" [src]="fotoPreviews['fotoDaRespostaDois']" alt="Image Preview" />
-              <video *ngIf="isPreviewVideo(fotoPreviews['fotoDaRespostaDois'])" [src]="fotoPreviews['fotoDaRespostaDois']" controls></video>
+              <div class="preview-container">
+                <img *ngIf="isPreviewImage(fotoPreviews['fotoDaRespostaDois'])" [src]="fotoPreviews['fotoDaRespostaDois']" alt="Image Preview" />
+                <video *ngIf="isPreviewVideo(fotoPreviews['fotoDaRespostaDois'])" [src]="fotoPreviews['fotoDaRespostaDois']" controls></video>
+                <button type="button" class="btn-remove-image" (click)="removeFile('fotoDaRespostaDois', $event)">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
             </ng-container>
             <span *ngIf="!fotoPreviews['fotoDaRespostaDois']" class="upload-placeholder">
               <img src="assets/imagens/img-foto.svg" class="upload-icon">
@@ -543,8 +580,13 @@
         <label for="fotoDaRespostaTres">
           <div class="foto-preview" id="fotoPreviewTres">
             <ng-container *ngIf="fotoPreviews['fotoDaRespostaTres']">
-              <img *ngIf="isPreviewImage(fotoPreviews['fotoDaRespostaTres'])" [src]="fotoPreviews['fotoDaRespostaTres']" alt="Image Preview" />
-              <video *ngIf="isPreviewVideo(fotoPreviews['fotoDaRespostaTres'])" [src]="fotoPreviews['fotoDaRespostaTres']" controls></video>
+              <div class="preview-container">
+                <img *ngIf="isPreviewImage(fotoPreviews['fotoDaRespostaTres'])" [src]="fotoPreviews['fotoDaRespostaTres']" alt="Image Preview" />
+                <video *ngIf="isPreviewVideo(fotoPreviews['fotoDaRespostaTres'])" [src]="fotoPreviews['fotoDaRespostaTres']" controls></video>
+                <button type="button" class="btn-remove-image" (click)="removeFile('fotoDaRespostaTres', $event)">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
             </ng-container>
             <span *ngIf="!fotoPreviews['fotoDaRespostaTres']" class="upload-placeholder">
               <img src="assets/imagens/img-foto.svg" class="upload-icon">
@@ -605,8 +647,13 @@
         <label for="fotoDaRespostaQuatro">
           <div class="foto-preview" id="fotoPreviewQuatro">
             <ng-container *ngIf="fotoPreviews['fotoDaRespostaQuatro']">
-              <img *ngIf="isPreviewImage(fotoPreviews['fotoDaRespostaQuatro'])" [src]="fotoPreviews['fotoDaRespostaQuatro']" alt="Image Preview" />
-              <video *ngIf="isPreviewVideo(fotoPreviews['fotoDaRespostaQuatro'])" [src]="fotoPreviews['fotoDaRespostaQuatro']" controls></video>
+              <div class="preview-container">
+                <img *ngIf="isPreviewImage(fotoPreviews['fotoDaRespostaQuatro'])" [src]="fotoPreviews['fotoDaRespostaQuatro']" alt="Image Preview" />
+                <video *ngIf="isPreviewVideo(fotoPreviews['fotoDaRespostaQuatro'])" [src]="fotoPreviews['fotoDaRespostaQuatro']" controls></video>
+                <button type="button" class="btn-remove-image" (click)="removeFile('fotoDaRespostaQuatro', $event)">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
             </ng-container>
             <span *ngIf="!fotoPreviews['fotoDaRespostaQuatro']" class="upload-placeholder">
               <img src="assets/imagens/img-foto.svg" class="upload-icon">

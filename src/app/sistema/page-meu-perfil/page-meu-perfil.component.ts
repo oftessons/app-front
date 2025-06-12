@@ -10,6 +10,8 @@ import { PeriodoAssinatura } from './enums/periodo-assinatura';
 import { PeriodoAssinaturaDescricao } from './enums/periodo-assinatura-descricao';
 import { TipoUsuario } from 'src/app/login/enums/tipo-usuario';
 import { TipoUsuarioDescricao } from 'src/app/login/enums/tipo-usuario-descricao';
+import { VendasService } from 'src/app/services/vendas.service';
+import { PlatformModule } from '@angular/cdk/platform';
 
 @Component({
   selector: 'app-page-meu-perfil',
@@ -23,9 +25,13 @@ export class PageMeuPerfilComponent implements OnInit {
   editMode: boolean = false;
   selectedFile!: File;
   planInformation!: Plano;
+  possuiPermissao!: boolean;
+  
 
   
-  constructor(private router: Router, private authService: AuthService, private stripeService: StripeService) {}
+  constructor(private router: Router, private authService: AuthService, private stripeService: StripeService,
+    private vendasService: VendasService
+  ) {}
 
   ngOnInit(): void {
     this.obterPerfilUsuario();
@@ -54,9 +60,22 @@ export class PageMeuPerfilComponent implements OnInit {
     return TipoUsuarioDescricao [tipoUsuario] || 'Descrição não disponível';
   }
 
+  obterTipoUsuarioPorDescricao(descricao: string): TipoUsuario | string {
+    for (const key in TipoUsuarioDescricao) {
+      if (TipoUsuarioDescricao[key as keyof typeof TipoUsuarioDescricao] === descricao) {
+        return key as TipoUsuario;
+      }
+    }
+      return ''; 
+  }
+
+
   editarPerfil() {
     this.editMode = !this.editMode;
+    const tipoDeEstudanteOriginal = this.obterTipoUsuarioPorDescricao(this.usuario.tipoDeEstudante);
     if (!this.editMode) {
+      
+      this.usuario.tipoDeEstudante = tipoDeEstudanteOriginal;
       this.authService
         .atualizarUsuario(this.usuario, this.selectedFile)
         .subscribe(
@@ -64,21 +83,22 @@ export class PageMeuPerfilComponent implements OnInit {
           //  console.log('Perfil atualizado com sucesso:', data);
           },
           (error) => {
-           // console.error('Erro ao atualizar perfil do usuário:', error);
+           console.error('Erro ao atualizar perfil do usuário:', error);
           }
         );
     }
   }
 
   exibirInformacaoPlano() {
-    this.stripeService.getPlanInformation().subscribe(
+    this.vendasService.obterDadosAssinatura().subscribe(
       (response) => {
         const plano: Plano = new Plano();
-        plano.name = response.data.name;
-        plano.intervaloRenovacao = this.getPeriodoTraduzido(response.data.intervaloRenovacao);
-        plano.status = this.getStatusTraduzido(response.data.status);
-        plano.proximaRenovacao = this.converterDateTime(response.data.proximaRenovacao);
-        plano.validoAte = this.converterDateTime(response.data.validoAte);
+        console.log(plano);
+        plano.name = response.name;
+        plano.intervaloRenovacao = this.getPeriodoTraduzido(response.intervaloRenovacao);
+        plano.status = this.getStatusTraduzido(response.status);
+        plano.proximaRenovacao = this.converterDateTime(response.proximaRenovacao);
+        plano.validoAte = this.converterDateTime(response.validoAte);
         this.planInformation = plano;
       },
       (error) => {
@@ -87,9 +107,9 @@ export class PageMeuPerfilComponent implements OnInit {
   }
 
   exibirPortalAssinatura() {
-    this.stripeService.createPortalSession().subscribe(
+    this.vendasService.obterPortalAcesso().subscribe(
       (response) => {
-        window.location.href = response.url_portal;
+        window.location.href = response.url;
         console.log('Portal de assinatura exibido com sucesso:', response);
       },
       (error) => {
@@ -112,7 +132,8 @@ export class PageMeuPerfilComponent implements OnInit {
   getPeriodoTraduzido(status: PeriodoAssinatura) {
     return PeriodoAssinaturaDescricao[status];
   }
- 
+
+  
   onFileSelected(event: any) {
     const file: File = event.target.files[0];
     if (file) {

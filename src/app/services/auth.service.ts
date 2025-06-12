@@ -13,6 +13,8 @@ import { HttpErrorResponse, HttpResponse  } from '@angular/common/http';
 import { throwError } from 'rxjs';
 import { LoginDTO } from '../sistema/LoginDTO';
 import { MFACodigoDTO } from '../sistema/MFACodigoDTO';
+import { UsuarioDadosAssinatura } from '../login/usuario-dados-assinatura';
+import { shareReplay } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -24,8 +26,9 @@ export class AuthService {
   clientID: string = environment.clientId;
   clientSecret: string = environment.clientSecret;
   jwtHelper: JwtHelperService = new JwtHelperService();
-  
+  private cachePermissao$: Observable<any> | null = null;
 
+  
   constructor(
     private http: HttpClient
   ) { }
@@ -60,7 +63,38 @@ export class AuthService {
       })
     );
   }
-  
+
+  verificarPermissao(): Observable<any> {
+    if (this.cachePermissao$) {      
+      return this.cachePermissao$;
+    }
+
+    this.cachePermissao$ = this.http.get<UsuarioDadosAssinatura>(`${this.apiURL}/obter-dados-assinatura`).pipe(
+      map(dados => ({
+        accessGranted: dados.subscriptionStatus !== 'partial',
+        message: dados.subscriptionStatus === 'partial' ? 'Seu plano atual não permite acesso a este conteúdo.' : null
+      })),
+
+      shareReplay(1),
+      catchError(err => {
+        this.cachePermissao$ = null;
+        return throwError(() => err);
+      })
+    );
+
+    return this.cachePermissao$;
+  }
+
+
+  obterLinkFlashcard(): Observable<any> {
+    return this.http.get<UsuarioDadosAssinatura>(`${this.apiURL}/obter-dados-assinatura`).pipe(
+      map(dados => {
+        return { linkFlashcard: dados.urlFlashcard };
+      })
+    )
+
+  }
+    
   atualizarUsuario(usuario: Usuario, fotoDoPerfil?: File | null): Observable<Usuario> {
     const formData: FormData = new FormData();
     formData.append('usuario', new Blob([JSON.stringify(usuario)], { type: 'application/json' }));
@@ -68,7 +102,7 @@ export class AuthService {
     if (fotoDoPerfil) {
       formData.append('fotoDoPerfil', fotoDoPerfil);
     }
-  
+    
     return this.http.put<Usuario>(`${this.apiURL}/update/${usuario.id}`, formData)
     .pipe(
       catchError((error: HttpErrorResponse) => {
@@ -102,11 +136,11 @@ export class AuthService {
   }
 
   // Método para obter o nome do usuário autenticado no AuthService
-obterNomeUsuario(): Observable<string> {
-  return this.http.get<{ nome: string }>(`${this.apiURL}/nome`).pipe(
-    map(response => response.nome)  // Extrai a propriedade 'nome' do objeto retornado
-  );
-}
+  obterNomeUsuario(): Observable<string> {
+    return this.http.get<{ nome: string }>(`${this.apiURL}/nome`).pipe(
+      map(response => response.nome)  // Extrai a propriedade 'nome' do objeto retornado
+    );
+  }
 
   
   salvarUsuarioAutenticado(usuario: Usuario) {
@@ -142,7 +176,7 @@ obterNomeUsuario(): Observable<string> {
     return request.pipe(
       catchError((error: HttpErrorResponse) => {
         if (error.status === 422) {
-          return throwError('usuário já cadastrado na base de dados');
+          return throwError('Email já cadastrado na base de dados');
         }
         return throwError(error);
       })
@@ -154,7 +188,7 @@ obterNomeUsuario(): Observable<string> {
       .pipe(
         catchError((error: HttpErrorResponse) => {
           if (error.status === 422) {
-            return throwError('Usuário já cadastrado na base de dados');
+            return throwError('Email já cadastrado na base de dados');
           }
           return throwError("O servidor não está funcionando corretamente.");
         })
@@ -166,7 +200,7 @@ obterNomeUsuario(): Observable<string> {
       .pipe(
         catchError((error: HttpErrorResponse) => {
           if (error.status === 422) {
-            return throwError('Usuário já cadastrado na base de dados');
+            return throwError('Email já cadastrado na base de dados');
           }
           return throwError("O servidor não está funcionando corretamente.");
         })
@@ -178,7 +212,7 @@ obterNomeUsuario(): Observable<string> {
       .pipe(
         catchError((error: HttpErrorResponse) => {
           if (error.status === 422) {
-            return throwError('Usuário já cadastrado na base de dados');
+            return throwError('Email já cadastrado na base de dados');
           }
           return throwError("O servidor não está funcionando corretamente.");
         })
@@ -240,6 +274,7 @@ obterNomeUsuario(): Observable<string> {
                         .set('username', username)
                         .set('password', password)
                         .set('grant_type', 'password')
+
 
     const headers = {
       'Authorization': 'Basic ' + btoa(`${this.clientID}:${this.clientSecret}`),

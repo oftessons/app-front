@@ -5,7 +5,7 @@
     </div>
 
     <div class="container-row">
-      <div class="mb-4">
+      <div class="mb-4" *ngIf="possuiPermissao">
         <div class="card">
           <div class="card-body text-center">
             <h5 class="card-title">Aulas</h5>
@@ -22,7 +22,7 @@
         </div>
       </div>
 
-      <div class="mb-4">
+      <div class="mb-4" *ngIf="possuiPermissao">
         <div class="card">
           <div class="card-body text-center">
             <h5 class="card-title">Questões</h5>
@@ -46,7 +46,7 @@
             <button (click)="redirecionarFlashcard()" class="btn btn-primary">
               Acessar >
             </button>            
-            <!--
+          <!--
             <div *ngIf="mostrarMensagemFlashcard" class="mensagem">
               Em breve novas funcionalidades disponíveis para você 😃.
             </div>

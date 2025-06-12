@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core'; 
+import { APP_INITIALIZER, NgModule } from '@angular/core'; 
 import { BrowserModule } from '@angular/platform-browser';
 import { ChatBotComponent } from './chat-bot/chat-bot.component'; 
 import { AppRoutingModule } from './app-routing.module';
@@ -28,6 +28,10 @@ import { DetalhesPlanosComponent } from './planos/detalhes-planos/detalhes-plano
 import { PagamentoConcluidoComponent } from './planos/pagamento-concluido/pagamento-concluido.component';
 import { ValidacaoAcessoComponent } from './validacao-acesso/validacao-acesso.component';
 import { ChatBotWhatsappComponent } from './chat-bot-whatsapp/chat-bot-whatsapp.component';
+import { TmplAstRecursiveVisitor } from '@angular/compiler';
+
+
+
 
 @NgModule({
   declarations: [

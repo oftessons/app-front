@@ -61,7 +61,6 @@ export class ValidacaoAcessoComponent {
         const usuario: Usuario = {
           id: userId,
           fotoUrl: null,
-          username: response.username,
           password: '',
           email: response.email || '',
           planoId: response.planoId || '',
@@ -75,7 +74,7 @@ export class ValidacaoAcessoComponent {
           bolsaAssinatura: response.bolsa || false,
           diasDeTeste: response.quantidadeDiasBolsa || 0,
           permissao: response.authorities.length > 0 ? response.authorities[0] : null,
-          tipoDeEstudante: response.tipoDeEstudante || ''
+          tipoDeEstudante: response.tipoDeEstudante || '',
         };
         localStorage.setItem('usuario', JSON.stringify(usuario));
 

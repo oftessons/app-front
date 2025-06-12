@@ -1,4 +1,5 @@
 import { Component, OnInit, ElementRef, ViewChild, AfterViewChecked, PipeTransform } from '@angular/core';
+import { Router } from '@angular/router';
 import { TipoDeProva } from './enums/tipoDeProva';
 import {
   getDescricaoAno,
@@ -41,11 +42,12 @@ declare var bootstrap: any;
   styleUrls: ['./page-questoes.component.css'],
 })
 export class PageQuestoesComponent implements OnInit, AfterViewChecked {
-
+  carregando: boolean = false;
   filtroSelecionado: any;
   questao: Questao = new Questao();
   selectedOption: string = '';
   usuario!: Usuario;
+  usuarioLogado: Usuario | null = null;
   usuarioId!: number;
   mensagemErro: string | null = null;
 
@@ -145,23 +147,57 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     private filtroService: FiltroService,
     private authService: AuthService,
     private sanitizer: DomSanitizer,
-     
+    private router: Router,     
   ) {}
 
   ngOnInit(): void {
-    this.obterPerfilUsuario();
-    this.loadQuestao();
-    const meuFiltro = history.state.questao;
-    if(meuFiltro){
-      this.multSelectAno = meuFiltro.ano;
-      this.multSelectTipoDeProva = meuFiltro.tipoDeProva;
-      this.multSelectTema = meuFiltro.tema;
-      this.multSelectSubtema = meuFiltro.subtema;
-      this.multSelecDificuldade = meuFiltro.dificuldade;
-      this.multSelectTipoDeProva = meuFiltro.tipoDeProva;
-      this.multiSelectRespSimu = meuFiltro.respostasSimulado;
-      this.multiSelectCertoErrado = meuFiltro.certasErradas;
+    this.usuarioLogado = this.authService.getUsuarioAutenticado();
+
+    const filtroStateJson = localStorage.getItem('questoesFiltroState');
+    let filtroState: any = null;
+
+    if (filtroStateJson) {
+      filtroState = JSON.parse(filtroStateJson);
+      
+      localStorage.removeItem('questoesFiltroState');
+
+      this.multSelectAno = filtroState.multSelectAno || [];
+      this.multSelecDificuldade = filtroState.multSelecDificuldade || [];
+      this.multSelectTipoDeProva = filtroState.multSelectTipoDeProva || [];
+      this.multSelectSubtema = filtroState.multSelectSubtema || [];
+      this.multSelectTema = filtroState.multSelectTema || [];
+      this.multiSelectCertoErrado = filtroState.multiSelectCertoErrado || [];
+      this.multiSelectRespSimu = filtroState.multiSelectRespSimu || [];
+      this.palavraChave = filtroState.palavraChave || '';
+
+      this.authService.obterUsuarioAutenticadoDoBackend().subscribe(
+        (data) => {
+          this.usuario = data;
+          this.usuarioId = parseInt(this.usuario.id);
+          this.aplicarFiltrosRestaurados(filtroState.questaoId);
+        },
+        (error) => {
+          console.error('Erro ao obter usuário:', error);
+          this.loadQuestao();
+        }
+      );
+    } else {
+      this.obterPerfilUsuario();
+      this.loadQuestao();
+      const meuFiltro = history.state.questao;
+      
+      if(meuFiltro){
+        this.multSelectAno = meuFiltro.ano;
+        this.multSelectTipoDeProva = meuFiltro.tipoDeProva;
+        this.multSelectTema = meuFiltro.tema;
+        this.multSelectSubtema = meuFiltro.subtema;
+        this.multSelecDificuldade = meuFiltro.dificuldade;
+        this.multSelectTipoDeProva = meuFiltro.tipoDeProva;
+        this.multiSelectRespSimu = meuFiltro.respostasSimulado;
+        this.multiSelectCertoErrado = meuFiltro.certasErradas;
+      }
     }
+
     this.tiposDeProvaDescricoes = this.tiposDeProva.map((tipoDeProva) =>
       this.getDescricaoTipoDeProva(tipoDeProva)
     );
@@ -407,7 +443,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   }
 
   filtrarQuestoes(): void {
-
+    this.carregando = true;
     this.selectedOption = '';
     this.respostaCorreta = null;
     this.respostaErrada = null;
@@ -522,20 +558,26 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
         this.mostrarGabarito = false;
         this.numeroDeQuestoes = questoes.length;
         this.toggleFiltros();
-
+        this.carregando = false;
       },
       (error) => {
         console.error('Erro ao filtrar questões:', error);
         this.message = 'Ocorreu um erro ao filtrar questões. Por favor, tente novamente mais tarde.';
+        this.carregando = false;
       }
     );
   }
 
   selecionarQuestao(event: Event): void {
+    
+    this.resetarOcorrenciasDeQuestao();
+    
     const target = event.target as HTMLSelectElement;
     const index = Number(target.value);
     this.paginaAtual = index;
     this.questaoAtual = this.questoes[this.paginaAtual];
+    this.carregarRespostaSeNecessario(this.questaoAtual.id);
+   
   }  
   
 
@@ -614,38 +656,13 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   
   
   anteriorQuestao() {
-    this.jaRespondeu = false;
-    this.mensagemErro = ''; // Limpa a mensagem de erro ao voltar para uma questão anterior
-  
     if (this.paginaAtual > 0) {
       this.paginaAtual--;
       this.questaoAtual = this.questoes[this.paginaAtual];
 
-      // Resetar variáveis relacionadas à resposta
-      this.selectedOption = '';
-      this.isRespostaCorreta = false;
-      this.mostrarGabarito = false; // O gabarito não é exibido automaticamente
-      this.respostaCorreta = '';
-      this.respostaErrada = '';
-      this.respostaVerificada = false;
-  
-      this.mostrarPorcentagem = false; // Reseta a barra de progresso
-      this.porcentagemAcertos = 0;
-      
-      if(this.respondidasAgora.has(this.questaoAtual.id)) {
-      this.questoesService.questaoRespondida(this.usuarioId, this.questaoAtual.id, 0).subscribe({
-        next: (resposta) => {
-          if(resposta) {
-            this.verificarRespostaUsuario(resposta);
-            this.jaRespondeu = true;
-            this.mostrarPorcentagem = true;
-          }
-        },
-        error: (error) => {
-          console.error("Erro ao verificar a resposta do usuário", error);
-        }
-      });
-    }
+      this.resetarOcorrenciasDeQuestao();
+      this.carregarRespostaSeNecessario(this.questaoAtual.id); 
+     
     } else {
       this.mensagemErro = 'Voce já está na primeira questão';
     }
@@ -653,41 +670,14 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   
   
   proximaQuestao() {
-    this.jaRespondeu = false;
-    this.resposta = '';
-    this.mensagemErro = ''; // Limpa qualquer mensagem de erro anterior
-  
+   
     if (this.paginaAtual < this.questoes.length - 1) {
       this.paginaAtual++;
       this.questaoAtual = this.questoes[this.paginaAtual];
-  
-      // Resetar variáveis relacionadas à resposta
-      this.selectedOption = '';
-      this.isRespostaCorreta = false;
-      this.mostrarGabarito = false; // Gabarito só será exibido ao clicar no botão
-      this.respostaCorreta = '';
-      this.respostaErrada = '';
-      this.respostaVerificada = false;
-  
-      this.mostrarPorcentagem = false; // Reseta a barra de progresso
-      this.porcentagemAcertos = 0;
 
-      if(this.respondidasAgora.has(this.questaoAtual.id)) {
-      this.questoesService.questaoRespondida(this.usuarioId, this.questaoAtual.id, 0).subscribe({
-        next: (resposta) => {
-          if(resposta) {
-            this.verificarRespostaUsuario(resposta);
-            this.jaRespondeu = true;
+      this.resetarOcorrenciasDeQuestao();
+      this.carregarRespostaSeNecessario(this.questaoAtual.id);
 
-            this.mostrarPorcentagem = true
-          }
-
-        },
-        error: (error) => {
-          console.error(error);
-        }
-      });
-    }
     } else {
       this.mensagemErro = 'Não há mais questões, mas em breve novas questões estarão disponíveis.'
     }
@@ -842,29 +832,72 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   }
 
   loadQuestao(): void {
-    this.questoesService.getQuestaoById(this.paginaAtual).subscribe(
-      (data: Questao) => {
-        this.questaoAtual = data;
-        // Sanitizar o conteúdo
-        this.comentarioDaQuestaoSanitizado =
-          this.sanitizer.bypassSecurityTrustHtml(
-            this.questaoAtual.comentarioDaQuestao || ''
-          );
-          this.sanitizerEnunciado = this.applyClassesToEnunciado(this.questaoAtual.enunciadoDaQuestao || '');
-      },
-      (error) => {
-        //console.error('Erro ao carregar cometario:', error);
-      }
-    );
+    if (this.questoes.length > 0 && this.questaoAtual?.id) {
+      const questaoId = this.questaoAtual.id;
+      this.questoesService.getQuestaoById(questaoId).subscribe(
+        (data: Questao) => {
+          this.questaoAtual = data;
+          this.processarQuestaoAtual();
+          this.carregarRespostaSeNecessario(questaoId);
+        },
+        (error) => {
+          console.error('Erro ao carregar questão específica:', error);
+          this.message = 'Erro ao carregar questão. Por favor, tente novamente.';
+        }
+      );
+    } 
   }
 
-  isImage(url: string): boolean {
-    //console.log(`Verificando imagem: ${url}`);
-    return url ? ['.jpeg', '.jpg', '.gif', '.png'].some(ext => url.toLowerCase().includes(ext)) : false;
+  processarQuestaoAtual(): void {
+    if (this.questaoAtual) {
+      this.comentarioDaQuestaoSanitizado = this.sanitizer.bypassSecurityTrustHtml(
+        this.questaoAtual.comentarioDaQuestao || ''
+      );
+      this.sanitizerEnunciado = this.applyClassesToEnunciado(
+        this.questaoAtual.enunciadoDaQuestao || ''
+      );
+    }
+  }
+
+  resetarOcorrenciasDeQuestao(): void {
+    this.jaRespondeu = false;
+    this.resposta = '';
+    this.mensagemErro = '';
+    this.selectedOption = '';
+    this.isRespostaCorreta = false;
+    this.mostrarGabarito = false; 
+    this.respostaCorreta = '';
+    this.respostaErrada = '';
+    this.respostaVerificada = false;
+    this.mostrarPorcentagem = false;
+    this.porcentagemAcertos = 0;
+
+  }
+
+  private carregarRespostaSeNecessario(questaoId: number): void {
+    if (this.respondidasAgora.has(questaoId)) {
+      this.questoesService.questaoRespondida(this.usuarioId, questaoId, 0).subscribe({
+        next: (resposta) => {
+          if (resposta) {
+            this.verificarRespostaUsuario(resposta);
+            this.jaRespondeu = true;
+            this.mostrarPorcentagem = true;
+          }
+          },
+          error: (error) => {
+            console.error("Erro ao verificar a resposta do usuário", error);
+          }
+        });
+      }
+  }
+
+
+  isImage(url: string | null): boolean {
+    return typeof url === 'string' && /\.(jpeg|jpg|gif|png)$/i.test(url);
   }
   
-  isVideo(url: string): boolean {
-    return url.match(/\.(mp4|webm|ogg)$/) != null;
+  isVideo(url: string | null): boolean {
+    return typeof url === 'string' && /\.(mp4|webm|ogg)$/i.test(url);
   }
 
   sanitizeVideoUrl(url: string): SafeResourceUrl {
@@ -877,5 +910,135 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
   removeAno(ano: any): void {
     this.multSelectAno = this.multSelectAno.filter(item => item !== ano);
+  }
+
+  isAdmin(): boolean {
+    return this.usuarioLogado?.permissao === 'ROLE_ADMIN'; 
+  }
+
+  isProf(): boolean {
+    return this.usuarioLogado?.permissao === 'ROLE_PROFESSOR'; 
+  }
+
+  editQuestao(): void {
+    if (this.questaoAtual?.id) {
+      const filtroState = {
+        multSelectAno: this.multSelectAno,
+        multSelecDificuldade: this.multSelecDificuldade,
+        multSelectTipoDeProva: this.multSelectTipoDeProva,
+        multSelectSubtema: this.multSelectSubtema,
+        multSelectTema: this.multSelectTema,
+        multiSelectCertoErrado: this.multiSelectCertoErrado,
+        multiSelectRespSimu: this.multiSelectRespSimu,
+        palavraChave: this.palavraChave,
+        questaoId: this.questaoAtual.id,
+        paginaAtual: this.paginaAtual
+      };
+      localStorage.setItem('questoesFiltroState', JSON.stringify(filtroState));
+
+      this.router.navigate(['/usuario/cadastro-questao', this.questaoAtual.id]);
+    }
+  }
+
+  aplicarFiltrosRestaurados(questaoId: number): void {
+    this.carregando = true;
+    
+    const filtros: any = {};
+    
+    // Construa o objeto filtros com os valores restaurados
+    if (this.multSelectAno.length) {
+      const anosSelecionados = this.multSelectAno
+        .map((ano) => this.obterAnoEnum(ano))
+        .filter((enumAno) => enumAno !== undefined);
+      if (anosSelecionados.length > 0) filtros.ano = anosSelecionados;
+    }
+    
+    if (this.multSelecDificuldade.length) {
+      const dificuldadeSelecionada = this.multSelecDificuldade
+        .map((dificuldade) => this.obterDificuldadeEnum(dificuldade))
+        .filter((enumDificuldade) => enumDificuldade !== undefined);
+      if (dificuldadeSelecionada.length > 0) filtros.dificuldade = dificuldadeSelecionada;
+    }
+
+    if (this.multSelectTipoDeProva.length) {
+      const tipoDeProvaSelecionado = this.multSelectTipoDeProva
+        .map((tipoDeProva) => this.obterTipoDeProvaEnum(tipoDeProva))
+        .filter((enumTipoDeProva) => enumTipoDeProva !== undefined);
+      if (tipoDeProvaSelecionado.length > 0) filtros.tipoDeProva = tipoDeProvaSelecionado;
+    }
+
+    if (this.multSelectSubtema.length) {
+      const subtemaSelecionado = this.multSelectSubtema
+        .map((subtema) => this.obterSubtemaEnum(subtema))
+        .filter((enumSubtema) => enumSubtema !== undefined);
+      if (subtemaSelecionado.length > 0) filtros.subtema = subtemaSelecionado;
+    }
+
+    if (this.multSelectTema.length) {
+      const temaSelecionado = this.multSelectTema
+        .map((tema) => this.obterTemaEnum(tema))
+        .filter((enumTema) => enumTema !== undefined);
+      if (temaSelecionado.length > 0) filtros.tema = temaSelecionado;
+    }
+
+    if (this.multiSelectCertoErrado.length) {
+      const certoErradoSelecionado = this.multiSelectCertoErrado
+        .map((certoErrado) => this.obterCertoErradoEnum(certoErrado))
+        .filter((enumCertoErrado) => enumCertoErrado !== undefined);
+      if (certoErradoSelecionado.length > 0) filtros.certoErrado = certoErradoSelecionado;
+    }
+
+    if (this.multiSelectRespSimu.length) {
+      const respSimuladoSelecionado = this.multiSelectRespSimu
+        .map((respSimu) => this.obterRespSimuladoEnum(respSimu))
+        .filter((enumRespSimu) => enumRespSimu !== undefined);
+      if (respSimuladoSelecionado.length > 0) filtros.respSimulado = respSimuladoSelecionado;
+    }
+    
+    
+    if (this.palavraChave && this.palavraChave.trim() !== '') {
+      filtros.palavraChave = this.palavraChave.trim();
+    }
+    
+    if (Object.keys(filtros).length === 0) {
+      this.carregando = false;
+      this.loadQuestao();
+      return;
+    }
+    
+    // Fazer a chamada de filtro
+    this.questoesService.filtrarQuestoes(this.usuarioId, filtros, 0, 0).subscribe(
+      (questoes: Questao[]) => {
+        if (questoes.length > 0) {
+          this.questoes = questoes;
+          this.numeroDeQuestoes = questoes.length;
+          
+          this.navegacaoPorQuestao = this.questoes.map((q, index) => ({
+            questao: q,
+            index: index,
+          }));
+          
+          const index = this.questoes.findIndex(q => q.id === questaoId);
+          if (index >= 0) {
+            this.paginaAtual = index;
+            this.questaoAtual = this.questoes[index];
+            this.carregarRespostaSeNecessario(this.questaoAtual.id);
+          } else {
+            this.paginaAtual = 0;
+            this.questaoAtual = this.questoes[0];
+          }
+        } else {
+          this.message = "Nenhuma questão encontrada com os filtros anteriores.";
+          this.loadQuestao();
+        }
+        this.carregando = false;
+      },
+      (error) => {
+        console.error('Erro ao restaurar filtros:', error);
+        this.message = 'Erro ao restaurar filtros anteriores.';
+        this.carregando = false;
+        this.loadQuestao();
+      }
+    );
   }
 }

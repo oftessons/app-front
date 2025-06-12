@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Usuario } from 'src/app/login/usuario';
@@ -15,6 +15,7 @@ import { AulasService } from 'src/app/services/aulas.service';
   styleUrls: ['./cadastro-de-aulas.component.css']
 })
 export class CadastroDeAulasComponent implements OnInit {
+  @ViewChild('videoInput') videoInput!: ElementRef<HTMLInputElement>;
 
   usuario: Usuario | null = null;
   Permissao = Permissao;
@@ -173,6 +174,8 @@ export class CadastroDeAulasComponent implements OnInit {
         }
       );
     } else {
+      console.log('Atualizando aula com ID:', this.aulaDTO);
+      console.log('FormData:', this.formData);
       this.aulasService.atualizar(this.aulaDTO.id, this.formData).subscribe(
         (response) => {
           this.isLoading = false; // Finaliza o carregamento
@@ -235,5 +238,27 @@ export class CadastroDeAulasComponent implements OnInit {
         console.error('Erro ao carregar aula:', error);
       }
     );
+  }
+
+  removeFile(field: string, event?: Event): void {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
+    if(this.aulaDTO.id){
+      if (field === 'video') {
+        this.video = null;
+        this.aulaDTO.urlVideo = null;
+        this.fotoPreviews[field] = null;
+        this.videoInput.nativeElement.value = '';
+      }
+    }else{
+      if (field === 'video') {
+        this.video = null;
+        this.fotoPreviews[field] = null;
+        this.videoInput.nativeElement.value = '';
+      }
+    }
   }
 }

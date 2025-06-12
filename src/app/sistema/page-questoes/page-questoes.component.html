@@ -13,7 +13,9 @@
       <div class="filters-container">
         <form #filtroForm="ngForm" (ngSubmit)="filtrarQuestoes()" class="consulta-form">  
           <div class="row">
-            <div class="col col-12 col-md-6 espaco-select">
+            
+          <div class="col">
+            <div class="espaco-select">
               <app-multiplo-select
                 label="Respostas"
                 [options]="respSimuladoDescricoes"
@@ -21,17 +23,7 @@
                 [multiple]="true">
               </app-multiplo-select>
             </div>
-            <div class="col col-12 col-md-6 espaco-select">
-              <app-multiplo-select
-                label="Questões"
-                [options]="questoesCertasErradas"
-                [(selectedValue)]="multiSelectCertoErrado"
-                [multiple]="true">
-              </app-multiplo-select>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col col-12 col-md-6 espaco-select">
+            <div class="espaco-select">
               <app-multiplo-select
                 label="Ano"
                 [options]="anosDescricoes"
@@ -39,17 +31,7 @@
                 [multiple]="true">
               </app-multiplo-select>
             </div>
-            <div class="col col-12 col-md-6 espaco-select">
-              <app-multiplo-select
-                label="Tipo de Prova"
-                [options]="tiposDeProvaDescricoes"
-                [(selectedValue)]="multSelectTipoDeProva"
-                [multiple]="true">
-              </app-multiplo-select>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col col-12 col-md-6 espaco-select">
+            <div class="espaco-select">
               <app-multiplo-select
                 label="Tema"
                 [options]="temasDescricoes"
@@ -57,17 +39,7 @@
                 [multiple]="true">
               </app-multiplo-select>
             </div>
-            <div class="col col-12 col-md-6 espaco-select">
-              <app-multiplo-select
-                label="Subtema"
-                [options]="subtemasDescricoes"
-                [(selectedValue)]="multSelectSubtema"
-                [multiple]="true">
-              </app-multiplo-select>
-            </div>
-          </div>
-          <div class="row rol-col">   
-            <div class="col col-12 col-md-6 espaco-select">
+            <div class="espaco-select">
               <app-multiplo-select
                 label="Dificuldade"
                 [options]="dificuldadesDescricoes"
@@ -75,7 +47,34 @@
                 [multiple]="true">
               </app-multiplo-select>
             </div>
-            <div class="col col-12 col-md-6 espaco-select">
+          </div>
+
+          <div class="col">
+            <div class="espaco-select">
+              <app-multiplo-select
+                label="Questões"
+                [options]="questoesCertasErradas"
+                [(selectedValue)]="multiSelectCertoErrado"
+                [multiple]="true">
+              </app-multiplo-select>
+            </div>
+            <div class="espaco-select">
+              <app-multiplo-select
+                label="Tipo de Prova"
+                [options]="tiposDeProvaDescricoes"
+                [(selectedValue)]="multSelectTipoDeProva"
+                [multiple]="true">
+              </app-multiplo-select>
+            </div>
+            <div class="espaco-select">
+              <app-multiplo-select
+                label="Subtema"
+                [options]="subtemasDescricoes"
+                [(selectedValue)]="multSelectSubtema"
+                [multiple]="true">
+              </app-multiplo-select>
+            </div>
+            <div class="espaco-select">
               <app-input-padrao
                 label="Pesquisar por palavra-chave"
                 [(value)]="palavraChave"
@@ -83,7 +82,7 @@
               </app-input-padrao>        
             </div>
           </div>
-  
+          </div>
           <div *ngIf="message" class="alert alert-info mt-3 alert-custom" role="alert">
             {{ message }}
           </div>
@@ -99,12 +98,12 @@
             <button type="button" class="btn-salvar" (click)="abrirModal()">Salvar Filtro</button>
           </div>
         </form>
+        <mat-progress-bar class="progress-bar-spacing" *ngIf="carregando" mode="indeterminate"></mat-progress-bar>
       </div>
     </div>
   </div>
-
-   <!-- Modal de confirmação -->
-   <div>
+  <!-- Modal de confirmação -->
+  <div>
     <div class="modal fade" id="confirmacaoModal" #confirmacaoModalRef tabindex="-1" aria-labelledby="confirmacaoModalLabel" aria-hidden="true">
       <div class="mr-box-save-lista-overlay"></div>
       <div class="modal-dialog">
@@ -154,6 +153,7 @@
         <h3>Tema: {{ questaoAtual.tema }}</h3>
         <h3>Ano: {{ questaoAtual.ano }}</h3>
         <h3>Tipo de Prova: {{ questaoAtual.tipoDeProva }}</h3>
+        <button type="button" class="btn-editar" (click)="editQuestao()" *ngIf="isAdmin() || isProf()">Editar Questão</button>
       </div>
       <div class="conteudo-questao">
         <!-- Quero se se eu tiver cadastrado o video apareca aqui no enunciado-->

@@ -29,10 +29,6 @@
         </div>
 
         <div class="profile-info">
-          <p><strong>Username: </strong>
-            <span *ngIf="!editMode"> {{ usuario.username }}</span>
-            <input *ngIf="editMode" [(ngModel)]="usuario.username" class="form-control" />
-          </p>
           <p><strong>Nome: </strong>
             <span *ngIf="!editMode"> {{ usuario.nome }}</span>
             <input *ngIf="editMode" [(ngModel)]="usuario.nome" class="form-control" />
@@ -91,10 +87,6 @@
           <span>{{ planInformation.proximaRenovacao }}</span>
         </div>
         <hr>
-        <div class="line-dados">
-          <h3>Válido até</h3>
-          <span>{{ planInformation.validoAte }}</span>
-        </div>
       </div>
       <button class="btn-assinatura" (click)="exibirPortalAssinatura()">Abrir Portal de Assinatura e Pagamentos</button>
     </div>

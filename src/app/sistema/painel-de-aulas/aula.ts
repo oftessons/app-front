@@ -6,7 +6,7 @@ export class Aula {
   idUser!: number;
   title!: string;
   video!: File;
-  urlVideo!: string;
+  urlVideo!: string | null;
   categoria!: Categoria;
   titulo!: string;
   descricao!: string;
