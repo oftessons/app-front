@@ -19,7 +19,7 @@ export const SubtemaDescricoes: Record<Subtema, string> = {
   [Subtema.ANTIBIOTICOS_ANTIFUNGICOS_E_ANTIVIRAIS]: 'Antibióticos, Antifúngicos e Antivirais',
   [Subtema.ANESTESICOS]: 'Anestésicos',
   [Subtema.ASTIGMATISMO]: 'Astigmatismo',
-  [Subtema.AUXILIOS_OPTICOS]: '⁠Auxílios Ópticos',
+  [Subtema.AUXILIOS_OPTICOS]: 'Auxílios Ópticos',
   [Subtema.BASES]: 'Bases',
   [Subtema.BASES_DE_CORNEA]: 'Bases de Córnea',
   [Subtema.BASES_RETINA]: 'Bases Retina',
