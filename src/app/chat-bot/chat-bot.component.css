@@ -7,7 +7,7 @@
 
 .chatbot-container {
   width: 350px;
-  height: 450px;
+  height: 470px;
   background-color: #fff;
   border-radius: 20px;
   overflow: hidden;
@@ -53,15 +53,6 @@
   scroll-behavior: smooth;
 }
 
-.chatbot-footer {
-  display: flex;
-  justify-content: center;
-  padding: 27px 10px;
-  background-color: #ffffff;
-  text-align: center;
-  padding-bottom: 10px;
-}
-
 .user-text-input {
   display: flex;
   align-items: flex-start;
@@ -102,6 +93,16 @@
   background-clip: content-box; 
 }
 
+.chatbot-footer {
+  display: flex;
+  justify-content: center;
+  padding: 30px 10px;
+  background-color: #ffffff;
+  text-align: center;
+  padding-bottom: 10px;
+  height: 120px;
+}
+
 .chatbot-footer button {
   background: linear-gradient(to right, #f5ce50, #febf25);
   color: white;
@@ -122,6 +123,7 @@
 .chatbot-footer button:disabled {
   background: #ccc;
   cursor: not-allowed;
+  opacity: 0.5;
   transform: scale(1);
 }
 
@@ -228,18 +230,64 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  height: 93px;
+  height: 120px;
+}
+
+.initial-buttons {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 10px;
+}
+
+.initial-buttons button {
+  padding: 12px;
+  border-radius: 16px;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ai-button {
+  background-color: #041e4e;
+  gap: 10px;
+  color: white;
+}
+
+.support-button {
+  background-color: #3b5fa0;
+  gap: 10px;
+  color: white;
+}
+
+.initial-buttons button:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.initial-buttons button:active {
+  transform: scale(0.98);
+}
+
+.initial-buttons i {
+  margin-right: 8px;
+  font-size: 16px;
 }
 
 .quick-replies .main-topics {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+  height: 100%;
 }
 
 .quick-replies .main-topics button,
 .quick-replies .sub-topics button {
-  padding: 8px 12px;
+  padding: 8px 16px;
   border: none;
   border-radius: 8px;
   background-color: #3b5fa0;
@@ -265,13 +313,8 @@
   background-color: #5a6268;
 }
 
-/* Disabled textarea style */
 .user-text-input:disabled {
   background-color: #e9ecef;
-  cursor: not-allowed;
-}
-.chatbot-footer button:disabled {
-  opacity: 0.5;
   cursor: not-allowed;
 }
 

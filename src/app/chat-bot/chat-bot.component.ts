@@ -38,6 +38,18 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
   isNavigationBarActive = false;
   private navCheckInterval: any;
   usuario!: Usuario;
+  conversationStep = -1; 
+  selectedTopic: any = null;
+  enableInput = false;
+  initialStep = true;
+
+  topics = [
+    { name: 'Acesso', subtopics: ['Esqueci minha senha'] },
+    { name: 'Pagamento', subtopics: ['Plano Atual'] },
+    { name: 'Reclamação', subtopics: ['Questão Atual', 'Plataforma'] },
+    { name: 'Sugestão', subtopics: ['Questão Atual', 'Plataforma'] },
+    { name: 'Outros', subtopics: ['Entrar em contato via WhatsApp'] },
+  ];
 
   @ViewChild('chatBody') chatBody!: ElementRef;
 
@@ -97,12 +109,51 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
     
     setTimeout(() => {
       const initialBotResponse = { 
-        text: "Selecione um dos tópicos abaixo para iniciar o atendimento:", 
+        text: "Como posso te ajudar hoje?", 
         type: 'bot' 
       };
       this.messages.push(initialBotResponse);
       this.chatBotStateService.addMessage(initialBotResponse);
+      this.initialStep = true;
+      this.conversationStep = -1;
     }, 1000);
+  }
+
+  selectAIAssistance(): void {
+    const userMsg = { text: "Gostaria de falar com a IA", type: 'user' };
+    this.messages.push(userMsg);
+    this.chatBotStateService.addMessage(userMsg);
+
+    setTimeout(() => {
+      const botMsg = {
+          text: "Estou pronto para responder suas dúvidas! O que você gostaria de saber?", 
+          type: 'bot' 
+      };
+      this.messages.push(botMsg);
+      this.chatBotStateService.addMessage(botMsg);
+      this.scrollToBottom();
+    }, 1000);
+
+    this.initialStep = false;
+    this.enableInput = true;
+    this.conversationStep = 2;
+  }
+
+  selectSupport(): void {
+    const userMsg = { text: "Gostaria de falar com o suporte.", type: 'user' };
+    this.messages.push(userMsg);
+    this.chatBotStateService.addMessage(userMsg);
+    setTimeout(() => {
+      const botMsg = {
+          text: "Selecione um dos tópicos abaixo para que possamos te ajudar:", 
+          type: 'bot' 
+      };
+      this.messages.push(botMsg);
+      this.chatBotStateService.addMessage(botMsg);
+      this.scrollToBottom();
+    }, 1000);
+    this.initialStep = false;
+    this.conversationStep = 0;
   }
 
   sendMessage(): void {
@@ -213,18 +264,6 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
     }, 100);
   }
 
-  topics = [
-    { name: 'Acesso', subtopics: ['Esqueci minha senha'] },
-    { name: 'Pagamento', subtopics: ['Plano Atual'] },
-    { name: 'Dúvida', subtopics: ['Questão Atual', 'Plataforma'] },
-    { name: 'Reclamação', subtopics: ['Questão Atual', 'Plataforma'] },
-    { name: 'Sugestão', subtopics: ['Questão Atual', 'Plataforma'] },
-    { name: 'Outros', subtopics: ['Entrar em contato via WhatsApp'] },
-  ];
-  conversationStep = 0; 
-  selectedTopic: any = null;
-  enableInput = false;
-
   selectMainTopic(topic: any): void {
     this.selectedTopic = topic;
     this.conversationStep = 1;
@@ -232,12 +271,13 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
 
   goBackMain(): void {
     this.selectedTopic = null;
-    this.conversationStep = 0;
+    this.conversationStep = -1;
     this.enableInput = false;
+    this.initialStep = true;
 
     setTimeout(() => {
       const menuMsg = {
-        text: "Selecione um dos tópicos abaixo:",
+        text: "Como posso te ajudar hoje?",
         type: 'bot'
       };
       this.messages.push(menuMsg);
