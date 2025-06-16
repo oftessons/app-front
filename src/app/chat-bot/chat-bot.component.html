@@ -32,14 +32,14 @@
   <div class="quick-replies" *ngIf="conversationStep < 2">
     <div *ngIf="conversationStep === -1 && initialStep" class="initial-buttons">
       <button class="ai-button" (click)="selectAIAssistance()">
-        <i class="fa fa-robot"></i> Tire dúvidas com nossa IA
+        <i class="fa fa-robot"></i> Tire dúvidas com a Victória
       </button>
       <button class="support-button" (click)="selectSupport()">
         <i class="fa fa-headset"></i> Fale com nosso suporte
       </button>
     </div>
     <div *ngIf="conversationStep === 0" class="main-topics">
-      <button class="back-to-initial-btn" (click)="goBackMain()">
+      <button class="back-btn" (click)="goBackMain()">
         <i class="fa fa-arrow-left"></i> Voltar
       </button>
       <button *ngFor="let topic of topics" (click)="selectMainTopic(topic)">
@@ -47,7 +47,7 @@
       </button>
     </div>
     <div *ngIf="conversationStep === 1" class="sub-topics">
-      <button class="back-btn" (click)="goBackMain()">Voltar</button>
+      <button class="back-btn" (click)="goBackToTopics()">Voltar</button>
       <button
         *ngFor="let sub of selectedTopic.subtopics"
         (click)="selectSubTopic(sub)"

@@ -46,9 +46,9 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
   topics = [
     { name: 'Acesso', subtopics: ['Esqueci minha senha'] },
     { name: 'Pagamento', subtopics: ['Plano Atual'] },
-    { name: 'Reclamação', subtopics: ['Questão Atual', 'Plataforma'] },
+    // { name: 'Reclamação', subtopics: ['Questão Atual', 'Plataforma'] },
     { name: 'Sugestão', subtopics: ['Questão Atual', 'Plataforma'] },
-    { name: 'Outros', subtopics: ['Entrar em contato via WhatsApp'] },
+    { name: 'Contato via WhatsApp' },
   ];
 
   @ViewChild('chatBody') chatBody!: ElementRef;
@@ -99,6 +99,15 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
       });
   }
 
+  private isMessageDuplicate(messageText: string): boolean {
+  if (this.messages.length === 0) {
+    return false;
+  }
+  
+  const lastMessage = this.messages[this.messages.length - 1];
+  return lastMessage.text === messageText && lastMessage.type === 'bot';
+}
+
   sendWelcomeMessage(): void {
     const welcomeMsg = { 
       text: "Olá esse é o canal de suporte da Oftlessons, seja bem-vindo!", 
@@ -120,13 +129,13 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
   }
 
   selectAIAssistance(): void {
-    const userMsg = { text: "Gostaria de falar com a IA", type: 'user' };
+    const userMsg = { text: "Gostaria de falar com a Victória", type: 'user' };
     this.messages.push(userMsg);
     this.chatBotStateService.addMessage(userMsg);
 
     setTimeout(() => {
       const botMsg = {
-          text: "Estou pronto para responder suas dúvidas! O que você gostaria de saber?", 
+          text: "Olá! Sou Victória, a assistente virtual da Oftlessons. Como posso te ajudar hoje?", 
           type: 'bot' 
       };
       this.messages.push(botMsg);
@@ -144,12 +153,12 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
     this.messages.push(userMsg);
     this.chatBotStateService.addMessage(userMsg);
     setTimeout(() => {
-      const botMsg = {
-          text: "Selecione um dos tópicos abaixo para que possamos te ajudar:", 
-          type: 'bot' 
-      };
-      this.messages.push(botMsg);
-      this.chatBotStateService.addMessage(botMsg);
+      const topicMsg = "Selecione um dos tópicos abaixo para que possamos te ajudar:";
+      if(!this.isMessageDuplicate(topicMsg)) {
+        const botMsg = { text: topicMsg, type: 'bot' };
+        this.messages.push(botMsg);
+        this.chatBotStateService.addMessage(botMsg);
+      }
       this.scrollToBottom();
     }, 1000);
     this.initialStep = false;
@@ -196,7 +205,7 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
           this.messages = this.messages.filter(msg => msg !== typingMsg);
           console.error('Erro ao enviar mensagem:', error);
           const errorMsg = { 
-            text: '⚠️ Erro ao conectar ao suporte. Tente novamente mais tarde.', 
+            text: '⚠️ Erro ao conectar com a assistente. Tente novamente mais tarde.', 
             type: 'bot' 
           };
           this.messages.push(errorMsg);
@@ -265,6 +274,22 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
   }
 
   selectMainTopic(topic: any): void {
+    if(topic.name === 'Contato via WhatsApp') {
+      const phoneNumber = '5511920909632';
+      const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent('Olá! Preciso de suporte para a Oftlessons.')}`;
+      setTimeout(() => {
+        window.open(whatsappUrl, '_blank');
+      }, 1000);
+      const botMsg = { 
+        text: 'Redirecionando você para o WhatsApp do suporte...', 
+        type: 'bot' 
+      };
+      this.messages.push(botMsg);
+      this.chatBotStateService.addMessage(botMsg);
+      this.scrollToBottom();
+      return;
+    }
+
     this.selectedTopic = topic;
     this.conversationStep = 1;
   }
@@ -276,12 +301,28 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
     this.initialStep = true;
 
     setTimeout(() => {
-      const menuMsg = {
-        text: "Como posso te ajudar hoje?",
-        type: 'bot'
-      };
-      this.messages.push(menuMsg);
-      this.chatBotStateService.addMessage(menuMsg);
+      const menuMsg = "Como posso te ajudar hoje?"
+      if(!this.isMessageDuplicate(menuMsg)) {
+        const menuBotMsg = { text: menuMsg, type: 'bot' };
+        this.messages.push(menuBotMsg);
+        this.chatBotStateService.addMessage(menuBotMsg);
+      }
+      this.scrollToBottom();
+    }, 1000);
+  }
+
+  goBackToTopics(): void {
+    this.selectedTopic = null;
+    this.conversationStep = 0;
+    this.enableInput = false;
+
+    setTimeout(() => {
+      const topicsMsg = "Selecione um dos tópicos abaixo para que possamos te ajudar:";
+      if(!this.isMessageDuplicate(topicsMsg)) {
+        const topicMsg = { text: topicsMsg, type: 'bot' };
+        this.messages.push(topicMsg);
+        this.chatBotStateService.addMessage(topicMsg);
+      }
       this.scrollToBottom();
     }, 1000);
   }
@@ -360,20 +401,6 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
     this.messages.push(userMsg);
     this.chatBotStateService.addMessage(userMsg);
     this.scrollToBottom();
-
-    if(sub === 'Entrar em contato via WhatsApp') {
-      const phoneNumber = '5511920909632';
-      const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent('Olá! Preciso de suporte para a Oftlessons.')}`;
-      window.open(whatsappUrl, '_blank');
-      
-      const botMsg = { 
-        text: 'Redirecionando você para o WhatsApp do suporte...', 
-        type: 'bot' 
-      };
-      this.messages.push(botMsg);
-      this.chatBotStateService.addMessage(botMsg);
-      return;
-    }
 
     if(sub === 'Esqueci minha senha') {
       this.processForgotPassword();
