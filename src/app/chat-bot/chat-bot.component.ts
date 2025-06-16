@@ -129,13 +129,13 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
   }
 
   selectAIAssistance(): void {
-    const userMsg = { text: "Gostaria de falar com o Victor", type: 'user' };
+    const userMsg = { text: "Gostaria de falar com a VictorIA", type: 'user' };
     this.messages.push(userMsg);
     this.chatBotStateService.addMessage(userMsg);
 
     setTimeout(() => {
       const botMsg = {
-          text: "Olá! Sou o Victor, o assistente virtual da Oftlessons. Como posso te ajudar hoje?", 
+          text: "Ola! Sou a VictorIA, sua Inteligência Artificial do Oftlessons. Como posso te ajudar hoje?", 
           type: 'bot' 
       };
       this.messages.push(botMsg);
