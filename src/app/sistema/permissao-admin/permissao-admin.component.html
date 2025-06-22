@@ -35,7 +35,7 @@
             </thead>
             <tbody>
                 <tr *ngFor="let professor of paginatedProfessores">
-                    <td><a href="#">{{ professor.nome }}</a></td>
+                    <td><a href="javascript:void(0)">{{ professor.nome }}</a></td>
                     <td>{{ professor.email }}</td>
                     <td>{{ professor.cidade }}</td>
                     <td>{{ professor.estado }}</td>
@@ -73,7 +73,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let aluno of paginatedAlunos">
-              <td><a href="#">{{ aluno.nome }}</a></td>
+              <td><a href="javascript:void(0)" (click)="openModalPlano(aluno.id)">{{ aluno.nome }}</a></td>
               <td>{{ aluno.email }}</td>
               <td>{{ aluno.cidade }}</td>
               <td>{{ aluno.estado }}</td>
@@ -112,7 +112,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let bolsista of paginatedBolsistas">
-              <td><a href="#">{{ bolsista.nome }}</a></td>
+              <td><a href="javascript:void(0)">{{ bolsista.nome }}</a></td>
               <td>{{ bolsista.email }}</td>
               <td>{{ bolsista.cidade }}</td>
               <td>{{ bolsista.estado }}</td>
@@ -331,6 +331,86 @@
         <button type="button" class="btn button-confirm" (click)="editarUsuarios()">
           Gravar alterações
         </button>
+      </div>
+    </app-modal>
+
+    <app-modal [show]="showModalPlano" (closeModal)="closeModalPlano()" size="max-w-7xl" [footer]="false">
+      <div class="container-modal sm:items-start">
+        <div class="modal-header">
+          <div class="content-header">
+            <div class="close-modal">
+              <button type="button" class="close" aria-label="Close" (click)="closeModalPlano()">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <h3 id="modal-title">
+              Perfil do Usuário
+            </h3>
+          </div>
+        </div>
+
+        <div class="profile-container" *ngIf="selectedUser">
+          <div class="profile-dados">
+            <div class="profile-photo-container">
+              <img [src]="selectedUser.fotoUrl || 'assets/imagens/foto.svg'" alt="Foto do Usuário" class="profile-photo">
+            </div>
+
+            <div class="profile-info">
+              <p><strong>Nome: </strong> {{ selectedUser.nome }}</p>
+              <p><strong>E-mail: </strong> {{ selectedUser.email }}</p>
+              <p><strong>Telefone: </strong> {{ selectedUser.telefone || 'Não informado' }}</p>
+              <p><strong>Cidade: </strong> {{ selectedUser.cidade || 'Não informada' }}</p>
+              <p><strong>Estado: </strong> {{ selectedUser.estado || 'Não informado' }}</p>
+              <p><strong>Tipo de Usuário: </strong> {{ selectedUser.permissao }}</p>
+              <p *ngIf="selectedUser.bolsaAssinatura"><strong>Bolsa: </strong> Sim</p>
+              <p *ngIf="selectedUser.diasDeTeste"><strong>Dias de Teste: </strong> {{ selectedUser.diasDeTeste }}</p>
+            </div>
+            <div class="profile-plan" *ngIf="selectedUser">
+              <h4 class="plan-title">Informações do Plano</h4>
+              <div *ngIf="loadingPlan" class="loading-plan">
+                Carregando informações do plano...
+              </div>
+              <div *ngIf="!loadingPlan && selectedUserPlan" class="plan-info">
+                <div class="line-dados">
+                  <h3>Plano</h3>
+                  <span>{{ selectedUserPlan.name || 'Não disponível' }}</span>
+                </div>
+                <hr>
+                <div class="line-dados">
+                  <h3>Período de renovação</h3>
+                  <span>{{ selectedUserPlan.intervaloRenovacao || 'Não disponível' }}</span>
+                </div>
+                <hr>
+                <div class="line-dados">
+                  <h3>Status</h3>
+                  <span>{{ selectedUserPlan.status || 'Não disponível' }}</span>
+                </div>
+                <hr>
+                <div class="line-dados">
+                  <h3>Próxima renovação</h3>
+                  <span>{{ selectedUserPlan.proximaRenovacao || 'Não disponível' }}</span>
+                </div>
+                <hr>
+                <div class="line-dados">
+                  <h3>Válido até</h3>
+                  <span>{{ selectedUserPlan.validoAte || 'Não disponível' }}</span>
+                </div>
+              </div>
+              <div *ngIf="!loadingPlan && !selectedUserPlan" class="no-plan">
+                Usuário não possui plano ativo ou não foi possível obter o plano.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="button-container">
+          <button type="button" class="btn button-cancel" (click)="closeModalPlano()">
+            Fechar
+          </button>
+          <button type="button" class="btn button-confirm" (click)="openModalAtualizar(selectedUser?.id || '')">
+            Editar Usuário
+          </button>
+        </div>
       </div>
     </app-modal>
   </div>

@@ -5,6 +5,8 @@ import { PermissaoDescricoes } from 'src/app/login/Permissao-descricao';
 import { Usuario } from 'src/app/login/usuario';
 import { AuthService } from 'src/app/services/auth.service';
 import { ChangeDetectorRef } from '@angular/core';
+import { Plano } from 'src/app/sistema/page-meu-perfil/plano';
+import { VendasService } from 'src/app/services/vendas.service';
 
 @Component({
   selector: 'app-permissao-admin',
@@ -69,6 +71,10 @@ export class PermissaoAdminComponent implements OnInit {
 
   showModalCadastrar: boolean = false;
   showModalAtualizar: boolean = false;
+  showModalPlano: boolean = false;
+  selectedUser: Usuario | null = null;
+  selectedUserPlan: Plano | null = null;
+  loadingPlan: boolean = false;
   submited: boolean = false;
   errors: string[] = [];
   modalErrors: string[] = [];
@@ -82,7 +88,7 @@ export class PermissaoAdminComponent implements OnInit {
   
 
   constructor(private formBuilder: FormBuilder, private authService: AuthService, 
-    private cdRef: ChangeDetectorRef) { 
+    private cdRef: ChangeDetectorRef, private vendasService: VendasService) { 
     this.usuarioFormCadastro = this.formBuilder.group({
       id: null,
       username: [''],
@@ -427,6 +433,7 @@ export class PermissaoAdminComponent implements OnInit {
 
   openModalAtualizar(id: string) {
     this.consultarUsuario(id);
+    this.showModalPlano = false;
     this.showModalAtualizar = true;
   }
 
@@ -434,6 +441,82 @@ export class PermissaoAdminComponent implements OnInit {
     this.modalErrors = [];
     this.limparTela();
     this.showModalAtualizar = false;
+  }
+
+  exibirInformacaoPlano(userId: string) {
+    this.loadingPlan = true;
+    this.selectedUserPlan = null;
+    
+    this.vendasService.obterDadosAssinaturaPorUsuario(userId).subscribe(
+      (response) => {
+        const plano = new Plano();
+        plano.name = response.name;
+        plano.intervaloRenovacao = this.getPeriodoTraduzido(response.intervaloRenovacao);
+        plano.status = this.getStatusTraduzido(response.status);
+        plano.proximaRenovacao = this.converterDateTime(response.proximaRenovacao);
+        plano.validoAte = this.converterDateTime(response.validoAte);
+        this.selectedUserPlan = plano;
+        this.loadingPlan = false;
+        this.cdRef.markForCheck();
+      },
+      (error) => {
+        console.error('Erro ao obter informações do plano:', error);
+        this.loadingPlan = false;
+        this.cdRef.markForCheck();
+      }
+    );
+  }
+
+  getPeriodoTraduzido(periodo: string): string {
+    const periodos: { [key: string]: string } = {
+      'month': 'Mensal',
+      'year': 'Anual',
+      'semester': 'Semestral',
+      'day': 'Diário'
+    };
+    return periodos[periodo] || periodo;
+  }
+
+  getStatusTraduzido(status: string): string {
+    const statusMap: { [key: string]: string } = {
+      'active': 'Ativo',
+      'canceled': 'Cancelado',
+      'incomplete': 'Incompleto',
+      'incomplete_expired': 'Expirado',
+      'past_due': 'Pagamento Pendente',
+      'trialing': 'Em período de teste',
+      'unpaid': 'Não pago'
+    };
+    return statusMap[status] || status;
+  }
+
+  converterDateTime(dateTime: string): string {
+    if (!dateTime) return 'Não disponível';
+    
+    const data = new Date(dateTime);
+    return data.toLocaleDateString('pt-BR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    });
+  }
+
+  openModalPlano(id: string) {
+    this.authService.visualizarUsuarioPorId(id).subscribe((response: Usuario) => {
+      this.selectedUser = response;
+      this.showModalPlano = true;
+      this.exibirInformacaoPlano(id);
+      this.cdRef.markForCheck();
+    }, (error) => {
+      this.errors.push(error);
+      this.cdRef.markForCheck();
+    });
+  }
+
+  closeModalPlano() {
+    this.selectedUser = null;
+    this.showModalPlano = false;
+    this.cdRef.markForCheck();
   }
 
   togglePasswordVisibility(field: string) {

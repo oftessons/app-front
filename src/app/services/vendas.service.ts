@@ -20,6 +20,10 @@ export class VendasService {
 
   }
 
+  obterDadosAssinaturaPorUsuario(userId: string): Observable<any> {
+    return this.http.get<any>(`${this.apiURL}/obter-informacoes-plano/${userId}`);
+  }
+
   obterPortalAcesso(): Observable<any>{
     const url = `${this.apiURL}/obter-portal-acesso`; 
 
