@@ -1,37 +1,55 @@
-<!-- select.component.html -->
 <div class="select-container">
-  <label [class.active]="selectedValue.length > 0">{{ label }}</label>
+  <label [class.active]="multiple ? selectedValue?.length > 0 : selectedValue">{{ label }}</label>
 
   <div
     [ngStyle]="customStyles"
     class="select-dropdown"
     (click)="toggleDropdown()"
   >
-    <!-- Exibe os valores selecionados quando "multiple" for true -->
-    <div *ngIf="multiple && selectedValue.length > 0" class="selected-values">
+    <div *ngIf="multiple && selectedValue?.length > 0" class="selected-values">
       <span *ngFor="let value of selectedValue" class="selected-value">
-        {{ value }}
-        <!-- Botão de remover -->
-        <span class="remove-value" (click)="removeValue(value)">x</span>
+        {{ getLabelFromValue(value) }}
+        <span class="remove-value" (click)="removeValue(value)">×</span>
       </span>
     </div>
 
-    <!-- Exibe a indicação de seleção se não houver nada selecionado -->
-    <!-- <div *ngIf="multiple && selectedValue.length === 0" class="selected-value">
- 
-    </div> -->
+    <div *ngIf="!multiple && selectedValue" class="selected-single">
+      {{ getLabelFromValue(selectedValue) }}
+    </div>
 
     <div class="arrow-down"></div>
   </div>
 
   <div class="options-container" *ngIf="isOpen">
-    <div
-      class="option"
-      *ngFor="let option of options"
-      (click)="onSelect(option)"
-      [class.selected]="selectedValue.includes(option)"
-    >
-      {{ option }}
-    </div>
+    <ng-container *ngIf="isGroupedOptions(); else flatOptions">
+      <div class="option-group" *ngFor="let group of options">
+        <div 
+          class="group-label"
+          (click)="onSelect(group.value)"
+          [class.selected]="multiple ? selectedValue.includes(group.value) : selectedValue === group.value"
+        >
+          {{ group.label }}
+        </div>
+        <div 
+          class="option"
+          *ngFor="let opt of group.options"
+          (click)="onSelect(opt.value)"
+          [class.selected]="multiple ? selectedValue.includes(opt.value) : selectedValue === opt.value"
+        >
+          {{ opt.label }}
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-template #flatOptions>
+      <div 
+        class="option"
+        *ngFor="let option of options"
+        (click)="onSelect(option)"
+        [class.selected]="multiple ? selectedValue.includes(option) : selectedValue === option"
+      >
+        {{ option }}
+      </div>
+    </ng-template>
   </div>
 </div>

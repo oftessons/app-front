@@ -25,39 +25,59 @@ export class MultiploSelectComponent {
     }
   }
 
-  onSelect(value: any) {
+  isGroupedOptions(): boolean {
+    return Array.isArray(this.options) && this.options.length > 0 && this.options[0]?.options;
+  }
+
+  getLabelFromValue(value: any): string {
+    if (this.isGroupedOptions()) {
+      for (const group of this.options) {
+        if (group.value === value) {
+          return group.label; // É um tema
+        }
+        const found = group.options.find((opt: any) => opt.value === value);
+        if (found) return found.label; // É um subtema
+      }
+    }
+
+    // Para lista simples
+    const flat = this.options.find((opt: any) => opt.value === value || opt === value);
+    return flat?.label ?? flat ?? value;
+  }
+
+  onSelect(value: any): void {
     if (this.multiple) {
-      if(!Array.isArray(this.selectedValue)) {
+      if (!Array.isArray(this.selectedValue)) {
         this.selectedValue = [];
       }
-        if (this.selectedValue.includes(value)) {
-          // Remove o valor se ele já estiver selecionado
-          this.selectedValue = this.selectedValue.filter((item: any) => item !== value);
-        } else {
-          // Adiciona o valor ao array
-          this.selectedValue.push(value);
-          this.scrollToBottom();
-        }
-      
-      this.selectedValueChange.emit(this.selectedValue); // Emitir o array atualizado
+
+      const index = this.selectedValue.indexOf(value);
+
+      if (index !== -1) {
+        this.selectedValue = this.selectedValue.filter((item: any) => item !== value);
+      } else {
+        this.selectedValue = [...this.selectedValue, value];
+        this.scrollToBottom();
+      }
+
+      this.selectedValueChange.emit(this.selectedValue);
+      this.isOpen = true;
     } else {
-      // Comportamento padrão para seleção única
       this.selectedValue = value;
       this.selectedValueChange.emit(value);
     }
-    if (this.multiple) {
-      this.isOpen = true;
-    }
+    
+
   }
 
-  removeValue(value: any) {
+  removeValue(value: any): void {
     if (this.multiple && Array.isArray(this.selectedValue)) {
       this.selectedValue = this.selectedValue.filter((item: any) => item !== value);
       this.selectedValueChange.emit(this.selectedValue);
     }
   }
 
-  scrollToBottom() {
+  scrollToBottom(): void {
     const element = this.elementRef.nativeElement.querySelector('.selected-values');
     setTimeout(() => {
       if (element) {
@@ -66,7 +86,7 @@ export class MultiploSelectComponent {
     }, 50);
   }
 
-  private updateArrowRotation() {
+  private updateArrowRotation(): void {
     const arrowDown = this.elementRef.nativeElement.querySelector('.arrow-down');
     if (this.isOpen) {
       arrowDown.classList.add('rotate');
@@ -75,13 +95,13 @@ export class MultiploSelectComponent {
     }
   }
 
-  toggleDropdown() {
+  toggleDropdown(): void {
     this.isOpen = !this.isOpen;
     this.updateArrowRotation();
   }
 
   @HostListener('document:click', ['$event'])
-  clickout(event: Event) {
+  clickout(event: Event): void {
     if (!this.elementRef.nativeElement.contains(event.target)) {
       this.isOpen = false;
       this.updateArrowRotation();
