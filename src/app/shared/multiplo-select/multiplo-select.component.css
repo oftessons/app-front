@@ -194,5 +194,12 @@
   text-decoration: underline;      
 }
 
-
-  
+.search-input {
+  width: 100%;
+  padding: 6px 10px;
+  margin-bottom: 8px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+}

@@ -21,8 +21,18 @@
   </div>
 
   <div class="options-container" *ngIf="isOpen">
+      <input
+        *ngIf="searchable" 
+        type="text"
+        [(ngModel)]="searchTerm"
+        (input)="onSearchTermChange()"
+        class="search-input"
+        placeholder="Buscar..."
+        (click)="$event.stopPropagation()"
+    />
+
     <ng-container *ngIf="isGroupedOptions(); else flatOptions">
-      <div class="option-group" *ngFor="let group of options">
+      <div class="option-group" *ngFor="let group of filteredOptions">
         <div 
           class="group-label"
           (click)="onSelect(group.value)"
@@ -44,7 +54,7 @@
     <ng-template #flatOptions>
       <div 
         class="option"
-        *ngFor="let option of options"
+        *ngFor="let option of filteredOptions"
         (click)="onSelect(option)"
         [class.selected]="multiple ? selectedValue.includes(option) : selectedValue === option"
       >

@@ -12,18 +12,49 @@ export class MultiploSelectComponent {
   @Output() selectedValueChange: EventEmitter<any> = new EventEmitter<any>();
   @Input() customStyles: { [key: string]: string } = {};
   @Input() multiple: boolean = false;
+  @Input() searchable: boolean = false;
+
+  searchTerm: string = '';
 
   isOpen: boolean = false;
+  filteredOptions: any[] = [];
+
 
   constructor(private elementRef: ElementRef) {}
 
   ngOnInit(): void {
+    this.filteredOptions = this.options; // inicialmente sem filtro
+
     if (this.multiple && (!this.selectedValue || !Array.isArray(this.selectedValue))) {
       this.selectedValue = [];
     } else if (!this.multiple && Array.isArray(this.selectedValue)) {
       this.selectedValue = null;
     }
   }
+
+    onSearchTermChange() {
+    const normalize = (str: string) =>
+      str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+
+    const term = normalize(this.searchTerm);
+
+    if (this.isGroupedOptions()) {
+      this.filteredOptions = this.options
+        .map(group => ({
+          ...group,
+          options: group.options.filter((opt: any) =>
+            normalize(opt.label).includes(term)
+          )
+        }))
+        .filter(group => group.options.length > 0);
+    } else {
+      this.filteredOptions = this.options.filter((opt: any) => {
+        const label = typeof opt === 'string' ? opt : opt.label;
+        return normalize(label).includes(term);
+      });
+    }
+  }
+
 
   isGroupedOptions(): boolean {
     return Array.isArray(this.options) && this.options.length > 0 && this.options[0]?.options;
