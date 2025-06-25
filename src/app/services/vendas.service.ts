@@ -21,7 +21,9 @@ export class VendasService {
   }
 
   obterDadosAssinaturaPorUsuario(userId: string): Observable<any> {
-    return this.http.get<any>(`${this.apiURL}/obter-informacoes-plano/${userId}`);
+    const url = `${this.apiURL}/obter-informacoes-plano-usuario/${userId}`;
+
+    return this.http.get(url, {});
   }
 
   obterPortalAcesso(): Observable<any>{
