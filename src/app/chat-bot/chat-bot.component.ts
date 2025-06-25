@@ -110,7 +110,7 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
 
   sendWelcomeMessage(): void {
     const welcomeMsg = { 
-      text: "Olá esse é o canal de suporte da Oftlessons, seja bem-vindo!", 
+      text: "Seja bem-vindo! Sou a VictorIA, sua Inteligência Artificial do Oftlessons.", 
       type: 'bot' 
     };
     this.messages.push(welcomeMsg);
@@ -118,7 +118,7 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
     
     setTimeout(() => {
       const initialBotResponse = { 
-        text: "Como posso te ajudar hoje?", 
+        text: "Escolha abaixo como posso te ajudar:", 
         type: 'bot' 
       };
       this.messages.push(initialBotResponse);
@@ -135,7 +135,7 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
 
     setTimeout(() => {
       const botMsg = {
-          text: "Ola! Sou a VictorIA, sua Inteligência Artificial do Oftlessons. Como posso te ajudar hoje?", 
+          text: "Ola! Como posso te ajudar hoje?", 
           type: 'bot' 
       };
       this.messages.push(botMsg);
