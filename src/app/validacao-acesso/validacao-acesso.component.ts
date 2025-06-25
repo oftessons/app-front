@@ -76,6 +76,7 @@ export class ValidacaoAcessoComponent {
           permissao: response.authorities.length > 0 ? response.authorities[0] : null,
           tipoDeEstudante: response.tipoDeEstudante || '',
         };
+        
         localStorage.setItem('usuario', JSON.stringify(usuario));
 
         this.mensagemSucesso = 'Login realizado com sucesso. Redirecionando...';

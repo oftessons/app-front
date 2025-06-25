@@ -15,6 +15,7 @@ import { Dificuldade } from './enums/dificuldade';
 import { Subtema } from './enums/subtema';
 import { Tema } from './enums/tema';
 import { Questao } from './questao';
+import { temasESubtemas } from './enums/map-tema-subtema';
 import { RespostasSimulado } from './enums/resp-simu';
 import { QuestoesService } from 'src/app/services/questoes.service';
 import { FiltroService } from 'src/app/services/filtro.service';
@@ -120,7 +121,13 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   multSelectTema: Tema[] = [];
   multiSelectRespSimu: RespostasSimulado[] = [];
   multiSelectCertoErrado: CertasErradas[] = [];
-
+  multiSelectTemasSubtemasSelecionados: Subtema[] = [];
+  subtemasAgrupadosPorTema: {
+    label: string;
+    value: string;
+    options: { label: string; value: Subtema }[];
+  }[] = [];
+  
   comentarioDaQuestaoSanitizado: SafeHtml = '';
   sanitizerEnunciado: SafeHtml = '';
 
@@ -231,6 +238,19 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     this.questoesCertasErradas = this.certoErrado.map((certasErradas) =>
       this.getDescricaoCertoErrado(certasErradas)
     );
+    
+    this.subtemasAgrupadosPorTema = Object.entries(temasESubtemas)
+      .map(([temaKey, subtemas]) => {
+        const temaEnum = temaKey as Tema;
+        return {
+          label: this.getDescricaoTema(temaEnum),
+          value: temaEnum,
+          options: subtemas.map(subtema => ({
+            label: this.getDescricaoSubtema(subtema),
+            value: subtema
+          }))
+        };
+      });
   }
 
   ngAfterViewChecked(): void {
@@ -308,7 +328,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
         this.usuarioId = parseInt(this.usuario.id);
       },
       (error) => {
-       
       }
     );
   }
@@ -428,6 +447,8 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     this.multSelectTema = [];
     this.multiSelectCertoErrado = [];
     this.multiSelectRespSimu = [];
+    this.multiSelectTemasSubtemasSelecionados = [];
+    
     this.palavraChave = '';
     this.filtros = {
       ano: null,
@@ -441,6 +462,15 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     };
     this.paginaAtual = 0;
   }
+
+    private isTema(value: string): boolean {
+      return Object.values(Tema).includes(value as Tema);
+    }
+
+  private isSubtema(value: string): boolean {
+    return Object.values(Subtema).includes(value as Subtema);
+  }
+
 
   filtrarQuestoes(): void {
     this.carregando = true;
@@ -484,15 +514,15 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       }
     }
 
-    if (this.multSelectSubtema.length) {
-      const subtemaSelecionado = this.multSelectSubtema
-      .map((subtema) => this.obterSubtemaEnum(subtema))
-      .filter((enumSubtema) => enumSubtema!== undefined);
+    // if (this.multSelectSubtema.length) {
+    //   const subtemaSelecionado = this.multSelectSubtema
+    //   .map((subtema) => this.obterSubtemaEnum(subtema))
+    //   .filter((enumSubtema) => enumSubtema!== undefined);
 
-      if (subtemaSelecionado) {
-        filtros.subtema = subtemaSelecionado;
-      }
-    }
+    //   if (subtemaSelecionado) {
+    //     filtros.subtema = subtemaSelecionado;
+    //   }
+    // }
 
     if (this.multSelectTema.length) {
       const temaSelecionado = this.multSelectTema
@@ -522,9 +552,39 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       if(respSimuladoSelecionado) {
         filtros.respSimulado = respSimuladoSelecionado;
       }
-      
     } 
 
+   if (this.multiSelectTemasSubtemasSelecionados.length) {
+      const temasSelecionados: string[] = [];
+      const subtemasSelecionados: string[] = [];
+
+      for (const item of this.multiSelectTemasSubtemasSelecionados) {
+        if (typeof item === 'string') {
+          if (this.isTema(item)) {
+            console.log("É um tema:", item);
+            temasSelecionados.push(item);
+          } else if (this.isSubtema(item)) {
+            console.log("É um subtema:", item);
+            subtemasSelecionados.push(item);
+          } else {
+            console.warn("Valor não reconhecido como tema nem subtema:", item);
+          }
+        }
+      }   
+
+      console.log("estou chegando aqui!");
+
+      if (temasSelecionados.length) {
+        filtros.tema = temasSelecionados; // ou separado por vírgula, depende da API
+      }
+
+      if (subtemasSelecionados.length) {
+        filtros.subtema = subtemasSelecionados
+          
+      }
+    }
+
+    
     // Verificar se a palavra-chave está preenchida
     if (this.palavraChave && this.palavraChave.trim() !== '') {
       filtros.palavraChave = this.palavraChave.trim();
@@ -534,7 +594,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       this.message = 'Por favor, selecione pelo menos um filtro.';
       this.questoes = [];
       return;
-    }
+  }
   
     this.questoesService.filtrarQuestoes(this.usuarioId, filtros, 0, 0).subscribe(
       (questoes: Questao[]) => {
@@ -577,7 +637,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     this.paginaAtual = index;
     this.questaoAtual = this.questoes[this.paginaAtual];
     this.carregarRespostaSeNecessario(this.questaoAtual.id);
-   
   }  
   
 
@@ -608,9 +667,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     if (filtros.certoErrado) {
       mensagemUsuarioTratamento += `Questões: ${this.getDescricaoCertoErrado(filtros.certoErrado)}, `;
     }
-
-  
-    // Remover a última vírgula e espaço
+    
     return mensagemUsuarioTratamento.slice(0, -2) + '.';
   }
 
@@ -662,7 +719,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
       this.resetarOcorrenciasDeQuestao();
       this.carregarRespostaSeNecessario(this.questaoAtual.id); 
-     
     } else {
       this.mensagemErro = 'Voce já está na primeira questão';
     }
@@ -670,7 +726,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   
   
   proximaQuestao() {
-   
     if (this.paginaAtual < this.questoes.length - 1) {
       this.paginaAtual++;
       this.questaoAtual = this.questoes[this.paginaAtual];
