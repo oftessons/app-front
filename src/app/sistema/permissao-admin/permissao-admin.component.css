@@ -232,3 +232,103 @@ h2 {
 input {
   background: #EFEFEF;
 }
+
+.profile-container {
+  padding: 1rem;
+  width: 100%;
+}
+
+.profile-dados {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.profile-photo-container {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid #dee2e6;
+}
+
+.profile-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-info {
+  flex: 1;
+  min-width: 300px;
+}
+
+.profile-info p {
+  margin-bottom: 8px;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #333;
+}
+
+.profile-info strong {
+  font-weight: 600;
+  color: #0f1934;
+}
+
+.profile-plan {
+  width: 100%;
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.plan-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #0f1934;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.line-dados {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 12px 0;
+}
+
+.line-dados h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #495057;
+  margin: 0;
+}
+
+.line-dados span {
+  font-size: 14px;
+  color: #333;
+}
+
+.loading-plan {
+  text-align: center;
+  padding: 20px;
+  color: #6c757d;
+}
+
+.no-plan {
+  text-align: center;
+  padding: 20px;
+  color: #6c757d;
+  font-style: italic;
+}
+
+hr {
+  margin: 10px 0;
+  border: 0;
+  border-top: 1px solid #eaeaea;
+}
