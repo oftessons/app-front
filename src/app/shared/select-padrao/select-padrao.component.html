@@ -1,17 +1,49 @@
-<!-- select.component.html -->
 <div class="select-container">
   <label [class.active]="selectedValue">{{ label }}</label>
-  <div [ngStyle]="customStyles" class="select-dropdown" (click)="isOpen = !isOpen">
-    <div class="selected-value">{{ selectedValue || '' }}</div>
+
+  <div [ngStyle]="customStyles" class="select-dropdown" (click)="toggleDropdown()">
+    <div class="selected-value">
+      {{ getLabelFromValue(selectedValue) || '' }}
+    </div>
     <div class="arrow-down"></div>
   </div>
 
   <div class="options-container" *ngIf="isOpen">
-    <div class="option"
-         *ngFor="let option of options"
-         (click)="onSelect(option)"
-         [class.selected]="option === selectedValue">
-      {{ option }}
-    </div>
+    <input
+      *ngIf="searchable"
+      type="text"
+      [(ngModel)]="searchTerm"
+      (input)="onSearchTermChange()"
+      class="search-input"
+      placeholder="Buscar..."
+      (click)="$event.stopPropagation()"
+    />
+
+    <ng-container *ngIf="isGroupedOptions(); else flatOptions">
+      <div class="theme-group-main" *ngFor="let theme of filteredOptions">
+        <div class="theme-label-main">{{ theme.label }}</div>
+        <div
+          class="option"
+          *ngFor="let subitem of theme.options"
+          (click)="onSelect(subitem.value)"
+          [class.selected]="subitem.value === selectedValue"
+        >
+          {{ subitem.label }}
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-template #flatOptions>
+      <div
+        class="option"
+        *ngFor="let option of filteredOptions"
+        (click)="onSelect(option.value ? option.value : option)"
+        [class.selected]="(option.value ? option.value : option) === selectedValue"
+      >
+        {{ option.label ? option.label : option }}
+      </div>
+    </ng-template>
+
+    <div *ngIf="filteredOptions.length === 0" class="no-results">Nenhum resultado encontrado.</div>
   </div>
 </div>

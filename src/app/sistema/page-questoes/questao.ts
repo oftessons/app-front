@@ -1,10 +1,12 @@
 import { Alternativa, AlternativaImagen } from '../alternativa';
 import { Ano } from './enums/ano';
-import { Tema } from './enums/tema';
 import { Dificuldade } from './enums/dificuldade';
 import { TipoDeProva } from './enums/tipoDeProva';
-import { Subtema } from './enums/subtema';
 import { Relevancia } from './enums/relevancia';
+import { Tema } from './enums/tema';
+import { Subtema } from './enums/subtema';
+import { IQuestaoAssunto } from './iQuestaoAssunto';
+
 export class Questao {
   id!: number;
   diaDoCadastro!: string;
@@ -43,17 +45,19 @@ export class Questao {
   referenciaBi!: string;
   comentadorDaQuestao!: string;
   ano!: Ano;
-  tema!: Tema;
+  // tema!: Tema;
   dificuldade!: Dificuldade;
   relevancia!: Relevancia;
   tipoDeProva!: TipoDeProva;
-  subtema!: Subtema;
+  // subtema!: Subtema;
+  assunto!: IQuestaoAssunto;
   palavraChave!: string;
   alternativas!: Alternativa[];
   alternativaCorreta?: Alternativa[];
   alternativaImagems?:AlternativaImagen[];
   tipoItemQuestao!:string;
   tipoItemQuestaoImagem!: string;
+
   toJson(): string {
     return JSON.stringify({
       id: this.id,
@@ -95,11 +99,12 @@ export class Questao {
       referenciaBi: this.referenciaBi,
       comentadorDaQuestao: this.comentadorDaQuestao,
       ano: this.ano,
-      tema: this.tema,
+      // tema: this.tema,
       dificuldade: this.dificuldade,
       relevancia: this.relevancia,
       tipoDeProva: this.tipoDeProva,
-      subtema: this.subtema,
+      // subtema: this.subtema,
+      assunto: this.assunto,
       palavraChave: this.palavraChave,
       alternativas: this.alternativas,
       alternativaCorreta: this.alternativaCorreta,

@@ -159,7 +159,7 @@
     <div class="questao">
       <div class="identificadores-questao">
         <h3>ID: {{ questaoAtual.id }}</h3>
-        <h3>Tema: {{ questaoAtual.tema }}</h3>
+        <h3>Tema: {{ questaoAtual.assunto.tema }}</h3>
         <h3>Ano: {{ questaoAtual.ano }}</h3>
         <h3>Tipo de Prova: {{ questaoAtual.tipoDeProva }}</h3>
         <button type="button" class="btn-editar" (click)="editQuestao()" *ngIf="isAdmin() || isProf()">Editar Questão</button>

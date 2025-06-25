@@ -84,7 +84,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     dificuldade: null,
     tipoDeProva: null,
     subtema: null,
-    tema: null,
+    assunto: null,
     certoErrado: null,
     respSimulado: null, 
     palavraChave: null,
