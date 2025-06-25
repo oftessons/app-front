@@ -463,9 +463,9 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     this.paginaAtual = 0;
   }
 
-    private isTema(value: string): boolean {
+  private isTema(value: string): boolean {
       return Object.values(Tema).includes(value as Tema);
-    }
+  }
 
   private isSubtema(value: string): boolean {
     return Object.values(Subtema).includes(value as Subtema);
@@ -572,10 +572,8 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
         }
       }   
 
-      console.log("estou chegando aqui!");
-
       if (temasSelecionados.length) {
-        filtros.tema = temasSelecionados; // ou separado por vírgula, depende da API
+        filtros.tema = temasSelecionados; 
       }
 
       if (subtemasSelecionados.length) {
@@ -584,7 +582,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       }
     }
 
-    
     // Verificar se a palavra-chave está preenchida
     if (this.palavraChave && this.palavraChave.trim() !== '') {
       filtros.palavraChave = this.palavraChave.trim();

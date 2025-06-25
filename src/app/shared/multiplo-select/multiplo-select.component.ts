@@ -1,41 +1,59 @@
-import { Component, Input, HostListener, Output, EventEmitter, ElementRef } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  ElementRef,
+  HostListener,
+  OnInit,
+  OnChanges,
+  SimpleChanges
+} from '@angular/core';
 
 @Component({
   selector: 'app-multiplo-select',
   templateUrl: './multiplo-select.component.html',
   styleUrls: ['./multiplo-select.component.css']
 })
-export class MultiploSelectComponent {
+export class MultiploSelectComponent implements OnInit, OnChanges {
   @Input() label: string = ''; 
   @Input() options: any[] = []; 
   @Input() selectedValue: any[] | any;
-  @Output() selectedValueChange: EventEmitter<any> = new EventEmitter<any>();
+  @Output() selectedValueChange = new EventEmitter<any>();
   @Input() customStyles: { [key: string]: string } = {};
   @Input() multiple: boolean = false;
   @Input() searchable: boolean = false;
 
   searchTerm: string = '';
-
   isOpen: boolean = false;
   filteredOptions: any[] = [];
-
 
   constructor(private elementRef: ElementRef) {}
 
   ngOnInit(): void {
-    this.filteredOptions = this.options; // inicialmente sem filtro
-
-    if (this.multiple && (!this.selectedValue || !Array.isArray(this.selectedValue))) {
+    // Garantir o tipo correto de selectedValue
+    if (this.multiple && !Array.isArray(this.selectedValue)) {
       this.selectedValue = [];
     } else if (!this.multiple && Array.isArray(this.selectedValue)) {
       this.selectedValue = null;
     }
+
+    // Inicializa as opções filtradas
+    this.filteredOptions = this.options;
   }
 
-    onSearchTermChange() {
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.options) {
+      // Sempre que 'options' mudar, redefina o filtro
+      this.filteredOptions = this.options;
+      this.searchTerm = '';
+      this.updateArrowRotation();
+    }
+  }
+
+  onSearchTermChange(): void {
     const normalize = (str: string) =>
       str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-
     const term = normalize(this.searchTerm);
 
     if (this.isGroupedOptions()) {
@@ -55,25 +73,29 @@ export class MultiploSelectComponent {
     }
   }
 
-
   isGroupedOptions(): boolean {
-    return Array.isArray(this.options) && this.options.length > 0 && this.options[0]?.options;
+    return Array.isArray(this.options)
+      && this.options.length > 0
+      && (this.options[0] as any).options !== undefined;
   }
 
   getLabelFromValue(value: any): string {
     if (this.isGroupedOptions()) {
-      for (const group of this.options) {
+      for (const group of this.options as any[]) {
         if (group.value === value) {
-          return group.label; // É um tema
+          return group.label;
         }
         const found = group.options.find((opt: any) => opt.value === value);
-        if (found) return found.label; // É um subtema
+        if (found) {
+          return found.label;
+        }
       }
     }
-
-    // Para lista simples
-    const flat = this.options.find((opt: any) => opt.value === value || opt === value);
-    return flat?.label ?? flat ?? value;
+    // Plano
+    const flat = (this.options as any[]).find(opt =>
+      opt.value === value || opt === value
+    );
+    return flat?.label ?? flat ?? '';
   }
 
   onSelect(value: any): void {
@@ -81,54 +103,56 @@ export class MultiploSelectComponent {
       if (!Array.isArray(this.selectedValue)) {
         this.selectedValue = [];
       }
-
-      const index = this.selectedValue.indexOf(value);
-
-      if (index !== -1) {
-        this.selectedValue = this.selectedValue.filter((item: any) => item !== value);
+      const idx = this.selectedValue.indexOf(value);
+      if (idx !== -1) {
+        this.selectedValue = this.selectedValue.filter((v: any) => v !== value);
       } else {
         this.selectedValue = [...this.selectedValue, value];
         this.scrollToBottom();
       }
-
       this.selectedValueChange.emit(this.selectedValue);
+      // manter dropdown aberto em múltipla selecao
       this.isOpen = true;
+      this.updateArrowRotation();
     } else {
       this.selectedValue = value;
       this.selectedValueChange.emit(value);
+      this.isOpen = false;
+      this.updateArrowRotation();
     }
-    
-
   }
 
   removeValue(value: any): void {
     if (this.multiple && Array.isArray(this.selectedValue)) {
-      this.selectedValue = this.selectedValue.filter((item: any) => item !== value);
+      this.selectedValue = this.selectedValue.filter((v: any) => v !== value);
       this.selectedValueChange.emit(this.selectedValue);
     }
   }
 
   scrollToBottom(): void {
-    const element = this.elementRef.nativeElement.querySelector('.selected-values');
+    const container: HTMLElement | null = this.elementRef.nativeElement
+      .querySelector('.selected-values');
     setTimeout(() => {
-      if (element) {
-        element.scrollTop = element.scrollHeight;
+      if (container) {
+        container.scrollTop = container.scrollHeight;
       }
-    }, 50);
-  }
-
-  private updateArrowRotation(): void {
-    const arrowDown = this.elementRef.nativeElement.querySelector('.arrow-down');
-    if (this.isOpen) {
-      arrowDown.classList.add('rotate');
-    } else {
-      arrowDown.classList.remove('rotate');
-    }
+    });
   }
 
   toggleDropdown(): void {
     this.isOpen = !this.isOpen;
     this.updateArrowRotation();
+  }
+
+  private updateArrowRotation(): void {
+    const arrow = this.elementRef.nativeElement.querySelector('.arrow-down');
+    if (arrow) {
+      if (this.isOpen) {
+        arrow.classList.add('rotate');
+      } else {
+        arrow.classList.remove('rotate');
+      }
+    }
   }
 
   @HostListener('document:click', ['$event'])
