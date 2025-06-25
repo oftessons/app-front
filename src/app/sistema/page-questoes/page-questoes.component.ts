@@ -124,7 +124,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   multiSelectTemasSubtemasSelecionados: Subtema[] = [];
   subtemasAgrupadosPorTema: {
     label: string;
-    value: string; //
+    value: string;
     options: { label: string; value: Subtema }[];
   }[] = [];
   
@@ -447,6 +447,8 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     this.multSelectTema = [];
     this.multiSelectCertoErrado = [];
     this.multiSelectRespSimu = [];
+    this.multiSelectTemasSubtemasSelecionados = [];
+    
     this.palavraChave = '';
     this.filtros = {
       ano: null,
