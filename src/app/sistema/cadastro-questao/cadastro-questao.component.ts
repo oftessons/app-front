@@ -150,6 +150,9 @@ editorConfig4 = {
             console.log(questao)
             this.questaoDTO = questao;
             this.atualizarEditoresComDados();
+            this.selectedSubtemaValue = this.getSubtemaEnumFromDescription(this.questaoDTO.subtema as Subtema) as Subtema;
+            console.log(this.questaoDTO.subtema as Subtema);
+            console.log(this.selectedSubtemaValue);
             this.questaoDTO.alternativas = this.questaoDTO.alternativas || [];
             if (this.questaoDTO.fotoDaQuestaoUrl) {
               this.fotoPreviews['fotoDaQuestao'] = this.questaoDTO.fotoDaQuestaoUrl;
@@ -186,7 +189,7 @@ editorConfig4 = {
       }
     });
 
-   this.subtemasAgrupadosPorTema = Object.entries(temasESubtemas)
+  this.subtemasAgrupadosPorTema = Object.entries(temasESubtemas)
       .map(([temaKey, subtemasArray]) => {
         return {
           label: TemaDescricoes[temaKey as Tema], 
@@ -374,8 +377,8 @@ editorConfig4 = {
       (this.isVideo(preview) || this.urlIsVideo(preview))
     );
   }
-  
-  
+
+
   onDrop(event: DragEvent, field: string) {
     event.preventDefault();
     const file = event.dataTransfer?.files[0];
@@ -409,7 +412,6 @@ editorConfig4 = {
   }
 
 
-  
   findTemaForSubtema(subtema: Subtema): Tema | undefined {
     for (const temaKey of Object.keys(temasESubtemas)) {
       const tema = temaKey as Tema; 
@@ -587,6 +589,15 @@ onSubmit(): void {
       return `Código de erro: ${errorResponse.status}\nMensagem: ${errorResponse.message}`;
     }
   }
+
+getSubtemaEnumFromDescription(description: string): Subtema | undefined {
+  for (const [subtemaKey, subtemaDescription] of Object.entries(SubtemaDescricoes)) {
+    if (subtemaDescription === description) {
+      return Subtema[subtemaKey as keyof typeof Subtema];
+    }
+  }
+  return undefined;
+}
 
   handleImageChange(event: any, index: number) {
   const file = event.target.files[0];
