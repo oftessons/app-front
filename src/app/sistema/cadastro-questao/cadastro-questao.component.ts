@@ -52,7 +52,7 @@ export class CadastroQuestaoComponent implements OnInit, AfterViewInit {
   imagePreviews: { [key: string]: string | ArrayBuffer | null } = {};
   id!: number;
   selectedAlternativa: number | undefined;
-  selectedSubtemaValue: Subtema | string = '';
+  selectedSubtemaValue: Subtema | string | null = '';
   
 
   selectedAlternativeIndex: number = -3;
@@ -675,8 +675,10 @@ onFileSelectedImageEditar(event: any, alternativaIndex: string) {
     this.fotoDaRespostaTres = null;
     this.fotoDaRespostaQuatro = null;
     this.videoDaQuestao = null;
+    this.selectedSubtemaValue = null;
     this.imagePreviews = {};
     this.fotoPreviews = {};
+    
 
     this.formData = new FormData();
 
