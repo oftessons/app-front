@@ -31,20 +31,17 @@ export class MultiploSelectComponent implements OnInit, OnChanges {
   constructor(private elementRef: ElementRef) {}
 
   ngOnInit(): void {
-    // Garantir o tipo correto de selectedValue
     if (this.multiple && !Array.isArray(this.selectedValue)) {
       this.selectedValue = [];
     } else if (!this.multiple && Array.isArray(this.selectedValue)) {
       this.selectedValue = null;
     }
 
-    // Inicializa as opções filtradas
     this.filteredOptions = this.options;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.options) {
-      // Sempre que 'options' mudar, redefina o filtro
       this.filteredOptions = this.options;
       this.searchTerm = '';
       this.updateArrowRotation();
@@ -111,7 +108,6 @@ export class MultiploSelectComponent implements OnInit, OnChanges {
         this.scrollToBottom();
       }
       this.selectedValueChange.emit(this.selectedValue);
-      // manter dropdown aberto em múltipla selecao
       this.isOpen = true;
       this.updateArrowRotation();
     } else {

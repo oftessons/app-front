@@ -54,6 +54,9 @@
         </div>
         <div class="row">
           <div class="col-md-6">
+            
+          </div>
+          <!-- <div class="col-md-6">
             <div class="form-group">
               <app-select-padrao
                 label="Tema"
@@ -62,8 +65,8 @@
                 [customStyles]="{'background': '#EFEFEF'}">
               </app-select-padrao>
             </div>
-          </div>
-          <div class="col-md-6">
+          </div> -->
+          <!-- <div class="col-md-6">
             <div class="form-group">
               <app-select-padrao
                 label="Subtema"
@@ -72,7 +75,7 @@
                 [customStyles]="{'background': '#EFEFEF'}">
               </app-select-padrao>
             </div>
-          </div>
+          </div> -->
         </div>
         <div class="row">
           <div class="col-md-6">
@@ -92,6 +95,17 @@
                 [options]="relevancias"
                 [(selectedValue)]="questaoDTO.relevancia"
                 [customStyles]="{'background': '#EFEFEF'}">
+              </app-select-padrao>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <app-select-padrao
+                label="Assunto"
+                [options]="subtemasAgrupadosPorTema"
+                [(selectedValue)]="selectedSubtemaValue"
+                [customStyles]="{'background': '#EFEFEF'}"
+                [searchable]="true">
               </app-select-padrao>
             </div>
           </div>
