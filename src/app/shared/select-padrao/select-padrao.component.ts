@@ -1,4 +1,4 @@
-// select-padrao.component.ts
+// select-padrao.compot.ts
 import {
   Component,
   Input,
@@ -18,8 +18,8 @@ import {
 })
 export class SelectPadraoComponent implements OnInit, OnChanges {
   @Input() label: string = '';
-  @Input() options: any[] = []; // Array de Temas, onde cada Tema tem uma propriedade 'options' para subtemas
-  @Input() selectedValue: any; // Para seleção única
+  @Input() options: any[] = [];
+  @Input() selectedValue: any; 
   @Output() selectedValueChange: EventEmitter<any> = new EventEmitter<any>();
   @Input() customStyles: { [key: string]: string } = {};
   @Input() searchable: boolean = false;
@@ -48,17 +48,15 @@ export class SelectPadraoComponent implements OnInit, OnChanges {
     const term = normalize(this.searchTerm);
 
     if (this.isGroupedOptions()) {
-      // Filtra as opções agrupadas (Tema > Subtema usando a propriedade 'options' do tema)
       this.filteredOptions = this.options
-        .map(theme => ({ // 'theme' é o item principal da iteração
+        .map(theme => ({ 
           ...theme,
-          options: theme.options.filter((subitem: any) => // Filtra os subitens dentro da propriedade 'options' do tema
+          options: theme.options.filter((subitem: any) => 
             normalize(subitem.label).includes(term)
           )
         }))
-        .filter(theme => theme.options.length > 0); // Remove temas sem subitens correspondentes após a filtragem
+        .filter(theme => theme.options.length > 0);
     } else {
-      // Filtra opções planas (array de strings ou {label, value})
       this.filteredOptions = this.options.filter((opt: any) => {
         const label = typeof opt === 'string' ? opt : opt.label;
         return normalize(label).includes(term);
@@ -66,42 +64,37 @@ export class SelectPadraoComponent implements OnInit, OnChanges {
     }
   }
 
-  // Verifica se as opções são agrupadas por Tema > Subtema (usando a propriedade 'options' do tema)
   isGroupedOptions(): boolean {
     return (
       Array.isArray(this.options) &&
       this.options.length > 0 &&
-      (this.options[0] as any).options !== undefined && // Verifica se o PRIMEIRO item tem 'options'
-      Array.isArray((this.options[0] as any).options) // E se essa propriedade 'options' é um array
+      (this.options[0] as any).options !== undefined &&
+      Array.isArray((this.options[0] as any).options) 
     );
   }
 
-  // Retorna o label correspondente ao valor selecionado
   getLabelFromValue(value: any): string {
     if (value === null || value === undefined) {
       return '';
     }
 
     if (this.isGroupedOptions()) {
-      for (const theme of this.options as any[]) { // Itera sobre os temas (itens principais)
-        // Se o próprio tema for selecionável (opcional e o valor estiver no tema)
+      for (const theme of this.options as any[]) {
         if (theme.value === value) {
           return theme.label;
         }
-        // Procura no array de subitens do tema atual (propriedade 'options')
         const foundSubitem = theme.options.find((subitem: any) => subitem.value === value);
         if (foundSubitem) {
           return foundSubitem.label;
         }
       }
     } else {
-      // Procura em opções planas
       const found = (this.options as any[]).find(opt =>
         (opt.value !== undefined ? opt.value : opt) === value
       );
       return found?.label ?? found ?? '';
     }
-    return ''; // Caso o valor não seja encontrado
+    return ''; 
   }
 
   onSelect(value: any): void {

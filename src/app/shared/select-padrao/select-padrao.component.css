@@ -99,6 +99,16 @@ label.active {
   text-decoration: underline;  
 }
 
+.search-input {
+    width: 100%;
+    padding: 6px 10px;
+    margin-bottom: 8px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+  }
+
 @media (max-width: 768px) {
   .select-container {
     width: 100%;
@@ -117,6 +127,7 @@ label.active {
     top: 10px;
     font-size: 9px;
   }
+
 }
 
 
