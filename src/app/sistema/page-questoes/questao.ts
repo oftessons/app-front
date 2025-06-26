@@ -45,11 +45,11 @@ export class Questao {
   referenciaBi!: string;
   comentadorDaQuestao!: string;
   ano!: Ano;
-  // tema!: Tema;
+  tema?: Tema;
   dificuldade!: Dificuldade;
   relevancia!: Relevancia;
   tipoDeProva!: TipoDeProva;
-  // subtema!: Subtema;
+  subtema?: Subtema;
   assunto!: IQuestaoAssunto;
   palavraChave!: string;
   alternativas!: Alternativa[];
