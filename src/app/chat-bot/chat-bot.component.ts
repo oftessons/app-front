@@ -42,6 +42,7 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
   selectedTopic: any = null;
   enableInput = false;
   initialStep = true;
+  isAISelected = false;
 
   topics = [
     { name: 'Acesso', subtopics: ['Esqueci minha senha'] },
@@ -132,6 +133,7 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
     const userMsg = { text: "Gostaria de falar com a VictorIA", type: 'user' };
     this.messages.push(userMsg);
     this.chatBotStateService.addMessage(userMsg);
+    this.isAISelected = true;
 
     setTimeout(() => {
       const botMsg = {
@@ -173,32 +175,30 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
     const message = this.userMessage.trim();
     if (message) {
       const userMessage = { text: message, type: 'user' };
-      this.messages.push(userMessage);
-      this.chatBotStateService.addMessage(userMessage);
+    this.messages.push(userMessage);
+    this.chatBotStateService.addMessage(userMessage);
 
-      const typingMsg = { text: "Digitando...", type: 'typing' };
-      this.messages.push(typingMsg);
-      this.scrollToBottom();
+    const typingMsg = { text: "Digitando...", type: 'typing' };
+    this.messages.push(typingMsg);
+    this.scrollToBottom();
+    this.userMessage = '';
+    setTimeout(() => {
       this.userMessage = '';
-      setTimeout(() => {
-        this.userMessage = '';
-      }, 0);
-      
-      this.chatBotStateService.sendMessageToBot(
-        message,
-        this.selectedTopic ? this.selectedTopic.name : null,
-      ).subscribe(
+    }, 0);
+
+    if( this.isAISelected) {
+      this.chatBotStateService.sendDuvidaToBot(message).subscribe(
         response => {
           this.messages = this.messages.filter(msg => msg !== typingMsg);
           
           const botMessage = { text: response.response, type: 'bot' };
           this.messages.push(botMessage);
           this.chatBotStateService.addMessage(botMessage);
-
+          
           if(response.action) {
             this.handleBotAction(response.action, response.data);
           }
-
+          
           this.scrollToBottom();
         },
         error => {
@@ -211,10 +211,44 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
           this.messages.push(errorMsg);
           this.chatBotStateService.addMessage(errorMsg);
           this.scrollToBottom();
-
+          this.conversationStep = -1;
           this.goBackMain();
         }
       );
+
+    } else {      
+      this.chatBotStateService.sendMessageToBot(
+        message,
+        this.selectedTopic ? this.selectedTopic.name : null,
+      ).subscribe(
+        response => {
+          this.messages = this.messages.filter(msg => msg !== typingMsg);
+          
+          const botMessage = { text: response.response, type: 'bot' };
+          this.messages.push(botMessage);
+          this.chatBotStateService.addMessage(botMessage);
+          
+          if(response.action) {
+            this.handleBotAction(response.action, response.data);
+          }
+          
+          this.scrollToBottom();
+        },
+        error => {
+          this.messages = this.messages.filter(msg => msg !== typingMsg);
+          console.error('Erro ao enviar mensagem:', error);
+          const errorMsg = { 
+            text: '⚠️ Erro ao conectar com a assistente. Tente novamente mais tarde.', 
+            type: 'bot' 
+          };
+          this.messages.push(errorMsg);
+          this.chatBotStateService.addMessage(errorMsg);
+          this.scrollToBottom();
+          
+          this.goBackMain();
+        }
+        );
+      }
     }
   }
 
