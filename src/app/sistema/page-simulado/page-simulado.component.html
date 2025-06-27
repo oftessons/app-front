@@ -20,6 +20,7 @@
                 [(selectedValue)]="selectedQuantidadeDeQuestoesSelecionadas">
               </app-select-padrao>
             </div>
+              
             <div class="col col-12 col-md-6 espaco-select">
               <app-select-padrao
                 label="Questões Respondidas"
@@ -29,13 +30,32 @@
             </div>
           </div>
           <div class="row">
-            <div class="col col-12 col-md-6 espaco-select">
-              <app-multiplo-select
-                    label="Ano"
-                    [options]="anosDescricoes"
-                    [(selectedValue)]="multiSelectedAno"
-                    [multiple]="true">
-              </app-multiplo-select>
+            <div class="col col-12 col-md-6">
+              <div class="espaco-select">
+                <app-multiplo-select
+                  label="Ano"
+                  [options]="anosDescricoes"
+                  [(selectedValue)]="multiSelectedAno"
+                  [multiple]="true">
+                </app-multiplo-select>
+              </div>
+              <div class="espaco-select">
+                <app-multiplo-select
+                  label="Assunto"
+                  [options]="subtemasAgrupadosPorTema"
+                  [(selectedValue)]="multiSelectTemasSubtemasSelecionados"
+                  [multiple]="true"
+                  [searchable]="true">
+                </app-multiplo-select>
+              </div>
+              <div class="espaco-select">
+                <app-multiplo-select
+                  label="Dificuldade"
+                  [options]="dificuldadesDescricoes"
+                  [(selectedValue)]="multiSelectedDificuldade"
+                  [multiple]="true">
+                </app-multiplo-select>
+              </div>
             </div>
             <div class="col col-12 col-md-6 espaco-select">
               <app-multiplo-select
@@ -44,44 +64,15 @@
                     [(selectedValue)]="multiSelectedTipoDeProva"
                     [multiple]="true">
               </app-multiplo-select>
+              <div class="espaco-select mt-3"> <app-input-padrao
+                    label="Pesquisar por palavra-chave"
+                    [(value)]="palavraChave"
+                    class="palavra-chave">
+                </app-input-padrao>        
+              </div>
             </div>
           </div>
-          <div class="row">
-            <div class="col col-12 col-md-6 espaco-select">
-              <app-multiplo-select
-                  label="Tema"
-                  [options]="temasDescricoes"
-                  [(selectedValue)]="multiSelectedTema"
-                  [multiple]="true">
-              </app-multiplo-select>
-            </div>
-            <div class="col col-12 col-md-6 espaco-select">
-              <app-multiplo-select
-                    label="Subtema"
-                    [options]="subtemasDescricoes"
-                    [(selectedValue)]="multiSelectedSubtema"
-                    [multiple]="true">  
-              </app-multiplo-select>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col col-12 col-md-6 espaco-select">
-              <app-multiplo-select
-                    label="Dificuldade"
-                    [options]="dificuldadesDescricoes"
-                    [(selectedValue)]="multiSelectedDificuldade"
-                    [multiple]="true">
-              </app-multiplo-select>
-            </div>
-            <div class="col col-12 col-md-6 espaco-select">
-              <app-input-padrao
-                  label="Pesquisar por palavra-chave"
-                  [(value)]="palavraChave"
-                  class="palavra-chave">
-                </app-input-padrao>       
-            </div>
-          </div>
-      
+          
           <div *ngIf="message" class="alert alert-info mt-3 alert-custom" role="alert">
             {{ message }}
           </div>
@@ -93,8 +84,7 @@
           <div class="button-row-filtro">
             <button type="submit" class="btn-filtrar">Filtrar</button>
             <button type="button" class="btn-filtrar-geral" (click)="LimparFiltro()">Limpar Filtro</button>
-            <!-- <button type="button" class="btn-salvar" (click)="abrirModal()">Salvar Simulado</button> -->
-          </div>
+            </div>
         </form>
         <mat-progress-bar class="progress-bar-spacing" *ngIf="carregando" mode="indeterminate"></mat-progress-bar>
       </div>
@@ -129,13 +119,11 @@
     </div>
   </div>
 
-  <!-- Exibição dos Resultados -->
   <div *ngIf="questaoAtual">
     <div class="identificadores-questao-resul">
       <h2 class="h2">Resultado da Filtragem</h2>
     </div>
     <div class="questao">
-      <!-- Exibição dos Resultados -->
       <div *ngIf="simuladoIniciado && !simuladoFinalizado">
         <div class="identificadores-questao">
           <h3>ID: {{ questaoAtual.id }}</h3>
@@ -191,7 +179,6 @@
                   </div>
                 </div>
               </div>
-              <!-- Mensagem de aviso -->
               <div *ngIf="mensagemDeAviso" class="alert alert-info mt-2">
                 {{ mensagemDeAviso }}
               </div>
@@ -200,7 +187,6 @@
 
           <div *ngIf="mostrarGabarito && questaoAtual">
             <h2 style="margin-top: 10px;">Comentário da Questão</h2>
-            <!-- Exibe o comentário da Questão com HTML Sanitizado -->
             <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestao | safeHtml"></div>
             <ng-container *ngIf="questaoAtual?.fotoDaQuestaoUrl">
               <img 
@@ -216,7 +202,6 @@
                 class="questao-video">
               </video>
             </ng-container>
-            <!-- Exibe o comentário da Questão com HTML Sanitizado -->
             <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestaoDois | safeHtml"></div>
             <ng-container *ngIf="questaoAtual?.fotoDaQuestaoUrl">
               <img 
@@ -232,7 +217,6 @@
                 class="questao-video">
               </video>
             </ng-container>
-            <!-- Exibe o comentário da Questão com HTML Sanitizado -->
             <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestaoTres | safeHtml"></div>
             <ng-container *ngIf="questaoAtual?.fotoDaQuestaoUrl">
               <img 
@@ -248,7 +232,6 @@
                 class="questao-video">
               </video>
             </ng-container>
-            <!-- Exibe o comentário da Questão com HTML Sanitizado -->
             <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestaoQuatro | safeHtml"></div>
             <ng-container *ngIf="questaoAtual?.fotoDaQuestaoUrl">
               <img 
@@ -280,21 +263,18 @@
               <button class="btn-proxima" (click)="proximaQuestao()">Próxima</button>
             </div>
           </div>          
-        </div>      
+        </div>        
       </div>
 
       <div>
-        <!-- Botão "Iniciar Simulado" -->
         <div class="iniciar-simulado-container" *ngIf="!simuladoIniciado && !simuladoFinalizado">
           <h2>Clique para Iniciar o Simulado</h2>
           <button (click)="iniciarSimulado()" class="btn-iniciar">Iniciar Simulado</button>
         </div>
 
-        <!-- Gráfico de Resultados -->
         <div *ngIf="simuladoFinalizado" class="resultado-container">
           <h2>Resultados do Simulado</h2>
 
-          <!-- Exibição do Tempo Final -->
           <div class="tempo-final-container">
             <h3>Tempo Final: {{ formatarTempo(tempoTotal) }}</h3>
           </div>

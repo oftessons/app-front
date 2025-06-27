@@ -37,6 +37,8 @@ import {
   SafeResourceUrl,
 } from '@angular/platform-browser';
 
+import { temasESubtemas } from '../page-questoes/enums/map-tema-subtema';
+
 declare var bootstrap: any;
 
 @Component({
@@ -113,6 +115,13 @@ export class PageSimuladoComponent implements OnInit {
   selectedQuantidadeDeQuestoesSelecionadas: QuantidadeDeQuestoesSelecionadas | null =
     null;
   selectedRespostasSimulado: RespostasSimulado | null = null;
+  
+  multiSelectTemasSubtemasSelecionados: Subtema[] = [];
+  subtemasAgrupadosPorTema: {
+    label: string;
+    value: string;
+    options: { label: string; value: Subtema }[];
+  }[] = [];
 
   questoes: Questao[] = [];
   isFiltered = false;
@@ -143,6 +152,7 @@ export class PageSimuladoComponent implements OnInit {
   temasDescricoes: string[] = [];
   quantidadeDeQuestoesSelecionadasDescricoes: string[] = [];
   respostasSimuladoDescricao: string[] = [];
+  
 
   mostrarFiltros: boolean = false;
 
@@ -210,6 +220,19 @@ export class PageSimuladoComponent implements OnInit {
       (respostasSimulado) =>
         this.getDescricaoRespostasSimulado(respostasSimulado)
     );
+
+    this.subtemasAgrupadosPorTema = Object.entries(temasESubtemas)
+        .map(([temaKey, subtemas]) => {
+          const temaEnum = temaKey as Tema;
+          return {
+            label: this.getDescricaoTema(temaEnum),
+            value: temaEnum,
+            options: subtemas.map(subtema => ({
+              label: this.getDescricaoSubtema(subtema),
+              value: subtema
+          }))
+        };
+    });
   }
 
   finalizarSimulado() {
@@ -414,6 +437,14 @@ export class PageSimuladoComponent implements OnInit {
     return chave ? Tema[chave as Tema] : undefined;
   }
 
+  private isTema(value: string): boolean {
+      return Object.values(Tema).includes(value as Tema);
+  }
+
+  private isSubtema(value: string): boolean {
+    return Object.values(Subtema).includes(value as Subtema);
+  }
+
   LimparFiltro() {
     this.multiSelectedAno = [];
     this.multiSelectedDificuldade = [];
@@ -421,6 +452,7 @@ export class PageSimuladoComponent implements OnInit {
     this.multiSelectedSubtema = [];
     this.multiSelectedTema = [];
     this.selectedQuantidadeDeQuestoesSelecionadas = null;
+    this.multiSelectTemasSubtemasSelecionados = [];
     this.palavraChave = '';
     this.filtros = {
       ano: null,
@@ -508,6 +540,36 @@ export class PageSimuladoComponent implements OnInit {
         filtros.quantidadeDeQuestoesSelecionadas = quantidadeSelecionada;
       }
     }
+
+
+       if (this.multiSelectTemasSubtemasSelecionados.length) {
+      const temasSelecionados: string[] = [];
+      const subtemasSelecionados: string[] = [];
+
+      for (const item of this.multiSelectTemasSubtemasSelecionados) {
+        if (typeof item === 'string') {
+          if (this.isTema(item)) {
+            console.log("É um tema:", item);
+            temasSelecionados.push(item);
+          } else if (this.isSubtema(item)) {
+            console.log("É um subtema:", item);
+            subtemasSelecionados.push(item);
+          } else {
+            console.warn("Valor não reconhecido como tema nem subtema:", item);
+          }
+        }
+      }   
+
+      if (temasSelecionados.length) {
+        filtros.tema = temasSelecionados; 
+      }
+
+      if (subtemasSelecionados.length) {
+        filtros.subtema = subtemasSelecionados
+          
+      }
+    }
+
     // Verificar se a palavra-chave está preenchida
     if (this.palavraChave && this.palavraChave.trim() !== '') {
       filtros.palavraChave = this.palavraChave.trim();

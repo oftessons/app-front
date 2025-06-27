@@ -177,4 +177,29 @@
     background-color: #dc3545;
     transform: scale(1.1);
   }
-  
+
+  .group-label {
+    font-weight: bold;               
+    font-size: 16px;                 
+    padding: 8px 12px;               
+    margin-top: 8px;                 
+    background-color: #e2e2e2;       
+    color: #333;                     
+    cursor: pointer;                
+    border-radius: 4px;              
+  }
+
+  .group-label:hover {
+    background-color: #e2e2e2;       
+    text-decoration: underline;      
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 6px 10px;
+    margin-bottom: 8px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+  }

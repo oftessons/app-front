@@ -1,4 +1,4 @@
-import { Component, OnInit,  AfterViewInit } from '@angular/core';
+import { Component, OnInit,  AfterViewInit, DoCheck } from '@angular/core';
 import { Location } from '@angular/common';
 import { Questao } from '../page-questoes/questao';
 import { Ano } from '../page-questoes/enums/ano';
@@ -11,6 +11,7 @@ import { QuestoesService } from 'src/app/services/questoes.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Alternativa } from '../alternativa';
 import { TinymceService } from 'src/app/services/tinymce.service';
+import { temasESubtemas } from '../page-questoes/enums/map-tema-subtema';
 
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Usuario } from 'src/app/login/usuario';
@@ -31,7 +32,7 @@ import { RelevanciaDescricao } from '../page-questoes/enums/relevancia-descricao
   styleUrls: ['./cadastro-questao.component.css']
 })
 
-export class CadastroQuestaoComponent implements OnInit,  AfterViewInit {
+export class CadastroQuestaoComponent implements OnInit, AfterViewInit {
   loading: boolean = false;
   usuario: Usuario | null = null;
   Permissao = Permissao;
@@ -51,6 +52,8 @@ export class CadastroQuestaoComponent implements OnInit,  AfterViewInit {
   imagePreviews: { [key: string]: string | ArrayBuffer | null } = {};
   id!: number;
   selectedAlternativa: number | undefined;
+  selectedSubtemaValue: Subtema | string | null = '';
+  
 
   selectedAlternativeIndex: number = -3;
 
@@ -60,6 +63,12 @@ export class CadastroQuestaoComponent implements OnInit,  AfterViewInit {
   subtemas: string[] = Object.values(SubtemaDescricoes);
   tiposDeProva: string[] = Object.values(TipoDeProvaDescricoes);
   relevancias: string[] = Object.values(RelevanciaDescricao);
+  subtemasAgrupadosPorTema: {
+    label: string;
+    value: string;
+    options: { label: string; value: Subtema }[];
+  }[] = [];
+  
 
   selectedImage: string='';
   uploadedImage: string='';
@@ -100,7 +109,6 @@ editorConfig4 = {
 
   ngOnInit(): void {
     // this.editorConfig = this.tinymceService.getEditorConfig();
-
     this.questaoDTO.alternativas = [
       {
         id: 1, texto: 'A', correta: false,
@@ -142,6 +150,9 @@ editorConfig4 = {
             console.log(questao)
             this.questaoDTO = questao;
             this.atualizarEditoresComDados();
+            this.selectedSubtemaValue = this.getSubtemaEnumFromDescription(this.questaoDTO.subtema as Subtema) as Subtema;
+            console.log(this.questaoDTO.subtema as Subtema);
+            console.log(this.selectedSubtemaValue);
             this.questaoDTO.alternativas = this.questaoDTO.alternativas || [];
             if (this.questaoDTO.fotoDaQuestaoUrl) {
               this.fotoPreviews['fotoDaQuestao'] = this.questaoDTO.fotoDaQuestaoUrl;
@@ -178,7 +189,21 @@ editorConfig4 = {
       }
     });
 
+  this.subtemasAgrupadosPorTema = Object.entries(temasESubtemas)
+      .map(([temaKey, subtemasArray]) => {
+        return {
+          label: TemaDescricoes[temaKey as Tema], 
+          value: Tema[temaKey as keyof typeof Tema],         
+          options: subtemasArray.map(subtemaValue => {
+            return {
+              label: SubtemaDescricoes[subtemaValue as Subtema],
+              value: subtemaValue 
+            };
+          })
+        };
+    });
   }
+
 
   ngAfterViewInit(): void {
     const quill4 = new Quill('#editor4', {
@@ -266,7 +291,6 @@ editorConfig4 = {
     });
   }
   
-
     // Função para obter o conteúdo do editor
     getEditorContent() {
      // console.log(this.editorContent);
@@ -353,8 +377,8 @@ editorConfig4 = {
       (this.isVideo(preview) || this.urlIsVideo(preview))
     );
   }
-  
-  
+
+
   onDrop(event: DragEvent, field: string) {
     event.preventDefault();
     const file = event.dataTransfer?.files[0];
@@ -387,8 +411,31 @@ editorConfig4 = {
     this.questaoDTO.alternativaCorreta = [this.questaoDTO.alternativas[index]];
   }
 
+
+  findTemaForSubtema(subtema: Subtema): Tema | undefined {
+    for (const temaKey of Object.keys(temasESubtemas)) {
+      const tema = temaKey as Tema; 
+
+      const subtemasDoTema = temasESubtemas[tema];
+
+      if (subtemasDoTema.includes(subtema)) {
+        return tema;
+      }
+    }
+
+    return undefined;
+}
+
 onSubmit(): void {
-  this.loading = true; 
+  this.loading = true;
+  
+    if(this.selectedSubtemaValue) {
+      this.questaoDTO.assunto = {
+        tema: TemaDescricoes[this.findTemaForSubtema(this.selectedSubtemaValue as Subtema)!],
+        subtema: SubtemaDescricoes[this.selectedSubtemaValue as Subtema]
+      }
+    }
+
     const quillEditor4 = document.querySelector('#editor4 .ql-editor');
     if (quillEditor4) {
       this.questaoDTO.comentarioDaQuestaoQuatro = quillEditor4.innerHTML;
@@ -479,8 +526,9 @@ onSubmit(): void {
     this.formData.append('questaoDTO', objetoJson);
     //console.log('objetoJson ', objetoJson);
 
-
+  
     if(!this.questaoDTO.id){
+      console.log(this.questaoDTO);
       this.questoesService.salvar(this.formData).subscribe(
         response => {
           this.successMessage = 'Questão salva com sucesso!';
@@ -541,6 +589,15 @@ onSubmit(): void {
       return `Código de erro: ${errorResponse.status}\nMensagem: ${errorResponse.message}`;
     }
   }
+
+getSubtemaEnumFromDescription(description: string): Subtema | undefined {
+  for (const [subtemaKey, subtemaDescription] of Object.entries(SubtemaDescricoes)) {
+    if (subtemaDescription === description) {
+      return Subtema[subtemaKey as keyof typeof Subtema];
+    }
+  }
+  return undefined;
+}
 
   handleImageChange(event: any, index: number) {
   const file = event.target.files[0];
@@ -618,8 +675,10 @@ onFileSelectedImageEditar(event: any, alternativaIndex: string) {
     this.fotoDaRespostaTres = null;
     this.fotoDaRespostaQuatro = null;
     this.videoDaQuestao = null;
+    this.selectedSubtemaValue = null;
     this.imagePreviews = {};
     this.fotoPreviews = {};
+    
 
     this.formData = new FormData();
 
