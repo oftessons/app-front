@@ -163,19 +163,20 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     const filtroStateJson = localStorage.getItem('questoesFiltroState');
     let filtroState: any = null;
 
-    if (filtroStateJson) {
+    if (filtroStateJson) {      
       filtroState = JSON.parse(filtroStateJson);
-      
+
       localStorage.removeItem('questoesFiltroState');
 
-      this.multSelectAno = filtroState.multSelectAno || [];
-      this.multSelecDificuldade = filtroState.multSelecDificuldade || [];
-      this.multSelectTipoDeProva = filtroState.multSelectTipoDeProva || [];
-      this.multSelectSubtema = filtroState.multSelectSubtema || [];
-      this.multSelectTema = filtroState.multSelectTema || [];
-      this.multiSelectCertoErrado = filtroState.multiSelectCertoErrado || [];
-      this.multiSelectRespSimu = filtroState.multiSelectRespSimu || [];
-      this.palavraChave = filtroState.palavraChave || '';
+      this.multSelectAno = filtroState.multSelectAno ?? [];
+      this.multSelecDificuldade = filtroState.multSelecDificuldade ?? [];
+      this.multSelectTipoDeProva = filtroState.multSelectTipoDeProva ?? [];
+      // this.multSelectSubtema = filtroState.multSelectSubtema ?? [];
+      // this.multSelectTema = filtroState.multSelectTema ?? [];
+      this.multiSelectTemasSubtemasSelecionados = filtroState.multiSelectTemasSubtemasSelecionados ?? [];
+      this.multiSelectCertoErrado = filtroState.multiSelectCertoErrado ?? [];
+      this.multiSelectRespSimu = filtroState.multiSelectRespSimu ?? [];
+      this.palavraChave = filtroState.palavraChave ?? '';
 
       this.authService.obterUsuarioAutenticadoDoBackend().subscribe(
         (data) => {
@@ -196,8 +197,9 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       if(meuFiltro){
         this.multSelectAno = meuFiltro.ano;
         this.multSelectTipoDeProva = meuFiltro.tipoDeProva;
-        this.multSelectTema = meuFiltro.tema;
-        this.multSelectSubtema = meuFiltro.subtema;
+        this.multiSelectTemasSubtemasSelecionados = meuFiltro.multiSelectTemasSubtemasSelecionados;
+        // this.multSelectTema = meuFiltro.tema;
+        // this.multSelectSubtema = meuFiltro.subtema;
         this.multSelecDificuldade = meuFiltro.dificuldade;
         this.multSelectTipoDeProva = meuFiltro.tipoDeProva;
         this.multiSelectRespSimu = meuFiltro.respostasSimulado;
@@ -554,21 +556,17 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       }
     } 
 
-   if (this.multiSelectTemasSubtemasSelecionados.length) {
+  if (this.multiSelectTemasSubtemasSelecionados.length) {
       const temasSelecionados: string[] = [];
       const subtemasSelecionados: string[] = [];
 
       for (const item of this.multiSelectTemasSubtemasSelecionados) {
         if (typeof item === 'string') {
           if (this.isTema(item)) {
-            console.log("É um tema:", item);
             temasSelecionados.push(item);
           } else if (this.isSubtema(item)) {
-            console.log("É um subtema:", item);
             subtemasSelecionados.push(item);
-          } else {
-            console.warn("Valor não reconhecido como tema nem subtema:", item);
-          }
+          } 
         }
       }   
 
@@ -980,6 +978,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
         multSelectTipoDeProva: this.multSelectTipoDeProva,
         multSelectSubtema: this.multSelectSubtema,
         multSelectTema: this.multSelectTema,
+        multiSelectTemasSubtemasSelecionados: this.multiSelectTemasSubtemasSelecionados,
         multiSelectCertoErrado: this.multiSelectCertoErrado,
         multiSelectRespSimu: this.multiSelectRespSimu,
         palavraChave: this.palavraChave,
@@ -1046,8 +1045,31 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
         .filter((enumRespSimu) => enumRespSimu !== undefined);
       if (respSimuladoSelecionado.length > 0) filtros.respSimulado = respSimuladoSelecionado;
     }
-    
-    
+
+      if (this.multiSelectTemasSubtemasSelecionados.length) {
+      const temasSelecionados: string[] = [];
+      const subtemasSelecionados: string[] = [];
+
+      for (const item of this.multiSelectTemasSubtemasSelecionados) {
+        if (typeof item === 'string') {
+          if (this.isTema(item)) {
+            temasSelecionados.push(item);
+          } else if (this.isSubtema(item)) {
+            subtemasSelecionados.push(item);
+          } 
+        }
+      }   
+
+      if (temasSelecionados.length) {
+        filtros.tema = temasSelecionados; 
+      }
+
+      if (subtemasSelecionados.length) {
+        filtros.subtema = subtemasSelecionados
+          
+      }
+    }
+
     if (this.palavraChave && this.palavraChave.trim() !== '') {
       filtros.palavraChave = this.palavraChave.trim();
     }
