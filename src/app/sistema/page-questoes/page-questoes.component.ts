@@ -1,5 +1,5 @@
-import { Component, OnInit, ElementRef, ViewChild, AfterViewChecked, PipeTransform } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, OnDestroy, ElementRef, ViewChild, AfterViewChecked, PipeTransform } from '@angular/core';
+import { NavigationEnd, Router, RouterEvent } from '@angular/router';
 import { TipoDeProva } from './enums/tipoDeProva';
 import {
   getDescricaoAno,
@@ -34,6 +34,7 @@ import { TemaDescricoes } from './enums/tema-descricao';
 import { CertasErradas } from './enums/certas-erradas';
 import { CertasErradasDescricao } from './enums/certas-errads-descricao';
 import { RespostasSimuladosDescricao } from './enums/resp-simu-descricao';
+import { filter, startWith } from 'rxjs/operators';
 
 declare var bootstrap: any;
 
@@ -155,7 +156,17 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     private authService: AuthService,
     private sanitizer: DomSanitizer,
     private router: Router,     
-  ) {}
+  ) {
+
+    this.router.events.pipe(
+      filter((e): e is NavigationEnd => e instanceof NavigationEnd)
+      ).subscribe(e => {
+      if (!e.urlAfterRedirects.includes('/questoes') &&
+          !e.urlAfterRedirects.includes('/cadastro-questao/')) {
+        this.questoesService.clearRequestsCache();
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.usuarioLogado = this.authService.getUsuarioAutenticado();
@@ -254,7 +265,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
         };
       });
   }
-
+  
   ngAfterViewChecked(): void {
     this.resizeImages();
   }
@@ -814,7 +825,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     });
   }
   
- confirmarSalvarFiltro(nomeFiltro: string, descricaoFiltro: string): void {
+  confirmarSalvarFiltro(nomeFiltro: string, descricaoFiltro: string): void {
   if (!nomeFiltro) {
     this.exibirMensagem('O campo "Nome" é obrigatório.', 'erro');
     return;
@@ -856,7 +867,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
         this.exibirMensagem(errorMessage, 'erro');
       }
     )
-   }
+    }
   }
 
   private mapearDescricoesParaEnums(selecoes: string[], descricoesEnum: any): string[] {
@@ -1084,6 +1095,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     this.questoesService.filtrarQuestoes(this.usuarioId, filtros, 0, 0).subscribe(
       (questoes: Questao[]) => {
         if (questoes.length > 0) {
+          this.toggleFiltros();
           this.questoes = questoes;
           this.numeroDeQuestoes = questoes.length;
           
