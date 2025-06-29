@@ -635,11 +635,11 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   }
 
   selecionarQuestao(event: Event): void {
-    
     this.resetarOcorrenciasDeQuestao();
     
     const target = event.target as HTMLSelectElement;
     const index = Number(target.value);
+  
     this.paginaAtual = index;
     this.questaoAtual = this.questoes[this.paginaAtual];
     this.carregarRespostaSeNecessario(this.questaoAtual.id);
@@ -720,6 +720,14 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   
   anteriorQuestao() {
     if (this.paginaAtual > 0) {
+      const selectElements = document.querySelector('.question-dropdown') as HTMLSelectElement;
+    
+      if(selectElements) {
+        const currentSelectedIndex = selectElements.selectedIndex;
+        selectElements.selectedIndex = currentSelectedIndex - 1;
+    
+      }
+
       this.paginaAtual--;
       this.questaoAtual = this.questoes[this.paginaAtual];
 
@@ -733,6 +741,14 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   
   proximaQuestao() {
     if (this.paginaAtual < this.questoes.length - 1) {
+      const selectElements = document.querySelector('.question-dropdown') as HTMLSelectElement;
+    
+      if(selectElements) {
+        const currentSelectedIndex = selectElements.selectedIndex;
+        selectElements.selectedIndex = currentSelectedIndex + 1;
+      
+      }
+
       this.paginaAtual++;
       this.questaoAtual = this.questoes[this.paginaAtual];
 
