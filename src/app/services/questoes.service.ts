@@ -7,7 +7,7 @@ import {
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, shareReplay, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Questao } from '../sistema/page-questoes/questao';
 import { Ano } from '../sistema/page-questoes/enums/ano';
@@ -19,6 +19,8 @@ import { RespostaDTO } from '../sistema/RespostaDTO';
 })
 export class QuestoesService {
   apiURL: string = environment.apiURLBase + '/api/questoes';
+  private readonly requestsCache: Map<string, Observable<Questao[]>> = new Map(); // Usaremos um Map para o cache
+
   constructor(private http: HttpClient) {}
 
   getAcertosEErrosPorTipoDeProva(usuarioId: number): Observable<any> {
@@ -166,7 +168,22 @@ export class QuestoesService {
     params = params.set('page', page.toString());
     params = params.set('size', size.toString());
 
-    return this.http.get<Questao[]>(url, { params });
+    const cacheKey = `${url}?${params.toString()}`;
+
+    if (this.requestsCache.has(cacheKey)) {
+      return this.requestsCache.get(cacheKey)!;
+    }
+
+    const request = this.http.get<Questao[]>(url, { params }).pipe(
+      shareReplay({ bufferSize: 1, refCount: false }) 
+    );
+
+    this.requestsCache.set(cacheKey, request);
+    return request;
+  }
+
+  clearRequestsCache(): void {
+    this.requestsCache.clear();
   }
 
   filtrarSimulados(

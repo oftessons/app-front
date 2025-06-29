@@ -296,7 +296,7 @@ editorConfig4 = {
      // console.log(this.editorContent);
     }
 
-   onAlternativaChange(index: number) {
+  onAlternativaChange(index: number) {
     this.selectedAlternativa = index;
   }
 
@@ -528,7 +528,7 @@ onSubmit(): void {
 
   
     if(!this.questaoDTO.id){
-      console.log(this.questaoDTO);
+      // console.log(this.questaoDTO);
       this.questoesService.salvar(this.formData).subscribe(
         response => {
           this.successMessage = 'Questão salva com sucesso!';
@@ -562,7 +562,7 @@ onSubmit(): void {
           this.successMessage = 'Questão atualizada com sucesso!';
           this.errorMessage = null;
           this.loading = false; // Desativa carregamento
-          console.debug('Questão atualizada com sucesso:', response);
+          // console.debug('Questão atualizada com sucesso:', response);
           this.location.back();
         },
         error => {
@@ -590,14 +590,14 @@ onSubmit(): void {
     }
   }
 
-getSubtemaEnumFromDescription(description: string): Subtema | undefined {
-  for (const [subtemaKey, subtemaDescription] of Object.entries(SubtemaDescricoes)) {
-    if (subtemaDescription === description) {
-      return Subtema[subtemaKey as keyof typeof Subtema];
+  getSubtemaEnumFromDescription(description: string): Subtema | undefined {
+    for (const [subtemaKey, subtemaDescription] of Object.entries(SubtemaDescricoes)) {
+      if (subtemaDescription === description) {
+        return Subtema[subtemaKey as keyof typeof Subtema];
+      }
     }
+    return undefined;
   }
-  return undefined;
-}
 
   handleImageChange(event: any, index: number) {
   const file = event.target.files[0];

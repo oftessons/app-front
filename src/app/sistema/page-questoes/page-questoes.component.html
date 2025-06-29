@@ -150,7 +150,7 @@
         {{ numeroDeQuestoes }} Questões Encontradas
         <span class="questoes-icone"></span> 
       </h2>      
-      <select (change)="selecionarQuestao($event)">
+      <select (change)="selecionarQuestao($event)" class="question-dropdown">
         <option *ngFor="let item of navegacaoPorQuestao" [value]="item.index">
           {{ 'Questão ' + (item.index + 1) }}
         </option>
