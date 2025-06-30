@@ -35,7 +35,7 @@
             </thead>
             <tbody>
                 <tr *ngFor="let professor of paginatedProfessores">
-                    <td><a href="javascript:void(0)">{{ professor.nome }}</a></td>
+                    <td><a href="javascript:void(0)" (click)="openModalPlano(professor.id)">{{ professor.nome }}</a></td>
                     <td>{{ professor.email }}</td>
                     <td>{{ professor.cidade }}</td>
                     <td>{{ professor.estado }}</td>
@@ -112,7 +112,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let bolsista of paginatedBolsistas">
-              <td><a href="javascript:void(0)">{{ bolsista.nome }}</a></td>
+              <td><a href="javascript:void(0)" (click)="openModalPlano(bolsista.id)">{{ bolsista.nome }}</a></td>
               <td>{{ bolsista.email }}</td>
               <td>{{ bolsista.cidade }}</td>
               <td>{{ bolsista.estado }}</td>
@@ -363,7 +363,7 @@
               <p><strong>Estado: </strong> {{ selectedUser.estado || 'Não informado' }}</p>
               <p><strong>Tipo de Usuário: </strong> {{ selectedUser.permissao }}</p>
               <p *ngIf="selectedUser.bolsaAssinatura"><strong>Bolsa: </strong> Sim</p>
-              <p *ngIf="selectedUser.diasDeTeste"><strong>Dias de Teste: </strong> {{ selectedUser.diasDeTeste }}</p>
+              <p *ngIf="selectedUser.diasDeTeste && selectedUser.bolsaAssinatura"><strong>Dias de Teste: </strong> {{ selectedUser.diasDeTeste }}</p>
             </div>
             <div class="profile-plan" *ngIf="selectedUser">
               <h4 class="plan-title">Informações do Plano</h4>
