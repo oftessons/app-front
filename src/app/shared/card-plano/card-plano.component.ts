@@ -4,6 +4,7 @@ import { StripeService } from 'src/app/services/stripe.service';
 import { HotmartService } from 'src/app/services/hotmart.service';
 import { PlanosComponent } from 'src/app/planos/planos/planos.component';
 import { Plano } from 'src/app/planos/enums/planos';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-card-plano',
@@ -30,7 +31,8 @@ export class CardPlanoComponent implements OnInit {
   constructor(
     private router: Router,
     private stripeService: StripeService,
-    private hotmartService: HotmartService
+    private hotmartService: HotmartService,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void { }
@@ -46,7 +48,20 @@ export class CardPlanoComponent implements OnInit {
       Plano.ANUAL_PARCELADO,
       Plano.COMBO
     ]
-
+    
+    if (this.planoSelecionado === Plano.GRATUITO) {
+      
+      this.stripeService.iniciarPeriodoTeste().subscribe(
+        response => {
+          const usuario = this.authService.getUsuarioAutenticado();
+          if (usuario) {
+            usuario.planoId = this.planoSelecionado;
+            this.router.navigate(['/usuario/dashboard']);
+          }
+        },
+        error => console.error('Erro ao iniciar período de teste:', error)
+      );
+    }
     // hotmart
     if (planosPermitidos.includes(this.planoSelecionado)) {
       this.hotmartService.obterLinkCompraFlashcard(this.planoHotmart).subscribe(

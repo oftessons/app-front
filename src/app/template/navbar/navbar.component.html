@@ -1,3 +1,11 @@
+<div *ngIf="mostrarContador" class="trial-banner">
+    <div class="trial-info">
+        <span>Seu período de teste termina em: </span>
+        <strong>{{ diasRestantes }} dias {{ horasRestantes }}:{{ minutosRestantes }}:{{ segundosRestantes }}</strong>
+    </div>
+    <button class="btn-upgrade" (click)="navegarParaPlanos()">Assinar agora</button>
+</div>
+
 <mat-toolbar class="mat-toolbar-fixed d-flex justify-content-between">
     <button mat-icon-button class="btn" (click)="toggleSidenav()">
         <mat-icon class="button-menu">{{ sidenav.opened ? 'close' : 'menu' }}</mat-icon>
