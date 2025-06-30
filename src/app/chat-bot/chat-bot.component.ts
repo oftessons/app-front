@@ -3,6 +3,8 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 import { ChatBotStateService } from '../services/chat-bot-state.service';
 import { AuthService } from '../services/auth.service';
 import { Usuario } from '../login/usuario';
+import { ApiChatRequestResponse } from './api-chat-request-dto';
+import { convertPropertyBinding } from '@angular/compiler/src/compiler_util/expression_converter';
 
 @Component({
   selector: 'chat-bot',
@@ -42,6 +44,8 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
   selectedTopic: any = null;
   enableInput = false;
   initialStep = true;
+  chatHistory: ApiChatRequestResponse[] = [];
+
 
   topics = [
     { name: 'Acesso', subtopics: ['Esqueci minha senha'] },
@@ -88,6 +92,31 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
     if (this.navCheckInterval) {
       clearInterval(this.navCheckInterval);
     }
+  }
+
+  enviarMensagem(): void {
+    if (!this.userMessage.trim()) return;
+
+    const userInput: ApiChatRequestResponse = {
+      text: this.userMessage,
+      role: 'user'
+    };
+
+    console.log([userInput]);
+    
+    this.chatHistory.push(userInput);
+
+    this.chatBotStateService.tireSuaDuvidaVictorIA([userInput]).subscribe({
+      next: (res) => {
+        if (res.data && res.data.length) {
+          this.chatHistory.push(...res.data); 
+        }
+        this.userMessage = ''; 
+      },
+      error: (err) => {
+        console.error('Erro ao enviar mensagem:', err);
+      }
+    });
   }
 
   private checkNavigationBar(): void {

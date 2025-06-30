@@ -4,6 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 import { environment } from 'src/environments/environment';
+import { ApiChatRequestResponse } from '../chat-bot/api-chat-request-dto';
+import { ApiResponse } from '../chat-bot/api-response';
 
 @Injectable({
   providedIn: 'root',
@@ -40,27 +42,49 @@ export class ChatBotStateService {
     this.conversationId = null;
   }
 
-  sendMessageToBot(message: string, topic?: string): Observable<any> {
-    this.authService.obterUsuarioAutenticadoDoBackend().subscribe(
-      (data) => {
-        this.user = data;
-      }, (error) => {
-        console.error('Erro ao obter perfil do usuário:', error);
-      }
-    )
+  // sendMessageToBot(message: string, topic?: string): Observable<any> {
+  //   this.authService.obterUsuarioAutenticadoDoBackend().subscribe(
+  //     (data) => {
+  //       this.user = data;
+  //     }, (error) => {
+  //       console.error('Erro ao obter perfil do usuário:', error);
+  //     }
+  //   )
 
-    const payload = {
-      message,
-      topic,
-      userContext: this.user ? {
-        id: this.user.id,
-        name: this.user.username,
-        email: this.user.email,
-        role: this.user.permissao,
-      } : null,
-    };
+  //   const payload = {
+  //     message,
+  //     topic,
+  //     userContext: this.user ? {
+  //       id: this.user.id,
+  //       name: this.user.username,
+  //       email: this.user.email,
+  //       role: this.user.permissao,
+  //     } : null,
+  //   };
 
-    return this.http.post<any>(this.apiURL, payload);
+  //   return this.http.post<any>(this.apiURL, payload);
+  // }
+
+  sendMessageToBot(
+    message: string,
+    topic: string | null = null // caso precise usar tópicos no futuro
+  ): Observable<{ response: string, action?: string, data?: any }> {
+    const payload: ApiChatRequestResponse[] = [
+      { text: message, role: 'user' }
+    ];
+
+    return new Observable(observer => {
+      this.http.post<ApiResponse<ApiChatRequestResponse[]>>(`${this.apiURL}/tire-sua-duvida`, payload).subscribe({
+        next: (res) => {
+          const respostaBot = res?.data?.[0]?.text || '❓ Nenhuma resposta recebida.';
+          observer.next({ response: respostaBot });
+          observer.complete();
+        },
+        error: (err) => {
+          observer.error(err);
+        }
+      });
+    });
   }
 
 
@@ -73,5 +97,14 @@ export class ChatBotStateService {
     }
     
     return this.http.get<any>(`${this.apiURL}/plan-info/${user.id}`);
+  }
+
+  tireSuaDuvidaVictorIA(
+    mensagens: ApiChatRequestResponse[]
+  ): Observable<ApiResponse<ApiChatRequestResponse[]>> {
+    return this.http.post<ApiResponse<ApiChatRequestResponse[]>>(
+      `${this.apiURL}/tire-sua-duvida`,
+      mensagens
+    );
   }
 }
