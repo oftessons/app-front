@@ -1,14 +1,17 @@
 <div class="card">
     <span *ngIf="recomendado" class="badge badge-recomendado">Recomendado</span>
     <div class="card-header" [ngStyle]="{'background-color': corCabecalho}">
-      <h3>{{ titulo }}</h3>
+        <h3>{{ titulo }}</h3>
     </div>
     <div class="card-body">
         <div class="value">
             <h4>
                 <span *ngIf="textoParcelas" class="texto-parcelas">{{ textoParcelas }}</span>
-                {{ preco | currency:'BRL' }}
-                <span *ngIf="mostrarPorMes">/mês</span>
+                <span *ngIf="mostrarPlanoGratuito" class="badge badge-gratuito">Teste 7 dias grátis</span>
+                <div *ngIf="mostrarPreco && preco > 0">
+                    {{ preco | currency: 'BRL' }}
+                    <span *ngIf="mostrarPorMes">/mês</span>
+                </div>
             </h4>
             <p *ngIf="textoAdicional" class="texto-adicional">{{ textoAdicional }}</p>
         </div>

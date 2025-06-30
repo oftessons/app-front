@@ -82,6 +82,19 @@ export class PaginaInicialComponent implements OnInit {
 
   planos = [
     {
+      titulo: 'Gratuito',
+      preco: 0.00,
+      descricao: [
+        'Acesso a um número limitado de questões.',
+        'Ideal para quem está começando ou quer experimentar a plataforma.',
+        'Sem compromisso, totalmente gratuito.'
+      ],
+      corCabecalho: '#253c66',
+      recomendado: false,
+      mostrarPlanoGratuito: true,
+      monstrarPreco: false,
+    },
+    {
       titulo: 'Mensal',
       preco: 397.00,
       descricao: [

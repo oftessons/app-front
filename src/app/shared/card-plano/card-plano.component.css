@@ -52,7 +52,6 @@
 }
 
 .value span {
-  font-size: 16px;
   color: #041e4e;
 }
 
@@ -92,6 +91,15 @@
   padding: 8px 20px;
   border-radius: 4px;
   font-size: 22px;
+  font-weight: 500;
+}
+
+.badge-gratuito {
+  background-color: #ffbf23;
+  color: #0f1934;
+  padding: 8px 20px;
+  border-radius: 4px;
+  font-size: 24px;
   font-weight: 500;
 }
 

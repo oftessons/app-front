@@ -17,6 +17,8 @@ export class CardPlanoComponent implements OnInit {
   @Input() preco: number = 0;
   @Input() textoBotao: string = 'Escolher plano';
   @Input() recomendado: boolean = false;
+  @Input() mostrarPlanoGratuito: boolean = false;
+  @Input() mostrarPreco: boolean = true;
   @Input() corCabecalho: string = '';
   @Input() textoAdicional: string = '';
   @Input() mostrarPorMes: boolean = true;

@@ -12,10 +12,11 @@
     <app-card-plano
         *ngIf="mostrarPlanoGratuito"
         titulo="Gratuito"
-        [descricao]="['Acesso a um número limitado de questões e aulas.', 'Ideal para quem está começando ou quer experimentar a plataforma.', 'Sem compromisso, totalmente gratuito.']"
-        [preco]="0.00"
-        textoBotao="Escolher plano"
+        [descricao]="['Acesso a um número limitado de questões.', 'Ideal para quem está começando ou quer experimentar a plataforma.', 'Sem compromisso, totalmente gratuito.']"
+        textoBotao="Iniciar teste gratuito"
         [recomendado]="false"
+        [mostrarPorMes]="false"
+        [mostrarPlanoGratuito]="true"
         textoAdicional=""
         (botaoClicado)="onBotaoClicado()"
         planoSelecionado="GRATUITO">
