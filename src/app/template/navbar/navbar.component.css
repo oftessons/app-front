@@ -27,7 +27,8 @@
 
 .btn-upgrade {
     background: linear-gradient(90deg, #f0b90b, #d9a31d);
-    color: white;
+    color: #0F1934;
+    font-weight: 600;
     border: none;
     padding: 6px 12px;
     border-radius: 4px;

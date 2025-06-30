@@ -48,7 +48,20 @@ export class CardPlanoComponent implements OnInit {
       Plano.ANUAL_PARCELADO,
       Plano.COMBO
     ]
-
+    
+    if (this.planoSelecionado === Plano.GRATUITO) {
+      
+      this.stripeService.iniciarPeriodoTeste().subscribe(
+        response => {
+          const usuario = this.authService.getUsuarioAutenticado();
+          if (usuario) {
+            usuario.planoId = this.planoSelecionado;
+            this.router.navigate(['/usuario/dashboard']);
+          }
+        },
+        error => console.error('Erro ao iniciar período de teste:', error)
+      );
+    }
     // hotmart
     if (planosPermitidos.includes(this.planoSelecionado)) {
       this.hotmartService.obterLinkCompraFlashcard(this.planoHotmart).subscribe(
@@ -78,28 +91,6 @@ export class CardPlanoComponent implements OnInit {
       window.location.href = this.rota;
     } else {
       this.router.navigate([this.rota]);
-    }
-
-    if (this.planoSelecionado === Plano.GRATUITO) {
-      
-      const usuario = this.authService.getUsuarioAutenticado();
-      if (!usuario || !usuario.planoId) {
-        console.error('Usuário não autenticado ou plano não definido.');
-        return;
-      }
-      this.authService.iniciarPeriodoTeste(usuario).subscribe(
-        response => {
-          const usuario = this.authService.getUsuarioAutenticado();
-          if (usuario) {
-            usuario.dataFimTeste = response.dataFimTeste;
-            localStorage.setItem('usuario', JSON.stringify(usuario));
-            localStorage.setItem('testeIniciado', 'true');
-            
-            this.router.navigate(['/usuario/dashboard']);
-          }
-        },
-        error => console.error('Erro ao iniciar período de teste:', error)
-      );
     }
   }
 }

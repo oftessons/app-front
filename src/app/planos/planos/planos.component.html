@@ -10,6 +10,7 @@
 
   <div class="planos-container">
     <app-card-plano
+        *ngIf="mostrarPlanoGratuito"
         titulo="Gratuito"
         [descricao]="['Acesso a um número limitado de questões e aulas.', 'Ideal para quem está começando ou quer experimentar a plataforma.', 'Sem compromisso, totalmente gratuito.']"
         [preco]="0.00"

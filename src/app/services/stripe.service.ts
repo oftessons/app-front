@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment.prod';
 import { catchError, map, tap } from 'rxjs/operators';
+import { UsuarioDadosAssinatura } from '../login/usuario-dados-assinatura';
 import { Observable, throwError } from 'rxjs';
 
 @Injectable({
@@ -29,6 +30,17 @@ export class StripeService {
 
     return this.http.post(url, {});
 
+  }
+
+  iniciarPeriodoTeste(): Observable<any> {
+    return this.http.post<any>(`${this.apiURL}/iniciar-teste`, {})
+      .pipe(
+        catchError((error: any) => {
+          return throwError(
+            'Erro ao iniciar período de teste. Por favor, tente novamente.'
+          );
+        })
+      );
   }
 
 }
