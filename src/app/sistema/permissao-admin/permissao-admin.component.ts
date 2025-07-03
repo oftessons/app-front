@@ -137,8 +137,6 @@ export class PermissaoAdminComponent implements OnInit {
       this.alunos = this.filtrarUsuariosPorPermissao('USER'); 
       this.professores = this.filtrarUsuariosPorPermissao('PROFESSOR');
       this.bolsistas = this.filtrarUsuariosPorPermissao('BOLSISTA');
-      console.log(this.bolsistas);
-      console.log(data);
 
       this.updatePaginatedData('alunos');
       this.updatePaginatedData('professores');
