@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Permissao } from 'src/app/login/Permissao';
 import { PermissaoDescricoes } from 'src/app/login/Permissao-descricao';
+import { TipoUsuario } from 'src/app/login/enums/tipo-usuario';
 import { Usuario } from 'src/app/login/usuario';
 import { AuthService } from 'src/app/services/auth.service';
 import { ChangeDetectorRef } from '@angular/core';
@@ -488,6 +489,17 @@ export class PermissaoAdminComponent implements OnInit {
       'unpaid': 'Não pago'
     };
     return statusMap[status] || status;
+  }
+
+  getTipoUsuarioTraduzido(tipo: string): string {
+    const tipos: { [key in TipoUsuario]: string } = {
+      [TipoUsuario.RESIDENTE_R1]: 'Residente R1',
+      [TipoUsuario.RESIDENTE_R2]: 'Residente R2',
+      [TipoUsuario.RESIDENTE_R3]: 'Residente R3',
+      [TipoUsuario.ESTUDANTE_MEDICINA]: 'Estudante de Medicina',
+      [TipoUsuario.OFTALMOLOGISTA]: 'Oftalmologista'
+    };
+    return tipos[tipo as TipoUsuario] || 'Não disponível';
   }
 
   converterDateTime(dateTime: string): string {
