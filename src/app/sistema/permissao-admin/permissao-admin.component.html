@@ -361,7 +361,8 @@
               <p><strong>Telefone: </strong> {{ selectedUser.telefone || 'Não informado' }}</p>
               <p><strong>Cidade: </strong> {{ selectedUser.cidade || 'Não informada' }}</p>
               <p><strong>Estado: </strong> {{ selectedUser.estado || 'Não informado' }}</p>
-              <p><strong>Tipo de Usuário: </strong> {{ selectedUser.permissao }}</p>
+              <p><strong>Permissão: </strong> {{ selectedUser.permissao }}</p>
+              <p *ngIf="selectedUser.tipoDeEstudante" ><strong>Tipo de estudante: </strong> {{ getTipoUsuarioTraduzido(selectedUser.tipoDeEstudante) }}</p>
               <p *ngIf="selectedUser.bolsaAssinatura"><strong>Bolsa: </strong> Sim</p>
               <p *ngIf="selectedUser.diasDeTeste && selectedUser.bolsaAssinatura"><strong>Dias de Teste: </strong> {{ selectedUser.diasDeTeste }}</p>
             </div>
@@ -386,7 +387,7 @@
                   <span>{{ selectedUserPlan.status || 'Não disponível' }}</span>
                 </div>
                 <hr>
-                <div class="line-dados">
+                <div *ngIf="selectedUserPlan.status !== 'expired'" class="line-dados">
                   <h3>Próxima renovação</h3>
                   <span>{{ selectedUserPlan.proximaRenovacao || 'Não disponível' }}</span>
                 </div>
