@@ -692,7 +692,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     this.respostaVerificada = true; // Marca como verificada
   }
   
- 
+
   exibirGabarito(): void {
     if (!this.questaoAtual) {
       console.warn('Nenhuma questão atual disponível.');
