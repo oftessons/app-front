@@ -134,6 +134,7 @@ export const temasESubtemas: Record<Tema, Subtema[]> = {
     Subtema.VERGENCIA_OBJETO_E_IMAGEM,
   ],
   [Tema.ORBITA]: [
+      Subtema.ANOMALIAS_CONGENITAS_DA_ORBITA,
       Subtema.CELULITES_ORBITARIAS,
       Subtema.DOENCAS_INFLAMATORIAS_DA_ORBITA,
       Subtema.INFECCOES_ORBITARIAS,
