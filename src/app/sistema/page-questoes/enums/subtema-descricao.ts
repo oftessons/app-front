@@ -15,6 +15,7 @@ export const SubtemaDescricoes: Record<Subtema, string> = {
   [Subtema.ANOMALIAS_CONGENITAS_PALPEBRAIS]: 'Anomalias Congênitas Palpebrais',
   [Subtema.ANTI_VEGF]: 'Anti-VEGF',
   [Subtema.ANATOMIA_DAS_VIAS_OPTICAS]: 'Anatomia das Vias Ópticas',
+  [Subtema.ANOMALIAS_CONGENITAS_DA_ORBITA]: 'Anomalias Congênitas da Órbita',
   [Subtema.ANISOMETROPIA]: 'Anisometropia',
   [Subtema.ANTIBIOTICOS_ANTIFUNGICOS_E_ANTIVIRAIS]: 'Antibióticos, Antifúngicos e Antivirais',
   [Subtema.ANESTESICOS]: 'Anestésicos',
