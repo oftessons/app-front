@@ -1,6 +1,6 @@
 <div class="container pt-5 content-with-fixed-buttons">
   <div class="container mt-4">
-    <div class="header">
+    <div class="header" *ngIf="realizandoSimulado">
       <h1 class="mt-4"> <span> | </span> Simulados</h1>
       <button class="btn-filtros" (click)="toggleFiltros()">
       <img src="assets/imagens/q-f.svg" alt="Ícone do Filtro" class="icon">
@@ -8,7 +8,7 @@
       </button>
     </div>
   </div>
-  <div [ngClass]="{'filtros-container': true, 'filtros-container-open': mostrarFiltros}">
+  <div [ngClass]="{'filtros-container': true, 'filtros-container-open': mostrarFiltros}" *ngIf="realizandoSimulado">
     <div class="container">
       <div class="filters-container">
         <form #filtroForm="ngForm" (ngSubmit)="filtrarQuestoes()" class="consulta-form">
@@ -120,7 +120,10 @@
   </div>
 
   <div *ngIf="questaoAtual">
-    <div class="identificadores-questao-resul">
+    <div class="identificadores-questao-resul" *ngIf="!realizandoSimulado">
+      <h2 class="h2">Revisão do Simulado</h2>
+    </div>
+    <div class="identificadores-questao-resul" *ngIf="realizandoSimulado">
       <h2 class="h2">Resultado da Filtragem</h2>
     </div>
     <div class="questao">

@@ -134,7 +134,8 @@ export class PageSimuladoComponent implements OnInit {
   respostaVerificada: boolean = false;
   jaRespondeu: boolean = false;
   visualizando: boolean = false;
-
+  realizandoSimulado: boolean = true;
+  
   dados: any;
   questaoDTO = new Questao();
   selectedAlternativeIndex: number = -3;
@@ -174,6 +175,7 @@ export class PageSimuladoComponent implements OnInit {
     await this.obterPerfilUsuario();
     if (meuSimulado) {
       this.toggleFiltros();
+      this.realizandoSimulado = false;
       this.visualizando = true;
       this.jaRespondeu = true;
       this.isMeuSimulado = true;
