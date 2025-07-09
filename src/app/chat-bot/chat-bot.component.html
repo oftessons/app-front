@@ -14,7 +14,7 @@
 <div class="chatbot-container" [@chatBotAnimation]="isOpen ? 'open' : 'closed'">
   <div class="chatbot-header">
     <button class="close-btn" (click)="toggleChat()">×</button>
-    Suporte
+    VictorIA - Assistente de IA
   </div>
   <div class="chatbot-body" #chatBody>
     <div
@@ -22,38 +22,22 @@
       class="message"
       [ngClass]="{
         'user-message': message.type === 'user',
-        'bot-message': message.type === 'bot'
+        'bot-message': message.type === 'bot',
+        'typeing-message': message.type === 'typing'
       }"
     >
-      {{ message.text }}
-    </div>
-  </div>
-
-  <div class="quick-replies" *ngIf="conversationStep < 2">
-    <div *ngIf="conversationStep === -1 && initialStep" class="initial-buttons">
-      <button class="ai-button" (click)="selectAIAssistance()">
-        <i class="fa fa-robot"></i> Tire dúvidas com a VictorIA
-      </button>
-      <button class="support-button" (click)="selectSupport()">
-        <i class="fa fa-headset"></i> Fale com nosso suporte
-      </button>
-    </div>
-    <div *ngIf="conversationStep === 0" class="main-topics">
-      <button class="back-btn" (click)="goBackMain()">
-        <i class="fa fa-arrow-left"></i> Voltar
-      </button>
-      <button *ngFor="let topic of topics" (click)="selectMainTopic(topic)">
-        {{ topic.name }}
-      </button>
-    </div>
-    <div *ngIf="conversationStep === 1" class="sub-topics">
-      <button class="back-btn" (click)="goBackToTopics()">Voltar</button>
-      <button
-        *ngFor="let sub of selectedTopic.subtopics"
-        (click)="selectSubTopic(sub)"
-      >
-        {{ sub }}
-      </button>
+      <div class="message-header">
+        <div class="avatar-container" *ngIf="message.avatar">
+          <img [src]="message.avatar" alt="Avatar" class="avatar-img">
+        </div>
+        <div class="message-info">
+          <span class="username" *ngIf="message.username">{{ message.username }}</span>
+          <span class="timestamp" *ngIf="message.timestamp">{{ message.timestamp | date:'shortTime' }}</span>
+        </div>
+      </div>
+      <div class="message-content">
+        {{ message.text }}
+      </div>
     </div>
   </div>
 
@@ -63,11 +47,10 @@
       [(ngModel)]="userMessage"
       (keydown)="handleKeydown($event)"
       placeholder="Escreva sua mensagem..."
-      [disabled]="!enableInput"
     ></textarea>
     <button
       (click)="sendMessage()"
-      [disabled]="!userMessage.trim() || !enableInput"
+      [disabled]="!userMessage.trim()"
     >
       <img src="assets/Icons/enviar.svg" alt="Enviar" class="send-icon" />
     </button>
