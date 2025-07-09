@@ -134,7 +134,8 @@ export class PageSimuladoComponent implements OnInit {
   respostaVerificada: boolean = false;
   jaRespondeu: boolean = false;
   visualizando: boolean = false;
-
+  realizandoSimulado: boolean = true;
+  
   dados: any;
   questaoDTO = new Questao();
   selectedAlternativeIndex: number = -3;
@@ -174,6 +175,7 @@ export class PageSimuladoComponent implements OnInit {
     await this.obterPerfilUsuario();
     if (meuSimulado) {
       this.toggleFiltros();
+      this.realizandoSimulado = false;
       this.visualizando = true;
       this.jaRespondeu = true;
       this.isMeuSimulado = true;
@@ -468,7 +470,7 @@ export class PageSimuladoComponent implements OnInit {
   filtrarQuestoes(): void {
     this.carregando = true;
     const filtros: any = {};
- 
+
     if (this.multiSelectedAno.length) {
       const anosSelecionados = this.multiSelectedAno
         .map((ano) => this.obterAnoEnum(ano))
@@ -542,7 +544,7 @@ export class PageSimuladoComponent implements OnInit {
     }
 
 
-       if (this.multiSelectTemasSubtemasSelecionados.length) {
+    if (this.multiSelectTemasSubtemasSelecionados.length) {
       const temasSelecionados: string[] = [];
       const subtemasSelecionados: string[] = [];
 
@@ -824,7 +826,7 @@ export class PageSimuladoComponent implements OnInit {
       },
       (error) => {
         const errorMessage =
-          error?.error?.message ||
+          error?.error?.message ??
           'Erro ao cadastrar o simulado. Tente novamente.';
         this.exibirMensagem(errorMessage, 'erro');
       }
@@ -867,6 +869,10 @@ export class PageSimuladoComponent implements OnInit {
       this.fecharCardConfirmacao();
             
     });
+  }
+
+  cancelarSimulado(): void {
+    window.location.reload();
   }
 
   fecharAlerta() {
