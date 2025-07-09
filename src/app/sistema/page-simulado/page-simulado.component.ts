@@ -36,6 +36,7 @@ import {
   SafeHtml,
   SafeResourceUrl,
 } from '@angular/platform-browser';
+import { Simulado } from '../simulado';
 
 import { temasESubtemas } from '../page-questoes/enums/map-tema-subtema';
 
@@ -153,7 +154,8 @@ export class PageSimuladoComponent implements OnInit {
   temasDescricoes: string[] = [];
   quantidadeDeQuestoesSelecionadasDescricoes: string[] = [];
   respostasSimuladoDescricao: string[] = [];
-  
+  idSimuladoRespondendo: number | null = null; 
+
 
   mostrarFiltros: boolean = false;
 
@@ -166,74 +168,78 @@ export class PageSimuladoComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private sanitizer: DomSanitizer
-  ) {}
+  ) {
+  }
 
-  async ngOnInit() {
-    const meuSimulado = history.state.simulado;
-    this.simuladoIdInicial = meuSimulado?.id;
-    this.dados = this.obterDados();
-    await this.obterPerfilUsuario();
-    if (meuSimulado) {
-      this.toggleFiltros();
-      this.realizandoSimulado = false;
-      this.visualizando = true;
-      this.jaRespondeu = true;
-      this.isMeuSimulado = true;
-      this.multiSelectedAno = meuSimulado.ano;
-      this.multiSelectedTipoDeProva = meuSimulado.tipoDeProva;
-      this.multiSelectedTema = meuSimulado.tema;
-      this.multiSelectedSubtema = meuSimulado.subtema;
-      this.multiSelectedDificuldade = meuSimulado.dificuldade;
-      this.selectedQuantidadeDeQuestoesSelecionadas = meuSimulado.qtdQuestoes;
-      this.selectedRespostasSimulado = meuSimulado.respostasSimulado;
-      this.questoes = meuSimulado.questoes;
-      if (this.questoes) {
-        this.idsQuestoes = this.questoes.map((q) => q.id);
-        this.paginaAtual = 0;
-        this.questaoAtual = this.questoes[this.paginaAtual];
-        this.resposta = '';
-        this.carregarRespostasPreviamente();
-        this.respostaQuestao(this.questoes[this.paginaAtual].id, this.simuladoIdInicial);
-        this.visualizarSimulado();
+  ngOnInit() {
+    this.carregarDadosIniciais();
+
+  }
+
+  async carregarDadosIniciais() {
+    try {
+      await this.obterPerfilUsuario(); 
+      this.dados = this.obterDados();  
+
+      const meuSimulado = history.state.simulado;
+      this.simuladoIdInicial = meuSimulado?.id;
+
+      if (meuSimulado) {
+        this.prepararSimulado(meuSimulado);
       }
+
+      this.carregarFiltrosEDescricoes();
+    } catch (error) {
+      console.error('Erro ao carregar dados iniciais:', error);
     }
-    this.tiposDeProvaDescricoes = this.tiposDeProva.map((tipoDeProva) =>
-      this.getDescricaoTipoDeProva(tipoDeProva)
-    );
-    this.anosDescricoes = this.anos.map((ano) => this.getDescricaoAno(ano));
-    this.dificuldadesDescricoes = this.dificuldades.map((dificuldade) =>
-      this.getDescricaoDificuldade(dificuldade)
-    );
-    this.subtemasDescricoes = this.subtemas.map((subtema) =>
-      this.getDescricaoSubtema(subtema)
-    );
-    this.temasDescricoes = this.temas.map((tema) =>
-      this.getDescricaoTema(tema)
-    );
+  }
+
+  private prepararSimulado(meuSimulado: any) {
+    this.toggleFiltros();
+    this.realizandoSimulado = false;
+    this.visualizando = true;
+    this.jaRespondeu = true;
+    this.isMeuSimulado = true;
+    this.multiSelectedAno = meuSimulado.ano;
+    this.multiSelectedTipoDeProva = meuSimulado.tipoDeProva;
+    this.multiSelectedTema = meuSimulado.tema;
+    this.multiSelectedSubtema = meuSimulado.subtema;
+    this.multiSelectedDificuldade = meuSimulado.dificuldade;
+    this.selectedQuantidadeDeQuestoesSelecionadas = meuSimulado.qtdQuestoes;
+    this.selectedRespostasSimulado = meuSimulado.respostasSimulado;
+    this.questoes = meuSimulado.questoes;
+
+    if (this.questoes) {
+      this.idsQuestoes = this.questoes.map((q) => q.id);
+      this.paginaAtual = 0;
+      this.questaoAtual = this.questoes[this.paginaAtual];
+      this.resposta = '';
+      this.carregarRespostasPreviamente();
+      this.respostaQuestao(this.questoes[this.paginaAtual].id, this.simuladoIdInicial);
+      this.visualizarSimulado();
+    }
+  }
+
+  private carregarFiltrosEDescricoes() {
+    this.tiposDeProvaDescricoes = this.tiposDeProva.map(this.getDescricaoTipoDeProva);
+    this.anosDescricoes = this.anos.map(this.getDescricaoAno);
+    this.dificuldadesDescricoes = this.dificuldades.map(this.getDescricaoDificuldade);
+    this.subtemasDescricoes = this.subtemas.map(this.getDescricaoSubtema);
+    this.temasDescricoes = this.temas.map(this.getDescricaoTema);
     this.quantidadeDeQuestoesSelecionadasDescricoes =
-      this.quantidadeDeQuestoesSelecionadas.map(
-        (quantidadeDeQuestoesSelecionadas) =>
-          this.getDescricaoQuantidadeDeQuestoesSelecionadas(
-            quantidadeDeQuestoesSelecionadas
-          )
-      );
+      this.quantidadeDeQuestoesSelecionadas.map(this.getDescricaoQuantidadeDeQuestoesSelecionadas);
+    this.respostasSimuladoDescricao = this.respostasSimulado.map(this.getDescricaoRespostasSimulado);
 
-    this.respostasSimuladoDescricao = this.respostasSimulado.map(
-      (respostasSimulado) =>
-        this.getDescricaoRespostasSimulado(respostasSimulado)
-    );
-
-    this.subtemasAgrupadosPorTema = Object.entries(temasESubtemas)
-        .map(([temaKey, subtemas]) => {
-          const temaEnum = temaKey as Tema;
-          return {
-            label: this.getDescricaoTema(temaEnum),
-            value: temaEnum,
-            options: subtemas.map(subtema => ({
-              label: this.getDescricaoSubtema(subtema),
-              value: subtema
-          }))
-        };
+    this.subtemasAgrupadosPorTema = Object.entries(temasESubtemas).map(([temaKey, subtemas]) => {
+      const temaEnum = temaKey as Tema;
+      return {
+        label: this.getDescricaoTema(temaEnum),
+        value: temaEnum,
+        options: subtemas.map(subtema => ({
+          label: this.getDescricaoSubtema(subtema),
+          value: subtema
+        }))
+      };
     });
   }
 
@@ -543,7 +549,6 @@ export class PageSimuladoComponent implements OnInit {
       }
     }
 
-
     if (this.multiSelectTemasSubtemasSelecionados.length) {
       const temasSelecionados: string[] = [];
       const subtemasSelecionados: string[] = [];
@@ -770,7 +775,7 @@ export class PageSimuladoComponent implements OnInit {
 
     // Montando o objeto simulado
     const simulado: any = {
-      nomeSimulado,
+      nomeSimulado: nomeSimulado,
       assunto: descricaoSimulado,
       qtdQuestoes: qtdQuestoesValue,
       ano: this.mapearDescricoesParaEnums(this.multiSelectedAno, AnoDescricoes),
@@ -814,12 +819,13 @@ export class PageSimuladoComponent implements OnInit {
           'Seu simulado foi cadastrado com sucesso!',
           'sucesso'
         );
-        
-        this.simuladoIdRespondendo = response.id;
+
+          this.simuladoIdRespondendo = response.id;
 
         // Fechar modal automaticamente (usando Bootstrap ou outro método)
         const modalElement = document.getElementById('confirmacaoModal');
         if (modalElement) {
+        
           const modalInstance = bootstrap.Modal.getInstance(modalElement);
           modalInstance?.hide();
         }
@@ -920,7 +926,24 @@ export class PageSimuladoComponent implements OnInit {
     return numero < 10 ? `0${numero}` : `${numero}`;
   }
 
-  backHome() {
+  revisarSimulado(id: number | null) {
+
+    if (id === null || isNaN(id)) {
+      return;
+    }
+
+    console.log(id);
+
+    this.simuladoService.obterSimuladoPorId(id).subscribe(
+        (data) => {
+        // console.log('Simulado:', data);
+          this.router.navigate(['/usuario/simulados'], { state: { simulado: data }});
+        },
+        (error) => {
+          alert('Erro ao obter simulado por ID');
+          console.error('Erro ao obter simulado por ID:', error);
+        }
+      )
     this.router.navigate(['usuario/dashboard']);
   }
 
