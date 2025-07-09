@@ -551,10 +551,10 @@ export class PageSimuladoComponent implements OnInit {
       for (const item of this.multiSelectTemasSubtemasSelecionados) {
         if (typeof item === 'string') {
           if (this.isTema(item)) {
-            console.log("É um tema:", item);
+            // console.log("É um tema:", item);
             temasSelecionados.push(item);
           } else if (this.isSubtema(item)) {
-            console.log("É um subtema:", item);
+            // console.log("É um subtema:", item);
             subtemasSelecionados.push(item);
           } else {
             console.warn("Valor não reconhecido como tema nem subtema:", item);
