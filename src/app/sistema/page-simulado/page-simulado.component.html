@@ -177,7 +177,13 @@
                       [checked]="alternativa.texto === selectedOption">
                     <label [for]="'alternativa' + i" class="alternativa-label">
                       <span class="alternativa-texto">{{ alternativa.texto }}  </span>
-                      <span class="alternativa-comentario">{{ alternativa.comentario }}</span>
+                      <span *ngIf="alternativa.imagemUrl; else comentarioTexto" class="img-alternativas">
+                        <img [src]="alternativa.imagemUrl" alt="Imagem da Alternativa" class="alternativa-foto">
+                      </span>
+                      <ng-template #comentarioTexto>
+                        <span class="alternativa-comentario">{{ alternativa.comentario }}</span>
+                      </ng-template>
+                      <!--<span class="alternativa-comentario">{{ alternativa.comentario }}</span>-->
                     </label>
                   </div>
                 </div>
