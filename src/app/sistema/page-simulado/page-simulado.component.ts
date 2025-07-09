@@ -168,11 +168,11 @@ export class PageSimuladoComponent implements OnInit {
     private sanitizer: DomSanitizer
   ) {}
 
-  async ngOnInit() {
+  ngOnInit() {
     const meuSimulado = history.state.simulado;
     this.simuladoIdInicial = meuSimulado?.id;
     this.dados = this.obterDados();
-    await this.obterPerfilUsuario();
+    this.obterPerfilUsuario();
     if (meuSimulado) {
       this.toggleFiltros();
       this.realizandoSimulado = false;
