@@ -47,6 +47,7 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
   private navCheckInterval: any;
   usuario!: Usuario;
   chatHistory: ApiChatRequestResponse[] = [];
+  botAvatar: string = 'assets/Icons/logo-OFT.png';
 
   @ViewChild('chatBody') chatBody!: ElementRef;
 
@@ -131,7 +132,7 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
     const welcomeMsg = { 
       text: "Seja bem-vindo! Sou a VictorIA, sua Inteligência Artificial do Oftlessons. Em que posso te ajudar?", 
       type: 'bot',
-      avatar: 'assets/Icons/avatar.png',
+      avatar: this.botAvatar,
       username: 'VictorIA',
       timestamp: new Date()
     };
@@ -145,7 +146,7 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
       const userMessage = { 
         text: message, 
         type: 'user',
-        avatar: this.usuario?.fotoUrl || 'assets/Icons/avatar.png', //adicionar foto do usuario futuramente
+        avatar: this.usuario?.fotoUrl || 'assets/Icons/avatar.png',
         username: this.usuario?.nome || 'Usuário',
         timestamp: new Date()
       };
@@ -170,7 +171,7 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
           const botMessage = { 
             text: response.response, 
             type: 'bot',
-            avatar: 'assets/Icons/avatar.png',
+            avatar: this.botAvatar,
             username: 'VictorIA',
             timestamp: new Date()
           };
@@ -185,7 +186,7 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
           const errorMsg = { 
             text: '⚠️ Erro ao conectar com a assistente. Tente novamente mais tarde.', 
             type: 'bot',
-            avatar: 'assets/Icons/avatar.png',
+            avatar: this.botAvatar,
             username: 'VictorIA',
             timestamp: new Date() 
           };
@@ -217,7 +218,7 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
         const userMsg = { 
           text: this.forgotEmail, 
           type: 'user',
-          avatar: 'assets/Icons/avatar.png',
+          avatar: this.usuario.fotoUrl || 'assets/Icons/avatar.png',
           username: this.usuario?.nome || 'Usuário',
           timestamp: new Date()
         };
@@ -236,7 +237,7 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
             const successMsg = { 
               text: `✅ Um email com instruções para recuperação de senha foi enviado para ${this.forgotEmail}. Por favor, verifique sua caixa de entrada.`, 
               type: 'bot',
-              avatar: 'assets/Icons/avatar.png',
+              avatar: this.botAvatar,
               username: 'VictorIA',
               timestamp: new Date()
             };
@@ -258,7 +259,7 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
             const errorMsg = { 
               text: errorMessage, 
               type: 'bot',
-              avatar: 'assets/Icons/avatar.png',
+              avatar: this.botAvatar,
               username: 'VictorIA',
               timestamp: new Date()
             };
@@ -273,7 +274,7 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
         const errorMsg = { 
           text: '❌ Não foi possível obter seu email. Tente novamente mais tarde.', 
           type: 'bot',
-          avatar: 'assets/Icons/avatar.png',
+          avatar: this.botAvatar,
           username: 'VictorIA',
           timestamp: new Date()
         };
@@ -289,6 +290,10 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
       event.preventDefault();
       this.sendMessage();
     }
+  }
+
+  isTyping(message: any): boolean {
+    return message.type === 'typing';
   }
 }
 

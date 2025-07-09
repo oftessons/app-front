@@ -287,6 +287,60 @@
   font-style: italic;
 }
 
+/* Estilos para elementos markdown */
+::ng-deep .bot-message markdown {
+  width: 100%;
+}
+
+::ng-deep .bot-message markdown p {
+  margin: 0 0 8px 0;
+}
+
+::ng-deep .bot-message markdown ul, 
+::ng-deep .bot-message markdown ol {
+  padding-left: 20px;
+  margin: 8px 0;
+}
+
+::ng-deep .bot-message markdown code {
+  background-color: #f1f1f1;
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.9em;
+}
+
+::ng-deep .bot-message markdown pre {
+  background-color: #f1f1f1;
+  padding: 10px;
+  border-radius: 4px;
+  overflow-x: auto;
+  margin: 8px 0;
+}
+
+::ng-deep .bot-message markdown a {
+  color: #0366d6;
+  text-decoration: none;
+}
+
+::ng-deep .bot-message markdown a:hover {
+  text-decoration: underline;
+}
+
+::ng-deep .bot-message markdown h1,
+::ng-deep .bot-message markdown h2,
+::ng-deep .bot-message markdown h3,
+::ng-deep .bot-message markdown h4 {
+  margin-top: 16px;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+::ng-deep .bot-message markdown img {
+  max-width: 100%;
+  border-radius: 4px;
+}
+
 @media (max-width: 768px) {
 
   .chatbot-logo {

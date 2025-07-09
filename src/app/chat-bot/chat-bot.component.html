@@ -36,7 +36,8 @@
         </div>
       </div>
       <div class="message-content">
-        {{ message.text }}
+        <markdown *ngIf="message.type === 'bot' && !isTyping(message)" [data]="message.text"></markdown>
+        <span *ngIf="message.type === 'user' || isTyping(message)">{{ message.text }}</span>
       </div>
     </div>
   </div>
