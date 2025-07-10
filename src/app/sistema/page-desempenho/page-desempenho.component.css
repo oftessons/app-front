@@ -77,3 +77,8 @@
     max-height: 470px !important;
 }
 
+.chart-container {
+    width: 100%;
+    max-width: 100%;
+    margin: auto;
+}

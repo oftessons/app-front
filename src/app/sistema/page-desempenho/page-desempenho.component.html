@@ -4,19 +4,21 @@
 
     <!-- Gráficos de Pizza: Acertos e Erros por Tipo de Prova -->
     <div class="row">
-      <div class="col-md-4" *ngFor="let pie of pieChartsData">
-        <div class="chart-container" style="height: 260px;">
-          <h5 class="text-center" style="color: black; font-weight: bold;">{{ pie.title }}</h5>
+      <div class="col-12 col-sm-6 col-md-4 mb-4" *ngFor="let pie of pieChartsData">
+        <div class="chart-wrapper p-3 shadow-sm rounded bg-white h-100">
+          <h5 class="text-center mb-3" style="color: black; font-weight: bold;">{{ pie.title }}</h5>
 
           <ng-container *ngIf="(pie.data[0] + pie.data[1]) > 0; else noData">
-            <canvas baseChart
-                    [data]="pie.data"
-                    [labels]="pie.labels"
-                    [chartType]="pie.chartType"
-                    [options]="pie.options"
-                    [colors]="pie.colors"
-                    [legend]="true">
-            </canvas>
+            <div class="chart-container" style="position: relative; height: 240px; width: 100%;">
+              <canvas baseChart
+                      [data]="pie.data"
+                      [labels]="pie.labels"
+                      [chartType]="pie.chartType"
+                      [options]="pie.options"
+                      [colors]="pie.colors"
+                      [legend]="true">
+              </canvas>
+            </div>
           </ng-container>
 
           <ng-template #noData>
@@ -24,7 +26,7 @@
           </ng-template>
         </div>
       </div>
-    </div>
+    </div> 
 
 
     <!-- Gráfico 3: Acertos e Erros por Mês -->

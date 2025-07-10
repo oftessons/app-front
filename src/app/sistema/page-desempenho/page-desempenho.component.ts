@@ -228,7 +228,7 @@ export class PageDesempenhoComponent implements OnInit {
         chartType: 'pie' as ChartType,
         options: {
           responsive: true,
-          maintainAspectRatio: true,
+          maintainAspectRatio: false,
         },
         colors: [
           {
