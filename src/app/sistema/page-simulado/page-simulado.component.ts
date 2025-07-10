@@ -898,6 +898,7 @@ export class PageSimuladoComponent implements OnInit {
     this.abrirModal();
     if (!this.isSimuladoIniciado) {
       this.isSimuladoIniciado = true;
+      this.realizandoSimulado = true;
       this.tempo = 0;
       this.intervalId = setInterval(() => {
         this.tempo++;
