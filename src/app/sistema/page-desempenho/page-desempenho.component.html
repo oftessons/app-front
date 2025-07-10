@@ -2,24 +2,35 @@
   <div class="container mt-4">
     <h1 class="mt-4"> <span> | </span> Meu Desempenho</h1>
 
+    <!-- Gráficos de Pizza: Acertos e Erros por Tipo de Prova -->
     <div class="row">
-      <div class="col-md-6">
-        <div class="chart-container">
-          <!-- Gráfico 1: Acertos e Erros por Tipo de Prova -->
-          <div style="display: block;">
+      <div class="col-md-4" *ngFor="let pie of pieChartsData">
+        <div class="chart-container" style="height: 260px;">
+          <h5 class="text-center" style="color: black; font-weight: bold;">{{ pie.title }}</h5>
+
+          <ng-container *ngIf="(pie.data[0] + pie.data[1]) > 0; else noData">
             <canvas baseChart
-                    [datasets]="barChartData1"
-                    [labels]="barChartLabels1"
-                    [options]="barChartOptions1"
-                    [legend]="barChartLegend"
-                    [chartType]="barChartType">
+                    [data]="pie.data"
+                    [labels]="pie.labels"
+                    [chartType]="pie.chartType"
+                    [options]="pie.options"
+                    [colors]="pie.colors"
+                    [legend]="true">
             </canvas>
-          </div>
+          </ng-container>
+
+          <ng-template #noData>
+            <p class="text-center text-muted">Sem dados disponíveis</p>
+          </ng-template>
         </div>
       </div>
-      <div class="col-md-6">
+    </div>
+
+
+    <!-- Gráfico 3: Acertos e Erros por Mês -->
+    <div class="row">
+      <div class="col-md-12">
         <div class="chart-container">
-          <!-- Gráfico 3: Acertos e Erros por Mês -->
           <div style="display: block;">
             <canvas baseChart
                     [datasets]="barChartData3"
@@ -33,10 +44,10 @@
       </div>
     </div>
 
+    <!-- Gráfico 2: Quantidade de Questões Feitas por Tema -->
     <div class="row">
       <div class="col-md-12">
-        <div class="chart-container chart-container-large container-height">
-          <!-- Gráfico 2: Quantidade de Questões Feitas por Tema -->
+        <div class="chart-container">
           <div style="display: block;" class="container-height">
             <canvas baseChart
               [datasets]="barChartData2"
@@ -50,10 +61,10 @@
       </div>
     </div>
 
+    <!-- Gráfico 4: Acertos e Erros por Tema -->
     <div class="row">
       <div class="col-md-12">
-        <div class="chart-container chart-container-large container-height">
-          <!-- Gráfico 4:  Acertos e Erros por Tema -->
+        <div class="chart-container">
           <div style="display: block;" class="container-height">
             <canvas baseChart
               [datasets]="barChartData4"

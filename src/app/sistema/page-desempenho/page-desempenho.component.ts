@@ -13,6 +13,16 @@ import { Usuario } from 'src/app/login/usuario';
 })
 export class PageDesempenhoComponent implements OnInit {
   usuario!: Usuario;
+
+  public pieChartsData: {
+    title: string;
+    data: number[];
+    labels: string[];
+    chartType: ChartType;
+    options: ChartOptions;
+    colors: any[];
+  }[] = [];
+
   
   // Gráfico 1: Acertos e Erros por Tipo de Prova
   public barChartOptions1: ChartOptions = {
@@ -203,41 +213,32 @@ export class PageDesempenhoComponent implements OnInit {
   }
 
   private processChartData1(data: any): void {
-    const tiposDeProva = [
+    const provas = [
       'Prova de Bases (Teórica 1)',
       'Prova de Especialidades (Teórica 2)',
       'Prova de Imagens (Teórico-prática)',
     ];
 
-    this.barChartLabels1 = tiposDeProva;
-    const errosData: number[] = [];
-    const acertosData: number[] = [];
-
-    tiposDeProva.forEach((tipo) => {
+    this.pieChartsData = provas.map((tipo) => {
       const tipoData = data[tipo] || { acertos: 0, erros: 0 };
-      acertosData.push(tipoData.acertos);
-      errosData.push(tipoData.erros);
+      return {
+        title: tipo,
+        data: [tipoData.acertos, tipoData.erros],
+        labels: ['Acertos', 'Erros'],
+        chartType: 'pie' as ChartType,
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+        },
+        colors: [
+          {
+            backgroundColor: ['#2d7d96', '#e05538'],
+          },
+        ],
+      };
     });
-
-    this.barChartData1 = [
-      {
-        data: acertosData,
-        label: 'Acertos',
-        backgroundColor: '#0A275E',
-        borderColor: '#0A275E',
-        hoverBackgroundColor: '#113A87',
-        hoverBorderColor: '#113A87',
-      },
-      {
-        data: errosData,
-        label: 'Erros',
-        backgroundColor: '#4E5E7B',
-        borderColor: '#4E5E7B',
-        hoverBackgroundColor: '#667A9F',
-        hoverBorderColor: '#667A9F',
-      },
-    ];
   }
+
 
   private processChartData2(data: any): void {
     const temas = Object.values(TemaDescricoes);
