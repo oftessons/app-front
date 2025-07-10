@@ -7,8 +7,8 @@
       Filtro Simulado
       </button>
     </div>
-  </div>
-  <div [ngClass]="{'filtros-container': true, 'filtros-container-open': mostrarFiltros}" *ngIf="realizandoSimulado">
+  </div>  
+  <div [ngClass]="{'filtros-container': true, 'filtros-container-open': mostrarFiltros}" *ngIf="realizandoSimulado || !isSimuladoIniciado;">
     <div class="container">
       <div class="filters-container">
         <form #filtroForm="ngForm" (ngSubmit)="filtrarQuestoes()" class="consulta-form">
@@ -118,6 +118,9 @@
       </div>
     </div>
   </div>
+
+  <ng-template #filtrosDesativados></ng-template>
+
 
   <div *ngIf="questaoAtual">
     <div class="identificadores-questao-resul" *ngIf="!realizandoSimulado">
