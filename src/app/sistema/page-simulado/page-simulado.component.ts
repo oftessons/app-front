@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, ChangeDetectorRef} from '@angular/core';
 import { TipoDeProva } from '../page-questoes/enums/tipoDeProva';
 import {
   getDescricaoAno,
@@ -167,7 +167,8 @@ export class PageSimuladoComponent implements OnInit {
     private simuladoService: SimuladoService,
     private authService: AuthService,
     private router: Router,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer, 
+    private cdr: ChangeDetectorRef
   ) {
   }
 
@@ -185,7 +186,12 @@ export class PageSimuladoComponent implements OnInit {
       this.simuladoIdInicial = meuSimulado?.id;
 
       if (meuSimulado) {
+        this.toggleFiltros();
+
         this.prepararSimulado(meuSimulado);
+        
+        this.realizandoSimulado = false;
+    
       }
 
       this.carregarFiltrosEDescricoes();
@@ -196,7 +202,6 @@ export class PageSimuladoComponent implements OnInit {
 
   private prepararSimulado(meuSimulado: any) {
     this.toggleFiltros();
-    this.realizandoSimulado = false;
     this.visualizando = true;
     this.jaRespondeu = true;
     this.isMeuSimulado = true;
@@ -893,6 +898,7 @@ export class PageSimuladoComponent implements OnInit {
     this.abrirModal();
     if (!this.isSimuladoIniciado) {
       this.isSimuladoIniciado = true;
+      this.realizandoSimulado = true;
       this.tempo = 0;
       this.intervalId = setInterval(() => {
         this.tempo++;
