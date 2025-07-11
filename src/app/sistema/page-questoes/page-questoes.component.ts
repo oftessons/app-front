@@ -22,6 +22,7 @@ import { FiltroService } from 'src/app/services/filtro.service';
 import { RespostaDTO } from '../RespostaDTO'; // Adicione esta importação
 import { Resposta } from '../Resposta'; // Adicione esta importação
 import { AuthService } from 'src/app/services/auth.service';
+import { QuestoesStateService } from 'src/app/services/questao-state.service';
 import { Usuario } from 'src/app/login/usuario';
 import { FiltroDTO } from '../filtroDTO';
 
@@ -152,6 +153,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
   constructor(
     private questoesService: QuestoesService,
+    private questoesStateService: QuestoesStateService,
     private filtroService: FiltroService,
     private authService: AuthService,
     private sanitizer: DomSanitizer,
@@ -625,6 +627,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
         this.numeroDeQuestoes = questoes.length;
         this.toggleFiltros();
         this.carregando = false;
+        this.questoesStateService.setQuestaoAtual(this.questaoAtual);
       },
       (error) => {
         console.error('Erro ao filtrar questões:', error);
@@ -733,6 +736,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
       this.resetarOcorrenciasDeQuestao();
       this.carregarRespostaSeNecessario(this.questaoAtual.id); 
+      this.questoesStateService.setQuestaoAtual(this.questaoAtual);
     } else {
       this.mensagemErro = 'Voce já está na primeira questão';
     }
@@ -754,6 +758,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
       this.resetarOcorrenciasDeQuestao();
       this.carregarRespostaSeNecessario(this.questaoAtual.id);
+      this.questoesStateService.setQuestaoAtual(this.questaoAtual);
 
     } else {
       this.mensagemErro = 'Não há mais questões, mas em breve novas questões estarão disponíveis.'
@@ -916,6 +921,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
           this.questaoAtual = data;
           this.processarQuestaoAtual();
           this.carregarRespostaSeNecessario(questaoId);
+          this.questoesStateService.setQuestaoAtual(this.questaoAtual);
         },
         (error) => {
           console.error('Erro ao carregar questão específica:', error);
@@ -1125,6 +1131,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
             this.paginaAtual = index;
             this.questaoAtual = this.questoes[index];
             this.carregarRespostaSeNecessario(this.questaoAtual.id);
+            this.questoesStateService.setQuestaoAtual(this.questaoAtual);
           } else {
             this.paginaAtual = 0;
             this.questaoAtual = this.questoes[0];

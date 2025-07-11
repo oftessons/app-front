@@ -29,6 +29,8 @@ import { PagamentoConcluidoComponent } from './planos/pagamento-concluido/pagame
 import { ValidacaoAcessoComponent } from './validacao-acesso/validacao-acesso.component';
 import { ChatBotWhatsappComponent } from './chat-bot-whatsapp/chat-bot-whatsapp.component';
 import { TmplAstRecursiveVisitor } from '@angular/compiler';
+import { MarkdownModule } from 'ngx-markdown';
+import { QuestoesStateService } from './services/questao-state.service';
 
 
 
@@ -62,6 +64,7 @@ import { TmplAstRecursiveVisitor } from '@angular/compiler';
     EditorModule,
     SharedModule,
     MatProgressBarModule,
+    MarkdownModule.forRoot(),
     QuillModule.forRoot({
       customOptions: [{
         import: 'formats/font',
@@ -89,7 +92,8 @@ import { TmplAstRecursiveVisitor } from '@angular/compiler';
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true,
-    }
+    },
+    QuestoesStateService,
   ],
   bootstrap: [AppComponent],
 })
