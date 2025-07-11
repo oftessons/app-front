@@ -14,7 +14,7 @@
 <div class="chatbot-container" [@chatBotAnimation]="isOpen ? 'open' : 'closed'">
   <div class="chatbot-header">
     <button class="close-btn" (click)="toggleChat()">×</button>
-    VictorIA - Assistente de IA
+    VictorIA
   </div>
   <div class="chatbot-body" #chatBody>
     <div
@@ -28,7 +28,7 @@
     >
       <div class="message-header">
         <div class="avatar-container" *ngIf="message.avatar">
-          <img [src]="message.avatar" alt="Avatar" class="avatar-img">
+          <img *ngIf="message.avatar" [src]="message.avatar" alt="Avatar" class="avatar-img">
         </div>
         <div class="message-info">
           <span class="username" *ngIf="message.username">{{ message.username }}</span>
@@ -37,23 +37,27 @@
       </div>
       <div class="message-content">
         <markdown *ngIf="message.type === 'bot' && !isTyping(message)" [data]="message.text"></markdown>
-        <span *ngIf="message.type === 'user' || isTyping(message)">{{ message.text }}</span>
+        <markdown *ngIf="message.type === 'user' || isTyping(message)">{{ message.text }}</markdown>
       </div>
     </div>
   </div>
 
   <div class="chatbot-footer">
-    <textarea
-      class="user-text-input"
-      [(ngModel)]="userMessage"
-      (keydown)="handleKeydown($event)"
-      placeholder="Escreva sua mensagem..."
-    ></textarea>
-    <button
-      (click)="sendMessage()"
-      [disabled]="!userMessage.trim()"
-    >
-      <img src="assets/Icons/enviar.svg" alt="Enviar" class="send-icon" />
-    </button>
+    <button [disabled]="!temQuestaoParaCitar()" [class.active]="isCitarQuestao" class="citarQuestao" (click)="citarQuestaoAtual(userMessage)"><div [class.active]="isCitarQuestao" class="citarQuestao-butao-texto">Citar Questão</div><img src="assets/Icons/x.png" [class.active]="isCitarQuestao"></button>
+    <div class="text-input-container"> 
+      <textarea
+        class="user-text-input"
+        [(ngModel)]="userMessage"
+        (keydown)="handleKeydown($event)"
+        placeholder="Escreva sua mensagem..."
+      ></textarea>
+      <button
+        class="send-button"
+        (click)="sendMessage()"
+        [disabled]="!userMessage.trim()"
+      >
+        <img src="assets/Icons/enviar.svg" alt="Enviar" class="send-icon" />
+      </button>
+    </div>
   </div>
 </div>

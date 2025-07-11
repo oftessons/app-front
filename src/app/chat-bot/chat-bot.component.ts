@@ -1,10 +1,12 @@
 import { Component, OnInit, ViewChild, AfterViewChecked, ElementRef, AfterViewInit, OnDestroy } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { ChatBotStateService } from '../services/chat-bot-state.service';
+import { QuestoesStateService } from '../services/questao-state.service';
 import { AuthService } from '../services/auth.service';
 import { Usuario } from '../login/usuario';
 import { ApiChatRequestResponse } from './api-chat-request-dto';
 import { convertPropertyBinding } from '@angular/compiler/src/compiler_util/expression_converter';
+import { Questao } from '../sistema/page-questoes/questao';
 
 @Component({
   selector: 'chat-bot',
@@ -33,6 +35,8 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
   showButton: boolean = false;
   userMessage: string = '';
   botResponse: string = '';
+  citarQuestao: Questao = new Questao();
+  isCitarQuestao: boolean = false;
   forgotEmail: string = '';
   errors: string[] = [];
   messages: Array<{ 
@@ -53,7 +57,8 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
 
   constructor(
     private chatBotStateService: ChatBotStateService,
-    private authService: AuthService
+    private authService: AuthService,
+    private questoesStateService: QuestoesStateService
   ) {}
 
   ngOnInit(): void {
@@ -92,6 +97,25 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
     if (this.navCheckInterval) {
       clearInterval(this.navCheckInterval);
     }
+  }
+
+  citarQuestaoAtual(message: string): void {
+    if (this.isCitarQuestao) {
+      this.isCitarQuestao = false;
+      this.citarQuestao = new Questao();
+      return;
+    }
+    this.isCitarQuestao = true;
+    const questaoAtual = this.questoesStateService.getQuestaoAtual();
+    if (questaoAtual) {
+      this.citarQuestao = questaoAtual;
+    } else {
+      this.isCitarQuestao = false;
+    }
+  }
+
+  temQuestaoParaCitar(): boolean {
+    return this.questoesStateService.getQuestaoAtual() !== null;
   }
 
   enviarMensagem(): void {
@@ -143,15 +167,31 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
   sendMessage(): void {
     const message = this.userMessage.trim();
     if (message) {
-      const userMessage = { 
-        text: message, 
-        type: 'user',
-        avatar: this.usuario?.fotoUrl || 'assets/Icons/avatar.png',
-        username: this.usuario?.nome || 'Usuário',
-        timestamp: new Date()
-      };
-      this.messages.push(userMessage);
-      this.chatBotStateService.addMessage(userMessage);
+      let fullMessage = message;
+
+      if(this.isCitarQuestao) {
+        fullMessage = `Questão ${this.citarQuestao.id} ${this.citarQuestao.enunciadoDaQuestao}\n\n${message}`;
+
+        const userMessageWithCitation = {
+          text: fullMessage,
+          type: 'user',
+          avatar: this.usuario?.fotoUrl || null,
+          username: this.usuario?.nome || 'Usuário',
+          timestamp: new Date()
+        };
+        this.messages.push(userMessageWithCitation);
+        this.chatBotStateService.addMessage(userMessageWithCitation);
+      } else {
+        const userMessage = { 
+          text: message, 
+          type: 'user',
+          avatar: this.usuario?.fotoUrl || null,
+          username: this.usuario?.nome || 'Usuário',
+          timestamp: new Date()
+        };
+        this.messages.push(userMessage);
+        this.chatBotStateService.addMessage(userMessage);
+      }
 
       const typingMsg = { text: "Digitando...", type: 'typing' };
       this.messages.push(typingMsg);
@@ -162,7 +202,7 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
       }, 0);
       
       this.chatBotStateService.sendMessageToBot(
-        message,
+        fullMessage,
         null,
       ).subscribe(
         response => {
@@ -177,6 +217,8 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
           };
           this.messages.push(botMessage);
           this.chatBotStateService.addMessage(botMessage);
+          this.isCitarQuestao = false;
+          this.citarQuestao = new Questao();
 
           this.scrollToBottom();
         },
@@ -192,6 +234,8 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
           };
           this.messages.push(errorMsg);
           this.chatBotStateService.addMessage(errorMsg);
+          this.isCitarQuestao = false;
+          this.citarQuestao = new Questao();
           this.scrollToBottom();
         }
       );
@@ -208,8 +252,8 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
       chatBodyElement.scrollTop = chatBodyElement.scrollHeight;
     }, 100);
   }
-
-  processForgotPassword(): void {
+  
+  processForgotPassword(): void { //possivel uso para o bot ou criar um botao em outro lugar
     this.authService.obterUsuarioAutenticadoDoBackend().subscribe(
       (data: Usuario) => {
         this.forgotEmail = data.email;

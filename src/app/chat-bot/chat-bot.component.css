@@ -53,6 +53,74 @@
   scroll-behavior: smooth;
 }
 
+.citarQuestao-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.citarQuestao {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f1f1f1;
+  padding: 6px 12px;
+  border-radius: 15px;
+  width: fit-content;
+  border: none;
+  font-size: 14px;
+  gap: 5px;
+  transition: all 0.3s ease;
+}
+
+.citarQuestao:hover {
+  background: #e0e0e0;
+}
+
+.citarQuestao.active {
+  background: #b1c0e86b;
+}
+
+.citarQuestao:disabled {
+  cursor: not-allowed;
+  background: #e0e0e0;
+}
+
+.citarQuestao-butao-texto {
+  transform: translateX(7px);
+  transition: all 0.3s ease;
+}
+
+.citarQuestao-butao-texto.active {
+  transform: translateX(0px);
+}
+
+.citarQuestao img {
+  width: 8px;
+  height: 8px;
+  transform: scale(0.01);
+  transition: all 0.3s ease;
+}
+
+.citarQuestao img.active {
+  position: relative;
+  transform: scale(1);
+}
+
+.citarQuestao img:hover {
+  cursor: pointer;
+
+}
+
+.text-input-container {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff;
+}
+
 .user-text-input {
   display: flex;
   align-items: flex-start;
@@ -95,39 +163,41 @@
 
 .chatbot-footer {
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  padding: 30px 10px;
+  padding: 10px;
+  gap: 8px;
   background-color: #ffffff;
   text-align: center;
   padding-bottom: 10px;
-  height: 120px;
 }
 
-.chatbot-footer button {
+.send-button {
   background: linear-gradient(to right, #f5ce50, #febf25);
   color: white;
   border: none;
-  padding: 10px 20px;
-  border-radius: 20px;
+  height: 100%;
+  padding: 20px;
+  border-radius: 15px;
   cursor: pointer;
   font-size: 14px;
   margin-left: 10px;
   transition: all 0.3s;
 }
 
-.chatbot-footer button:hover {
+.send-button:hover {
   background: linear-gradient(to left, #f5ce50, #febf25);
   transform: scale(1.05);
 }
 
-.chatbot-footer button:disabled {
+.send-button:disabled {
   background: #ccc;
   cursor: not-allowed;
   opacity: 0.5;
   transform: scale(1);
 }
 
-.chatbot-footer img {
+.send-button img {
   width: 20px;
   height: 20px;
   margin-right: 2px;
@@ -287,22 +357,21 @@
   font-style: italic;
 }
 
-/* Estilos para elementos markdown */
-::ng-deep .bot-message markdown {
+::ng-deep markdown {
   width: 100%;
 }
 
-::ng-deep .bot-message markdown p {
+::ng-deep markdown p {
   margin: 0 0 8px 0;
 }
 
-::ng-deep .bot-message markdown ul, 
-::ng-deep .bot-message markdown ol {
+::ng-deep markdown ul, 
+::ng-deep markdown ol {
   padding-left: 20px;
   margin: 8px 0;
 }
 
-::ng-deep .bot-message markdown code {
+::ng-deep markdown code {
   background-color: #f1f1f1;
   padding: 2px 4px;
   border-radius: 4px;
@@ -310,7 +379,7 @@
   font-size: 0.9em;
 }
 
-::ng-deep .bot-message markdown pre {
+::ng-deep markdown pre {
   background-color: #f1f1f1;
   padding: 10px;
   border-radius: 4px;
@@ -318,25 +387,25 @@
   margin: 8px 0;
 }
 
-::ng-deep .bot-message markdown a {
+::ng-deep markdown a {
   color: #0366d6;
   text-decoration: none;
 }
 
-::ng-deep .bot-message markdown a:hover {
+::ng-deep markdown a:hover {
   text-decoration: underline;
 }
 
-::ng-deep .bot-message markdown h1,
-::ng-deep .bot-message markdown h2,
-::ng-deep .bot-message markdown h3,
-::ng-deep .bot-message markdown h4 {
+::ng-deep markdown h1,
+::ng-deep markdown h2,
+::ng-deep markdown h3,
+::ng-deep markdown h4 {
   margin-top: 16px;
   margin-bottom: 8px;
   font-weight: 600;
 }
 
-::ng-deep .bot-message markdown img {
+::ng-deep markdown img {
   max-width: 100%;
   border-radius: 4px;
 }
