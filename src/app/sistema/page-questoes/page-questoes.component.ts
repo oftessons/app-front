@@ -33,7 +33,7 @@ import { TipoDeProvaDescricoes } from './enums/tipodeprova-descricao';
 import { SubtemaDescricoes } from './enums/subtema-descricao';
 import { TemaDescricoes } from './enums/tema-descricao';
 import { CertasErradas } from './enums/certas-erradas';
-import { CertasErradasDescricao } from './enums/certas-errads-descricao';
+import { CertasErradasDescricao } from './enums/certas-erradas-descricao';
 import { RespostasSimuladosDescricao } from './enums/resp-simu-descricao';
 import { filter, startWith } from 'rxjs/operators';
 

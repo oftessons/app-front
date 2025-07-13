@@ -23,7 +23,7 @@ import { AppRoutingModule } from '../app-routing.module';
     PlaylistModeComponent,
     MultiploSelectComponent,
     ModalComponent,
-    CardPlanoComponent
+    CardPlanoComponent,
   ],
   imports: [
     CommonModule,

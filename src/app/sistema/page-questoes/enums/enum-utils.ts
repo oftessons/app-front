@@ -15,7 +15,7 @@ import { QuantidadeDeQuestoesSelecionadas } from "./quant-questoes"
 import { QuantidadeDeQuestõesSelecionadasDescricoes } from "./quant-que-descricao"
 import { RespostasSimulado } from "./resp-simu"
 import { RespostasSimuladosDescricao } from "./resp-simu-descricao"
-import { CertasErradasDescricao } from "./certas-errads-descricao"
+import { CertasErradasDescricao } from "./certas-erradas-descricao"
 
 export function getQuantidadeDeQuestõesSelecionadasDescricoes( quantidadeDeQuestoesSelecionadas:QuantidadeDeQuestoesSelecionadas): string{
   return QuantidadeDeQuestõesSelecionadasDescricoes[quantidadeDeQuestoesSelecionadas];
