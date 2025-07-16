@@ -112,6 +112,7 @@
     position: relative; /* Permite posicionar elementos filhos relativamente a este elemento */
     padding: 5px;
     margin-top: 15px;
+    color: var(--text-color);
     font-family: 'Nunito Sans', sans-serif;
 }
 
@@ -133,7 +134,7 @@
 }
 
 .mat-list-item:hover {
-    background-color: #e3eaf0; /* Cor de destaque ao passar o mouse */
+    background-color: var(--bg-sidebar-active-link-hover); /* Cor de destaque ao passar o mouse */
     font-weight: bold;
 }
 
@@ -142,7 +143,7 @@
 }
 
 .mat-list-item:hover span {
-    color: #0D356A;
+    color: var(--bg-sidebar-active-link-text);
 }
 
 /* Adaptações para dispositivos móveis */
@@ -173,7 +174,7 @@
         bottom: 0;
         left: 0;
         width: 3px; /* Largura da linha vertical */
-        background-color:#CDDAEF;
+        background-color: var(--bg-sidebar-active-link-hover);
         display: none; /* Inicialmente, a linha está oculta */
     }
 
@@ -189,10 +190,6 @@
     .mat-list-item:hover .icon {
         color:#CDDAEF;
     }
-
-    .mat-list-item:hover span {
-        color: #0D356A;
-    }
 }
 
 .heading-home{
@@ -201,19 +198,19 @@
     text-transform: uppercase;
     margin-left: 14px;
     margin-top: 18px;
-    color: #0F1934;
+    color: var(--text-color);
 }
 
 .active-link {
-    background-color: #cfe2ff; 
+    background-color: var(--bg-sidebar-active-link); 
     font-weight: bold; 
-    color: #040404; 
+    color: var(--text-color); 
 }
 
 
 .mat-drawer-sidenav{
     width: 200px;
-    background-color: #f2f2f2;
+    background-color: var(--bg-sidebar);
     overflow-x: hidden;
     margin-top: 15px;
     font-family: 'Nunito Sans', sans-serif;
@@ -265,6 +262,58 @@
 
 ::ng-deep .mat-drawer.mat-drawer-side {
     z-index: 1000 !important;
+}
+.toggle-container {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  gap: 12px;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+  margin: 0;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #ffd54d;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
 }
 
 /* Estilo para dispositivos móveis e tablets */

@@ -4,6 +4,27 @@
 @import "~quill/dist/quill.snow.css";
 
 :root {
+  --primary-color: #0a1435;
+  
+  --text-color: #212529;
+  --bg-geral: #E3EAF0;
+  --bg-navbar: #0a1435;
+  --bg-sidebar: #f2f2f2;
+  --bg-sidebar-active-link: #cfe2ff;
+  --bg-sidebar-active-link-hover: #e3eaf0;
+  --bg-sidebar-active-link-text: #0a1435;
+  --bg-input: #efefef;
+  --bg-container: #ffffff;
+  --border-color: #ced4da;
+  --placeholder-color: #6c757d;
+  --multiple-select-search-bg: #ffffff;
+  --multiple-select-value-bg: #ffffff;
+  --multiple-select-group-label-bg: #e2e2e2;
+  --multiple-select-hover-bg: #fbfbfb;
+  --scroll-track-bg: #ffffff;
+  --scroll-thumb-bg: #0a1435;
+  --scroll-thumb-hover-bg: #1f242d;
+
   --blue: #007bff;
   --indigo: #6610f2;
   --purple: #6f42c1;
@@ -34,6 +55,36 @@
   --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
+body.dark-mode {
+  --text-color: #e3e3e3;
+  --bg-geral: #1a1e22;
+  --bg-navbar: #000021;
+  --bg-sidebar: #14181a;
+  --bg-sidebar-active-link: #1f242d;
+  --bg-sidebar-active-link-hover: #2c2f35;
+  --bg-sidebar-active-link-text: #a2cdff;
+  --bg-input: #171b1c;
+  --bg-container: #0d1011;
+  --border-color: #2c2f35;
+  --placeholder-color: #bbbec0;
+  --multiple-select-search-bg: #171b1c;
+  --multiple-select-value-bg: #424547;
+  --multiple-select-group-label-bg: #2c2f35;
+  --multiple-select-hover-bg: #4a4b4b;
+  --scroll-track-bg: #262a2e;
+  --scroll-thumb-bg: #636363;
+  --scroll-thumb-hover-bg: #4a6fa0;
+}
+
+body.dark-mode .mat-drawer-content {
+  background-color: #1a1e22;
+}
+
+body.dark-mode .mat-radio-button .mat-radio-outer-circle {
+  border-color: #a0a0a0;
+}
+
+
 *,
 *::before,
 *::after {
@@ -62,6 +113,11 @@ body {
   text-align: left;
   background: #E3EAF0 !important;
 }
+
+.line {
+  color: var(--text-color);
+}
+
 .mat-drawer-content{
     background: #fefefe;
 }
@@ -89,18 +145,18 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background-color: #fff;
+  background-color: var(--scroll-track-bg);
   border-radius: 100vw;
 }
 
 ::-webkit-scrollbar-thumb {
   /* background-color: #C20C45; */
-  background-color: #002035;
+  background-color: var(--scroll-thumb-bg);
   border-radius: 100vw;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: #1f242d;
+  background-color: var(--scroll-thumb-hover-bg);
   border-radius: 100vw;
 }
 
@@ -117,6 +173,7 @@ hr {
 h1, h2, h3, h4, h5, h6 {
   margin-top: 0;
   margin-bottom: 0.5rem;
+  color: var(--text-color) !important;
 }
 
 p {
@@ -259,6 +316,7 @@ th {
 label {
   display: inline-block;
   margin-bottom: 0.5rem;
+  color: var(--text-color);
 }
 
 button {

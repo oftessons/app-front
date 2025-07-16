@@ -115,6 +115,7 @@
   display: flex;
   flex-wrap: nowrap;
   gap: 5px;
+  color: var(--text-color);
 }
 .btn-filters {
   padding: 10px 20px;
@@ -127,7 +128,7 @@
 
 .filters-container {
   margin-top: 20px;
-  background: #94979d;
+  background: var(--bg-container);
   border-radius: 5px;
   padding: 50px;
 }

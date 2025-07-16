@@ -15,6 +15,13 @@
         <img src="assets/imagens/logoq-bank.svg" alt="" style="padding: 10px; height: 65px;" class="d-inline-block align-text-top">
     </a>
 
+    <div class="toggle-container">
+        <label class="switch">
+            <input name="darkModeToggle" type="checkbox" [checked]="isDarkMode()" (change)="toggleDarkMode()">
+            <span class="slider"></span>
+        </label>
+    </div>
+
     <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseLayouts" aria-expanded="false"
         aria-controls="collapseLayouts">
         <div class="sb-nav-link-icon">

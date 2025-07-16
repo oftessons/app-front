@@ -10,8 +10,9 @@
     width: 100%;
     padding: 10px;
     padding-top: 16px;
-    background: #ffffff;
-    border: 1px solid #ffffff;
+    background: var(--bg-input);
+    color: var(--text-color);
+    border: none;
     border-radius: 8px;
     outline: none;
     transition: border-color 0.3s ease;

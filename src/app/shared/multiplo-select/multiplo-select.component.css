@@ -25,8 +25,7 @@
   }
   
   .select-dropdown {
-    background: #fff;
-    border: 1px solid #ffffff;
+    background: var(--bg-input);
     padding: 12px 10px;
     cursor: pointer;
     min-height: 48px;
@@ -40,7 +39,8 @@
   .selected-value {
     font-size: 14px;
     font-weight: 600;
-    background-color: #f0f0f0;
+    background-color: var(--multiple-select-value-bg);
+    color: var(--text-color);
     border-radius: 4px;
     padding: 4px;
   }
@@ -57,7 +57,7 @@
     top: 100%;
     left: 0;
     width: 100%;
-    background: white;
+    background: var(--bg-input);
     border-radius: 8px;
     max-height: 200px;
     overflow-y: auto;
@@ -65,18 +65,31 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
     margin-top: 2px;
   }
+
+  .option-group{
+    margin-top: 16px;
+    
+    .option{
+      margin-left: 15px;
+    }
+  }
+
+  .option-group:first-of-type {
+    margin-top: 0;
+  }
   
   .option {
     padding: 10px;
     cursor: pointer;
-    background: #ffffff;
+    background: var(--bg-input);
+    color: var(--text-color);
+    border-radius: 8px;
     transition: background-color 0.3s ease, color 0.3s ease;
   }
   
   .option:hover,
   .option.selected {
-    background: #f0f0f0;
-    color: #3f51b5;
+    background: var(--multiple-select-hover-bg);
     font-weight: 700;
   }
   
@@ -181,17 +194,16 @@
   .group-label {
     font-weight: bold;               
     font-size: 16px;                 
-    padding: 8px 12px;               
-    margin-top: 8px;                 
-    background-color: #e2e2e2;       
-    color: #333;                     
+    padding: 8px 12px;                    
+    color: var(--text-color);           
+    background-color: var(--multiple-select-group-label-bg);                           
     cursor: pointer;                
-    border-radius: 4px;              
+    border-radius: 8px;
+    transition: background-color 0.3s ease, color 0.3s ease;              
   }
 
   .group-label:hover {
-    background-color: #e2e2e2;       
-    text-decoration: underline;      
+    background-color: var(--multiple-select-hover-bg);           
   }
 
   .search-input {
@@ -199,7 +211,9 @@
     padding: 6px 10px;
     margin-bottom: 8px;
     box-sizing: border-box;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    background: var(--multiple-select-search-bg);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
     outline: none;
   }

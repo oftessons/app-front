@@ -37,7 +37,7 @@
                 label="Ano"
                 [options]="anos"
                 [(selectedValue)]="questaoDTO.ano"
-                [customStyles]="{'background': '#EFEFEF'}">
+                >
               </app-select-padrao>
             </div>
           </div>
@@ -47,7 +47,7 @@
               label="Tipo de Prova"
               [options]="tiposDeProva"
               [(selectedValue)]="questaoDTO.tipoDeProva"
-              [customStyles]="{'background': '#EFEFEF'}">
+              >
             </app-select-padrao>
             </div>
           </div>
@@ -62,7 +62,7 @@
                 label="Tema"
                 [options]="temas"
                 [(selectedValue)]="questaoDTO.tema"
-                [customStyles]="{'background': '#EFEFEF'}">
+                >
               </app-select-padrao>
             </div>
           </div> -->
@@ -72,7 +72,7 @@
                 label="Subtema"
                 [options]="subtemas"
                 [(selectedValue)]="questaoDTO.subtema"
-                [customStyles]="{'background': '#EFEFEF'}">
+                >
               </app-select-padrao>
             </div>
           </div> -->
@@ -84,7 +84,7 @@
               label="Dificuldade"
               [options]="dificuldades"
               [(selectedValue)]="questaoDTO.dificuldade"
-              [customStyles]="{'background': '#EFEFEF'}">
+              >
             </app-select-padrao>
             </div>
           </div>
@@ -94,7 +94,7 @@
                 label="Relevância"
                 [options]="relevancias"
                 [(selectedValue)]="questaoDTO.relevancia"
-                [customStyles]="{'background': '#EFEFEF'}">
+                >
               </app-select-padrao>
             </div>
           </div>
@@ -104,7 +104,6 @@
                 label="Assunto"
                 [options]="subtemasAgrupadosPorTema"
                 [(selectedValue)]="selectedSubtemaValue"
-                [customStyles]="{'background': '#EFEFEF'}"
                 [searchable]="true">
               </app-select-padrao>
             </div>
