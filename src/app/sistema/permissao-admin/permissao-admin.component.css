@@ -190,6 +190,12 @@ h2 {
   width: 100%;
 }
 
+.form-group {
+  label {
+    color: #000000;
+  }
+}
+
 .button-container {
   display: flex;
   justify-content: center;
@@ -290,7 +296,7 @@ input {
 .plan-title {
   font-size: 18px;
   font-weight: 600;
-  color: #0f1934;
+  color: #0f1934 !important;
   margin-bottom: 15px;
   padding-bottom: 10px;
   border-bottom: 1px solid #dee2e6;
@@ -306,7 +312,7 @@ input {
 .line-dados h3 {
   font-size: 14px;
   font-weight: 600;
-  color: #495057;
+  color: #495057 !important;
   margin: 0;
 }
 
