@@ -53,6 +53,12 @@ export class PaginaInicialComponent implements OnInit {
   submitted = false;
   anoAtual: number = new Date().getFullYear();
 
+  currentDepoimentoIndex = 0;
+  depoimentosExibidos: any[] = [];
+  carouselInterval: any;
+  autoPlayInterval = 8000;
+  isMobile = false;
+
   depoimentos = [
     {
       name: 'Paloma Schürmann Ribeiro',
@@ -166,6 +172,20 @@ export class PaginaInicialComponent implements OnInit {
     }, {
       validator: this.passwordMatchValidator
     });
+    
+    this.checkScreenSize();
+    this.initCarousel();
+    
+    window.addEventListener('resize', () => {
+      this.checkScreenSize();
+      this.initCarousel();
+    });
+    
+    this.startAutoPlay();
+  }
+  
+  ngOnDestroy(): void {
+    this.stopAutoPlay();
   }
 
   passwordMatchValidator(form: FormGroup) {
@@ -331,5 +351,120 @@ export class PaginaInicialComponent implements OnInit {
         if (sectionDot) sectionDot.classList.add('active');
       }
     });
+  }
+  
+  checkScreenSize() {
+    this.isMobile = window.innerWidth < 768;
+  }
+  
+  initCarousel() {
+    const itemsToShow = this.isMobile ? 1 : 2;
+    
+    this.depoimentosExibidos = this.depoimentos.slice(0, itemsToShow);
+    this.currentDepoimentoIndex = 0;
+  }
+  
+  nextDepoimento() {
+    this.stopAutoPlay();
+    const itemsToShow = this.isMobile ? 1 : 2;
+    
+    
+    const gridElement = document.querySelector('.depoimentos-grid') as HTMLElement;
+    if (gridElement) {
+      gridElement.style.opacity = '0';
+      gridElement.style.transform = 'translateX(-15px)';
+      
+      setTimeout(() => {
+        
+        this.currentDepoimentoIndex = (this.currentDepoimentoIndex + 1) % (this.depoimentos.length - itemsToShow + 1);
+        this.depoimentosExibidos = this.depoimentos.slice(this.currentDepoimentoIndex, this.currentDepoimentoIndex + itemsToShow);
+        
+        
+        setTimeout(() => {
+          gridElement.style.opacity = '1';
+          gridElement.style.transform = 'translateX(0)';
+        }, 50);
+      }, 300);
+    } else {
+      
+      this.currentDepoimentoIndex = (this.currentDepoimentoIndex + 1) % (this.depoimentos.length - itemsToShow + 1);
+      this.depoimentosExibidos = this.depoimentos.slice(this.currentDepoimentoIndex, this.currentDepoimentoIndex + itemsToShow);
+    }
+    
+    this.startAutoPlay();
+  }
+  
+  prevDepoimento() {
+    this.stopAutoPlay();
+    const itemsToShow = this.isMobile ? 1 : 2;
+    
+    
+    const gridElement = document.querySelector('.depoimentos-grid') as HTMLElement;
+    if (gridElement) {
+      gridElement.style.opacity = '0';
+      gridElement.style.transform = 'translateX(15px)';
+      
+      setTimeout(() => {
+        
+        this.currentDepoimentoIndex = (this.currentDepoimentoIndex - 1 + this.depoimentos.length - itemsToShow + 1) % (this.depoimentos.length - itemsToShow + 1);
+        this.depoimentosExibidos = this.depoimentos.slice(this.currentDepoimentoIndex, this.currentDepoimentoIndex + itemsToShow);
+        
+        
+        setTimeout(() => {
+          gridElement.style.opacity = '1';
+          gridElement.style.transform = 'translateX(0)';
+        }, 50);
+      }, 300);
+    } else {
+      
+      this.currentDepoimentoIndex = (this.currentDepoimentoIndex - 1 + this.depoimentos.length - itemsToShow + 1) % (this.depoimentos.length - itemsToShow + 1);
+      this.depoimentosExibidos = this.depoimentos.slice(this.currentDepoimentoIndex, this.currentDepoimentoIndex + itemsToShow);
+    }
+    
+    this.startAutoPlay();
+  }
+  
+  goToDepoimento(index: number) {
+    this.stopAutoPlay();
+    const itemsToShow = this.isMobile ? 1 : 2;
+    
+    
+    if (index >= 0 && index <= this.depoimentos.length - itemsToShow) {
+      
+      const gridElement = document.querySelector('.depoimentos-grid') as HTMLElement;
+      if (gridElement) {
+        gridElement.style.opacity = '0';
+        
+        setTimeout(() => {
+          
+          this.currentDepoimentoIndex = index;
+          this.depoimentosExibidos = this.depoimentos.slice(this.currentDepoimentoIndex, this.currentDepoimentoIndex + itemsToShow);
+          
+          
+          setTimeout(() => {
+            gridElement.style.opacity = '1';
+            gridElement.style.transform = 'translateX(0)';
+          }, 50);
+        }, 300);
+      } else {
+        
+        this.currentDepoimentoIndex = index;
+        this.depoimentosExibidos = this.depoimentos.slice(this.currentDepoimentoIndex, this.currentDepoimentoIndex + itemsToShow);
+      }
+    }
+    
+    this.startAutoPlay();
+  }
+  
+  startAutoPlay() {
+    this.carouselInterval = setInterval(() => {
+      this.nextDepoimento();
+    }, this.autoPlayInterval);
+  }
+  
+  stopAutoPlay() {
+    if (this.carouselInterval) {
+      clearInterval(this.carouselInterval);
+    }
   }
 }

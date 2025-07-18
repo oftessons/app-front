@@ -192,20 +192,32 @@
   <section id="depoimentos" class="depoimentos-section">
     <div class="container">
       <h2 class="depoimento-title">Depoimentos</h2>
-      <div class="depoimentos-grid">
-        <div class="depoimento-card" *ngFor="let depoimento of depoimentos">
-          <div class="depoimento-author">
-            <div class="depoimento-avatar">
-              <img [src]="depoimento.image" alt="{{ depoimento.name }}" />
+      <div class="carousel-container">
+        <div class="depoimentos-grid">
+          <div class="depoimento-card" *ngFor="let depoimento of depoimentosExibidos">
+            <div class="depoimento-author">
+              <div class="depoimento-avatar">
+                <img [src]="depoimento.image" alt="{{ depoimento.name }}" />
+              </div>
+              <div class="depoimento-info">
+                <h4>{{ depoimento.name }}</h4>
+                <p>{{ depoimento.role }}</p>
+              </div>
             </div>
-            <div class="depoimento-info">
-              <h4>{{ depoimento.name }}</h4>
-              <p>{{ depoimento.role }}</p>
+            <div class="depoimento-content">
+              <p>"{{ depoimento.content }}"</p>
             </div>
           </div>
-          <div class="depoimento-content">
-            <p>"{{ depoimento.content }}"</p>
+        </div>
+        <div class="carousel-controls">
+          <button class="carousel-control prev" (click)="prevDepoimento()">❮</button>
+          <div class="carousel-dots">
+            <span *ngFor="let _, let i = index; of: depoimentos.slice(0, depoimentos.length - (isMobile ? 0 : 1))" 
+                  class="carousel-dot" 
+                  [class.active]="i === currentDepoimentoIndex"
+                  (click)="goToDepoimento(i)"></span>
           </div>
+          <button class="carousel-control next" (click)="nextDepoimento()">❯</button>
         </div>
       </div>
     </div>
