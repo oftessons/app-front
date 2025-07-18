@@ -12,8 +12,9 @@
   }
   
   .consulta-form {
-    background-color: #f2f2f2; /* Fundo cinza claro */
-    border: 1px solid #ddd; /* Borda cinza */
+    background-color: var(--bg-container);
+    border: 1px solid var(--border-color); 
+    color: var(--text-color);
     padding: 20px; /* Espaçamento interno */
     border-radius: 5px; /* Borda arredondada */
   }
@@ -54,6 +55,24 @@
   ::ng-deep .mat-form-field-underline {
     display: none;
   }
+
+  ::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+}
+
+::ng-deep .mat-form-field .mat-input-element {
+  color: var(--text-color);
+}
+
+::ng-deep .mat-form-field-label {
+  color: var(--placeholder-color) !important;
+}
+
+::ng-deep .mat-form-field.mat-focused .mat-form-field-label {
+  color: var(--accent-color) !important;
+}
   
   @media (max-width: 768px) {
     .consulta-form .col-md-4 {
@@ -82,7 +101,7 @@
   }
   
   .crud-container {
-    background-color: #8C8E94;
+    background-color: var(--bg-container);
     padding: 20px;
     border-radius: 5px;
     margin-top: 20px;

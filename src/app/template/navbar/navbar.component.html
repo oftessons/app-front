@@ -15,6 +15,13 @@
         <img src="assets/imagens/logoq-bank.svg" alt="" style="padding: 10px; height: 65px;" class="d-inline-block align-text-top">
     </a>
 
+    <div class="toggle-container">
+        <label class="switch">
+            <input name="darkModeToggle" type="checkbox" [checked]="isDarkMode()" (change)="toggleDarkMode()">
+            <span class="slider"></span>
+        </label>
+    </div>
+
     <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseLayouts" aria-expanded="false"
         aria-controls="collapseLayouts">
         <div class="sb-nav-link-icon">
@@ -31,46 +38,46 @@
             <div class="heading-home">Home</div>
 
             <a mat-list-item routerLink="/usuario/inicio" [ngClass]="{'active-link': isActive('/usuario/inicio')}">
-                <img src="assets/Icons/inicio-of.svg" alt="Ícone de Início" class="icon">
+                <img [src]="!isDarkMode() ? 'assets/Icons/inicio-of.svg' : 'assets/Icons/dark/inicio-of-dark.svg'" alt="Ícone de Início" class="icon">
                 <span class="ml-2">Início</span>
             </a>  
 
             <a mat-list-item routerLink="/usuario/dashboard" [ngClass]="{'active-link': isActive('/usuario/dashboard')}">
-                <img src="assets/imagens/painel.svg" alt="Ícone de Painel de Controle" class="icon">
+                <img [src]="!isDarkMode() ? 'assets/imagens/painel.svg' : 'assets/Icons/dark/painel-dark.svg'" alt="Ícone de Painel de Controle" class="icon">
                 <span class="ml-2">Painel de Controle</span>
             </a>            
             
             <div *ngIf="possuiPermissao" class="heading-home">Serviços</div>
             <a mat-list-item *ngIf="possuiPermissao" routerLink="/usuario/questoes" [ngClass]="{'active-link': isActive('/usuario/questoes')}">
-                <img src="assets/imagens/caderno.svg" alt="Ícone de Questões" class="icon">
+                <img [src]="!isDarkMode() ? 'assets/imagens/caderno.svg' : 'assets/Icons/dark/caderno-dark.svg'" alt="Ícone de Questões" class="icon">
                 <span class="ml-2">Questões</span>
             </a>
             <!--
             <a mat-list-item routerLink="/usuario/painel-de-aulas" [ngClass]="{'active-link': isActive('/usuario/painel-de-aulas')}">
-                <img src="assets/Icons/au-ofi.svg" alt="Ícone de Aula" class="icon">
+                <img [src]="!isDarkMode() ? 'assets/Icons/au-ofi.svg' : 'assets/Icons/dark/au-ofi-dark.svg'" alt="Ícone de Aula" class="icon">
                 <span class="ml-2">Aulas</span>
             </a>
             -->
             <a mat-list-item routerLink="/usuario/filtro" *ngIf="possuiPermissao" [ngClass]="{'active-link': isActive('/usuario/filtro')}" >
-                <img src="assets/imagens/fi-a.svg" alt="Ícone de Meus Filtros" class="icon">
+                <img [src]="!isDarkMode() ? 'assets/imagens/fi-a.svg' : 'assets/Icons/dark/fi-a-dark.svg'" alt="Ícone de Meus Filtros" class="icon">
                 <span class="ml-2">Meus Filtros</span>
             </a>
             <a mat-list-item routerLink="/usuario/simulados" *ngIf="possuiPermissao" [ngClass]="{'active-link': isActive('/usuario/simulados')}">
-                <img src="assets/imagens/simu.svg" alt="Ícone do Simulado" class="icon">
+                <img [src]="!isDarkMode() ? 'assets/imagens/simu.svg' : 'assets/Icons/dark/simu-dark.svg'" alt="Ícone do Simulado" class="icon">
                 <span class="ml-2">Simulados</span>
             </a>           
             <a mat-list-item routerLink="/usuario/meus-simulados" *ngIf="possuiPermissao" [ngClass]="{'active-link': isActive('/usuario/meus-simulados')}" >
-                <img src="assets/imagens/ibm-simulated-side.svg" alt="Ícone de Meus Simulados" class="icon">
+                <img [src]="!isDarkMode() ? 'assets/imagens/ibm-simulated-side.svg' : 'assets/Icons/dark/ibm-simulated-side-dark.svg'" alt="Ícone de Meus Simulados" class="icon">
                 <span class="ml-2">Meus Simulados</span>
             </a>
             <a mat-list-item routerLink="/usuario/desempenho" *ngIf="possuiPermissao"  [ngClass]="{'active-link': isActive('/usuario/desempenho')}">
-                <img src="assets/imagens/garfic.svg" alt="Ícone de Desempenho" class="icon">
+                <img [src]="!isDarkMode() ? 'assets/imagens/garfic.svg' : 'assets/Icons/dark/garfic-dark.svg'" alt="Ícone de Desempenho" class="icon">
                 <span class="ml-2">Desempenho</span>
             </a>
             
             <div class="heading-home">Configurações</div>
             <a mat-list-item routerLink="/usuario/minha-conta" routerLinkActive="active-link">
-                <img src="assets/imagens/perfil.svg" alt="Ícone de Meu Perfil" class="icon">
+                <img [src]="!isDarkMode() ? 'assets/imagens/perfil.svg' : 'assets/Icons/dark/perfil-dark.svg'" alt="Ícone de Meu Perfil" class="icon">
                 <span class="ml-2">Minha Conta</span>
             </a>
 

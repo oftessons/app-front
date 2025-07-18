@@ -4,6 +4,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Usuario } from 'src/app/login/usuario';
 import { Permissao } from 'src/app/login/Permissao';
 import { AuthService } from 'src/app/services/auth.service';
+import { ThemeService } from 'src/app/services/theme.service';
 
 import { Categoria } from '../painel-de-aulas/enums/categoria';
 import { Aula } from '../painel-de-aulas/aula';
@@ -42,7 +43,8 @@ export class CadastroDeAulasComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private aulasService: AulasService
+    private aulasService: AulasService,
+    private themeService: ThemeService,
   ) {}
 
   ngOnInit(): void {
@@ -260,5 +262,9 @@ export class CadastroDeAulasComponent implements OnInit {
         this.videoInput.nativeElement.value = '';
       }
     }
+  }
+
+  isDarkMode(): boolean {
+    return this.themeService.isDarkMode();
   }
 }

@@ -394,7 +394,7 @@ label {
 .depoimento-title {
   text-align: center;
   font-size: 36px;
-  color: white;
+  color: white !important;
   margin-bottom: 74px;
 }
 

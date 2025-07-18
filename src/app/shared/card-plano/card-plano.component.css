@@ -18,6 +18,10 @@
   display: flex;
 }
 
+.card-header h3 {
+  color: white !important;
+}
+
 .card-body {
   margin: 8px;
   display: flex;

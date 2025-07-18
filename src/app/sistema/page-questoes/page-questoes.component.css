@@ -1,8 +1,8 @@
 .conteudo-questao {
   display: flex;
   flex-direction: column;
-  color: #0e0e0e;
-  background-color: #d2cfcf;
+  color: var(--text-color);
+  background-color: var(--bg-container);
   border-radius: 15px;
   padding: 20px; /* Adicionei padding para espaçamento interno */
   margin-bottom: 10px;
@@ -30,8 +30,8 @@
 
 .identificadores-questao {
   display: flex;
-  color: #101010;
-  background-color: #d2cfcf;
+  color: var(--text-color);
+  background-color: var(--bg-container);
   border-radius: 15px;
   padding: 2px;
   margin-bottom: 10px;
@@ -47,7 +47,7 @@
   justify-content: space-between; /* Faz com que os itens fiquem nas extremidades */
   align-items: center; /* Alinha os itens verticalmente no centro */
   color: #101010;
-  background-color: #d2cfcf;
+  background-color: var(--bg-container);
   border-radius: 15px;
   padding: 2px 10px; /* Adicionado espaço interno horizontal */
   margin-bottom: 10px;
@@ -65,10 +65,10 @@
 
 .identificadores-questao-resul select {
   padding: 1px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--border-color);
   border-radius: 5px;
-  background-color: #fff;
-  color: #101010;
+  background: var(--bg-input);
+  color: var(--text-color);
   font-size: 14px;
   margin-right: 15px;
 }
@@ -78,11 +78,6 @@
   width: 20px; /* Ajuste o tamanho conforme necessário */
   height: 20px;
   margin-right: 8px; /* Espaço entre o ícone e o texto */
-  background-image: url("src/assets/Icons/setaDireta.svg");
-  background-size: contain; /* Faz com que o ícone se ajuste dentro do tamanho definido */
-  background-repeat: no-repeat; /* Garante que a imagem não repita */
-  background-position: center; /* Centraliza o ícone */
-  vertical-align: middle; /* Alinha verticalmente com o texto */
 }
 
 .example-radio-group {
@@ -115,6 +110,7 @@
   display: flex;
   flex-wrap: nowrap;
   gap: 5px;
+  color: var(--text-color);
 }
 .btn-filters {
   padding: 10px 20px;
@@ -127,7 +123,7 @@
 
 .filters-container {
   margin-top: 20px;
-  background: #94979d;
+  background: var(--bg-container);
   border-radius: 5px;
   padding: 50px;
 }
@@ -239,7 +235,7 @@
   bottom: 0;
   left: 200px;
   right: 0;
-  background-color: rgba(255, 255, 255, 0.95);
+  background-color: var(--bg-sidebar);
   padding: 12px 20px;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
   z-index: 999;
@@ -565,11 +561,12 @@ p {
   align-items: center;
   border-radius: 5px; /* Border radius for rounded corners */
   padding: 5px;
+  color: var(--text-color);
   transition: background-color 0.3s, border-color 0.3s; /* Smooth transitions for background and border color */
 }
 
 .alternativa:hover {
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: var(--multiple-select-hover-bg);
   border-radius: 5px;
 }
 
@@ -633,7 +630,7 @@ p {
 
 .alternativa-comentario {
   font-size: 16px;
-  color: #000000;
+  color: var(--text-color);
 }
 
 .img-alternativas img {
@@ -681,7 +678,27 @@ p {
 
 .img-comentario{
   font-size: 16px;
+  color: var(--text-color) !important;
 }
+
+.img-comentario p {
+  color: var(--text-color) !important;
+
+  span {
+    color: var(--text-color) !important;
+  }
+}
+
+/* Usando ::ng-deep para sobrescrever estilos encapsulados */
+::ng-deep .img-comentario span {
+  color: var(--text-color) !important;
+}
+
+/* Outra alternativa mais específica */
+::ng-deep .img-comentario span[style*="color"] {
+  color: var(--text-color) !important;
+}
+
 .img-comentario {
   white-space: pre-wrap; /* Preserva quebras de linha e espaços */
   word-break: break-word; /* Quebra palavras longas */

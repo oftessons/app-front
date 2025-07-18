@@ -33,7 +33,7 @@
 }
 
 .card-title {
-  color: #cddaef;
+  color: #cddaef !important;
   font-size: 24px;
 }
 
@@ -53,7 +53,7 @@
   border-color: transparent;
 }
 .btn:hover {
-  color: #6be26b;
+  color: #a2cdff;
 }
 
 @media (max-width: 1200px) {

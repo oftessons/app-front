@@ -13,8 +13,8 @@
 .conteudo-questao {
   display: flex;
   flex-direction: column;
-  color: #0e0e0e;
-  background-color: #c0c0c1;
+  color: var(--text-color);
+  background-color: var(--bg-container);
   border-radius: 15px;
   padding: 20px;
   margin-bottom: 10px;
@@ -44,8 +44,8 @@
 
 .identificadores-questao {
   display: flex;
-  color: #101010;
-  background-color: #c0c0c1;
+  color: var(--text-color);
+  background-color: var(--bg-container);
   border-radius: 15px;
   padding: 2px;
   margin-bottom: 10px;
@@ -88,7 +88,7 @@
 
 .filters-container {
   margin-top: 20px;
-  background: #94979d;
+  background: var(--bg-container);
   border-radius: 5px;
   padding: 50px;
 }
@@ -147,7 +147,6 @@
 
 .alternativa-comentario {
   font-size: 16px;
-  color: #000000;
 }
 
 
@@ -160,7 +159,7 @@
   bottom: 0;
   left: 200px;
   right: 0;
-  background-color: rgba(255, 255, 255, 0.95);
+  background-color: var(--bg-sidebar);
   padding: 15px 20px;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
   z-index: 999;
@@ -562,7 +561,7 @@ canvas {
   align-items: center;
   margin-top: 20px;
   margin-bottom: 24px;
-  background: #c0c0c1;
+  background: var(--bg-container);
   padding: 32px;
   height: 480px;
   border-radius: 16px;
@@ -638,11 +637,6 @@ canvas {
   font-size: 16px;
   color: #fff;
   background: #3b5fa0;
-}
-
-.alternativa-comentario {
-  font-size: 14px;
-  color: #000000;
 }
 
 .filtros-container {

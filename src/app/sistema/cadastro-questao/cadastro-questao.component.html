@@ -37,7 +37,7 @@
                 label="Ano"
                 [options]="anos"
                 [(selectedValue)]="questaoDTO.ano"
-                [customStyles]="{'background': '#EFEFEF'}">
+                >
               </app-select-padrao>
             </div>
           </div>
@@ -47,7 +47,7 @@
               label="Tipo de Prova"
               [options]="tiposDeProva"
               [(selectedValue)]="questaoDTO.tipoDeProva"
-              [customStyles]="{'background': '#EFEFEF'}">
+              >
             </app-select-padrao>
             </div>
           </div>
@@ -62,7 +62,7 @@
                 label="Tema"
                 [options]="temas"
                 [(selectedValue)]="questaoDTO.tema"
-                [customStyles]="{'background': '#EFEFEF'}">
+                >
               </app-select-padrao>
             </div>
           </div> -->
@@ -72,7 +72,7 @@
                 label="Subtema"
                 [options]="subtemas"
                 [(selectedValue)]="questaoDTO.subtema"
-                [customStyles]="{'background': '#EFEFEF'}">
+                >
               </app-select-padrao>
             </div>
           </div> -->
@@ -84,7 +84,7 @@
               label="Dificuldade"
               [options]="dificuldades"
               [(selectedValue)]="questaoDTO.dificuldade"
-              [customStyles]="{'background': '#EFEFEF'}">
+              >
             </app-select-padrao>
             </div>
           </div>
@@ -94,7 +94,7 @@
                 label="Relevância"
                 [options]="relevancias"
                 [(selectedValue)]="questaoDTO.relevancia"
-                [customStyles]="{'background': '#EFEFEF'}">
+                >
               </app-select-padrao>
             </div>
           </div>
@@ -104,7 +104,6 @@
                 label="Assunto"
                 [options]="subtemasAgrupadosPorTema"
                 [(selectedValue)]="selectedSubtemaValue"
-                [customStyles]="{'background': '#EFEFEF'}"
                 [searchable]="true">
               </app-select-padrao>
             </div>
@@ -199,7 +198,7 @@
                   </div>
                 </ng-container>
                 <span *ngIf="!fotoPreviews['fotoDaQuestao']" class="upload-placeholder">
-                  <img src="assets/imagens/img-foto.svg" style="width: 50px; opacity: 0.5;" class="upload-icon">
+                  <img [src]="!isDarkMode() ? 'assets/imagens/img-foto.svg' : 'assets/Icons/dark/img-foto-dark.svg'" style="width: 50px;" class="upload-icon">
                   Clique para fazer upload da imagem ou vídeo
                 </span>
               </div>
@@ -275,7 +274,7 @@
                         </div>
                       </ng-container>
                       <span *ngIf="!fotoPreviews['fotoDaAlternativa' + i]" class="upload-placeholder">
-                        <img src="assets/imagens/img-foto.svg" class="upload-icon">
+                        <img [src]="!isDarkMode() ? 'assets/imagens/img-foto.svg' : 'assets/Icons/dark/img-foto-dark.svg'" class="upload-icon">
                         <p>Clique para fazer upload da imagem</p>
                       </span>
                     </div>
@@ -307,7 +306,7 @@
                       </ng-container>
                       <!-- <img *ngIf="imagePreviews['afirmacao' + i]" [src]="imagePreviews['afirmacao' + i]" alt="Image Preview" /> -->
                       <span *ngIf="!imagePreviews['afirmacao' + i]">
-                        <img src="assets/imagens/img-foto.svg" style="width: 50px; opacity: 0.5;"> Clique para fazer upload da imagem
+                        <img [src]="!isDarkMode() ? 'assets/imagens/img-foto.svg' : 'assets/Icons/dark/img-foto-dark.svg'" style="width: 50px;" class="upload-icon"> Clique para fazer upload da imagem
                       </span>
                     </div>
                   </label>
@@ -343,7 +342,7 @@
                 </div>
               </ng-container>
               <span *ngIf="!fotoPreviews['videoDaQuestao']" class="upload-placeholder">
-                <img src="assets/imagens/filme.svg" style="width: 50px; opacity: 0.5;" class="upload-icon">
+                <img [src]="!isDarkMode() ? 'assets/imagens/filme.svg' : 'assets/Icons/dark/filme-dark.svg'" style="width: 50px;" class="upload-icon">
                 Clique para fazer upload do vídeo
               </span>
             </div>
@@ -439,7 +438,7 @@
               </div>
             </ng-container>
             <span *ngIf="!fotoPreviews['fotoDaRespostaUm']" class="upload-placeholder">
-              <img src="assets/imagens/img-foto.svg" class="upload-icon">
+              <img [src]="!isDarkMode() ? 'assets/imagens/img-foto.svg' : 'assets/Icons/dark/img-foto-dark.svg'" class="upload-icon">
               <p>Clique para fazer upload da imagem ou vídeo</p>
             </span>
           </div>
@@ -521,7 +520,7 @@
               </div>
             </ng-container>
             <span *ngIf="!fotoPreviews['fotoDaRespostaDois']" class="upload-placeholder">
-              <img src="assets/imagens/img-foto.svg" class="upload-icon">
+              <img [src]="!isDarkMode() ? 'assets/imagens/img-foto.svg' : 'assets/Icons/dark/img-foto-dark.svg'" class="upload-icon">
               <p>Clique para fazer upload da imagem ou vídeo</p>
             </span>
           </div>
@@ -603,7 +602,7 @@
               </div>
             </ng-container>
             <span *ngIf="!fotoPreviews['fotoDaRespostaTres']" class="upload-placeholder">
-              <img src="assets/imagens/img-foto.svg" class="upload-icon">
+              <img [src]="!isDarkMode() ? 'assets/imagens/img-foto.svg' : 'assets/Icons/dark/img-foto-dark.svg'" class="upload-icon">
               <p>Clique para fazer upload da imagem ou vídeo</p>
             </span>
           </div>
@@ -670,7 +669,7 @@
               </div>
             </ng-container>
             <span *ngIf="!fotoPreviews['fotoDaRespostaQuatro']" class="upload-placeholder">
-              <img src="assets/imagens/img-foto.svg" class="upload-icon">
+              <img [src]="!isDarkMode() ? 'assets/imagens/img-foto.svg' : 'assets/Icons/dark/img-foto-dark.svg'" class="upload-icon">
               <p>Clique para fazer upload da imagem ou vídeo</p>
             </span>
           </div>

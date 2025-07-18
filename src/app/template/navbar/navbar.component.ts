@@ -6,6 +6,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { StripeService } from 'src/app/services/stripe.service';
 import { interval, Subscription } from 'rxjs';
 import { filter, delay } from 'rxjs/operators';
+import { ThemeService } from 'src/app/services/theme.service';
 
 @Component({
   selector: 'app-navbar',
@@ -31,7 +32,8 @@ export class NavbarComponent {
     private authService: AuthService,
     private router: Router,
     private stripeService: StripeService,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    private themeService: ThemeService
   ) { }
 
   ngOnInit() {
@@ -193,5 +195,13 @@ export class NavbarComponent {
 
   isActive(route: string): boolean {
     return this.router.isActive(route, true);
+  }
+
+  toggleDarkMode(): void {
+    this.themeService.toggleDarkMode();
+  }
+
+  isDarkMode(): boolean {
+    return this.themeService.isDarkMode();
   }
 }
