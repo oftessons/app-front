@@ -3,6 +3,7 @@ import { SimuladoService } from 'src/app/services/simulado.service';
 import { Simulado } from '../simulado';
 import { Router } from '@angular/router'; // Para navegação após visualizar ou editar
 import { AuthService } from 'src/app/services/auth.service';
+import { ThemeService } from 'src/app/services/theme.service';
 import { Usuario } from 'src/app/login/usuario';
 
 @Component({
@@ -22,7 +23,8 @@ export class MeusSimuladosComponent implements OnInit {
   constructor(
     private simuladoService: SimuladoService,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private themeService: ThemeService
   ) {}
 
   ngOnInit(): void {
@@ -88,5 +90,8 @@ export class MeusSimuladosComponent implements OnInit {
     );
   }
   
+  isDarkMode(): boolean {
+    return this.themeService.isDarkMode();
+  }
 }
 

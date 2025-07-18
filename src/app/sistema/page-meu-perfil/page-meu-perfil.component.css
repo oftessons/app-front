@@ -7,7 +7,7 @@
 }
 
 .minha-conta {
-  background: #fff;
+  background: var(--bg-container);
   min-width: 250px;
   padding: 24px;
   margin-right: 24px;
@@ -18,7 +18,7 @@
   display: flex;
   flex-direction: column;
   padding: 48px;
-  background: #fff;
+  background: var(--bg-container);
   width: 100%;
   border-radius: 8px;
 }
@@ -28,8 +28,9 @@
   flex-direction: column;
   margin-top: 24px;
   padding: 24px;
-  background: #eeeeee;
-  border: 1px solid #b9b9b9;
+  background: var(--bg-container);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   width: 100%;
 }
@@ -119,6 +120,7 @@
 
 .profile-info {
   width: 100%;
+  color: var(--text-color);
 }
 
 .input-group {
@@ -178,16 +180,15 @@
   border: none;
   cursor: pointer;
   font-size: 16px;
-  color: #333;
+  color: var(--text-color);
   transition: background-color 0.3s, color 0.3s;
   border-radius: 4px;
 }
 
 .menu-account button:hover {
-  background-color: #f0f0f0;
+  background-color: var(--bg-sidebar-active-link-hover);
 }
 
 .menu-account button.active {
-  background-color: #007bff;
-  color: #fff;
+  background-color: var(--bg-sidebar-active-link);
 }

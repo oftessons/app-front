@@ -17,6 +17,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Usuario } from 'src/app/login/usuario';
 import { Permissao } from 'src/app/login/Permissao';
 import { AuthService } from 'src/app/services/auth.service';
+import { ThemeService } from 'src/app/services/theme.service';
 
 import Quill from 'quill';
 import { AnoDescricoes } from '../page-questoes/enums/ano-descricoes';
@@ -103,6 +104,7 @@ editorConfig4 = {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     public tinymceService: TinymceService,
+    private themeService: ThemeService,
     private sanitizer: DomSanitizer,
     private location: Location
   ) { }
@@ -777,5 +779,9 @@ onFileSelectedImageEditar(event: any, alternativaIndex: string) {
 
   voltarPaginaAnterior(): void {
     this.location.back();
+  }
+
+  isDarkMode(): boolean {
+    return this.themeService.isDarkMode();
   }
 }

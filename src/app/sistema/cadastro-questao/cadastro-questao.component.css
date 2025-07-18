@@ -226,7 +226,7 @@ textarea {
 
 /* Imagens e Upload */
 .image-upload {
-  border: 2px dashed #ccc;
+  border: 2px dashed var(--border-color);
   border-radius: 5px;
   position: relative;
   width: 100%;
@@ -301,7 +301,6 @@ textarea {
 
 .upload-icon {
   width: 50px;
-  opacity: 0.5;
   margin-bottom: 10px;
 
 }

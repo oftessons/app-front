@@ -148,7 +148,7 @@
     <div class="identificadores-questao-resul">
       <h2 class="h2">
         {{ numeroDeQuestoes }} Questões Encontradas
-        <span class="questoes-icone"></span> 
+        <img [src]="!isDarkMode() ? 'assets/Icons/setaDireta.svg' : 'assets/Icons/dark/setaDireta-dark.svg'" alt="Ícone de Questões" class="questoes-icone">
       </h2>      
       <select (change)="selecionarQuestao($event)" class="question-dropdown">
         <option *ngFor="let item of navegacaoPorQuestao" [value]="item.index">

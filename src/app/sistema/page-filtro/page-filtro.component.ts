@@ -3,6 +3,7 @@ import { FiltroDTO } from '../filtroDTO'; // Atualize o caminho conforme necess√
 import { FiltroService } from 'src/app/services/filtro.service';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import { ThemeService } from 'src/app/services/theme.service';
 import { Usuario } from 'src/app/login/usuario';
 
 @Component({
@@ -21,7 +22,8 @@ export class PageFiltroComponent implements OnInit {
   constructor(
     private filtroService: FiltroService,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private themeService: ThemeService
   ) {}
 
   ngOnInit(): void {
@@ -86,5 +88,9 @@ export class PageFiltroComponent implements OnInit {
         console.error('Erro ao obter simulado por ID:', error);
       }
     )
+  }
+
+  isDarkMode(): boolean {
+    return this.themeService.isDarkMode();
   }
 }

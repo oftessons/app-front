@@ -39,8 +39,8 @@
     width: 100%; /* Ajusta o container para ocupar toda a largura disponível */
     max-width: 100%; /* Garante que o container não exceda 100% da largura */
     padding: 10px;
-    background-color: #f2f2f2;
-    border: 2px solid #8C8E94;
+    background-color: var(--bg-container);
+    border: 2px solid var(--border-color);
     border-radius: 5px;
     margin-bottom: 20px;
 }
@@ -53,6 +53,19 @@
     border: 2px solid #8C8E94;
     border-radius: 5px;
     margin-bottom: 20px;
+}
+
+.chart-wrapper {
+    background-color: var(--bg-container) !important;
+}
+
+.chart-wrapper h5 {
+    color: var(--text-color) !important;
+    font-weight: bold;
+}
+
+.text-muted {
+    color: var(--text-color) !important;
 }
 
 @media (min-width: 768px) {

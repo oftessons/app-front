@@ -23,6 +23,7 @@ import { RespostaDTO } from '../RespostaDTO'; // Adicione esta importação
 import { Resposta } from '../Resposta'; // Adicione esta importação
 import { AuthService } from 'src/app/services/auth.service';
 import { QuestoesStateService } from 'src/app/services/questao-state.service';
+import { ThemeService } from 'src/app/services/theme.service';
 import { Usuario } from 'src/app/login/usuario';
 import { FiltroDTO } from '../filtroDTO';
 
@@ -156,6 +157,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     private questoesStateService: QuestoesStateService,
     private filtroService: FiltroService,
     private authService: AuthService,
+    private themeService: ThemeService,
     private sanitizer: DomSanitizer,
     private router: Router,     
   ) {
@@ -1149,5 +1151,9 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
         this.loadQuestao();
       }
     );
+  }
+
+  isDarkMode(): boolean {
+    return this.themeService.isDarkMode();
   }
 }

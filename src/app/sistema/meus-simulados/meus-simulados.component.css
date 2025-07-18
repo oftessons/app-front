@@ -10,6 +10,7 @@
     font-size: 20px;
     margin-top: 10px;
     font-family: 'Nunito Sans', sans-serif;
+    color: var(--text-color);
   }
   
   h5 {
@@ -18,7 +19,25 @@
   
   p.card-text {
     margin-top: 5px;
+    color: var(--text-color);
   }
+
+  /* Cards */
+.card {
+  background-color: var(--bg-container);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px var(--shadow-color);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 4px 8px var(--shadow-hover-color);
+}
+
+.card-body {
+  padding: 20px;
+}
   
   /* Ícones */
   .icon {
@@ -36,8 +55,8 @@
   /* Botões */
   .btn-transparent-primary {
     background-color: transparent;
-    color: #1E1E1E;
-    border: 1px solid #1E1E1E;
+    color: var(--text-color);
+    border: 1px solid var(--text-color);
   }
   
   .btn-transparent-primary:hover {
@@ -46,8 +65,8 @@
   
   .btn-transparent-danger {
     background-color: transparent;
-    color: #7E1313;
-    border: 1px solid #7E1313;
+    color: #ff0000;
+    border: 1px solid #ff0000;
   }
 
   .custom-alert {

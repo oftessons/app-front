@@ -7,7 +7,7 @@
   justify-content: space-between;
   margin-bottom: 24px;
   padding: 16px;
-  background: #cdcdcd;
+  background: var(--bg-container);
   border-radius: 16px;
   align-items: center;
 }
@@ -46,8 +46,9 @@
 .tabela td {
   padding: 16px;
   text-align: left;
-  border: 1px solid #e3eaf0;
-  background: #ffffff;
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  background: var(--bg-input);
 }
 
 .tabela th {
