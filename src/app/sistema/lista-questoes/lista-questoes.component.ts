@@ -68,6 +68,7 @@ export class ListaQuestoesComponent implements OnInit {
   aulaDTO = new Aula();
   categoria: string[] = Object.values(Categoria);
   categoriaSelecionada: Categoria | null = null;
+  carregando : boolean = false;
 
   constructor(
     private questoesService: QuestoesService,
@@ -101,6 +102,10 @@ export class ListaQuestoesComponent implements OnInit {
   buscarQuestoes(): void {
     this.authService.obterUsuarioAutenticadoDoBackend().subscribe(
       (usuario) => {
+        this.carregando = true;
+        this.message = '';
+        this.mensagemSucesso = '';
+        this.questoes = [];
         const idUser = parseInt(usuario.id); // Aqui pegamos o ID do usuário
         if (this.questaoId) {
           this.questoesService
@@ -113,13 +118,16 @@ export class ListaQuestoesComponent implements OnInit {
                   this.questoes = [];
                 } else {
                   this.questoes = [questao];
+                  this.mensagemSucesso = 'Questão encontrada com sucesso!';
                   this.message = '';
                 }
+                this.carregando = false;
               },
               (error) => {
                 // console.error('Erro ao buscar questões:', error);
                 this.message =
                   'Erro ao buscar questão. Por favor, tente novamente.';
+                  this.carregando = false;
               }
             );
         } else {
@@ -128,6 +136,8 @@ export class ListaQuestoesComponent implements OnInit {
       },
       (error) => {
         // console.error('Erro ao obter usuário autenticado:', error);
+        this.message = 'Erro ao obter usuário autenticado. Por favor, tente novamente.';
+        this.carregando = false;
       }
     );
   }
