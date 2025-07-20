@@ -24,6 +24,8 @@
   --scroll-track-bg: #ffffff;
   --scroll-thumb-bg: #0a1435;
   --scroll-thumb-hover-bg: #1f242d;
+  --button-disabled-bg: #cccccc;
+  --nav-button-bg: #686868;
 
   --blue: #007bff;
   --indigo: #6610f2;
@@ -74,6 +76,8 @@ body.dark-mode {
   --scroll-track-bg: #262a2e;
   --scroll-thumb-bg: #636363;
   --scroll-thumb-hover-bg: #4a6fa0;
+  --button-disabled-bg: #3a3a3a;
+  --nav-button-bg: #686868;
 }
 
 body.dark-mode .mat-drawer-content {

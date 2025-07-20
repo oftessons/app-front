@@ -110,10 +110,10 @@ h2 {
 .pagination-controls button {
   margin: 0 5px;
   padding: 5px 10px;
-  border: 1px solid #0f1934;
+  border: 1px solid var(--border-color);
   border-radius: 8px;
-  background: transparent;
-  color: #0f1934;
+  background: var(--bg-input);
+  color: var(--text-color);
   cursor: pointer;
 }
 
@@ -124,13 +124,13 @@ h2 {
 }
 
 .pagination-controls button.nav-button {
-  background: #686868;
+  background: var(--nav-button-bg);
   color: #ffffff;
   border: none;
 }
 
 .pagination-controls button.nav-button:disabled {
-  background-color: #cccccc;
+  background-color: var(--button-disabled-bg);
   cursor: not-allowed;
 }
 
