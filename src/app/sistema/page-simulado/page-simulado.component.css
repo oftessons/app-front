@@ -174,6 +174,11 @@
   gap: 10px;
 }
 
+.btn-responder:disabled {
+  background-color: #A9A9A9;
+  border-color: #A9A9A9;
+}
+
 /* Ajustes para posicionamento do chatbot */
 body.has-fixed-buttons .chatbot-toggle-button {
   bottom: 90px; /* Posicionar acima da barra de navegação fixa */

@@ -54,7 +54,7 @@ export class PageSimuladoComponent implements OnInit {
   mensagemDeAviso!: string;
 
   tempo: number = 0; // Contador de tempo em segundos
-  tempoRestanteQuestaoSimulado: number = 30; // Tempo restante para responder uma questao do simulado
+  tempoRestanteQuestaoSimulado: number = 160; // Tempo restante para responder uma questao do simulado
   radioDisabled: boolean = false;
   intervalId: any; // Armazena o ID do intervalo para controlar o timer
   intervalContagemRegressiva: any;
@@ -769,9 +769,9 @@ export class PageSimuladoComponent implements OnInit {
       this.respostaCorreta = '';
       this.respostaErrada = '';
       this.respostaVerificada = false;
-      this.radioDisabled = false; // Habilita os radio buttons novamente
+      this.radioDisabled = false; 
 
-
+      clearInterval(this.intervalContagemRegressiva);
       this.contagemRegressivaSimuladoQuestao();
 
       if(this.isMeuSimulado){
@@ -922,13 +922,17 @@ export class PageSimuladoComponent implements OnInit {
         if (this.tempoRestanteQuestaoSimulado <= 0) {
           this.tempoRestanteQuestaoSimulado = 0;
           this.radioDisabled = true; 
-          clearInterval(this.intervalContagemRegressiva); 
+          // clearInterval(this.intervalContagemRegressiva); 
         } else {
           this.tempoRestanteQuestaoSimulado--; 
         }
 
       }, 1000); 
     }
+  }
+
+  getCorTempoRestante(): string {
+    return this.tempoRestanteQuestaoSimulado < 30 ? 'red' : ""; 
   }
 
   visualizarSimulado(): void {

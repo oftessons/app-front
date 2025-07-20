@@ -145,9 +145,10 @@
             </h3>
           </div>
           <div *ngIf="!isMeuSimulado" class="timer-container">
-            <h3 [ngStyle]="{ color: tempoRestanteQuestaoSimulado < 30 ? 'red' : 'black' }">
-              <span>Tempo Restante:</span> 
+            <h3>
+              <span [ngStyle]="{ color: getCorTempoRestante() }">Tempo Restante: 
               {{ tempoRestanteQuestaoSimulado }}s
+              </span> 
             </h3>
           </div>
           <div [innerHTML]="questaoAtual.enunciadoDaQuestao"></div>
@@ -279,7 +280,7 @@
               <button *ngIf="visualizando" class="btn-anterior" (click)="anteriorQuestao()" [disabled]="paginaAtual === 0">Anterior</button>
               
 
-              <button *ngIf="!isMeuSimulado" class="btn-responder" (click)="questaoAtual && responderQuestao(questaoAtual)">Responder</button>
+              <button *ngIf="!isMeuSimulado" class="btn-responder" (click)="questaoAtual && responderQuestao(questaoAtual)" [disabled]="radioDisabled">Responder</button>
               <button class="btn-proxima" (click)="proximaQuestao()">Próxima</button>
             </div>
           </div>          
