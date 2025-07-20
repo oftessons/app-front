@@ -140,8 +140,15 @@
         <div class="conteudo-questao">
           <div *ngIf="!isMeuSimulado" class="timer-container">
             <h3>
-              <span>Tempo:</span> 
+              <span>Tempo de simulado:</span> 
               {{ formatarTempo(tempo) }}
+            </h3>
+          </div>
+          <div *ngIf="!isMeuSimulado" class="timer-container">
+            <h3>
+              <span [ngStyle]="{ color: getCorTempoRestante() }">Tempo Restante: 
+              {{ tempoRestanteQuestaoSimulado }}s
+              </span> 
             </h3>
           </div>
           <div [innerHTML]="questaoAtual.enunciadoDaQuestao"></div>
@@ -177,7 +184,9 @@
                       [value]="alternativa.texto"
                       [(ngModel)]="selectedOption" 
                       (change)="onOptionChange(alternativa.texto)"
-                      [checked]="alternativa.texto === selectedOption">
+                      [checked]="alternativa.texto === selectedOption"
+                      [disabled]="radioDisabled">
+                      
                     <label [for]="'alternativa' + i" class="alternativa-label">
                       <span class="alternativa-texto">{{ alternativa.texto }}  </span>
                       <span *ngIf="alternativa.imagemUrl; else comentarioTexto" class="img-alternativas">
@@ -271,7 +280,7 @@
               <button *ngIf="visualizando" class="btn-anterior" (click)="anteriorQuestao()" [disabled]="paginaAtual === 0">Anterior</button>
               
 
-              <button *ngIf="!isMeuSimulado" class="btn-responder" (click)="questaoAtual && responderQuestao(questaoAtual)">Responder</button>
+              <button *ngIf="!isMeuSimulado" class="btn-responder" (click)="questaoAtual && responderQuestao(questaoAtual)" [disabled]="radioDisabled">Responder</button>
               <button class="btn-proxima" (click)="proximaQuestao()">Próxima</button>
             </div>
           </div>          
@@ -281,7 +290,7 @@
       <div>
         <div class="iniciar-simulado-container" *ngIf="!simuladoIniciado && !simuladoFinalizado">
           <h2>Clique para Iniciar o Simulado</h2>
-          <button (click)="iniciarSimulado()" class="btn-iniciar">Iniciar Simulado</button>
+          <button (click)="abrirModal()" class="btn-iniciar">Iniciar Simulado</button>
         </div>
 
         <div *ngIf="simuladoFinalizado" class="resultado-container">

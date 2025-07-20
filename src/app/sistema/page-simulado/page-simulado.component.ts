@@ -36,7 +36,6 @@ import {
   SafeHtml,
   SafeResourceUrl,
 } from '@angular/platform-browser';
-import { Simulado } from '../simulado';
 
 import { temasESubtemas } from '../page-questoes/enums/map-tema-subtema';
 
@@ -55,7 +54,10 @@ export class PageSimuladoComponent implements OnInit {
   mensagemDeAviso!: string;
 
   tempo: number = 0; // Contador de tempo em segundos
+  tempoRestanteQuestaoSimulado: number = 160; // Tempo restante para responder uma questao do simulado
+  radioDisabled: boolean = false;
   intervalId: any; // Armazena o ID do intervalo para controlar o timer
+  intervalContagemRegressiva: any;
   isSimuladoIniciado: boolean = false; // Controla se o simulado foi iniciado ou não
 
   questao: Questao = new Questao();
@@ -232,7 +234,7 @@ export class PageSimuladoComponent implements OnInit {
     this.subtemasDescricoes = this.subtemas.map(this.getDescricaoSubtema);
     this.temasDescricoes = this.temas.map(this.getDescricaoTema);
     this.quantidadeDeQuestoesSelecionadasDescricoes =
-      this.quantidadeDeQuestoesSelecionadas.map(this.getDescricaoQuantidadeDeQuestoesSelecionadas);
+    this.quantidadeDeQuestoesSelecionadas.map(this.getDescricaoQuantidadeDeQuestoesSelecionadas);
     this.respostasSimuladoDescricao = this.respostasSimulado.map(this.getDescricaoRespostasSimulado);
 
     this.subtemasAgrupadosPorTema = Object.entries(temasESubtemas).map(([temaKey, subtemas]) => {
@@ -758,6 +760,7 @@ export class PageSimuladoComponent implements OnInit {
   proximaQuestao() {
     if (this.paginaAtual < this.questoes.length - 1) {
       this.paginaAtual++;
+      this.tempoRestanteQuestaoSimulado = 160;
       this.questaoAtual = this.questoes[this.paginaAtual];
       this.mostrarGabarito = false;
       this.resposta = '';
@@ -766,6 +769,11 @@ export class PageSimuladoComponent implements OnInit {
       this.respostaCorreta = '';
       this.respostaErrada = '';
       this.respostaVerificada = false;
+      this.radioDisabled = false; 
+
+      clearInterval(this.intervalContagemRegressiva);
+      this.contagemRegressivaSimuladoQuestao();
+
       if(this.isMeuSimulado){
         this.respostaQuestao(this.questoes[this.paginaAtual].id, this.simuladoIdInicial);
       }
@@ -830,9 +838,10 @@ export class PageSimuladoComponent implements OnInit {
         // Fechar modal automaticamente (usando Bootstrap ou outro método)
         const modalElement = document.getElementById('confirmacaoModal');
         if (modalElement) {
-        
           const modalInstance = bootstrap.Modal.getInstance(modalElement);
-          modalInstance?.hide();
+          modalInstance?.hide();   
+          this.contagemRegressivaSimuladoQuestao();
+          this.iniciarSimulado();
         }
       },
       (error) => {
@@ -894,18 +903,36 @@ export class PageSimuladoComponent implements OnInit {
     this.mostrarCardConfirmacao = false;
   }
 
-  iniciarSimulado(): void {
-    this.abrirModal();
+  iniciarSimulado(): void {    
     if (!this.isSimuladoIniciado) {
       this.isSimuladoIniciado = true;
       this.realizandoSimulado = true;
       this.tempo = 0;
       this.intervalId = setInterval(() => {
         this.tempo++;
-      }, 1000); // Atualiza o tempo a cada segundo
+      }, 1000); 
     }
     this.simuladoIniciado = true;
     this.simuladoFinalizado = false;
+  }
+  
+  contagemRegressivaSimuladoQuestao(): void {
+    if (this.tempoRestanteQuestaoSimulado > 0) {
+      this.intervalContagemRegressiva = setInterval(() => {
+        if (this.tempoRestanteQuestaoSimulado <= 0) {
+          this.tempoRestanteQuestaoSimulado = 0;
+          this.radioDisabled = true; 
+          // clearInterval(this.intervalContagemRegressiva); 
+        } else {
+          this.tempoRestanteQuestaoSimulado--; 
+        }
+
+      }, 1000); 
+    }
+  }
+
+  getCorTempoRestante(): string {
+    return this.tempoRestanteQuestaoSimulado < 30 ? 'red' : ""; 
   }
 
   visualizarSimulado(): void {
