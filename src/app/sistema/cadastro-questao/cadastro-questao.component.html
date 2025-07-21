@@ -739,11 +739,18 @@
         Salvar
       </button>
     
-      <button type="submit" class="btn btn-primary" *ngIf="questaoDTO.id" [disabled]="loading">
-        <span *ngIf="loading" class="spinner-border spinner-border-sm"></span>
-        Atualizar
-      </button>
+      <div class="d-flex justify-content-between">
+        <button type="submit" class="btn btn-primary" *ngIf="questaoDTO.id" [disabled]="loading">
+          <span *ngIf="loading" class="spinner-border spinner-border-sm"></span>
+          Atualizar
+        </button>
+
+        <button type="button" class="btn btn-primary" *ngIf="questaoDTO.id" (click)="irParaProximaQuestao()" [disabled]="limiteQuestoes">
+          Próxima questão
+        </button>
+      </div>
     </div>
   </form>
+
 </div>
 </div>

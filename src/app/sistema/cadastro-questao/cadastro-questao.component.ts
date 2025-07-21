@@ -54,8 +54,14 @@ export class CadastroQuestaoComponent implements OnInit, AfterViewInit {
   id!: number;
   selectedAlternativa: number | undefined;
   selectedSubtemaValue: Subtema | string | null = '';
-  
 
+  questaoIds: number[] = [];
+  currentPage = 0;
+  pageSize = 150; 
+  totalElements = 0;
+  maxAttempts = 10; 
+  limiteQuestoes: boolean = false;
+  
   selectedAlternativeIndex: number = -3;
 
   anos: string[] = Object.values(AnoDescricoes);
@@ -146,6 +152,7 @@ editorConfig4 = {
     this.activatedRoute.params.subscribe(params => {
       this.questaoDTO.id = +params['id'];
       if (this.questaoDTO.id){
+        this.loadQuestaoIds();
         this.questoesService.getQuestaoById(this.questaoDTO.id).subscribe(
           (questao) => {
             console.log("QUESTAO RETORNADA PELO ID: ")
@@ -203,7 +210,7 @@ editorConfig4 = {
             };
           })
         };
-    });
+    });   
   }
 
 
@@ -580,6 +587,47 @@ onSubmit(): void {
       title: this.questaoDTO.title,
       alternativas: this.questaoDTO.alternativas
     });
+  }
+
+
+  private loadQuestaoIds(): void {
+    this.questoesService
+      .getPaginatedQuestaoIds(this.currentPage, this.pageSize)
+      .subscribe(response => {
+        this.questaoIds = response.content;
+        this.totalElements = response.totalElements;
+      });
+  }
+
+  irParaProximaQuestao(): void {
+    const currentId = this.questaoDTO.id;
+    const idx = this.questaoIds.indexOf(currentId);
+
+    if (idx !== -1 && idx < this.questaoIds.length - 1) {
+      const nextId = this.questaoIds[idx + 1];
+      this.router.navigate([`/usuario/cadastro-questao/${nextId}`]);
+      return;
+    }
+
+    const totalPages = Math.ceil(this.totalElements / this.pageSize);
+    if (this.currentPage < totalPages) {
+      this.currentPage++;
+      this.questoesService
+        .getPaginatedQuestaoIds(this.currentPage, this.pageSize)
+        .subscribe(response => {
+          this.questaoIds = response.content;
+          this.totalElements = response.totalElements;
+
+          if (this.questaoIds.length > 0) {
+            const primeiroDaPagina = this.questaoIds[0];
+            this.router.navigate([`/usuario/cadastro-questao/${primeiroDaPagina}`]);
+          } else {
+            console.warn(`Página ${this.currentPage} veio vazia.`);
+          }
+        });
+    } else {
+      this.limiteQuestoes = true;
+    }
   }
 
   extractErrorMessage(errorResponse: any): string {

@@ -207,6 +207,12 @@ export class QuestoesService {
     return this.http.get<Questao[]>(url, { params });
   }
 
+  getPaginatedQuestaoIds(page: number, size: number): Observable<any> {
+    const params = new HttpParams().set('page', page.toString()).set('size', size.toString());
+    const url = `${this.apiURL}/obter-ids`;
+    return this.http.get<any>(url, { params });
+  }
+
   consultarQuestao(
     filtros: any,
     page: number = 0,
