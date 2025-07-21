@@ -43,7 +43,7 @@
 
 .value h4 {
   margin: 0;
-  color: #041e4e;
+  color: #041e4e !important;
   font-size: 33px;
   font-weight: 500;
 }
