@@ -358,4 +358,38 @@
   margin-right: 20px; /* Espaço à direita para o botão */
 }
 
+.feedback-message {
+  padding: 15px;
+  margin: 15px 0;
+  border-radius: 5px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
 
+.feedback-message i {
+  margin-right: 10px;
+  font-size: 18px;
+}
+
+.alert-success {
+  background-color: #d4edda;
+  color: #155724;
+  border-color: #c3e6cb;
+  gap: 10px;
+}
+
+.alert-warning {
+  background-color: #fff3cd;
+  color: #856404;
+  border-color: #ffeeba;
+  gap: 10px;
+}
+
+.alert-info {
+  background-color: #d1ecf1;
+  color: #0c5460;
+  border-color: #bee5eb;
+  gap: 10px;
+}

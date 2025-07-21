@@ -22,15 +22,23 @@
             </button>
           </div>
         </div>
+        <div *ngIf="carregando" class="text-center mt-3">
+          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        </div>
+    
+        <div *ngIf="mensagemSucesso" class="alert alert-success mt-3 feedback-message" role="alert">
+          <i class="fa fa-check-circle"></i> {{ mensagemSucesso }}
+        </div>
+        <div *ngIf="message && !questoes.length" class="alert alert-warning mt-3 feedback-message" role="alert">
+          <i class="fa fa-exclamation-triangle"></i> {{ message }}
+        </div>
+    
+        <div *ngIf="questoes.length > 0" class="alert alert-info mt-3 feedback-message" role="alert">
+          <i class="fa fa-info-circle"></i> {{ questoes.length }} questão(ões) encontrada(s).
+        </div>
       </form>
     </div>
 
-    <div *ngIf="mensagemSucesso" class="alert alert-success mt-3" role="alert">
-      {{ mensagemSucesso }}
-    </div>
-    <div *ngIf="message && !questoes.length" class="alert alert-warning mt-3" role="alert">
-      {{ message }}
-    </div>
   
     <div *ngIf="questoes.length > 0" class="crud-container mt-3">
       <div class="table-responsive">

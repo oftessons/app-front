@@ -66,6 +66,7 @@
           <tr>
             <th>Nome</th>
             <th>Email</th>
+            <th>Plano</th>
             <th>Cidade</th>
             <th>Estado</th>
             <th>Ações</th>
@@ -75,6 +76,7 @@
           <tr *ngFor="let aluno of paginatedAlunos">
               <td><a href="javascript:void(0)" (click)="openModalPlano(aluno.id)">{{ aluno.nome }}</a></td>
               <td>{{ aluno.email }}</td>
+              <td>{{ getPlanoUsuario(aluno) }}</td>
               <td>{{ aluno.cidade }}</td>
               <td>{{ aluno.estado }}</td>
               <td>

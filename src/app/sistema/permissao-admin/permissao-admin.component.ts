@@ -86,7 +86,9 @@ export class PermissaoAdminComponent implements OnInit {
     currentPassword: false,
     newPassword: false
   };
-  
+
+  planosUsuarios: { [userId: string]: string } = {};
+  planosStatus: { [userId: string]: string } = {};
 
   constructor(private formBuilder: FormBuilder, private authService: AuthService, 
     private cdRef: ChangeDetectorRef, private vendasService: VendasService) { 
@@ -137,6 +139,10 @@ export class PermissaoAdminComponent implements OnInit {
       this.alunos = this.filtrarUsuariosPorPermissao('USER'); 
       this.professores = this.filtrarUsuariosPorPermissao('PROFESSOR');
       this.bolsistas = this.filtrarUsuariosPorPermissao('BOLSISTA');
+
+      this.alunos.forEach(aluno => {
+        this.planosUsuarios[aluno.id] = this.getPlanoUsuario(aluno);
+      });
 
       this.updatePaginatedData('alunos');
       this.updatePaginatedData('professores');
@@ -392,18 +398,18 @@ export class PermissaoAdminComponent implements OnInit {
 
   previousPage(type: 'professores' | 'alunos' | 'bolsistas'): void {
     if (type === 'professores') {
-      if (this.pageIndexProfessores < this.totalPagesProfessores - 1) {
-        this.pageIndexProfessores++;
+      if (this.pageIndexProfessores > 0) {
+        this.pageIndexProfessores--;
         this.updatePaginatedData(type);
       }
     } else if (type === 'alunos') {
-      if (this.pageIndexAlunos < this.totalPagesAlunos - 1) {
-        this.pageIndexAlunos++;
+      if (this.pageIndexAlunos > 0) {
+        this.pageIndexAlunos--;
         this.updatePaginatedData(type);
       }
     } else if (type === 'bolsistas') {
-      if (this.pageIndexBolsistas < this.totalPagesBolsistas - 1) {
-        this.pageIndexBolsistas++;
+      if (this.pageIndexBolsistas > 0) {
+        this.pageIndexBolsistas--;
         this.updatePaginatedData(type);
       }
     }
@@ -466,6 +472,35 @@ export class PermissaoAdminComponent implements OnInit {
     );
   }
 
+  carregarPlanoUsuario(userId: string) {
+    this.vendasService.obterDadosAssinaturaPorUsuario(userId).subscribe(
+      (response) => {
+        this.planosUsuarios[userId] = response.name || 'Sem plano';
+        this.planosStatus[userId] = this.getStatusTraduzido(response.status) || 'Não disponível';
+        this.cdRef.markForCheck();
+      },
+      (error) => {
+        this.planosUsuarios[userId] = 'Não disponível';
+        this.cdRef.markForCheck();
+      }
+    );
+  }
+
+  getPlanoUsuario(usuario: Usuario): string {
+    if (usuario.bolsaAssinatura) {
+      return 'Bolsista';
+    }
+    
+    if (this.planosUsuarios[usuario.id]) {
+      const plano = this.planosUsuarios[usuario.id];
+      const status = this.planosStatus[usuario.id] || '';
+      return plano + (status ? ` (${status})` : '');
+    }
+    
+    this.carregarPlanoUsuario(usuario.id);
+    return 'Carregando...';
+  }
+
   getPeriodoTraduzido(periodo: string): string {
     const periodos: { [key: string]: string } = {
       'month': 'Mensal',
@@ -479,6 +514,7 @@ export class PermissaoAdminComponent implements OnInit {
   getStatusTraduzido(status: string): string {
     const statusMap: { [key: string]: string } = {
       'active': 'Ativo',
+      'expired': 'Expirado',
       'canceled': 'Cancelado',
       'incomplete': 'Incompleto',
       'incomplete_expired': 'Expirado',
