@@ -43,7 +43,10 @@
   </div>
 
   <div class="chatbot-footer">
-    <button [disabled]="!temQuestaoParaCitar()" [class.active]="isCitarQuestao" class="citarQuestao" (click)="citarQuestaoAtual(userMessage)"><div [class.active]="isCitarQuestao" class="citarQuestao-butao-texto">Citar Questão</div><img src="assets/Icons/x.png" [class.active]="isCitarQuestao"></button>
+    <div class="support-options">
+      <button [disabled]="!temQuestaoParaCitar()" [class.active]="isCitarQuestao" class="citarQuestao" (click)="citarQuestaoAtual(userMessage)"><div [class.active]="isCitarQuestao" class="citarQuestao-butao-texto">Citar Questão</div><img src="assets/Icons/x.png" [class.active]="isCitarQuestao"></button>
+      <button class="suporte-btn" (click)="enviarParaSuporte()"> <img style="width: 20px;" src="assets/Icons/whatsapp-verde.svg" alt="whatsapp">Suporte WhatsApp</button>
+    </div>
     <div class="text-input-container"> 
       <textarea
         class="user-text-input"

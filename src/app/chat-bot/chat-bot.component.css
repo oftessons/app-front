@@ -172,6 +172,25 @@
   padding-bottom: 10px;
 }
 
+.support-options {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  gap: 10px;
+}
+
+.suporte-btn {
+  display: flex;
+  padding: 6px 12px;
+  min-height: 30px;
+  border-radius: 15px;
+  font-size: 14px;
+  gap: 5px;
+  border: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
 .send-button {
   background: linear-gradient(to right, #f5ce50, #febf25);
   color: white;

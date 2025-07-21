@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, AfterViewChecked, ElementRef, AfterViewIn
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { ChatBotStateService } from '../services/chat-bot-state.service';
 import { QuestoesStateService } from '../services/questao-state.service';
+import { VendasService } from '../services/vendas.service';
 import { AuthService } from '../services/auth.service';
 import { Usuario } from '../login/usuario';
 import { ApiChatRequestResponse } from './api-chat-request-dto';
@@ -58,7 +59,8 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
   constructor(
     private chatBotStateService: ChatBotStateService,
     private authService: AuthService,
-    private questoesStateService: QuestoesStateService
+    private questoesStateService: QuestoesStateService,
+    private vendasService: VendasService
   ) {}
 
   ngOnInit(): void {
@@ -253,6 +255,90 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
     }, 100);
   }
   
+  async enviarParaSuporte(): Promise<void> {
+    try {
+      const dadosUsuario = this.usuario ? 
+        `Nome: ${this.usuario.nome}
+Email: ${this.usuario.email}
+Telefone: ${this.usuario.telefone || 'Não informado'}
+Cidade: ${this.usuario.cidade || 'Não informada'}
+Estado: ${this.usuario.estado || 'Não informado'}` : 'Usuário não autenticado';
+      
+      let dadosPlano = 'Informações do plano não disponíveis';
+      if (this.usuario && this.usuario.id) {
+        try {
+          const planInfo = await this.vendasService.obterDadosAssinaturaPorUsuario(this.usuario.id).toPromise();
+          if (planInfo) {
+            dadosPlano = `Plano: ${planInfo.name || 'Não disponível'}
+            Status: ${planInfo.status || 'Não disponível'}
+            Próxima renovação: ${planInfo.proximaRenovacao || 'Não disponível'}`;
+          }
+        } catch (err) {
+          console.error('Erro ao obter informações do plano:', err);
+        }
+      }
+      
+      let dadosQuestao = 'Nenhuma questão está sendo visualizada atualmente';
+      const questaoAtual = this.questoesStateService.getQuestaoAtual();
+      if (questaoAtual) {
+        dadosQuestao = `ID da Questão: ${questaoAtual.id}`
+      }
+      
+      const ultimasMensagens = this.messages
+        .slice(-5) 
+        .map(msg => `${msg.type === 'user' ? this.usuario?.nome || 'Usuário' : 'VictorIA'}: ${msg.text?.substring(0, 50)}...`)
+        .join('\n\n');
+      
+      const mensagemCompleta = `*Suporte Oftlessons*
+      
+*DADOS DO USUÁRIO*
+${dadosUsuario}
+
+*INFORMAÇÕES DO PLANO*
+${dadosPlano}
+
+*QUESTÃO ATUAL*
+${dadosQuestao}
+
+*ÚLTIMAS INTERAÇÕES*
+${ultimasMensagens}
+
+*ESCREVA SUA MENSAGEM ABAIXO*
+`;
+
+      const numeroWhatsapp = '5511920909632';
+      const whatsappUrl = `https://wa.me/${numeroWhatsapp}?text=${encodeURIComponent(mensagemCompleta)}`;
+      
+      setTimeout(() => {
+        window.open(whatsappUrl, '_blank');
+      }, 2000);
+
+      const botMessage = { 
+        text: "✅ Estou abrindo o WhatsApp para você entrar em contato com nosso suporte. Suas informações serão enviadas para agilizar o atendimento.", 
+        type: 'bot',
+        avatar: this.botAvatar,
+        username: 'VictorIA',
+        timestamp: new Date()
+      };
+      this.messages.push(botMessage);
+      this.chatBotStateService.addMessage(botMessage);
+      this.scrollToBottom();
+      
+    } catch (error) {
+      console.error('Erro ao processar solicitação de suporte:', error);
+      const errorMsg = { 
+        text: '❌ Não foi possível conectar ao suporte. Por favor, tente novamente mais tarde.', 
+        type: 'bot',
+        avatar: this.botAvatar,
+        username: 'VictorIA',
+        timestamp: new Date()
+      };
+      this.messages.push(errorMsg);
+      this.chatBotStateService.addMessage(errorMsg);
+      this.scrollToBottom();
+    }
+  }
+
   processForgotPassword(): void { //possivel uso para o bot ou criar um botao em outro lugar
     this.authService.obterUsuarioAutenticadoDoBackend().subscribe(
       (data: Usuario) => {
