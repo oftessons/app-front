@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Simulado } from '../sistema/simulado';
 
@@ -10,6 +10,17 @@ import { Simulado } from '../sistema/simulado';
 export class SimuladoService {
   apiURL: string = environment.apiURLBase + '/api/simulado';
   constructor(private http: HttpClient) {}
+
+  private simuladoAtivoSubject = new BehaviorSubject<boolean>(false);
+  simuladoAtivo$ = this.simuladoAtivoSubject.asObservable();
+
+  simuladoIniciado() {
+    this.simuladoAtivoSubject.next(true);
+  }
+
+  simuladoFinalizado() {
+    this.simuladoAtivoSubject.next(false);
+  }
 
   
   finalizarSimulado(idUser: number, respostasEnviadas: any[]) {

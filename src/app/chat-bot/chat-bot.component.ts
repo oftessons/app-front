@@ -6,8 +6,8 @@ import { VendasService } from '../services/vendas.service';
 import { AuthService } from '../services/auth.service';
 import { Usuario } from '../login/usuario';
 import { ApiChatRequestResponse } from './api-chat-request-dto';
-import { convertPropertyBinding } from '@angular/compiler/src/compiler_util/expression_converter';
 import { Questao } from '../sistema/page-questoes/questao';
+import { SimuladoService } from '../services/simulado.service';
 
 @Component({
   selector: 'chat-bot',
@@ -40,6 +40,7 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
   isCitarQuestao: boolean = false;
   forgotEmail: string = '';
   errors: string[] = [];
+  chatAtivo: boolean = true;
   messages: Array<{ 
     text: string, 
     type: string,
@@ -60,10 +61,15 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
     private chatBotStateService: ChatBotStateService,
     private authService: AuthService,
     private questoesStateService: QuestoesStateService,
-    private vendasService: VendasService
+    private vendasService: VendasService,
+    private simuladoService: SimuladoService
   ) {}
 
   ngOnInit(): void {
+    this.simuladoService.simuladoAtivo$.subscribe((simuladoAtivo => {
+      this.chatAtivo = !simuladoAtivo;
+    }))
+
     this.chatBotStateService.isChatOpen$.subscribe((isOpen) => {
       this.isOpen = isOpen;
       if (this.isOpen) {
