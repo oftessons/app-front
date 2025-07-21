@@ -30,7 +30,7 @@ import { SimuladoService } from 'src/app/services/simulado.service';
 import { QuantidadeDeQuestoesSelecionadas } from '../page-questoes/enums/quant-questoes';
 import { RespostasSimulado } from '../page-questoes/enums/resp-simu';
 import Chart from 'chart.js';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import {
   DomSanitizer,
   SafeHtml,
@@ -38,6 +38,7 @@ import {
 } from '@angular/platform-browser';
 
 import { temasESubtemas } from '../page-questoes/enums/map-tema-subtema';
+import { filter } from 'rxjs/operators';
 
 declare var bootstrap: any;
 
@@ -176,7 +177,14 @@ export class PageSimuladoComponent implements OnInit {
 
   ngOnInit() {
     this.carregarDadosIniciais();
-
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd) 
+    ).subscribe(() => {
+      if (!this.router.url.includes('/simulado')) {
+        this.simuladoService.simuladoFinalizado(); 
+      }
+    });
+  
   }
 
   async carregarDadosIniciais() {
@@ -256,6 +264,7 @@ export class PageSimuladoComponent implements OnInit {
       .subscribe((resultado) => {
         this.gerarGrafico(resultado.acertos, resultado.erros);
       });
+    this.simuladoService.simuladoFinalizado();
     this.simuladoIniciado = false;
     this.simuladoFinalizado = true;
     this.tempoTotal = this.tempo; // Tempo total em segundos
@@ -905,6 +914,7 @@ export class PageSimuladoComponent implements OnInit {
 
   iniciarSimulado(): void {    
     if (!this.isSimuladoIniciado) {
+      this.simuladoService.simuladoIniciado();
       this.isSimuladoIniciado = true;
       this.realizandoSimulado = true;
       this.tempo = 0;

@@ -271,6 +271,10 @@
   font-weight: bold;
 }
 
+button:disabled .chatbot-logo {
+  filter: grayscale(100%);
+}
+
 .user-message {
   background-color: #e1f5fe;
   padding: 12px;

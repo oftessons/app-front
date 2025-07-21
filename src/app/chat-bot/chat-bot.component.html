@@ -3,7 +3,7 @@
   [class.nav-active]="isNavigationBarActive"
   (click)="toggleChat()"
   *ngIf="showButton"
->
+  [disabled]="!chatAtivo">
   <img
     src="assets/imagens/logo-iconnavegador.svg"
     alt="Chatbot Logo"
@@ -53,6 +53,7 @@
         [(ngModel)]="userMessage"
         (keydown)="handleKeydown($event)"
         placeholder="Escreva sua mensagem..."
+        [disabled]="!chatAtivo"
       ></textarea>
       <button
         class="send-button"
