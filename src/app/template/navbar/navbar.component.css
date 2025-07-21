@@ -55,7 +55,7 @@
     right: 0;
     z-index: 2;
     background-color: #0F1934;
-    padding: 30px;
+    padding: 10px;
     font-family: 'Nunito Sans', sans-serif;
 }
 
@@ -335,6 +335,12 @@ input:checked + .slider:before {
 
     .nav-link {
         order: 3;
+    }
+}
+
+@media (max-width: 480px) {
+    .mat-toolbar-fixed {
+        padding: 0;
     }
 }
 
