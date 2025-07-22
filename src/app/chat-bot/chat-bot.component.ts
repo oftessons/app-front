@@ -177,28 +177,19 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
     if (message) {
       let fullMessage = message;
 
-      if(this.isCitarQuestao) {
-        fullMessage = `Questão ${this.citarQuestao.id} ${this.citarQuestao.enunciadoDaQuestao}\n\n${message}`;
+      const userMessage = { 
+        text: message, 
+        type: 'user',
+        avatar: this.usuario?.fotoUrl || null,
+        username: this.usuario?.nome || 'Usuário',
+        timestamp: new Date()
+      };
+      this.messages.push(userMessage);
+      this.chatBotStateService.addMessage(userMessage);
 
-        const userMessageWithCitation = {
-          text: fullMessage,
-          type: 'user',
-          avatar: this.usuario?.fotoUrl || null,
-          username: this.usuario?.nome || 'Usuário',
-          timestamp: new Date()
-        };
-        this.messages.push(userMessageWithCitation);
-        this.chatBotStateService.addMessage(userMessageWithCitation);
-      } else {
-        const userMessage = { 
-          text: message, 
-          type: 'user',
-          avatar: this.usuario?.fotoUrl || null,
-          username: this.usuario?.nome || 'Usuário',
-          timestamp: new Date()
-        };
-        this.messages.push(userMessage);
-        this.chatBotStateService.addMessage(userMessage);
+      if(this.isCitarQuestao) {
+        fullMessage = `Questão id ${this.citarQuestao.id} Enunciado:${this.citarQuestao.enunciadoDaQuestao} \n\n${message}`;
+        console.log('Citando questão:', fullMessage);
       }
 
       const typingMsg = { text: "Digitando...", type: 'typing' };
@@ -315,9 +306,9 @@ ${ultimasMensagens}
       const numeroWhatsapp = '5511920909632';
       const whatsappUrl = `https://wa.me/${numeroWhatsapp}?text=${encodeURIComponent(mensagemCompleta)}`;
       
-      setTimeout(() => {
+      // setTimeout(() => {
         window.open(whatsappUrl, '_blank');
-      }, 2000);
+      // }, 2000);
 
       const botMessage = { 
         text: "✅ Estou abrindo o WhatsApp para você entrar em contato com nosso suporte. Suas informações serão enviadas para agilizar o atendimento.", 
