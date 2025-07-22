@@ -107,6 +107,7 @@
           <tr>
             <th>Nome</th>
             <th>Email</th>
+            <th>Dias de bolsa</th>
             <th>Cidade</th>
             <th>Estado</th>
             <th>Ações</th>
@@ -116,6 +117,7 @@
           <tr *ngFor="let bolsista of paginatedBolsistas">
               <td><a href="javascript:void(0)" (click)="openModalPlano(bolsista.id)">{{ bolsista.nome }}</a></td>
               <td>{{ bolsista.email }}</td>
+              <td>{{ bolsista.diasDeTeste }}</td>
               <td>{{ bolsista.cidade }}</td>
               <td>{{ bolsista.estado }}</td>
               <td>
@@ -363,10 +365,10 @@
               <p><strong>Telefone: </strong> {{ selectedUser.telefone || 'Não informado' }}</p>
               <p><strong>Cidade: </strong> {{ selectedUser.cidade || 'Não informada' }}</p>
               <p><strong>Estado: </strong> {{ selectedUser.estado || 'Não informado' }}</p>
-              <p><strong>Permissão: </strong> {{ selectedUser.permissao }}</p>
+              <p><strong>Permissão: </strong> {{ getPermissaoTraduzida(selectedUser.permissao) }}</p>
               <p *ngIf="selectedUser.tipoDeEstudante" ><strong>Tipo de estudante: </strong> {{ getTipoUsuarioTraduzido(selectedUser.tipoDeEstudante) }}</p>
-              <p *ngIf="selectedUser.bolsaAssinatura"><strong>Bolsa: </strong> Sim</p>
-              <p *ngIf="selectedUser.diasDeTeste && selectedUser.bolsaAssinatura"><strong>Dias de Teste: </strong> {{ selectedUser.diasDeTeste }}</p>
+              <p *ngIf="selectedUser.diasDeTeste && getPermissaoTraduzida(selectedUser.permissao) === 'Bolsista'"><strong>Dias de Bolsa: </strong> {{ selectedUser.diasDeTeste }}</p>
+              <p *ngIf="selectedUser.diasDeTeste && getPermissaoTraduzida(selectedUser.permissao) === 'Aluno'"><strong>Dias de Teste: </strong> {{ selectedUser.diasDeTeste }}</p>
             </div>
             <div class="profile-plan" *ngIf="selectedUser">
               <h4 class="plan-title">Informações do Plano</h4>
