@@ -536,6 +536,19 @@ export class PermissaoAdminComponent implements OnInit {
     return tipos[tipo as TipoUsuario] || 'Não disponível';
   }
 
+  getPermissaoTraduzida(permissao: Permissao): string {
+    if( permissao === undefined || permissao === null) {
+      return 'Não disponível';
+    }
+    const permissoes: { [key: string]: string } = {
+      'ADMIN': 'Administrador',
+      'PROFESSOR': 'Professor',
+      'USER': 'Aluno',
+      'BOLSISTA': 'Bolsista'
+    };
+    return permissoes[permissao] || 'Não disponível';
+  }
+
   converterDateTime(dateTime: string): string {
     if (!dateTime) return 'Não disponível';
     
