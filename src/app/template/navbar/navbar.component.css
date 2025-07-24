@@ -173,22 +173,13 @@
         top: 0;
         bottom: 0;
         left: 0;
-        width: 3px; /* Largura da linha vertical */
-        background-color: var(--bg-sidebar-active-link-hover);
+        width: 3px; /* Largura da linha vertical */       
         display: none; /* Inicialmente, a linha está oculta */
     }
 
     .mat-list-item:hover:before {
         display: block; /* Torna a linha vertical visível ao passar o mouse */
         font-weight: bold;
-    }
-
-    .mat-list-item:hover {
-        background-color: #F4FCF1; /* Cor de destaque ao passar o mouse */  
-    }
-
-    .mat-list-item:hover .icon {
-        color:#CDDAEF;
     }
 }
 

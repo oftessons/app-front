@@ -376,8 +376,43 @@ button:disabled .chatbot-logo {
 
 .typing-message {
   background-color: #f1f1f1;
-  color: #666;
-  font-style: italic;
+  width: fit-content;
+}
+
+.typing-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 20px;
+  width: 100%;
+}
+
+.typing-indicator .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #ccc;
+  margin: 0 2px;
+  animation: typing 0.5s infinite alternate ease-in;
+}
+
+.typing-indicator .dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.typing-indicator .dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes typing {
+  0% {
+    background-color: #ccc;
+    transform: translate(0, -5px);
+  }
+  100% {
+    background-color: #f5ce50;
+    transform: translate(0, 0);
+  }
 }
 
 ::ng-deep markdown {

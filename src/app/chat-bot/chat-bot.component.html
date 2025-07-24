@@ -23,7 +23,7 @@
       [ngClass]="{
         'user-message': message.type === 'user',
         'bot-message': message.type === 'bot',
-        'typeing-message': message.type === 'typing'
+        'typing-message': message.type === 'typing'
       }"
     >
       <div class="message-header">
@@ -38,6 +38,11 @@
       <div class="message-content">
         <markdown *ngIf="message.type === 'bot' && !isTyping(message)" [data]="message.text"></markdown>
         <markdown *ngIf="message.type === 'user' || isTyping(message)">{{ message.text }}</markdown>
+      </div>
+      <div *ngIf="isTyping(message)" class="typing-indicator">
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
       </div>
     </div>
   </div>
