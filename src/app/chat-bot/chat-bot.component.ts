@@ -192,7 +192,7 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
         console.log('Citando questão:', fullMessage);
       }
 
-      const typingMsg = { text: "Digitando...", type: 'typing' };
+      const typingMsg = { text: '', type: 'typing' };
       this.messages.push(typingMsg);
       this.scrollToBottom();
       this.userMessage = '';
