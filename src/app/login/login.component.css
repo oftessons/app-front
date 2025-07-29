@@ -293,6 +293,7 @@ input::placeholder {
 .small {
   padding: 8px;
   font-family: "Nunito Sans";
+  color: var(--text-color);
 }
 
 .small a {

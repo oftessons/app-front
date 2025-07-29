@@ -28,12 +28,13 @@ import { ModuloUveiteOncologiaOcularComponent } from './modulos-das-aulas/modulo
 import { PermissaoAdminComponent } from './permissao-admin/permissao-admin.component';
 import { PermissaoProfessorComponent } from './permissao-professor/permissao-professor.component';
 import { InicioComponent } from './inicio/inicio.component';
+import { BolsaGuardService } from '../services/bolsa.guard';
 
 const routes: Routes = [
   { 
     path: 'usuario', 
     component: LayoutComponent,  
-    canActivate: [AuthGuard], 
+    canActivate: [AuthGuard, BolsaGuardService], 
     children: [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'inicio', component: InicioComponent},

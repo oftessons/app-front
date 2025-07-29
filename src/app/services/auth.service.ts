@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 
 import { JwtHelperService } from '@auth0/angular-jwt'
@@ -282,5 +282,16 @@ export class AuthService {
     }
 
     return this.http.post( this.tokenURL, params.toString(), { headers });
+  }
+
+  verificarBolsaExpirada(): Observable<boolean> {
+    return this.http.get<{ expirada: boolean }>(`${this.apiURL}/verificar-bolsa-expirada`).pipe(
+      map(response => response.expirada),
+      catchError(error => {
+        console.error('Erro ao verificar expiração da bolsa:', error);
+        // Se houver um erro, assume que a bolsa está expirada para redirecionar o usuário por segurança
+        return of(true);
+      })
+    );
   }
 }

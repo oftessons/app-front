@@ -284,6 +284,72 @@ input {
   color: #0f1934;
 }
 
+.bolsista-info {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #f1f1f1;
+  border-radius: 8px;
+  width: 100%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.bolsa-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.bolsa-detail-item {
+  padding: 10px;
+  background-color: white;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.bolsa-detail-item h3 {
+  font-size: 14px;
+  color: #6c757d !important;
+  margin-bottom: 5px;
+}
+
+.bolsa-detail-item span {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+}
+
+.expired-badge {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+.bolsa-actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+.button-action {
+  background-color: #3b5fa0;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.button-action:hover {
+  background-color: #2a4578;
+}
+
+.button-action:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
 .profile-plan {
   width: 100%;
   margin-top: 20px;

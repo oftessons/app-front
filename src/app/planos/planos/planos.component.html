@@ -6,6 +6,9 @@
       seus estudos. Resolva exercícios sem restrições, assista a videoaulas e
       acompanhe seu progresso.
     </p>
+    <div class="alert alert-warning" *ngIf="mensagemExpirado">
+      {{ mensagemExpirado }}
+    </div>
   </div>
 
   <div class="planos-container">
