@@ -6,7 +6,7 @@ import {
   HttpResponse,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, map, shareReplay, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Questao } from '../sistema/page-questoes/questao';
@@ -20,8 +20,43 @@ import { RespostaDTO } from '../sistema/RespostaDTO';
 export class QuestoesService {
   apiURL: string = environment.apiURLBase + '/api/questoes';
   private readonly requestsCache: Map<string, Observable<Questao[]>> = new Map(); // Usaremos um Map para o cache
+  private readonly listaDeIdsFiltrados = new BehaviorSubject<number[]>([]);
+  listaDeIdsFiltrados$ = this.listaDeIdsFiltrados.asObservable();
+
 
   constructor(private http: HttpClient) {}
+
+  public obterIds(): void {
+    console.log(this.listaDeIdsFiltrados);
+  }
+
+
+  public setQuestoesFiltradas(questoes: any[]): void {
+    const ids = questoes.map(q => q.id); 
+    this.listaDeIdsFiltrados.next(ids);
+  }
+
+  public getProximoId(idAtual: number): number | null {
+    const ids = this.listaDeIdsFiltrados.getValue();
+    const indiceAtual = ids.indexOf(idAtual);
+
+    if (indiceAtual > -1 && indiceAtual < ids.length - 1) {
+      return ids[indiceAtual + 1];
+    }
+
+    return null; 
+  }
+
+  getAnteriorId(idAtual: number): number | null {
+    const ids = this.listaDeIdsFiltrados.getValue();
+    const indiceAtual = ids.indexOf(idAtual);
+
+    if (indiceAtual > 0) {
+      return ids[indiceAtual - 1];
+    }
+
+    return null; 
+  }
 
   getAcertosEErrosPorTipoDeProva(usuarioId: number): Observable<any> {
     return this.http

@@ -724,6 +724,7 @@
     </div>
     
     <div class="container mt-4 container-btn">
+      
       <button type="button" class="btn btn-secondary" routerLink="/usuario/dashboard"
         *ngIf="!questaoDTO.id" [disabled]="loading">
         Voltar
@@ -741,9 +742,9 @@
     
       <div class="d-flex justify-content-between">
         <div class="d-flex justify-content-between">
-          <button type="button" class="btn btn-secondary" *ngIf="questaoDTO.id" (click)="voltarPaginaAnterior()"
+          <button type="button" class="btn btn-secondary" *ngIf="questaoDTO.id" (click)="voltarQuestao()"
             [disabled]="loading">
-            Voltar
+            Voltar questão
           </button>
           <button type="submit" class="btn btn-primary" *ngIf="questaoDTO.id" [disabled]="loading">
             <span *ngIf="loading" class="spinner-border spinner-border-sm"></span>
