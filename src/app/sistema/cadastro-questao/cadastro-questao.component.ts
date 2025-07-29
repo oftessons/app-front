@@ -1,15 +1,10 @@
 import { Component, OnInit,  AfterViewInit, DoCheck } from '@angular/core';
 import { Location } from '@angular/common';
 import { Questao } from '../page-questoes/questao';
-import { Ano } from '../page-questoes/enums/ano';
 import { Tema } from '../page-questoes/enums/tema';
-import { Dificuldade } from '../page-questoes/enums/dificuldade';
-import { TipoDeProva } from '../page-questoes/enums/tipoDeProva';
 import { Subtema } from '../page-questoes/enums/subtema';
-import { Relevancia } from '../page-questoes/enums/relevancia';
 import { QuestoesService } from 'src/app/services/questoes.service';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Alternativa } from '../alternativa';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { TinymceService } from 'src/app/services/tinymce.service';
 import { temasESubtemas } from '../page-questoes/enums/map-tema-subtema';
 
@@ -26,12 +21,14 @@ import { TemaDescricoes } from '../page-questoes/enums/tema-descricao';
 import { SubtemaDescricoes } from '../page-questoes/enums/subtema-descricao';
 import { TipoDeProvaDescricoes } from '../page-questoes/enums/tipodeprova-descricao';
 import { RelevanciaDescricao } from '../page-questoes/enums/relevancia-descricao';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-cadastro-questao',
   templateUrl: './cadastro-questao.component.html',
   styleUrls: ['./cadastro-questao.component.css']
 })
+
 
 export class CadastroQuestaoComponent implements OnInit, AfterViewInit {
   loading: boolean = false;
@@ -117,6 +114,7 @@ editorConfig4 = {
 
   ngOnInit(): void {
     // this.editorConfig = this.tinymceService.getEditorConfig();
+
     this.questaoDTO.alternativas = [
       {
         id: 1, texto: 'A', correta: false,
@@ -152,16 +150,17 @@ editorConfig4 = {
     this.activatedRoute.params.subscribe(params => {
       this.questaoDTO.id = +params['id'];
       if (this.questaoDTO.id){
-        this.loadQuestaoIds();
+        const proximoId = this.questoesService.getProximoId(this.questaoDTO.id);
+      
         this.questoesService.getQuestaoById(this.questaoDTO.id).subscribe(
           (questao) => {
-            console.log("QUESTAO RETORNADA PELO ID: ")
-            console.log(questao)
+            // console.log("QUESTAO RETORNADA PELO ID: ")
+            // console.log(questao)
             this.questaoDTO = questao;
             this.atualizarEditoresComDados();
             this.selectedSubtemaValue = this.getSubtemaEnumFromDescription(this.questaoDTO.subtema as Subtema) as Subtema;
-            console.log(this.questaoDTO.subtema as Subtema);
-            console.log(this.selectedSubtemaValue);
+            // console.log(this.questaoDTO.subtema as Subtema);
+            // console.log(this.selectedSubtemaValue);
             this.questaoDTO.alternativas = this.questaoDTO.alternativas || [];
             if (this.questaoDTO.fotoDaQuestaoUrl) {
               this.fotoPreviews['fotoDaQuestao'] = this.questaoDTO.fotoDaQuestaoUrl;
@@ -210,7 +209,8 @@ editorConfig4 = {
             };
           })
         };
-    });   
+    }); 
+        
   }
 
 
@@ -590,44 +590,14 @@ onSubmit(): void {
   }
 
 
-  private loadQuestaoIds(): void {
-    this.questoesService
-      .getPaginatedQuestaoIds(this.currentPage, this.pageSize)
-      .subscribe(response => {
-        this.questaoIds = response.content;
-        this.totalElements = response.totalElements;
-      });
+  irParaProximaQuestao(): void {
+    const proximoId = this.questoesService.getProximoId(this.questaoDTO.id);
+
+    if (proximoId) {
+      this.router.navigate([`/usuario/cadastro-questao/${proximoId}`]);
+
   }
 
-  irParaProximaQuestao(): void {
-    const currentId = this.questaoDTO.id;
-    const idx = this.questaoIds.indexOf(currentId);
-
-    if (idx !== -1 && idx < this.questaoIds.length - 1) {
-      const nextId = this.questaoIds[idx + 1];
-      this.router.navigate([`/usuario/cadastro-questao/${nextId}`]);
-      return;
-    }
-
-    const totalPages = Math.ceil(this.totalElements / this.pageSize);
-    if (this.currentPage < totalPages) {
-      this.currentPage++;
-      this.questoesService
-        .getPaginatedQuestaoIds(this.currentPage, this.pageSize)
-        .subscribe(response => {
-          this.questaoIds = response.content;
-          this.totalElements = response.totalElements;
-
-          if (this.questaoIds.length > 0) {
-            const primeiroDaPagina = this.questaoIds[0];
-            this.router.navigate([`/usuario/cadastro-questao/${primeiroDaPagina}`]);
-          } else {
-            console.warn(`Página ${this.currentPage} veio vazia.`);
-          }
-        });
-    } else {
-      this.limiteQuestoes = true;
-    }
   }
 
   extractErrorMessage(errorResponse: any): string {
@@ -826,6 +796,10 @@ onFileSelectedImageEditar(event: any, alternativaIndex: string) {
   }
 
   voltarPaginaAnterior(): void {
+    this.router.navigate(['/usuario/questoes']);
+  }
+
+  voltarQuestao(): void {
     this.location.back();
   }
 

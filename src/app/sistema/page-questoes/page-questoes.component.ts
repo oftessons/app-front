@@ -37,6 +37,7 @@ import { CertasErradas } from './enums/certas-erradas';
 import { CertasErradasDescricao } from './enums/certas-erradas-descricao';
 import { RespostasSimuladosDescricao } from './enums/resp-simu-descricao';
 import { filter, startWith } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
 
 declare var bootstrap: any;
 
@@ -78,7 +79,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   message: string = '';
   resposta: string = ''; // Adiciona esta variável para armazenar a resposta
   respondidasAgora: Set<Number> = new Set();
-
+  
 
   questaoAtual: Questao | null = null;
   paginaAtual: number = 0;
@@ -630,6 +631,8 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
         this.toggleFiltros();
         this.carregando = false;
         this.questoesStateService.setQuestaoAtual(this.questaoAtual);
+        this.questoesService.setQuestoesFiltradas(questoes);
+        console.log(questoes);
       },
       (error) => {
         console.error('Erro ao filtrar questões:', error);
@@ -638,6 +641,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       }
     );
   }
+
 
   selecionarQuestao(event: Event): void {
     this.resetarOcorrenciasDeQuestao();
