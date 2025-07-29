@@ -21,7 +21,6 @@ import { TemaDescricoes } from '../page-questoes/enums/tema-descricao';
 import { SubtemaDescricoes } from '../page-questoes/enums/subtema-descricao';
 import { TipoDeProvaDescricoes } from '../page-questoes/enums/tipodeprova-descricao';
 import { RelevanciaDescricao } from '../page-questoes/enums/relevancia-descricao';
-import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-cadastro-questao',
@@ -108,9 +107,9 @@ editorConfig4 = {
     private activatedRoute: ActivatedRoute,
     public tinymceService: TinymceService,
     private themeService: ThemeService,
-    private sanitizer: DomSanitizer,
     private location: Location
-  ) { }
+) { 
+  }
 
   ngOnInit(): void {
     // this.editorConfig = this.tinymceService.getEditorConfig();
@@ -592,13 +591,28 @@ onSubmit(): void {
 
   irParaProximaQuestao(): void {
     const proximoId = this.questoesService.getProximoId(this.questaoDTO.id);
+    if (!proximoId) {
+      return;
+    }
+    
+    this.clearImageState();
 
-    if (proximoId) {
-      this.router.navigate([`/usuario/cadastro-questao/${proximoId}`]);
+    this.router.navigate(['/usuario/cadastro-questao', proximoId]);
+  }
+
+  private clearImageState(): void {
+    this.fotoPreviews = {};
+    this.imagePreviews = {};
+
+    this.fotoDaQuestao = null;
+    this.fotoDaRespostaUm = null;
+    this.fotoDaRespostaDois = null;
+    this.fotoDaRespostaTres = null;
+    this.fotoDaRespostaQuatro = null;
+    this.videoDaQuestao = null;
 
   }
 
-  }
 
   extractErrorMessage(errorResponse: any): string {
     if (errorResponse.error instanceof ErrorEvent) {
