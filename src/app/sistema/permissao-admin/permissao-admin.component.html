@@ -107,7 +107,7 @@
           <tr>
             <th>Nome</th>
             <th>Email</th>
-            <th>Dias de bolsa</th>
+            <th>Data de Expiração</th>
             <th>Cidade</th>
             <th>Estado</th>
             <th>Ações</th>
@@ -117,7 +117,7 @@
           <tr *ngFor="let bolsista of paginatedBolsistas">
               <td><a href="javascript:void(0)" (click)="openModalPlano(bolsista.id)">{{ bolsista.nome }}</a></td>
               <td>{{ bolsista.email }}</td>
-              <td>{{ bolsista.diasDeTeste }}</td>
+              <td>{{ getDataExpiracaoBolsa(bolsista) }}</td>
               <td>{{ bolsista.cidade }}</td>
               <td>{{ bolsista.estado }}</td>
               <td>
@@ -370,7 +370,35 @@
               <p *ngIf="selectedUser.diasDeTeste && getPermissaoTraduzida(selectedUser.permissao) === 'Bolsista'"><strong>Dias de Bolsa: </strong> {{ selectedUser.diasDeTeste }}</p>
               <p *ngIf="selectedUser.diasDeTeste && getPermissaoTraduzida(selectedUser.permissao) === 'Aluno'"><strong>Dias de Teste: </strong> {{ selectedUser.diasDeTeste }}</p>
             </div>
-            <div class="profile-plan" *ngIf="selectedUser">
+            <div class="bolsista-info" *ngIf="getPermissaoTraduzida(selectedUser.permissao) === 'Bolsista'">
+              <h4 class="plan-title">Informações da Bolsa</h4>
+              <div class="bolsa-details">
+                <div class="bolsa-detail-item">
+                  <h3>Status da Bolsa</h3>
+                  <span [class.expired-badge]="isBolsaExpirada(selectedUser)">
+                    {{ getBolsaStatus(selectedUser) }}
+                  </span>
+                </div>
+                <div class="bolsa-detail-item">
+                  <h3>Data de Início</h3>
+                  <span>{{ formatarDataBolsa(selectedUser.dataInicioBolsa) }}</span>
+                </div>
+                <div class="bolsa-detail-item">
+                  <h3>Duração (dias)</h3>
+                  <span>{{ selectedUser.diasDeTeste || 'Não definido' }}</span>
+                </div>
+                <div class="bolsa-detail-item">
+                  <h3>Data de Expiração</h3>
+                  <span>{{ calcularDataExpiracao(selectedUser) }}</span>
+                </div>
+                <div class="bolsa-detail-item">
+                  <h3>Dias Restantes</h3>
+                  <span>{{ calcularDiasRestantes(selectedUser) }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+            <div class="profile-plan" *ngIf="getPermissaoTraduzida(selectedUser.permissao) !== 'Bolsista'">
               <h4 class="plan-title">Informações do Plano</h4>
               <div *ngIf="loadingPlan" class="loading-plan">
                 Carregando informações do plano...
@@ -416,6 +444,5 @@
             Editar Usuário
           </button>
         </div>
-      </div>
     </app-modal>
   </div>

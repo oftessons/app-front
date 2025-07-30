@@ -177,6 +177,7 @@ export class PermissaoAdminComponent implements OnInit {
     usuario.tipoUsuario = userData.tipoUsuario;
     usuario.bolsaAssinatura = userData.bolsa;
     usuario.diasDeTeste = userData.quantidadeDiasBolsa;
+    usuario.dataInicioBolsa = userData.bolsa ? new Date() : undefined;
     const permissao = this.mapearDescricaoParaEnum(userData.tipoUsuario);
 
 
@@ -487,8 +488,8 @@ export class PermissaoAdminComponent implements OnInit {
   }
 
   getPlanoUsuario(usuario: Usuario): string {
-    if (usuario.bolsaAssinatura) {
-      return 'Bolsista';
+    if (!usuario || !usuario.id) {
+      return 'Não disponível';
     }
     
     if (this.planosUsuarios[usuario.id]) {
@@ -584,5 +585,90 @@ export class PermissaoAdminComponent implements OnInit {
     if (passwordInput) {
       passwordInput.setAttribute('type', this.passwordVisible[field] ? 'text' : 'password');
     }
+  }
+
+  getDataExpiracaoBolsa(bolsista: Usuario): string {
+    if (!bolsista.dataInicioBolsa || !bolsista.diasDeTeste) {
+      return 'Não disponível';
+    }
+    
+    const dataInicio = new Date(bolsista.dataInicioBolsa);
+    dataInicio.setDate(dataInicio.getDate() + bolsista.diasDeTeste);
+    let statusBolsa;
+
+    if( dataInicio < new Date()) {
+      statusBolsa = 'Expirado';
+    } else if (dataInicio > new Date()) {
+      statusBolsa = 'Ativo';
+    }
+
+    return `${dataInicio.toLocaleDateString('pt-BR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    })}  (${statusBolsa})`;
+  }
+
+  isBolsaExpirada(usuario: Usuario): boolean {
+    if (!usuario.dataInicioBolsa || !usuario.diasDeTeste) {
+      return true;
+    }
+    
+    const dataInicio = new Date(usuario.dataInicioBolsa);
+    const dataExpiracao = new Date(dataInicio);
+    dataExpiracao.setDate(dataExpiracao.getDate() + usuario.diasDeTeste);
+    
+    return dataExpiracao < new Date();
+  }
+
+  getBolsaStatus(usuario: Usuario): string {
+    if (this.isBolsaExpirada(usuario)) {
+      return 'Expirado';
+    } else {
+      return 'Ativo';
+    }
+  }
+
+  formatarDataBolsa(data: Date | string | undefined): string {
+    if (!data) return 'Não definida';
+    
+    const dataObj = new Date(data);
+    return dataObj.toLocaleDateString('pt-BR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    });
+  }
+
+  calcularDataExpiracao(usuario: Usuario): string {
+    if (!usuario.dataInicioBolsa || !usuario.diasDeTeste) {
+      return 'Não definida';
+    }
+    
+    const dataInicio = new Date(usuario.dataInicioBolsa);
+    const dataExpiracao = new Date(dataInicio);
+    dataExpiracao.setDate(dataExpiracao.getDate() + usuario.diasDeTeste);
+    
+    return this.formatarDataBolsa(dataExpiracao);
+  }
+
+  calcularDiasRestantes(usuario: Usuario): string {
+    if (!usuario.dataInicioBolsa || !usuario.diasDeTeste) {
+      return 'Não disponível';
+    }
+    
+    const dataInicio = new Date(usuario.dataInicioBolsa);
+    const dataExpiracao = new Date(dataInicio);
+    dataExpiracao.setDate(dataExpiracao.getDate() + usuario.diasDeTeste);
+    
+    const hoje = new Date();
+    if (dataExpiracao < hoje) {
+      return 'Expirado';
+    }
+    
+    const diffTime = Math.abs(dataExpiracao.getTime() - hoje.getTime());
+    const diasRestantes = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    return `${diasRestantes} dias`;
   }
 }

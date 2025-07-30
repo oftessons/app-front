@@ -10,6 +10,7 @@ import { StripeService } from 'src/app/services/stripe.service';
 })
 export class PlanosComponent implements OnInit {
   mostrarPlanoGratuito: boolean = false;
+  mensagemExpirado: string = '';
   
   constructor(
     private router: Router,
@@ -19,6 +20,11 @@ export class PlanosComponent implements OnInit {
   ) {}
   
   ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+    if (params['expired'] === 'true') {
+      this.mensagemExpirado = params['message'] || 'Sua bolsa expirou. Por favor, escolha um plano para continuar.';
+    }
+    });
     this.verificarStatusPlanoGratuito();
   }  
 
