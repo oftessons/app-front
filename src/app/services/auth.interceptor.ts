@@ -32,7 +32,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
           } else {
             this.snackBar.open('Sua sessão expirou. Faça login novamente.', 'Fechar', {
-              duration: 5000,
+              duration: 20000,
               panelClass: ['snackbar-warning']
             });
 
@@ -43,7 +43,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
         } else if (error.status === 403) {
           this.snackBar.open('Acesso negado. Você não tem permissão para esta ação.', 'Fechar', {
-            duration: 5000,
+            duration: 20000,
             panelClass: ['snackbar-error']
           });
 
