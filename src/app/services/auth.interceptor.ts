@@ -28,26 +28,20 @@ export class AuthInterceptor implements HttpInterceptor {
         if (error.status === 401 && !isAuthRequest) {
 
           if (error.error && error.error.message === 'Assinatura inativa.') {
-            // Redireciona para a página de planos
             this.router.navigate(['/planos']);
 
           } else {
-            // Token expirado ou inválido
             this.snackBar.open('Sua sessão expirou. Faça login novamente.', 'Fechar', {
               duration: 5000,
               panelClass: ['snackbar-warning']
             });
 
-            // Limpa tokens
             localStorage.removeItem('access_token');
-            localStorage.removeItem('refresh_token');
 
-            // Redireciona para login
             this.router.navigate(['/login']);
           }
 
         } else if (error.status === 403) {
-          // Acesso negado
           this.snackBar.open('Acesso negado. Você não tem permissão para esta ação.', 'Fechar', {
             duration: 5000,
             panelClass: ['snackbar-error']
