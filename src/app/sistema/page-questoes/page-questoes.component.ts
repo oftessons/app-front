@@ -632,7 +632,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
         this.carregando = false;
         this.questoesStateService.setQuestaoAtual(this.questaoAtual);
         this.questoesService.setQuestoesFiltradas(questoes);
-        console.log(questoes);
       },
       (error) => {
         console.error('Erro ao filtrar questões:', error);

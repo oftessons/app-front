@@ -28,10 +28,9 @@ import { DetalhesPlanosComponent } from './planos/detalhes-planos/detalhes-plano
 import { PagamentoConcluidoComponent } from './planos/pagamento-concluido/pagamento-concluido.component';
 import { ValidacaoAcessoComponent } from './validacao-acesso/validacao-acesso.component';
 import { ChatBotWhatsappComponent } from './chat-bot-whatsapp/chat-bot-whatsapp.component';
-import { TmplAstRecursiveVisitor } from '@angular/compiler';
 import { MarkdownModule } from 'ngx-markdown';
 import { QuestoesStateService } from './services/questao-state.service';
-
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 
@@ -64,6 +63,7 @@ import { QuestoesStateService } from './services/questao-state.service';
     EditorModule,
     SharedModule,
     MatProgressBarModule,
+    MatSnackBarModule,
     MarkdownModule.forRoot(),
     QuillModule.forRoot({
       customOptions: [{
