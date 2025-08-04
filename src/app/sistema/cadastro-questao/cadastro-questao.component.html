@@ -1,65 +1,62 @@
 <div *ngIf="usuario && (usuario.permissao === Permissao.ADMIN || usuario.permissao === Permissao.PROFESSOR)">
   <div class="container pt-5">
     <div class="container mt-4 container-geral">
-      <div class="header-container d-flex justify-content-between align-items-center">
-        <div class="d-flex align-items-center">
-          <button type="button" class="btn-voltar me-2" (click)="voltarPaginaAnterior()">
-            <i class="fa fa-arrow-left"></i>
-          </button>
-          <h2 class="m-0">
-            {{ questaoDTO.id ? 'Edição da Questão' : 'Cadastro da Questão' }}
-          </h2>
+      <div class="header-container">
+      <button type="button" class="btn-voltar" (click)="voltarPaginaAnterior()">
+        <i class="fa fa-arrow-left"></i>
+      </button>
+      <h2>{{ questaoDTO.id ? 'Edição da Questão' : 'Cadastro da Questão' }}</h2>
+    </div>
+    <form class="form-cad" #questaoForm="ngForm" (ngSubmit)="onSubmit()">
+      <div class="row" *ngIf="questaoDTO.id">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>ID:</label>
+            <input type="text" class="form-control" name="id" [(ngModel)]="questaoDTO.id" disabled>
+          </div>
         </div>
-
-        <button *ngIf="questaoDTO.id" type="button" class="btn btn-secondary" (click)="irParaProximaQuestao()"
-          [disabled]="limiteQuestoes">
-          Próxima questão
-        </button>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Data Cadastro:</label>
+            <input type="text" class="form-control" name="diaDoCadastro" [(ngModel)]="questaoDTO.diaDoCadastro"
+              disabled>
+          </div>
+        </div>
       </div>
-
-      <form class="form-cad" #questaoForm="ngForm" (ngSubmit)="onSubmit()">
-        <div class="row" *ngIf="questaoDTO.id">
+      <div>
+        <span class="div-section">
+          Especifique as características da questão para o filtro:
+        </span>
+        <hr class="line">
+      </div>
+      <div class="select-input">
+        <div class="row">
           <div class="col-md-6">
             <div class="form-group">
-              <label>ID:</label>
-              <input type="text" class="form-control" name="id" [(ngModel)]="questaoDTO.id" disabled>
+              <app-select-padrao
+                label="Ano"
+                [options]="anos"
+                [(selectedValue)]="questaoDTO.ano"
+                >
+              </app-select-padrao>
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
-              <label>Data Cadastro:</label>
-              <input type="text" class="form-control" name="diaDoCadastro" [(ngModel)]="questaoDTO.diaDoCadastro"
-                disabled>
+              <app-select-padrao
+              label="Tipo de Prova"
+              [options]="tiposDeProva"
+              [(selectedValue)]="questaoDTO.tipoDeProva"
+              >
+            </app-select-padrao>
             </div>
           </div>
         </div>
-        <div>
-          <span class="div-section">
-            Especifique as características da questão para o filtro:
-          </span>
-          <hr class="line">
-        </div>
-        <div class="select-input">
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
-                <app-select-padrao label="Ano" [options]="anos" [(selectedValue)]="questaoDTO.ano">
-                </app-select-padrao>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <app-select-padrao label="Tipo de Prova" [options]="tiposDeProva"
-                  [(selectedValue)]="questaoDTO.tipoDeProva">
-                </app-select-padrao>
-              </div>
-            </div>
+        <div class="row">
+          <div class="col-md-6">
+            
           </div>
-          <div class="row">
-            <div class="col-md-6">
-
-            </div>
-            <!-- <div class="col-md-6">
+          <!-- <div class="col-md-6">
             <div class="form-group">
               <app-select-padrao
                 label="Tema"
@@ -69,7 +66,7 @@
               </app-select-padrao>
             </div>
           </div> -->
-            <!-- <div class="col-md-6">
+          <!-- <div class="col-md-6">
             <div class="form-group">
               <app-select-padrao
                 label="Subtema"
@@ -79,58 +76,68 @@
               </app-select-padrao>
             </div>
           </div> -->
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <app-select-padrao
+              label="Dificuldade"
+              [options]="dificuldades"
+              [(selectedValue)]="questaoDTO.dificuldade"
+              >
+            </app-select-padrao>
+            </div>
           </div>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
-                <app-select-padrao label="Dificuldade" [options]="dificuldades"
-                  [(selectedValue)]="questaoDTO.dificuldade">
-                </app-select-padrao>
-              </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <app-select-padrao
+                label="Relevância"
+                [options]="relevancias"
+                [(selectedValue)]="questaoDTO.relevancia"
+                >
+              </app-select-padrao>
             </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <app-select-padrao label="Relevância" [options]="relevancias" [(selectedValue)]="questaoDTO.relevancia">
-                </app-select-padrao>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <app-select-padrao label="Assunto" [options]="subtemasAgrupadosPorTema"
-                  [(selectedValue)]="selectedSubtemaValue" [searchable]="true">
-                </app-select-padrao>
-              </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <app-select-padrao
+                label="Assunto"
+                [options]="subtemasAgrupadosPorTema"
+                [(selectedValue)]="selectedSubtemaValue"
+                [searchable]="true">
+              </app-select-padrao>
             </div>
           </div>
         </div>
+      </div>
 
-        <div>
-          <hr class="line">
-          <span class="div-section">
-            Digite todas as informações do enunciado da questão:
-          </span>
-          <hr class="line">
-        </div>
+      <div>
+        <hr class="line">
+        <span class="div-section">
+          Digite todas as informações do enunciado da questão:
+        </span>
+        <hr class="line">
+      </div>
 
-        <div class="form-group">
-          <label>Enunciado da Questão:</label>
-          <div id="toolbar1">
-            <!-- Add font size dropdown -->
-            <select class="ql-header">
-              <option value="1"></option>
-              <option value="2"></option>
-              <option value="3"></option>
-              <option value="4"></option>
-              <option value="5"></option>
-              <option value="6"></option>
-              <option selected></option>
-            </select>
-            <!-- Add font family dropdown -->
-            <select class="ql-font">
-              <option selected></option>
-              <option value="serif"></option>
-              <option value="monospace"></option>
-            </select>
+      <div class="form-group">
+        <label>Enunciado da Questão:</label>
+        <div id="toolbar1">
+          <!-- Add font size dropdown -->
+          <select class="ql-header">
+            <option value="1"></option>
+            <option value="2"></option>
+            <option value="3"></option>
+            <option value="4"></option>
+            <option value="5"></option>
+            <option value="6"></option>
+            <option selected></option>
+          </select>
+          <!-- Add font family dropdown -->
+          <select class="ql-font">
+            <option selected></option>
+            <option value="serif"></option>
+            <option value="monospace"></option>
+          </select>
             <!-- Add a bold button -->
             <button class="ql-bold"></button>
             <!-- Add an italic button -->
@@ -160,540 +167,517 @@
             <!-- Add a clean button -->
             <button class="ql-clean"></button>
           </div>
-
-          <!-- Quill Editor Container -->
-          <div id="editor1" class="form-control" name="enunciadoDaQuestao" [(ngModel)]="questaoDTO.enunciadoDaQuestao">
-          </div>
+        
+        <!-- Quill Editor Container -->
+        <div id="editor1" class="form-control" name="enunciadoDaQuestao"
+          [(ngModel)]="questaoDTO.enunciadoDaQuestao">
         </div>
-
-        <div>
-          <hr class="line">
-          <span class="div-section">
-            Imagem ou vídeo para o enunciado da questão:
-          </span>
-          <hr class="line">
-        </div>
-        <div class="cont-imgs">
-          <div class="form-group">
-            <div class="image-upload" (drop)="onDrop($event, 'fotoDaQuestao')" (dragover)="onDragOver($event)">
-              <input type="file" id="fotoDaQuestao" name="fotoDaQuestao"
-                (change)="onFileSelected($event, 'fotoDaQuestao')" accept="image/*,video/*" style="display: none;" />
-              <label for="fotoDaQuestao">
-                <div class="foto-preview" id="fotoPreview">
-                  <ng-container *ngIf="fotoPreviews['fotoDaQuestao']">
-                    <div class="preview-container">
-                      <img *ngIf="isPreviewImage(fotoPreviews['fotoDaQuestao'])" [src]="fotoPreviews['fotoDaQuestao']"
-                        alt="Image Preview" />
-                      <video *ngIf="isPreviewVideo(fotoPreviews['fotoDaQuestao'])" [src]="fotoPreviews['fotoDaQuestao']"
-                        controls></video>
-                      <button type="button" class="btn-remove-image" (click)="removeFile('fotoDaQuestao', $event)">
-                        <i class="fas fa-times"></i>
-                      </button>
-                    </div>
-                  </ng-container>
-                  <span *ngIf="!fotoPreviews['fotoDaQuestao']" class="upload-placeholder">
-                    <img [src]="!isDarkMode() ? 'assets/imagens/img-foto.svg' : 'assets/Icons/dark/img-foto-dark.svg'"
-                      style="width: 50px;" class="upload-icon">
-                    Clique para fazer upload da imagem ou vídeo
-                  </span>
-                </div>
-              </label>
-            </div>
-          </div>
-        </div>
-        <div class="form-group mt-2">
-          <label>Descrição da imagem ou vídeo:</label>
-          <textarea class="form-control" name="descricaoDaImagemDoEnunciado"
-            [(ngModel)]="questaoDTO.descricaoDaImagemDoEnunciado" placeholder="Descreva esta imagem para acessibilidade"
-            rows="2"></textarea>
-        </div>
-      </form>
-    </div>
-
-    <div class="container mt-4 container-geral">
-      <div class="header-container">
-        <h2>Alternativas da Questão</h2>
       </div>
-      <form class="form-cad" #questaoForm="ngForm" (ngSubmit)="onSubmit()">
-        <div>
-          <span class="div-section">
-            Gabarito da questão a ser cadastrada:
-          </span>
-          <hr class="line">
+
+      <div>
+        <hr class="line">
+        <span class="div-section">
+          Imagem ou vídeo para o enunciado da questão:
+        </span>
+        <hr class="line">
+      </div>
+      <div class="cont-imgs">
+        <div class="form-group">
+          <div class="image-upload" (drop)="onDrop($event, 'fotoDaQuestao')" (dragover)="onDragOver($event)">
+            <input type="file" id="fotoDaQuestao" name="fotoDaQuestao"
+              (change)="onFileSelected($event, 'fotoDaQuestao')" accept="image/*,video/*" style="display: none;" />
+            <label for="fotoDaQuestao">
+              <div class="foto-preview" id="fotoPreview">
+                <ng-container *ngIf="fotoPreviews['fotoDaQuestao']">
+                  <div class="preview-container">
+                    <img *ngIf="isPreviewImage(fotoPreviews['fotoDaQuestao'])" [src]="fotoPreviews['fotoDaQuestao']" alt="Image Preview" />
+                    <video *ngIf="isPreviewVideo(fotoPreviews['fotoDaQuestao'])" [src]="fotoPreviews['fotoDaQuestao']" controls></video>
+                    <button type="button" class="btn-remove-image" (click)="removeFile('fotoDaQuestao', $event)">
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
+                </ng-container>
+                <span *ngIf="!fotoPreviews['fotoDaQuestao']" class="upload-placeholder">
+                  <img [src]="!isDarkMode() ? 'assets/imagens/img-foto.svg' : 'assets/Icons/dark/img-foto-dark.svg'" style="width: 50px;" class="upload-icon">
+                  Clique para fazer upload da imagem ou vídeo
+                </span>
+              </div>
+            </label>
+          </div>
         </div>
-        <div class="row">
-          <div class="col-md-6">
-            <label>Marque a Alternativa Correta da Questão:</label>
-            <div class="form-group">
-              <mat-radio-group [(ngModel)]="questaoDTO.tipoItemQuestaoImagem" name="updateTipoItemQuestaoImagem">
-                <mat-radio-button value="texto" (click)="updateTipoItemQuestaoImagem('texto')"
-                  style="display: inline-block; margin-right: 10px;">Texto</mat-radio-button>
-                <mat-radio-button value="imagem" style="display: inline-block;"
-                  (click)="updateTipoItemQuestaoImagem('imagem')">Imagem</mat-radio-button>
-              </mat-radio-group>
-            </div>
-            <div *ngIf="questaoDTO.tipoItemQuestaoImagem === 'texto'">
-              <div *ngFor="let alternativa of questaoDTO.alternativas; let i = index" class="container-alternativa">
-                <input type="radio" [name]="questaoDTO.tipoItemQuestaoImagem + 'Alternativa'" (click)="markCorrect(i)"
-                  [checked]="alternativa.correta">
-                <div class="col-md-12">
-                  <div class="form-group">
-                    <label>Alternativa {{ alternativa.texto }}</label>
-                    <input type="text" class="form-control" name="comentario{{i}}" [(ngModel)]="alternativa.comentario"
-                      placeholder="Digite o enunciado da alternativa" />
-                  </div>
-                </div>
+      </div>      
+      <div class="form-group mt-2">
+        <label>Descrição da imagem ou vídeo:</label>
+        <textarea class="form-control" name="descricaoDaImagemDoEnunciado" 
+          [(ngModel)]="questaoDTO.descricaoDaImagemDoEnunciado" 
+          placeholder="Descreva esta imagem para acessibilidade" rows="2"></textarea>
+      </div>
+    </form>
+</div>
+
+<div class="container mt-4 container-geral">
+  <div class="header-container"> 
+    <h2>Alternativas da Questão</h2>
+  </div>
+  <form class="form-cad" #questaoForm="ngForm" (ngSubmit)="onSubmit()">
+    <div>
+      <span class="div-section">
+        Gabarito da questão a ser cadastrada:
+      </span>
+      <hr class="line">
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <label>Marque a Alternativa Correta da Questão:</label>
+        <div class="form-group">
+          <mat-radio-group [(ngModel)]="questaoDTO.tipoItemQuestaoImagem" name="updateTipoItemQuestaoImagem">
+            <mat-radio-button value="texto" (click)="updateTipoItemQuestaoImagem('texto')"
+              style="display: inline-block; margin-right: 10px;">Texto</mat-radio-button>
+            <mat-radio-button value="imagem" style="display: inline-block;"
+              (click)="updateTipoItemQuestaoImagem('imagem')">Imagem</mat-radio-button>
+          </mat-radio-group>
+        </div>
+        <div *ngIf="questaoDTO.tipoItemQuestaoImagem === 'texto'">
+          <div *ngFor="let alternativa of questaoDTO.alternativas; let i = index" class="container-alternativa">
+            <input type="radio" [name]="questaoDTO.tipoItemQuestaoImagem + 'Alternativa'" (click)="markCorrect(i)"
+              [checked]="alternativa.correta">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label>Alternativa {{ alternativa.texto }}</label>
+                <input type="text" class="form-control" name="comentario{{i}}"
+                  [(ngModel)]="alternativa.comentario" placeholder="Digite o enunciado da alternativa" />
               </div>
             </div>
-
-            <div *ngIf="questaoDTO.id">
-              <h2>{{ questaoDTO.id ? 'Edição da Questão' : 'Cadastro da Questão' }}</h2>
-              <div *ngIf="questaoDTO.tipoItemQuestaoImagem === 'imagem'">
-                <div *ngFor="let alternativa of questaoDTO.alternativas; let i = index">
-                  <div class="form-group">
-                    <input type="radio" [name]="questaoDTO.tipoItemQuestaoImagem + 'Alternativa'"
-                      (click)="markCorrectImage(i)" [checked]="alternativa.correta" class="checkbox">
-                    <div class="image-upload">
-                      <input type="file" id="fotoDaAlternativa{{ i }}" name="fotoDaAlternativa{{ i }}"
-                        (change)="onFileSelectedImageEditar($event, 'fotoDaAlternativa' + i)" accept="image/*,video/*"
-                        style="display: none;" />
-                      <label for="fotoDaAlternativa{{ i }}">
-                        <div class="foto-preview" id="fotoPreview{{ i }}">
-                          <ng-container *ngIf="fotoPreviews['fotoDaAlternativa' + i]">
-                            <div class="preview-container">
-                              <img [src]="fotoPreviews['fotoDaAlternativa' + i]" alt="Image Preview" />
-                              <button type="button" class="btn-remove-image"
-                                (click)="removeFile('fotoDaAlternativa' + i, $event)">
-                                <i class="fas fa-times"></i>
-                              </button>
-                            </div>
-                          </ng-container>
-                          <span *ngIf="!fotoPreviews['fotoDaAlternativa' + i]" class="upload-placeholder">
-                            <img
-                              [src]="!isDarkMode() ? 'assets/imagens/img-foto.svg' : 'assets/Icons/dark/img-foto-dark.svg'"
-                              class="upload-icon">
-                            <p>Clique para fazer upload da imagem</p>
-                          </span>
+          </div>
+        </div>
+        
+        <div *ngIf="questaoDTO.id">
+          <h2>{{ questaoDTO.id ? 'Edição da Questão' : 'Cadastro da Questão' }}</h2>
+          <div *ngIf="questaoDTO.tipoItemQuestaoImagem === 'imagem'">
+            <div *ngFor="let alternativa of questaoDTO.alternativas; let i = index">
+              <div class="form-group">
+                <input type="radio" [name]="questaoDTO.tipoItemQuestaoImagem + 'Alternativa'"
+                  (click)="markCorrectImage(i)" [checked]="alternativa.correta" class="checkbox">
+                <div class="image-upload">
+                  <input type="file" id="fotoDaAlternativa{{ i }}" name="fotoDaAlternativa{{ i }}"
+                    (change)="onFileSelectedImageEditar($event, 'fotoDaAlternativa' + i)" 
+                    accept="image/*,video/*" 
+                    style="display: none;"/>
+                    <label for="fotoDaAlternativa{{ i }}">
+                    <div class="foto-preview" id="fotoPreview{{ i }}">
+                      <ng-container *ngIf="fotoPreviews['fotoDaAlternativa' + i]">
+                        <div class="preview-container">
+                          <img [src]="fotoPreviews['fotoDaAlternativa' + i]" alt="Image Preview" />
+                          <button type="button" class="btn-remove-image" (click)="removeFile('fotoDaAlternativa' + i, $event)">
+                            <i class="fas fa-times"></i>
+                          </button>
                         </div>
-                      </label>
+                      </ng-container>
+                      <span *ngIf="!fotoPreviews['fotoDaAlternativa' + i]" class="upload-placeholder">
+                        <img [src]="!isDarkMode() ? 'assets/imagens/img-foto.svg' : 'assets/Icons/dark/img-foto-dark.svg'" class="upload-icon">
+                        <p>Clique para fazer upload da imagem</p>
+                      </span>
                     </div>
-                  </div>
+                  </label>  
                 </div>
               </div>
             </div>
-
-            <div *ngIf="!questaoDTO.id">
-              <div *ngIf="questaoDTO.tipoItemQuestaoImagem === 'imagem'">
-                <div *ngFor="let alternativa of questaoDTO.alternativas; let i = index">
-                  <div class="image-container">
-                    <input type="radio" [name]="questaoDTO.tipoItemQuestaoImagem + 'Alternativa'"
+          </div>
+        </div>        
+        
+        <div *ngIf="!questaoDTO.id">
+          <div *ngIf="questaoDTO.tipoItemQuestaoImagem === 'imagem'">
+            <div *ngFor="let alternativa of questaoDTO.alternativas; let i = index">
+              <div class="image-container">
+                <input type="radio" [name]="questaoDTO.tipoItemQuestaoImagem + 'Alternativa'"
                       (click)="markCorrectImage(i)" [checked]="alternativa.correta" class="checkbox">
-                    <div class="image-upload">
-                      <input type="file" id="afirmacao{{ i }}" name="afirmacao{{ i }}"
+                <div class="image-upload">
+                  <input type="file" id="afirmacao{{ i }}" name="afirmacao{{ i }}"
                         (change)="onFileSelectedImage($event, 'afirmacao' + i)" accept="image/*" />
-                      <label for="afirmacao{{ i }}">
-                        <div class="image-preview" id="imagePreview{{ i }}">
-                          <ng-container *ngIf="imagePreviews['afirmacao' + i]">
-                            <div class="preview-container">
-                              <img [src]="imagePreviews['afirmacao' + i]" alt="Image Preview" />
-                              <button type="button" class="btn-remove-image"
-                                (click)="removeFile('afirmacao' + i, $event)">
-                                <i class="fas fa-times"></i>
-                              </button>
-                            </div>
-                          </ng-container>
-                          <!-- <img *ngIf="imagePreviews['afirmacao' + i]" [src]="imagePreviews['afirmacao' + i]" alt="Image Preview" /> -->
-                          <span *ngIf="!imagePreviews['afirmacao' + i]">
-                            <img
-                              [src]="!isDarkMode() ? 'assets/imagens/img-foto.svg' : 'assets/Icons/dark/img-foto-dark.svg'"
-                              style="width: 50px;" class="upload-icon"> Clique para fazer upload da imagem
-                          </span>
+                  <label for="afirmacao{{ i }}">
+                    <div class="image-preview" id="imagePreview{{ i }}">
+                      <ng-container *ngIf="imagePreviews['afirmacao' + i]">
+                        <div class="preview-container">
+                          <img [src]="imagePreviews['afirmacao' + i]" alt="Image Preview" />
+                          <button type="button" class="btn-remove-image" (click)="removeFile('afirmacao' + i, $event)">
+                            <i class="fas fa-times"></i>
+                          </button>
                         </div>
-                      </label>
+                      </ng-container>
+                      <!-- <img *ngIf="imagePreviews['afirmacao' + i]" [src]="imagePreviews['afirmacao' + i]" alt="Image Preview" /> -->
+                      <span *ngIf="!imagePreviews['afirmacao' + i]">
+                        <img [src]="!isDarkMode() ? 'assets/imagens/img-foto.svg' : 'assets/Icons/dark/img-foto-dark.svg'" style="width: 50px;" class="upload-icon"> Clique para fazer upload da imagem
+                      </span>
                     </div>
-                  </div>
+                  </label>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-
-        <div>
-          <hr class="line">
-          <span class="div-section">
-            Vídeo para o gabarito da questão:
-          </span>
-          <hr class="line">
-        </div>
-        <div class="cont-imgs">
-          <div class="form-group">
-            <div class="image-upload" (drop)="onDrop($event, 'videoDaQuestao')" (dragover)="onDragOver($event)">
-              <input type="file" id="videoDaQuestao" name="videoDaQuestao"
-                (change)="onFileSelected($event, 'videoDaQuestao')" accept="image/*,video/*" style="display: none;" />
-              <label for="videoDaQuestao">
-                <div class="foto-preview" id="fotoPreview">
-                  <ng-container *ngIf="fotoPreviews['videoDaQuestao']">
-                    <div class="preview-container">
-                      <img *ngIf="isPreviewImage(fotoPreviews['videoDaQuestao'])" [src]="fotoPreviews['videoDaQuestao']"
-                        alt="Image Preview" />
-                      <video *ngIf="isPreviewVideo(fotoPreviews['videoDaQuestao'])"
-                        [src]="fotoPreviews ['videoDaQuestao']" controls></video>
-                      <button type="button" class="btn-remove-image" (click)="removeFile('videoDaQuestao', $event)">
-                        <i class="fas fa-times"></i>
-                      </button>
-                    </div>
-                  </ng-container>
-                  <span *ngIf="!fotoPreviews['videoDaQuestao']" class="upload-placeholder">
-                    <img [src]="!isDarkMode() ? 'assets/imagens/filme.svg' : 'assets/Icons/dark/filme-dark.svg'"
-                      style="width: 50px;" class="upload-icon">
-                    Clique para fazer upload do vídeo
-                  </span>
-                </div>
-              </label>
-            </div>
-          </div>
-        </div>
-      </form>
+        </div>        
+      </div>
     </div>
 
-    <div class="container mt-4 container-geral">
-      <div class="header-container">
-        <h2>Gabarito Comentado da Questão</h2>
+    <div>
+      <hr class="line">
+      <span class="div-section">
+        Vídeo para o gabarito da questão:
+      </span>
+      <hr class="line">
+    </div>
+    <div class="cont-imgs">
+      <div class="form-group">
+        <div class="image-upload" (drop)="onDrop($event, 'videoDaQuestao')" (dragover)="onDragOver($event)">
+          <input type="file" id="videoDaQuestao" name="videoDaQuestao"
+            (change)="onFileSelected($event, 'videoDaQuestao')" accept="image/*,video/*" style="display: none;" />
+          <label for="videoDaQuestao">
+            <div class="foto-preview" id="fotoPreview">
+              <ng-container *ngIf="fotoPreviews['videoDaQuestao']">
+                <div class="preview-container">
+                  <img *ngIf="isPreviewImage(fotoPreviews['videoDaQuestao'])" [src]="fotoPreviews['videoDaQuestao']" alt="Image Preview" />
+                  <video *ngIf="isPreviewVideo(fotoPreviews['videoDaQuestao'])" [src]="fotoPreviews ['videoDaQuestao']" controls></video>
+                  <button type="button" class="btn-remove-image" (click)="removeFile('videoDaQuestao', $event)">
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+              </ng-container>
+              <span *ngIf="!fotoPreviews['videoDaQuestao']" class="upload-placeholder">
+                <img [src]="!isDarkMode() ? 'assets/imagens/filme.svg' : 'assets/Icons/dark/filme-dark.svg'" style="width: 50px;" class="upload-icon">
+                Clique para fazer upload do vídeo
+              </span>
+            </div>
+          </label>
+        </div>
       </div>
-      <form class="form-cad" #questaoForm="ngForm" (ngSubmit)="onSubmit()">
-        <div>
-          <span class="div-section">
-            Descreva os comentários da questão:
-          </span>
-          <hr class="line">
-        </div>
-        <div class="row">
-          <div class="form-group">
-            <label>Comentário do Gabarito 1:</label>
-            <div id="toolbar">
-              <!-- Add font size dropdown -->
-              <select class="ql-header">
-                <option value="1"></option>
-                <option value="2"></option>
-                <option value="3"></option>
-                <option value="4"></option>
-                <option value="5"></option>
-                <option value="6"></option>
-                <option selected></option>
-              </select>
-              <!-- Add font family dropdown -->
-              <select class="ql-font">
-                <option selected></option>
-                <option value="serif"></option>
-                <option value="monospace"></option>
-              </select>
-              <!-- Add a bold button -->
-              <button class="ql-bold"></button>
-              <!-- Add an italic button -->
-              <button class="ql-italic"></button>
-              <!-- Add an underline button -->
-              <button class="ql-underline"></button>
-              <!-- Adicione o seletor de cores -->
-              <select class="ql-color"></select>
-              <!-- Adicione o seletor de cores de fundo -->
-              <select class="ql-background"></select>
-              <!-- Add alignment buttons -->
-              <select class="ql-align">
-                <option selected></option>
-                <option value="center"></option>
-                <option value="right"></option>
-                <option value="justify"></option>
-              </select>
-              <!-- Add a list button -->
-              <button class="ql-list" value="ordered"></button>
-              <button class="ql-list" value="bullet"></button>
-              <!-- Add a link button -->
-              <button class="ql-link"></button>
-              <!-- Add an image button -->
-              <button class="ql-image"></button>
-              <!-- Add a video button -->
-              <button class="ql-video"></button>
-              <!-- Add a clean button -->
-              <button class="ql-clean"></button>
-            </div>
+    </div>
+  </form>
+</div>
 
-            <!-- Quill Editor Container -->
-            <div id="editor" class="form-control" name="comentarioDaQuestao"
-              [(ngModel)]="questaoDTO.comentarioDaQuestao">
-            </div>
+<div class="container mt-4 container-geral">
+  <div class="header-container"> 
+    <h2>Gabarito Comentado da Questão</h2>
+  </div>
+  <form class="form-cad" #questaoForm="ngForm" (ngSubmit)="onSubmit()">
+    <div>
+      <span class="div-section">
+        Descreva os comentários da questão:
+      </span>
+      <hr class="line">
+    </div>
+    <div class="row">
+      <div class="form-group">
+        <label>Comentário do Gabarito 1:</label>
+        <div id="toolbar">
+          <!-- Add font size dropdown -->
+          <select class="ql-header">
+            <option value="1"></option>
+            <option value="2"></option>
+            <option value="3"></option>
+            <option value="4"></option>
+            <option value="5"></option>
+            <option value="6"></option>
+            <option selected></option>
+          </select>
+          <!-- Add font family dropdown -->
+          <select class="ql-font">
+            <option selected></option>
+            <option value="serif"></option>
+            <option value="monospace"></option>
+          </select>
+            <!-- Add a bold button -->
+            <button class="ql-bold"></button>
+            <!-- Add an italic button -->
+            <button class="ql-italic"></button>
+            <!-- Add an underline button -->
+            <button class="ql-underline"></button>
+            <!-- Adicione o seletor de cores -->
+            <select class="ql-color"></select>
+            <!-- Adicione o seletor de cores de fundo -->
+            <select class="ql-background"></select>
+            <!-- Add alignment buttons -->
+            <select class="ql-align">
+              <option selected></option>
+              <option value="center"></option>
+              <option value="right"></option>
+              <option value="justify"></option>
+            </select>
+            <!-- Add a list button -->
+            <button class="ql-list" value="ordered"></button>
+            <button class="ql-list" value="bullet"></button>
+            <!-- Add a link button -->
+            <button class="ql-link"></button>
+            <!-- Add an image button -->
+            <button class="ql-image"></button>
+            <!-- Add a video button -->
+            <button class="ql-video"></button>
+            <!-- Add a clean button -->
+            <button class="ql-clean"></button>
           </div>
+        
+        <!-- Quill Editor Container -->
+        <div id="editor" class="form-control" name="comentarioDaQuestao"
+          [(ngModel)]="questaoDTO.comentarioDaQuestao">
         </div>
+      </div>
+    </div>
 
-        <div class="form-group">
-          <label>Imagem do gabarito 1:</label>
-          <div class="image-upload" (drop)="onDrop($event, 'fotoDaRespostaUm')" (dragover)="onDragOver($event)">
-            <input type="file" id="fotoDaRespostaUm" name="fotoDaRespostaUm"
-              (change)="onFileSelected($event, 'fotoDaRespostaUm')" accept="image/*,video/*" style="display: none;" />
-            <label for="fotoDaRespostaUm">
-              <div class="foto-preview" id="fotoPreview">
-                <ng-container *ngIf="fotoPreviews['fotoDaRespostaUm']">
-                  <div class="preview-container">
-                    <img *ngIf="isPreviewImage(fotoPreviews['fotoDaRespostaUm'])"
-                      [src]="fotoPreviews['fotoDaRespostaUm']" alt="Image Preview" />
-                    <video *ngIf="isPreviewVideo(fotoPreviews['fotoDaRespostaUm'])"
-                      [src]="fotoPreviews['fotoDaRespostaUm']" controls></video>
-                    <button type="button" class="btn-remove-image" (click)="removeFile('fotoDaRespostaUm', $event)">
-                      <i class="fas fa-times"></i>
-                    </button>
-                  </div>
-                </ng-container>
-                <span *ngIf="!fotoPreviews['fotoDaRespostaUm']" class="upload-placeholder">
-                  <img [src]="!isDarkMode() ? 'assets/imagens/img-foto.svg' : 'assets/Icons/dark/img-foto-dark.svg'"
-                    class="upload-icon">
-                  <p>Clique para fazer upload da imagem ou vídeo</p>
-                </span>
+    <div class="form-group">
+      <label>Imagem do gabarito 1:</label>
+      <div class="image-upload" (drop)="onDrop($event, 'fotoDaRespostaUm')" (dragover)="onDragOver($event)">
+        <input type="file" id="fotoDaRespostaUm" name="fotoDaRespostaUm"
+          (change)="onFileSelected($event, 'fotoDaRespostaUm')" accept="image/*,video/*" style="display: none;" />
+        <label for="fotoDaRespostaUm">
+          <div class="foto-preview" id="fotoPreview">
+            <ng-container *ngIf="fotoPreviews['fotoDaRespostaUm']">
+              <div class="preview-container">
+                <img *ngIf="isPreviewImage(fotoPreviews['fotoDaRespostaUm'])" [src]="fotoPreviews['fotoDaRespostaUm']" alt="Image Preview" />
+                <video *ngIf="isPreviewVideo(fotoPreviews['fotoDaRespostaUm'])" [src]="fotoPreviews['fotoDaRespostaUm']" controls></video>
+                <button type="button" class="btn-remove-image" (click)="removeFile('fotoDaRespostaUm', $event)">
+                  <i class="fas fa-times"></i>
+                </button>
               </div>
-            </label>
+            </ng-container>
+            <span *ngIf="!fotoPreviews['fotoDaRespostaUm']" class="upload-placeholder">
+              <img [src]="!isDarkMode() ? 'assets/imagens/img-foto.svg' : 'assets/Icons/dark/img-foto-dark.svg'" class="upload-icon">
+              <p>Clique para fazer upload da imagem ou vídeo</p>
+            </span>
           </div>
-        </div>
+        </label>
+      </div>
+    </div>
 
-        <div class="row">
-          <div class="form-group">
-            <label>Comentário do Gabarito 2:</label>
-            <div id="toolbar2">
-              <!-- Add font size dropdown -->
-              <select class="ql-header">
-                <option value="1"></option>
-                <option value="2"></option>
-                <option value="3"></option>
-                <option value="4"></option>
-                <option value="5"></option>
-                <option value="6"></option>
-                <option selected></option>
-              </select>
-              <!-- Add font family dropdown -->
-              <select class="ql-font">
-                <option selected></option>
-                <option value="serif"></option>
-                <option value="monospace"></option>
-              </select>
-              <!-- Add a bold button -->
-              <button class="ql-bold"></button>
-              <!-- Add an italic button -->
-              <button class="ql-italic"></button>
-              <!-- Add an underline button -->
-              <button class="ql-underline"></button>
-              <!-- Adicione o seletor de cores -->
-              <select class="ql-color"></select>
-              <!-- Adicione o seletor de cores de fundo -->
-              <select class="ql-background"></select>
-              <!-- Add alignment buttons -->
-              <select class="ql-align">
-                <option selected></option>
-                <option value="center"></option>
-                <option value="right"></option>
-                <option value="justify"></option>
-              </select>
-              <!-- Add a list button -->
-              <button class="ql-list" value="ordered"></button>
-              <button class="ql-list" value="bullet"></button>
-              <!-- Add a link button -->
-              <button class="ql-link"></button>
-              <!-- Add an image button -->
-              <button class="ql-image"></button>
-              <!-- Add a video button -->
-              <button class="ql-video"></button>
-              <!-- Add a clean button -->
-              <button class="ql-clean"></button>
-            </div>
-
-            <!-- Quill Editor Container -->
-            <div id="editor2" class="form-control" name="comentarioDaQuestaoDois"
-              [(ngModel)]="questaoDTO.comentarioDaQuestaoDois">
-            </div>
+    <div class="row">
+      <div class="form-group">
+        <label>Comentário do Gabarito 2:</label>
+        <div id="toolbar2">
+          <!-- Add font size dropdown -->
+          <select class="ql-header">
+            <option value="1"></option>
+            <option value="2"></option>
+            <option value="3"></option>
+            <option value="4"></option>
+            <option value="5"></option>
+            <option value="6"></option>
+            <option selected></option>
+          </select>
+          <!-- Add font family dropdown -->
+          <select class="ql-font">
+            <option selected></option>
+            <option value="serif"></option>
+            <option value="monospace"></option>
+          </select>
+            <!-- Add a bold button -->
+            <button class="ql-bold"></button>
+            <!-- Add an italic button -->
+            <button class="ql-italic"></button>
+            <!-- Add an underline button -->
+            <button class="ql-underline"></button>
+            <!-- Adicione o seletor de cores -->
+            <select class="ql-color"></select>
+            <!-- Adicione o seletor de cores de fundo -->
+            <select class="ql-background"></select>
+            <!-- Add alignment buttons -->
+            <select class="ql-align">
+              <option selected></option>
+              <option value="center"></option>
+              <option value="right"></option>
+              <option value="justify"></option>
+            </select>
+            <!-- Add a list button -->
+            <button class="ql-list" value="ordered"></button>
+            <button class="ql-list" value="bullet"></button>
+            <!-- Add a link button -->
+            <button class="ql-link"></button>
+            <!-- Add an image button -->
+            <button class="ql-image"></button>
+            <!-- Add a video button -->
+            <button class="ql-video"></button>
+            <!-- Add a clean button -->
+            <button class="ql-clean"></button>
           </div>
+        
+        <!-- Quill Editor Container -->
+        <div id="editor2" class="form-control" name="comentarioDaQuestaoDois"
+          [(ngModel)]="questaoDTO.comentarioDaQuestaoDois">
         </div>
+      </div>
+    </div>
 
-        <div class="form-group">
-          <label>Imagem do gabarito 2:</label>
-          <div class="image-upload" (drop)="onDrop($event, 'fotoDaRespostaDois')" (dragover)="onDragOver($event)">
-            <input type="file" id="fotoDaRespostaDois" name="fotoDaRespostaDois"
-              (change)="onFileSelected($event, 'fotoDaRespostaDois')" accept="image/*,video/*" style="display: none;" />
-            <label for="fotoDaRespostaDois">
-              <div class="foto-preview" id="fotoPreview">
-                <ng-container *ngIf="fotoPreviews['fotoDaRespostaDois']">
-                  <div class="preview-container">
-                    <img *ngIf="isPreviewImage(fotoPreviews['fotoDaRespostaDois'])"
-                      [src]="fotoPreviews['fotoDaRespostaDois']" alt="Image Preview" />
-                    <video *ngIf="isPreviewVideo(fotoPreviews['fotoDaRespostaDois'])"
-                      [src]="fotoPreviews['fotoDaRespostaDois']" controls></video>
-                    <button type="button" class="btn-remove-image" (click)="removeFile('fotoDaRespostaDois', $event)">
-                      <i class="fas fa-times"></i>
-                    </button>
-                  </div>
-                </ng-container>
-                <span *ngIf="!fotoPreviews['fotoDaRespostaDois']" class="upload-placeholder">
-                  <img [src]="!isDarkMode() ? 'assets/imagens/img-foto.svg' : 'assets/Icons/dark/img-foto-dark.svg'"
-                    class="upload-icon">
-                  <p>Clique para fazer upload da imagem ou vídeo</p>
-                </span>
+    <div class="form-group">
+      <label>Imagem do gabarito 2:</label>
+      <div class="image-upload" (drop)="onDrop($event, 'fotoDaRespostaDois')" (dragover)="onDragOver($event)">
+        <input type="file" id="fotoDaRespostaDois" name="fotoDaRespostaDois"
+          (change)="onFileSelected($event, 'fotoDaRespostaDois')" accept="image/*,video/*" style="display: none;" />
+        <label for="fotoDaRespostaDois">
+          <div class="foto-preview" id="fotoPreview">
+            <ng-container *ngIf="fotoPreviews['fotoDaRespostaDois']">
+              <div class="preview-container">
+                <img *ngIf="isPreviewImage(fotoPreviews['fotoDaRespostaDois'])" [src]="fotoPreviews['fotoDaRespostaDois']" alt="Image Preview" />
+                <video *ngIf="isPreviewVideo(fotoPreviews['fotoDaRespostaDois'])" [src]="fotoPreviews['fotoDaRespostaDois']" controls></video>
+                <button type="button" class="btn-remove-image" (click)="removeFile('fotoDaRespostaDois', $event)">
+                  <i class="fas fa-times"></i>
+                </button>
               </div>
-            </label>
+            </ng-container>
+            <span *ngIf="!fotoPreviews['fotoDaRespostaDois']" class="upload-placeholder">
+              <img [src]="!isDarkMode() ? 'assets/imagens/img-foto.svg' : 'assets/Icons/dark/img-foto-dark.svg'" class="upload-icon">
+              <p>Clique para fazer upload da imagem ou vídeo</p>
+            </span>
           </div>
-        </div>
+        </label>
+      </div>
+    </div>
 
-        <div class="row">
-          <div class="form-group">
-            <label>Comentário do Gabarito 3:</label>
-            <div id="toolbar3">
-              <!-- Add font size dropdown -->
-              <select class="ql-header">
-                <option value="1"></option>
-                <option value="2"></option>
-                <option value="3"></option>
-                <option value="4"></option>
-                <option value="5"></option>
-                <option value="6"></option>
-                <option selected></option>
-              </select>
-              <!-- Add font family dropdown -->
-              <select class="ql-font">
-                <option selected></option>
-                <option value="serif"></option>
-                <option value="monospace"></option>
-              </select>
-              <!-- Add a bold button -->
-              <button class="ql-bold"></button>
-              <!-- Add an italic button -->
-              <button class="ql-italic"></button>
-              <!-- Add an underline button -->
-              <button class="ql-underline"></button>
-              <!-- Adicione o seletor de cores -->
-              <select class="ql-color"></select>
-              <!-- Adicione o seletor de cores de fundo -->
-              <select class="ql-background"></select>
-              <!-- Add alignment buttons -->
-              <select class="ql-align">
-                <option selected></option>
-                <option value="center"></option>
-                <option value="right"></option>
-                <option value="justify"></option>
-              </select>
-              <!-- Add a list button -->
-              <button class="ql-list" value="ordered"></button>
-              <button class="ql-list" value="bullet"></button>
-              <!-- Add a link button -->
-              <button class="ql-link"></button>
-              <!-- Add an image button -->
-              <button class="ql-image"></button>
-              <!-- Add a video button -->
-              <button class="ql-video"></button>
-              <!-- Add a clean button -->
-              <button class="ql-clean"></button>
-            </div>
-
-            <!-- Quill Editor Container -->
-            <div id="editor3" class="form-control" name="comentarioDaQuestaoTres"
-              [(ngModel)]="questaoDTO.comentarioDaQuestaoTres">
-            </div>
+    <div class="row">
+      <div class="form-group">
+        <label>Comentário do Gabarito 3:</label>
+        <div id="toolbar3">
+          <!-- Add font size dropdown -->
+          <select class="ql-header">
+            <option value="1"></option>
+            <option value="2"></option>
+            <option value="3"></option>
+            <option value="4"></option>
+            <option value="5"></option>
+            <option value="6"></option>
+            <option selected></option>
+          </select>
+          <!-- Add font family dropdown -->
+          <select class="ql-font">
+            <option selected></option>
+            <option value="serif"></option>
+            <option value="monospace"></option>
+          </select>
+            <!-- Add a bold button -->
+            <button class="ql-bold"></button>
+            <!-- Add an italic button -->
+            <button class="ql-italic"></button>
+            <!-- Add an underline button -->
+            <button class="ql-underline"></button>
+            <!-- Adicione o seletor de cores -->
+            <select class="ql-color"></select>
+            <!-- Adicione o seletor de cores de fundo -->
+            <select class="ql-background"></select>
+            <!-- Add alignment buttons -->
+            <select class="ql-align">
+              <option selected></option>
+              <option value="center"></option>
+              <option value="right"></option>
+              <option value="justify"></option>
+            </select>
+            <!-- Add a list button -->
+            <button class="ql-list" value="ordered"></button>
+            <button class="ql-list" value="bullet"></button>
+            <!-- Add a link button -->
+            <button class="ql-link"></button>
+            <!-- Add an image button -->
+            <button class="ql-image"></button>
+            <!-- Add a video button -->
+            <button class="ql-video"></button>
+            <!-- Add a clean button -->
+            <button class="ql-clean"></button>
           </div>
+        
+        <!-- Quill Editor Container -->
+        <div id="editor3" class="form-control" name="comentarioDaQuestaoTres"
+          [(ngModel)]="questaoDTO.comentarioDaQuestaoTres">
         </div>
+      </div>
+    </div>
 
-        <div class="form-group">
-          <label>Imagem do gabarito 3:</label>
-          <div class="image-upload" (drop)="onDrop($event, 'fotoDaRespostaTres')" (dragover)="onDragOver($event)">
-            <input type="file" id="fotoDaRespostaTres" name="fotoDaRespostaTres"
-              (change)="onFileSelected($event, 'fotoDaRespostaTres')" accept="image/*,video/*" style="display: none;" />
-            <label for="fotoDaRespostaTres">
-              <div class="foto-preview" id="fotoPreviewTres">
-                <ng-container *ngIf="fotoPreviews['fotoDaRespostaTres']">
-                  <div class="preview-container">
-                    <img *ngIf="isPreviewImage(fotoPreviews['fotoDaRespostaTres'])"
-                      [src]="fotoPreviews['fotoDaRespostaTres']" alt="Image Preview" />
-                    <video *ngIf="isPreviewVideo(fotoPreviews['fotoDaRespostaTres'])"
-                      [src]="fotoPreviews['fotoDaRespostaTres']" controls></video>
-                    <button type="button" class="btn-remove-image" (click)="removeFile('fotoDaRespostaTres', $event)">
-                      <i class="fas fa-times"></i>
-                    </button>
-                  </div>
-                </ng-container>
-                <span *ngIf="!fotoPreviews['fotoDaRespostaTres']" class="upload-placeholder">
-                  <img [src]="!isDarkMode() ? 'assets/imagens/img-foto.svg' : 'assets/Icons/dark/img-foto-dark.svg'"
-                    class="upload-icon">
-                  <p>Clique para fazer upload da imagem ou vídeo</p>
-                </span>
+    <div class="form-group">
+      <label>Imagem do gabarito 3:</label>
+      <div class="image-upload" (drop)="onDrop($event, 'fotoDaRespostaTres')" (dragover)="onDragOver($event)">
+        <input type="file" id="fotoDaRespostaTres" name="fotoDaRespostaTres"
+          (change)="onFileSelected($event, 'fotoDaRespostaTres')" accept="image/*,video/*" style="display: none;" />
+        <label for="fotoDaRespostaTres">
+          <div class="foto-preview" id="fotoPreviewTres">
+            <ng-container *ngIf="fotoPreviews['fotoDaRespostaTres']">
+              <div class="preview-container">
+                <img *ngIf="isPreviewImage(fotoPreviews['fotoDaRespostaTres'])" [src]="fotoPreviews['fotoDaRespostaTres']" alt="Image Preview" />
+                <video *ngIf="isPreviewVideo(fotoPreviews['fotoDaRespostaTres'])" [src]="fotoPreviews['fotoDaRespostaTres']" controls></video>
+                <button type="button" class="btn-remove-image" (click)="removeFile('fotoDaRespostaTres', $event)">
+                  <i class="fas fa-times"></i>
+                </button>
               </div>
-            </label>
+            </ng-container>
+            <span *ngIf="!fotoPreviews['fotoDaRespostaTres']" class="upload-placeholder">
+              <img [src]="!isDarkMode() ? 'assets/imagens/img-foto.svg' : 'assets/Icons/dark/img-foto-dark.svg'" class="upload-icon">
+              <p>Clique para fazer upload da imagem ou vídeo</p>
+            </span>
           </div>
-        </div>
+        </label>
+      </div>
+    </div>
 
-        <div class="row">
-          <div class="form-group">
-            <label>Comentário do Gabarito 4:</label>
-            <div id="toolbar4">
-              <select class="ql-header">
-                <option value="1"></option>
-                <option value="2"></option>
-                <option value="3"></option>
-                <option value="4"></option>
-                <option value="5"></option>
-                <option value="6"></option>
-                <option selected></option>
-              </select>
-              <select class="ql-font">
-                <option selected></option>
-                <option value="serif"></option>
-                <option value="monospace"></option>
-              </select>
-              <button class="ql-bold"></button>
-              <button class="ql-italic"></button>
-              <button class="ql-underline"></button>
-              <select class="ql-color"></select>
-              <select class="ql-background"></select>
-              <select class="ql-align">
-                <option selected></option>
-                <option value="center"></option>
-                <option value="right"></option>
-                <option value="justify"></option>
-              </select>
-              <button class="ql-list" value="ordered"></button>
-              <button class="ql-list" value="bullet"></button>
-              <button class="ql-link"></button>
-              <button class="ql-image"></button>
-              <button class="ql-video"></button>
-              <button class="ql-clean"></button>
-            </div>
-            <div id="editor4" class="form-control" name="comentarioDaQuestaoQuatro"
-              [(ngModel)]="questaoDTO.comentarioDaQuestaoQuatro">
-            </div>
+    <div class="row">
+      <div class="form-group">
+        <label>Comentário do Gabarito 4:</label>
+        <div id="toolbar4">
+          <select class="ql-header">
+            <option value="1"></option>
+            <option value="2"></option>
+            <option value="3"></option>
+            <option value="4"></option>
+            <option value="5"></option>
+            <option value="6"></option>
+            <option selected></option>
+          </select>
+          <select class="ql-font">
+            <option selected></option>
+            <option value="serif"></option>
+            <option value="monospace"></option>
+          </select>
+            <button class="ql-bold"></button>
+            <button class="ql-italic"></button>
+            <button class="ql-underline"></button>
+            <select class="ql-color"></select>
+            <select class="ql-background"></select>
+            <select class="ql-align">
+              <option selected></option>
+              <option value="center"></option>
+              <option value="right"></option>
+              <option value="justify"></option>
+            </select>
+            <button class="ql-list" value="ordered"></button>
+            <button class="ql-list" value="bullet"></button>
+            <button class="ql-link"></button>
+            <button class="ql-image"></button>
+            <button class="ql-video"></button>
+            <button class="ql-clean"></button>
           </div>
+        <div id="editor4" class="form-control" name="comentarioDaQuestaoQuatro"
+          [(ngModel)]="questaoDTO.comentarioDaQuestaoQuatro">
         </div>
+      </div>
+    </div>
 
-        <div class="form-group">
-          <label>Imagem do gabarito 4:</label>
-          <div class="image-upload" (drop)="onDrop($event, 'fotoDaRespostaQuatro')" (dragover)="onDragOver($event)">
-            <input type="file" id="fotoDaRespostaQuatro" name="fotoDaRespostaQuatro"
-              (change)="onFileSelected($event, 'fotoDaRespostaQuatro')" accept="image/*,video/*"
-              style="display: none;" />
-            <label for="fotoDaRespostaQuatro">
-              <div class="foto-preview" id="fotoPreviewQuatro">
-                <ng-container *ngIf="fotoPreviews['fotoDaRespostaQuatro']">
-                  <div class="preview-container">
-                    <img *ngIf="isPreviewImage(fotoPreviews['fotoDaRespostaQuatro'])"
-                      [src]="fotoPreviews['fotoDaRespostaQuatro']" alt="Image Preview" />
-                    <video *ngIf="isPreviewVideo(fotoPreviews['fotoDaRespostaQuatro'])"
-                      [src]="fotoPreviews['fotoDaRespostaQuatro']" controls></video>
-                    <button type="button" class="btn-remove-image" (click)="removeFile('fotoDaRespostaQuatro', $event)">
-                      <i class="fas fa-times"></i>
-                    </button>
-                  </div>
-                </ng-container>
-                <span *ngIf="!fotoPreviews['fotoDaRespostaQuatro']" class="upload-placeholder">
-                  <img [src]="!isDarkMode() ? 'assets/imagens/img-foto.svg' : 'assets/Icons/dark/img-foto-dark.svg'"
-                    class="upload-icon">
-                  <p>Clique para fazer upload da imagem ou vídeo</p>
-                </span>
+    <div class="form-group">
+      <label>Imagem do gabarito 4:</label>
+      <div class="image-upload" (drop)="onDrop($event, 'fotoDaRespostaQuatro')" (dragover)="onDragOver($event)">
+        <input type="file" id="fotoDaRespostaQuatro" name="fotoDaRespostaQuatro"
+          (change)="onFileSelected($event, 'fotoDaRespostaQuatro')" accept="image/*,video/*" style="display: none;" />
+        <label for="fotoDaRespostaQuatro">
+          <div class="foto-preview" id="fotoPreviewQuatro">
+            <ng-container *ngIf="fotoPreviews['fotoDaRespostaQuatro']">
+              <div class="preview-container">
+                <img *ngIf="isPreviewImage(fotoPreviews['fotoDaRespostaQuatro'])" [src]="fotoPreviews['fotoDaRespostaQuatro']" alt="Image Preview" />
+                <video *ngIf="isPreviewVideo(fotoPreviews['fotoDaRespostaQuatro'])" [src]="fotoPreviews['fotoDaRespostaQuatro']" controls></video>
+                <button type="button" class="btn-remove-image" (click)="removeFile('fotoDaRespostaQuatro', $event)">
+                  <i class="fas fa-times"></i>
+                </button>
               </div>
-            </label>
+            </ng-container>
+            <span *ngIf="!fotoPreviews['fotoDaRespostaQuatro']" class="upload-placeholder">
+              <img [src]="!isDarkMode() ? 'assets/imagens/img-foto.svg' : 'assets/Icons/dark/img-foto-dark.svg'" class="upload-icon">
+              <p>Clique para fazer upload da imagem ou vídeo</p>
+            </span>
           </div>
-        </div>
+        </label>
+      </div>
+    </div>
 
-        <!--
+    <!--
     <div>
       <hr class="line">
       <span class="div-section">
@@ -720,57 +704,60 @@
     </div>
   -->
 
+   
 
 
 
 
-
-        <div class="row">
-          <div class="col-md-12">
-            <div *ngIf="loading" class="alert alert-info" role="alert">
-              Carregando...
-            </div>
-            <div *ngIf="successMessage" class="alert alert-success" role="alert">
-              {{ successMessage }}
-            </div>
-            <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
-              {{ errorMessage }}
-            </div>
-          </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div *ngIf="loading" class="alert alert-info" role="alert">
+          Carregando...
         </div>
-
-        <div class="container mt-4 container-btn">
-
-          <button type="button" class="btn btn-secondary" routerLink="/usuario/dashboard" *ngIf="!questaoDTO.id"
-            [disabled]="loading">
-            Voltar
-          </button>
-
-          <button type="button" class="btn btn-nova-questao" *ngIf="!questaoDTO.id" [disabled]="loading"
-            (click)="cadastrarNovaQuestao()">
-            <span *ngIf="loading" class="spinner-border spinner-border-sm"></span>
-            Nova Questão
-          </button>
-
-          <button type="submit" class="btn btn-primary" *ngIf="!questaoDTO.id" [disabled]="loading">
-            <span *ngIf="loading" class="spinner-border spinner-border-sm"></span>
-            Salvar
-          </button>
-
-          <div class="d-flex justify-content-between">
-            <div class="d-flex justify-content-between">
-              <button type="button" class="btn btn-secondary" *ngIf="questaoDTO.id" (click)="voltarQuestao()"
-                [disabled]="loading">
-                Voltar questão
-              </button>
-              <button type="submit" class="btn btn-primary" *ngIf="questaoDTO.id" [disabled]="loading">
-                <span *ngIf="loading" class="spinner-border spinner-border-sm"></span>
-                Atualizar
-              </button>
-            </div>
-          </div>
+        <div *ngIf="successMessage" class="alert alert-success" role="alert">
+          {{ successMessage }}
         </div>
-      </form>
-
+        <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+          {{ errorMessage }}
+        </div>
+      </div>
     </div>
-  </div>
+    
+    <div class="container mt-4 container-btn">
+      
+      <button type="button" class="btn btn-secondary" routerLink="/usuario/dashboard"
+        *ngIf="!questaoDTO.id" [disabled]="loading">
+        Voltar
+      </button>
+
+      <button type="button" class="btn btn-nova-questao" *ngIf="!questaoDTO.id" [disabled]="loading" (click)="cadastrarNovaQuestao()" >
+        <span *ngIf="loading" class="spinner-border spinner-border-sm"></span>
+        Nova Questão
+      </button>
+    
+      <button type="submit" class="btn btn-primary" *ngIf="!questaoDTO.id" [disabled]="loading">
+        <span *ngIf="loading" class="spinner-border spinner-border-sm"></span>
+        Salvar
+      </button>
+    
+      <div class="d-flex justify-content-between">
+        <div class="d-flex justify-content-between">
+          <button type="button" class="btn btn-secondary" *ngIf="questaoDTO.id" (click)="voltarQuestao()"
+            [disabled]="loading">
+            Voltar questão
+          </button>
+          <button type="submit" class="btn btn-primary" *ngIf="questaoDTO.id" [disabled]="loading">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm"></span>
+            Atualizar
+          </button>
+        </div>
+
+        <button type="button" class="btn btn-primary" *ngIf="questaoDTO.id" (click)="irParaProximaQuestao()" [disabled]="limiteQuestoes">
+          Próxima questão
+        </button>
+      </div>
+    </div>
+  </form>
+
+</div>
+</div>
