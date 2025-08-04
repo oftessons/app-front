@@ -29,6 +29,8 @@ import { PermissaoAdminComponent } from './permissao-admin/permissao-admin.compo
 import { PermissaoProfessorComponent } from './permissao-professor/permissao-professor.component';
 import { InicioComponent } from './inicio/inicio.component';
 import { BolsaGuardService } from '../services/bolsa.guard';
+import { FiltroGringoComponent } from './filtro-gringo/filtro-gringo.component';
+import { CadastroQuestoesAmericanasComponent } from './cadastro-questoes-americanas/cadastro-questoes-americanas.component';
 
 const routes: Routes = [
   { 
@@ -40,10 +42,12 @@ const routes: Routes = [
       { path: 'inicio', component: InicioComponent},
       { path: 'questoes', component: PageQuestoesComponent },
       { path: 'filtro', component: PageFiltroComponent },
+      { path: 'filtro-especial', component: FiltroGringoComponent},
+      { path: 'cadastro-filtro-especial', component: CadastroQuestoesAmericanasComponent},
       { path: 'painel-de-aulas', component: PainelDeAulasComponent},
       { path: 'modulo-catarata', component:ModuloCatarataComponent},
-      { path:'modulo-cirurgia-refrativa', component: ModuloCirurgiaRefrativaComponent},
-      { path:'modulo-cornea-conjuntiva-esclera', component: ModuloCorneaConjutivaEscleraComponent},
+      { path: 'modulo-cirurgia-refrativa', component: ModuloCirurgiaRefrativaComponent},
+      { path: 'modulo-cornea-conjuntiva-esclera', component: ModuloCorneaConjutivaEscleraComponent},
       { path:'modulo-estrabismo-e-oftalmoped', component:ModuloEstrabismoEOftalmopedComponent},
       { path:'modulo-farmacologia', component:ModuloFarmacologiaComponent},
       { path:'modulo-glaucoma', component:ModuloGlaucomaComponent},

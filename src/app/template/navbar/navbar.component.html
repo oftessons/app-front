@@ -47,11 +47,12 @@
                 <span class="ml-2">Painel de Controle</span>
             </a>            
             
-            <div *ngIf="possuiPermissao" class="heading-home">Serviços</div>
+            <div *ngIf="possuiPermissao" class="heading-home">Funcionalidades</div>
             <a mat-list-item *ngIf="possuiPermissao" routerLink="/usuario/questoes" [ngClass]="{'active-link': isActive('/usuario/questoes')}">
                 <img [src]="!isDarkMode() ? 'assets/imagens/caderno.svg' : 'assets/Icons/dark/caderno-dark.svg'" alt="Ícone de Questões" class="icon">
                 <span class="ml-2">Questões</span>
             </a>
+
             <!--
             <a mat-list-item routerLink="/usuario/painel-de-aulas" [ngClass]="{'active-link': isActive('/usuario/painel-de-aulas')}">
                 <img [src]="!isDarkMode() ? 'assets/Icons/au-ofi.svg' : 'assets/Icons/dark/au-ofi-dark.svg'" alt="Ícone de Aula" class="icon">

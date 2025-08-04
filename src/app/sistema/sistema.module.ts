@@ -41,6 +41,8 @@ import { PermissaoProfessorComponent } from './permissao-professor/permissao-pro
 import { InicioComponent } from './inicio/inicio.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { PaginaInicialComponent } from './pagina-inicial/pagina-inicial.component';
+import { CadastroQuestoesAmericanasComponent } from './cadastro-questoes-americanas/cadastro-questoes-americanas.component';
+import { FiltroGringoComponent } from './filtro-gringo/filtro-gringo.component';
 
 @NgModule({
   declarations: [
@@ -72,6 +74,8 @@ import { PaginaInicialComponent } from './pagina-inicial/pagina-inicial.componen
     PermissaoProfessorComponent,
     InicioComponent,
     PaginaInicialComponent,
+    CadastroQuestoesAmericanasComponent,
+    FiltroGringoComponent,
   ],
   imports: [
     CommonModule,
