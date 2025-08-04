@@ -72,6 +72,7 @@ import { PaginaInicialComponent } from './pagina-inicial/pagina-inicial.componen
     PermissaoProfessorComponent,
     InicioComponent,
     PaginaInicialComponent,
+    
   ],
   imports: [
     CommonModule,

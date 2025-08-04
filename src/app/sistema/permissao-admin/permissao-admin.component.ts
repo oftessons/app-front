@@ -8,6 +8,9 @@ import { AuthService } from 'src/app/services/auth.service';
 import { ChangeDetectorRef } from '@angular/core';
 import { Plano } from 'src/app/sistema/page-meu-perfil/plano';
 import { VendasService } from 'src/app/services/vendas.service';
+import { ModalDeleteComponent } from 'src/app/shared/modal-delete/modal-delete.component';
+import { ModalDeleteService } from 'src/app/services/modal-delete.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-permissao-admin',
@@ -16,11 +19,12 @@ import { VendasService } from 'src/app/services/vendas.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PermissaoAdminComponent implements OnInit {
+
   displayedColumns: string[] = ['nome', 'email', 'cidade', 'estado'];
 
   usuarios: Usuario[] = [];
 
-  professores: Usuario[]  = []
+  professores: Usuario[] = []
   paginatedProfessores = this.professores.slice(0, 6);
   pageSizeProfessores = 6;
   pageIndexProfessores = 0;
@@ -38,36 +42,36 @@ export class PermissaoAdminComponent implements OnInit {
   pageIndexBolsistas = 0;
   totalPagesBolsistas = Math.ceil(this.bolsistas.length / this.pageSizeBolsistas);
 
-  tiposPermissao =  [PermissaoDescricoes.ROLE_PROFESSOR, PermissaoDescricoes.ROLE_USER, PermissaoDescricoes.ROLE_BOLSISTA];
+  tiposPermissao = [PermissaoDescricoes.ROLE_PROFESSOR, PermissaoDescricoes.ROLE_USER, PermissaoDescricoes.ROLE_BOLSISTA];
   mensagemSucesso: string = '';
   cadastrando: boolean = false;
-  userData: Usuario = new Usuario(); 
-  
-  usuarioFormCadastro =  this.formBuilder.group({
+  userData: Usuario = new Usuario();
+
+  usuarioFormCadastro = this.formBuilder.group({
     id: new FormControl(0,),
-    username: new FormControl('', {validators: [Validators.required]}),
-    password: new FormControl('', {validators: [Validators.required]}),
-    confirmPassword: new FormControl('', {validators: [Validators.required]}),
+    username: new FormControl('', { validators: [Validators.required] }),
+    password: new FormControl('', { validators: [Validators.required] }),
+    confirmPassword: new FormControl('', { validators: [Validators.required] }),
     nome: new FormControl('', [Validators.required]),
-    email: new FormControl('', {validators: [Validators.required]}),
-    telefone: new FormControl('', {validators: [Validators.required]}),
-    estado: new FormControl('', ),
-    cidade: new FormControl('', ),
-    tipoUsuario: new FormControl('', {validators: [Validators.required]}),
+    email: new FormControl('', { validators: [Validators.required] }),
+    telefone: new FormControl('', { validators: [Validators.required] }),
+    estado: new FormControl('',),
+    cidade: new FormControl('',),
+    tipoUsuario: new FormControl('', { validators: [Validators.required] }),
     bolsa: new FormControl(false),
-    quantidadeDiasBolsa: new FormControl( [null, [Validators.required, Validators.min(1)]])
+    quantidadeDiasBolsa: new FormControl([null, [Validators.required, Validators.min(1)]])
   });
 
-  usuarioFormUpdate =  this.formBuilder.group({
+  usuarioFormUpdate = this.formBuilder.group({
     id: new FormControl(0,),
-    username: new FormControl('', {validators: [Validators.required]}),
-    password: new FormControl('', {validators: [Validators.required]}),
-    confirmPassword: new FormControl('', {validators: [Validators.required]}),
+    username: new FormControl('', { validators: [Validators.required] }),
+    password: new FormControl('', { validators: [Validators.required] }),
+    confirmPassword: new FormControl('', { validators: [Validators.required] }),
     nome: new FormControl('', [Validators.required]),
-    email: new FormControl('', {validators: [Validators.required]}),
-    telefone: new FormControl('', {validators: [Validators.required]}),
-    estado: new FormControl('', ),
-    cidade: new FormControl('', ),
+    email: new FormControl('', { validators: [Validators.required] }),
+    telefone: new FormControl('', { validators: [Validators.required] }),
+    estado: new FormControl('',),
+    cidade: new FormControl('',),
   });
 
   showModalCadastrar: boolean = false;
@@ -90,8 +94,9 @@ export class PermissaoAdminComponent implements OnInit {
   planosUsuarios: { [userId: string]: string } = {};
   planosStatus: { [userId: string]: string } = {};
 
-  constructor(private formBuilder: FormBuilder, private authService: AuthService, 
-    private cdRef: ChangeDetectorRef, private vendasService: VendasService) { 
+  constructor(private formBuilder: FormBuilder, private authService: AuthService,
+    private cdRef: ChangeDetectorRef, private vendasService: VendasService,
+    private modalDeleteService: ModalDeleteService, private snackBar: MatSnackBar) {
     this.usuarioFormCadastro = this.formBuilder.group({
       id: null,
       username: [''],
@@ -129,14 +134,14 @@ export class PermissaoAdminComponent implements OnInit {
 
   carregarUsuarios() {
     this.authService.visualizarUsuarios().subscribe((data: Usuario[] | null) => {
-      if(!Array.isArray(data)) {
+      if (!Array.isArray(data)) {
         this.errors.push("Nenhum aluno cadastrado.")
         this.cdRef.markForCheck();
         return;
       };
 
       this.usuarios = data;
-      this.alunos = this.filtrarUsuariosPorPermissao('USER'); 
+      this.alunos = this.filtrarUsuariosPorPermissao('USER');
       this.professores = this.filtrarUsuariosPorPermissao('PROFESSOR');
       this.bolsistas = this.filtrarUsuariosPorPermissao('BOLSISTA');
 
@@ -147,7 +152,7 @@ export class PermissaoAdminComponent implements OnInit {
       this.updatePaginatedData('alunos');
       this.updatePaginatedData('professores');
       this.updatePaginatedData('bolsistas');
-      
+
       this.cdRef.markForCheck();
     }, (error) => {
       this.errors.push(error);
@@ -162,7 +167,7 @@ export class PermissaoAdminComponent implements OnInit {
     this.modalErrors = [];
     this.validadaoDeCadastro(userData);
 
-    if(this.modalErrors.length > 0) {
+    if (this.modalErrors.length > 0) {
       return;
     }
 
@@ -183,7 +188,7 @@ export class PermissaoAdminComponent implements OnInit {
 
     this.authService.salvar(usuario, permissao).subscribe((response) => {
       this.mensagemSucesso = response.message;
-  
+
       this.carregarUsuarios();
 
       this.limparTela();
@@ -191,19 +196,19 @@ export class PermissaoAdminComponent implements OnInit {
       this.closeModalCadastrar();
 
       this.cdRef.detectChanges();
-      
 
-    },(error => {
+
+    }, (error => {
       this.modalErrors.push(error);
       this.cdRef.markForCheck();
-      
+
     }))
   }
 
 
   consultarUsuario(id: string) {
     this.authService.visualizarUsuarioPorId(id).subscribe((response: Usuario) => {
-      
+
       this.usuarioFormUpdate.patchValue({
         id: id,
         nome: response.nome,
@@ -225,10 +230,10 @@ export class PermissaoAdminComponent implements OnInit {
     this.mensagemSucesso = "";
     this.errors = [];
     this.modalErrors = [];
-    this.userData = {... this.usuarioFormUpdate.value};
+    this.userData = { ... this.usuarioFormUpdate.value };
     this.validadaoDeCadastro(this.userData);
-    
-    if(this.modalErrors.length > 0) {
+
+    if (this.modalErrors.length > 0) {
       return;
     }
 
@@ -240,12 +245,12 @@ export class PermissaoAdminComponent implements OnInit {
         professores: this.professores,
         bolsistas: this.bolsistas
       };
-      
+
       for (const key of Object.keys(tiposUsuarios) as (keyof typeof tiposUsuarios)[]) {
         const usuarios = tiposUsuarios[key];
         const index = tiposUsuarios[key].findIndex((user) => user.id === updateUser.id);
 
-        if(index != -1) {
+        if (index != -1) {
           usuarios[index] = updateUser;
           this.updatePaginatedData(key);
 
@@ -263,27 +268,58 @@ export class PermissaoAdminComponent implements OnInit {
     })
   }
 
-  removerUsuario(id: string) {
-    if (confirm("Você tem certeza que deseja remover este usuário?")) {
-      this.authService.removerUsuario(id).subscribe((response) => {
-        
-        this.alunos = this.alunos.filter((user) => user.id !== id);
-        this.professores = this.professores.filter((prof) => prof.id !== id);
-        this.bolsistas = this.bolsistas.filter((bolsista) => bolsista.id !== id);
+  removerUsuario(id: string): void {
+    this.authService.removerUsuario(id).subscribe({
+      next: () => {
+        this.alunos = this.alunos.filter(u => u.id !== id);
+        this.professores = this.professores.filter(u => u.id !== id);
+        this.bolsistas = this.bolsistas.filter(u => u.id !== id);
+
         this.updatePaginatedData('alunos');
         this.updatePaginatedData('professores');
         this.updatePaginatedData('bolsistas');
-        this.mensagemSucesso = "Excluído com sucesso";
-        this.cdRef.markForCheck();  
-        
+
+        // feedback de sucesso
+        this.snackBar.open('Usuário removido com sucesso!', '✕', {
+          duration: 5000,                   
+          panelClass: ['snackbar-success'],
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
+        });
+
+        this.cdRef.markForCheck();
       },
-      (error) => {
-        this.errors.push(error);
-        this.cdRef.markForCheck();  
+      error: err => {
+        this.errors.push(err);
+
+        this.snackBar.open('Erro ao remover usuário.', '✕', {
+          duration: 3000,
+          panelClass: ['snackbar-error'],
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
+        });
+
+        this.cdRef.markForCheck();
       }
-      );
-    }
+    });
   }
+
+
+  openModalDeletar(usuario: Usuario): void {
+    this.modalDeleteService.openModal(
+      {
+        title: 'Remoção de usuário',
+        description: `
+          Tem certeza que deseja excluir o usuário
+          <strong>${usuario.nome}</strong>?`,
+        item: usuario,
+        deletarTextoBotao: 'Excluir',
+        size: 'md'
+      },
+      () => this.removerUsuario(usuario.id) 
+    );
+  }
+
 
   mapearDescricaoParaEnum(selecao: string): Permissao {
 
@@ -294,7 +330,7 @@ export class PermissaoAdminComponent implements OnInit {
     }
 
     return enumeracao[selecao] || Permissao.USER;
-  } 
+  }
 
   limparTela() {
     this.usuarioFormCadastro.patchValue({
@@ -309,7 +345,7 @@ export class PermissaoAdminComponent implements OnInit {
       cidade: '',
       tipoUsuario: ''
     });
-    
+
   }
 
   validadaoDeCadastro(userData: Usuario) {
@@ -329,28 +365,28 @@ export class PermissaoAdminComponent implements OnInit {
     if (!/[!@#$%^&*]/.test(userData.password)) {
       passwordValidationErrors.push("A senha deve conter pelo menos um caractere especial (por exemplo, !@#$%^&*).");
     }
-   
+
     if (!userData.email) {
       passwordValidationErrors.push("O campo de email é obrigatório.");
 
     }
-  
+
     if (!userData.nome) {
       passwordValidationErrors.push("O campo de nome é obrigatório.");
     }
 
-    if(!userData.tipoUsuario && this.cadastrando) {
+    if (!userData.tipoUsuario && this.cadastrando) {
       passwordValidationErrors.push("O campo de seleção de permissão de usuário é obrigatório.");
     }
-    
+
     if (passwordValidationErrors.length > 0) {
       this.modalErrors = passwordValidationErrors;
-      return; 
+      return;
     }
-  
+
     if (userData.password !== userData.confirmPassword && this.cadastrando) {
-        this.modalErrors.push("As senhas não coincidem.");
-        return; 
+      this.modalErrors.push("As senhas não coincidem.");
+      return;
     }
 
   }
@@ -359,7 +395,7 @@ export class PermissaoAdminComponent implements OnInit {
     return this.usuarios.filter(user => String(user.permissao) === permissao);
   }
 
-  updatePaginatedData(type: 'professores' | 'alunos' | 'bolsistas'): void { 
+  updatePaginatedData(type: 'professores' | 'alunos' | 'bolsistas'): void {
     if (type === 'alunos') {
       const startIndex = this.pageIndexAlunos * this.pageSizeAlunos;
       const endIndex = startIndex + this.pageSizeAlunos;
@@ -428,7 +464,7 @@ export class PermissaoAdminComponent implements OnInit {
   }
 
   openModalCadastrar() {
-    this.showModalCadastrar  = true;
+    this.showModalCadastrar = true;
   }
 
   closeModalCadastrar() {
@@ -452,7 +488,7 @@ export class PermissaoAdminComponent implements OnInit {
   exibirInformacaoPlano(userId: string) {
     this.loadingPlan = true;
     this.selectedUserPlan = null;
-    
+
     this.vendasService.obterDadosAssinaturaPorUsuario(userId).subscribe(
       (response) => {
         const plano = new Plano();
@@ -491,13 +527,13 @@ export class PermissaoAdminComponent implements OnInit {
     if (!usuario || !usuario.id) {
       return 'Não disponível';
     }
-    
+
     if (this.planosUsuarios[usuario.id]) {
       const plano = this.planosUsuarios[usuario.id];
       const status = this.planosStatus[usuario.id] || '';
       return plano + (status ? ` (${status})` : '');
     }
-    
+
     this.carregarPlanoUsuario(usuario.id);
     return 'Carregando...';
   }
@@ -538,7 +574,7 @@ export class PermissaoAdminComponent implements OnInit {
   }
 
   getPermissaoTraduzida(permissao: Permissao): string {
-    if( permissao === undefined || permissao === null) {
+    if (permissao === undefined || permissao === null) {
       return 'Não disponível';
     }
     const permissoes: { [key: string]: string } = {
@@ -552,7 +588,7 @@ export class PermissaoAdminComponent implements OnInit {
 
   converterDateTime(dateTime: string): string {
     if (!dateTime) return 'Não disponível';
-    
+
     const data = new Date(dateTime);
     return data.toLocaleDateString('pt-BR', {
       day: '2-digit',
@@ -591,12 +627,12 @@ export class PermissaoAdminComponent implements OnInit {
     if (!bolsista.dataInicioBolsa || !bolsista.diasDeTeste) {
       return 'Não disponível';
     }
-    
+
     const dataInicio = new Date(bolsista.dataInicioBolsa);
     dataInicio.setDate(dataInicio.getDate() + bolsista.diasDeTeste);
     let statusBolsa;
 
-    if( dataInicio < new Date()) {
+    if (dataInicio < new Date()) {
       statusBolsa = 'Expirado';
     } else if (dataInicio > new Date()) {
       statusBolsa = 'Ativo';
@@ -613,11 +649,11 @@ export class PermissaoAdminComponent implements OnInit {
     if (!usuario.dataInicioBolsa || !usuario.diasDeTeste) {
       return true;
     }
-    
+
     const dataInicio = new Date(usuario.dataInicioBolsa);
     const dataExpiracao = new Date(dataInicio);
     dataExpiracao.setDate(dataExpiracao.getDate() + usuario.diasDeTeste);
-    
+
     return dataExpiracao < new Date();
   }
 
@@ -631,7 +667,7 @@ export class PermissaoAdminComponent implements OnInit {
 
   formatarDataBolsa(data: Date | string | undefined): string {
     if (!data) return 'Não definida';
-    
+
     const dataObj = new Date(data);
     return dataObj.toLocaleDateString('pt-BR', {
       day: '2-digit',
@@ -644,11 +680,11 @@ export class PermissaoAdminComponent implements OnInit {
     if (!usuario.dataInicioBolsa || !usuario.diasDeTeste) {
       return 'Não definida';
     }
-    
+
     const dataInicio = new Date(usuario.dataInicioBolsa);
     const dataExpiracao = new Date(dataInicio);
     dataExpiracao.setDate(dataExpiracao.getDate() + usuario.diasDeTeste);
-    
+
     return this.formatarDataBolsa(dataExpiracao);
   }
 
@@ -656,19 +692,19 @@ export class PermissaoAdminComponent implements OnInit {
     if (!usuario.dataInicioBolsa || !usuario.diasDeTeste) {
       return 'Não disponível';
     }
-    
+
     const dataInicio = new Date(usuario.dataInicioBolsa);
     const dataExpiracao = new Date(dataInicio);
     dataExpiracao.setDate(dataExpiracao.getDate() + usuario.diasDeTeste);
-    
+
     const hoje = new Date();
     if (dataExpiracao < hoje) {
       return 'Expirado';
     }
-    
+
     const diffTime = Math.abs(dataExpiracao.getTime() - hoje.getTime());
     const diasRestantes = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
+
     return `${diasRestantes} dias`;
   }
 }
