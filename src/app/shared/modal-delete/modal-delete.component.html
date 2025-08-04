@@ -1,0 +1,33 @@
+<div
+  class="modal-geral"
+  role="dialog"
+  [attr.aria-labelledby]="title"
+  aria-modal="true"
+>
+  <div class="modal-bg" (click)="onModalClose()"></div>
+  <div class="modal-wrapper">
+    <div class="modal-container">
+      <div class="modal-box" [ngClass]="size">
+        <ng-container>
+          <div class="modal-conteudo">
+            <button class="modal-close-btn" (click)="onModalClose()" aria-label="Fechar">×</button>
+            <div class="modal-icone">
+              <img src="assets/Icons/atencao.svg" alt="Atenção" />
+            </div>
+            <h2>{{ title }}</h2>
+            <hr class="modal-divider" />
+            <span [innerHTML]="description"></span>
+            <div class="modal-botoes">
+              <button class="btn-acao delete" (click)="confirmarExclusao()">
+                {{ deletarTextoBotao || 'Remover' }}
+              </button>
+              <button class="btn-acao cancelar" (click)="onModalClose()">
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>

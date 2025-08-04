@@ -44,7 +44,7 @@
                         Editar
                         <img src="assets/imagens/pencil.svg" alt="Ícone de Editar" class="icon" />
                       </button>
-                      <button class="btn-excluir btn-danger btn" (click)="removerUsuario(professor.id)">
+                      <button class="btn-excluir btn-danger btn" (click)="openModalDeletar(professor)">
                         Excluir
                         <img src="assets/imagens/de.svg" alt="Ícone de Deletar" class="icon" />
                       </button>
@@ -84,7 +84,7 @@
                   Editar
                   <img src="assets/imagens/pencil.svg" alt="Ícone de Editar" class="icon" />
                 </button>
-                <button class="btn-excluir btn-danger btn" (click)="removerUsuario(aluno.id)">
+                <button class="btn-excluir btn-danger btn" (click)="openModalDeletar(aluno)">
                   Excluir
                   <img src="assets/imagens/de.svg" alt="Ícone de Deletar" class="icon" />
                 </button>
@@ -125,7 +125,7 @@
                   Editar
                   <img src="assets/imagens/pencil.svg" alt="Ícone de Editar" class="icon" />
                 </button>
-                <button class="btn-excluir btn-danger btn" (click)="removerUsuario(bolsista.id)">
+                <button class="btn-excluir btn-danger btn" (click)="openModalDeletar(bolsista)">
                   Excluir
                   <img src="assets/imagens/de.svg" alt="Ícone de Deletar" class="icon" />
                 </button>

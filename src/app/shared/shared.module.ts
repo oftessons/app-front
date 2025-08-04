@@ -13,7 +13,7 @@ import { MultiploSelectComponent } from './multiplo-select/multiplo-select.compo
 import { ModalComponent } from './modal/modal.component';
 import { CardPlanoComponent } from './card-plano/card-plano.component';
 import { AppRoutingModule } from '../app-routing.module';
-
+import { ModalDeleteComponent } from './modal-delete/modal-delete.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +24,7 @@ import { AppRoutingModule } from '../app-routing.module';
     MultiploSelectComponent,
     ModalComponent,
     CardPlanoComponent,
+    ModalDeleteComponent,
   ],
   imports: [
     CommonModule,
@@ -40,7 +41,7 @@ import { AppRoutingModule } from '../app-routing.module';
     PlaylistModeComponent,
     MultiploSelectComponent,
     ModalComponent,
-    CardPlanoComponent
+    CardPlanoComponent,
   ]
 })
 export class SharedModule { }

@@ -8,7 +8,7 @@ import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { TinymceService } from 'src/app/services/tinymce.service';
 import { temasESubtemas } from '../page-questoes/enums/map-tema-subtema';
 
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { DomSanitizer, SafeHtml }  from '@angular/platform-browser';
 import { Usuario } from 'src/app/login/usuario';
 import { Permissao } from 'src/app/login/Permissao';
 import { AuthService } from 'src/app/services/auth.service';
@@ -593,7 +593,7 @@ onSubmit(): void {
     const proximoId = this.questoesService.getProximoId(this.questaoDTO.id);
     if (!proximoId) {
       return;
-    }
+  }
     
     this.clearImageState();
 
