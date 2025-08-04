@@ -41,7 +41,6 @@ import { PermissaoProfessorComponent } from './permissao-professor/permissao-pro
 import { InicioComponent } from './inicio/inicio.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { PaginaInicialComponent } from './pagina-inicial/pagina-inicial.component';
-import { SimuladoRevisaoComponent } from './simulado-revisao/simulado-revisao.component';
 
 @NgModule({
   declarations: [
@@ -73,7 +72,7 @@ import { SimuladoRevisaoComponent } from './simulado-revisao/simulado-revisao.co
     PermissaoProfessorComponent,
     InicioComponent,
     PaginaInicialComponent,
-    SimuladoRevisaoComponent,
+    
   ],
   imports: [
     CommonModule,
