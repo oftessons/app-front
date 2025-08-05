@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild, AfterViewChecked, ElementRef, AfterViewInit, OnDestroy, HostBinding, Renderer2 } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 import { ChatBotStateService } from '../services/chat-bot-state.service';
 import { QuestoesStateService } from '../services/questao-state.service';
 import { VendasService } from '../services/vendas.service';
@@ -75,7 +77,8 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
     private vendasService: VendasService,
     private simuladoService: SimuladoService,
     private elementRef: ElementRef,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -92,6 +95,22 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
       if (!questaoAtual && this.isCitarQuestao) {
         this.isCitarQuestao = false;
         this.citarQuestao = new Questao();
+      }
+    });
+
+    // Monitora mudanças de navegação para limpar o estado da questão
+    this.router.events.pipe(
+      filter((e): e is NavigationEnd => e instanceof NavigationEnd)
+    ).subscribe(e => {
+      // Se o usuário saiu das páginas de questões, limpar o estado
+      if (!e.urlAfterRedirects.includes('/questoes') &&
+          !e.urlAfterRedirects.includes('/cadastro-questao/')) {
+        const questaoAtual = this.questoesStateService.getQuestaoAtual();
+        if (questaoAtual || this.isCitarQuestao) {
+          this.isCitarQuestao = false;
+          this.citarQuestao = new Questao();
+          this.questoesStateService.setQuestaoAtual(null);
+        }
       }
     });
 
@@ -153,7 +172,15 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
   temQuestaoParaCitar(): boolean {
     const questaoAtual = this.questoesStateService.getQuestaoAtual();
   
+    // Se não há questão atual e o botão estava ativo, desativa
     if (!questaoAtual && this.isCitarQuestao) {
+      this.isCitarQuestao = false;
+      this.citarQuestao = new Questao();
+      return false;
+    }
+    
+    // Se não há questão atual, garantir que o estado local também está limpo
+    if (!questaoAtual) {
       this.isCitarQuestao = false;
       this.citarQuestao = new Questao();
       return false;
