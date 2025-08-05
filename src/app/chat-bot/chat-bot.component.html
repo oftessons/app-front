@@ -11,11 +11,16 @@
   />
 </button>
 
-<div class="chatbot-container" [@chatBotAnimation]="isOpen ? 'open' : 'closed'">
-  <div class="chatbot-header">
-    <button class="close-btn" (click)="toggleChat()">×</button>
-    VictorIA
+<div class="chatbot-container" 
+     [class.nav-active]="isNavigationBarActive"
+     [@chatBotAnimation]="isOpen ? 'open' : 'closed'">
+  <div class="chatbot-header" 
+       (mousedown)="onDragStart($event)"
+       (touchstart)="onTouchStart($event)"
+       [style.cursor]="isDragging ? 'grabbing' : 'grab'">
+       VictorIA
   </div>
+  <button class="close-btn" (click)="toggleChat()">×</button>
   <div class="chatbot-body" #chatBody>
     <div
       *ngFor="let message of messages"
