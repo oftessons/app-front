@@ -3,6 +3,57 @@
   bottom: 20px;
   right: 20px;
   z-index: 1000;
+  transition: top 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), 
+              bottom 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), 
+              left 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), 
+              right 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+:host.dragging {
+  transition: none;
+}
+
+:host.transitioning {
+  transition: top 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), 
+              bottom 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), 
+              left 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), 
+              right 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+:host.top-left {
+  top: 85px;
+  left: 20px;
+  bottom: unset;
+  right: unset;
+}
+
+:host.top-right {
+  top: 85px;
+  right: 20px;
+  bottom: unset;
+  left: unset;
+}
+
+:host.bottom-left {
+  bottom: 20px;
+  left: 20px;
+  top: unset;
+  right: unset;
+}
+
+:host.bottom-right {
+  bottom: 20px;
+  right: 20px;
+  top: unset;
+  left: unset;
+}
+
+:host.bottom-right.nav-active {
+  bottom: 90px;
+}
+
+:host.bottom-left.nav-active {
+  bottom: 90px;
 }
 
 .chatbot-container {
@@ -12,34 +63,64 @@
   border-radius: 20px;
   overflow: hidden;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  transition: transform 1s ease-in-out;
+  transition: transform 1s ease-in-out, box-shadow 0.3s ease;
+}
+
+.chatbot-container.dragging {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  transform: scale(1.02);
+}
+
+.chatbot-container.transitioning {
+  transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .chatbot-header {
   background: linear-gradient(to right, #f5ce50, #febf25);
   color: #0f1934;
-  padding: 15px;
+  /* padding: 15px; */
   text-align: center;
   position: relative;
   border-radius: 20px 20px 0 0;
   font-size: 18px;
   font-weight: bold;
+  height: 50px;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.chatbot-header:active {
+  cursor: grabbing;
+}
+
+.chatbot-container.dragging .chatbot-header {
+  cursor: grabbing;
 }
 
 .close-btn {
   position: absolute;
-  top: 15px;
+  top: 5px;
   right: 10px;
   background: none;
   border: none;
   color: white;
-  font-size: 30px;
+  font-size: 40px;
   cursor: pointer;
   transition: color 0.3s;
+  height: 40px;
+  width: 60px;
+  padding: 0;
+  z-index: 60;
 }
 
 .close-btn:hover {
-  color: #ff4d4d;
+  color: #ccc;
 }
 
 .chatbot-body {
@@ -469,7 +550,20 @@ button:disabled .chatbot-logo {
 }
 
 @media (max-width: 768px) {
+  :host.top-left {
+    top: 70px;
+    left: 20px;
+    bottom: unset;
+    right: unset;
+  }
 
+  :host.top-right {
+    top: 70px;
+    right: 20px;
+    bottom: unset;
+    left: unset;
+  }
+  
   .chatbot-logo {
     width: 24px;
     height: 24px;
