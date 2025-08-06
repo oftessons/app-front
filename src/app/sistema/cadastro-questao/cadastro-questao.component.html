@@ -252,6 +252,7 @@
                   <div class="form-group">
                     <input type="radio" [name]="questaoDTO.tipoItemQuestaoImagem + 'Alternativa'"
                       (click)="markCorrectImage(i)" [checked]="alternativa.correta" class="checkbox">
+                    <label for="{{questaoDTO.tipoItemQuestaoImagem + 'Alternativa'}}">Alternativa {{ alternativa.texto }}</label>
                     <div class="image-upload">
                       <input type="file" id="fotoDaAlternativa{{ i }}" name="fotoDaAlternativa{{ i }}"
                         (change)="onFileSelectedImageEditar($event, 'fotoDaAlternativa' + i)" accept="image/*,video/*"

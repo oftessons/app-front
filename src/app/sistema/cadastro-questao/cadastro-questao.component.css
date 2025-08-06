@@ -560,3 +560,30 @@ input[type="checkbox"] {
   padding: 15px;
   font-size: 16px;
 }
+
+::ng-deep .ql-editor span[style*="color: rgb(0,"],
+::ng-deep .ql-editor span[style*="color: rgb(1,"],
+::ng-deep .ql-editor span[style*="color: rgb(2,"],
+::ng-deep .ql-editor span[style*="color: rgb(3,"],
+::ng-deep .ql-editor span[style*="color: rgb(4,"],
+::ng-deep .ql-editor span[style*="color: rgb(5,"],
+::ng-deep .ql-editor span[style*="color: rgb(6,"],
+::ng-deep .ql-editor span[style*="color: rgb(7,"],
+::ng-deep .ql-editor span[style*="color: rgb(8,"],
+::ng-deep .ql-editor span[style*="color: rgb(9,"],
+::ng-deep .ql-editor span[style*="color: rgb(10,"],
+::ng-deep .ql-editor span[style*="color: rgb(11,"],
+::ng-deep .ql-editor span[style*="color: rgb(12,"],
+::ng-deep .ql-editor span[style*="color: rgb(13,"],
+::ng-deep .ql-editor span[style*="color: rgb(14,"],
+::ng-deep .ql-editor span[style*="color: rgb(15,"],
+::ng-deep .ql-editor p[style*="color: rgb(14, 14, 14)"] {
+  color: var(--text-color) !important;
+}
+
+::ng-deep .ql-editor span[style*="color:#000"],
+::ng-deep .ql-editor span[style*="color: #000"],
+::ng-deep .ql-editor span[style*="color:black"],
+::ng-deep .ql-editor span[style*="color: black"] {
+  color: var(--text-color) !important;
+}
