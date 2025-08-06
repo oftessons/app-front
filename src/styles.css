@@ -26,6 +26,7 @@
   --scroll-thumb-hover-bg: #1f242d;
   --button-disabled-bg: #cccccc;
   --nav-button-bg: #686868;
+  --filtro-bg: #94979d;
 
   --blue: #007bff;
   --indigo: #6610f2;
@@ -78,6 +79,7 @@ body.dark-mode {
   --scroll-thumb-hover-bg: #4a6fa0;
   --button-disabled-bg: #3a3a3a;
   --nav-button-bg: #686868;
+  --filtro-bg: #0d1011;
 }
 
 body.dark-mode .mat-drawer-content {
