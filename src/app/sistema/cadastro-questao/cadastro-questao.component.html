@@ -21,13 +21,13 @@
           <div class="col-md-6">
             <div class="form-group">
               <label>ID:</label>
-              <input type="text" class="form-control" name="id" [(ngModel)]="questaoDTO.id" disabled>
+              <input type="text" class="form-control input" name="id" [(ngModel)]="questaoDTO.id" disabled>
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
               <label>Data Cadastro:</label>
-              <input type="text" class="form-control" name="diaDoCadastro" [(ngModel)]="questaoDTO.diaDoCadastro"
+              <input type="text" class="form-control input" name="diaDoCadastro" [(ngModel)]="questaoDTO.diaDoCadastro"
                 disabled>
             </div>
           </div>
@@ -202,7 +202,7 @@
         </div>
         <div class="form-group mt-2">
           <label>Descrição da imagem ou vídeo:</label>
-          <textarea class="form-control" name="descricaoDaImagemDoEnunciado"
+          <textarea class="form-control input" name="descricaoDaImagemDoEnunciado"
             [(ngModel)]="questaoDTO.descricaoDaImagemDoEnunciado" placeholder="Descreva esta imagem para acessibilidade"
             rows="2"></textarea>
         </div>
@@ -238,7 +238,7 @@
                 <div class="col-md-12">
                   <div class="form-group">
                     <label>Alternativa {{ alternativa.texto }}</label>
-                    <input type="text" class="form-control" name="comentario{{i}}" [(ngModel)]="alternativa.comentario"
+                    <input type="text" class="form-control input" name="comentario{{i}}" [(ngModel)]="alternativa.comentario"
                       placeholder="Digite o enunciado da alternativa" />
                   </div>
                 </div>
