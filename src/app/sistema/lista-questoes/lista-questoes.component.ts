@@ -22,6 +22,7 @@ import { Aula } from 'src/app/sistema/painel-de-aulas/aula';
 import { AulasService } from 'src/app/services/aulas.service';
 import { Categoria } from '../painel-de-aulas/enums/categoria';
 import { CategoriaDescricoes } from '../painel-de-aulas/enums/categoria-descricao';
+import { NavigateService } from 'src/app/services/navigate.service';
 
 @Component({
   selector: 'app-lista-questoes',
@@ -75,7 +76,8 @@ export class ListaQuestoesComponent implements OnInit {
     private filtroService: FiltroService,
     private authService: AuthService,
     private router: Router,
-    private aulasService: AulasService
+    private aulasService: AulasService,
+    private navigateService: NavigateService
   ) {}
 
   ngOnInit(): void {
@@ -84,6 +86,11 @@ export class ListaQuestoesComponent implements OnInit {
   }
 
   carregarFiltros(): void {}
+
+
+  navegarParaEdicao(id: number): void {
+    this.navigateService.navigateTo(`/usuario/cadastro-questao/${id}`, '/usuario/buscar-questão');
+  }
 
   editarFiltro(id: number): void {
     this.filtroService.getFiltroById(id).subscribe(

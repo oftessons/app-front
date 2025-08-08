@@ -21,6 +21,7 @@ import { TemaDescricoes } from '../page-questoes/enums/tema-descricao';
 import { SubtemaDescricoes } from '../page-questoes/enums/subtema-descricao';
 import { TipoDeProvaDescricoes } from '../page-questoes/enums/tipodeprova-descricao';
 import { RelevanciaDescricao } from '../page-questoes/enums/relevancia-descricao';
+import { NavigateService } from 'src/app/services/navigate.service';
 
 @Component({
   selector: 'app-cadastro-questao',
@@ -107,7 +108,8 @@ editorConfig4 = {
     private activatedRoute: ActivatedRoute,
     public tinymceService: TinymceService,
     private themeService: ThemeService,
-    private location: Location
+    private location: Location,
+    private navigateService: NavigateService
 ) { 
   }
 
@@ -810,7 +812,7 @@ onFileSelectedImageEditar(event: any, alternativaIndex: string) {
   }
 
   voltarPaginaAnterior(): void {
-    this.router.navigate(['/usuario/questoes']);
+    this.navigateService.navigateBack();
   }
 
   voltarQuestao(): void {

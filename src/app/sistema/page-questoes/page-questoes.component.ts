@@ -36,8 +36,8 @@ import { TemaDescricoes } from './enums/tema-descricao';
 import { CertasErradas } from './enums/certas-erradas';
 import { CertasErradasDescricao } from './enums/certas-erradas-descricao';
 import { RespostasSimuladosDescricao } from './enums/resp-simu-descricao';
-import { filter, startWith } from 'rxjs/operators';
-import { BehaviorSubject } from 'rxjs';
+import { filter } from 'rxjs/operators';
+import { NavigateService } from 'src/app/services/navigate.service';
 
 declare var bootstrap: any;
 
@@ -164,6 +164,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     private themeService: ThemeService,
     private sanitizer: DomSanitizer,
     private router: Router,
+    private navigateService: NavigateService
   ) {
 
     this.router.events.pipe(
@@ -1036,7 +1037,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       };
       localStorage.setItem('questoesFiltroState', JSON.stringify(filtroState));
 
-      this.router.navigate(['/usuario/cadastro-questao', this.questaoAtual.id]);
+      this.navigateService.navigateTo(`/usuario/cadastro-questao/${this.questaoAtual.id}`, '/usuario/questoes');
     }
   }
 
