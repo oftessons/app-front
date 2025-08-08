@@ -45,6 +45,7 @@
                 [options]="subtemasAgrupadosPorTema"
                 [(selectedValue)]="multiSelectTemasSubtemasSelecionados"
                 [multiple]="true"
+                (selectedValueChange)="onSelecaoChange($event)"a
                 [searchable]="true">
               </app-multiplo-select>
             </div>
