@@ -23,6 +23,7 @@ export class MultiploSelectComponent implements OnInit, OnChanges {
   @Input() customStyles: { [key: string]: string } = {};
   @Input() multiple: boolean = false;
   @Input() searchable: boolean = false;
+  @Input() disabled: boolean = false;
 
   searchTerm: string = '';
   isOpen: boolean = false;
@@ -46,9 +47,16 @@ export class MultiploSelectComponent implements OnInit, OnChanges {
       this.searchTerm = '';
       this.updateArrowRotation();
     }
+
+    if (changes.disabled && this.disabled) {
+      this.isOpen = false; 
+      this.updateArrowRotation();
+    }
   }
 
   onSearchTermChange(): void {
+    if(this.disabled) return;
+
     const normalize = (str: string) =>
       str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
     const term = normalize(this.searchTerm);
@@ -96,6 +104,7 @@ export class MultiploSelectComponent implements OnInit, OnChanges {
   }
 
   onSelect(value: any): void {
+    if (this.disabled) return;
     if (this.multiple) {
       if (!Array.isArray(this.selectedValue)) {
         this.selectedValue = [];
@@ -119,6 +128,7 @@ export class MultiploSelectComponent implements OnInit, OnChanges {
   }
 
   removeValue(value: any): void {
+    if (this.disabled) return;
     if (this.multiple && Array.isArray(this.selectedValue)) {
       this.selectedValue = this.selectedValue.filter((v: any) => v !== value);
       this.selectedValueChange.emit(this.selectedValue);
@@ -136,6 +146,7 @@ export class MultiploSelectComponent implements OnInit, OnChanges {
   }
 
   toggleDropdown(): void {
+    if (this.disabled) return;
     this.isOpen = !this.isOpen;
     this.updateArrowRotation();
   }
@@ -153,6 +164,7 @@ export class MultiploSelectComponent implements OnInit, OnChanges {
 
   @HostListener('document:click', ['$event'])
   clickout(event: Event): void {
+    if (this.disabled) return;
     if (!this.elementRef.nativeElement.contains(event.target)) {
       this.isOpen = false;
       this.updateArrowRotation();

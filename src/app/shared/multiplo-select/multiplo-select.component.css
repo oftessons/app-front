@@ -217,3 +217,17 @@
     border-radius: 8px;
     outline: none;
   }
+
+.select-container.disabled {
+  opacity: 0.6;
+  pointer-events: none;
+  cursor: not-allowed !important;
+}
+
+.arrow-down.disabled {
+  opacity: 0.5;
+}
+
+.selected-value .remove-value {
+  cursor: pointer;
+}

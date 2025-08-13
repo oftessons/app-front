@@ -73,6 +73,7 @@ export class PageSimuladoComponent implements OnInit {
 
   nomeFiltro: string = '';
   descricaoFiltro: string = '';
+  filtrosBloqueados: boolean = false;
 
   tiposDeProva = Object.values(TipoDeProva);
   anos = Object.values(Ano);
@@ -478,6 +479,7 @@ export class PageSimuladoComponent implements OnInit {
     this.selectedQuantidadeDeQuestoesSelecionadas = null;
     this.multiSelectTemasSubtemasSelecionados = [];
     this.palavraChave = '';
+    this.filtrosBloqueados = false;
     this.filtros = {
       ano: null,
       dificuldade: null,
@@ -1035,5 +1037,22 @@ export class PageSimuladoComponent implements OnInit {
     }
     this.respostaVerificada = true; // Marca como verificada
     
+  }
+
+  
+  verificarBloqueioFiltros(): void {
+    const tiposEspeciais = ['AAO', 'ICO/FRCOphto'];
+    this.filtrosBloqueados = this.multiSelectedTipoDeProva.some(tipo => tiposEspeciais.includes(tipo));
+    if (this.filtrosBloqueados) {
+      this.multiSelectedAno = [];
+    }
+  }
+
+  onTipoDeProvaChange(): void {
+    this.verificarBloqueioFiltros();
+  }
+
+  isFiltroBloqueado(): boolean {
+    return this.filtrosBloqueados;
   }
 }

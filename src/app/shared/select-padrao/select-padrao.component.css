@@ -121,6 +121,38 @@ label.active {
     outline: none;
   }
 
+.select-container.disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.select-dropdown.disabled {
+  opacity: 0.6;
+  cursor: not-allowed !important;
+  
+}
+
+.arrow-down.disabled {
+  border-top-color: #6c757d !important;
+  opacity: 0.5;
+}
+
+.select-container.disabled label,
+.select-container.disabled label.active {
+  color: #6c757d !important;
+}
+
+.select-container.disabled .selected-value {
+  color: #6c757d !important;
+}
+
+.no-results {
+  padding: 10px;
+  text-align: center;
+  color: #999;
+  font-style: italic;
+}
+
 @media (max-width: 768px) {
   .select-container {
     width: 100%;

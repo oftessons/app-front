@@ -10,6 +10,7 @@ export class InputPadraoComponent implements OnInit {
   @Input() label: string = '';
   @Input() value: string = '';
   @Input() placeholder: string = '';
+  @Input() disabled: boolean = false;
   @Output() valueChange: EventEmitter<string> = new EventEmitter<string>();
 
   constructor() { }
@@ -24,6 +25,8 @@ export class InputPadraoComponent implements OnInit {
   }
 
   onValueChange(event: Event): void {
+    if (this.disabled) return;
+
     const inputElement = event.target as HTMLInputElement;
     this.value = inputElement.value;
     this.valueChange.emit(this.value);
