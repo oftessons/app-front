@@ -675,7 +675,7 @@ p {
   font-size: 16px;
 }
 
-.img-comentario{
+/* .img-comentario{
   font-size: 16px;
   color: var(--text-color) !important;
 }
@@ -686,15 +686,33 @@ p {
   span {
     color: var(--text-color) !important;
   }
-}
+} */
 
 /* Usando ::ng-deep para sobrescrever estilos encapsulados */
-::ng-deep .img-comentario span {
+/* ::ng-deep .img-comentario span {
+  color: var(--text-color) !important;
+} */
+
+/* Outra alternativa mais específica */
+/* ::ng-deep .img-comentario span[style*="color"] {
+  color: var(--text-color) !important;
+} */
+
+::ng-deep .img-comentario span[style*="rgb(0, 0, 0)"],
+::ng-deep .img-comentario span[style*="rgb(0,0,0)"],
+::ng-deep .img-comentario span[style*="color: rgb(0, 0, 0)"],
+::ng-deep .img-comentario span[style*="color: rgb(0,0,0)"],
+::ng-deep .img-comentario span[style*="color:rgb(0, 0, 0)"],
+::ng-deep .img-comentario span[style*="color:rgb(0,0,0)"] {
   color: var(--text-color) !important;
 }
 
-/* Outra alternativa mais específica */
-::ng-deep .img-comentario span[style*="color"] {
+::ng-deep .img-comentario p[style*="rgb(0, 0, 0)"],
+::ng-deep .img-comentario p[style*="rgb(0,0,0)"],
+::ng-deep .img-comentario p[style*="color: rgb(0, 0, 0)"],
+::ng-deep .img-comentario p[style*="color: rgb(0,0,0)"],
+::ng-deep .img-comentario p[style*="color:rgb(0, 0, 0)"],
+::ng-deep .img-comentario p[style*="color:rgb(0,0,0)"] {
   color: var(--text-color) !important;
 }
 
