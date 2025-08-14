@@ -1,15 +1,16 @@
-<div class="select-container">
+<div class="select-container" [class.disabled]="disabled">
   <label [class.active]="multiple ? selectedValue?.length > 0 : selectedValue">{{ label }}</label>
 
   <div
     [ngStyle]="customStyles"
     class="select-dropdown"
-    (click)="toggleDropdown()"
+    [class.disabled]="disabled"
+    (click)="!disabled && toggleDropdown()"
   >
     <div *ngIf="multiple && selectedValue?.length > 0" class="selected-values">
       <span *ngFor="let value of selectedValue" class="selected-value">
         {{ getLabelFromValue(value) }}
-        <span class="remove-value" (click)="removeValue(value)">×</span>
+        <span class="remove-value" *ngIf="!disabled" (click)="removeValue(value)">×</span>
       </span>
     </div>
 
@@ -17,10 +18,10 @@
       {{ getLabelFromValue(selectedValue) }}
     </div>
 
-    <div class="arrow-down"></div>
+    <div class="arrow-down" [class.disabled]="disabled"></div>
   </div>
 
-  <div class="options-container" *ngIf="isOpen">
+  <div class="options-container" *ngIf="isOpen && !disabled">
       <input
         *ngIf="searchable" 
         type="text"

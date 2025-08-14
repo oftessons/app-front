@@ -23,6 +23,7 @@ export class SelectPadraoComponent implements OnInit, OnChanges {
   @Output() selectedValueChange: EventEmitter<any> = new EventEmitter<any>();
   @Input() customStyles: { [key: string]: string } = {};
   @Input() searchable: boolean = false;
+  @Input() disabled: boolean = false;
 
   searchTerm: string = '';
   isOpen: boolean = false;
@@ -35,6 +36,10 @@ export class SelectPadraoComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    if (this.disabled) {
+      this.isOpen = false;
+      this.updateArrowRotation();
+    }
     if (changes.options) {
       this.filteredOptions = this.options;
       this.searchTerm = '';
@@ -43,6 +48,8 @@ export class SelectPadraoComponent implements OnInit, OnChanges {
   }
 
   onSearchTermChange(): void {
+    if (this.disabled) return;
+
     const normalize = (str: string) =>
       str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
     const term = normalize(this.searchTerm);
@@ -98,6 +105,8 @@ export class SelectPadraoComponent implements OnInit, OnChanges {
   }
 
   onSelect(value: any): void {
+    if (this.disabled) return;
+
     this.selectedValue = value;
     this.selectedValueChange.emit(value);
     this.isOpen = false;
@@ -105,6 +114,7 @@ export class SelectPadraoComponent implements OnInit, OnChanges {
   }
 
   toggleDropdown(): void {
+    if (this.disabled) return;
     this.isOpen = !this.isOpen;
     this.updateArrowRotation();
     if (this.isOpen && this.searchable) {
@@ -130,6 +140,7 @@ export class SelectPadraoComponent implements OnInit, OnChanges {
 
   @HostListener('document:click', ['$event'])
   clickout(event: Event): void {
+    if (this.disabled) return;
     if (!this.elementRef.nativeElement.contains(event.target)) {
       this.isOpen = false;
       this.updateArrowRotation();

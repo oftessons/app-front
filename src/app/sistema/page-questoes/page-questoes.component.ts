@@ -49,6 +49,7 @@ declare var bootstrap: any;
 export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   carregando: boolean = false;
   filtroSelecionado: any;
+  filtrosBloqueados: boolean = false;
   questao: Questao = new Questao();
   selectedOption: string = '';
   usuario!: Usuario;
@@ -479,6 +480,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     this.multiSelectTemasSubtemasSelecionados = [];
 
     this.palavraChave = '';
+    this.filtrosBloqueados = false;
     this.filtros = {
       ano: null,
       dificuldade: null,
@@ -1172,5 +1174,21 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
   isDarkMode(): boolean {
     return this.themeService.isDarkMode();
+  }
+
+  verificarBloqueioFiltros(): void {
+    const tiposEspeciais = ['AAO', 'ICO/FRCOphto'];
+    this.filtrosBloqueados = this.multSelectTipoDeProva.some(tipo => tiposEspeciais.includes(tipo));
+    if (this.filtrosBloqueados) {//filtros a serem limpos
+      this.multSelectAno = [];
+    }
+  }
+
+  onTipoDeProvaChange(): void {
+    this.verificarBloqueioFiltros();
+  }
+
+  isFiltroBloqueado(): boolean {
+    return this.filtrosBloqueados;
   }
 }

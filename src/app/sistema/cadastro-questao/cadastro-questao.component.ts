@@ -58,7 +58,8 @@ export class CadastroQuestaoComponent implements OnInit, AfterViewInit {
   totalElements = 0;
   maxAttempts = 10; 
   limiteQuestoes: boolean = false;
-  
+  alternativasDisponiveis = ['A', 'B', 'C', 'D', 'E'];
+
   selectedAlternativeIndex: number = -3;
 
   anos: string[] = Object.values(AnoDescricoes);
@@ -514,6 +515,9 @@ onSubmit(): void {
           if(alt.texto == 'D'){
             this.formData.append('D', alt.foto);
           }
+          if(alt.texto == 'E'){
+            this.formData.append('E', alt.foto);
+          }
         }
       });
     }else{
@@ -528,6 +532,9 @@ onSubmit(): void {
       }
       if (this.questaoDTO.alternativas[3].foto) {
         this.formData.append('D', this.questaoDTO.alternativas[3].foto);
+      }
+      if (this.questaoDTO.alternativas[4].foto) {
+        this.formData.append('E', this.questaoDTO.alternativas[4].foto);
       }
     }
   
@@ -821,5 +828,47 @@ onFileSelectedImageEditar(event: any, alternativaIndex: string) {
 
   isDarkMode(): boolean {
     return this.themeService.isDarkMode();
+  }
+
+  adicionarAlternativaE(): void {
+    if (this.questaoDTO.alternativas.length < 5) {
+      const proximaLetra = this.alternativasDisponiveis[this.questaoDTO.alternativas.length];
+      
+      this.questaoDTO.alternativas.push({
+        id: this.questaoDTO.alternativas.length + 1,
+        texto: proximaLetra,
+        correta: false,
+        comentario: ''
+      });
+
+      this.questaoDTO.alternativaImagems?.push({
+        id: this.questaoDTO.alternativaImagems.length + 1,
+        texto: proximaLetra,
+        correta: false
+      });
+    }
+  }
+
+  removerAlternativaE(): void {
+    if (this.questaoDTO.alternativas.length > 4) {
+      const ultimoIndex = this.questaoDTO.alternativas.length - 1;
+      
+      this.questaoDTO.alternativas.pop();
+      this.questaoDTO.alternativaImagems?.pop();
+      
+      const fieldName = `fotoDaAlternativa${ultimoIndex}`;
+      const fieldNameNew = `afirmacao${ultimoIndex}`;
+      
+      delete this.fotoPreviews[fieldName];
+      delete this.imagePreviews[fieldNameNew];
+    }
+  }
+
+  podeAdicionarAlternativa(): boolean {
+    return this.questaoDTO.alternativas.length < 5;
+  }
+
+  podeRemoverAlternativa(): boolean {
+    return this.questaoDTO.alternativas.length > 4;
   }
 }

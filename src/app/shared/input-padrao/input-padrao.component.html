@@ -1,5 +1,14 @@
 <!-- input-padrao.component.html -->
-<div class="input-container">
-    <input type="text" [(ngModel)]="value" (input)="onValueChange($event)" (focus)="onFocus()" (blur)="onBlur()" placeholder="{{ placeholder }}" />
-    <label [class.active]="value">{{ label }}</label>
-  </div>
+<div class="input-container" [class.disabled]="disabled">
+  <input
+    type="text"
+    [(ngModel)]="value"
+    (input)="onValueChange($event)"
+    (focus)="onFocus()"
+    (blur)="onBlur()"
+    placeholder="{{ placeholder }}"
+    [disabled]="disabled"
+    [class.disabled]="disabled"
+  />
+  <label [class.active]="value" [class.disabled]="disabled">{{ label }}</label>
+</div>

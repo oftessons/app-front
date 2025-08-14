@@ -1,14 +1,14 @@
-<div class="select-container">
+<div class="select-container" [class.disabled]="disabled">
   <label [class.active]="selectedValue">{{ label }}</label>
 
-  <div [ngStyle]="customStyles" class="select-dropdown" (click)="toggleDropdown()">
+  <div [ngStyle]="customStyles" class="select-dropdown" [class.disabled]="disabled" (click)="!disabled && toggleDropdown()">
     <div class="selected-value">
       {{ getLabelFromValue(selectedValue) || '' }}
     </div>
-    <div class="arrow-down"></div>
+    <div class="arrow-down" [class.disabled]="disabled"></div>
   </div>
 
-  <div class="options-container" *ngIf="isOpen">
+  <div class="options-container" *ngIf="isOpen && !disabled">
     <input
       *ngIf="searchable"
       type="text"

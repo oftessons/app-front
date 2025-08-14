@@ -36,7 +36,8 @@
                   label="Ano"
                   [options]="anosDescricoes"
                   [(selectedValue)]="multiSelectedAno"
-                  [multiple]="true">
+                  [multiple]="true"
+                  [disabled]="isFiltroBloqueado()">
                 </app-multiplo-select>
               </div>
               <div class="espaco-select">
@@ -62,7 +63,8 @@
                     label="Tipo de Prova"
                     [options]="tiposDeProvaDescricoes"
                     [(selectedValue)]="multiSelectedTipoDeProva"
-                    [multiple]="true">
+                    [multiple]="true"
+                    (selectedValueChange)="onTipoDeProvaChange()">
               </app-multiplo-select>
               <div class="espaco-select mt-3"> <app-input-padrao
                     label="Pesquisar por palavra-chave"

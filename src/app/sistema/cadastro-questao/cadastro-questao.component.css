@@ -564,3 +564,32 @@ input[type="checkbox"] {
   background-color: var(--bg-input);
   border: 1px solid var(--border-color);
 }
+
+.btn-outline-primary {
+  background-color: #0f1934;
+  border-color: #0f1934;
+  color: #ffffff;
+}
+
+.btn-outline-primary:hover {
+  background-color: #0d1a26;
+  border-color: #0d1a26;
+}
+
+.btn-outline-danger {
+  background-color: #dc3545;
+  border-color: #dc3545;
+  color: #ffffff;
+}
+
+.btn-outline-danger:hover {
+  background-color: #c82333;
+  border-color: #bd2131;
+}
+
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  border-radius: 0.2rem;
+  margin-left: 30px;
+}

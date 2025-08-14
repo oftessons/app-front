@@ -28,7 +28,8 @@
                 label="Ano"
                 [options]="anosDescricoes"
                 [(selectedValue)]="multSelectAno"
-                [multiple]="true">
+                [multiple]="true"
+                [disabled]="isFiltroBloqueado()">
               </app-multiplo-select>
             </div>
             <!--<div class="espaco-select">
@@ -73,7 +74,8 @@
                 label="Tipo de Prova"
                 [options]="tiposDeProvaDescricoes"
                 [(selectedValue)]="multSelectTipoDeProva"
-                [multiple]="true">
+                [multiple]="true"
+                (selectedValueChange)="onTipoDeProvaChange()">
               </app-multiplo-select>
             </div>
             <!-- <div class="espaco-select">

@@ -288,32 +288,49 @@
                   <div class="image-container">
                     <input type="radio" [name]="questaoDTO.tipoItemQuestaoImagem + 'Alternativa'"
                       (click)="markCorrectImage(i)" [checked]="alternativa.correta" class="checkbox">
-                    <div class="image-upload">
-                      <input type="file" id="afirmacao{{ i }}" name="afirmacao{{ i }}"
-                        (change)="onFileSelectedImage($event, 'afirmacao' + i)" accept="image/*" />
-                      <label for="afirmacao{{ i }}">
-                        <div class="image-preview" id="imagePreview{{ i }}">
-                          <ng-container *ngIf="imagePreviews['afirmacao' + i]">
-                            <div class="preview-container">
-                              <img [src]="imagePreviews['afirmacao' + i]" alt="Image Preview" />
-                              <button type="button" class="btn-remove-image"
-                                (click)="removeFile('afirmacao' + i, $event)">
-                                <i class="fas fa-times"></i>
-                              </button>
-                            </div>
-                          </ng-container>
-                          <!-- <img *ngIf="imagePreviews['afirmacao' + i]" [src]="imagePreviews['afirmacao' + i]" alt="Image Preview" /> -->
-                          <span *ngIf="!imagePreviews['afirmacao' + i]">
-                            <img
-                              [src]="!isDarkMode() ? 'assets/imagens/img-foto.svg' : 'assets/Icons/dark/img-foto-dark.svg'"
-                              style="width: 50px;" class="upload-icon"> Clique para fazer upload da imagem
-                          </span>
-                        </div>
-                      </label>
+                    <div class="col">
+                      <label for="{{questaoDTO.tipoItemQuestaoImagem + 'Alternativa'}}">Alternativa {{ alternativa.texto }}</label>
+                      <div class="image-upload">
+                        <input type="file" id="afirmacao{{ i }}" name="afirmacao{{ i }}"
+                          (change)="onFileSelectedImage($event, 'afirmacao' + i)" accept="image/*" />
+                        <label for="afirmacao{{ i }}">
+                          <div class="image-preview" id="imagePreview{{ i }}">
+                            <ng-container *ngIf="imagePreviews['afirmacao' + i]">
+                              <div class="preview-container">
+                                <img [src]="imagePreviews['afirmacao' + i]" alt="Image Preview" />
+                                <button type="button" class="btn-remove-image"
+                                  (click)="removeFile('afirmacao' + i, $event)">
+                                  <i class="fas fa-times"></i>
+                                </button>
+                              </div>
+                            </ng-container>
+                            <!-- <img *ngIf="imagePreviews['afirmacao' + i]" [src]="imagePreviews['afirmacao' + i]" alt="Image Preview" /> -->
+                            <span *ngIf="!imagePreviews['afirmacao' + i]">
+                              <img
+                                [src]="!isDarkMode() ? 'assets/imagens/img-foto.svg' : 'assets/Icons/dark/img-foto-dark.svg'"
+                                style="width: 50px;" class="upload-icon"> Clique para fazer upload da imagem
+                            </span>
+                          </div>
+                        </label>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
+            </div>
+            <div *ngIf="(questaoDTO.tipoItemQuestaoImagem === 'imagem' || questaoDTO.tipoItemQuestaoImagem === 'texto') && !questaoDTO.id" class="form-group mb-3">
+              <button type="button" class="btn btn-sm btn-outline-primary me-2" 
+                      (click)="adicionarAlternativaE()" 
+                      [disabled]="!podeAdicionarAlternativa()"
+                      *ngIf="podeAdicionarAlternativa()">
+                <i class="fas fa-plus"></i> Adicionar Alternativa E
+              </button>
+              <button type="button" class="btn btn-sm btn-outline-danger" 
+                      (click)="removerAlternativaE()" 
+                      [disabled]="!podeRemoverAlternativa()"
+                      *ngIf="podeRemoverAlternativa()">
+                <i class="fas fa-minus"></i> Remover Alternativa E
+              </button>
             </div>
           </div>
         </div>

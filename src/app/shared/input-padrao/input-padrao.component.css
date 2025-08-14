@@ -60,3 +60,27 @@
     flex-grow: 1;
     padding-top: 8px;
   }
+
+.input-container.disabled {
+  opacity: 0.6;
+}
+
+.input-container input:disabled,
+.input-container input.disabled {
+  cursor: not-allowed !important;
+}
+
+.input-container.disabled label {
+    color: #6c757d !important;
+    top: 50% !important;
+    left: 10px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    transform: translateY(-50%) !important;
+}
+
+.input-container.disabled label.active {
+    top: 12px !important;
+    font-size: 10px !important;
+    transform: translateY(0) !important;
+}
