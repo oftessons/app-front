@@ -703,7 +703,16 @@ p {
 ::ng-deep .img-comentario span[style*="color: rgb(0, 0, 0)"],
 ::ng-deep .img-comentario span[style*="color: rgb(0,0,0)"],
 ::ng-deep .img-comentario span[style*="color:rgb(0, 0, 0)"],
-::ng-deep .img-comentario span[style*="color:rgb(0,0,0)"] {
+::ng-deep .img-comentario span[style*="color:rgb(0,0,0)"],
+::ng-deep .img-comentario span[style*="color: rgb(33, 37, 41);"]  {
+  color: var(--text-color) !important;
+}
+
+::ng-deep .img-comentario span[style*="background-color"] {
+  color: #000 !important;
+}
+
+::ng-deep .img-comentario span[style*="background-color"] {
   color: var(--text-color) !important;
 }
 
@@ -712,7 +721,8 @@ p {
 ::ng-deep .img-comentario p[style*="color: rgb(0, 0, 0)"],
 ::ng-deep .img-comentario p[style*="color: rgb(0,0,0)"],
 ::ng-deep .img-comentario p[style*="color:rgb(0, 0, 0)"],
-::ng-deep .img-comentario p[style*="color:rgb(0,0,0)"] {
+::ng-deep .img-comentario p[style*="color:rgb(0,0,0)"],
+::ng-deep .img-comentario p[style*="color: rgb(33, 37, 41);"] {
   color: var(--text-color) !important;
 }
 
