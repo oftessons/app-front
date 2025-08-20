@@ -1,6 +1,7 @@
 import { Tema } from "./tema";
 
 export const TemaDescricoes: Record<Tema, string> = {
+  [Tema.AAO_ADAPTER]: 'AAO Adapter',
   [Tema.CATARATA]: 'Catarata',
   [Tema.CIRURGIA_REFRATIVA]: 'Cirurgia Refrativa',
   [Tema.CORNEA_CONJUNTIVA_E_ESCLERA]: 'Córnea, Conjuntiva e Esclera',
