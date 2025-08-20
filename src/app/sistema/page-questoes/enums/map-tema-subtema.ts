@@ -3,7 +3,7 @@ import { Subtema } from "./subtema";
 
 export const temasESubtemas: Record<Tema, Subtema[]> = {
 
-  [Tema.AAO_ADAPTER]: [
+  [Tema.AAO_ADAPTED]: [
     Subtema.UPDATE_ON_GENERAL_MEDICINE,
     Subtema.FUNDAMENTALS_AND_PRINCIPLES_OF_OPHTHALMOLOGY,
     Subtema.CLINICAL_OPTICS_AND_VISION_REHABILITATION,
