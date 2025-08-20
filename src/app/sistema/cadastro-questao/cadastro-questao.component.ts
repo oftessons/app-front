@@ -46,6 +46,7 @@ export class CadastroQuestaoComponent implements OnInit, AfterViewInit {
   fotoDaRespostaDois: File | null = null;
   fotoDaRespostaTres: File | null = null;
   fotoDaRespostaQuatro: File | null = null;
+  fotoDaRespostaCinco: File | null = null;
   videoDaQuestao: File | null = null;
   imagePreviews: { [key: string]: string | ArrayBuffer | null } = {};
   id!: number;
@@ -100,6 +101,14 @@ editorConfig3 = {
 
 editorConfig4 = {
   toolbar: '#toolbar4'
+};
+
+editorConfig5 = {
+  toolbar: '#toolbar5'
+};
+
+editorConfig6 = {
+  toolbar: '#toolbar6'
 };
 
   constructor(
@@ -188,6 +197,9 @@ editorConfig4 = {
             if (this.questaoDTO.fotoDaRespostaQuatroUrl){
               this.fotoPreviews['fotoDaRespostaQuatro'] = this.questaoDTO.fotoDaRespostaQuatroUrl;
             }
+            if (this.questaoDTO.fotoDaRespostaCincoUrl){
+              this.fotoPreviews['fotoDaRespostaCinco'] = this.questaoDTO.fotoDaRespostaCincoUrl;
+            }
             if (this.questaoDTO.videoDaQuestaoUrl){
               this.fotoPreviews['videoDaQuestao'] = this.questaoDTO.videoDaQuestaoUrl;
             }
@@ -217,6 +229,28 @@ editorConfig4 = {
 
 
   ngAfterViewInit(): void {
+    const quill6 = new Quill('#editor6', {
+      modules: {
+        toolbar: this.editorConfig6.toolbar
+      },
+      theme: 'snow'
+    });
+    quill6.root.innerHTML = this.questaoDTO.comentarioDaQuestaoSeis || '';
+    quill6.on('text-change', () => {
+      this.questaoDTO.comentarioDaQuestaoSeis = quill6.root.innerHTML;
+    });
+
+    const quill5 = new Quill('#editor5', {
+      modules: {
+        toolbar: this.editorConfig5.toolbar
+      },
+      theme: 'snow'
+    });
+    quill5.root.innerHTML = this.questaoDTO.comentarioDaQuestaoCinco || '';
+    quill5.on('text-change', () => {
+      this.questaoDTO.comentarioDaQuestaoCinco = quill5.root.innerHTML;
+    });
+
     const quill4 = new Quill('#editor4', {
       modules: {
         toolbar: this.editorConfig4.toolbar
@@ -294,11 +328,22 @@ editorConfig4 = {
       if (editor4) {
         editor4.innerHTML = this.questaoDTO.comentarioDaQuestaoQuatro || '';
       }
-  
-      const editor5 = document.querySelector('#editor1')?.querySelector('.ql-editor');
+
+      const editor5 = document.querySelector('#editor5')?.querySelector('.ql-editor');
       if (editor5) {
-        editor5.innerHTML = this.questaoDTO.enunciadoDaQuestao || '';
+        editor5.innerHTML = this.questaoDTO.comentarioDaQuestaoCinco || '';
       }
+
+      const editor6 = document.querySelector('#editor6')?.querySelector('.ql-editor');
+      if (editor6) {
+        editor6.innerHTML = this.questaoDTO.comentarioDaQuestaoSeis || '';
+      }
+
+      const editorEnunciado = document.querySelector('#editor1')?.querySelector('.ql-editor');
+      if (editorEnunciado) {
+        editorEnunciado.innerHTML = this.questaoDTO.enunciadoDaQuestao || '';
+      }
+      
     });
   }
   
@@ -343,6 +388,9 @@ editorConfig4 = {
           break;
           case 'fotoDaRespostaQuatro':
           this.fotoDaRespostaQuatro = file;
+          break;
+          case 'fotoDaRespostaCinco':
+          this.fotoDaRespostaCinco = file;
           break;
           case 'videoDaQuestao':
             this.videoDaQuestao = file;
@@ -447,6 +495,16 @@ onSubmit(): void {
       }
     }
 
+    const quillEditor6 = document.querySelector('#editor6 .ql-editor');
+    if (quillEditor6) {
+      this.questaoDTO.comentarioDaQuestaoSeis = quillEditor6.innerHTML;
+    }
+
+    const quillEditor5 = document.querySelector('#editor5 .ql-editor');
+    if (quillEditor5) {
+      this.questaoDTO.comentarioDaQuestaoCinco = quillEditor5.innerHTML;
+    }
+
     const quillEditor4 = document.querySelector('#editor4 .ql-editor');
     if (quillEditor4) {
       this.questaoDTO.comentarioDaQuestaoQuatro = quillEditor4.innerHTML;
@@ -497,46 +555,19 @@ onSubmit(): void {
      // console.log("fotoDaRespostaQuatro: passo");
       this.formData.append('fotoDaRespostaQuatroArquivo', this.fotoDaRespostaQuatro);
     }
+    if (this.fotoDaRespostaCinco) {
+      // console.log("fotoDaRespostaCinco: passo");
+      this.formData.append('fotoDaRespostaCincoArquivo', this.fotoDaRespostaCinco);
+    }
     if (this.videoDaQuestao) {
       this.formData.append('videoDaQuestaoArquivo', this.videoDaQuestao);
     }
-    if(this.questaoDTO.id != null){
-      this.questaoDTO.alternativas.forEach((alt, index) => {
-        if (alt.foto) {
-          if(alt.texto == 'A'){
-            this.formData.append('A', alt.foto);
-          }
-          if(alt.texto == 'B'){
-            this.formData.append('B', alt.foto);
-          }
-          if(alt.texto == 'C'){
-            this.formData.append('C', alt.foto);
-          }
-          if(alt.texto == 'D'){
-            this.formData.append('D', alt.foto);
-          }
-          if(alt.texto == 'E'){
-            this.formData.append('E', alt.foto);
-          }
-        }
-      });
-    }else{
-      if (this.questaoDTO.alternativas[0].foto) {
-      this.formData.append('A', this.questaoDTO.alternativas[0].foto);
+    this.questaoDTO.alternativas.forEach((alt, index) => {
+      if (alt.foto instanceof File) {
+        console.log(`Anexando foto da alternativa ${alt.texto}:`, alt.foto);
+        this.formData.append(alt.texto, alt.foto);
       }
-      if (this.questaoDTO.alternativas[1].foto) {
-        this.formData.append('B', this.questaoDTO.alternativas[1].foto);
-      }
-      if (this.questaoDTO.alternativas[2].foto) {
-        this.formData.append('C', this.questaoDTO.alternativas[2].foto);
-      }
-      if (this.questaoDTO.alternativas[3].foto) {
-        this.formData.append('D', this.questaoDTO.alternativas[3].foto);
-      }
-      if (this.questaoDTO.alternativas[4].foto) {
-        this.formData.append('E', this.questaoDTO.alternativas[4].foto);
-      }
-    }
+    });
   
     //console.debug('Enviando formulário com dados da questão:', this.formData);
    // console.log('CLASSE ', objetoJson);
@@ -618,6 +649,7 @@ onSubmit(): void {
     this.fotoDaRespostaDois = null;
     this.fotoDaRespostaTres = null;
     this.fotoDaRespostaQuatro = null;
+    this.fotoDaRespostaCinco = null;
     this.videoDaQuestao = null;
 
   }
@@ -717,6 +749,7 @@ onFileSelectedImageEditar(event: any, alternativaIndex: string) {
     this.fotoDaRespostaDois = null;
     this.fotoDaRespostaTres = null;
     this.fotoDaRespostaQuatro = null;
+    this.fotoDaRespostaCinco = null;
     this.videoDaQuestao = null;
     this.selectedSubtemaValue = null;
     this.imagePreviews = {};
@@ -745,7 +778,7 @@ onFileSelectedImageEditar(event: any, alternativaIndex: string) {
 
   private limparEditores(): void {
     setTimeout(() => {
-      const editors = ['#editor', '#editor1', '#editor2', '#editor3', '#editor4'];
+      const editors = ['#editor', '#editor1', '#editor2', '#editor3', '#editor4', '#editor5', '#editor6'];
       editors.forEach(selector => {
         const editorElement = document.querySelector(selector);
         if (editorElement) {
@@ -780,6 +813,8 @@ onFileSelectedImageEditar(event: any, alternativaIndex: string) {
         this.questaoDTO.fotoDaRespostaTresUrl = null;
       } else if (fieldName === 'fotoDaRespostaQuatro') {
         this.questaoDTO.fotoDaRespostaQuatroUrl = null;
+      } else if (fieldName === 'fotoDaRespostaCinco') {
+        this.questaoDTO.fotoDaRespostaCincoUrl = null;
       } else if (fieldName === 'videoDaQuestao') {
         this.questaoDTO.videoDaQuestaoUrl = null;
       } else if (fieldName.startsWith('fotoDaAlternativa')) {
@@ -789,6 +824,7 @@ onFileSelectedImageEditar(event: any, alternativaIndex: string) {
           if (index === 1) this.questaoDTO.alternativas[1].imagemUrl = null;
           if (index === 2) this.questaoDTO.alternativas[2].imagemUrl = null;
           if (index === 3) this.questaoDTO.alternativas[3].imagemUrl = null;
+          if (index === 4) this.questaoDTO.alternativas[4].imagemUrl = null;
         }
       }
     }
@@ -802,6 +838,7 @@ onFileSelectedImageEditar(event: any, alternativaIndex: string) {
       if (fieldName === 'fotoDaRespostaDois') this.fotoDaRespostaDois = null;
       if (fieldName === 'fotoDaRespostaTres') this.fotoDaRespostaTres = null;
       if (fieldName === 'fotoDaRespostaQuatro') this.fotoDaRespostaQuatro = null;
+      if (fieldName === 'fotoDaRespostaCinco') this.fotoDaRespostaCinco = null;
     } else if (fieldName.startsWith('afirmacao')) {
       const index = parseInt(fieldName.replace('afirmacao', ''), 10);
       if (!isNaN(index) && this.questaoDTO.alternativas[index]) {
@@ -833,6 +870,8 @@ onFileSelectedImageEditar(event: any, alternativaIndex: string) {
   adicionarAlternativaE(): void {
     if (this.questaoDTO.alternativas.length < 5) {
       const proximaLetra = this.alternativasDisponiveis[this.questaoDTO.alternativas.length];
+      console.log(this.questaoDTO.alternativas.length);
+      console.log(this.questaoDTO.alternativas.length+1);
       
       this.questaoDTO.alternativas.push({
         id: this.questaoDTO.alternativas.length + 1,
