@@ -710,6 +710,118 @@
           </div>
         </div>
 
+        <div class="row">
+          <div class="form-group">
+            <label>Comentário do Gabarito 5:</label>
+            <div id="toolbar5">
+              <select class="ql-header">
+                <option value="1"></option>
+                <option value="2"></option>
+                <option value="3"></option>
+                <option value="4"></option>
+                <option value="5"></option>
+                <option value="6"></option>
+                <option selected></option>
+              </select>
+              <select class="ql-font">
+                <option selected></option>
+                <option value="serif"></option>
+                <option value="monospace"></option>
+              </select>
+              <button class="ql-bold"></button>
+              <button class="ql-italic"></button>
+              <button class="ql-underline"></button>
+              <select class="ql-color"></select>
+              <select class="ql-background"></select>
+              <select class="ql-align">
+                <option selected></option>
+                <option value="center"></option>
+                <option value="right"></option>
+                <option value="justify"></option>
+              </select>
+              <button class="ql-list" value="ordered"></button>
+              <button class="ql-list" value="bullet"></button>
+              <button class="ql-link"></button>
+              <button class="ql-image"></button>
+              <button class="ql-video"></button>
+              <button class="ql-clean"></button>
+            </div>
+            <div id="editor5" class="form-control" name="comentarioDaQuestaoCinco"
+              [(ngModel)]="questaoDTO.comentarioDaQuestaoCinco">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Imagem do gabarito 5:</label>
+          <div class="image-upload" (drop)="onDrop($event, 'fotoDaRespostaCinco')" (dragover)="onDragOver($event)">
+            <input type="file" id="fotoDaRespostaCinco" name="fotoDaRespostaCinco"
+              (change)="onFileSelected($event, 'fotoDaRespostaCinco')" accept="image/*,video/*"
+              style="display: none;" />
+            <label for="fotoDaRespostaCinco">
+              <div class="foto-preview" id="fotoPreviewCinco">
+                <ng-container *ngIf="fotoPreviews['fotoDaRespostaCinco']">
+                  <div class="preview-container">
+                    <img *ngIf="isPreviewImage(fotoPreviews['fotoDaRespostaCinco'])"
+                      [src]="fotoPreviews['fotoDaRespostaCinco']" alt="Image Preview" />
+                    <video *ngIf="isPreviewVideo(fotoPreviews['fotoDaRespostaCinco'])"
+                      [src]="fotoPreviews['fotoDaRespostaCinco']" controls></video>
+                    <button type="button" class="btn-remove-image" (click)="removeFile('fotoDaRespostaCinco', $event)">
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
+                </ng-container>
+                <span *ngIf="!fotoPreviews['fotoDaRespostaCinco']" class="upload-placeholder">
+                  <img [src]="!isDarkMode() ? 'assets/imagens/img-foto.svg' : 'assets/Icons/dark/img-foto-dark.svg'"
+                    class="upload-icon">
+                  <p>Clique para fazer upload da imagem ou vídeo</p>
+                </span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group">
+            <label>Comentário do Gabarito 6:</label>
+            <div id="toolbar6">
+              <select class="ql-header">
+                <option value="1"></option>
+                <option value="2"></option>
+                <option value="3"></option>
+                <option value="4"></option>
+                <option value="5"></option>
+                <option value="6"></option>
+                <option selected></option>
+              </select>
+              <select class="ql-font">
+                <option selected></option>
+                <option value="serif"></option>
+                <option value="monospace"></option>
+              </select>
+              <button class="ql-bold"></button>
+              <button class="ql-italic"></button>
+              <button class="ql-underline"></button>
+              <select class="ql-color"></select>
+              <select class="ql-background"></select>
+              <select class="ql-align">
+                <option selected></option>
+                <option value="center"></option>
+                <option value="right"></option>
+                <option value="justify"></option>
+              </select>
+              <button class="ql-list" value="ordered"></button>
+              <button class="ql-list" value="bullet"></button>
+              <button class="ql-link"></button>
+              <button class="ql-image"></button>
+              <button class="ql-video"></button>
+              <button class="ql-clean"></button>
+            </div>
+            <div id="editor6" class="form-control" name="comentarioDaQuestaoSeis"
+              [(ngModel)]="questaoDTO.comentarioDaQuestaoSeis">
+            </div>
+          </div>
+        </div>
         <!--
     <div>
       <hr class="line">

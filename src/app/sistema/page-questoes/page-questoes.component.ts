@@ -727,7 +727,8 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       this.questaoAtual.fotoDaRespostaUmUrl,
       this.questaoAtual.fotoDaRespostaDoisUrl,
       this.questaoAtual.fotoDaRespostaTresUrl,
-      this.questaoAtual.fotoDaRespostaQuatroUrl
+      this.questaoAtual.fotoDaRespostaQuatroUrl,
+      this.questaoAtual.fotoDaRespostaCincoUrl
     ];
 
     imagens.forEach((url, index) => {

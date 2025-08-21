@@ -23,6 +23,7 @@ export class Questao {
   fotoAfirmacaoDois!: string | null;
   fotoAfirmacaoTres!: string | null;
   fotoAfirmacaoQuatro!: string | null;
+  fotoAfirmacaoCinco!: string | null;
   assinale!: string;
   fotoDaQuestao!: File;
   fotoDaQuestaoUrl!: string | null;
@@ -30,6 +31,7 @@ export class Questao {
   fotoDaRespostaDoisUrl!: string | null;
   fotoDaRespostaTresUrl!: string | null;
   fotoDaRespostaQuatroUrl!: string | null;
+  fotoDaRespostaCincoUrl!: string | null;
   videoDaQuestaoUrl!: string | null;
   videoDaQuestao!: File;
   fotoDaRespostaUm!: File;
@@ -41,6 +43,8 @@ export class Questao {
   comentarioDaQuestaoDois!: string;
   comentarioDaQuestaoTres!: string;
   comentarioDaQuestaoQuatro!: string;
+  comentarioDaQuestaoCinco!: string;
+  comentarioDaQuestaoSeis!: string;
   // comentarioDaQuestaoGeral!: string;
   referenciaBi!: string;
   comentadorDaQuestao!: string;

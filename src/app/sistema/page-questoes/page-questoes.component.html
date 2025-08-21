@@ -307,6 +307,22 @@
                     class="questao-video">
                   </video>
                 </ng-container>
+                <div *ngIf="questaoAtual?.comentarioDaQuestaoCinco" class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestaoCinco | safeHtml"></div>
+                <ng-container *ngIf="questaoAtual?.fotoDaRespostaCincoUrl">
+                  <img 
+                    *ngIf="isImage(questaoAtual.fotoDaRespostaCincoUrl)" 
+                    [src]="questaoAtual.fotoDaRespostaCincoUrl" 
+                    alt="Foto da questão" 
+                    class="questao-foto">
+                  <video 
+                    *ngIf="isVideo(questaoAtual.fotoDaRespostaCincoUrl)" 
+                    [src]="questaoAtual.fotoDaRespostaCincoUrl" 
+                    controls
+                    controlsList="nodownload"  
+                    class="questao-video">
+                  </video>
+                </ng-container>
+                <div *ngIf="questaoAtual?.comentarioDaQuestaoSeis" class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestaoSeis | safeHtml"></div>
                 <p *ngIf="questaoAtual?.referenciaBi">Referência: {{ questaoAtual.referenciaBi }}</p>
                 <p *ngIf="questaoAtual?.comentadorDaQuestao">Comentado por: {{ questaoAtual.comentadorDaQuestao }}</p>
               </div>

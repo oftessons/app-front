@@ -712,7 +712,7 @@ p {
   color: #000 !important;
 }
 
-::ng-deep .img-comentario span[style*="background-color"] {
+::ng-deep .img-comentario span[style*="background-color: transparent"] {
   color: var(--text-color) !important;
 }
 
