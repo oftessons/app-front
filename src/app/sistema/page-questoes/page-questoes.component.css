@@ -670,6 +670,11 @@ p {
 @media (max-width: 480px) {
   .identificadores-questao {
     flex-wrap: wrap;
+    font-size: 14px;
+  }
+
+  .identificadores-questao-resul h2 {
+  font-size: 16px;
   }
 
   .btn-editar {
