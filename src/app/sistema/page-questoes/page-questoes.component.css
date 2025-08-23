@@ -6,6 +6,7 @@
   border-radius: 15px;
   padding: 20px; /* Adicionei padding para espaçamento interno */
   margin-bottom: 10px;
+  font-size: 16px;
 }
 .conteudo-questao p {
   padding: 10px; /* Espaçamento para o parágrafo */
@@ -38,7 +39,7 @@
   align-items: center; /* Alinha os itens verticalmente no centro */
 }
 .identificadores-questao h3 {
-  font-size: 14px;
+  font-size: 16px;
   margin: 0 14px 0 22px;
 }
 
@@ -54,7 +55,7 @@
 }
 
 .identificadores-questao-resul h2 {
-  font-size: 14px;
+  font-size: 16px;
   margin: 0;
   margin-left: 12px;
 }
