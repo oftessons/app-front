@@ -264,6 +264,10 @@
   .right-buttons button {
     width: 100%; /* Faz os botões ocuparem a largura total */
   }
+
+  .conteudo-questao {
+   font-size: 16px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -658,6 +662,9 @@ p {
     margin-bottom: 0; /* Remove o espaçamento vertical */
     max-width: 30%; /* Limita a largura para não exceder 30% */
   }
+  .conteudo-questao {
+   font-size: 16px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -668,6 +675,9 @@ p {
   .btn-editar {
     width: 100%;
     padding: 8px;
+  }
+  .conteudo-questao {
+   font-size: 16px;
   }
 }
 
