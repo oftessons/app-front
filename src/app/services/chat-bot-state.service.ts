@@ -16,6 +16,7 @@ export class ChatBotStateService {
   isChatOpen$ = this.chatState.asObservable();
 
   private messageHistory: Array<{ text: string, type: string }> = [];
+  private historicoDaConversa: ApiChatRequestResponse[] = [];
   private conversationId: string | null = null;
 
   apiURL: string = environment.apiURLBase + "/chat"; 
@@ -69,12 +70,12 @@ export class ChatBotStateService {
     message: string,
     topic: string | null = null // caso precise usar tópicos no futuro
   ): Observable<{ response: string, action?: string, data?: any }> {
-    const payload: ApiChatRequestResponse[] = [
-      { text: message, role: 'user' }
-    ];
+    
+    this.historicoDaConversa.push({ text: message, role: 'user' });
+
 
     return new Observable(observer => {
-      this.http.post<ApiResponse<ApiChatRequestResponse[]>>(`${this.apiURL}/tire-sua-duvida`, payload).subscribe({
+      this.http.post<ApiResponse<ApiChatRequestResponse[]>>(`${this.apiURL}/tire-sua-duvida`, this.historicoDaConversa).subscribe({
         next: (res) => {
           const respostaBot = res?.data?.[0]?.text || '❓ Nenhuma resposta recebida.';
           observer.next({ response: respostaBot });
