@@ -42,14 +42,15 @@
           <div class="row">
             <div class="col-md-6">
               <div class="form-group">
-                <app-select-padrao label="Ano" [options]="anos" [(selectedValue)]="questaoDTO.ano">
+                <app-select-padrao [disabled]="isFiltroBloqueado()" label="Ano" [options]="anos" [(selectedValue)]="questaoDTO.ano">
                 </app-select-padrao>
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
                 <app-select-padrao label="Tipo de Prova" [options]="tiposDeProva"
-                  [(selectedValue)]="questaoDTO.tipoDeProva">
+                  [(selectedValue)]="questaoDTO.tipoDeProva"
+                  (selectedValueChange)="onTipoDeProvaChange()">
                 </app-select-padrao>
               </div>
             </div>

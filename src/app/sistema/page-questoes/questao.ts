@@ -48,7 +48,7 @@ export class Questao {
   // comentarioDaQuestaoGeral!: string;
   referenciaBi!: string;
   comentadorDaQuestao!: string;
-  ano!: Ano;
+  ano!: Ano | null;
   tema?: Tema;
   dificuldade!: Dificuldade;
   relevancia!: Relevancia;

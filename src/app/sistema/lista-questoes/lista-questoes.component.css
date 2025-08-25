@@ -66,6 +66,10 @@
   color: var(--text-color);
 }
 
+::ng-deep .mat-form-field .mat-input-element::placeholder {
+  color: var(--placeholder-color);
+}
+
 ::ng-deep .mat-form-field-label {
   color: var(--placeholder-color) !important;
 }

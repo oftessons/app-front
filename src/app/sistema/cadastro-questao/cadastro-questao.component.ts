@@ -60,6 +60,7 @@ export class CadastroQuestaoComponent implements OnInit, AfterViewInit {
   maxAttempts = 10; 
   limiteQuestoes: boolean = false;
   alternativasDisponiveis = ['A', 'B', 'C', 'D', 'E'];
+  filtrosBloqueados: boolean = false;
 
   selectedAlternativeIndex: number = -3;
 
@@ -754,7 +755,7 @@ onFileSelectedImageEditar(event: any, alternativaIndex: string) {
     this.selectedSubtemaValue = null;
     this.imagePreviews = {};
     this.fotoPreviews = {};
-    
+    this.filtrosBloqueados = false;
 
     this.formData = new FormData();
 
@@ -909,5 +910,22 @@ onFileSelectedImageEditar(event: any, alternativaIndex: string) {
 
   podeRemoverAlternativa(): boolean {
     return this.questaoDTO.alternativas.length > 4;
+  }
+
+  
+  verificarBloqueioFiltros(): void {
+    const tiposEspeciais = ['AAO', 'ICO/FRCOphto'];
+    this.filtrosBloqueados = this.questaoDTO.tipoDeProva ? tiposEspeciais.includes(this.questaoDTO.tipoDeProva) : false;
+    if (this.filtrosBloqueados) {//filtros a serem limpos
+      this.questaoDTO.ano = null;
+    }
+  }
+
+  onTipoDeProvaChange(): void {
+    this.verificarBloqueioFiltros();
+  }
+
+  isFiltroBloqueado(): boolean {
+    return this.filtrosBloqueados;
   }
 }
