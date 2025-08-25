@@ -159,7 +159,7 @@ h2 {
 .modal-header h3 {
   font-size: 24px;
   font-weight: 500;
-  color: #ffffff;
+  color: #ffffff !important;
 }
 
 .modal-header hr {
