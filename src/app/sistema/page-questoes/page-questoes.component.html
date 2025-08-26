@@ -152,7 +152,25 @@
       <h2 class="h2">
         {{ numeroDeQuestoes }} Questões Encontradas
         <img [src]="!isDarkMode() ? 'assets/Icons/setaDireta.svg' : 'assets/Icons/dark/setaDireta-dark.svg'" alt="Ícone de Questões" class="questoes-icone">
-      </h2>      
+        <div class="balloon-container">
+          <div class="balloon-box">
+            <button class="close-btn" >×</button>
+            <h3 class="balloon-title">💡Curiosidades do Subtema</h3>
+            <span class="balloon-text">O subtema ************************* foi tem uma frquencia de aparecer **% nas questoes dos ultimos 3 anos</span>
+            <nav class="balloon-navigation">
+              <div class="balloon-indicator">
+                <div class="indicator-dot"></div>
+                <div class="indicator-dot"></div>
+                <div class="indicator-dot"></div>
+              </div>
+              <div class="balloon-buttons">
+                <button class="balloon-btn">Anterior</button>
+                <button class="balloon-btn">Próxima</button>
+              </div>
+            </nav>
+          </div>  
+        </div>
+      </h2> 
       <select (change)="selecionarQuestao($event)" class="question-dropdown">
         <option *ngFor="let item of navegacaoPorQuestao" [value]="item.index">
           {{ 'Questão ' + (item.index + 1) }}
