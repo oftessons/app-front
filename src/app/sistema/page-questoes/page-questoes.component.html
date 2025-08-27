@@ -78,6 +78,14 @@
                 (selectedValueChange)="onTipoDeProvaChange()">
               </app-multiplo-select>
             </div>
+          <div class="espaco-select">
+              <app-multiplo-select
+                label="Comentários"
+                [options]="questoesComentadas"
+                [(selectedValue)]="multiSelectQuestoesComentadas"
+                [multiple]="true">
+              </app-multiplo-select>
+            </div>
             <!-- <div class="espaco-select">
               <app-multiplo-select
                 label="Subtema"

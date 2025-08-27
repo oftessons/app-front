@@ -5,6 +5,7 @@ import {
   getDescricaoAno,
   getDescricaoCertoErrado,
   getDescricaoDificuldade,
+  getDescricaoQuestaoComentadas,
   getDescricaoRespostasSimulado,
   getDescricaoSubtema,
   getDescricaoTema,
@@ -38,6 +39,8 @@ import { CertasErradasDescricao } from './enums/certas-erradas-descricao';
 import { RespostasSimuladosDescricao } from './enums/resp-simu-descricao';
 import { filter } from 'rxjs/operators';
 import { NavigateService } from 'src/app/services/navigate.service';
+import { Comentada } from './enums/comentadas';
+import { ComentadasDescricao } from './enums/comentadas-descricao';
 
 declare var bootstrap: any;
 
@@ -64,6 +67,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   temas = Object.values(Tema);
   respSimulado = Object.values(RespostasSimulado);
   certoErrado = Object.values(CertasErradas);
+  comentadas = Object.values(Comentada);
   mensagemSucesso: string = '';
 
   jaRespondeu: boolean = false;
@@ -92,6 +96,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     assunto: null,
     certoErrado: null,
     respSimulado: null,
+    comentadas: null,
     palavraChave: null,
   };
 
@@ -116,6 +121,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   temasDescricoes: string[] = [];
   respSimuladoDescricoes: string[] = [];
   questoesCertasErradas: string[] = [];
+  questoesComentadas: string[] = [];
 
   descricaoFiltro: string = '';
   palavraChave: string = '';
@@ -127,6 +133,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   multiSelectRespSimu: RespostasSimulado[] = [];
   multiSelectCertoErrado: CertasErradas[] = [];
   multiSelectTemasSubtemasSelecionados: Subtema[] = [];
+  multiSelectQuestoesComentadas: Comentada[] = [];
 
   subtemasAgrupadosPorTema: {
     label: string;
@@ -197,6 +204,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       this.multiSelectTemasSubtemasSelecionados = filtroState.multiSelectTemasSubtemasSelecionados ?? [];
       this.multiSelectCertoErrado = filtroState.multiSelectCertoErrado ?? [];
       this.multiSelectRespSimu = filtroState.multiSelectRespSimu ?? [];
+      this.multiSelectQuestoesComentadas = filtroState.multiSelectQuestoesComentadas ?? [];
       this.palavraChave = filtroState.palavraChave ?? '';
 
       this.authService.obterUsuarioAutenticadoDoBackend().subscribe(
@@ -225,6 +233,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
         this.multSelectTipoDeProva = meuFiltro.tipoDeProva;
         this.multiSelectRespSimu = meuFiltro.respostasSimulado;
         this.multiSelectCertoErrado = meuFiltro.certasErradas;
+        this.multiSelectQuestoesComentadas = meuFiltro.questoesComentadas;
       }
     }
 
@@ -260,6 +269,9 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     );
     this.questoesCertasErradas = this.certoErrado.map((certasErradas) =>
       this.getDescricaoCertoErrado(certasErradas)
+    );
+    this.questoesComentadas = this.comentadas.map((comentada) =>
+      this.getDescricaoQuestoesComentadas(comentada)
     );
 
     this.subtemasAgrupadosPorTema = Object.entries(temasESubtemas)
@@ -418,6 +430,14 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     return certasErradas.map(this.getDescricaoCertoErrado).join('; ');
   }
 
+  getDescricaoQuestoesComentadas(comentada: Comentada): string {
+    return getDescricaoQuestaoComentadas(comentada);
+  }
+
+  getDescricoesQuestoesComentadas(comentada: Comentada[]): string {
+    return comentada.map(this.getDescricaoQuestoesComentadas).join('; ');
+  }
+
   obterAnoEnum(ano: string): Ano | undefined {
     const anoEnum = Object.keys(AnoDescricoes).find(
       (key) => AnoDescricoes[key as Ano] === ano
@@ -468,6 +488,13 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     return chave ? RespostasSimulado[chave as RespostasSimulado] : undefined;
   }
 
+  obterQuestaoComentadaEnum(descricao: string): Comentada | undefined {
+    const chave = Object.keys(ComentadasDescricao).find(
+      (key) => ComentadasDescricao[key as Comentada] === descricao
+    );
+    return chave ? Comentada[chave as Comentada] : undefined;
+  }
+
 
   LimparFiltro() {
     this.multSelectAno = [];
@@ -478,6 +505,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     this.multiSelectCertoErrado = [];
     this.multiSelectRespSimu = [];
     this.multiSelectTemasSubtemasSelecionados = [];
+    this.multiSelectQuestoesComentadas = [];
 
     this.palavraChave = '';
     this.filtrosBloqueados = false;
@@ -490,6 +518,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       certoErrado: null,
       respSimulado: null,
       palavraChave: null,
+      comentadas: null
     };
     this.paginaAtual = 0;
   }
@@ -585,6 +614,14 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       }
     }
 
+    if (this.multiSelectQuestoesComentadas.length) {
+      const questaoComentadaSelecionada = this.multiSelectQuestoesComentadas
+        .map((questaoComentada) => this.obterQuestaoComentadaEnum(questaoComentada))
+        .filter((enumQuestaoComentada) => enumQuestaoComentada !== undefined);
+
+      if (questaoComentadaSelecionada) filtros.comentada = questaoComentadaSelecionada;
+    }
+
     if (this.multiSelectTemasSubtemasSelecionados && this.multiSelectTemasSubtemasSelecionados.length > 0) {
       const temasSelecionados: string[] = [];
       const subtemasSelecionados: string[] = [];
@@ -608,12 +645,15 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       if (subtemasSelecionados.length > 0) {
         filtros.subtema = subtemasSelecionados;
       }
+
     }
 
     // Verificar se a palavra-chave está preenchida
     if (this.palavraChave && this.palavraChave.trim() !== '') {
       filtros.palavraChave = this.palavraChave.trim();
     }
+
+    // console.log(filtros);
 
     if (Object.keys(filtros).length === 0) {
       this.message = 'Por favor, selecione pelo menos um filtro.';
@@ -1071,6 +1111,14 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       if (tipoDeProvaSelecionado.length > 0) filtros.tipoDeProva = tipoDeProvaSelecionado;
     }
 
+    if (this.multiSelectQuestoesComentadas.length) {
+      const questaoComentadaSelecionada = this.multiSelectQuestoesComentadas
+        .map((questaoComentada) => this.obterQuestaoComentadaEnum(questaoComentada))
+        .filter((enumQuestaoComentada) => enumQuestaoComentada !== undefined);
+
+      if (questaoComentadaSelecionada.length > 0) filtros.comentada = questaoComentadaSelecionada;
+    }
+
     if (this.multSelectSubtema.length) {
       const subtemaSelecionado = this.multSelectSubtema
         .map((subtema) => this.obterSubtemaEnum(subtema))
@@ -1103,7 +1151,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       const temasSelecionados: string[] = [];
       const subtemasSelecionados: string[] = [];
 
-      console.log("Entrei aqui");
 
       for (const item of this.multiSelectTemasSubtemasSelecionados) {
         if (typeof item === 'string') {
@@ -1180,7 +1227,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   verificarBloqueioFiltros(): void {
     const tiposEspeciais = ['AAO', 'ICO/FRCOphto'];
     this.filtrosBloqueados = this.multSelectTipoDeProva.some(tipo => tiposEspeciais.includes(tipo));
-    if (this.filtrosBloqueados) {//filtros a serem limpos
+    if (this.filtrosBloqueados) {   //filtros a serem limpos
       this.multSelectAno = [];
     }
   }
