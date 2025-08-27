@@ -160,7 +160,39 @@
       <h2 class="h2">
         {{ numeroDeQuestoes }} Questões Encontradas
         <img [src]="!isDarkMode() ? 'assets/Icons/setaDireta.svg' : 'assets/Icons/dark/setaDireta-dark.svg'" alt="Ícone de Questões" class="questoes-icone">
-      </h2>      
+        <div class="balloon-container" *ngIf="mostrarBalloon">
+          <div class="balloon-box" [@slideIn]>
+            <button class="close-btn" (click)="fecharBalloon()">×</button>
+            <h3 class="balloon-title">💡Curiosidades do Subtema</h3>
+            <ng-container *ngIf="getCuriosidadeAtual() as curiosidade">
+              <span class="balloon-text">{{ formatarMensagemCuriosidade(curiosidade) }}</span>
+            </ng-container>
+            <div class="balloon-navigation" *ngIf="curiosidades.length > 1">
+              <div class="balloon-indicator">
+                <div 
+                class="indicator-dot" 
+                *ngFor="let item of curiosidades; let i = index"
+                [class.active]="i === curiosidadeAtual">
+              </div>
+              </div>
+              <div class="balloon-buttons">
+                <button 
+                  class="balloon-btn" 
+                  (click)="curiosidadeAnterior()" 
+                  [disabled]="curiosidadeAtual === 0">
+                  Anterior
+                </button>
+                <button
+                  class="balloon-btn"
+                  (click)="proximaCuriosidade()"
+                  [disabled]="curiosidadeAtual === curiosidades.length - 1">
+                  Próxima
+                </button>
+              </div>
+            </div>
+          </div>  
+        </div>
+      </h2> 
       <select (change)="selecionarQuestao($event)" class="question-dropdown">
         <option *ngFor="let item of navegacaoPorQuestao" [value]="item.index">
           {{ 'Questão ' + (item.index + 1) }}

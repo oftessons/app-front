@@ -39,15 +39,42 @@ import { CertasErradasDescricao } from './enums/certas-erradas-descricao';
 import { RespostasSimuladosDescricao } from './enums/resp-simu-descricao';
 import { filter } from 'rxjs/operators';
 import { NavigateService } from 'src/app/services/navigate.service';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 import { Comentada } from './enums/comentadas';
 import { ComentadasDescricao } from './enums/comentadas-descricao';
 
+
 declare var bootstrap: any;
+
+interface DadosCuriosidade {
+  qtdQuestoes: number;
+  totalQuestoes: number;
+  porcentagem: number;
+}
+
+interface CuriosidadeResponse {
+  mensagem: string;
+  subtema: string;
+  dadosCuriosidade: DadosCuriosidade[];
+}
 
 @Component({
   selector: 'app-page-questoes',
   templateUrl: './page-questoes.component.html',
   styleUrls: ['./page-questoes.component.css'],
+  animations: [
+    trigger('slideIn', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(-20px) scale(0.95)' }),
+        animate('600ms cubic-bezier(0.68, -0.55, 0.265, 1.55)', 
+          style({ opacity: 1, transform: 'translateY(0) scale(1)' }))
+      ]),
+      transition(':leave', [
+        animate('300ms ease-in', 
+          style({ opacity: 0, transform: 'translateY(-10px) scale(0.95)' }))
+      ])
+    ])
+  ]
 })
 export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   carregando: boolean = false;
@@ -163,6 +190,10 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       index: 0,
     },
   ];
+
+  mostrarBalloon: boolean = false;
+  curiosidades: any[] = [];
+  curiosidadeAtual: number = 0;
 
   constructor(
     private questoesService: QuestoesService,
@@ -539,6 +570,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     this.respostaErrada = null;
     this.mostrarPorcentagem = false;
     this.porcentagemAcertos = 0;
+    //this.fecharBalloon();
 
 
     const filtros: any = {};
@@ -677,6 +709,8 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
             questao: questao,
             index: index,
           }));
+
+          this.buscarCuriosidadesSeNecessario(filtros);
         }
 
         this.resposta = '';
@@ -1238,5 +1272,97 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
   isFiltroBloqueado(): boolean {
     return this.filtrosBloqueados;
+  }
+
+  buscarCuriosidadesSeNecessario(filtros: any): void {
+    const subtemasParaCuriosidades: string[] = [];
+
+    if (this.multiSelectTemasSubtemasSelecionados && this.multiSelectTemasSubtemasSelecionados.length > 0) {
+      const subtemasSelecionados = this.multiSelectTemasSubtemasSelecionados.filter(item => 
+        typeof item === 'string' && !item.startsWith('TEMA_')
+      );
+      subtemasParaCuriosidades.push(...subtemasSelecionados);
+    }
+
+    if (subtemasParaCuriosidades.length > 0) {
+      
+      this.questoesService.getCuriosidades(subtemasParaCuriosidades).subscribe(
+        (curiosidades: CuriosidadeResponse[]) => {
+          
+          this.curiosidades = curiosidades
+            .filter(c => c.mensagem === 'success' && this.temDadosValidosCuriosidade(c))
+            .slice(0, 3);
+          
+          this.curiosidadeAtual = 0;
+          
+          setTimeout(() => {
+            if (this.curiosidades.length > 0) {
+              this.mostrarBalloon = true;
+            }
+          }, 2000);
+        },
+        (error) => {
+          console.error('Erro ao buscar curiosidades:', error);
+        }
+      );
+    }
+  }
+
+  fecharBalloon(): void {
+    this.mostrarBalloon = false;
+    this.curiosidades = [];
+    this.curiosidadeAtual = 0;
+  }
+
+  proximaCuriosidade(): void {
+    if (this.curiosidadeAtual < this.curiosidades.length - 1) {
+      this.curiosidadeAtual++;
+    }
+  }
+
+  curiosidadeAnterior(): void {
+    if (this.curiosidadeAtual > 0) {
+      this.curiosidadeAtual--;
+    }
+  }
+
+  temDadosValidosCuriosidade(curiosidade: CuriosidadeResponse): boolean {
+    return curiosidade && 
+          curiosidade.dadosCuriosidade && 
+          curiosidade.dadosCuriosidade.length > 0 &&
+          curiosidade.mensagem === 'success';
+  }
+
+  formatarMensagemCuriosidade(curiosidade: CuriosidadeResponse): string {
+    if (!this.temDadosValidosCuriosidade(curiosidade)) {
+      return 'Dados não disponíveis para este subtema.';
+    }
+
+    const dados = curiosidade.dadosCuriosidade[0];
+    const porcentagemFormatada = dados.porcentagem.toFixed(1);
+    
+    const nomeSubtemaFormatado = this.getDescricaoSubtemaFormatada(curiosidade.subtema);
+    if (dados.qtdQuestoes === 0) {
+      return `O subtema "${nomeSubtemaFormatado}" não possui questões cadastradas nos últimos 3 anos (${dados.totalQuestoes} questões no total).`;
+    }
+    
+    return `O subtema "${nomeSubtemaFormatado}" representa ${porcentagemFormatada}% das questões dos últimos 3 anos (${dados.qtdQuestoes} de ${dados.totalQuestoes} questões).`;
+  }
+
+  getDescricaoSubtemaFormatada(subtema: string): string {
+    
+    const subtemaEnum = Object.values(Subtema).find(s => s === subtema);
+    if (subtemaEnum) {
+      return this.getDescricaoSubtema(subtemaEnum);
+    }
+    
+    return subtema.replace(/_/g, ' ').toLowerCase()
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  }
+
+  getCuriosidadeAtual(): CuriosidadeResponse | null {
+    return this.curiosidades[this.curiosidadeAtual] || null;
   }
 }
