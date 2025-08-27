@@ -86,7 +86,6 @@
   height: 163px;
   background: #f1f1f1;
   border-radius: 15px;
-  text-align: center;
   display: flex;
   flex-direction: column;
   justify-content: space-between  ;
@@ -137,6 +136,7 @@
   line-height: 140%;
   max-height: 100px;
   overflow: auto;
+  height: 100%;
   font-size: 14px;
   color: #333;
   margin-left: 10px;
@@ -186,10 +186,12 @@
   border-radius: 50%;
   margin: 0 5px;
   cursor: pointer;
+  transition: 0.3s all ease;
 }
 
 .indicator-dot.active {
   background-color: #041E4E;
+  transform: scale(1.2);
 }
 
 .balloon-buttons {
@@ -212,6 +214,40 @@
 
 .balloon-btn:hover {
   background-color: #041E4E;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.loading-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #e9ecef;
+  border-top: 2px solid #667eea;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 .questoes-icone {
