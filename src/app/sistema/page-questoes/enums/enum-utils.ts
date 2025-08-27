@@ -16,6 +16,8 @@ import { QuantidadeDeQuestõesSelecionadasDescricoes } from "./quant-que-descric
 import { RespostasSimulado } from "./resp-simu"
 import { RespostasSimuladosDescricao } from "./resp-simu-descricao"
 import { CertasErradasDescricao } from "./certas-erradas-descricao"
+import { Comentada } from "./comentadas"
+import { ComentadasDescricao } from "./comentadas-descricao"
 
 export function getQuantidadeDeQuestõesSelecionadasDescricoes( quantidadeDeQuestoesSelecionadas:QuantidadeDeQuestoesSelecionadas): string{
   return QuantidadeDeQuestõesSelecionadasDescricoes[quantidadeDeQuestoesSelecionadas];
@@ -50,4 +52,8 @@ export function getDescricaoRespostasSimulado(respostasSimulado: RespostasSimula
 
 export function getDescricaoCertoErrado(certoErrado: CertasErradas): string {
   return CertasErradasDescricao[certoErrado];
+}
+
+export function getDescricaoQuestaoComentadas(comentada: Comentada): string {
+  return ComentadasDescricao[comentada];
 }
