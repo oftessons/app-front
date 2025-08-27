@@ -1,4 +1,4 @@
-import { Component, OnInit,  AfterViewInit, DoCheck } from '@angular/core';
+import { Component, OnInit, AfterViewInit, DoCheck } from '@angular/core';
 import { Location } from '@angular/common';
 import { Questao } from '../page-questoes/questao';
 import { Tema } from '../page-questoes/enums/tema';
@@ -55,9 +55,9 @@ export class CadastroQuestaoComponent implements OnInit, AfterViewInit {
 
   questaoIds: number[] = [];
   currentPage = 0;
-  pageSize = 150; 
+  pageSize = 150;
   totalElements = 0;
-  maxAttempts = 10; 
+  maxAttempts = 10;
   limiteQuestoes: boolean = false;
   alternativasDisponiveis = ['A', 'B', 'C', 'D', 'E'];
   filtrosBloqueados: boolean = false;
@@ -75,42 +75,42 @@ export class CadastroQuestaoComponent implements OnInit, AfterViewInit {
     value: string;
     options: { label: string; value: Subtema }[];
   }[] = [];
-  
 
-  selectedImage: string='';
-  uploadedImage: string='';
+
+  selectedImage: string = '';
+  uploadedImage: string = '';
   fotoPreviews: { [key: string]: string | ArrayBuffer | null } = {};
 
   // editorConfig: any;
 
   editorContent: string = '';
   editorConfig = {
-  toolbar: '#toolbar'
-};
+    toolbar: '#toolbar'
+  };
 
-editorConfig1 = {
-  toolbar: '#toolbar1'
-};
+  editorConfig1 = {
+    toolbar: '#toolbar1'
+  };
 
-editorConfig2 = {
-  toolbar: '#toolbar2'
-};
+  editorConfig2 = {
+    toolbar: '#toolbar2'
+  };
 
-editorConfig3 = {
-  toolbar: '#toolbar3'
-};
+  editorConfig3 = {
+    toolbar: '#toolbar3'
+  };
 
-editorConfig4 = {
-  toolbar: '#toolbar4'
-};
+  editorConfig4 = {
+    toolbar: '#toolbar4'
+  };
 
-editorConfig5 = {
-  toolbar: '#toolbar5'
-};
+  editorConfig5 = {
+    toolbar: '#toolbar5'
+  };
 
-editorConfig6 = {
-  toolbar: '#toolbar6'
-};
+  editorConfig6 = {
+    toolbar: '#toolbar6'
+  };
 
   constructor(
     private questoesService: QuestoesService,
@@ -121,7 +121,7 @@ editorConfig6 = {
     private themeService: ThemeService,
     private location: Location,
     private navigateService: NavigateService
-) { 
+  ) {
   }
 
   ngOnInit(): void {
@@ -152,18 +152,18 @@ editorConfig6 = {
       { id: 3, texto: 'C', correta: false },
       { id: 4, texto: 'D', correta: false }
     ];
-    
+
     this.usuario = this.authService.getUsuarioAutenticado();
 
     //Selecion o tem texto por defaault
-    this.questaoDTO.tipoItemQuestao='texto'
-    this.questaoDTO.tipoItemQuestaoImagem='texto'
+    this.questaoDTO.tipoItemQuestao = 'texto'
+    this.questaoDTO.tipoItemQuestaoImagem = 'texto'
 
     this.activatedRoute.params.subscribe(params => {
       this.questaoDTO.id = +params['id'];
-      if (this.questaoDTO.id){
+      if (this.questaoDTO.id) {
         const proximoId = this.questoesService.getProximoId(this.questaoDTO.id);
-      
+
         this.questoesService.getQuestaoById(this.questaoDTO.id).subscribe(
           (questao) => {
             // console.log("QUESTAO RETORNADA PELO ID: ")
@@ -185,23 +185,23 @@ editorConfig6 = {
                 this.fotoPreviews['fotoDaAlternativa' + i] = null;
               }
             }
-            
-            if (this.questaoDTO.fotoDaRespostaUmUrl){
+
+            if (this.questaoDTO.fotoDaRespostaUmUrl) {
               this.fotoPreviews['fotoDaRespostaUm'] = this.questaoDTO.fotoDaRespostaUmUrl;
             }
-            if (this.questaoDTO.fotoDaRespostaDoisUrl){
+            if (this.questaoDTO.fotoDaRespostaDoisUrl) {
               this.fotoPreviews['fotoDaRespostaDois'] = this.questaoDTO.fotoDaRespostaDoisUrl;
             }
-            if (this.questaoDTO.fotoDaRespostaTresUrl){
+            if (this.questaoDTO.fotoDaRespostaTresUrl) {
               this.fotoPreviews['fotoDaRespostaTres'] = this.questaoDTO.fotoDaRespostaTresUrl;
             }
-            if (this.questaoDTO.fotoDaRespostaQuatroUrl){
+            if (this.questaoDTO.fotoDaRespostaQuatroUrl) {
               this.fotoPreviews['fotoDaRespostaQuatro'] = this.questaoDTO.fotoDaRespostaQuatroUrl;
             }
-            if (this.questaoDTO.fotoDaRespostaCincoUrl){
+            if (this.questaoDTO.fotoDaRespostaCincoUrl) {
               this.fotoPreviews['fotoDaRespostaCinco'] = this.questaoDTO.fotoDaRespostaCincoUrl;
             }
-            if (this.questaoDTO.videoDaQuestaoUrl){
+            if (this.questaoDTO.videoDaQuestaoUrl) {
               this.fotoPreviews['videoDaQuestao'] = this.questaoDTO.videoDaQuestaoUrl;
             }
           },
@@ -212,20 +212,20 @@ editorConfig6 = {
       }
     });
 
-  this.subtemasAgrupadosPorTema = Object.entries(temasESubtemas)
+    this.subtemasAgrupadosPorTema = Object.entries(temasESubtemas)
       .map(([temaKey, subtemasArray]) => {
         return {
-          label: TemaDescricoes[temaKey as Tema], 
-          value: Tema[temaKey as keyof typeof Tema],         
+          label: TemaDescricoes[temaKey as Tema],
+          value: Tema[temaKey as keyof typeof Tema],
           options: subtemasArray.map(subtemaValue => {
             return {
               label: SubtemaDescricoes[subtemaValue as Subtema],
-              value: subtemaValue 
+              value: subtemaValue
             };
           })
         };
-    }); 
-        
+      });
+
   }
 
 
@@ -262,7 +262,7 @@ editorConfig6 = {
     quill4.on('text-change', () => {
       this.questaoDTO.comentarioDaQuestaoQuatro = quill4.root.innerHTML;
     });
-  
+
     const quill3 = new Quill('#editor3', {
       modules: {
         toolbar: this.editorConfig3.toolbar
@@ -273,7 +273,7 @@ editorConfig6 = {
     quill3.on('text-change', () => {
       this.questaoDTO.comentarioDaQuestaoTres = quill3.root.innerHTML;
     });
-  
+
     const quill2 = new Quill('#editor2', {
       modules: {
         toolbar: this.editorConfig2.toolbar
@@ -284,7 +284,7 @@ editorConfig6 = {
     quill2.on('text-change', () => {
       this.questaoDTO.comentarioDaQuestaoDois = quill2.root.innerHTML;
     });
-  
+
     const quill = new Quill('#editor', {
       modules: {
         toolbar: this.editorConfig.toolbar
@@ -295,7 +295,7 @@ editorConfig6 = {
     quill.on('text-change', () => {
       this.questaoDTO.comentarioDaQuestao = quill.root.innerHTML;
     });
-  
+
     const quill1 = new Quill('#editor1', {
       modules: {
         toolbar: this.editorConfig1.toolbar
@@ -314,17 +314,17 @@ editorConfig6 = {
       if (editor1) {
         editor1.innerHTML = this.questaoDTO.comentarioDaQuestao || '';
       }
-  
+
       const editor2 = document.querySelector('#editor2')?.querySelector('.ql-editor');
       if (editor2) {
         editor2.innerHTML = this.questaoDTO.comentarioDaQuestaoDois || '';
       }
-  
+
       const editor3 = document.querySelector('#editor3')?.querySelector('.ql-editor');
       if (editor3) {
         editor3.innerHTML = this.questaoDTO.comentarioDaQuestaoTres || '';
       }
-  
+
       const editor4 = document.querySelector('#editor4')?.querySelector('.ql-editor');
       if (editor4) {
         editor4.innerHTML = this.questaoDTO.comentarioDaQuestaoQuatro || '';
@@ -344,30 +344,30 @@ editorConfig6 = {
       if (editorEnunciado) {
         editorEnunciado.innerHTML = this.questaoDTO.enunciadoDaQuestao || '';
       }
-      
+
     });
   }
-  
-    // Função para obter o conteúdo do editor
-    getEditorContent() {
-     // console.log(this.editorContent);
-    }
+
+  // Função para obter o conteúdo do editor
+  getEditorContent() {
+    // console.log(this.editorContent);
+  }
 
   onAlternativaChange(index: number) {
     this.selectedAlternativa = index;
   }
 
   carregarQuestao(id: number): void {
-   // console.log('Carregando questão com ID:', id);
+    // console.log('Carregando questão com ID:', id);
     this.questoesService.getQuestaoById(id).subscribe(
       questao => {
         this.questaoDTO = questao;
         this.questaoDTO.alternativas = this.questaoDTO.alternativas || [];  // Inicializa alternativas se for undefined
         this.selectedAlternativeIndex = this.questaoDTO.alternativas.findIndex(alt => alt.correta);
-       // console.log('Questão carregada:', this.questaoDTO);
+        // console.log('Questão carregada:', this.questaoDTO);
       },
       error => {
-      //  console.error('Erro ao carregar questão:', error);
+        //  console.error('Erro ao carregar questão:', error);
       }
     );
   }
@@ -384,17 +384,17 @@ editorConfig6 = {
         case 'fotoDaRespostaDois':
           this.fotoDaRespostaDois = file;
           break;
-          case 'fotoDaRespostaTres':
+        case 'fotoDaRespostaTres':
           this.fotoDaRespostaTres = file;
           break;
-          case 'fotoDaRespostaQuatro':
+        case 'fotoDaRespostaQuatro':
           this.fotoDaRespostaQuatro = file;
           break;
-          case 'fotoDaRespostaCinco':
+        case 'fotoDaRespostaCinco':
           this.fotoDaRespostaCinco = file;
           break;
-          case 'videoDaQuestao':
-            this.videoDaQuestao = file;
+        case 'videoDaQuestao':
+          this.videoDaQuestao = file;
           break;
         default:
           break;
@@ -402,7 +402,7 @@ editorConfig6 = {
       const reader = new FileReader();
       reader.onload = () => {
         this.fotoPreviews[field] = reader.result;
-      //  console.log(`Arquivo carregado para o campo ${field}.`);
+        //  console.log(`Arquivo carregado para o campo ${field}.`);
       };
       reader.readAsDataURL(file);
     }
@@ -411,26 +411,26 @@ editorConfig6 = {
   isImage(fileUrl: string | ArrayBuffer | null): boolean {
     return typeof fileUrl === 'string' && fileUrl.startsWith('data:image/');
   }
-  
+
   isVideo(fileUrl: string | ArrayBuffer | null): boolean {
     return typeof fileUrl === 'string' && fileUrl.startsWith('data:video/');
   }
-  
+
   urlIsImage(url: string | null): boolean {
     return typeof url === 'string' && /\.(jpeg|jpg|png|gif)$/i.test(url);
   }
-  
+
   urlIsVideo(url: string | null): boolean {
     return typeof url === 'string' && /\.(mp4|webm|ogg)$/i.test(url);
   }
-  
+
   isPreviewImage(preview: string | ArrayBuffer | null): boolean {
     return (
       typeof preview === 'string' &&
       (this.isImage(preview) || this.urlIsImage(preview))
     );
   }
-  
+
   isPreviewVideo(preview: string | ArrayBuffer | null): boolean {
     return (
       typeof preview === 'string' &&
@@ -466,7 +466,7 @@ editorConfig6 = {
     this.questaoDTO.alternativaCorreta = [this.questaoDTO.alternativas[index]];
   }
 
-    markCorrectImage(index: number): void {
+  markCorrectImage(index: number): void {
     this.updateCorrectAlternative(index);
     this.questaoDTO.alternativaCorreta = [this.questaoDTO.alternativas[index]];
   }
@@ -474,7 +474,7 @@ editorConfig6 = {
 
   findTemaForSubtema(subtema: Subtema): Tema | undefined {
     for (const temaKey of Object.keys(temasESubtemas)) {
-      const tema = temaKey as Tema; 
+      const tema = temaKey as Tema;
 
       const subtemasDoTema = temasESubtemas[tema];
 
@@ -484,12 +484,17 @@ editorConfig6 = {
     }
 
     return undefined;
-}
+  }
 
-onSubmit(): void {
-  this.loading = true;
-  
-    if(this.selectedSubtemaValue) {
+  isComentarioValido(html: string): boolean {
+    const cleaned = html.trim().replace(/<p><br><\/p>/g, '').replace(/&nbsp;/g, '').trim();
+    return cleaned !== '';
+  }
+
+  onSubmit(): void {
+    this.loading = true;
+
+    if (this.selectedSubtemaValue) {
       this.questaoDTO.assunto = {
         tema: TemaDescricoes[this.findTemaForSubtema(this.selectedSubtemaValue as Subtema)!],
         subtema: SubtemaDescricoes[this.selectedSubtemaValue as Subtema]
@@ -498,32 +503,38 @@ onSubmit(): void {
 
     const quillEditor6 = document.querySelector('#editor6 .ql-editor');
     if (quillEditor6) {
-      this.questaoDTO.comentarioDaQuestaoSeis = quillEditor6.innerHTML;
+      const html = quillEditor6.innerHTML;
+      this.questaoDTO.comentarioDaQuestaoSeis = this.isComentarioValido(html) ? html : '';
     }
 
     const quillEditor5 = document.querySelector('#editor5 .ql-editor');
     if (quillEditor5) {
-      this.questaoDTO.comentarioDaQuestaoCinco = quillEditor5.innerHTML;
+      const html = quillEditor5.innerHTML;
+      this.questaoDTO.comentarioDaQuestaoCinco = this.isComentarioValido(html) ? html : '';
     }
 
     const quillEditor4 = document.querySelector('#editor4 .ql-editor');
     if (quillEditor4) {
-      this.questaoDTO.comentarioDaQuestaoQuatro = quillEditor4.innerHTML;
+      const html = quillEditor4.innerHTML;
+      this.questaoDTO.comentarioDaQuestaoQuatro = this.isComentarioValido(html) ? html : '';
     }
 
     const quillEditor3 = document.querySelector('#editor3 .ql-editor');
     if (quillEditor3) {
-      this.questaoDTO.comentarioDaQuestaoTres = quillEditor3.innerHTML;
+      const html = quillEditor3.innerHTML;
+      this.questaoDTO.comentarioDaQuestaoTres = this.isComentarioValido(html) ? html : '';;
     }
-  
+
     const quillEditor2 = document.querySelector('#editor2 .ql-editor');
     if (quillEditor2) {
-      this.questaoDTO.comentarioDaQuestaoDois = quillEditor2.innerHTML;
+      const html = quillEditor2.innerHTML;
+      this.questaoDTO.comentarioDaQuestaoDois = this.isComentarioValido(html) ? html : '';
     }
 
     const quillEditor = document.querySelector('#editor .ql-editor');
     if (quillEditor) {
-      this.questaoDTO.comentarioDaQuestao = quillEditor.innerHTML;
+      const html = quillEditor.innerHTML;
+      this.questaoDTO.comentarioDaQuestao = this.isComentarioValido(html) ? html : '';
     }
 
     const quillEditor1 = document.querySelector('#editor1 .ql-editor');
@@ -533,7 +544,7 @@ onSubmit(): void {
     console.log("Alternativas: ", this.questaoDTO.alternativas);
     const objetoJson = JSON.stringify(this.questaoDTO);
     this.formData = new FormData();
-  
+
     if (this.fotoDaQuestao) {
       this.formData.append('fotoDaQuestaoArquivo', this.fotoDaQuestao);
     }
@@ -541,19 +552,19 @@ onSubmit(): void {
       this.formData.append('descricaoDaImagemDoEnunciado', this.descricaoFotoDaQuestao);
     }
     if (this.fotoDaRespostaUm) {
-    //  console.log("fotoDaRespostaUm: passo");
+      //  console.log("fotoDaRespostaUm: passo");
       this.formData.append('fotoDaRespostaUmArquivo', this.fotoDaRespostaUm);
     }
     if (this.fotoDaRespostaDois) {
-     // console.log("fotoDaRespostaDois: passo");
+      // console.log("fotoDaRespostaDois: passo");
       this.formData.append('fotoDaRespostaDoisArquivo', this.fotoDaRespostaDois);
     }
     if (this.fotoDaRespostaTres) {
-     // console.log("fotoDaRespostaTres: passo");
+      // console.log("fotoDaRespostaTres: passo");
       this.formData.append('fotoDaRespostaTresArquivo', this.fotoDaRespostaTres);
     }
     if (this.fotoDaRespostaQuatro) {
-     // console.log("fotoDaRespostaQuatro: passo");
+      // console.log("fotoDaRespostaQuatro: passo");
       this.formData.append('fotoDaRespostaQuatroArquivo', this.fotoDaRespostaQuatro);
     }
     if (this.fotoDaRespostaCinco) {
@@ -569,21 +580,28 @@ onSubmit(): void {
         this.formData.append(alt.texto, alt.foto);
       }
     });
-  
-    //console.debug('Enviando formulário com dados da questão:', this.formData);
-   // console.log('CLASSE ', objetoJson);
-    this.formData.append('questaoDTO', objetoJson);
-    //console.log('objetoJson ', objetoJson);
 
-  
-    if(!this.questaoDTO.id){
+    //console.debug('Enviando formulário com dados da questão:', this.formData);
+    // console.log('CLASSE ', objetoJson);
+    this.formData.append('questaoDTO', objetoJson);
+
+
+    console.log("Debugando");
+    console.log(this.questaoDTO.comentarioDaQuestao);
+    console.log(this.questaoDTO.comentarioDaQuestaoDois);
+    console.log(this.questaoDTO.comentarioDaQuestaoTres);
+    console.log(this.questaoDTO.comentarioDaQuestaoQuatro);
+    console.log(this.questaoDTO.comentarioDaQuestaoCinco);
+
+
+    if (!this.questaoDTO.id) {
       // console.log(this.questaoDTO);
       this.questoesService.salvar(this.formData).subscribe(
         response => {
           this.successMessage = 'Questão salva com sucesso!';
           this.errorMessage = null;
           this.loading = false; // Desativa carregamento
-        //  console.debug('Questão salva com sucesso:', response);
+          //  console.debug('Questão salva com sucesso:', response);
         },
         error => {
           this.errorMessage = error;
@@ -593,10 +611,10 @@ onSubmit(): void {
         }
       );
     } else {
-      console.log("Saida da Foto 0: ",this.questaoDTO.alternativas[0].foto);
-      if(this.questaoDTO.alternativas[0].foto){
+      console.log("Saida da Foto 0: ", this.questaoDTO.alternativas[0].foto);
+      if (this.questaoDTO.alternativas[0].foto) {
         console.log("Saida da Foto 0 diferente de null");
-      }else{
+      } else {
         console.log("Saida da Foto 0 igual a null");
       }
 
@@ -612,7 +630,7 @@ onSubmit(): void {
           this.errorMessage = null;
           this.loading = false; // Desativa carregamento
           // console.debug('Questão atualizada com sucesso:', response);
-          
+
         },
         error => {
           this.errorMessage = error;
@@ -622,7 +640,7 @@ onSubmit(): void {
         }
       );
     }
-  
+
     console.log('Dados da questão antes de enviar:', {
       title: this.questaoDTO.title,
       alternativas: this.questaoDTO.alternativas
@@ -635,7 +653,7 @@ onSubmit(): void {
     if (!proximoId) {
       return;
     }
-    
+
     this.clearImageState();
 
     this.router.navigate(['/usuario/cadastro-questao', proximoId]);
@@ -676,52 +694,52 @@ onSubmit(): void {
   }
 
   handleImageChange(event: any, index: number) {
-  const file = event.target.files[0];
-  const reader = new FileReader();
-  reader.onload = () => {
-    this.uploadedImage = reader.result as string;
-    this.questaoDTO.alternativas[index].imagemUrl = this.uploadedImage;
-  };
-  reader.readAsDataURL(file);
-}
-
-
-updateTipoItemQuestaoImagem(tipo: string) {
-  this.questaoDTO.tipoItemQuestaoImagem = tipo;
-}
-
-onFileSelectedImage(event: any, alternativaIndex: string) {
-  const file = event.target.files[0];
-
-  if (file) {
-    const index = parseInt(alternativaIndex.replace('afirmacao', ''));
-
-    this.questaoDTO.alternativas[index].foto = file;
-
+    const file = event.target.files[0];
     const reader = new FileReader();
     reader.onload = () => {
-      this.imagePreviews[alternativaIndex] = reader.result;
+      this.uploadedImage = reader.result as string;
+      this.questaoDTO.alternativas[index].imagemUrl = this.uploadedImage;
     };
     reader.readAsDataURL(file);
   }
-}
 
-onFileSelectedImageEditar(event: any, alternativaIndex: string) {
-  const file = event.target.files[0];
 
-  if (file) {
-    // Atualiza a propriedade da alternativa correspondente
-    const index = parseInt(alternativaIndex.replace('fotoDaAlternativa', ''), 10);
-    this.questaoDTO.alternativas[index].foto = file;
-
-    // Atualiza a pré-visualização
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.fotoPreviews[alternativaIndex] = reader.result as string;
-    };
-    reader.readAsDataURL(file);
+  updateTipoItemQuestaoImagem(tipo: string) {
+    this.questaoDTO.tipoItemQuestaoImagem = tipo;
   }
-}
+
+  onFileSelectedImage(event: any, alternativaIndex: string) {
+    const file = event.target.files[0];
+
+    if (file) {
+      const index = parseInt(alternativaIndex.replace('afirmacao', ''));
+
+      this.questaoDTO.alternativas[index].foto = file;
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreviews[alternativaIndex] = reader.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  onFileSelectedImageEditar(event: any, alternativaIndex: string) {
+    const file = event.target.files[0];
+
+    if (file) {
+      // Atualiza a propriedade da alternativa correspondente
+      const index = parseInt(alternativaIndex.replace('fotoDaAlternativa', ''), 10);
+      this.questaoDTO.alternativas[index].foto = file;
+
+      // Atualiza a pré-visualização
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.fotoPreviews[alternativaIndex] = reader.result as string;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
 
   cadastrarNovaQuestao(): void {
     this.successMessage = null;
@@ -730,10 +748,10 @@ onFileSelectedImageEditar(event: any, alternativaIndex: string) {
     this.questaoDTO = new Questao();
 
     this.questaoDTO.alternativas = [
-      {id: 1, texto: 'A', correta: false, comentario: ''},
-      {id: 2, texto: 'B', correta: false, comentario: ''},
-      {id: 3, texto: 'C', correta: false, comentario: ''},
-      {id: 4, texto: 'D', correta: false, comentario: ''}
+      { id: 1, texto: 'A', correta: false, comentario: '' },
+      { id: 2, texto: 'B', correta: false, comentario: '' },
+      { id: 3, texto: 'C', correta: false, comentario: '' },
+      { id: 4, texto: 'D', correta: false, comentario: '' }
     ];
 
     this.questaoDTO.alternativaImagems = [
@@ -761,11 +779,11 @@ onFileSelectedImageEditar(event: any, alternativaIndex: string) {
 
     this.limparEditores();
 
-    
+
     setTimeout(() => {
       const drawerContentEl = document.querySelector('mat-drawer-content') as HTMLElement;
       const innerEl = drawerContentEl?.querySelector('.mat-drawer-content') as HTMLElement;
-  
+
       if (drawerContentEl) {
         drawerContentEl.scrollTo({ top: 0, behavior: 'smooth' });
       }
@@ -773,8 +791,8 @@ onFileSelectedImageEditar(event: any, alternativaIndex: string) {
         innerEl.scrollTo({ top: 0, behavior: 'smooth' });
       }
     }, 50);
-      
-    
+
+
   }
 
   private limparEditores(): void {
@@ -797,15 +815,15 @@ onFileSelectedImageEditar(event: any, alternativaIndex: string) {
       event.preventDefault();
       event.stopPropagation();
     }
-    
+
     this.fotoPreviews[fieldName] = null;
-    
+
     if (this.questaoDTO.id) {
       if (fieldName === 'fotoDaQuestao') {
         this.fotoPreviews['fotoDaQuestao'] = null;
         this.questaoDTO.fotoDaQuestaoUrl = null;
         this.fotoDaQuestao = null;
-        
+
       } else if (fieldName === 'fotoDaRespostaUm') {
         this.questaoDTO.fotoDaRespostaUmUrl = null;
       } else if (fieldName === 'fotoDaRespostaDois') {
@@ -829,7 +847,7 @@ onFileSelectedImageEditar(event: any, alternativaIndex: string) {
         }
       }
     }
-    
+
     if (fieldName === 'fotoDaQuestao') {
       this.fotoDaQuestao = null;
     } else if (fieldName === 'videoDaQuestao') {
@@ -846,7 +864,7 @@ onFileSelectedImageEditar(event: any, alternativaIndex: string) {
         this.imagePreviews[fieldName] = null;
         this.questaoDTO.alternativas[index].foto = undefined;
       }
-      
+
     } else if (fieldName.startsWith('fotoDaAlternativa')) {
       const index = parseInt(fieldName.replace('fotoDaAlternativa', ''), 10);
       if (!isNaN(index) && this.questaoDTO.alternativas[index]) {
@@ -872,8 +890,8 @@ onFileSelectedImageEditar(event: any, alternativaIndex: string) {
     if (this.questaoDTO.alternativas.length < 5) {
       const proximaLetra = this.alternativasDisponiveis[this.questaoDTO.alternativas.length];
       console.log(this.questaoDTO.alternativas.length);
-      console.log(this.questaoDTO.alternativas.length+1);
-      
+      console.log(this.questaoDTO.alternativas.length + 1);
+
       this.questaoDTO.alternativas.push({
         id: this.questaoDTO.alternativas.length + 1,
         texto: proximaLetra,
@@ -892,13 +910,13 @@ onFileSelectedImageEditar(event: any, alternativaIndex: string) {
   removerAlternativaE(): void {
     if (this.questaoDTO.alternativas.length > 4) {
       const ultimoIndex = this.questaoDTO.alternativas.length - 1;
-      
+
       this.questaoDTO.alternativas.pop();
       this.questaoDTO.alternativaImagems?.pop();
-      
+
       const fieldName = `fotoDaAlternativa${ultimoIndex}`;
       const fieldNameNew = `afirmacao${ultimoIndex}`;
-      
+
       delete this.fotoPreviews[fieldName];
       delete this.imagePreviews[fieldNameNew];
     }
@@ -912,7 +930,7 @@ onFileSelectedImageEditar(event: any, alternativaIndex: string) {
     return this.questaoDTO.alternativas.length > 4;
   }
 
-  
+
   verificarBloqueioFiltros(): void {
     const tiposEspeciais = ['AAO', 'ICO/FRCOphto'];
     this.filtrosBloqueados = this.questaoDTO.tipoDeProva ? tiposEspeciais.includes(this.questaoDTO.tipoDeProva) : false;
