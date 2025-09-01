@@ -110,7 +110,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   isRespostaCorreta: boolean = false;
   message: string = '';
   resposta: string = ''; // Adiciona esta variável para armazenar a resposta
-  respondidasAgora: Set<Number> = new Set();
+  respondidasAgora: Set<number> = new Set();
 
 
   questaoAtual: Questao | null = null;
@@ -564,6 +564,9 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
 
   filtrarQuestoes(): void {
+    this.jaRespondeu = false;
+    this.questoesService.clearRequestsCache();
+    this.respondidasAgora.clear();
     this.carregando = true;
     this.selectedOption = '';
     this.respostaCorreta = null;
