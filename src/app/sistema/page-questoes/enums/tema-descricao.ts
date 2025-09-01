@@ -11,7 +11,7 @@ export const TemaDescricoes: Record<Tema, string> = {
   [Tema.FARMACOLOGIA]: 'Farmacologia',
   [Tema.GENETICA_OCULAR]: 'Genética Ocular',
   [Tema.GLAUCOMA]: 'Glaucoma',
-  [Tema.ICO_PART_1]: 'ICO Part 1',
+  [Tema.ICO_PART_1]: 'Ico Part 1',
   [Tema.LENTES_DE_CONTATO]: 'Lentes de Contato',
   [Tema.NAO_CLASSIFICADA]: 'Não classificada',
   [Tema.NEUROFTALMOLOGIA]: 'Neuroftalmologia',
