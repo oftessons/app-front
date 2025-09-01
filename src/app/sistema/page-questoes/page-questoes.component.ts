@@ -66,11 +66,11 @@ interface CuriosidadeResponse {
     trigger('slideIn', [
       transition(':enter', [
         style({ opacity: 0, transform: 'translateY(-20px) scale(0.95)' }),
-        animate('600ms cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+        animate('600ms cubic-bezier(0.68, -0.55, 0.265, 1.55)', 
           style({ opacity: 1, transform: 'translateY(0) scale(1)' }))
       ]),
       transition(':leave', [
-        animate('300ms ease-in',
+        animate('300ms ease-in', 
           style({ opacity: 0, transform: 'translateY(-10px) scale(0.95)' }))
       ])
     ])
@@ -110,7 +110,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   isRespostaCorreta: boolean = false;
   message: string = '';
   resposta: string = ''; // Adiciona esta variável para armazenar a resposta
-  respondidasAgora: Set<number> = new Set();
+  respondidasAgora: Set<Number> = new Set();
 
 
   questaoAtual: Questao | null = null;
@@ -564,10 +564,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
 
   filtrarQuestoes(): void {
-    this.questoesService.clearRequestsCache();
-    this.respondidasAgora.clear();
-    this.jaRespondeu = false;
-
     this.carregando = true;
     this.selectedOption = '';
     this.respostaCorreta = null;
@@ -1282,23 +1278,23 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     const subtemasParaCuriosidades: string[] = [];
 
     if (this.multiSelectTemasSubtemasSelecionados && this.multiSelectTemasSubtemasSelecionados.length > 0) {
-      const subtemasSelecionados = this.multiSelectTemasSubtemasSelecionados.filter(item =>
+      const subtemasSelecionados = this.multiSelectTemasSubtemasSelecionados.filter(item => 
         typeof item === 'string' && !item.startsWith('TEMA_')
       );
       subtemasParaCuriosidades.push(...subtemasSelecionados);
     }
 
     if (subtemasParaCuriosidades.length > 0) {
-
+      
       this.questoesService.getCuriosidades(subtemasParaCuriosidades).subscribe(
         (curiosidades: CuriosidadeResponse[]) => {
-
+          
           this.curiosidades = curiosidades
             .filter(c => c.mensagem === 'success' && this.temDadosValidosCuriosidade(c))
             .slice(0, 3);
-
+          
           this.curiosidadeAtual = 0;
-
+          
           setTimeout(() => {
             if (this.curiosidades.length > 0) {
               this.mostrarBalloon = true;
@@ -1331,10 +1327,10 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   }
 
   temDadosValidosCuriosidade(curiosidade: CuriosidadeResponse): boolean {
-    return curiosidade &&
-      curiosidade.dadosCuriosidade &&
-      curiosidade.dadosCuriosidade.length > 0 &&
-      curiosidade.mensagem === 'success';
+    return curiosidade && 
+          curiosidade.dadosCuriosidade && 
+          curiosidade.dadosCuriosidade.length > 0 &&
+          curiosidade.mensagem === 'success';
   }
 
   formatarMensagemCuriosidade(curiosidade: CuriosidadeResponse): string {
@@ -1344,22 +1340,22 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
     const dados = curiosidade.dadosCuriosidade[0];
     const porcentagemFormatada = dados.porcentagem.toFixed(1);
-
+    
     const nomeSubtemaFormatado = this.getDescricaoSubtemaFormatada(curiosidade.subtema);
     if (dados.qtdQuestoes === 0) {
       return `O subtema "${nomeSubtemaFormatado}" não possui questões cadastradas nos últimos 3 anos (${dados.totalQuestoes} questões no total).`;
     }
-
+    
     return `O subtema "${nomeSubtemaFormatado}" representa ${porcentagemFormatada}% das questões dos últimos 3 anos (${dados.qtdQuestoes} de ${dados.totalQuestoes} questões).`;
   }
 
   getDescricaoSubtemaFormatada(subtema: string): string {
-
+    
     const subtemaEnum = Object.values(Subtema).find(s => s === subtema);
     if (subtemaEnum) {
       return this.getDescricaoSubtema(subtemaEnum);
     }
-
+    
     return subtema.replace(/_/g, ' ').toLowerCase()
       .split(' ')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))
