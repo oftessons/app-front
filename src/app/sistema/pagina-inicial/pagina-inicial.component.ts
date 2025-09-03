@@ -87,41 +87,42 @@ export class PaginaInicialComponent implements OnInit {
   ];
 
   planos = [
-    {
-      titulo: 'Mensal',
-      preco: 397.00,
-      descricao: [
-        'Revisão rápida sobre qualquer tema ou assunto.',
-        'Ideal para quem busca agilidade no aprendizado.',
-        'Acesso flexível ao conteúdo essencial.'
-      ],
-      corCabecalho: '#253c66',
-      recomendado: false,
-    },
-    {
-      titulo: 'Semestral',
-      preco: 116.16,
-      mostrarPorMes: true,
-      descricao: [
-        'Exploração detalhada do acervo da plataforma.',
-        'Estudo com tempo para absorver conhecimento.',
-        'Perfeito para uma aprendizagem profunda e completa.'
-      ],
-      corCabecalho: '#041E4E',
-      textoAdicional: 'R$697,00 por 6 meses',
-      recomendado: false,
-    },
+    // {
+    //   titulo: 'Mensal',
+    //   preco: 397.00,
+    //   descricao: [
+    //     'Revisão rápida sobre qualquer tema ou assunto.',
+    //     'Ideal para quem busca agilidade no aprendizado.',
+    //     'Acesso flexível ao conteúdo essencial.'
+    //   ],
+    //   corCabecalho: '#253c66',
+    //   recomendado: false,
+    // },
+    // {
+    //   titulo: 'Semestral',
+    //   preco: 116.16,
+    //   mostrarPorMes: true,
+    //   descricao: [
+    //     'Exploração detalhada do acervo da plataforma.',
+    //     'Estudo com tempo para absorver conhecimento.',
+    //     'Perfeito para uma aprendizagem profunda e completa.'
+    //   ],
+    //   corCabecalho: '#041E4E',
+    //   textoAdicional: 'R$697,00 por 6 meses',
+    //   recomendado: false,
+    // },
     {
       titulo: 'Anual',
-      preco: 99.75,
+      preco: 141.42,
       mostrarPorMes: true,
       descricao: [
-        'Utilize todas as funcionalidades da plataforma.',
-        'Melhore seu aprendizado de forma abrangente.',
-        'Acesso ao banco de questões com reset duas vezes ao ano.'
+        'Banco de questões com 4 mil questões.',
+        '+2500 questões comentadas.',
+        'Simulados personalizados, cronometrados com base na Prova Nacional de Oftalmologia.',
+        'Assistente de IA que tira dúvidas e oferece explicações detalhadas.'
       ],
       corCabecalho: '#0F1934',
-      textoAdicional: 'R$1.197,00 por 1 ano',
+      textoAdicional: 'R$1.697,00 por 1 ano',
       recomendado: true,
     },
     //{
