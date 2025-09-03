@@ -24,7 +24,7 @@
         planoSelecionado="GRATUITO">
     </app-card-plano>
 
-    <app-card-plano
+    <!-- <app-card-plano
         titulo="Mensal"
         [descricao]="['Revisão rápida sobre qualquer tema ou assunto.', 'Ideal para quem busca agilidade no aprendizado.', 'Acesso flexível ao conteúdo essencial.']"
         [preco]="397.00"
@@ -46,15 +46,20 @@
         corCabecalho="#041E4E"
         (botaoClicado)="onBotaoClicado()"
         rota="plano/semestral">
-    </app-card-plano>
+    </app-card-plano> -->
 
     <app-card-plano
         titulo="Anual"
-        [descricao]="['Utilize todas as funcionalidades da plataforma.', 'Melhore seu aprendizado de forma abrangente.', 'Acesso ao banco de questões com reset duas vezes ao ano.']"
-        [preco]="99.75"
+        [descricao]="[
+          'Banco de questões com 4 mil questões.',
+          '+2500 questões comentadas.',
+          'Simulados personalizados, cronometrados com base na Prova Nacional de Oftalmologia.',
+          'Assistente de IA que tira dúvidas e oferece explicações detalhadas.'
+          ]"
+        [preco]="141.42"
         textoBotao="Escolher plano"
         [recomendado]="true"
-        textoAdicional="R$1.197,00 por 1 ano"
+        textoAdicional="R$1.697,00 por 1 ano"
         corCabecalho="#0F1934"
         (botaoClicado)="onBotaoClicado()"
         rota="plano/anual">
