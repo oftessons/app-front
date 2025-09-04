@@ -1,0 +1,129 @@
+.desenvolvimento-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  font-family: 'Nunito Sans', sans-serif;
+}
+
+.desenvolvimento-card {
+  background: var(--bg-container);
+  border-radius: 20px;
+  padding: 40px;
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border-color);
+}
+
+.icone-container {
+  margin-bottom: 30px;
+  
+  img {
+    width: 100%;
+    max-width: 377px;
+  }
+}
+
+.conteudo {
+  margin-bottom: 30px;
+}
+
+.breve {
+  font-size: 28px;
+  color: var(--text-color);
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+.titulo {
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--text-color);
+  margin-bottom: 16px;
+  line-height: 1.2;
+}
+
+.subtitulo {
+  font-size: 16px;
+  color: var(--text-color);
+  margin-bottom: 30px;
+  line-height: 1.5;
+}
+
+.acoes {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.btn-voltar {
+  background: #041e4e;
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.btn-voltar:hover {
+  background: #3b5fa0;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(4, 30, 78, 0.3);
+}
+
+.btn-voltar i {
+  font-size: 14px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .desenvolvimento-container {
+    padding: 15px;
+    min-height: 100vh;
+  }
+
+  .desenvolvimento-card {
+    padding: 30px 20px;
+  }
+
+  .titulo {
+    font-size: 24px;
+  }
+
+  .subtitulo {
+    font-size: 14px;
+  }
+
+  .acoes {
+    flex-direction: column;
+  }
+
+  .btn-voltar {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .desenvolvimento-card {
+    padding: 25px 15px;
+  }
+
+  .titulo {
+    font-size: 20px;
+  }
+
+  .subtitulo {
+    font-size: 13px;
+  }
+}

@@ -14,6 +14,7 @@ import { ModalComponent } from './modal/modal.component';
 import { CardPlanoComponent } from './card-plano/card-plano.component';
 import { AppRoutingModule } from '../app-routing.module';
 import { ModalDeleteComponent } from './modal-delete/modal-delete.component';
+import { PageEmDesenvolvimentoComponent } from './page-em-desenvolvimento/page-em-desenvolvimento.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { ModalDeleteComponent } from './modal-delete/modal-delete.component';
     ModalComponent,
     CardPlanoComponent,
     ModalDeleteComponent,
+    PageEmDesenvolvimentoComponent
   ],
   imports: [
     CommonModule,
@@ -42,6 +44,7 @@ import { ModalDeleteComponent } from './modal-delete/modal-delete.component';
     MultiploSelectComponent,
     ModalComponent,
     CardPlanoComponent,
+    PageEmDesenvolvimentoComponent
   ]
 })
 export class SharedModule { }

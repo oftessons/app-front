@@ -28,6 +28,9 @@ import { ModuloUveiteOncologiaOcularComponent } from './modulos-das-aulas/modulo
 import { PermissaoAdminComponent } from './permissao-admin/permissao-admin.component';
 import { PermissaoProfessorComponent } from './permissao-professor/permissao-professor.component';
 import { InicioComponent } from './inicio/inicio.component';
+import { PageTrilhaComponent } from './page-trilha/page-trilha.component';
+import { PageRevisaoComponent } from './page-revisao/page-revisao.component';
+import { FlashcardsComponent } from './flashcards/flashcards.component';
 import { BolsaGuardService } from '../services/bolsa.guard';
 
 const routes: Routes = [
@@ -36,9 +39,12 @@ const routes: Routes = [
     component: LayoutComponent,  
     canActivate: [AuthGuard, BolsaGuardService], 
     children: [
-      { path: 'dashboard', component: DashboardComponent },
       { path: 'inicio', component: InicioComponent},
+      { path: 'trilha', component: PageTrilhaComponent },
+      { path: 'revisao', component: PageRevisaoComponent },
+      { path: 'dashboard', component: DashboardComponent },
       { path: 'questoes', component: PageQuestoesComponent },
+      { path: 'flashcards', component: FlashcardsComponent },
       { path: 'filtro', component: PageFiltroComponent },
       { path: 'painel-de-aulas', component: PainelDeAulasComponent},
       { path: 'modulo-catarata', component:ModuloCatarataComponent},

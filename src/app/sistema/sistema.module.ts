@@ -41,11 +41,17 @@ import { PermissaoProfessorComponent } from './permissao-professor/permissao-pro
 import { InicioComponent } from './inicio/inicio.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { PaginaInicialComponent } from './pagina-inicial/pagina-inicial.component';
+import { PageTrilhaComponent } from './page-trilha/page-trilha.component';
+import { PageRevisaoComponent } from './page-revisao/page-revisao.component';
+import { FlashcardsComponent } from './flashcards/flashcards.component';
 
 @NgModule({
   declarations: [
     DashboardComponent,
     PageDesempenhoComponent,
+    PageTrilhaComponent,
+    PageRevisaoComponent,
+    FlashcardsComponent,
     PageMeuPerfilComponent,
     PageQuestoesComponent,
     PageFiltroComponent,
