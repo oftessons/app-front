@@ -1,0 +1,21 @@
+<div class="desenvolvimento-container">
+  <div class="desenvolvimento-card">
+
+    <div class="conteudo">
+      <h1 class="breve">Em Desenvolvimento</h1>
+      <h2 class="titulo">{{ titulo }}</h2>
+      <div class="icone-container" *ngIf="mostrarIcone">
+          <img src="assets/imagens/em-desenvolvimento.svg" alt="Ícone de Desenvolvimento">
+      </div>
+      <p class="subtitulo">{{ subtitulo }}</p>
+    </div>
+
+    
+    <div class="acoes" *ngIf="mostrarBotaoVoltar">
+      <button class="btn-voltar" (click)="voltar()">
+        <i class="fas fa-arrow-left"></i>
+        Voltar
+      </button>
+    </div>
+  </div>
+</div>

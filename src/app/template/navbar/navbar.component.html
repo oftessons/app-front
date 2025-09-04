@@ -38,9 +38,19 @@
             <div class="heading-home">Home</div>
 
             <a mat-list-item routerLink="/usuario/inicio" [ngClass]="{'active-link': isActive('/usuario/inicio')}">
-                <img [src]="!isDarkMode() ? 'assets/Icons/inicio-of.svg' : 'assets/Icons/dark/inicio-of-dark.svg'" alt="Ícone de Início" class="icon">
+                <img [src]="!isDarkMode() ? 'assets/Icons/home.svg' : 'assets/Icons/dark/home-dark.svg'" alt="Ícone de Início" class="icon">
                 <span class="ml-2">Início</span>
             </a>  
+
+            <a mat-list-item routerLink="/usuario/trilha" [ngClass]="{'active-link': isActive('/usuario/trilha')}">
+                <img [src]="!isDarkMode() ? 'assets/Icons/trilha.svg' : 'assets/Icons/dark/trilha-dark.svg'" alt="Ícone de Início" class="icon">
+                <span class="ml-2">Trilha do Conhecimento</span>
+            </a>
+
+            <a mat-list-item routerLink="/usuario/revisao" [ngClass]="{'active-link': isActive('/usuario/revisao')}">
+                <img [src]="!isDarkMode() ? 'assets/Icons/revisao.svg' : 'assets/Icons/dark/revisao-dark.svg'" alt="Ícone de Revisão" class="icon">
+                <span class="ml-2">Revisões</span>
+            </a>
 
             <a mat-list-item routerLink="/usuario/dashboard" [ngClass]="{'active-link': isActive('/usuario/dashboard')}">
                 <img [src]="!isDarkMode() ? 'assets/imagens/painel.svg' : 'assets/Icons/dark/painel-dark.svg'" alt="Ícone de Painel de Controle" class="icon">
@@ -51,6 +61,10 @@
             <a mat-list-item *ngIf="possuiPermissao" routerLink="/usuario/questoes" [ngClass]="{'active-link': isActive('/usuario/questoes')}">
                 <img [src]="!isDarkMode() ? 'assets/imagens/caderno.svg' : 'assets/Icons/dark/caderno-dark.svg'" alt="Ícone de Questões" class="icon">
                 <span class="ml-2">Questões</span>
+            </a>
+            <a mat-list-item *ngIf="possuiPermissao" routerLink="/usuario/flashcards" [ngClass]="{'active-link': isActive('/usuario/flashcards')}">
+                <img [src]="!isDarkMode() ? 'assets/Icons/flashcards.svg' : 'assets/Icons/dark/flashcards-dark.svg'" alt="Ícone de Flashcards" class="icon">
+                <span class="ml-2">Flashcards</span>
             </a>
             <!--
             <a mat-list-item routerLink="/usuario/painel-de-aulas" [ngClass]="{'active-link': isActive('/usuario/painel-de-aulas')}">
