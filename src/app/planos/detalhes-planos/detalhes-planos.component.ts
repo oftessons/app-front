@@ -26,12 +26,13 @@ export class DetalhesPlanosComponent implements OnInit {
         {
           titulo: 'Anual',
           descricao: [
-            'Utilize todas as funcionalidades da plataforma.',
-            'Melhore seu aprendizado de forma abrangente.',
-            'Acesso ao banco de questões com reset duas vezes ao ano.'
+            'Banco de questões com 4 mil questões.',
+            '+2500 questões comentadas.',
+            'Simulados personalizados, cronometrados com base na Prova Nacional de Oftalmologia.',
+            'Assistente de IA que tira dúvidas e oferece explicações detalhadas.'
           ],
           preco: 1197.00,
-          textoAdicional: 'Valor a vista',
+          textoAdicional: 'Valor à Vista',
           corCabecalho: '#0F1934',
           textoParcelas: '',
           mostrarPorMes: false,
@@ -40,12 +41,13 @@ export class DetalhesPlanosComponent implements OnInit {
         {
           titulo: 'Anual',
           descricao: [
-            'Utilize todas as funcionalidades da plataforma.',
-            'Melhore seu aprendizado de forma abrangente.',
-            'Acesso ao banco de questões com reset duas vezes ao ano.'
+            'Banco de questões com 4 mil questões.',
+            '+2500 questões comentadas.',
+            'Simulados personalizados, cronometrados com base na Prova Nacional de Oftalmologia.',
+            'Assistente de IA que tira dúvidas e oferece explicações detalhadas.'
           ],
-          preco: 99.75,
-          textoAdicional: 'Preço total R$1,197.00',
+          preco: 141.42,
+          textoAdicional: 'Preço total R$1,697.00',
           corCabecalho: '#102040',
           textoParcelas: '12x',
           mostrarPorMes: true,
