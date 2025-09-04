@@ -16,7 +16,7 @@
 .title-planos h2 {
   font-size: 32px;
   font-weight: 500;
-  color: #3b5fa0;
+  color: #3b5fa0 !important;
   margin: 16px;
   text-align: center;
 }

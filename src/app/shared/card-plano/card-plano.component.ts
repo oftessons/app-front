@@ -14,7 +14,7 @@ import { AuthService } from 'src/app/services/auth.service';
 export class CardPlanoComponent implements OnInit {
   @Input() titulo: string = '';
   @Input() descricao: string[] = [];
-  @Input() preco: number = 0;
+  @Input() preco: number | string = '';
   @Input() textoBotao: string = 'Escolher plano';
   @Input() recomendado: boolean = false;
   @Input() corCabecalho: string = '';
