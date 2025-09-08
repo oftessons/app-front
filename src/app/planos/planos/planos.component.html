@@ -39,12 +39,16 @@
     </app-card-plano> -->
 
     <app-card-plano
-        titulo="Semestral"
-        [descricao]="['Exploração detalhada do acervo da plataforma.', 'Estudo com tempo para absorver conhecimento.', 'Perfeito para uma aprendizagem profunda e completa.']"
-        [preco]="116.16"
+        titulo="QBank + Mentoria"
+        [descricao]="['Exploração detalhada do acervo da plataforma de +4 mil questões.',
+            'Mentoria personalizada para maximizar seu aprendizado.',
+            'Acompanhamento mensal com cronograma de estudo e revisões',
+            'Fichas de questões personalizadas para guia de estudo']"
+        [preco]="450.26"
+        [textoParcelas]="'6x'"
         textoBotao="Escolher plano"
         [recomendado]="false"
-        textoAdicional="R$697,00 por 6 meses"
+        textoAdicional="Ou em 1x de R$2.400,00"
         corCabecalho="#041E4E"
         (botaoClicado)="onBotaoClicado()"
         rota="plano/semestral">

@@ -76,6 +76,8 @@ export class DetalhesPlanosComponent implements OnInit {
           descricao: [
             'Exploração detalhada do acervo da plataforma de +4 mil questões.',
             'Mentoria personalizada para maximizar seu aprendizado.',
+            'Acompanhamento mensal com cronograma de estudo e revisões',
+            'Fichas de questões personalizadas para guia de estudo'
           ],
           preco: 450.26,
           textoAdicional: 'Ou em 1x de R$2.400,00',
