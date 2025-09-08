@@ -36,7 +36,7 @@
         (botaoClicado)="onBotaoClicado()"
         [usarServicoPagamento]="true"
         planoSelecionado="ASSINATURA_MENSAL">
-    </app-card-plano>
+    </app-card-plano> -->
 
     <app-card-plano
         titulo="Semestral"
@@ -48,7 +48,7 @@
         corCabecalho="#041E4E"
         (botaoClicado)="onBotaoClicado()"
         rota="plano/semestral">
-    </app-card-plano> -->
+    </app-card-plano>
 
     <app-card-plano
         titulo="Anual"
@@ -58,10 +58,11 @@
           'Simulados personalizados, cronometrados com base na Prova Nacional de Oftalmologia.',
           'Assistente de IA que tira dúvidas e oferece explicações detalhadas.'
           ]"
-        [preco]="141.42"
+        [preco]="175.51"
+        [textoParcelas]="'12x'"
         textoBotao="Escolher plano"
         [recomendado]="true"
-        textoAdicional="R$1.697,00 por 1 ano"
+        textoAdicional="ou em 1x de R$1.697,00"
         corCabecalho="#0F1934"
         (botaoClicado)="onBotaoClicado()"
         rota="plano/anual">

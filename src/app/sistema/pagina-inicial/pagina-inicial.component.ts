@@ -112,8 +112,22 @@ export class PaginaInicialComponent implements OnInit {
     //   recomendado: false,
     // },
     {
+      titulo: 'Qbank + Mentoria',
+      preco: 450.26,
+      mostrarPorMes: true,
+      descricao: [
+        'Exploração detalhada do acervo da plataforma.',
+        'Estudo com tempo para absorver conhecimento.',
+        'Perfeito para uma aprendizagem profunda e completa.'
+      ],
+      corCabecalho: '#041E4E',
+      textoParcelas: '6x',
+      textoAdicional: 'ou em 1x de R$2.400,00',
+      recomendado: false,
+    },
+    {
       titulo: 'Anual',
-      preco: 141.42,
+      preco: 175.51,
       mostrarPorMes: true,
       descricao: [
         'Banco de questões com 4 mil questões.',
@@ -122,7 +136,8 @@ export class PaginaInicialComponent implements OnInit {
         'Assistente de IA que tira dúvidas e oferece explicações detalhadas.'
       ],
       corCabecalho: '#0F1934',
-      textoAdicional: 'R$1.697,00 por 1 ano',
+      textoParcelas: '12x',
+      textoAdicional: 'ou em 1x de R$1.697,00',
       recomendado: true,
     },
     //{

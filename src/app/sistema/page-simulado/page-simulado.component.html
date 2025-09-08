@@ -153,7 +153,7 @@
               </span> 
             </h3>
           </div>
-          <div [innerHTML]="questaoAtual.enunciadoDaQuestao"></div>
+          <div class="enunciado-questao" [innerHTML]="questaoAtual.enunciadoDaQuestao"></div>
           <ng-container *ngIf="questaoAtual?.fotoDaQuestaoUrl">
             <img 
               *ngIf="isImage(questaoAtual.fotoDaQuestaoUrl)" 

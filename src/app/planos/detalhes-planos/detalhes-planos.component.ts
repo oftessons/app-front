@@ -46,8 +46,8 @@ export class DetalhesPlanosComponent implements OnInit {
             'Simulados personalizados, cronometrados com base na Prova Nacional de Oftalmologia.',
             'Assistente de IA que tira dúvidas e oferece explicações detalhadas.'
           ],
-          preco: 141.42,
-          textoAdicional: 'Preço total R$1,697.00',
+          preco: 175.51,
+          textoAdicional: 'ou em 1x de R$1.697,00',
           corCabecalho: '#102040',
           textoParcelas: '12x',
           mostrarPorMes: true,
@@ -72,14 +72,13 @@ export class DetalhesPlanosComponent implements OnInit {
           planoSelecionado: 'assinatura_semestral'.toUpperCase()
         },
         {
-          titulo: 'Semestral',
+          titulo: 'Qbank + Mentoria',
           descricao: [
-            'Exploração detalhada do acervo da plataforma.',
-            'Estudo com tempo para absorver conhecimento.',
-            'Perfeito para uma aprendizagem profunda e completa.'
+            'Exploração detalhada do acervo da plataforma de +4 mil questões.',
+            'Mentoria personalizada para maximizar seu aprendizado.',
           ],
-          preco: 116.16,
-          textoAdicional: 'Preço total R$697,00',
+          preco: 450.26,
+          textoAdicional: 'Ou em 1x de R$2.400,00',
           corCabecalho: '#041E4E',
           textoParcelas: '6x',
           mostrarPorMes: true,

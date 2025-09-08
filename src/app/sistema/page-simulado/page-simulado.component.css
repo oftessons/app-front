@@ -26,6 +26,10 @@
   font-size: 16px;
 }
 
+.enunciado-questao {
+  font-size: 16px;
+}
+
 .questao-foto {
   max-width: 350px;
   height: auto;
