@@ -25,9 +25,9 @@ import { Resposta } from '../Resposta'; // Adicione esta importação
 import { AuthService } from 'src/app/services/auth.service';
 import { QuestoesStateService } from 'src/app/services/questao-state.service';
 import { ThemeService } from 'src/app/services/theme.service';
+import { StripeService } from 'src/app/services/stripe.service';
 import { Usuario } from 'src/app/login/usuario';
 import { FiltroDTO } from '../filtroDTO';
-
 import { DomSanitizer, SafeHtml, SafeResourceUrl } from '@angular/platform-browser';
 import { AnoDescricoes } from './enums/ano-descricoes';
 import { DificuldadeDescricoes } from './enums/dificuldade-descricao';
@@ -85,10 +85,12 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   usuario!: Usuario;
   usuarioLogado: Usuario | null = null;
   usuarioId!: number;
+  isTrialUser: boolean = false;
   mensagemErro: string | null = null;
 
   tiposDeProva = Object.values(TipoDeProva);
   anos = Object.values(Ano);
+  anosPermitidosParaTrial: Ano[] = [Ano.ANO_2023, Ano.ANO_2024, Ano.ANO_2025];
   dificuldades = Object.values(Dificuldade);
   subtemas = Object.values(Subtema);
   temas = Object.values(Tema);
@@ -203,7 +205,8 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     private themeService: ThemeService,
     private sanitizer: DomSanitizer,
     private router: Router,
-    private navigateService: NavigateService
+    private navigateService: NavigateService,
+    private stripeService: StripeService
   ) {
 
     this.router.events.pipe(
@@ -218,6 +221,8 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
   ngOnInit(): void {
     this.usuarioLogado = this.authService.getUsuarioAutenticado();
+
+    this.verificarStatusUsuario();
 
     const filtroStateJson = localStorage.getItem('questoesFiltroState');
     let filtroState: any = null;
@@ -322,6 +327,29 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
   ngAfterViewChecked(): void {
     this.resizeImages();
+  }
+
+  private verificarStatusUsuario(): void {
+    if (this.usuarioLogado) {
+      this.stripeService.getPlanInformation().subscribe(
+        (planInfo) => {
+          this.isTrialUser = planInfo.data.status === 'trialing';
+          if (this.isTrialUser) {
+            this.aplicarLimitacoesTrial();
+            console.log('Usuário em período de teste. Aplicando limitações.');
+          }
+        },
+        (error) => {
+          console.error('Erro ao verificar status:', error);
+        }
+      );
+    }
+  }
+
+  private aplicarLimitacoesTrial(): void {
+    this.anosDescricoes = this.anos
+      .filter(ano => this.anosPermitidosParaTrial.includes(ano))
+      .map(ano => this.getDescricaoAno(ano));
   }
 
   isPreviewVideo(url: string | boolean): boolean {
@@ -589,6 +617,17 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       }
     }
 
+    if (this.isTrialUser && this.multSelectAno.length > 0) {
+      const anosPermitidosDescricoes = this.anosPermitidosParaTrial.map(ano => this.getDescricaoAno(ano));
+      const temAnoNaoPermitido = this.multSelectAno.some(ano => !anosPermitidosDescricoes.includes(ano));
+      
+      if (temAnoNaoPermitido) {
+        this.exibirMensagem('Usuários com conta gratuita têm acesso limitado a questões de 2023 a 2025.', 'erro');
+        this.carregando = false;
+        return;
+      }
+    }
+
     if (this.multSelecDificuldade.length) {
       const dificuldadeSelecionada = this.multSelecDificuldade
         .map((dificuldade) => this.obterDificuldadeEnum(dificuldade))
@@ -714,19 +753,23 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
           }));
 
           this.buscarCuriosidadesSeNecessario(filtros);
+          this.toggleFiltros();
         }
 
         this.resposta = '';
         this.mostrarGabarito = false;
         this.numeroDeQuestoes = questoes.length;
-        this.toggleFiltros();
         this.carregando = false;
         this.questoesStateService.setQuestaoAtual(this.questaoAtual);
         this.questoesService.setQuestoesFiltradas(questoes);
       },
       (error) => {
         console.error('Erro ao filtrar questões:', error);
-        this.message = 'Ocorreu um erro ao filtrar questões. Por favor, tente novamente mais tarde.';
+        if(error.status === 403) {
+          this.message = 'Usuários com conta gratuita têm acesso limitado a questões de 2023 a 2025.';
+        } else {
+          this.message = 'Ocorreu um erro ao filtrar questões. Por favor, tente novamente mais tarde.';
+        }
         this.carregando = false;
       }
     );
