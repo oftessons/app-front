@@ -911,7 +911,12 @@ p {
   color: #000 !important;
 }
 
-::ng-deep .img-comentario span[style*="background-color: transparent"] {
+::ng-deep .img-comentario span[style*="background-color: transparent"],
+::ng-deep .img-comentario span[style*="background-color: rgba(0, 0, 0, 0)"] {
+  color: var(--text-color) !important;
+}
+
+::ng-deep .img-comentario p span[style*="rgb(0, 0, 0)"] {
   color: var(--text-color) !important;
 }
 
