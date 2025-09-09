@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild, ChangeDetectorRef} from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { TipoDeProva } from '../page-questoes/enums/tipoDeProva';
 import {
   getDescricaoAno,
@@ -120,7 +120,7 @@ export class PageSimuladoComponent implements OnInit {
   selectedQuantidadeDeQuestoesSelecionadas: QuantidadeDeQuestoesSelecionadas | null =
     null;
   selectedRespostasSimulado: RespostasSimulado | null = null;
-  
+
   multiSelectTemasSubtemasSelecionados: Subtema[] = [];
   subtemasAgrupadosPorTema: {
     label: string;
@@ -138,9 +138,10 @@ export class PageSimuladoComponent implements OnInit {
   respostaErrada: string = '';
   respostaVerificada: boolean = false;
   jaRespondeu: boolean = false;
+  questaoRespondida: boolean = false;
   visualizando: boolean = false;
   realizandoSimulado: boolean = true;
-  
+
   dados: any;
   questaoDTO = new Questao();
   selectedAlternativeIndex: number = -3;
@@ -158,7 +159,7 @@ export class PageSimuladoComponent implements OnInit {
   temasDescricoes: string[] = [];
   quantidadeDeQuestoesSelecionadasDescricoes: string[] = [];
   respostasSimuladoDescricao: string[] = [];
-  idSimuladoRespondendo: number | null = null; 
+  idSimuladoRespondendo: number | null = null;
 
 
   mostrarFiltros: boolean = false;
@@ -171,7 +172,7 @@ export class PageSimuladoComponent implements OnInit {
     private simuladoService: SimuladoService,
     private authService: AuthService,
     private router: Router,
-    private sanitizer: DomSanitizer, 
+    private sanitizer: DomSanitizer,
     private cdr: ChangeDetectorRef
   ) {
   }
@@ -179,19 +180,19 @@ export class PageSimuladoComponent implements OnInit {
   ngOnInit() {
     this.carregarDadosIniciais();
     this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd) 
+      filter(event => event instanceof NavigationEnd)
     ).subscribe(() => {
       if (!this.router.url.includes('/simulado')) {
-        this.simuladoService.simuladoFinalizado(); 
+        this.simuladoService.simuladoFinalizado();
       }
     });
-  
+
   }
 
   async carregarDadosIniciais() {
     try {
-      await this.obterPerfilUsuario(); 
-      this.dados = this.obterDados();  
+      await this.obterPerfilUsuario();
+      this.dados = this.obterDados();
 
       const meuSimulado = history.state.simulado;
       this.simuladoIdInicial = meuSimulado?.id;
@@ -200,9 +201,9 @@ export class PageSimuladoComponent implements OnInit {
         this.toggleFiltros();
 
         this.prepararSimulado(meuSimulado);
-        
+
         this.realizandoSimulado = false;
-    
+
       }
 
       this.carregarFiltrosEDescricoes();
@@ -243,7 +244,7 @@ export class PageSimuladoComponent implements OnInit {
     this.subtemasDescricoes = this.subtemas.map(this.getDescricaoSubtema);
     this.temasDescricoes = this.temas.map(this.getDescricaoTema);
     this.quantidadeDeQuestoesSelecionadasDescricoes =
-    this.quantidadeDeQuestoesSelecionadas.map(this.getDescricaoQuantidadeDeQuestoesSelecionadas);
+      this.quantidadeDeQuestoesSelecionadas.map(this.getDescricaoQuantidadeDeQuestoesSelecionadas);
     this.respostasSimuladoDescricao = this.respostasSimulado.map(this.getDescricaoRespostasSimulado);
 
     this.subtemasAgrupadosPorTema = Object.entries(temasESubtemas).map(([temaKey, subtemas]) => {
@@ -323,7 +324,7 @@ export class PageSimuladoComponent implements OnInit {
   async obterPerfilUsuario() {
     try {
       const data = await this.authService.obterUsuarioAutenticadoDoBackend().toPromise();
-      
+
       if (data?.id) {
         this.usuario = data;
         this.usuarioId = parseInt(this.usuario.id, 10);
@@ -338,6 +339,7 @@ export class PageSimuladoComponent implements OnInit {
 
   responderQuestao(questao: Questao | null): void {
     if (this.selectedOption) {
+      this.questaoRespondida = true;
       this.mensagemDeAviso = `Você marcou a letra ${this.getLetraAlternativa(
         this.selectedOption
       )} como resposta, continue seus estudos e vá para a próxima questão 😃.`;
@@ -463,7 +465,7 @@ export class PageSimuladoComponent implements OnInit {
   }
 
   private isTema(value: string): boolean {
-      return Object.values(Tema).includes(value as Tema);
+    return Object.values(Tema).includes(value as Tema);
   }
 
   private isSubtema(value: string): boolean {
@@ -583,15 +585,15 @@ export class PageSimuladoComponent implements OnInit {
             console.warn("Valor não reconhecido como tema nem subtema:", item);
           }
         }
-      }   
+      }
 
       if (temasSelecionados.length) {
-        filtros.tema = temasSelecionados; 
+        filtros.tema = temasSelecionados;
       }
 
       if (subtemasSelecionados.length) {
         filtros.subtema = subtemasSelecionados
-          
+
       }
     }
 
@@ -747,7 +749,7 @@ export class PageSimuladoComponent implements OnInit {
     console.log(this.paginaAtual);
     if (respostaAnterior) {
       this.selectedOption = respostaAnterior;
-      if(this.isMeuSimulado){
+      if (this.isMeuSimulado) {
         this.respostaQuestao(this.questoes[this.paginaAtual].id, this.simuladoIdInicial);
       }
     } else {
@@ -769,6 +771,13 @@ export class PageSimuladoComponent implements OnInit {
   }
 
   proximaQuestao() {
+
+    if (!this.questaoRespondida) {
+      this.mensagemDeAviso = 'Questão não respondida. Por favor, responda antes de avançar.';
+      console.log(this.mensagemDeAviso);
+      return;
+    }
+
     if (this.paginaAtual < this.questoes.length - 1) {
       this.paginaAtual++;
       this.tempoRestanteQuestaoSimulado = 160;
@@ -780,12 +789,13 @@ export class PageSimuladoComponent implements OnInit {
       this.respostaCorreta = '';
       this.respostaErrada = '';
       this.respostaVerificada = false;
-      this.radioDisabled = false; 
+      this.radioDisabled = false;
+      this.questaoRespondida = false;
 
       clearInterval(this.intervalContagemRegressiva);
       this.contagemRegressivaSimuladoQuestao();
 
-      if(this.isMeuSimulado){
+      if (this.isMeuSimulado) {
         this.respostaQuestao(this.questoes[this.paginaAtual].id, this.simuladoIdInicial);
       }
     }
@@ -844,13 +854,13 @@ export class PageSimuladoComponent implements OnInit {
           'sucesso'
         );
 
-          this.simuladoIdRespondendo = response.id;
+        this.simuladoIdRespondendo = response.id;
 
         // Fechar modal automaticamente (usando Bootstrap ou outro método)
         const modalElement = document.getElementById('confirmacaoModal');
         if (modalElement) {
           const modalInstance = bootstrap.Modal.getInstance(modalElement);
-          modalInstance?.hide();   
+          modalInstance?.hide();
           this.contagemRegressivaSimuladoQuestao();
           this.iniciarSimulado();
         }
@@ -898,7 +908,7 @@ export class PageSimuladoComponent implements OnInit {
 
     modalElement?.addEventListener('hidden.bs.modal', () => {
       this.fecharCardConfirmacao();
-            
+
     });
   }
 
@@ -914,7 +924,7 @@ export class PageSimuladoComponent implements OnInit {
     this.mostrarCardConfirmacao = false;
   }
 
-  iniciarSimulado(): void {    
+  iniciarSimulado(): void {
     if (!this.isSimuladoIniciado) {
       this.simuladoService.simuladoIniciado();
       this.isSimuladoIniciado = true;
@@ -922,29 +932,29 @@ export class PageSimuladoComponent implements OnInit {
       this.tempo = 0;
       this.intervalId = setInterval(() => {
         this.tempo++;
-      }, 1000); 
+      }, 1000);
     }
     this.simuladoIniciado = true;
     this.simuladoFinalizado = false;
   }
-  
+
   contagemRegressivaSimuladoQuestao(): void {
     if (this.tempoRestanteQuestaoSimulado > 0) {
       this.intervalContagemRegressiva = setInterval(() => {
         if (this.tempoRestanteQuestaoSimulado <= 0) {
           this.tempoRestanteQuestaoSimulado = 0;
-          this.radioDisabled = true; 
+          this.radioDisabled = true;
           // clearInterval(this.intervalContagemRegressiva); 
         } else {
-          this.tempoRestanteQuestaoSimulado--; 
+          this.tempoRestanteQuestaoSimulado--;
         }
 
-      }, 1000); 
+      }, 1000);
     }
   }
 
   getCorTempoRestante(): string {
-    return this.tempoRestanteQuestaoSimulado < 30 ? 'red' : ""; 
+    return this.tempoRestanteQuestaoSimulado < 30 ? 'red' : "";
   }
 
   visualizarSimulado(): void {
@@ -980,15 +990,15 @@ export class PageSimuladoComponent implements OnInit {
     console.log(id);
 
     this.simuladoService.obterSimuladoPorId(id).subscribe(
-        (data) => {
+      (data) => {
         // console.log('Simulado:', data);
-          this.router.navigate(['/usuario/simulados'], { state: { simulado: data }});
-        },
-        (error) => {
-          alert('Erro ao obter simulado por ID');
-          console.error('Erro ao obter simulado por ID:', error);
-        }
-      )
+        this.router.navigate(['/usuario/simulados'], { state: { simulado: data } });
+      },
+      (error) => {
+        alert('Erro ao obter simulado por ID');
+        console.error('Erro ao obter simulado por ID:', error);
+      }
+    )
     this.router.navigate(['usuario/dashboard']);
   }
 
@@ -1027,7 +1037,7 @@ export class PageSimuladoComponent implements OnInit {
   verificarRespostaUsuario(resposta: Resposta) {
     this.selectedOption = resposta.opcaoSelecionada; // Alternativa escolhida
     this.isRespostaCorreta = resposta.correct; // Se está correta ou não
-  
+
     if (resposta.correct) {
       this.respostaCorreta = this.selectedOption;
       this.respostaErrada = '';
@@ -1036,10 +1046,10 @@ export class PageSimuladoComponent implements OnInit {
       this.respostaCorreta = resposta.opcaoCorreta; // Alternativa correta
     }
     this.respostaVerificada = true; // Marca como verificada
-    
+
   }
 
-  
+
   verificarBloqueioFiltros(): void {
     const tiposEspeciais = ['AAO', 'ICO/FRCOphto'];
     this.filtrosBloqueados = this.multiSelectedTipoDeProva.some(tipo => tiposEspeciais.includes(tipo));

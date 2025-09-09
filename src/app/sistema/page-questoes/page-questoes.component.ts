@@ -66,11 +66,11 @@ interface CuriosidadeResponse {
     trigger('slideIn', [
       transition(':enter', [
         style({ opacity: 0, transform: 'translateY(-20px) scale(0.95)' }),
-        animate('600ms cubic-bezier(0.68, -0.55, 0.265, 1.55)', 
+        animate('600ms cubic-bezier(0.68, -0.55, 0.265, 1.55)',
           style({ opacity: 1, transform: 'translateY(0) scale(1)' }))
       ]),
       transition(':leave', [
-        animate('300ms ease-in', 
+        animate('300ms ease-in',
           style({ opacity: 0, transform: 'translateY(-10px) scale(0.95)' }))
       ])
     ])
@@ -161,7 +161,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   multSelectTema: Tema[] = [];
   multiSelectRespSimu: RespostasSimulado[] = [];
   multiSelectCertoErrado: CertasErradas[] = [];
-  multiSelectTemasSubtemasSelecionados: Subtema[] = [];
+  multiSelectTemasSubtemasSelecionados: (Subtema | string)[] = [];
   multiSelectQuestoesComentadas: Comentada[] = [];
 
   subtemasAgrupadosPorTema: {
@@ -227,6 +227,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     const filtroStateJson = localStorage.getItem('questoesFiltroState');
     let filtroState: any = null;
 
+
     if (filtroStateJson) {
       filtroState = JSON.parse(filtroStateJson);
 
@@ -235,13 +236,13 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       this.multSelectAno = filtroState.multSelectAno ?? [];
       this.multSelecDificuldade = filtroState.multSelecDificuldade ?? [];
       this.multSelectTipoDeProva = filtroState.multSelectTipoDeProva ?? [];
-      // this.multSelectSubtema = filtroState.multSelectSubtema ?? [];
-      // this.multSelectTema = filtroState.multSelectTema ?? [];
       this.multiSelectTemasSubtemasSelecionados = filtroState.multiSelectTemasSubtemasSelecionados ?? [];
+
       this.multiSelectCertoErrado = filtroState.multiSelectCertoErrado ?? [];
       this.multiSelectRespSimu = filtroState.multiSelectRespSimu ?? [];
       this.multiSelectQuestoesComentadas = filtroState.multiSelectQuestoesComentadas ?? [];
       this.palavraChave = filtroState.palavraChave ?? '';
+      this.multiSelectQuestoesComentadas = filtroState.comentada ?? [];
 
       this.authService.obterUsuarioAutenticadoDoBackend().subscribe(
         (data) => {
@@ -257,19 +258,36 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     } else {
       this.obterPerfilUsuario();
       this.loadQuestao();
+
       const meuFiltro = history.state.questao;
 
       if (meuFiltro) {
         this.multSelectAno = meuFiltro.ano;
         this.multSelectTipoDeProva = meuFiltro.tipoDeProva;
-        this.multiSelectTemasSubtemasSelecionados = meuFiltro.multiSelectTemasSubtemasSelecionados;
-        // this.multSelectTema = meuFiltro.tema;
-        // this.multSelectSubtema = meuFiltro.subtema;
+        this.multiSelectQuestoesComentadas = meuFiltro.comentada;
         this.multSelecDificuldade = meuFiltro.dificuldade;
         this.multSelectTipoDeProva = meuFiltro.tipoDeProva;
         this.multiSelectRespSimu = meuFiltro.respostasSimulado;
         this.multiSelectCertoErrado = meuFiltro.certasErradas;
-        this.multiSelectQuestoesComentadas = meuFiltro.questoesComentadas;
+
+        this.multiSelectTemasSubtemasSelecionados = [];
+        if (meuFiltro.tema && meuFiltro.tema.length > 0) {
+          meuFiltro.tema.forEach((tema: string) => {
+            const temaEnum = this.obterTemaEnum(tema);
+            if (temaEnum) {
+              this.multiSelectTemasSubtemasSelecionados.push(`TEMA_${temaEnum}`);
+            }
+          });
+        }
+        if (meuFiltro.subtema && meuFiltro.subtema.length > 0) {
+          meuFiltro.subtema.forEach((subtema: string) => {
+            const subtemaEnum = this.obterSubtemaEnum(subtema);
+            if (subtemaEnum) {
+              this.multiSelectTemasSubtemasSelecionados.push(subtemaEnum);
+            }
+          });
+        }
+
       }
     }
 
@@ -315,7 +333,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
         const temaEnum = temaKey as Tema;
         return {
           label: this.getDescricaoTema(temaEnum),
-          // AQUI ESTÁ A CORREÇÃO: Adicionamos o prefixo ao valor do tema.
           value: `TEMA_${temaEnum}`,
           options: subtemas.map(subtema => ({
             label: this.getDescricaoSubtema(subtema),
@@ -617,10 +634,11 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       }
     }
 
+
     if (this.isTrialUser && this.multSelectAno.length > 0) {
       const anosPermitidosDescricoes = this.anosPermitidosParaTrial.map(ano => this.getDescricaoAno(ano));
       const temAnoNaoPermitido = this.multSelectAno.some(ano => !anosPermitidosDescricoes.includes(ano));
-      
+
       if (temAnoNaoPermitido) {
         this.exibirMensagem('Usuários com conta gratuita têm acesso limitado a questões de 2023 a 2025.', 'erro');
         this.carregando = false;
@@ -658,15 +676,15 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     //   }
     // }
 
-    if (this.multSelectTema.length) {
-      const temaSelecionado = this.multSelectTema
-        .map((tema) => this.obterTemaEnum(tema))
-        .filter((enumTema) => enumTema !== undefined);
+    // if (this.multSelectTema.length) {
+    //   const temaSelecionado = this.multSelectTema
+    //     .map((tema) => this.obterTemaEnum(tema))
+    //     .filter((enumTema) => enumTema !== undefined);
 
-      if (temaSelecionado) {
-        filtros.tema = temaSelecionado;
-      }
-    }
+    //   if (temaSelecionado) {
+    //     filtros.tema = temaSelecionado;
+    //   }
+    // }
 
     if (this.multiSelectCertoErrado.length) {
       const certoErradoSelecionado = this.multiSelectCertoErrado
@@ -700,7 +718,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       const temasSelecionados: string[] = [];
       const subtemasSelecionados: string[] = [];
 
-
       for (const item of this.multiSelectTemasSubtemasSelecionados) {
         if (typeof item === 'string' && item.startsWith('TEMA_')) {
           const temaOriginal = item.substring(5);
@@ -722,18 +739,20 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
     }
 
+    console.log(filtros);
+
     // Verificar se a palavra-chave está preenchida
     if (this.palavraChave && this.palavraChave.trim() !== '') {
       filtros.palavraChave = this.palavraChave.trim();
     }
 
-    // console.log(filtros);
 
     if (Object.keys(filtros).length === 0) {
       this.message = 'Por favor, selecione pelo menos um filtro.';
       this.questoes = [];
       return;
     }
+
 
     this.questoesService.filtrarQuestoes(this.usuarioId, filtros, 0, 0).subscribe(
       (questoes: Questao[]) => {
@@ -765,7 +784,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       },
       (error) => {
         console.error('Erro ao filtrar questões:', error);
-        if(error.status === 403) {
+        if (error.status === 403) {
           this.message = 'Usuários com conta gratuita têm acesso limitado a questões de 2023 a 2025.';
         } else {
           this.message = 'Ocorreu um erro ao filtrar questões. Por favor, tente novamente mais tarde.';
@@ -814,6 +833,10 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     }
     if (filtros.certoErrado) {
       mensagemUsuarioTratamento += `Questões: ${this.getDescricaoCertoErrado(filtros.certoErrado)}, `;
+    }
+    if (filtros.comentada) {
+      mensagemUsuarioTratamento += `Questões: ${this.getDescricaoQuestoesComentadas(filtros.comentada)}, `;
+
     }
 
     return mensagemUsuarioTratamento.slice(0, -2) + '.';
@@ -996,18 +1019,32 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       this.filtroASalvar = {} as FiltroDTO;
     }
 
+    for (const item of this.multiSelectTemasSubtemasSelecionados) {
+      if (item.startsWith('TEMA_')) {
+        const temaOriginal = item.substring(5) as Tema;
+        if (!this.multSelectTema.includes(temaOriginal)) {
+          this.multSelectTema.push(temaOriginal);
+        }
+      } else {
+        this.multSelectSubtema.push(item as unknown as Subtema);
+      }
+
+    }
+
     this.filtroASalvar = {
       nome: nomeFiltro,
       assunto: descricaoFiltro,
       ano: this.mapearDescricoesParaEnums(this.multSelectAno, AnoDescricoes),
       dificuldade: this.mapearDescricoesParaEnums(this.multSelecDificuldade, DificuldadeDescricoes),
       tipoDeProva: this.mapearDescricoesParaEnums(this.multSelectTipoDeProva, TipoDeProvaDescricoes),
-      subtema: this.mapearDescricoesParaEnums(this.multSelectSubtema, SubtemaDescricoes),
-      tema: this.mapearDescricoesParaEnums(this.multSelectTema, TemaDescricoes),
+      subtema: this.multSelectSubtema,
+      tema: this.multSelectTema,
       respostasSimulado: this.mapearDescricoesParaEnums(this.multiSelectRespSimu, RespostasSimuladosDescricao),
       certasErradas: this.mapearDescricoesParaEnums(this.multiSelectCertoErrado, CertasErradasDescricao),
+      comentada: this.mapearDescricoesParaEnums(this.multiSelectQuestoesComentadas, ComentadasDescricao),
     };
 
+    console.log(this.filtroASalvar);
 
     if (this.filtroASalvar) {
       const idUser = parseInt(this.usuario.id);
@@ -1324,23 +1361,23 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     const subtemasParaCuriosidades: string[] = [];
 
     if (this.multiSelectTemasSubtemasSelecionados && this.multiSelectTemasSubtemasSelecionados.length > 0) {
-      const subtemasSelecionados = this.multiSelectTemasSubtemasSelecionados.filter(item => 
+      const subtemasSelecionados = this.multiSelectTemasSubtemasSelecionados.filter(item =>
         typeof item === 'string' && !item.startsWith('TEMA_')
       );
       subtemasParaCuriosidades.push(...subtemasSelecionados);
     }
 
     if (subtemasParaCuriosidades.length > 0) {
-      
+
       this.questoesService.getCuriosidades(subtemasParaCuriosidades).subscribe(
         (curiosidades: CuriosidadeResponse[]) => {
-          
+
           this.curiosidades = curiosidades
             .filter(c => c.mensagem === 'success' && this.temDadosValidosCuriosidade(c))
             .slice(0, 3);
-          
+
           this.curiosidadeAtual = 0;
-          
+
           setTimeout(() => {
             if (this.curiosidades.length > 0) {
               this.mostrarBalloon = true;
@@ -1373,10 +1410,10 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   }
 
   temDadosValidosCuriosidade(curiosidade: CuriosidadeResponse): boolean {
-    return curiosidade && 
-          curiosidade.dadosCuriosidade && 
-          curiosidade.dadosCuriosidade.length > 0 &&
-          curiosidade.mensagem === 'success';
+    return curiosidade &&
+      curiosidade.dadosCuriosidade &&
+      curiosidade.dadosCuriosidade.length > 0 &&
+      curiosidade.mensagem === 'success';
   }
 
   formatarMensagemCuriosidade(curiosidade: CuriosidadeResponse): string {
@@ -1386,22 +1423,22 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
     const dados = curiosidade.dadosCuriosidade[0];
     const porcentagemFormatada = dados.porcentagem.toFixed(1);
-    
+
     const nomeSubtemaFormatado = this.getDescricaoSubtemaFormatada(curiosidade.subtema);
     if (dados.qtdQuestoes === 0) {
       return `O subtema "${nomeSubtemaFormatado}" não possui questões cadastradas nos últimos 3 anos (${dados.totalQuestoes} questões no total).`;
     }
-    
+
     return `O subtema "${nomeSubtemaFormatado}" representa ${porcentagemFormatada}% das questões dos últimos 3 anos (${dados.qtdQuestoes} de ${dados.totalQuestoes} questões).`;
   }
 
   getDescricaoSubtemaFormatada(subtema: string): string {
-    
+
     const subtemaEnum = Object.values(Subtema).find(s => s === subtema);
     if (subtemaEnum) {
       return this.getDescricaoSubtema(subtemaEnum);
     }
-    
+
     return subtema.replace(/_/g, ' ').toLowerCase()
       .split(' ')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))

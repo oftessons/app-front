@@ -9,4 +9,5 @@ export class FiltroDTO {
   subtema!: string[] | null;
   certasErradas!: string[] | null;
   respostasSimulado!: string[] | null;
+  comentada!: string[] | null;
 }

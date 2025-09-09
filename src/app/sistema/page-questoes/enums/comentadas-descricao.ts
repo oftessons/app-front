@@ -1,6 +1,6 @@
 import { Comentada } from "./comentadas";
 
 export const ComentadasDescricao: Record<Comentada, string> = {
-    [Comentada.COMENTADA]: 'Comentadas',
-    [Comentada.NAO_COMENTADA]: 'Não Comentadas',
+    [Comentada.COMENTADA]: 'Comentada',
+    [Comentada.NAO_COMENTADA]: 'Não Comentada',
 }
