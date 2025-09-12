@@ -42,15 +42,15 @@
           <div class="row">
             <div class="col-md-6">
               <div class="form-group">
-                <app-select-padrao [disabled]="isFiltroBloqueado()" label="Ano" [options]="anos" [(selectedValue)]="questaoDTO.ano">
+                <app-select-padrao [disabled]="isFiltroBloqueado()" label="Ano" [options]="anos"
+                  [(selectedValue)]="questaoDTO.ano">
                 </app-select-padrao>
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
                 <app-select-padrao label="Tipo de Prova" [options]="tiposDeProva"
-                  [(selectedValue)]="questaoDTO.tipoDeProva"
-                  (selectedValueChange)="onTipoDeProvaChange()">
+                  [(selectedValue)]="questaoDTO.tipoDeProva" (selectedValueChange)="onTipoDeProvaChange()">
                 </app-select-padrao>
               </div>
             </div>
@@ -239,8 +239,8 @@
                 <div class="col-md-12">
                   <div class="form-group">
                     <label>Alternativa {{ alternativa.texto }}</label>
-                    <input type="text" class="form-control input" name="comentario{{i}}" [(ngModel)]="alternativa.comentario"
-                      placeholder="Digite o enunciado da alternativa" />
+                    <input type="text" class="form-control input" name="comentario{{i}}"
+                      [(ngModel)]="alternativa.comentario" placeholder="Digite o enunciado da alternativa" />
                   </div>
                 </div>
               </div>
@@ -253,7 +253,8 @@
                   <div class="form-group">
                     <input type="radio" [name]="questaoDTO.tipoItemQuestaoImagem + 'Alternativa'"
                       (click)="markCorrectImage(i)" [checked]="alternativa.correta" class="checkbox">
-                    <label for="{{questaoDTO.tipoItemQuestaoImagem + 'Alternativa'}}">Alternativa {{ alternativa.texto }}</label>
+                    <label for="{{questaoDTO.tipoItemQuestaoImagem + 'Alternativa'}}">Alternativa {{ alternativa.texto
+                      }}</label>
                     <div class="image-upload">
                       <input type="file" id="fotoDaAlternativa{{ i }}" name="fotoDaAlternativa{{ i }}"
                         (change)="onFileSelectedImageEditar($event, 'fotoDaAlternativa' + i)" accept="image/*,video/*"
@@ -290,7 +291,8 @@
                     <input type="radio" [name]="questaoDTO.tipoItemQuestaoImagem + 'Alternativa'"
                       (click)="markCorrectImage(i)" [checked]="alternativa.correta" class="checkbox">
                     <div class="col">
-                      <label for="{{questaoDTO.tipoItemQuestaoImagem + 'Alternativa'}}">Alternativa {{ alternativa.texto }}</label>
+                      <label for="{{questaoDTO.tipoItemQuestaoImagem + 'Alternativa'}}">Alternativa {{ alternativa.texto
+                        }}</label>
                       <div class="image-upload">
                         <input type="file" id="afirmacao{{ i }}" name="afirmacao{{ i }}"
                           (change)="onFileSelectedImage($event, 'afirmacao' + i)" accept="image/*" />
@@ -319,17 +321,15 @@
                 </div>
               </div>
             </div>
-            <div *ngIf="(questaoDTO.tipoItemQuestaoImagem === 'imagem' || questaoDTO.tipoItemQuestaoImagem === 'texto') && !questaoDTO.id" class="form-group mb-3">
-              <button type="button" class="btn btn-sm btn-outline-primary me-2" 
-                      (click)="adicionarAlternativaE()" 
-                      [disabled]="!podeAdicionarAlternativa()"
-                      *ngIf="podeAdicionarAlternativa()">
+            <div
+              *ngIf="(questaoDTO.tipoItemQuestaoImagem === 'imagem' || questaoDTO.tipoItemQuestaoImagem === 'texto') && !questaoDTO.id"
+              class="form-group mb-3">
+              <button type="button" class="btn btn-sm btn-outline-primary me-2" (click)="adicionarAlternativaE()"
+                [disabled]="!podeAdicionarAlternativa()" *ngIf="podeAdicionarAlternativa()">
                 <i class="fas fa-plus"></i> Adicionar Alternativa E
               </button>
-              <button type="button" class="btn btn-sm btn-outline-danger" 
-                      (click)="removerAlternativaE()" 
-                      [disabled]="!podeRemoverAlternativa()"
-                      *ngIf="podeRemoverAlternativa()">
+              <button type="button" class="btn btn-sm btn-outline-danger" (click)="removerAlternativaE()"
+                [disabled]="!podeRemoverAlternativa()" *ngIf="podeRemoverAlternativa()">
                 <i class="fas fa-minus"></i> Remover Alternativa E
               </button>
             </div>
