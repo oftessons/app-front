@@ -25,4 +25,5 @@ export const TemaDescricoes: Record<Tema, string> = {
   [Tema.TUMORES_INTRAOCULARES]: 'Tumores Intraoculares',
   [Tema.UVEITE]: 'Uveíte',
   [Tema.VISAO_SUBNORMAL]: 'Visão Subnormal',
+  [Tema.SBRV]: 'SBRV',
 };

@@ -329,6 +329,12 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     );
 
     this.subtemasAgrupadosPorTema = Object.entries(temasESubtemas)
+      .filter(([temaKey]) => {
+        if (temaKey === Tema.SBRV) {
+          return this.isProf() || this.isAdmin();
+        }
+        return true;
+      })
       .map(([temaKey, subtemas]) => {
         const temaEnum = temaKey as Tema;
         return {
@@ -336,7 +342,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
           value: `TEMA_${temaEnum}`,
           options: subtemas.map(subtema => ({
             label: this.getDescricaoSubtema(subtema),
-            value: subtema // O valor do subtema continua original
+            value: subtema
           }))
         };
       });
