@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --host 0.0.0.0",
     "build": "NODE_OPTIONS=--openssl-legacy-provider ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
@@ -26,8 +26,10 @@
     "bootstrap": "^5.3.3",
     "chart.js": "^2.9.4",
     "jquery": "^3.5.0",
+    "lottie-web": "^5.9.6",
     "marked": "^16.0.0",
     "ng2-charts": "^2.4.0",
+    "ngx-lottie": "^6.4.0",
     "ngx-markdown": "^12.1.0",
     "ngx-pagination": "^5.0.0",
     "ngx-quill": "^14.0.0",

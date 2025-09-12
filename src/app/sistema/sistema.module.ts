@@ -1,5 +1,7 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { LottieModule } from 'ngx-lottie';
+import player from 'lottie-web';
 
 import { SistemaRoutingModule } from './sistema-routing.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -44,6 +46,11 @@ import { PaginaInicialComponent } from './pagina-inicial/pagina-inicial.componen
 import { PageTrilhaComponent } from './page-trilha/page-trilha.component';
 import { PageRevisaoComponent } from './page-revisao/page-revisao.component';
 import { FlashcardsComponent } from './flashcards/flashcards.component';
+
+// Função necessária para o ngx-lottie
+export function playerFactory() {
+  return player;
+}
 
 @NgModule({
   declarations: [
@@ -92,7 +99,8 @@ import { FlashcardsComponent } from './flashcards/flashcards.component';
     NgxPaginationModule,
     EditorModule,
     SharedModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    LottieModule.forRoot({ player: playerFactory })
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA, // Permite o uso de elementos personalizados
