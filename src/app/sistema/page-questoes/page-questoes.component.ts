@@ -305,9 +305,16 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       this.getDescricaoTema(tema)
     );
     this.loadQuestao();
-    this.tiposDeProvaDescricoes = this.tiposDeProva.map((tipoDeProva) =>
-      this.getDescricaoTipoDeProva(tipoDeProva)
-    );
+    this.tiposDeProvaDescricoes = this.tiposDeProva
+      .filter((tipoProvaKey) => {
+        if(tipoProvaKey === TipoDeProva.SBRV) {
+          return this.isProf() || this.isAdmin();
+        }
+        return true;
+      })
+      .map((tipoDeProva) =>
+        this.getDescricaoTipoDeProva(tipoDeProva)
+      );
     this.anosDescricoes = this.anos.map((ano) => this.getDescricaoAno(ano));
     this.dificuldadesDescricoes = this.dificuldades.map((dificuldade) =>
       this.getDescricaoDificuldade(dificuldade)
