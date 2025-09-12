@@ -66,6 +66,7 @@ export class PageSimuladoComponent implements OnInit {
   selectedOption: string = '';
 
   usuario!: Usuario;
+  usuarioLogado: Usuario | null = null;
   usuarioId!: number;
 
   @ViewChild('confirmacaoModalRef', { static: false })
@@ -178,6 +179,8 @@ export class PageSimuladoComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.usuarioLogado = this.authService.getUsuarioAutenticado();
+
     this.carregarDadosIniciais();
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
@@ -238,7 +241,15 @@ export class PageSimuladoComponent implements OnInit {
   }
 
   private carregarFiltrosEDescricoes() {
-    this.tiposDeProvaDescricoes = this.tiposDeProva.map(this.getDescricaoTipoDeProva);
+    this.tiposDeProvaDescricoes = this.tiposDeProva
+      .filter((tipoProvaKey) => {
+        if (tipoProvaKey == TipoDeProva.SBRV) {
+          return this.isProf() || this.isAdmin();
+        }
+        return true;
+      })
+
+      .map(this.getDescricaoTipoDeProva);
     this.anosDescricoes = this.anos.map(this.getDescricaoAno);
     this.dificuldadesDescricoes = this.dificuldades.map(this.getDescricaoDificuldade);
     this.subtemasDescricoes = this.subtemas.map(this.getDescricaoSubtema);
@@ -268,7 +279,7 @@ export class PageSimuladoComponent implements OnInit {
         console.log(resultado.metricasPorTema);
       });
 
-    
+
     this.simuladoService.simuladoFinalizado();
     this.simuladoIniciado = false;
     this.simuladoFinalizado = true;
@@ -399,6 +410,13 @@ export class PageSimuladoComponent implements OnInit {
       );
   }
 
+  isAdmin(): boolean {
+    return this.usuarioLogado?.permissao === 'ROLE_ADMIN';
+  }
+
+  isProf(): boolean {
+    return this.usuarioLogado?.permissao === 'ROLE_PROFESSOR';
+  }
 
   exibirGabarito() {
     this.mostrarGabarito = !this.mostrarGabarito;
@@ -780,7 +798,7 @@ export class PageSimuladoComponent implements OnInit {
 
   proximaQuestao() {
 
-    if (!this.questaoRespondida) {
+    if (!this.questaoRespondida && !this.isSimuladoIniciado) {
       this.mensagemDeAviso = 'Questão não respondida. Por favor, responda antes de avançar.';
       console.log(this.mensagemDeAviso);
       return;

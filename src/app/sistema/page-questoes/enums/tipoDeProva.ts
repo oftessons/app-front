@@ -3,5 +3,6 @@ export enum TipoDeProva {
     TEORICA_2 = 'TEORICA_2',
     PRATICA = 'PRATICA',
     AAO = 'AAO',
-    ICO_FRCOPHTHO = 'ICO_FRCOPHTHO'
+    ICO_FRCOPHTHO = 'ICO_FRCOPHTHO',
+    SBRV = 'SBRV'
 }  
