@@ -7,6 +7,7 @@
   --primary-color: #0a1435;
   
   --text-color: #212529;
+  --text-secondary: #6c757d;
   --bg-geral: #E3EAF0;
   --bg-navbar: #0a1435;
   --bg-sidebar: #f2f2f2;
@@ -27,8 +28,12 @@
   --button-disabled-bg: #cccccc;
   --nav-button-bg: #686868;
   --filtro-bg: #94979d;
+  --button-bg: #f0f0f0;
+  --card-bg: #ffffff;
+  --progress-bg: #e9ecef;
 
   --blue: #007bff;
+  --light-blue: #3B5FA0;
   --indigo: #6610f2;
   --purple: #6f42c1;
   --pink: #e83e8c;
@@ -60,6 +65,7 @@
 
 body.dark-mode {
   --text-color: #e3e3e3;
+  --text-secondary: #aaaaaa;
   --bg-geral: #1a1e22;
   --bg-navbar: #000021;
   --bg-sidebar: #14181a;
@@ -80,6 +86,9 @@ body.dark-mode {
   --button-disabled-bg: #3a3a3a;
   --nav-button-bg: #686868;
   --filtro-bg: #0d1011;
+  --button-bg: #2a2a2a;
+  --card-bg: #14181a;
+  --progress-bg: #2c2f35;
 }
 
 body.dark-mode .mat-drawer-content {
