@@ -265,7 +265,10 @@ export class PageSimuladoComponent implements OnInit {
       .finalizarSimulado(this.usuarioId, this.respostasList)
       .subscribe((resultado) => {
         this.gerarGrafico(resultado.acertos, resultado.erros);
+        console.log(resultado.metricasPorTema);
       });
+
+    
     this.simuladoService.simuladoFinalizado();
     this.simuladoIniciado = false;
     this.simuladoFinalizado = true;
@@ -380,9 +383,13 @@ export class PageSimuladoComponent implements OnInit {
           // Adicionar a resposta à lista de respostas do simulado
           this.respostasList.push({
             questaoId: questao.id,
+            temaQuestao: questao.tema,
             selecionarOpcao: this.selectedOption,
             correta: resposta.correct,
           });
+
+          console.log('Respostas do simulado:', this.respostasList);
+
         },
         (error) => {
           console.error('Erro ao verificar resposta:', error);
@@ -391,6 +398,7 @@ export class PageSimuladoComponent implements OnInit {
         }
       );
   }
+
 
   exibirGabarito() {
     this.mostrarGabarito = !this.mostrarGabarito;
