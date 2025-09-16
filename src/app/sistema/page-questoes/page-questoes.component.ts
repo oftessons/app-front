@@ -91,6 +91,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   tiposDeProva = Object.values(TipoDeProva);
   anos = Object.values(Ano);
   anosPermitidosParaTrial: Ano[] = [Ano.ANO_2023, Ano.ANO_2024, Ano.ANO_2025];
+  tipoDeProvasPermitidosParaTrial: TipoDeProva[] = [TipoDeProva.AAO];
   dificuldades = Object.values(Dificuldade);
   subtemas = Object.values(Subtema);
   temas = Object.values(Tema);
@@ -377,9 +378,32 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   }
 
   private aplicarLimitacoesTrial(): void {
-    this.anosDescricoes = this.anos
-      .filter(ano => this.anosPermitidosParaTrial.includes(ano))
-      .map(ano => this.getDescricaoAno(ano));
+    this.anosDescricoes = this.anos.map((ano) => this.getDescricaoAno(ano));
+  }
+
+  isAnoBloqueadoParaTrial(ano: string): boolean {
+    if (!this.isTrialUser) return false;
+    const anoEnum = this.obterAnoEnum(ano);
+    return anoEnum ? !this.anosPermitidosParaTrial.includes(anoEnum) : false;
+  }
+
+  isTipoDeProvaBloqueadoParaTrial(tipoDeProva: string): boolean {
+    const tiposEspeciais = ['AAO'];
+    return tiposEspeciais.includes(tipoDeProva);
+  }
+
+  temItensBloqueadosParaTrial(): boolean {
+    if (this.isTrialUser) {
+      const temAnosBloqueados = this.multSelectAno.some(ano => this.isAnoBloqueadoParaTrial(ano));
+      if (temAnosBloqueados) return true;
+    }
+
+    const temTipoDeProvaBloqueado = this.multSelectTipoDeProva.some(tipoDeProva => this.isTipoDeProvaBloqueadoParaTrial(tipoDeProva));
+    return temTipoDeProvaBloqueado;
+  }
+
+  redirecionarParaUpgrade(): void {
+    this.router.navigate(['/planos']);
   }
 
   isPreviewVideo(url: string | boolean): boolean {
@@ -622,6 +646,11 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
 
   filtrarQuestoes(): void {
+    if (this.temItensBloqueadosParaTrial()) {
+      this.exibirMensagem('Usuários com conta gratuita têm acesso limitado a questões de 2023 a 2025.', 'erro');
+      return;
+    }
+    
     this.jaRespondeu = false;
     this.questoesService.clearRequestsCache();
     this.respondidasAgora.clear();
@@ -648,16 +677,16 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     }
 
 
-    if (this.isTrialUser && this.multSelectAno.length > 0) {
-      const anosPermitidosDescricoes = this.anosPermitidosParaTrial.map(ano => this.getDescricaoAno(ano));
-      const temAnoNaoPermitido = this.multSelectAno.some(ano => !anosPermitidosDescricoes.includes(ano));
+    // if (this.isTrialUser && this.multSelectAno.length > 0) {
+    //   const anosPermitidosDescricoes = this.anosPermitidosParaTrial.map(ano => this.getDescricaoAno(ano));
+    //   const temAnoNaoPermitido = this.multSelectAno.some(ano => !anosPermitidosDescricoes.includes(ano));
 
-      if (temAnoNaoPermitido) {
-        this.exibirMensagem('Usuários com conta gratuita têm acesso limitado a questões de 2023 a 2025.', 'erro');
-        this.carregando = false;
-        return;
-      }
-    }
+    //   if (temAnoNaoPermitido) {
+    //     this.exibirMensagem('Usuários com conta gratuita têm acesso limitado a questões de 2023 a 2025.', 'erro');
+    //     this.carregando = false;
+    //     return;
+    //   }
+    // }
 
     if (this.multSelecDificuldade.length) {
       const dificuldadeSelecionada = this.multSelecDificuldade
