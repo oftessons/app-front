@@ -100,6 +100,9 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   comentadas = Object.values(Comentada);
   mensagemSucesso: string = '';
 
+  anosComPremium: any[] = [];
+  tiposDeProvaComPremium: any[] = [];
+
   jaRespondeu: boolean = false;
   respondendo: boolean = false;
 
@@ -369,11 +372,15 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
             this.aplicarLimitacoesTrial();
             console.log('Usuário em período de teste. Aplicando limitações.');
           }
+          this.prepararArraysComPremium();
         },
         (error) => {
-          console.error('Erro ao verificar status:', error);
+          this.prepararArraysComPremium();
         }
       );
+    } else {
+      // Se não há usuário logado, preparar arrays
+      this.prepararArraysComPremium();
     }
   }
 
@@ -404,6 +411,37 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
   redirecionarParaUpgrade(): void {
     this.router.navigate(['/planos']);
+  }
+
+  private prepararArraysComPremium(): void {
+    // Preparar anos com informação premium
+    this.anosComPremium = this.anos.map(ano => {
+      const descricao = this.getDescricaoAno(ano);
+      return {
+        label: descricao,
+        value: descricao,
+        isPremium: this.isTrialUser && this.isAnoBloqueadoParaTrial(descricao),
+        onPremiumClick: () => this.redirecionarParaUpgrade()
+      };
+    });
+
+    // Preparar tipos de prova com informação premium
+    this.tiposDeProvaComPremium = this.tiposDeProva
+      .filter((tipoProvaKey) => {
+        if(tipoProvaKey === TipoDeProva.SBRV) {
+          return this.isProf() || this.isAdmin();
+        }
+        return true;
+      })
+      .map(tipoDeProva => {
+        const descricao = this.getDescricaoTipoDeProva(tipoDeProva);
+        return {
+          label: descricao,
+          value: descricao,
+          isPremium: descricao === 'AAO',
+          onPremiumClick: () => this.redirecionarParaUpgrade()
+        };
+      });
   }
 
   isPreviewVideo(url: string | boolean): boolean {

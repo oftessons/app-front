@@ -36,18 +36,36 @@
       <div class="option-group" *ngFor="let group of filteredOptions">
         <div 
           class="group-label"
+          [class.premium-option]="showPremiumIcons && isGroupPremium(group)"
           (click)="onSelect(group.value)"
           [class.selected]="multiple ? selectedValue.includes(group.value) : selectedValue === group.value"
         >
-          {{ group.label }}
+          <span class="option-text">{{ group.label }}</span>
+          <span 
+            *ngIf="showPremiumIcons && isGroupPremium(group)" 
+            class="premium-badge"
+            (click)="handlePremiumClick($event, group)"
+          >
+            <i class="fas fa-crown"></i>
+            Assine agora
+          </span>
         </div>
         <div 
           class="option"
+          [class.premium-option]="showPremiumIcons && isOptionPremium(opt)"
           *ngFor="let opt of group.options"
           (click)="onSelect(opt.value)"
           [class.selected]="multiple ? selectedValue.includes(opt.value) : selectedValue === opt.value"
         >
-          {{ opt.label }}
+          <span class="option-text">{{ opt.label }}</span>
+          <span 
+            *ngIf="showPremiumIcons && isOptionPremium(opt)" 
+            class="premium-badge"
+            (click)="handlePremiumClick($event, opt)"
+          >
+            <i class="fas fa-crown"></i>
+            Assine agora
+          </span>
         </div>
       </div>
     </ng-container>
@@ -55,11 +73,20 @@
     <ng-template #flatOptions>
       <div 
         class="option"
+        [class.premium-option]="showPremiumIcons && isOptionPremium(option)"
         *ngFor="let option of filteredOptions"
-        (click)="onSelect(option)"
-        [class.selected]="multiple ? selectedValue.includes(option) : selectedValue === option"
+        (click)="onSelect(getOptionValue(option))"
+        [class.selected]="multiple ? selectedValue.includes(getOptionValue(option)) : selectedValue === getOptionValue(option)"
       >
-        {{ option }}
+        <span class="option-text">{{ getOptionLabel(option) }}</span>
+        <span 
+          *ngIf="showPremiumIcons && isOptionPremium(option)" 
+          class="premium-badge"
+          (click)="handlePremiumClick($event, option)"
+        >
+          <i class="fas fa-crown"></i>
+          Assine agora
+        </span>
       </div>
     </ng-template>
   </div>

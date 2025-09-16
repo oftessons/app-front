@@ -10,6 +10,21 @@ import {
   SimpleChanges
 } from '@angular/core';
 
+interface OptionWithPremium {
+  label: string;
+  value: any;
+  isPremium?: boolean;
+  onPremiumClick?: () => void;
+}
+
+interface GroupWithPremium {
+  label: string;
+  value: string;
+  options: OptionWithPremium[];
+  isPremium?: boolean;
+  onPremiumClick?: () => void;
+}
+
 @Component({
   selector: 'app-multiplo-select',
   templateUrl: './multiplo-select.component.html',
@@ -24,6 +39,8 @@ export class MultiploSelectComponent implements OnInit, OnChanges {
   @Input() multiple: boolean = false;
   @Input() searchable: boolean = false;
   @Input() disabled: boolean = false;
+  @Input() showPremiumIcons: boolean = false;
+  @Input() onPremiumClick: () => void = () => {};
 
   searchTerm: string = '';
   isOpen: boolean = false;
@@ -160,6 +177,32 @@ export class MultiploSelectComponent implements OnInit, OnChanges {
         arrow.classList.remove('rotate');
       }
     }
+  }
+
+  isOptionPremium(option: any): boolean {
+    if (typeof option === 'string') return false;
+    return option.isPremium === true;
+  }
+
+  isGroupPremium(group: any): boolean {
+    return group.isPremium === true;
+  }
+
+  handlePremiumClick(event: Event, option?: any): void {
+    event.stopPropagation();
+    if (option?.onPremiumClick) {
+      option.onPremiumClick();
+    } else {
+      this.onPremiumClick();
+    }
+  }
+
+  getOptionLabel(option: any): string {
+    return typeof option === 'string' ? option : option.label;
+  }
+
+  getOptionValue(option: any): any {
+    return typeof option === 'string' ? option : option.value;
   }
 
   @HostListener('document:click', ['$event'])
