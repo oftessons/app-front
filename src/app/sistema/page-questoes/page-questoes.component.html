@@ -26,9 +26,11 @@
             <div class="espaco-select">
               <app-multiplo-select
                 label="Ano"
-                [options]="anosDescricoes"
+                [options]="anosComPremium"
                 [(selectedValue)]="multSelectAno"
                 [multiple]="true"
+                [showPremiumIcons]="true"
+                [onPremiumClick]="redirecionarParaUpgrade.bind(this)"
                 [disabled]="isFiltroBloqueado()">
               </app-multiplo-select>
             </div>
@@ -72,9 +74,11 @@
             <div class="espaco-select">
               <app-multiplo-select
                 label="Tipo de Prova"
-                [options]="tiposDeProvaDescricoes"
+                [options]="tiposDeProvaComPremium"
                 [(selectedValue)]="multSelectTipoDeProva"
                 [multiple]="true"
+                [showPremiumIcons]="true"
+                [onPremiumClick]="redirecionarParaUpgrade.bind(this)"
                 (selectedValueChange)="onTipoDeProvaChange()">
               </app-multiplo-select>
             </div>
@@ -103,6 +107,19 @@
             </div>
           </div>
           </div>
+
+          <div *ngIf="temItensBloqueadosParaTrial()" class="upgrade-message">
+            <div class="alert alert-warning d-flex align-items-center justify-content-between" role="alert">
+              <div>
+                <i class="fas fa-crown me-2"></i>
+                <span>Para acessar todas as questões e funcionalidades, </span>
+              </div>
+              <button type="button" class="btn-upgrade" (click)="redirecionarParaUpgrade()">
+                Assine agora!
+              </button>
+            </div>
+          </div>
+
           <div *ngIf="message" class="alert alert-info mt-3 alert-custom" role="alert">
             {{ message }}
           </div>
