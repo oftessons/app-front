@@ -170,7 +170,21 @@ export class CadastroQuestaoComponent implements OnInit, AfterViewInit {
             // console.log(questao)
             this.questaoDTO = questao;
             this.atualizarEditoresComDados();
-            this.selectedSubtemaValue = this.getSubtemaEnumFromDescription(this.questaoDTO.subtema as Subtema) as Subtema;
+
+
+            // Carregar o assunto da questão selecionada
+            const temaEnum = this.getTemaEnumFromDescription(this.questaoDTO.tema as Tema);
+            const subtemaEnum = this.getSubtemaEnumFromDescription(this.questaoDTO.subtema as Subtema);
+
+            if(temaEnum && subtemaEnum) {
+              this.selectedSubtemaValue = JSON.stringify({
+                tema: temaEnum,
+                subtema: subtemaEnum
+              });
+            }
+
+
+            // this.selectedSubtemaValue = this.getSubtemaEnumFromDescription(this.questaoDTO.subtema as Subtema) as Subtema;
             // console.log(this.questaoDTO.subtema as Subtema);
             // console.log(this.selectedSubtemaValue);
             this.questaoDTO.alternativas = this.questaoDTO.alternativas || [];
@@ -217,12 +231,10 @@ export class CadastroQuestaoComponent implements OnInit, AfterViewInit {
         const temaPai = Tema[temaKey as keyof typeof Tema];
 
         return {
-          label: TemaDescricoes[temaKey as Tema], // Ex: "Estrabismo"
+          label: TemaDescricoes[temaKey as Tema], 
           options: subtemasArray.map(subtemaValue => {
             return {
-              label: SubtemaDescricoes[subtemaValue as Subtema], // Ex: "Ambliopia"
-              // O PONTO CHAVE: Empacotamos toda a informação necessária em uma string JSON.
-              // Isso garante que funcione em qualquer componente de select.
+              label: SubtemaDescricoes[subtemaValue as Subtema],
               value: JSON.stringify({
                 tema: temaPai,
                 subtema: subtemaValue
@@ -231,7 +243,6 @@ export class CadastroQuestaoComponent implements OnInit, AfterViewInit {
           })
         };
       });
-
   }
 
 
@@ -508,7 +519,6 @@ export class CadastroQuestaoComponent implements OnInit, AfterViewInit {
         subtema: SubtemaDescricoes[selecao.subtema as Subtema]
       };
 
-
     } else {
       console.error("Nenhum assunto selecionado!");
       this.loading = false;
@@ -698,7 +708,15 @@ export class CadastroQuestaoComponent implements OnInit, AfterViewInit {
     }
   }
 
-  getSubtemaEnumFromDescription(description: string): Subtema | undefined {
+  private getTemaEnumFromDescription(description: string): Tema | undefined {
+    const temaKey = Object.keys(TemaDescricoes).find(
+      key => TemaDescricoes[key as Tema] === description
+    );
+    return temaKey ? Tema[temaKey as keyof typeof Tema] : undefined;
+  }
+
+
+  private getSubtemaEnumFromDescription(description: string): Subtema | undefined {
     for (const [subtemaKey, subtemaDescription] of Object.entries(SubtemaDescricoes)) {
       if (subtemaDescription === description) {
         return Subtema[subtemaKey as keyof typeof Subtema];
