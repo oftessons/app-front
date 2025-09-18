@@ -2,9 +2,7 @@
   <div class="title-planos">
     <h2>Planos acessíveis para todos os perfis</h2>
     <p>
-      Escolha um plano e tenha acesso ilimitado a questões e aulas para turbinar
-      seus estudos. Resolva exercícios sem restrições, assista a videoaulas e
-      acompanhe seu progresso.
+      Escolha um plano e tenha acesso ilimitado a nossas questões e comentários.
     </p>
     <div class="alert alert-warning" *ngIf="mensagemExpirado">
       {{ mensagemExpirado }}
@@ -15,7 +13,7 @@
     <app-card-plano
         *ngIf="mostrarPlanoGratuito"
         titulo="7 dias Grátis"
-        [descricao]="['Acesso a um número limitado de questões e aulas.', 'Ideal para quem está começando ou quer experimentar a plataforma.', 'Sem compromisso, totalmente gratuito.']"
+        [descricao]="['Acesso a um número limitado de questões.', 'Ideal para quem está começando ou quer experimentar a plataforma.', 'Sem compromisso, totalmente gratuito.']"
         [preco]="''"
         textoParcelas="Gratuito"
         textoBotao="Teste 7 dias grátis"

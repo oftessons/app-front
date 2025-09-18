@@ -501,6 +501,7 @@ button:disabled .chatbot-logo {
 }
 
 ::ng-deep markdown p {
+  color: #333;
   margin: 0 0 8px 0;
 }
 
@@ -541,7 +542,8 @@ button:disabled .chatbot-logo {
 ::ng-deep markdown h4 {
   margin-top: 16px;
   margin-bottom: 8px;
-  font-weight: 600;
+  font-weight: 600 !important;
+  color: #000 !important;
 }
 
 ::ng-deep markdown img {
