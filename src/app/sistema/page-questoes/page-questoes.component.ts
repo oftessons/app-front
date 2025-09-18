@@ -395,6 +395,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   }
 
   isTipoDeProvaBloqueadoParaTrial(tipoDeProva: string): boolean {
+    if (!this.isTrialUser) return false;
     const tiposEspeciais = ['AAO'];
     return tiposEspeciais.includes(tipoDeProva);
   }
@@ -438,7 +439,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
         return {
           label: descricao,
           value: descricao,
-          isPremium: descricao === 'AAO',
+          isPremium: this.isTrialUser &&  descricao === 'AAO',
           onPremiumClick: () => this.redirecionarParaUpgrade()
         };
       });
