@@ -142,6 +142,7 @@ export class PageSimuladoComponent implements OnInit {
   questaoRespondida: boolean = false;
   visualizando: boolean = false;
   realizandoSimulado: boolean = true;
+  revisandoSimulado: boolean = false;
 
   dados: any;
   questaoDTO = new Questao();
@@ -797,7 +798,7 @@ export class PageSimuladoComponent implements OnInit {
   }
 
   proximaQuestao() {
-    if (!this.questaoRespondida && this.simuladoIniciado) {
+    if (!this.questaoRespondida && !this.revisandoSimulado) {
       this.mensagemDeAviso = 'Questão não respondida. Por favor, responda antes de avançar.';
       return;
     }
@@ -988,6 +989,7 @@ export class PageSimuladoComponent implements OnInit {
     }
     this.simuladoIniciado = true;
     this.simuladoFinalizado = false;
+    this.revisandoSimulado = true; 
   }
 
   // Função para formatar o tempo decorrido (opcional)
@@ -1010,9 +1012,7 @@ export class PageSimuladoComponent implements OnInit {
     if (id === null || isNaN(id)) {
       return;
     }
-
-    console.log(id);
-
+    
     this.simuladoService.obterSimuladoPorId(id).subscribe(
       (data) => {
         // console.log('Simulado:', data);
