@@ -797,10 +797,8 @@ export class PageSimuladoComponent implements OnInit {
   }
 
   proximaQuestao() {
-
-    if (!this.questaoRespondida && !this.isSimuladoIniciado) {
+    if (!this.questaoRespondida && this.simuladoIniciado) {
       this.mensagemDeAviso = 'Questão não respondida. Por favor, responda antes de avançar.';
-      console.log(this.mensagemDeAviso);
       return;
     }
 

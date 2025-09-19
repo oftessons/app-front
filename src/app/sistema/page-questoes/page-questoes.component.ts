@@ -55,6 +55,8 @@ interface DadosCuriosidade {
 interface CuriosidadeResponse {
   mensagem: string;
   subtema: string;
+  tipoDeProva: string;
+  anos: string[];
   dadosCuriosidade: DadosCuriosidade[];
 }
 
@@ -851,7 +853,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
             index: index,
           }));
 
-          this.buscarCuriosidadesSeNecessario(filtros);
+          this.buscarCuriosidadesSeNecessario();
           this.toggleFiltros();
         }
 
@@ -980,6 +982,8 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       this.resetarOcorrenciasDeQuestao();
       this.carregarRespostaSeNecessario(this.questaoAtual.id);
       this.questoesStateService.setQuestaoAtual(this.questaoAtual);
+      this.buscarCuriosidadesSeNecessario();
+
     } else {
       this.mensagemErro = 'Voce já está na primeira questão';
     }
@@ -1002,6 +1006,8 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       this.resetarOcorrenciasDeQuestao();
       this.carregarRespostaSeNecessario(this.questaoAtual.id);
       this.questoesStateService.setQuestaoAtual(this.questaoAtual);
+      this.buscarCuriosidadesSeNecessario();
+
 
     } else {
       this.mensagemErro = 'Não há mais questões, mas em breve novas questões estarão disponíveis.'
@@ -1124,7 +1130,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       comentada: this.mapearDescricoesParaEnums(this.multiSelectQuestoesComentadas, ComentadasDescricao),
     };
 
-    console.log(this.filtroASalvar);
 
     if (this.filtroASalvar) {
       const idUser = parseInt(this.usuario.id);
@@ -1231,7 +1236,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     }
   }
 
-
   isImage(url: string | null): boolean {
     return typeof url === 'string' && /\.(jpeg|jpg|gif|png)$/i.test(url);
   }
@@ -1275,6 +1279,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
         questaoId: this.questaoAtual.id,
         paginaAtual: this.paginaAtual
       };
+
       localStorage.setItem('questoesFiltroState', JSON.stringify(filtroState));
 
       this.navigateService.navigateTo(`/usuario/cadastro-questao/${this.questaoAtual.id}`, '/usuario/questoes');
@@ -1437,19 +1442,12 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     return this.filtrosBloqueados;
   }
 
-  buscarCuriosidadesSeNecessario(filtros: any): void {
-    const subtemasParaCuriosidades: string[] = [];
+  buscarCuriosidadesSeNecessario(): void {
+    const idQuestao = this.questaoAtual?.id;
 
-    if (this.multiSelectTemasSubtemasSelecionados && this.multiSelectTemasSubtemasSelecionados.length > 0) {
-      const subtemasSelecionados = this.multiSelectTemasSubtemasSelecionados.filter(item =>
-        typeof item === 'string' && !item.startsWith('TEMA_')
-      );
-      subtemasParaCuriosidades.push(...subtemasSelecionados);
-    }
+    if (idQuestao && !this.isTrialUser) {
 
-    if (subtemasParaCuriosidades.length > 0) {
-
-      this.questoesService.getCuriosidades(subtemasParaCuriosidades).subscribe(
+      this.questoesService.getCuriosidades(idQuestao).subscribe(
         (curiosidades: CuriosidadeResponse[]) => {
 
           this.curiosidades = curiosidades
@@ -1505,11 +1503,20 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     const porcentagemFormatada = dados.porcentagem.toFixed(1);
 
     const nomeSubtemaFormatado = this.getDescricaoSubtemaFormatada(curiosidade.subtema);
-    if (dados.qtdQuestoes === 0) {
-      return `O subtema "${nomeSubtemaFormatado}" não possui questões cadastradas nos últimos 3 anos (${dados.totalQuestoes} questões no total).`;
+    const tipoDeProvaFormatado = curiosidade.tipoDeProva;
+
+    let periodo = '';
+    if (curiosidade.anos && curiosidade.anos.length > 1) {
+      periodo = 'nos últimos três anos';
+    } else if (curiosidade.anos && curiosidade.anos.length === 1) {
+      periodo = `no ano "${curiosidade.anos[0]}"`;
     }
 
-    return `O subtema "${nomeSubtemaFormatado}" representa ${porcentagemFormatada}% das questões dos últimos 3 anos (${dados.qtdQuestoes} de ${dados.totalQuestoes} questões).`;
+    if (dados.qtdQuestoes === 0) {
+      return `O subtema "${nomeSubtemaFormatado}" não possui questões cadastradas para "${tipoDeProvaFormatado}" ${periodo}. (${dados.totalQuestoes} questões no total).`;
+    }
+
+    return `O subtema "${nomeSubtemaFormatado}" representa ${porcentagemFormatada}% das questões de "${tipoDeProvaFormatado}" ${periodo}. (${dados.qtdQuestoes} de ${dados.totalQuestoes} questões).`;
   }
 
   getDescricaoSubtemaFormatada(subtema: string): string {
