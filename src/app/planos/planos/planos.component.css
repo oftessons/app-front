@@ -91,7 +91,7 @@
 }
 
 
-@media (max-width: 768px) {
+@media (max-width: 928px) {
   .main-container {
     margin: 16px;
     padding: 24px;
@@ -116,7 +116,7 @@
   }
 }
 
-@media (min-width: 769px) and (max-width: 1300px) {
+@media (min-width: 800px) and (max-width: 1300px) {
   .main-container {
     justify-items: center;
   }
