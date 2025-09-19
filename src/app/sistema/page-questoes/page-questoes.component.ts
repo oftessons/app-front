@@ -982,6 +982,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       this.resetarOcorrenciasDeQuestao();
       this.carregarRespostaSeNecessario(this.questaoAtual.id);
       this.questoesStateService.setQuestaoAtual(this.questaoAtual);
+      this.fecharBalloon();
       this.buscarCuriosidadesSeNecessario();
 
     } else {
@@ -1006,6 +1007,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       this.resetarOcorrenciasDeQuestao();
       this.carregarRespostaSeNecessario(this.questaoAtual.id);
       this.questoesStateService.setQuestaoAtual(this.questaoAtual);
+      this.fecharBalloon();
       this.buscarCuriosidadesSeNecessario();
 
 
