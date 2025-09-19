@@ -358,15 +358,10 @@ export class QuestoesService {
     return this.http.get<any>(`/api/aulas/${idUser}/${aulaId}`);
   }
   
-  getCuriosidades(subtemas: string[]): Observable<any[]> {
-    const url = `${this.apiURL}/curiosidades`;
-    let params = new HttpParams();
+  getCuriosidades(idQuestao: number): Observable<any[]> {
+    const url = `${this.apiURL}/curiosidades/${idQuestao}`;
     
-    subtemas.forEach(subtema => {
-      params = params.append('subtema', subtema);
-    });
-
-    return this.http.get<any[]>(url, { params }).pipe(
+    return this.http.get<any[]>(url).pipe(
       catchError((error) => {
         console.error('Erro ao buscar curiosidades:', error);
         return throwError('Erro ao buscar curiosidades dos subtemas.');
