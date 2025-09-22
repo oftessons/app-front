@@ -1,11 +1,65 @@
 <div class="container pt-5">
   <div class="container mt-4">
-    <div class="container-logo">
-        <img src="assets/imagens/logoq-bank.svg" alt="logo da empresa oftlessons" class="logo">
+    <div class="header">
+      <div class="welcome-message">
+        <h1 class="mt-4"> 👋 Seja Bem-vindo(a), {{ nomeUsuario }} </h1>
+      </div>
+      <div class="filtro-select">
+        <app-select-padrao
+          [options]="opcoesFiltro"
+          [selectedValue]="filtroSelecionado"
+          
+          (selectedValueChange)="onFiltroSelecionado($event)"
+          placeholder="Filtrar por"
+        ></app-select-padrao>
+      </div>
     </div>
-
-    <div class="container-row">
-      <div class="mb-4" *ngIf="possuiPermissao">
+    <div class="estatisticas">
+      <div class="card-estatistica">
+        <img [src]="isDarkMode() ? 'assets/Icons/dark/v-dark.svg' : 'assets/Icons/v.svg'" alt="Ícone de Respostas Certas">
+        <div class="card-text-estatistica">
+          <h3>{{ respostasCertas }}</h3>
+          <p>Respostas Certas</p>
+        </div>
+      </div>
+      <div class="card-estatistica">
+        <img [src]="isDarkMode() ? 'assets/Icons/dark/x-dark.svg' : 'assets/Icons/x.svg'" alt="Ícone de Respostas Erradas">
+        <div class="card-text-estatistica">
+          <h3>{{ respostasErradas }}</h3>
+          <p>Respostas Erradas</p>
+        </div>
+      </div>
+      <div class="card-estatistica">
+        <img [src]="isDarkMode() ? 'assets/Icons/dark/au-ofi-dark.svg' : 'assets/Icons/au-ofi.svg'" alt="Ícone de Aulas">
+        <div class="card-text-estatistica">
+          <h3>{{ aulasAssistidas }}</h3>
+          <p>Aulas Assistidas</p>
+        </div>
+      </div>
+      <div class="card-estatistica">
+        <img [src]="isDarkMode() ? 'assets/Icons/dark/flashcards-dark.svg' : 'assets/Icons/flashcards.svg'" alt="Ícone de Flashcards">
+        <div class="card-text-estatistica">
+          <h3>{{ flashcardsEstudados }}</h3>
+          <p>Flashcards Estudados</p>
+        </div>
+      </div>
+    </div>
+    <div class="banner-trilha">
+      <div class="banner-text">
+        <h2>Revise seus estudos e aprenda como nunca antes!</h2>
+        <p>Crie sua programação de estudos e conquiste novos resultados.</p>
+      </div>
+      <button 
+        class="banner-button"
+        >
+        Criar minha trilha de revisões
+        <img src="assets/Icons/arrow-updown.svg" alt="">
+      </button>
+    </div>
+    <div class="section">
+      <h2>Principais recursos para você</h2>
+      <div class="container-row">
+        <div class="mb-4" *ngIf="possuiPermissao">
         <div class="card">
           <div class="card-body text-center">
             <h5 class="card-title">Aulas</h5>
@@ -46,15 +100,37 @@
             <button (click)="redirecionarFlashcard()" class="btn btn-primary">
               Acessar >
             </button>            
-          <!--
-            <div *ngIf="mostrarMensagemFlashcard" class="mensagem">
-              Em breve novas funcionalidades disponíveis para você 😃.
+            <!--
+              <div *ngIf="mostrarMensagemFlashcard" class="mensagem">
+                Em breve novas funcionalidades disponíveis para você 😃.
+              </div>
+              -->
             </div>
-          -->
           </div>
         </div>
       </div>
     </div>
-
+    <div class="section">
+      <h2>Pesquisa de Satisfação</h2>
+      <div class="container-row">
+        <div class="mb-4">
+          <div class="card satisfacao">
+            <div class="card-body text-center">
+              <h5 class="card-title">Pesquisa de Satisfação</h5>
+               <div class="card-icon">
+                <img src="assets/Icons/pes.svg" alt="Ícone de Pesquisa" class="icon" style="width: 50px; height: 50px;">
+              </div>
+              <a 
+                href="https://forms.gle/owp46GkkmZDNq4sq9" 
+                class="btn btn-primary btn-pesquisa" 
+                target="_blank" 
+                rel="noopener noreferrer">
+                Acessar >
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
+import { ThemeService } from 'src/app/services/theme.service';
 
 @Component({
   selector: 'app-inicio',
@@ -7,20 +8,43 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./inicio.component.css']
 })
 export class InicioComponent implements OnInit {
-
+  nomeUsuario: string = '';
   mostrarMensagemAulas: boolean = false;
   mostrarMensagemFlashcard: boolean = false;
   linkFlashcard: string = 'www.google.com';
   possuiPermissao: boolean = true;
 
+  opcoesFiltro: string[] = ['Diário', 'Semanal', 'Mensal', 'Anual'];
+  filtroSelecionado: string = 'Semanal';
 
-  constructor(private authService: AuthService) { }
+  respostasCertas: number = 0;
+  respostasErradas: number = 0;
+  aulasAssistidas: number = 0;
+  flashcardsEstudados: number = 0;
+  
+  constructor(
+    private authService: AuthService,
+    private themeService: ThemeService
+  ) { }
 
   ngOnInit(): void {
     this.authService.verificarPermissao().subscribe(
       response => this.possuiPermissao = response.accessGranted,
       err => console.error('Erro ao buscar a permissão ', err)
     );
+    this.obterNomeUsuario();
+  }
+
+  obterNomeUsuario(): void {
+    this.authService.obterNomeUsuario().subscribe(
+      nome => this.nomeUsuario = nome,
+      err => console.error('Erro ao buscar nome do usuário', err)
+    );
+  }
+
+  onFiltroSelecionado(event: any): void {
+    const filtroSelecionado = event.target.value;
+    console.log('Filtro selecionado:', filtroSelecionado);
   }
 
   redirecionarFlashcard() {
@@ -53,4 +77,7 @@ export class InicioComponent implements OnInit {
     }
   }
 
+  isDarkMode(): boolean {
+    return this.themeService.isDarkMode();
+  }
 }
