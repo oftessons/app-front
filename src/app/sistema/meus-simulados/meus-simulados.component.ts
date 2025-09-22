@@ -5,6 +5,8 @@ import { Router } from '@angular/router'; // Para navegação após visualizar o
 import { AuthService } from 'src/app/services/auth.service';
 import { ThemeService } from 'src/app/services/theme.service';
 import { Usuario } from 'src/app/login/usuario';
+import { StatusSimuladoDescricao } from './status-simulado-descricao';
+import { StatusSimulado } from './status-simulado';
 
 @Component({
   selector: 'app-meus-simulados',
@@ -25,7 +27,7 @@ export class MeusSimuladosComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private themeService: ThemeService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.obterPerfilUsuario();
@@ -42,7 +44,7 @@ export class MeusSimuladosComponent implements OnInit {
             this.carregando = false;  // Desativa o carregamento quando os dados chegarem
           },
           (error) => {
-           // console.error('Erro ao carregar simulados', error);
+            // console.error('Erro ao carregar simulados', error);
             this.carregando = false;  // Mesmo em caso de erro, desativa o carregamento
           }
         );
@@ -57,9 +59,9 @@ export class MeusSimuladosComponent implements OnInit {
   editarSimulado(id: number): void {
     this.simuladoService.obterSimuladoPorId(id).subscribe(
       (data) => {
-       // console.log('Simulado:', data);
+        // console.log('Simulado:', data);
         this.ocultarFiltros = true;
-        this.router.navigate(['/usuario/simulados'], { state: { simulado: data }});
+        this.router.navigate(['/usuario/simulados'], { state: { simulado: data } });
       },
       (error) => {
         alert('Erro ao obter simulado por ID');
@@ -75,10 +77,10 @@ export class MeusSimuladosComponent implements OnInit {
         this.simulados = this.simulados.filter(
           (simulado) => simulado.id !== id
         );
-  
+
         // Definir a mensagem de sucesso
         this.mensagemSucesso = 'Simulado Deletado com Sucesso.';
-        
+
         // Esconder a mensagem após 3 segundos
         setTimeout(() => {
           this.mensagemSucesso = '';
@@ -89,7 +91,24 @@ export class MeusSimuladosComponent implements OnInit {
       }
     );
   }
-  
+
+  descricaoStatusSimulado(status: StatusSimulado): string {
+    return StatusSimuladoDescricao[status];
+  }
+
+  getBotaoSimuladoTexto(status: StatusSimulado): string {
+    switch (status) {
+      case StatusSimulado.NAO_INICIADO:
+        return 'Iniciar simulado';
+      case StatusSimulado.EM_ANDAMENTO:
+        return 'Retornar ao simulado';
+      case StatusSimulado.FINALIZADO:
+        return 'Revisar simulado';
+      default:
+        return 'Ação';
+    }
+  }
+
   isDarkMode(): boolean {
     return this.themeService.isDarkMode();
   }
