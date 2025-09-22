@@ -5,6 +5,7 @@ import { Tema } from './page-questoes/enums/tema';
 import { TipoDeProva } from './page-questoes/enums/tipoDeProva';
 import { QuantidadeDeQuestoesSelecionadas } from './page-questoes/enums/quant-questoes';
 import { RespostasSimulado } from './page-questoes/enums/resp-simu';
+import { StatusSimulado } from './meus-simulados/status-simulado';
 
 export class Simulado {
   id?: number; // Torna o campo id opcional
@@ -18,4 +19,6 @@ export class Simulado {
   subtema!: Subtema | null;
   questaoIds!: number[] | null;
   respostasSimulado!: RespostasSimulado | null;
+  statusSimulado!: StatusSimulado;
+  tempoDecorrido!: string | null;
 }

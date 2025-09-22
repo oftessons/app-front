@@ -9,7 +9,7 @@ import { Simulado } from '../sistema/simulado';
 })
 export class SimuladoService {
   apiURL: string = environment.apiURLBase + '/api/simulado';
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   private simuladoAtivoSubject = new BehaviorSubject<boolean>(false);
   simuladoAtivo$ = this.simuladoAtivoSubject.asObservable();
@@ -22,9 +22,15 @@ export class SimuladoService {
     this.simuladoAtivoSubject.next(false);
   }
 
-  
-  finalizarSimulado(idUser: number, respostasEnviadas: any[]) {
-    return this.http.post<any>(`${this.apiURL}/finalizar/${idUser}`, respostasEnviadas);
+  atualizarTempoSimulado(simuladoId: number, tempoEmSegundos: number): Observable<any> {
+    const url = `${this.apiURL}/${simuladoId}/tempo`;
+
+    return this.http.put(url, tempoEmSegundos);
+  }
+
+
+  finalizarSimulado(idUser: number, idSimulado: number, respostasEnviadas: any[]) {
+    return this.http.post<any>(`${this.apiURL}/finalizar/${idUser}/${idSimulado}`, respostasEnviadas);
   }
 
   // Método para cadastrar um novo simulado

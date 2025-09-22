@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, ChangeDetectorRef, HostListener, OnDestroy } from '@angular/core';
 import { TipoDeProva } from '../page-questoes/enums/tipoDeProva';
 import {
   getDescricaoAno,
@@ -38,7 +38,9 @@ import {
 } from '@angular/platform-browser';
 
 import { temasESubtemas } from '../page-questoes/enums/map-tema-subtema';
-import { filter } from 'rxjs/operators';
+import { catchError, filter, map, tap } from 'rxjs/operators';
+import { StatusSimulado } from '../meus-simulados/status-simulado';
+import { forkJoin, Observable, of } from 'rxjs';
 
 declare var bootstrap: any;
 
@@ -47,7 +49,7 @@ declare var bootstrap: any;
   templateUrl: './page-simulado.component.html',
   styleUrls: ['./page-simulado.component.css'],
 })
-export class PageSimuladoComponent implements OnInit {
+export class PageSimuladoComponent implements OnInit, OnDestroy {
   carregando: boolean = false;
   nomeSimulado: string = '';
   descricaoSimulado: string = '';
@@ -95,6 +97,7 @@ export class PageSimuladoComponent implements OnInit {
   alertaVisivel = false;
 
   questaoAtual: Questao | null = null;
+  carregandoSimulado: boolean = false; // <-- ADICIONE ESTA LINHA
   paginaAtual: number = 0;
   filtros: any = {
     ano: null,
@@ -193,88 +196,142 @@ export class PageSimuladoComponent implements OnInit {
 
   }
 
+  ngOnDestroy(): void {
+    this.salvarTempoAtual();
+
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
+    if (this.intervalContagemRegressiva) {
+      clearInterval(this.intervalContagemRegressiva);
+    }
+  }
+
+  salvarTempoAtual(): void {
+    if (this.isSimuladoIniciado && !this.simuladoFinalizado && this.simuladoIdRespondendo > 0) {
+      console.log(`Salvando tempo: ${this.tempo}s para o simulado ${this.simuladoIdRespondendo}`);
+
+      this.simuladoService.atualizarTempoSimulado(this.simuladoIdRespondendo, this.tempo)
+        .subscribe({
+          next: () => console.log('Tempo salvo com sucesso.'),
+          error: (err) => console.error('Erro ao salvar o tempo:', err)
+        });
+    }
+  }
+
   async carregarDadosIniciais() {
     try {
       await this.obterPerfilUsuario();
       this.dados = this.obterDados();
+      this.carregarFiltrosEDescricoes();
 
       const meuSimulado = history.state.simulado;
       this.simuladoIdInicial = meuSimulado?.id;
 
       if (meuSimulado) {
         this.toggleFiltros();
-
-        this.prepararSimulado(meuSimulado);
-
-        this.realizandoSimulado = false;
-
+        this.simuladoIdRespondendo = meuSimulado.id;
+        this.idSimuladoRespondendo = meuSimulado.id;
+        const status = meuSimulado.statusSimulado as StatusSimulado;
+        this.prepararSimulado(meuSimulado, status);
       }
-
-      this.carregarFiltrosEDescricoes();
     } catch (error) {
       console.error('Erro ao carregar dados iniciais:', error);
     }
   }
 
-  private prepararSimulado(meuSimulado: any) {
-    this.toggleFiltros();
-    this.visualizando = true;
-    this.jaRespondeu = true;
+  private prepararSimulado(meuSimulado: any, status: StatusSimulado) {
     this.isMeuSimulado = true;
-    this.multiSelectedAno = meuSimulado.ano;
-    this.multiSelectedTipoDeProva = meuSimulado.tipoDeProva;
-    this.multiSelectedTema = meuSimulado.tema;
-    this.multiSelectedSubtema = meuSimulado.subtema;
-    this.multiSelectedDificuldade = meuSimulado.dificuldade;
-    this.selectedQuantidadeDeQuestoesSelecionadas = meuSimulado.qtdQuestoes;
-    this.selectedRespostasSimulado = meuSimulado.respostasSimulado;
     this.questoes = meuSimulado.questoes;
 
-    if (this.questoes) {
-      this.idsQuestoes = this.questoes.map((q) => q.id);
+    if (!this.questoes || this.questoes.length === 0) {
+      this.message = "Erro: As questões para este simulado não puderam ser carregadas.";
+      return;
+    }
+
+    this.idsQuestoes = this.questoes.map((q) => q.id);
+    this.resposta = '';
+
+    const tempoSalvo = meuSimulado.tempoDecorrido || 0;
+
+    if (status === StatusSimulado.EM_ANDAMENTO) {
+      this.carregandoSimulado = true;
+      this.realizandoSimulado = true;
+      this.isSimuladoIniciado = true;
+      this.isMeuSimulado = false;
+
+      this.carregarRespostasPreviamente().subscribe(() => {
+        console.log("DEBUG: Respostas carregadas para EM_ANDAMENTO.");
+        this.visualizando = false;
+        this.jaRespondeu = false;
+
+        let proximaPagina = 0;
+        let todasRespondidas = true;
+        for (let i = 0; i < this.questoes.length; i++) {
+          if (!this.respostas[i]) {
+            proximaPagina = i;
+            todasRespondidas = false;
+            break;
+          }
+        }
+        if (todasRespondidas) { proximaPagina = this.questoes.length - 1; }
+
+        this.paginaAtual = proximaPagina;
+        this.questaoAtual = this.questoes[this.paginaAtual];
+        this.carregarRespostaAnterior();
+        this.iniciarSimulado(tempoSalvo); // <-- Passa o tempo salvo
+        this.contagemRegressivaSimuladoQuestao();
+        this.carregandoSimulado = false;
+        this.cdr.detectChanges();
+      });
+
+    } else if (status === StatusSimulado.FINALIZADO) {
+      console.log("DEBUG: Status FINALIZADO. Configurando síncrono.");
+      this.visualizando = true;
+      this.jaRespondeu = true;
+      this.realizandoSimulado = false;
       this.paginaAtual = 0;
       this.questaoAtual = this.questoes[this.paginaAtual];
-      this.resposta = '';
-      this.carregarRespostasPreviamente();
-      this.respostaQuestao(this.questoes[this.paginaAtual].id, this.simuladoIdInicial);
       this.visualizarSimulado();
+      this.tempo = tempoSalvo;
+      this.tempoTotal = tempoSalvo;
+      this.cdr.detectChanges();
+
+      this.carregarRespostasPreviamente().subscribe(() => {
+        this.respostaQuestao(this.questoes[this.paginaAtual].id, this.simuladoIdInicial);
+        this.cdr.detectChanges();
+      });
+
+    } else if (status === StatusSimulado.NAO_INICIADO) {
+      console.log("DEBUG: Status NAO_INICIADO. Configurando síncrono.");
+      this.visualizando = false;
+      this.jaRespondeu = false;
+      this.realizandoSimulado = true;
+      this.paginaAtual = 0;
+      this.questaoAtual = this.questoes[this.paginaAtual];
+      this.iniciarSimulado(0); // <-- Passa 0
+      this.contagemRegressivaSimuladoQuestao();
+      this.cdr.detectChanges();
     }
   }
 
-  private carregarFiltrosEDescricoes() {
-    this.tiposDeProvaDescricoes = this.tiposDeProva
-      .filter((tipoProvaKey) => {
-        if (tipoProvaKey == TipoDeProva.SBRV) {
-          return this.isProf() || this.isAdmin();
-        }
-        return true;
-      })
-
-      .map(this.getDescricaoTipoDeProva);
-    this.anosDescricoes = this.anos.map(this.getDescricaoAno);
-    this.dificuldadesDescricoes = this.dificuldades.map(this.getDescricaoDificuldade);
-    this.subtemasDescricoes = this.subtemas.map(this.getDescricaoSubtema);
-    this.temasDescricoes = this.temas.map(this.getDescricaoTema);
-    this.quantidadeDeQuestoesSelecionadasDescricoes =
-      this.quantidadeDeQuestoesSelecionadas.map(this.getDescricaoQuantidadeDeQuestoesSelecionadas);
-    this.respostasSimuladoDescricao = this.respostasSimulado.map(this.getDescricaoRespostasSimulado);
-
-    this.subtemasAgrupadosPorTema = Object.entries(temasESubtemas).map(([temaKey, subtemas]) => {
-      const temaEnum = temaKey as Tema;
-      return {
-        label: this.getDescricaoTema(temaEnum),
-        value: temaEnum,
-        options: subtemas.map(subtema => ({
-          label: this.getDescricaoSubtema(subtema),
-          value: subtema
-        }))
-      };
-    });
-  }
 
   finalizarSimulado() {
+    this.salvarTempoAtual();
+
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+      this.intervalId = null; 
+    }
+    if (this.intervalContagemRegressiva) {
+      clearInterval(this.intervalContagemRegressiva);
+      this.intervalContagemRegressiva = null;
+    }
+
+    this.tempoTotal = this.tempo;
+
     this.simuladoService
-      .finalizarSimulado(this.usuarioId, this.respostasList)
+      .finalizarSimulado(this.usuarioId, this.simuladoIdRespondendo, this.respostasList)
       .subscribe((resultado) => {
         this.gerarGrafico(resultado.acertos, resultado.erros);
         console.log(resultado.metricasPorTema);
@@ -284,7 +341,6 @@ export class PageSimuladoComponent implements OnInit {
     this.simuladoService.simuladoFinalizado();
     this.simuladoIniciado = false;
     this.simuladoFinalizado = true;
-    this.tempoTotal = this.tempo; // Tempo total em segundos
   }
 
   gerarGrafico(acertos: number, erros: number) {
@@ -752,23 +808,38 @@ export class PageSimuladoComponent implements OnInit {
       );
   }
 
-  carregarRespostasPreviamente(): void {
-    this.questoes.forEach((questao, index) => {
-      this.questoesService.questaoRespondida(this.usuarioId, questao.id, this.simuladoIdInicial).subscribe({
-        next: (resposta) => {
+  carregarRespostasPreviamente(): Observable<void> {
+    if (!this.questoes || this.questoes.length === 0) {
+      return of(void 0);
+    }
+
+    this.respostas = [];
+    this.respostasList = [];
+
+    const observables = this.questoes.map((questao, index) => {
+      return this.questoesService.questaoRespondida(this.usuarioId, questao.id, this.simuladoIdInicial).pipe(
+        tap(resposta => {
           if (resposta) {
             this.respostas[index] = resposta.opcaoSelecionada;
-            if (index === this.paginaAtual) {
-              this.selectedOption = resposta.opcaoSelecionada;
-              this.verificarRespostaUsuario(resposta);
-            }
+
+            this.respostasList.push({
+              questaoId: questao.id,
+              temaQuestao: questao.tema,
+              selecionarOpcao: resposta.opcaoSelecionada,
+              correta: resposta.correct,
+            });
           }
-        },
-        error: (erro) => {
+        }),
+        catchError(erro => {
           console.error(`Erro ao carregar resposta para a questão ${questao.id}:`, erro);
-        }
-      });
+          return of(null);
+        })
+      );
     });
+
+    return forkJoin(observables).pipe(
+      map(() => void 0)
+    );
   }
 
   carregarRespostaAnterior() {
@@ -899,6 +970,37 @@ export class PageSimuladoComponent implements OnInit {
     );
   }
 
+  private carregarFiltrosEDescricoes() {
+    this.tiposDeProvaDescricoes = this.tiposDeProva
+      .filter((tipoProvaKey) => {
+        if (tipoProvaKey == TipoDeProva.SBRV) {
+          return this.isProf() || this.isAdmin();
+        }
+        return true;
+      })
+
+      .map(this.getDescricaoTipoDeProva);
+    this.anosDescricoes = this.anos.map(this.getDescricaoAno);
+    this.dificuldadesDescricoes = this.dificuldades.map(this.getDescricaoDificuldade);
+    this.subtemasDescricoes = this.subtemas.map(this.getDescricaoSubtema);
+    this.temasDescricoes = this.temas.map(this.getDescricaoTema);
+    this.quantidadeDeQuestoesSelecionadasDescricoes =
+      this.quantidadeDeQuestoesSelecionadas.map(this.getDescricaoQuantidadeDeQuestoesSelecionadas);
+    this.respostasSimuladoDescricao = this.respostasSimulado.map(this.getDescricaoRespostasSimulado);
+
+    this.subtemasAgrupadosPorTema = Object.entries(temasESubtemas).map(([temaKey, subtemas]) => {
+      const temaEnum = temaKey as Tema;
+      return {
+        label: this.getDescricaoTema(temaEnum),
+        value: temaEnum,
+        options: subtemas.map(subtema => ({
+          label: this.getDescricaoSubtema(subtema),
+          value: subtema
+        }))
+      };
+    });
+  }
+
   private mapearDescricoesParaEnums(
     selecoes: string[],
     descricoesEnum: any
@@ -949,16 +1051,21 @@ export class PageSimuladoComponent implements OnInit {
     this.mostrarCardConfirmacao = false;
   }
 
-  iniciarSimulado(): void {
-    if (!this.isSimuladoIniciado) {
-      this.simuladoService.simuladoIniciado();
+  iniciarSimulado(tempoInicial: number = 0): void {
+
+    this.tempo = tempoInicial;
+    this.simuladoService.simuladoIniciado();
+
+    if (!this.intervalId) {
       this.isSimuladoIniciado = true;
       this.realizandoSimulado = true;
-      this.tempo = 0;
+
       this.intervalId = setInterval(() => {
         this.tempo++;
       }, 1000);
     }
+
+    // Essas flags controlam a exibição no HTML
     this.simuladoIniciado = true;
     this.simuladoFinalizado = false;
   }
@@ -989,7 +1096,7 @@ export class PageSimuladoComponent implements OnInit {
     }
     this.simuladoIniciado = true;
     this.simuladoFinalizado = false;
-    this.revisandoSimulado = true; 
+    this.revisandoSimulado = true;
   }
 
   // Função para formatar o tempo decorrido (opcional)
@@ -1012,7 +1119,7 @@ export class PageSimuladoComponent implements OnInit {
     if (id === null || isNaN(id)) {
       return;
     }
-    
+
     this.simuladoService.obterSimuladoPorId(id).subscribe(
       (data) => {
         // console.log('Simulado:', data);
