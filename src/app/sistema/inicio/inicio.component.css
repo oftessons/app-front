@@ -42,7 +42,6 @@
   padding: 20px;
   border-radius: 16px;
   gap: 16px;
-  min-width: 176px;
   max-width: 250px;
 }
 
@@ -217,7 +216,28 @@
   }
 }
 
+@media (max-width: 570px) {
+  /* .estatisticas {
+    flex-direction: column;
+    align-items: center;
+  } */
+  .card-estatistica {
+    width: 200px;
+  }
+}
+
 @media (max-width: 480px) {
+  .welcome-message{
+    font-size: 22px;
+  }
+  .estatisticas {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .card-estatistica {
+    width: 100%;
+  }
   .header {
     flex-direction: column;
     align-items: flex-start;
@@ -225,5 +245,9 @@
   }
   .filtro-select {
     width: 100%;
+  }
+  .banner-trilha {
+    height: 250px;
+    padding: 10px;
   }
 }
