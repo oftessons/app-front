@@ -11,11 +11,17 @@
 }
 
 .welcome-message {
+  margin: 0;
   font-size: 28px;
 }
 
 .filtro-select {
-  width: 200px;
+  width: 200px; 
+}
+
+::ng-deep .filtro-select .mat-form-field-flex,
+::ng-deep .filtro-select .select-dropdown {
+  background: var(--bg-container) !important;
 }
 
 .estatisticas {
@@ -140,13 +146,20 @@
   border-radius: 16px;
 }
 
-.card.satisfacao {
-  background: var(--yellow);
-}
-
 .card-title {
   color: #cddaef !important;
   font-size: 24px;
+}
+
+.card.satisfacao {
+  background: var(--yellow);
+  h5 {
+    color: #0F1934 !important;
+  }
+
+  a {
+    color: #0F1934 !important;
+  }
 }
 
 .icon {

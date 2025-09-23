@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { ThemeService } from 'src/app/services/theme.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-inicio',
@@ -24,7 +25,8 @@ export class InicioComponent implements OnInit {
   
   constructor(
     private authService: AuthService,
-    private themeService: ThemeService
+    private themeService: ThemeService,
+    private Router: Router
   ) { }
 
   ngOnInit(): void {
@@ -47,20 +49,12 @@ export class InicioComponent implements OnInit {
     console.log('Filtro selecionado:', filtroSelecionado);
   }
 
+  abrirModalConfiguracaoTrilha(): void {
+    this.Router.navigate(['/usuario/trilha']); //! remover para implementar modal
+  }
+
   redirecionarFlashcard() {
-    this.authService.obterLinkFlashcard().subscribe((data) => {
-      this.linkFlashcard = data.linkFlashcard;
-      if(this.linkFlashcard != null && this.linkFlashcard !== '') {
-        window.open(this.linkFlashcard, '_blank');
-      
-      } else {
-        window.open('https://www.brainscape.com/', '_blank');
-
-      }
-
-    })
-
-    console.log("nem passei por aqui");
+    this.Router.navigate(['/usuario/flashcards']);
   }
   
   exibirMensagem(tipo: string): void {

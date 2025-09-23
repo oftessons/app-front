@@ -1,14 +1,12 @@
 <div class="container pt-5">
   <div class="container mt-4">
     <div class="header">
-      <div class="welcome-message">
-        <h1 class="mt-4"> 👋 Seja Bem-vindo(a), {{ nomeUsuario }} </h1>
-      </div>
+      <h1 class="welcome-message">👋 Seja Bem-vindo(a), {{ nomeUsuario }} </h1>
       <div class="filtro-select">
         <app-select-padrao
           [options]="opcoesFiltro"
           [selectedValue]="filtroSelecionado"
-          
+          [label]="'Filtrar por'"
           (selectedValueChange)="onFiltroSelecionado($event)"
           placeholder="Filtrar por"
         ></app-select-padrao>
@@ -51,60 +49,58 @@
       </div>
       <button 
         class="banner-button"
+        (click)="abrirModalConfiguracaoTrilha()"
         >
         Criar minha trilha de revisões
-        <img src="assets/Icons/arrow-updown.svg" alt="">
+        <img src="assets/Icons/arrow-updown.svg" alt="seta">
       </button>
     </div>
     <div class="section">
       <h2>Principais recursos para você</h2>
       <div class="container-row">
         <div class="mb-4" *ngIf="possuiPermissao">
-        <div class="card">
-          <div class="card-body text-center">
-            <h5 class="card-title">Aulas</h5>
-            <div class="card-icon">
-              <img src="assets/Icons/au-bra.svg" alt="Ícone de Aulas" class="icon" style="width: 50px; height: 50px;">
-            </div>
-            <button (click)="exibirMensagem('aulas')" class="btn btn-primary">
-              Acessar >
-            </button>
-            <div *ngIf="mostrarMensagemAulas" class="mensagem">
-              Em breve novas funcionalidades disponíveis para você 😃.
+          <div class="card">
+            <div class="card-body text-center">
+              <h5 class="card-title">Questões</h5>
+              <div class="card-icon">
+                <img src="assets/Icons/dark/caderno-dark.svg" alt="Ícone de Questões" class="icon"/>
+              </div>
+              <a routerLink="/usuario/questoes" class="btn btn-primary">
+                Acessar >
+              </a>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="mb-4" *ngIf="possuiPermissao">
-        <div class="card">
-          <div class="card-body text-center">
-            <h5 class="card-title">Questões</h5>
-            <div class="card-icon">
-              <img src="assets/imagens/Group.svg" alt="Ícone de Empresa de Engenharia" class="icon"/>
+        <div class="mb-4" *ngIf="possuiPermissao">
+          <div class="card">
+            <div class="card-body text-center">
+              <h5 class="card-title">Simulados</h5>
+              <div class="card-icon">
+                <img src="assets/Icons/dark/simu-dark.svg" alt="Ícone de Simulados" class="icon"/>
+              </div>
+              <a routerLink="/usuario/simulados" class="btn btn-primary">
+                Acessar >
+              </a>
             </div>
-            <a routerLink="/usuario/questoes" class="btn btn-primary">
-              Acessar >
-            </a>
           </div>
         </div>
-      </div>
 
-      <div class="mb-4">
-        <div class="card">
-          <div class="card-body text-center">
-            <h5 class="card-title">Flashcards</h5>
-            <div class="card-icon">
-              <img src="assets/Icons/dark/flashcards-dark.svg" alt="Ícone de Flashcard" class="icon"/>
-            </div>
-            <button (click)="redirecionarFlashcard()" class="btn btn-primary">
-              Acessar >
-            </button>            
-            <!--
+        <div class="mb-4">
+          <div class="card">
+            <div class="card-body text-center">
+              <h5 class="card-title">Flashcards</h5>
+              <div class="card-icon">
+                <img src="assets/Icons/dark/flashcards-dark.svg" alt="Ícone de Flashcard" class="icon"/>
+              </div>
+              <button (click)="redirecionarFlashcard()" class="btn btn-primary">
+                Acessar >
+              </button>            
+              <!--               
               <div *ngIf="mostrarMensagemFlashcard" class="mensagem">
                 Em breve novas funcionalidades disponíveis para você 😃.
               </div>
-              -->
+                -->
             </div>
           </div>
         </div>
