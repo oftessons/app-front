@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
+import { ThemeService } from 'src/app/services/theme.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-inicio',
@@ -7,36 +9,52 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./inicio.component.css']
 })
 export class InicioComponent implements OnInit {
-
+  nomeUsuario: string = '';
   mostrarMensagemAulas: boolean = false;
   mostrarMensagemFlashcard: boolean = false;
   linkFlashcard: string = 'www.google.com';
   possuiPermissao: boolean = true;
 
+  opcoesFiltro: string[] = ['Diário', 'Semanal', 'Mensal', 'Anual'];
+  filtroSelecionado: string = 'Semanal';
 
-  constructor(private authService: AuthService) { }
+  respostasCertas: number = 0;
+  respostasErradas: number = 0;
+  aulasAssistidas: number = 0;
+  flashcardsEstudados: number = 0;
+  
+  constructor(
+    private authService: AuthService,
+    private themeService: ThemeService,
+    private Router: Router
+  ) { }
 
   ngOnInit(): void {
     this.authService.verificarPermissao().subscribe(
       response => this.possuiPermissao = response.accessGranted,
       err => console.error('Erro ao buscar a permissão ', err)
     );
+    this.obterNomeUsuario();
+  }
+
+  obterNomeUsuario(): void {
+    this.authService.obterNomeUsuario().subscribe(
+      nome => this.nomeUsuario = nome,
+      err => console.error('Erro ao buscar nome do usuário', err)
+    );
+  }
+
+  onFiltroSelecionado(event: any): void {
+    const filtroSelecionado = event.target.value;
+    console.log('Filtro selecionado:', filtroSelecionado);
+  }
+
+  abrirModalConfiguracaoTrilha(): void {
+    this.Router.navigate(['/usuario/trilha']); //! remover para implementar modal
   }
 
   redirecionarFlashcard() {
-    this.authService.obterLinkFlashcard().subscribe((data) => {
-      this.linkFlashcard = data.linkFlashcard;
-      if(this.linkFlashcard != null && this.linkFlashcard !== '') {
-        window.open(this.linkFlashcard, '_blank');
-      
-      } else {
-        window.open('https://www.brainscape.com/', '_blank');
-
-      }
-
-    })
-
-    console.log("nem passei por aqui");
+    this.Router.navigate(['/usuario/flashcards']);
   }
   
   exibirMensagem(tipo: string): void {
@@ -53,4 +71,7 @@ export class InicioComponent implements OnInit {
     }
   }
 
+  isDarkMode(): boolean {
+    return this.themeService.isDarkMode();
+  }
 }
