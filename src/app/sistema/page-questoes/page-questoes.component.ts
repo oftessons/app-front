@@ -693,7 +693,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     }
     
     this.jaRespondeu = false;
-    this.questoesService.clearRequestsCache();
     this.respondidasAgora.clear();
     this.carregando = true;
     this.selectedOption = '';
