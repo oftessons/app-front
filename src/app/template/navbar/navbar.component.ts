@@ -49,12 +49,15 @@ export class NavbarComponent {
     
     // Inicializar posição baseado no estado inicial da sidebar
     setTimeout(() => {
-      this.adjustNavigationPosition(this.isSidenavOpen());
+      const isOpen = this.sidenav?.opened || false;
+      this.adjustNavigationPosition(isOpen);
+      this.adjustModalPosition(isOpen);
     }, 100);
     
     // Observer para mudanças de tamanho da tela
     this.breakpointObserver.observe('(min-width: 901px)').subscribe(() => {
       this.adjustNavigationPosition(this.isSidenavOpen());
+      this.adjustModalPosition(this.isSidenavOpen());
     });
 
     this.authService.verificarPermissao().subscribe(
@@ -175,6 +178,7 @@ export class NavbarComponent {
     setTimeout(() => {
       const isOpen = this.sidenav.opened;
       this.adjustNavigationPosition(isOpen);
+      this.adjustModalPosition(isOpen);
       console.log('Sidenav is now', isOpen ? 'open' : 'closed');
     }, 50);
   }
@@ -189,6 +193,21 @@ export class NavbarComponent {
     }
   }
   
+  adjustModalPosition(isOpen: boolean) {
+    if (this.breakpointObserver.isMatched('(min-width: 901px)')) {
+      const modalOverlay = document.querySelector('.modal-overlay') as HTMLElement;
+      if (modalOverlay) {
+        modalOverlay.style.left = isOpen ? '150px' : '0';
+        modalOverlay.style.transition = 'left 0.3s ease';
+      }
+    } else {
+      // Em dispositivos móveis, sempre resetar para 0
+      const modalOverlay = document.querySelector('.modal-overlay') as HTMLElement;
+      if (modalOverlay) {
+        modalOverlay.style.left = '0';
+      }
+    }
+  }
 
   isSidenavOpen() {
     return this.breakpointObserver.isMatched('(min-width: 901px)');

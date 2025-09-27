@@ -78,6 +78,7 @@ export class ChatBotStateService {
       this.http.post<ApiResponse<ApiChatRequestResponse[]>>(`${this.apiURL}/tire-sua-duvida`, this.historicoDaConversa).subscribe({
         next: (res) => {
           const respostaBot = res?.data?.[0]?.text || '❓ Nenhuma resposta recebida.';
+          this.historicoDaConversa.push({ text: respostaBot, role: 'model' });
           observer.next({ response: respostaBot });
           observer.complete();
         },
