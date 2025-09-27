@@ -71,10 +71,6 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
   usuarioLogado: Usuario | null = null;
   usuarioId!: number;
 
-  porcentagemAcertos: number = 0;
-  acertos: number = 0;
-  totalQuestoes: number = 0;
-
   @ViewChild('confirmacaoModalRef', { static: false })
   confirmacaoModal!: ElementRef;
 
@@ -265,6 +261,7 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
       this.isMeuSimulado = false;
 
       this.carregarRespostasPreviamente().subscribe(() => {
+        console.log("DEBUG: Respostas carregadas para EM_ANDAMENTO.");
         this.visualizando = false;
         this.jaRespondeu = false;
 
@@ -282,13 +279,14 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
         this.paginaAtual = proximaPagina;
         this.questaoAtual = this.questoes[this.paginaAtual];
         this.carregarRespostaAnterior();
-        this.iniciarSimulado(tempoSalvo);
+        this.iniciarSimulado(tempoSalvo); // <-- Passa o tempo salvo
         this.contagemRegressivaSimuladoQuestao();
         this.carregandoSimulado = false;
         this.cdr.detectChanges();
       });
 
     } else if (status === StatusSimulado.FINALIZADO) {
+      console.log("DEBUG: Status FINALIZADO. Configurando síncrono.");
       this.visualizando = true;
       this.jaRespondeu = true;
       this.realizandoSimulado = false;
@@ -305,14 +303,13 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
       });
 
     } else if (status === StatusSimulado.NAO_INICIADO) {
-      this.isMeuSimulado = false;
-      this.simuladoService.iniciarSimulado(meuSimulado.id);
+      console.log("DEBUG: Status NAO_INICIADO. Configurando síncrono.");
       this.visualizando = false;
       this.jaRespondeu = false;
       this.realizandoSimulado = true;
       this.paginaAtual = 0;
       this.questaoAtual = this.questoes[this.paginaAtual];
-      this.iniciarSimulado(0);
+      this.iniciarSimulado(0); // <-- Passa 0
       this.contagemRegressivaSimuladoQuestao();
       this.cdr.detectChanges();
     }
@@ -324,7 +321,7 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
 
     if (this.intervalId) {
       clearInterval(this.intervalId);
-      this.intervalId = null;
+      this.intervalId = null; 
     }
     if (this.intervalContagemRegressiva) {
       clearInterval(this.intervalContagemRegressiva);
@@ -337,7 +334,7 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
       .finalizarSimulado(this.usuarioId, this.simuladoIdRespondendo, this.respostasList)
       .subscribe((resultado) => {
         this.gerarGrafico(resultado.acertos, resultado.erros);
-        console.log(resultado.metricasDoSimulado);
+        console.log(resultado.metricasPorTema);
       });
 
 
@@ -347,50 +344,27 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
   }
 
   gerarGrafico(acertos: number, erros: number) {
-    // --- INÍCIO DAS NOVAS LINHAS ---
-    // 1. Calcula os totais e a porcentagem para usar no template HTML
-    this.acertos = acertos;
-    this.totalQuestoes = acertos + erros;
-
-    if (this.totalQuestoes > 0) {
-      this.porcentagemAcertos = Math.round((this.acertos / this.totalQuestoes) * 100);
-    } else {
-      this.porcentagemAcertos = 0;
-    }
-    // --- FIM DAS NOVAS LINHAS ---
-
     if (this.chart) {
       this.chart.destroy();
     }
-
-    this.chart = new Chart('graficoResultados', {
-      type: 'doughnut',
+    this.chart = new Chart('graficoBarras', {
+      type: 'pie',
       data: {
         labels: ['Acertos', 'Erros'],
         datasets: [
           {
+            label: 'Quantidade',
             data: [acertos, erros],
-            backgroundColor: [
-              'rgba(46, 204, 113, 1)',
-              'rgba(231, 76, 60, 1)'],
-            borderColor: '#2c3e50',
-            borderWidth: 2
+            backgroundColor: ['#4CAF50', '#F44336'],
           },
         ],
       },
       options: {
         responsive: true,
-        maintainAspectRatio: false,
         plugins: {
           legend: {
-            display: false
+            position: 'top',
           },
-          tooltip: {
-            enabled: true
-          },
-          doughnut: {
-            cutout: '75%'
-          }
         },
       },
     });
@@ -478,9 +452,7 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
           this.respostasList.push({
             questaoId: questao.id,
             temaQuestao: questao.tema,
-            subtemaQuestao: questao.subtema,
             selecionarOpcao: this.selectedOption,
-            simuladoId: respostaDTO.simuladoId,
             correta: resposta.correct,
           });
 
@@ -957,6 +929,7 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
       respostasSimulado: this.selectedRespostasSimulado,
     };
 
+    // Validação básica
     if (
       !simulado.nomeSimulado ||
       !simulado.assunto ||
@@ -969,21 +942,17 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const idUsuario = localStorage.getItem('usuarioIdSimulado') !== null
-      ? Number(localStorage.getItem('usuarioIdSimulado'))
-      : this.usuarioId;
-
-
-    this.simuladoService.cadastrarSimulado(idUsuario, simulado).subscribe(
+    // Chamada ao serviço
+    this.simuladoService.cadastrarSimulado(this.usuarioId, simulado).subscribe(
       (response) => {
         this.exibirMensagem(
           'Seu simulado foi cadastrado com sucesso!',
           'sucesso'
         );
 
-
         this.simuladoIdRespondendo = response.id;
 
+        // Fechar modal automaticamente (usando Bootstrap ou outro método)
         const modalElement = document.getElementById('confirmacaoModal');
         if (modalElement) {
           const modalInstance = bootstrap.Modal.getInstance(modalElement);

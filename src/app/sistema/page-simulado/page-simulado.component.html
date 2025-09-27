@@ -242,47 +242,19 @@
           <button (click)="abrirModal()" class="btn-iniciar">Iniciar Simulado</button>
         </div>
 
-        <div *ngIf="simuladoFinalizado" class="results-page-container">
-          <div class="results-card">
+        <div *ngIf="simuladoFinalizado" class="resultado-container">
+          <h2>Resultados do Simulado</h2>
 
-            <h4 class="results-header">Resultados do Simulado</h4>
-
-            <div class="results-body">
-
-              <div class="chart-container">
-                <canvas id="graficoResultados" width="180" height="180"></canvas>
-                <div class="chart-percentage">
-                  {{ porcentagemAcertos }}%
-                </div>
-              </div>
-
-              <div class="metrics-container">
-                <div class="metric-item">
-                  <h4>Desempenho</h4>
-                  <p>
-                    🎯 Acertos: {{ acertos }} / {{ totalQuestoes }}
-                  </p>
-                </div>
-                <div class="metric-item">
-                  <h4>Tempo</h4>
-                  <p>
-                    ⏱️ Finalizado em: {{ formatarTempo(tempoTotal) }}
-                  </p>
-                </div>
-              </div>
-
-            </div>
-
-            <div class="results-actions">
-              <button class="btn-secondary-action" (click)="revisarSimulado(simuladoIdRespondendo)">
-                Revisar Gabarito
-              </button>
-              <button class="btn-primary-action"
-                [routerLink]="['/usuario/metricas-detalhadas', simuladoIdRespondendo]">Ver Métricas Detalhadas</button>
-            </div>
+          <div class="tempo-final-container">
+            <h3>Tempo Final: {{ formatarTempo(tempoTotal) }}</h3>
           </div>
-        </div>
 
+          <div class="grafico-container">
+            <canvas id="graficoBarras"></canvas>
+          </div>
+          <button class="btn-back" (click)="revisarSimulado(simuladoIdRespondendo)">Revisar simulado</button>
+          <button class="btn-back">Ver métricas</button>
+        </div>
       </div>
     </div>
   </div>

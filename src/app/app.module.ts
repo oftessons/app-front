@@ -31,7 +31,6 @@ import { ChatBotWhatsappComponent } from './chat-bot-whatsapp/chat-bot-whatsapp.
 import { MarkdownModule } from 'ngx-markdown';
 import { QuestoesStateService } from './services/questao-state.service';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 
 
@@ -49,7 +48,6 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
     ChatBotWhatsappComponent,
   ],
   imports: [
-    MatDialogModule,
     BrowserModule,
     AppRoutingModule,
     TemplateModule,

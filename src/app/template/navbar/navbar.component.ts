@@ -7,7 +7,6 @@ import { StripeService } from 'src/app/services/stripe.service';
 import { interval, Subscription } from 'rxjs';
 import { filter, delay } from 'rxjs/operators';
 import { ThemeService } from 'src/app/services/theme.service';
-import { Usuario } from 'src/app/login/usuario';
 
 @Component({
   selector: 'app-navbar',
@@ -19,8 +18,6 @@ export class NavbarComponent {
   nomeUsuario: string = ''; // Variável para armazenar o nome do usuário
   possuiPermissao: boolean = true;
 
-  usuarioLogado: Usuario | null = null;
-  
   mostrarContador: boolean = false;
   diasRestantes: string = '00';
   horasRestantes: string = '00';
@@ -44,8 +41,6 @@ export class NavbarComponent {
       nome => this.nomeUsuario = nome,
       err => console.error('Erro ao buscar nome do usuário ', err)
     );
-
-    this.usuarioLogado = this.authService.getUsuarioAutenticado();
     
     // Inicializar posição baseado no estado inicial da sidebar
     setTimeout(() => {
@@ -204,14 +199,6 @@ export class NavbarComponent {
 
   toggleDarkMode(): void {
     this.themeService.toggleDarkMode();
-  }
-
-  isProf(): boolean {
-    return this.usuarioLogado?.permissao === 'ROLE_PROFESSOR'; 
-  }
-
-  permissionAllowed(): boolean {
-    return this.usuarioLogado?.permissao === 'ROLE_PROFESSOR' || this.usuarioLogado?.permissao === 'ROLE_ADMIN';
   }
 
   isDarkMode(): boolean {
