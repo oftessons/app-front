@@ -45,7 +45,7 @@ export class MeusSimuladosComponent implements OnInit {
           },
           (error) => {
             // console.error('Erro ao carregar simulados', error);
-            this.carregando = false;  // Mesmo em caso de erro, desativa o carregamento
+            this.carregando = false;  
           }
         );
       },
@@ -73,15 +73,12 @@ export class MeusSimuladosComponent implements OnInit {
   deletarSimulado(id: number): void {
     this.simuladoService.deletarSimulado(id).subscribe(
       () => {
-        // Atualizar a lista de simulados
         this.simulados = this.simulados.filter(
           (simulado) => simulado.id !== id
         );
 
-        // Definir a mensagem de sucesso
         this.mensagemSucesso = 'Simulado Deletado com Sucesso.';
 
-        // Esconder a mensagem após 3 segundos
         setTimeout(() => {
           this.mensagemSucesso = '';
         }, 3000);
@@ -107,6 +104,10 @@ export class MeusSimuladosComponent implements OnInit {
       default:
         return 'Ação';
     }
+  }
+
+  verificarMetricas(simuladoId: number): void {
+    this.router.navigate(['/usuario/metricas-detalhadas', simuladoId]);
   }
 
   isDarkMode(): boolean {

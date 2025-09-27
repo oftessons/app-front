@@ -2,14 +2,12 @@
   <div class="container mt-4">
     <h1 class="mt-4"> | Meus Simulados</h1>
 
-    <!-- Barra de progresso durante o carregamento -->
     <mat-progress-bar *ngIf="carregando" mode="indeterminate"></mat-progress-bar>
 
     <div *ngIf="mensagemSucesso" class="alert alert-success custom-alert">
       {{ mensagemSucesso }}
     </div>
 
-    <!-- Simulados ou mensagem de nenhum simulado -->
     <div *ngIf="!carregando">
       <div *ngIf="simulados.length > 0; else noSimulados">
         <div *ngFor="let simulado of simulados" class="card mt-3">
@@ -24,21 +22,30 @@
               <p class="card-text">
                 Assunto: {{ simulado.assunto }}
               </p>
-              <!-- Status do Simulado -->
+              
+              <p class="card-text">
+                Criado por: {{ usuario?.nome }}
+              </p>
+              
               <p class="card-text">
                 Status: <span class="badge bg-info text-dark">{{ descricaoStatusSimulado(simulado.statusSimulado) }}</span>
               </p>
             </div>
             <div>
-              <button class="btn btn-transparent-primary me-2" (click)="editarSimulado(simulado.id!)">
-                {{ getBotaoSimuladoTexto(simulado.statusSimulado) }}
-                <img [src]="!isDarkMode() ? 'assets/imagens/fil.svg' : 'assets/Icons/dark/fil-dark.svg'"
-                  alt="Ícone de Visualizar" class="icon me-1">
-              </button>
-              <button class="btn btn-transparent-danger" (click)="deletarSimulado(simulado.id!)">
-                Deletar
-                <img src="assets/imagens/excluir.svg" alt="Ícone de Deletar" class="icon me-1">
-              </button>
+                <button class="btn btn-transparent-primary ms-2" (click)="editarSimulado(simulado.id!)">
+                    {{ getBotaoSimuladoTexto(simulado.statusSimulado) }}
+                    <img [src]="!isDarkMode() ? 'assets/imagens/fil.svg' : 'assets/Icons/dark/fil-dark.svg'"
+                    alt="Ícone de Visualizar" class="icon me-1">
+                  </button>
+                  <button *ngIf="simulado.statusSimulado === 'FINALIZADO'" class="btn btn-success ms-2" (click)="verificarMetricas(simulado.id!)">
+                    Verificar Métricas
+                    <img [src]="!isDarkMode() ? 'assets/imagens/metrics.svg' : 'assets/Icons/dark/metrics-dark.svg'"
+                    alt="" class="icon me-1">
+                  </button>
+                  <button class="btn btn-transparent-danger ms-2" (click)="deletarSimulado(simulado.id!)">
+                    Deletar
+                    <img src="assets/imagens/excluir.svg" alt="Ícone de Deletar" class="icon me-1">
+                </button>
             </div>
           </div>
         </div>

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Simulado } from '../sistema/simulado';
+import { MetricaSubtema, MetricaTema } from '../sistema/metricas-detalhadas/metrica-interface';
 
 @Injectable({
   providedIn: 'root',
@@ -28,6 +29,10 @@ export class SimuladoService {
     return this.http.put(url, tempoEmSegundos);
   }
 
+  iniciarSimulado(idSimulado: number) {
+    return this.http.post<any>(`${this.apiURL}/iniciar/${idSimulado}`, null);
+
+  }
 
   finalizarSimulado(idUser: number, idSimulado: number, respostasEnviadas: any[]) {
     return this.http.post<any>(`${this.apiURL}/finalizar/${idUser}/${idSimulado}`, respostasEnviadas);
@@ -46,6 +51,14 @@ export class SimuladoService {
   // Método para obter um simulado por ID
   obterSimuladoPorId(id: number): Observable<Simulado> {
     return this.http.get<Simulado>(`${this.apiURL}/${id}`);
+  }
+
+  buscarMetricasAgrupadasPorTema(simuladoId: number): Observable<{ response: MetricaTema[] } > {
+    return this.http.get<{ response: MetricaTema[] }>(`${this.apiURL}/obter-metricas-tema/${simuladoId}`);
+  }
+
+  buscarMetricasDetalhadas(simuladoId: number): Observable<{ response: MetricaSubtema[] } > {
+    return this.http.get<{ response: MetricaSubtema[] }>(`${this.apiURL}/obter-metricas-subtema/${simuladoId}`);
   }
 
   // Método para editar um simulado
