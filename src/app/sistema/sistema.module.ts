@@ -44,6 +44,8 @@ import { PaginaInicialComponent } from './pagina-inicial/pagina-inicial.componen
 import { PageTrilhaComponent } from './page-trilha/page-trilha.component';
 import { PageRevisaoComponent } from './page-revisao/page-revisao.component';
 import { FlashcardsComponent } from './flashcards/flashcards.component';
+import { PageMentoriaComponent } from './page-mentoria/page-mentoria.component';
+import { MetricasDetalhadasComponent } from './metricas-detalhadas/metricas-detalhadas.component';
 
 @NgModule({
   declarations: [
@@ -78,6 +80,8 @@ import { FlashcardsComponent } from './flashcards/flashcards.component';
     PermissaoProfessorComponent,
     InicioComponent,
     PaginaInicialComponent,
+    PageMentoriaComponent,
+    MetricasDetalhadasComponent,
     
   ],
   imports: [

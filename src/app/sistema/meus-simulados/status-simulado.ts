@@ -1,0 +1,5 @@
+export enum StatusSimulado {
+    NAO_INICIADO = 'NAO_INICIADO',
+    EM_ANDAMENTO = 'EM_ANDAMENTO',
+    FINALIZADO = 'FINALIZADO',
+}

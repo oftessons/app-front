@@ -1,7 +1,13 @@
 <div class="container pt-5 content-with-fixed-buttons">
   <div class="container mt-4">
     <div class="header" *ngIf="realizandoSimulado && !isSimuladoIniciado;">
-      <h1 class="mt-4"> <span> | </span> Simulados</h1>
+      <h1 class="mt-4">
+        <span> | </span>
+        <ng-container *ngIf="nomeAlunoMentorado; else simuladosTitulo">
+          Criando simulado para "{{ nomeAlunoMentorado }}"
+        </ng-container>
+        <ng-template #simuladosTitulo>Simulados</ng-template>
+      </h1>
       <button class="btn-filtros" (click)="toggleFiltros()">
         <img src="assets/imagens/q-f.svg" alt="Ícone do Filtro" class="icon">
         Filtro Simulado
@@ -120,141 +126,178 @@
     </div>
     <div class="questao">
       <div *ngIf="simuladoIniciado && !simuladoFinalizado">
-        <div class="identificadores-questao">
-          <h3>ID: {{ questaoAtual.id }}</h3>
-          <h3>Tema: {{ questaoAtual.tema }}</h3>
-          <h3>Ano: {{ questaoAtual.ano }}</h3>
+        <!-- Exibe mensagem de sucesso ao cadastrar simulado para outra pessoa -->
+        <div *ngIf="nomeAlunoMentorado" class="alert alert-success mt-3">
+          Simulado cadastrado com sucesso!
         </div>
 
-        <div class="conteudo-questao">
-          <div *ngIf="!isMeuSimulado" class="timer-container">
-            <h3>
-              <span>Tempo de simulado:</span>
-              {{ formatarTempo(tempo) }}
-            </h3>
+        <!-- Só exibe as questões se NÃO estiver cadastrando para outra pessoa OU se não acabou de cadastrar -->
+        <ng-container *ngIf="!(nomeAlunoMentorado)">
+          <div class="identificadores-questao">
+        <h3>ID: {{ questaoAtual.id }}</h3>
+        <h3>Tema: {{ questaoAtual.tema }}</h3>
+        <h3>Ano: {{ questaoAtual.ano }}</h3>
           </div>
-          <div *ngIf="!isMeuSimulado" class="timer-container">
-            <h3>
-              <span [ngStyle]="{ color: getCorTempoRestante() }">Tempo restante:
-                {{ tempoRestanteQuestaoSimulado }}s
-              </span>
-            </h3>
+
+          <div class="conteudo-questao">
+        <div *ngIf="!isMeuSimulado" class="timer-container">
+          <h3>
+            <span>Tempo de simulado:</span>
+            {{ formatarTempo(tempo) }}
+          </h3>
+        </div>
+        <div *ngIf="!isMeuSimulado" class="timer-container">
+          <h3>
+            <span [ngStyle]="{ color: getCorTempoRestante() }">Tempo restante:
+          {{ tempoRestanteQuestaoSimulado }}s
+            </span>
+          </h3>
+        </div>
+        <div class="enunciado-questao" [innerHTML]="questaoAtual.enunciadoDaQuestao"></div>
+        <ng-container *ngIf="questaoAtual?.fotoDaQuestaoUrl">
+          <img *ngIf="isImage(questaoAtual.fotoDaQuestaoUrl)" [src]="questaoAtual.fotoDaQuestaoUrl"
+            alt="Foto da questão" class="questao-foto">
+          <video *ngIf="isVideo(questaoAtual.fotoDaQuestaoUrl)" [src]="questaoAtual.fotoDaQuestaoUrl" controls
+            controlsList="nodownload" class="questao-video">
+          </video>
+        </ng-container>
+
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+          <div *ngFor="let alternativa of questaoAtual.alternativas; let i = index" class="alternativa" [ngClass]="{ 
+            'alternativa-certa': respostaVerificada && alternativa.texto === respostaCorreta,
+            'alternativa-errada': respostaVerificada && alternativa.texto === respostaErrada
+
+          }">
+            <div class="alternativa-input-group">
+              <input type="radio" name="alternativa" [id]="'alternativa' + i" [value]="alternativa.texto"
+            [(ngModel)]="selectedOption" (change)="onOptionChange(alternativa.texto)"
+            [checked]="alternativa.texto === selectedOption" [disabled]="radioDisabled">
+
+              <label [for]="'alternativa' + i" class="alternativa-label">
+            <span class="alternativa-texto">{{ alternativa.texto }} </span>
+            <span *ngIf="alternativa.imagemUrl; else comentarioTexto" class="img-alternativas">
+              <img [src]="alternativa.imagemUrl" alt="Imagem da Alternativa" class="alternativa-foto">
+            </span>
+            <ng-template #comentarioTexto>
+              <span class="alternativa-comentario">{{ alternativa.comentario }}</span>
+            </ng-template>
+              </label>
+            </div>
           </div>
-          <div class="enunciado-questao" [innerHTML]="questaoAtual.enunciadoDaQuestao"></div>
+            </div>
+            <div *ngIf="mensagemDeAviso" class="alert alert-info mt-2">
+          {{ mensagemDeAviso }}
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="mostrarGabarito && questaoAtual">
+          <h2 style="margin-top: 10px;">Comentário da Questão</h2>
+          <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestao | safeHtml"></div>
           <ng-container *ngIf="questaoAtual?.fotoDaQuestaoUrl">
-            <img *ngIf="isImage(questaoAtual.fotoDaQuestaoUrl)" [src]="questaoAtual.fotoDaQuestaoUrl"
-              alt="Foto da questão" class="questao-foto">
-            <video *ngIf="isVideo(questaoAtual.fotoDaQuestaoUrl)" [src]="questaoAtual.fotoDaQuestaoUrl" controls
-              controlsList="nodownload" class="questao-video">
+            <img *ngIf="isImage(questaoAtual.fotoDaRespostaUmUrl)" [src]="questaoAtual.fotoDaRespostaUmUrl"
+          alt="Foto da questão" class="questao-foto">
+            <video *ngIf="isVideo(questaoAtual.fotoDaRespostaUmUrl)" [src]="questaoAtual.fotoDaRespostaUmUrl" controls
+          controlsList="nodownload" class="questao-video">
             </video>
           </ng-container>
+          <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestaoDois | safeHtml"></div>
+          <ng-container *ngIf="questaoAtual?.fotoDaQuestaoUrl">
+            <img *ngIf="isImage(questaoAtual.fotoDaRespostaDoisUrl)" [src]="questaoAtual.fotoDaRespostaDoisUrl"
+          alt="Foto da questão" class="questao-foto">
+            <video *ngIf="isVideo(questaoAtual.fotoDaRespostaDoisUrl)" [src]="questaoAtual.fotoDaRespostaDoisUrl"
+          controls controlsList="nodownload" class="questao-video">
+            </video>
+          </ng-container>
+          <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestaoTres | safeHtml"></div>
+          <ng-container *ngIf="questaoAtual?.fotoDaQuestaoUrl">
+            <img *ngIf="isImage(questaoAtual.fotoDaRespostaTresUrl)" [src]="questaoAtual.fotoDaRespostaTresUrl"
+          alt="Foto da questão" class="questao-foto">
+            <video *ngIf="isVideo(questaoAtual.fotoDaRespostaTresUrl)" [src]="questaoAtual.fotoDaRespostaTresUrl"
+          controls controlsList="nodownload" class="questao-video">
+            </video>
+          </ng-container>
+          <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestaoQuatro | safeHtml"></div>
+          <ng-container *ngIf="questaoAtual?.fotoDaQuestaoUrl">
+            <img *ngIf="isImage(questaoAtual.fotoDaRespostaQuatroUrl)" [src]="questaoAtual.fotoDaRespostaQuatroUrl"
+          alt="Foto da questão" class="questao-foto">
+            <video *ngIf="isVideo(questaoAtual.fotoDaRespostaQuatroUrl)" [src]="questaoAtual.fotoDaRespostaQuatroUrl"
+          controls controlsList="nodownload" class="questao-video">
+            </video>
+          </ng-container>
+          <p *ngIf="questaoAtual?.referenciaBi">Referência: {{ questaoAtual.referenciaBi }}</p>
+          <p *ngIf="questaoAtual?.comentadorDaQuestao">Comentado por: {{ questaoAtual.comentadorDaQuestao }}</p>
+        </div>
 
-          <div class="row">
-            <div class="col-md-12">
-              <div class="form-group">
-                <div *ngFor="let alternativa of questaoAtual.alternativas; let i = index" class="alternativa" [ngClass]="{ 
-                  'alternativa-certa': respostaVerificada && alternativa.texto === respostaCorreta,
-                  'alternativa-errada': respostaVerificada && alternativa.texto === respostaErrada
+        <div class="navigation-fixed">
+          <div class="navigation-buttons">
+            <button *ngIf="!isMeuSimulado" class="btn-finalizar" (click)="finalizarSimulado()">Finalizar</button>
+            <button *ngIf="jaRespondeu" class="btn-gabarito" (click)="exibirGabarito()">Comentário da Questão</button>
 
-                }">
-                  <div class="alternativa-input-group">
-                    <input type="radio" name="alternativa" [id]="'alternativa' + i" [value]="alternativa.texto"
-                      [(ngModel)]="selectedOption" (change)="onOptionChange(alternativa.texto)"
-                      [checked]="alternativa.texto === selectedOption" [disabled]="radioDisabled">
+            <button *ngIf="visualizando" class="btn-anterior" (click)="anteriorQuestao()"
+          [disabled]="paginaAtual === 0">Anterior</button>
 
-                    <label [for]="'alternativa' + i" class="alternativa-label">
-                      <span class="alternativa-texto">{{ alternativa.texto }} </span>
-                      <span *ngIf="alternativa.imagemUrl; else comentarioTexto" class="img-alternativas">
-                        <img [src]="alternativa.imagemUrl" alt="Imagem da Alternativa" class="alternativa-foto">
-                      </span>
-                      <ng-template #comentarioTexto>
-                        <span class="alternativa-comentario">{{ alternativa.comentario }}</span>
-                      </ng-template>
-                      <!--<span class="alternativa-comentario">{{ alternativa.comentario }}</span>-->
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div *ngIf="mensagemDeAviso" class="alert alert-info mt-2">
-                {{ mensagemDeAviso }}
-              </div>
-            </div>
-          </div>
-
-          <div *ngIf="mostrarGabarito && questaoAtual">
-            <h2 style="margin-top: 10px;">Comentário da Questão</h2>
-            <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestao | safeHtml"></div>
-            <ng-container *ngIf="questaoAtual?.fotoDaQuestaoUrl">
-              <img *ngIf="isImage(questaoAtual.fotoDaRespostaUmUrl)" [src]="questaoAtual.fotoDaRespostaUmUrl"
-                alt="Foto da questão" class="questao-foto">
-              <video *ngIf="isVideo(questaoAtual.fotoDaRespostaUmUrl)" [src]="questaoAtual.fotoDaRespostaUmUrl" controls
-                controlsList="nodownload" class="questao-video">
-              </video>
-            </ng-container>
-            <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestaoDois | safeHtml"></div>
-            <ng-container *ngIf="questaoAtual?.fotoDaQuestaoUrl">
-              <img *ngIf="isImage(questaoAtual.fotoDaRespostaDoisUrl)" [src]="questaoAtual.fotoDaRespostaDoisUrl"
-                alt="Foto da questão" class="questao-foto">
-              <video *ngIf="isVideo(questaoAtual.fotoDaRespostaDoisUrl)" [src]="questaoAtual.fotoDaRespostaDoisUrl"
-                controls controlsList="nodownload" class="questao-video">
-              </video>
-            </ng-container>
-            <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestaoTres | safeHtml"></div>
-            <ng-container *ngIf="questaoAtual?.fotoDaQuestaoUrl">
-              <img *ngIf="isImage(questaoAtual.fotoDaRespostaTresUrl)" [src]="questaoAtual.fotoDaRespostaTresUrl"
-                alt="Foto da questão" class="questao-foto">
-              <video *ngIf="isVideo(questaoAtual.fotoDaRespostaTresUrl)" [src]="questaoAtual.fotoDaRespostaTresUrl"
-                controls controlsList="nodownload" class="questao-video">
-              </video>
-            </ng-container>
-            <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestaoQuatro | safeHtml"></div>
-            <ng-container *ngIf="questaoAtual?.fotoDaQuestaoUrl">
-              <img *ngIf="isImage(questaoAtual.fotoDaRespostaQuatroUrl)" [src]="questaoAtual.fotoDaRespostaQuatroUrl"
-                alt="Foto da questão" class="questao-foto">
-              <video *ngIf="isVideo(questaoAtual.fotoDaRespostaQuatroUrl)" [src]="questaoAtual.fotoDaRespostaQuatroUrl"
-                controls controlsList="nodownload" class="questao-video">
-              </video>
-            </ng-container>
-            <p *ngIf="questaoAtual?.referenciaBi">Referência: {{ questaoAtual.referenciaBi }}</p>
-            <p *ngIf="questaoAtual?.comentadorDaQuestao">Comentado por: {{ questaoAtual.comentadorDaQuestao }}</p>
-          </div>
-
-          <div class="navigation-fixed">
-            <div class="navigation-buttons">
-              <button *ngIf="!isMeuSimulado" class="btn-finalizar" (click)="finalizarSimulado()">Finalizar</button>
-              <button *ngIf="jaRespondeu" class="btn-gabarito" (click)="exibirGabarito()">Comentário da Questão</button>
-
-              <button *ngIf="visualizando" class="btn-anterior" (click)="anteriorQuestao()"
-                [disabled]="paginaAtual === 0">Anterior</button>
-
-
-              <button *ngIf="!isMeuSimulado" class="btn-responder"
-                (click)="questaoAtual && responderQuestao(questaoAtual)" [disabled]="radioDisabled">Responder</button>
-              <button class="btn-proxima" (click)="proximaQuestao()">Próxima</button>
-            </div>
+            <button *ngIf="!isMeuSimulado" class="btn-responder"
+          (click)="questaoAtual && responderQuestao(questaoAtual)" [disabled]="radioDisabled">Responder</button>
+            <button class="btn-proxima" (click)="proximaQuestao()">Próxima</button>
           </div>
         </div>
+          </div>
+        </ng-container>
       </div>
 
       <div>
         <div class="iniciar-simulado-container" *ngIf="!simuladoIniciado && !simuladoFinalizado">
-          <h2>Clique para Iniciar o Simulado</h2>
-          <button (click)="abrirModal()" class="btn-iniciar">Iniciar Simulado</button>
+          <h2 *ngIf="!nomeAlunoMentorado">Clique para Iniciar o Simulado</h2>
+          <h2 *ngIf="nomeAlunoMentorado">Clique para Salvar o Simulado</h2>
+          <button (click)="abrirModal()" class="btn-iniciar">
+            {{ nomeAlunoMentorado ? 'Salvar Simulado' : 'Iniciar Simulado' }}
+          </button>
         </div>
 
-        <div *ngIf="simuladoFinalizado" class="resultado-container">
-          <h2>Resultados do Simulado</h2>
+        <div *ngIf="simuladoFinalizado" class="results-page-container">
+          <div class="results-card">
 
-          <div class="tempo-final-container">
-            <h3>Tempo Final: {{ formatarTempo(tempoTotal) }}</h3>
-          </div>
+            <h4 class="results-header">Resultados do Simulado</h4>
 
-          <div class="grafico-container">
-            <canvas id="graficoBarras"></canvas>
+            <div class="results-body">
+
+              <div class="chart-container">
+                <canvas id="graficoResultados" width="180" height="180"></canvas>
+                <div class="chart-percentage">
+                  {{ porcentagemAcertos }}%
+                </div>
+              </div>
+
+              <div class="metrics-container">
+                <div class="metric-item">
+                  <h4>Desempenho</h4>
+                  <p>
+                  🎯 Acertos: {{ acertos }} / {{ totalQuestoes }}
+                  </p>
+                </div>
+                <div class="metric-item">
+                  <h4>Tempo</h4>
+                  <p>
+                    ⏱️ Finalizado em: {{ formatarTempo(tempoTotal) }}
+                  </p>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="results-actions">
+              <button class="btn-secondary-action" (click)="revisarSimulado(simuladoIdRespondendo)">
+                Revisar Gabarito
+              </button>
+              <button class="btn-primary-action"
+                [routerLink]="['/usuario/metricas-detalhadas', simuladoIdRespondendo]">Ver Métricas Detalhadas</button>
+            </div>
           </div>
-          <button class="btn-back" (click)="revisarSimulado(simuladoIdRespondendo)">Revisar simulado</button>
-          <button class="btn-back">Ver métricas</button>
         </div>
+
       </div>
     </div>
   </div>

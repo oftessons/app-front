@@ -30,8 +30,11 @@ import { PermissaoProfessorComponent } from './permissao-professor/permissao-pro
 import { InicioComponent } from './inicio/inicio.component';
 import { PageTrilhaComponent } from './page-trilha/page-trilha.component';
 import { PageRevisaoComponent } from './page-revisao/page-revisao.component';
+import { PageMentoriaComponent } from './page-mentoria/page-mentoria.component';
 import { FlashcardsComponent } from './flashcards/flashcards.component';
 import { BolsaGuardService } from '../services/bolsa.guard';
+import { MetricasDetalhadasComponent } from './metricas-detalhadas/metricas-detalhadas.component';
+
 
 const routes: Routes = [
   { 
@@ -108,6 +111,18 @@ const routes: Routes = [
         component: PermissaoProfessorComponent, 
         canActivate: [AuthGuard], 
         data: { role: 'PROFESSOR' }
+      },
+      {
+        path: 'sistema-mentoria',
+        component: PageMentoriaComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['ADMIN', 'PROFESSOR'] }
+      },
+      {
+        path: 'metricas-detalhadas/:id',
+        component: MetricasDetalhadasComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['ADMIN', 'PROFESSOR', 'USER'] }
       }
     ]
   }

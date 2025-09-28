@@ -1,0 +1,164 @@
+<div class="container pt-5">
+    <div class="container mt-4">
+
+        <h1 class="mt-4">
+            <span>|</span> Mentoria
+        </h1>
+
+        <mat-tab-group animationDuration="0ms" class="mentoria-tabs">
+
+            <mat-tab label="Visão por Aluno">
+                <div class="tab-content">
+                    <div class="filtro-container">
+                        <app-multiplo-select label="Selecione o(s) Aluno(s) para visualizar"
+                            [options]="opcoesAlunosParaFiltro" [(selectedValue)]="idsAlunosSelecionados"
+                            [multiple]="true" (selectedValueChange)="onSelecaoDeAlunosChange()" [searchable]="true">
+                        </app-multiplo-select>
+                    </div>
+
+                    <div class="conteudo-principal">
+                        <div *ngIf="carregandoAlunos" class="feedback-container">
+                            <p>Carregando lista de alunos...</p>
+                        </div>
+
+                        <ul class="mentored-users-list" *ngIf="!carregandoAlunos && alunosFiltrados.length > 0">
+                            <li *ngFor="let usuario of alunosFiltrados">
+                                <div class="usuario-card">
+                                    <div class="usuario-foto-container">
+                                        <img [src]="usuario.fotoUrl || 'assets/imagens/foto.svg'"
+                                            alt="Foto de {{ usuario.nome }}" class="usuario-foto">
+                                    </div>
+                                    <div class="usuario-info">
+                                        <h3>{{ usuario.nome }}</h3>
+                                        <p><strong>Email:</strong> {{ usuario.email }}</p>
+                                        <p><strong>Tipo de Estudante:</strong> {{ usuario.tipoDeEstudante || 'Não informado' }}</p>
+                                    </div>
+
+                                    <div class="usuario-card-acoes">
+                                        <!-- BOTÃO ATUALIZADO PARA ABRIR O MODAL -->
+                                        <button class="btn-card btn-desempenho" (click)="verDetalhesAluno(usuario)">
+                                            Ver Dados
+                                        </button>
+                                        <button class="btn-card btn-desempenho" (click)="verDesempenho(usuario)">
+                                            Ver Desempenho
+                                        </button>
+                                        <button class="btn-card btn-desempenho"
+                                            (click)="verSimuladosRealizados(usuario)">
+                                            Simulados Realizados
+                                        </button>
+                                        <button class="btn-card btn-criar-simulado" (click)="criarSimulado(usuario)">
+                                            Criar Simulado
+                                        </button>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+
+                        <div *ngIf="!carregandoAlunos && alunosFiltrados.length === 0" class="feedback-container">
+                            <div class="usuario-card-empty">
+                                <h3>Nenhum aluno selecionado</h3>
+                                <p>Selecione um ou mais alunos no filtro acima para visualizá-los.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+
+            <mat-tab label="Pontos de Atenção da Turma">
+                <div class="tab-content">
+                    <div class="sugestoes-container">
+                        <h3 class="sugestoes-titulo">Sugestões de Pontos de Atenção</h3>
+                        <p class="sugestoes-subtitulo">Com base no desempenho recente de todos os alunos, sugerimos
+                            focar em
+                            simulados sobre os seguintes tópicos:</p>
+
+                        <div *ngIf="carregandoSugestoes" class="feedback-container">
+                            <p>Analisando dados e gerando sugestões...</p>
+                        </div>
+
+                        <div class="sugestoes-grid" *ngIf="!carregandoSugestoes && sugestoesAgrupadas.length > 0">
+                            <div *ngFor="let sugestao of sugestoesAgrupadas" class="sugestao-card">
+                                <div class="sugestao-header">
+                                    <span class="sugestao-tag">{{ traduzirTema(sugestao.tema) }}</span>
+                                    <span class="sugestao-tag">{{ traduzirSubtema(sugestao.subtema) }}</span>
+                                </div>
+                                <div class="sugestao-body">
+                                    <h4>Foco em: {{ traduzirSubtema(sugestao.subtema) }}</h4>
+                                    <h5>Tipo de prova: {{ traduzirTipoDeProva(sugestao.tipoDeProva) }}</h5>
+                                    <p>Notamos uma dificuldade recorrente neste assunto.</p>
+                                    <details class="exemplos-questoes">
+                                        <summary>Ver exemplos de questões ({{ sugestao.questoes.length }})</summary>
+                                        <ul>
+                                            <li *ngFor="let questao of sugestao.questoes"
+                                                [innerHTML]="sanitizer.bypassSecurityTrustHtml(questao.question_text)">
+                                            </li>
+                                        </ul>
+                                    </details>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div *ngIf="!carregandoSugestoes && sugestoesAgrupadas.length === 0" class="feedback-container">
+                            <p>Nenhum ponto de atenção encontrado para este grupo.</p>
+                        </div>
+
+                        <div class="pagination-container" *ngIf="!carregandoSugestoes && totalDePaginasSugestoes > 0">
+                            <button class="pagination-button" (click)="irParaPaginaSugestoes(paginaAtualSugestoes - 1)"
+                                [disabled]="paginaAtualSugestoes === 1">
+                                Anterior
+                            </button>
+                            <span class="pagination-info">
+                                Grupo {{ paginaAtualSugestoes }} de {{ totalDePaginasSugestoes }}
+                            </span>
+                            <button class="pagination-button" (click)="irParaPaginaSugestoes(paginaAtualSugestoes + 1)"
+                                [disabled]="paginaAtualSugestoes === totalDePaginasSugestoes">
+                                Próxima
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+    </div>
+</div>
+
+<!-- =============================================================== -->
+<!-- ============= CÓDIGO DO MODAL (POPUP) DO ALUNO ================ -->
+<!-- =============================================================== -->
+<div *ngIf="alunoSelecionadoParaDetalhes" class="modal-overlay" (click)="fecharDetalhesAluno()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+
+        <div class="modal-body">
+            <div class="aluno-detalhe">
+                <strong>ID do Usuário:</strong>
+                <p>{{ alunoSelecionadoParaDetalhes.id || 'Não informado' }}</p>
+            </div>
+            <div class="aluno-detalhe">
+                <strong>Nome Completo:</strong>
+                <p>{{ alunoSelecionadoParaDetalhes.nome || 'Não informado' }}</p>
+            </div>
+            <div class="aluno-detalhe">
+                <strong>Email:</strong>
+                <p>{{ alunoSelecionadoParaDetalhes.email || 'Não informado' }}</p>
+            </div>
+            <div class="aluno-detalhe">
+                <strong>Cidade:</strong>
+                <p>{{ alunoSelecionadoParaDetalhes.cidade || 'Não informado' }}</p>
+            </div>
+            <div class="aluno-detalhe">
+                <strong>Estado:</strong>
+                <p>{{ alunoSelecionadoParaDetalhes.estado || 'Não informado' }}</p>
+            </div>
+            <div class="aluno-detalhe">
+                <strong>Telefone:</strong>
+                <p>{{ alunoSelecionadoParaDetalhes.telefone || 'Não informado' }}</p>
+            </div>
+            <div class="aluno-detalhe">
+                <strong>Tipo de Estudante:</strong>
+                <p>{{ alunoSelecionadoParaDetalhes.tipoDeEstudante || 'Não informado' }}</p>
+            </div>
+        </div>
+
+    </div>
+</div>
