@@ -1,9 +1,10 @@
-import { Component, OnInit, OnDestroy, ViewChildren, QueryList, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChildren, QueryList, ElementRef, AfterViewInit, Optional, Inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import Chart from 'chart.js';
 import { SimuladoService } from 'src/app/services/simulado.service';
 import { MetricaSubtema, MetricaTema } from './metrica-interface';
 import { forkJoin } from 'rxjs';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 interface GrupoSubtema {
   tema: string;
@@ -22,12 +23,11 @@ export class MetricasDetalhadasComponent implements OnInit, OnDestroy, AfterView
   dadosTema: MetricaTema[] = [];
   dadosSubtema: MetricaSubtema[] = [];
   dadosAgrupadosPorTema: GrupoSubtema[] = [];
+  simuladoIdAlunoMentorado!: string | null;
 
-  // Variáveis para guardar as instâncias dos gráficos
   temaChart: Chart | null = null;
   subtemaCharts: Chart[] = [];
   
-  // Observador para reagir a mudanças de tema
   private themeObserver!: MutationObserver;
 
   colorPalette = [
@@ -37,11 +37,16 @@ export class MetricasDetalhadasComponent implements OnInit, OnDestroy, AfterView
 
   constructor(
     private simuladoService: SimuladoService,
-    private route: ActivatedRoute
-  ) { }
+    private route: ActivatedRoute,
+
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: { simuladoId: string } | null
+  ) { 
+
+    this.simuladoIdAlunoMentorado = data?.simuladoId ? data?.simuladoId : null; 
+  }
 
   ngOnInit(): void {
-    const simuladoId = Number(this.route.snapshot.paramMap.get('id'));
+    const simuladoId = this.simuladoIdAlunoMentorado ?  Number(this.simuladoIdAlunoMentorado) : Number(this.route.snapshot.paramMap.get('id'));
 
     if (simuladoId && !isNaN(simuladoId)) {
       forkJoin({
@@ -54,7 +59,6 @@ export class MetricasDetalhadasComponent implements OnInit, OnDestroy, AfterView
           this.agruparSubtemasPorTema();
           this.carregando = false;
 
-          // Renderiza os gráficos após os dados chegarem e a tela ser atualizada
           setTimeout(() => {
             this.renderizarGraficoPorTema();
             this.renderizarGraficosPorSubtema();
@@ -72,17 +76,14 @@ export class MetricasDetalhadasComponent implements OnInit, OnDestroy, AfterView
   }
 
   ngAfterViewInit(): void {
-    // Configura o observador para reagir a trocas de tema
     this.observeThemeChanges();
 
-    // Garante que se a lista de subtemas for alterada dinamicamente, os gráficos são redesenhados
     this.subtemaCanvases.changes.subscribe(() => {
       this.renderizarGraficosPorSubtema();
     });
   }
 
   ngOnDestroy(): void {
-    // Limpa o observador quando o componente é destruído para evitar vazamento de memória
     if (this.themeObserver) {
       this.themeObserver.disconnect();
     }

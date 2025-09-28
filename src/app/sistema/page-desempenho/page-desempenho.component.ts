@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
 import { QuestoesService } from 'src/app/services/questoes.service'; // Atualize o caminho se necessário
 import { Label } from 'ng2-charts';
@@ -14,7 +14,8 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class PageDesempenhoComponent implements OnInit {
   usuario!: Usuario;
-  alunoIdRecebido!: string;
+  alunoMentoradoId!: string;
+  nomeAlunoMentorado!: string;
 
   public pieChartsData: {
     title: string;
@@ -175,17 +176,23 @@ export class PageDesempenhoComponent implements OnInit {
   constructor(
     private questoesService: QuestoesService,
     private authService: AuthService,
-    @Inject(MAT_DIALOG_DATA) public data: { alunoId: string }
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: { alunoId: string, nomeAluno: string } | null
   ) {
-    this.alunoIdRecebido = data.alunoId;
+    if(data?.alunoId) {
+      this.alunoMentoradoId = data.alunoId;
+      this.nomeAlunoMentorado = data.nomeAluno;
+    }
   }
 
   ngOnInit(): void {
-    console.log('ID do aluno recebido:', this.alunoIdRecebido);
-
     this.authService.obterUsuarioAutenticadoDoBackend().subscribe(
       (data) => {
         this.usuario = data;
+
+        if(this.alunoMentoradoId) {
+          this.usuario.id = this.alunoMentoradoId;
+        }
+
         const idUser = parseInt(this.usuario.id);
 
         this.questoesService

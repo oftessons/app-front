@@ -1,8 +1,15 @@
 <div class="container pt-5">
   <div class="container mt-4">
-    <h1 class="mt-4"> <span> | </span> Meu Desempenho</h1>
+    <h1 class="mt-4">
+      <span> | </span>
+      <ng-container *ngIf="alunoMentoradoId; else meuDesempenho">
+        Desempenho geral de "{{ nomeAlunoMentorado }}"
+      </ng-container>
+      <ng-template #meuDesempenho>
+        Meu Desempenho
+      </ng-template>
+    </h1>
 
-    <!-- Gráficos de Pizza: Acertos e Erros por Tipo de Prova -->
     <div class="row">
       <div class="col-12 col-sm-6 col-md-4 mb-4" *ngFor="let pie of pieChartsData">
         <div class="chart-wrapper p-3 shadow-sm rounded bg-white h-100">
@@ -29,7 +36,6 @@
     </div> 
 
 
-    <!-- Gráfico 3: Acertos e Erros por Mês -->
     <div class="row">
       <div class="col-md-12">
         <div class="chart-container">
@@ -46,7 +52,6 @@
       </div>
     </div>
 
-    <!-- Gráfico 2: Quantidade de Questões Feitas por Tema -->
     <div class="row">
       <div class="col-md-12 p-3">
         <div class="chart-container">
@@ -63,7 +68,6 @@
       </div>
     </div>
 
-    <!-- Gráfico 4: Acertos e Erros por Tema -->
     <div class="row">
       <div class="col-md-12">
         <div class="chart-container">

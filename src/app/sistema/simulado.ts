@@ -23,4 +23,5 @@ export class Simulado {
   statusSimulado!: StatusSimulado;
   tempoDecorrido!: string | null;
   usuario!: Usuario | null;
+  criadoPor!: string;
 }

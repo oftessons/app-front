@@ -3,25 +3,32 @@ import { Router } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Usuario } from 'src/app/login/usuario';
 import { AuthService } from 'src/app/services/auth.service';
-import { Tema } from '../page-questoes/enums/tema';
-import { Subtema } from '../page-questoes/enums/subtema';
 import { MatDialog } from '@angular/material/dialog';
 import { PageSimuladoComponent } from '../page-simulado/page-simulado.component';
+import { PageDesempenhoComponent } from '../page-desempenho/page-desempenho.component';
+import { MeusSimuladosComponent } from '../meus-simulados/meus-simulados.component';
+import { QuestoesService } from 'src/app/services/questoes.service';
+import { SugestaoQuestaoIResponseDTO } from './SugestaoQuestaoIResponseDTO';
 import { TemaDescricoes } from '../page-questoes/enums/tema-descricao';
 import { SubtemaDescricoes } from '../page-questoes/enums/subtema-descricao';
-import { PageDesempenhoComponent } from '../page-desempenho/page-desempenho.component';
+import { Tema } from '../page-questoes/enums/tema';
+import { Subtema } from '../page-questoes/enums/subtema';
+import { TipoDeProvaDescricoes } from '../page-questoes/enums/tipodeprova-descricao';
+import { TipoDeProva } from '../page-questoes/enums/tipoDeProva';
 
-// Interfaces para a seção de sugestões
+// Interfaces
 interface SugestaoQuestao {
   question_id: number;
   question_text: string;
   theme: string;
   subtheme: string;
+  exam_type: string;
 }
 
 interface SugestoesAgrupadas {
   tema: string;
   subtema: string;
+  tipoDeProva: string;
   questoes: SugestaoQuestao[];
 }
 
@@ -32,26 +39,27 @@ interface SugestoesAgrupadas {
 })
 export class PageMentoriaComponent implements OnInit {
 
-  // --- Propriedades para a Lógica de Alunos ---
+  // --- Propriedades da Lógica de Alunos ---
   listaCompletaAlunos: Usuario[] = [];
   carregandoAlunos = true;
-
-  // Opções formatadas para o seu componente <app-multiplo-select>
   opcoesAlunosParaFiltro: { label: string, value: number }[] = [];
-
-  // Guarda os IDs dos alunos que foram selecionados no filtro
   idsAlunosSelecionados: number[] = [];
-
-  // Guarda a lista de objetos de usuário que devem ser exibidos na tela
   alunosFiltrados: Usuario[] = [];
 
-  // --- Propriedades para as Sugestões ---
-  sugestoesRaw: SugestaoQuestao[] = [];
+  // --- NOVA PROPRIEDADE PARA O MODAL ---
+  // Guarda o objeto do aluno quando o modal deve ser exibido, ou null quando estiver fechado.
+  alunoSelecionadoParaDetalhes: Usuario | null = null;
+
+  // --- Propriedades da Lógica de Sugestões (com Paginação) ---
   sugestoesAgrupadas: SugestoesAgrupadas[] = [];
   carregandoSugestoes = true;
+  paginaAtualSugestoes = 1;
+  totalDePaginasSugestoes = 5; // Total de grupos a serem buscados
+  limitePorPaginaSugestoes = 10;
 
   constructor(
     private readonly authService: AuthService,
+    private readonly questoesService: QuestoesService,
     private router: Router,
     public sanitizer: DomSanitizer,
     private readonly dialog: MatDialog,
@@ -59,15 +67,15 @@ export class PageMentoriaComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchListaCompletaAlunos();
-    this.fetchSugestoes();
+    this.fetchPaginaDeSugestoes(this.paginaAtualSugestoes); // Carrega a primeira página de sugestões
   }
 
+  // --- LÓGICA DE ALUNOS ---
   fetchListaCompletaAlunos(): void {
     this.carregandoAlunos = true;
     this.authService.visualizarAlunos().subscribe({
       next: (data: Usuario[] | null) => {
         this.listaCompletaAlunos = data || [];
-        // Transforma a lista de alunos para o formato { label, value } que o seletor espera
         this.opcoesAlunosParaFiltro = this.listaCompletaAlunos.map(aluno => ({
           label: aluno.nome,
           value: Number(aluno.id)
@@ -82,73 +90,106 @@ export class PageMentoriaComponent implements OnInit {
     });
   }
 
-  // É chamado toda vez que a seleção no filtro <app-multiplo-select> muda
   onSelecaoDeAlunosChange(): void {
     if (!this.idsAlunosSelecionados || this.idsAlunosSelecionados.length === 0) {
-      // Se nada estiver selecionado, a lista de exibição fica vazia
       this.alunosFiltrados = [];
       return;
     }
-
-    // Filtra a lista completa para encontrar os alunos cujos IDs foram selecionados
     this.alunosFiltrados = this.listaCompletaAlunos.filter(aluno =>
       this.idsAlunosSelecionados.includes(Number(aluno.id))
     );
   }
 
-  // Ações para os cards de alunos (agora com tipagem correta do ID)
-  verDesempenho(usuarioId: string): void {
-    const dialogRef = this.dialog.open(PageDesempenhoComponent, {
-      width: '90vw',
-      maxWidth: '1200px',
-      maxHeight: '90vh',
-      data: { alunoId: usuarioId },
+  verDesempenho(usuario: Usuario): void {
+    this.dialog.open(PageDesempenhoComponent, {
+      width: '90vw', maxWidth: '1200px', maxHeight: '90vh',
+      data: { alunoId: usuario.id, nomeAluno: usuario.nome },
       panelClass: 'dark-theme-dialog'
     });
   }
 
-  criarSimulado(usuarioId: string): void {
-    const dialogRef = this.dialog.open(PageSimuladoComponent, {
-      width: '90vw',
-      maxWidth: '1200px',
-      maxHeight: '90vh',
-      data: { alunoId: usuarioId },
+  verSimuladosRealizados(usuario: Usuario): void {
+    this.dialog.open(MeusSimuladosComponent, {
+      width: '90vw', maxWidth: '1200px', maxHeight: '90vh',
+      data: { alunoId: usuario.id, nomeAluno: usuario.nome },
       panelClass: 'dark-theme-dialog'
     });
   }
 
-  // --- Funções da Seção de Sugestões (sem alterações) ---
+  criarSimulado(usuario: Usuario): void {
+    this.dialog.open(PageSimuladoComponent, {
+      width: '90vw', maxWidth: '1200px', maxHeight: '90vh',
+      data: { alunoId: usuario.id, nomeAluno: usuario.nome },
+      panelClass: 'dark-theme-dialog'
+    });
+  }
 
-  fetchSugestoes(): void {
+  // --- LÓGICA DO MODAL DE DETALHES DO ALUNO ---
+
+  /**
+   * Define o aluno a ser exibido no modal de detalhes, abrindo-o.
+   * @param usuario O objeto do usuário clicado.
+   */
+  verDetalhesAluno(usuario: Usuario): void {
+    this.alunoSelecionadoParaDetalhes = usuario;
+  }
+
+  /**
+   * Limpa o aluno selecionado, fechando o modal de detalhes.
+   */
+  fecharDetalhesAluno(): void {
+    this.alunoSelecionadoParaDetalhes = null;
+  }
+
+  // --- LÓGICA DE SUGESTÕES COM PAGINAÇÃO ---
+  fetchPaginaDeSugestoes(pagina: number): void {
     this.carregandoSugestoes = true;
-    const dadosSimulados: SugestaoQuestao[] = [
-      { question_id: 789, question_text: "<p>Uma fonte luminosa incide sobre uma lente esferocilíndrica...</p>", theme: "OPTICA", subtheme: "LENTES_E_ESPELHOS" },
-      { question_id: 805, question_text: "<p>Considerando que uma lente foca a 50 mm a luz...</p>", theme: "OPTICA", subtheme: "LENTES_E_ESPELHOS" },
-      { question_id: 3168, question_text: "<p>Ao se analisar o movimento de um feixe de luz refletido...</p>", theme: "OPTICA", subtheme: "LENTES_E_ESPELHOS" },
-      { question_id: 956, question_text: "<p>Sobre a reflexão de um espelho é correto afirmar...</p>", theme: "REFRACAO", subtheme: "ASTIGMATISMO" }
-    ];
+    this.sugestoesAgrupadas = [];
 
-    setTimeout(() => {
-      this.sugestoesRaw = dadosSimulados;
-      this.agruparSugestoes();
-      this.carregandoSugestoes = false;
-    }, 1000);
+    this.questoesService.obterSugestoesDeQuestoes(pagina, this.limitePorPaginaSugestoes).subscribe({
+      next: (resultado: SugestaoQuestaoIResponseDTO[] | null) => {
+        const sugestoes: SugestaoQuestao[] = resultado ? resultado.map(dto => ({
+          question_id: dto.question_id,
+          question_text: dto.question_text,
+          theme: dto.theme,
+          subtheme: dto.subtheme,
+          exam_type: dto.exam_type
+        })) : [];
+
+        this.agruparSugestoes(sugestoes);
+        this.carregandoSugestoes = false;
+      },
+      error: (error) => {
+        console.error(`Erro ao buscar sugestões da página ${pagina}:`, error);
+        this.sugestoesAgrupadas = [];
+        this.carregandoSugestoes = false;
+      }
+    });
   }
 
-  private agruparSugestoes(): void {
+  private agruparSugestoes(sugestoes: SugestaoQuestao[]): void {
     const grupos: { [key: string]: SugestoesAgrupadas } = {};
-    for (const questao of this.sugestoesRaw) {
+    for (const questao of sugestoes) {
       const chave = `${questao.theme}-${questao.subtheme}`;
       if (!grupos[chave]) {
         grupos[chave] = {
           tema: questao.theme,
           subtema: questao.subtheme,
+          tipoDeProva: questao.exam_type,
           questoes: []
         };
       }
       grupos[chave].questoes.push(questao);
     }
     this.sugestoesAgrupadas = Object.values(grupos);
+  }
+
+  irParaPaginaSugestoes(pagina: number): void {
+    if (pagina < 1 || pagina > this.totalDePaginasSugestoes || pagina === this.paginaAtualSugestoes) {
+      return;
+    }
+    this.paginaAtualSugestoes = pagina;
+    this.fetchPaginaDeSugestoes(this.paginaAtualSugestoes);
   }
 
   criarSimuladoComFoco(sugestao: SugestoesAgrupadas): void {
@@ -160,11 +201,16 @@ export class PageMentoriaComponent implements OnInit {
     });
   }
 
+  // Funções de tradução
   traduzirTema(tema: string): string {
     return TemaDescricoes[tema as Tema] || tema;
   }
 
   traduzirSubtema(subtema: string): string {
     return SubtemaDescricoes[subtema as Subtema] || subtema;
+  }
+
+  traduzirTipoDeProva(tipoDeProva: string): string {
+    return TipoDeProvaDescricoes[tipoDeProva as TipoDeProva] || tipoDeProva;
   }
 }

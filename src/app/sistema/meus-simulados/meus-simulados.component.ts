@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { SimuladoService } from 'src/app/services/simulado.service';
 import { Simulado } from '../simulado';
 import { Router } from '@angular/router'; // Para navegação após visualizar ou editar
@@ -7,6 +7,9 @@ import { ThemeService } from 'src/app/services/theme.service';
 import { Usuario } from 'src/app/login/usuario';
 import { StatusSimuladoDescricao } from './status-simulado-descricao';
 import { StatusSimulado } from './status-simulado';
+import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { MetricasDetalhadasComponent } from '../metricas-detalhadas/metricas-detalhadas.component';
+import { PageSimuladoComponent } from '../page-simulado/page-simulado.component';
 
 @Component({
   selector: 'app-meus-simulados',
@@ -20,14 +23,22 @@ export class MeusSimuladosComponent implements OnInit {
   carregando: boolean = true;  // Variável para indicar o estado de carregamento
   mensagemSucesso: string = '';
   ocultarFiltros: boolean = false;
+  idAlunoMentorado!: string;
+  nomeAlunoMentorado!: string;
 
 
   constructor(
     private simuladoService: SimuladoService,
     private router: Router,
     private authService: AuthService,
-    private themeService: ThemeService
-  ) { }
+    private themeService: ThemeService,
+    private readonly dialog: MatDialog,
+
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: { alunoId: string, nomeAluno: string } | null
+  ) {
+    this.idAlunoMentorado = data?.alunoId || '';
+    this.nomeAlunoMentorado = data?.nomeAluno || '';
+  }
 
   ngOnInit(): void {
     this.obterPerfilUsuario();
@@ -37,15 +48,15 @@ export class MeusSimuladosComponent implements OnInit {
     this.authService.obterUsuarioAutenticadoDoBackend().subscribe(
       (data) => {
         this.usuario = data;
-        this.usuarioId = parseInt(this.usuario.id);
+        this.usuarioId = this.idAlunoMentorado ? Number(this.idAlunoMentorado) : Number(this.usuario.id);
         this.simuladoService.obterSimulados(this.usuarioId).subscribe(
           (data: Simulado[]) => {
             this.simulados = data;
-            this.carregando = false;  // Desativa o carregamento quando os dados chegarem
+            this.carregando = false;
           },
           (error) => {
             // console.error('Erro ao carregar simulados', error);
-            this.carregando = false;  
+            this.carregando = false;
           }
         );
       },
@@ -59,15 +70,33 @@ export class MeusSimuladosComponent implements OnInit {
   editarSimulado(id: number): void {
     this.simuladoService.obterSimuladoPorId(id).subscribe(
       (data) => {
-        // console.log('Simulado:', data);
         this.ocultarFiltros = true;
-        this.router.navigate(['/usuario/simulados'], { state: { simulado: data } });
+        if (this.data) {
+          // Se estiver em um dialog, abre o componente de edição em um modal
+          const dialogRef = this.dialog.open(PageSimuladoComponent, {
+            width: '90vw',
+            maxWidth: '1200px',
+            maxHeight: '90vh',
+            data: { simulado: data, modoEdicao: true, alunoId: this.usuarioId },
+            panelClass: 'dark-theme-dialog'
+          });
+
+          dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+              // Atualize a lista de simulados ou faça outra ação se necessário
+              this.obterPerfilUsuario();
+            }
+          });
+        } else {
+          // Caso contrário, navega normalmente
+          this.router.navigate(['/usuario/simulados'], { state: { simulado: data } });
+        }
       },
       (error) => {
         alert('Erro ao obter simulado por ID');
         console.error('Erro ao obter simulado por ID:', error);
       }
-    )
+    );
   }
 
   deletarSimulado(id: number): void {
@@ -106,8 +135,34 @@ export class MeusSimuladosComponent implements OnInit {
     }
   }
 
-  verificarMetricas(simuladoId: number): void {
-    this.router.navigate(['/usuario/metricas-detalhadas', simuladoId]);
+  abrirMetricas(simulado: Simulado): void {
+    // Se o componente estiver sendo usado em um dialog (possui this.data), abre o dialog
+    if (this.data) {
+      this.verificarMetricasDialog(simulado);
+    } else {
+      this.verificarMetricas(simulado);
+    }
+  }
+
+  verificarMetricasDialog(simulado: Simulado) {
+    const dialogRef = this.dialog.open(MetricasDetalhadasComponent, {
+      width: '90vw',
+      maxWidth: '1200px',
+      maxHeight: '90vh',
+      data: { simuladoId: simulado.id },
+      panelClass: 'dark-theme-dialog'
+
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.verificarMetricas(result);
+      }
+    });
+  }
+
+  verificarMetricas(simulado: Simulado): void {
+    this.router.navigate(['/usuario/metricas-detalhadas', simulado.id]);
   }
 
   isDarkMode(): boolean {

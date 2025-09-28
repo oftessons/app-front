@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild, ChangeDetectorRef, HostListener, OnDestroy } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, ChangeDetectorRef, HostListener, OnDestroy, Inject, Optional } from '@angular/core';
 import { TipoDeProva } from '../page-questoes/enums/tipoDeProva';
 import {
   getDescricaoAno,
@@ -41,6 +41,8 @@ import { temasESubtemas } from '../page-questoes/enums/map-tema-subtema';
 import { catchError, filter, map, tap } from 'rxjs/operators';
 import { StatusSimulado } from '../meus-simulados/status-simulado';
 import { forkJoin, Observable, of } from 'rxjs';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Simulado } from '../simulado';
 
 declare var bootstrap: any;
 
@@ -169,7 +171,9 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
   quantidadeDeQuestoesSelecionadasDescricoes: string[] = [];
   respostasSimuladoDescricao: string[] = [];
   idSimuladoRespondendo: number | null = null;
-
+  idAlunoMentorado: string = '';
+  nomeAlunoMentorado: string = '';
+  simuladoMentorado: Simulado | null = null;
 
   mostrarFiltros: boolean = false;
 
@@ -182,8 +186,12 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private router: Router,
     private sanitizer: DomSanitizer,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: { alunoId: string, nomeAluno: string, simulado: Simulado } | null
   ) {
+    this.idAlunoMentorado = data?.alunoId || '';
+    this.nomeAlunoMentorado = data?.nomeAluno || '';
+    this.simuladoMentorado = data?.simulado || null;
   }
 
   ngOnInit() {
@@ -229,7 +237,7 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
       this.dados = this.obterDados();
       this.carregarFiltrosEDescricoes();
 
-      const meuSimulado = history.state.simulado;
+      const meuSimulado = this.simuladoMentorado ?? history.state.simulado;
       this.simuladoIdInicial = meuSimulado?.id;
 
       if (meuSimulado) {
@@ -333,31 +341,28 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
 
     this.tempoTotal = this.tempo;
 
+    this.totalQuestoes = this.questoes.length;
+
     this.simuladoService
       .finalizarSimulado(this.usuarioId, this.simuladoIdRespondendo, this.respostasList)
       .subscribe((resultado) => {
-        this.gerarGrafico(resultado.acertos, resultado.erros);
-        console.log(resultado.metricasDoSimulado);
+        this.gerarGrafico(resultado.acertos, resultado.erros, this.totalQuestoes);
       });
-
 
     this.simuladoService.simuladoFinalizado();
     this.simuladoIniciado = false;
     this.simuladoFinalizado = true;
   }
 
-  gerarGrafico(acertos: number, erros: number) {
-    // --- INÍCIO DAS NOVAS LINHAS ---
-    // 1. Calcula os totais e a porcentagem para usar no template HTML
+  gerarGrafico(acertos: number, erros: number, qtdQuestoes: number) {
     this.acertos = acertos;
-    this.totalQuestoes = acertos + erros;
+    this.totalQuestoes = qtdQuestoes;
 
     if (this.totalQuestoes > 0) {
       this.porcentagemAcertos = Math.round((this.acertos / this.totalQuestoes) * 100);
     } else {
       this.porcentagemAcertos = 0;
     }
-    // --- FIM DAS NOVAS LINHAS ---
 
     if (this.chart) {
       this.chart.destroy();
@@ -397,7 +402,6 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
   }
 
   obterDados() {
-    // Simula a obtenção de dados
     return { exemplo: 'valor' };
   }
 
@@ -424,7 +428,7 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
 
       if (data?.id) {
         this.usuario = data;
-        this.usuarioId = parseInt(this.usuario.id, 10);
+        this.usuarioId = this.idAlunoMentorado ? Number(this.idAlunoMentorado) : Number(this.usuario.id);
         console.log('Perfil do usuário:', this.usuarioId);
       } else {
         console.error('Erro: ID do usuário não encontrado.');
@@ -440,7 +444,6 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
       this.mensagemDeAviso = `Você marcou a letra ${this.getLetraAlternativa(
         this.selectedOption
       )} como resposta, continue seus estudos e vá para a próxima questão 😃.`;
-      // Armazena a resposta para a questão atual
       this.respostas[this.paginaAtual] = this.selectedOption;
     } else {
       this.mensagemDeAviso =
@@ -725,6 +728,7 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
       return;
     }
 
+
     this.questoesService
       .filtrarSimulados(this.usuarioId, filtros, 0, 100)
       .subscribe(
@@ -955,6 +959,7 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
       ),
       questaoIds: this.idsQuestoes,
       respostasSimulado: this.selectedRespostasSimulado,
+      criadoPor: this.usuario.nome,
     };
 
     if (
@@ -973,6 +978,7 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
       ? Number(localStorage.getItem('usuarioIdSimulado'))
       : this.usuarioId;
 
+    console.log(simulado);
 
     this.simuladoService.cadastrarSimulado(idUsuario, simulado).subscribe(
       (response) => {
