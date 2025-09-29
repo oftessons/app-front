@@ -185,7 +185,8 @@
 
 /* Ajustes para posicionamento do chatbot */
 body.has-fixed-buttons .chatbot-toggle-button {
-  bottom: 90px; /* Posicionar acima da barra de navegação fixa */
+  bottom: 90px;
+  /* Posicionar acima da barra de navegação fixa */
 }
 
 .btn-anterior,
@@ -306,8 +307,7 @@ body.has-fixed-buttons .chatbot-toggle-button {
   width: 280px;
 }
 
-.mat-form-field-type-mat-select:not(.mat-form-field-disabled)
-  .mat-form-field-flex {
+.mat-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-form-field-flex {
   cursor: pointer;
   background: aliceblue;
 }
@@ -355,9 +355,7 @@ body.has-fixed-buttons .chatbot-toggle-button {
     width: 80%;
   }
 
-  ::ng-deep
-    .mat-form-field-type-mat-select:not(.mat-form-field-disabled)
-    .mat-form-field-flex {
+  ::ng-deep .mat-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-form-field-flex {
     width: 100%;
   }
 
@@ -418,14 +416,18 @@ body.has-fixed-buttons .chatbot-toggle-button {
 
 .left-buttons {
   display: flex;
-  justify-content: flex-start; /* Alinha os botões à esquerda */
-  gap: 10px; /* Espaçamento entre botões */
+  justify-content: flex-start;
+  /* Alinha os botões à esquerda */
+  gap: 10px;
+  /* Espaçamento entre botões */
 }
 
 .right-buttons {
   display: flex;
-  justify-content: flex-end; /* Alinha os botões à direita */
-  gap: 10px; /* Espaçamento entre botões */
+  justify-content: flex-end;
+  /* Alinha os botões à direita */
+  gap: 10px;
+  /* Espaçamento entre botões */
 }
 
 
@@ -444,10 +446,13 @@ body.has-fixed-buttons .chatbot-toggle-button {
 .btn-gabarito {
   padding: 10px 20px;
   width: 130px;
-  border: 2px solid #f4a261; /* Borda da cor especificada */
+  border: 2px solid #f4a261;
+  /* Borda da cor especificada */
   border-radius: 5px;
-  background-color: #f4a261; /* Background transparente */
-  color: #000; /* Cor do texto preto */
+  background-color: #f4a261;
+  /* Background transparente */
+  color: #000;
+  /* Cor do texto preto */
   cursor: pointer;
   font-size: 16px;
   font-weight: bold;
@@ -527,13 +532,19 @@ body.has-fixed-buttons .chatbot-toggle-button {
 }
 
 .tempo h3 {
-  border: 2px solid #041e4e; /* Borda preta */
-  border-radius: 10px; /* Borda arredondada */
-  background-color: #041e4e; /* Fundo transparente */
+  border: 2px solid #041e4e;
+  /* Borda preta */
+  border-radius: 10px;
+  /* Borda arredondada */
+  background-color: #041e4e;
+  /* Fundo transparente */
   color: #fff;
-  padding: 10px; /* Espaçamento interno para dar um pouco de respiro ao conteúdo */
-  text-align: center; /* Centralizar o texto */
-  display: inline-block; /* Para que o tamanho se ajuste ao conteúdo */
+  padding: 10px;
+  /* Espaçamento interno para dar um pouco de respiro ao conteúdo */
+  text-align: center;
+  /* Centralizar o texto */
+  display: inline-block;
+  /* Para que o tamanho se ajuste ao conteúdo */
   font-size: 15px;
 }
 
@@ -541,13 +552,18 @@ body.has-fixed-buttons .chatbot-toggle-button {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #f4f4f4; /* Fundo diferente */
-  border: 2px solid #041e4e; /* Borda destacada */
+  background-color: #f4f4f4;
+  /* Fundo diferente */
+  border: 2px solid #041e4e;
+  /* Borda destacada */
   border-radius: 10px;
   padding: 10px;
-  width: 450px; /* Largura do gráfico reduzida */
-  height: 300px; /* Altura do gráfico reduzida */
-  margin: 0 20px; /* Espaçamento lateral para centralizar entre os botões */
+  width: 450px;
+  /* Largura do gráfico reduzida */
+  height: 300px;
+  /* Altura do gráfico reduzida */
+  margin: 0 20px;
+  /* Espaçamento lateral para centralizar entre os botões */
 }
 
 canvas {
@@ -614,8 +630,8 @@ canvas {
 .alternativa-certa::after {
   content: '';
   display: inline-block;
-  width: 25px; 
-  height: 25px; 
+  width: 25px;
+  height: 25px;
   background-image: url('src/assets/Icons/confirmar.png');
   background-size: cover;
   margin-left: 8px;
@@ -624,7 +640,7 @@ canvas {
 .alternativa-errada::after {
   content: '';
   display: inline-block;
-  width: 25px; 
+  width: 25px;
   height: 25px;
   background-image: url('src/assets/Icons/Error.png');
   background-size: cover;
@@ -658,26 +674,154 @@ canvas {
   max-height: 0;
 }
 
+.results-page-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 15px;
+  width: 100%;
+}
+
+.results-card {
+  background-color: #2c3e50;
+  border-radius: 12px;
+  padding: 24px;
+  width: 100%;
+  max-width: 650px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  border: 1px solid #34495e;
+  color: #ecf0f1;
+}
+
+.results-header {
+  text-align: center;
+  margin-bottom: 24px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+/* Corpo principal com layout flexível */
+.results-body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.chart-container {
+  position: relative;
+  width: 180px;
+  height: 180px;
+}
+
+.chart-percentage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+/* Contêiner das métricas de texto */
+.metrics-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.metric-item h4 {
+  font-size: 0.9rem;
+  color: #95a5a6;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.metric-item p {
+  font-size: 1.2rem;
+  margin: 0;
+  font-weight: 600;
+  color: #ecf0f1;
+}
+
+/* Seção dos botões */
+.results-actions {
+  display: flex;
+  justify-content: flex-end;
+  /* Alinha botões à direita */
+  gap: 15px;
+  margin-top: 30px;
+  border-top: 1px solid #34495e;
+  padding-top: 20px;
+}
+
+/* Estilos base dos botões */
+.btn-primary-action,
+.btn-secondary-action {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Botão de Ação Primária (preenchido) */
+.btn-primary-action {
+  background-color: #3498db;
+  /* Azul */
+  color: white;
+}
+
+.btn-primary-action:hover {
+  background-color: #2980b9;
+}
+
+/* Botão de Ação Secundária (contorno) */
+.btn-secondary-action {
+  background-color: transparent;
+  color: #3498db;
+  border: 2px solid #3498db;
+}
+
+.btn-secondary-action:hover {
+  background-color: #3498db;
+  color: white;
+}
+
 /* Media Query para telas menores */
 @media (max-width: 768px) {
   .button-row {
-    flex-direction: column; /* Mantém a coluna em telas menores */
-    align-items: stretch; /* Faz os botões ocuparem a largura total */
+    flex-direction: column;
+    /* Mantém a coluna em telas menores */
+    align-items: stretch;
+    /* Faz os botões ocuparem a largura total */
   }
 
   .right-buttons {
-    flex-direction: row; /* Mantém a disposição em linha */
-    justify-content: space-between; /* Espaço igual entre os botões */
-    width: 100%; /* Largura total */
-    margin-bottom: 10px; /* Espaçamento entre as linhas */
+    flex-direction: row;
+    /* Mantém a disposição em linha */
+    justify-content: space-between;
+    /* Espaço igual entre os botões */
+    width: 100%;
+    /* Largura total */
+    margin-bottom: 10px;
+    /* Espaçamento entre as linhas */
   }
+
   .btn-proxima {
-    margin-left: 0; /* Remove a margem à esquerda em dispositivos móveis */
+    margin-left: 0;
+    /* Remove a margem à esquerda em dispositivos móveis */
   }
+
   .btn-anterior,
   .btn-responder,
   .btn-proxima,
   .btn-finalizar {
-    width: 48%; /* Largura de cada botão em uma linha (2 botões por linha) */
+    width: 48%;
+    /* Largura de cada botão em uma linha (2 botões por linha) */
   }
 }

@@ -13,7 +13,7 @@ export class Usuario {
   nome!: string;
   confirmPassword!: string;
   tipoUsuario!: string;
-  permissao!: Permissao;  // Atualize para usar a enum Permissao
+  permissao!: Permissao;  
   bolsaAssinatura!: boolean;
   diasDeTeste!: number;
   dataInicioBolsa?: Date;

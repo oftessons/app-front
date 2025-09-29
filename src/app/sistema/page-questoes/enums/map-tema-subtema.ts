@@ -2,7 +2,6 @@ import { Tema } from "./tema";
 import { Subtema } from "./subtema";
 
 export const temasESubtemas: Record<Tema, Subtema[]> = {
-
   [Tema.AAO_ADAPTED]: [
     Subtema.UPDATE_ON_GENERAL_MEDICINE,
     Subtema.FUNDAMENTALS_AND_PRINCIPLES_OF_OPHTHALMOLOGY,
@@ -252,6 +251,27 @@ export const temasESubtemas: Record<Tema, Subtema[]> = {
     Subtema.TRAUMA_DE_RETINA_E_COROIDE,
     Subtema.VITRECTOMIA_POSTERIOR,
     Subtema.VVPP_IE_E_PNEUMATICA,
+  ],
+  [Tema.SBRV]: [
+    Subtema.CIRURGIA_MACULAR,
+    Subtema.COROIDE_NERVO_OPTICO,
+    Subtema.DESCOLAMENTO_DE_RETINA,
+    Subtema.DISTROFIAS,
+    Subtema.DMRI,
+    Subtema.INFECCIOSAS,
+    Subtema.INFLAMATORIA,
+    Subtema.MICROANGIOPATIAS,
+    Subtema.PONTOS_BRANCOS,
+    Subtema.PRINCIPIOS_CIRURGICOS,
+    Subtema.RETINA_VITREO,
+    Subtema.RETINOPATIA_DIABETICA,
+    Subtema.ESPECTRO_PAQUICOROIDE,
+    Subtema.TRAUMA,
+    Subtema.BASES,
+    Subtema.PROPEDEUTICA,
+    Subtema.DOENCAS_VASCULARES,
+    Subtema.OUTROS
+
   ],
   [Tema.TUMORES_INTRAOCULARES]: [
     Subtema.FACOMATOSES,

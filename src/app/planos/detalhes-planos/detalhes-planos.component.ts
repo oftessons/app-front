@@ -23,21 +23,21 @@ export class DetalhesPlanosComponent implements OnInit {
     // Define os planos com base na URL
     if (this.tipoPlano === 'anual') {
       this.planos = [
-        {
-          titulo: 'Anual',
-          descricao: [
-            'Banco de questões com 4 mil questões.',
-            '+2500 questões comentadas.',
-            'Simulados personalizados, cronometrados com base na Prova Nacional de Oftalmologia.',
-            'Assistente de IA que tira dúvidas e oferece explicações detalhadas.'
-          ],
-          preco: 1197.00,
-          textoAdicional: 'Valor à Vista',
-          corCabecalho: '#0F1934',
-          textoParcelas: '',
-          mostrarPorMes: false,
-          planoSelecionado: 'assinatura_anual'.toUpperCase()
-        },
+        // {
+        //   titulo: 'Anual',
+        //   descricao: [
+        //     'Banco de questões com 4 mil questões.',
+        //     '+2500 questões comentadas.',
+        //     'Simulados personalizados, cronometrados com base na Prova Nacional de Oftalmologia.',
+        //     'Assistente de IA que tira dúvidas e oferece explicações detalhadas.'
+        //   ],
+        //   preco: 1197.00,
+        //   textoAdicional: 'Valor à Vista',
+        //   corCabecalho: '#0F1934',
+        //   textoParcelas: '',
+        //   mostrarPorMes: false,
+        //   planoSelecionado: 'assinatura_anual'.toUpperCase()
+        // },
         {
           titulo: 'Anual',
           descricao: [
@@ -57,20 +57,20 @@ export class DetalhesPlanosComponent implements OnInit {
       ];
     } else if (this.tipoPlano === 'semestral') {
       this.planos = [
-        {
-          titulo: 'Semestral',
-          descricao: [
-            'Exploração detalhada do acervo da plataforma.',
-            'Estudo com tempo para absorver conhecimento.',
-            'Perfeito para uma aprendizagem profunda e completa.'
-          ],
-          preco: 697.00,
-          textoAdicional: 'Valor a vista',
-          corCabecalho: '#041E4E',
-          textoParcelas: '',
-          mostrarPorMes: false,
-          planoSelecionado: 'assinatura_semestral'.toUpperCase()
-        },
+        // {
+        //   titulo: 'Semestral',
+        //   descricao: [
+        //     'Exploração detalhada do acervo da plataforma.',
+        //     'Estudo com tempo para absorver conhecimento.',
+        //     'Perfeito para uma aprendizagem profunda e completa.'
+        //   ],
+        //   preco: 697.00,
+        //   textoAdicional: 'Valor a vista',
+        //   corCabecalho: '#041E4E',
+        //   textoParcelas: '',
+        //   mostrarPorMes: false,
+        //   planoSelecionado: 'assinatura_semestral'.toUpperCase()
+        // },
         {
           titulo: 'Qbank + Mentoria',
           descricao: [

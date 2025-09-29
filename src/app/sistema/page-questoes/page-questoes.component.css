@@ -250,6 +250,44 @@
   100% { transform: rotate(360deg); }
 }
 
+.upgrade-message {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.upgrade-message .alert {
+  background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+  border: 1px solid #ffc107;
+  border-radius: 8px;
+  padding: 12px 16px;
+}
+
+.btn-upgrade {
+  background: linear-gradient(90deg, #f0b90b, #d9a31d);
+  color: #0F1934;
+  font-weight: 600;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  text-wrap: nowrap;
+  transition: all 0.3s ease;
+}
+
+.btn-upgrade:hover {
+  background: linear-gradient(90deg, #d9a31d, #f0b90b);
+  transform: scale(1.05);
+}
+
+.btn-upgrade:active {
+  background: linear-gradient(90deg, #f0b90b, #d9a31d);
+  transform: scale(0.95);
+}
+.upgrade-message .fas.fa-crown {
+  color: #ffc107;
+  font-size: 1.1rem;
+}
+
 .questoes-icone {
   display: inline-block; /* Garante que o ícone seja tratado como um bloco inline */
   width: 20px; /* Ajuste o tamanho conforme necessário */
@@ -896,14 +934,16 @@ p {
 /* ::ng-deep .img-comentario span[style*="color"] {
   color: var(--text-color) !important;
 } */
-
 ::ng-deep .img-comentario span[style*="rgb(0, 0, 0)"],
 ::ng-deep .img-comentario span[style*="rgb(0,0,0)"],
+::ng-deep .img-comentario span[style*="color: black"],
 ::ng-deep .img-comentario span[style*="color: rgb(0, 0, 0)"],
 ::ng-deep .img-comentario span[style*="color: rgb(0,0,0)"],
 ::ng-deep .img-comentario span[style*="color:rgb(0, 0, 0)"],
 ::ng-deep .img-comentario span[style*="color:rgb(0,0,0)"],
-::ng-deep .img-comentario span[style*="color: rgb(33, 37, 41);"]  {
+::ng-deep .img-comentario span[style*="color: rgb(33, 37, 41);"],
+::ng-deep .img-comentario span[style*="color: rgb(17, 17, 17);"],
+::ng-deep span[style*="--clrSquiggleHighlightTextColor"] {
   color: var(--text-color) !important;
 }
 
@@ -922,11 +962,45 @@ p {
 
 ::ng-deep .img-comentario p[style*="rgb(0, 0, 0)"],
 ::ng-deep .img-comentario p[style*="rgb(0,0,0)"],
+::ng-deep .img-comentario p[style*="color: black"],
 ::ng-deep .img-comentario p[style*="color: rgb(0, 0, 0)"],
 ::ng-deep .img-comentario p[style*="color: rgb(0,0,0)"],
 ::ng-deep .img-comentario p[style*="color:rgb(0, 0, 0)"],
 ::ng-deep .img-comentario p[style*="color:rgb(0,0,0)"],
-::ng-deep .img-comentario p[style*="color: rgb(33, 37, 41);"] {
+::ng-deep .img-comentario p[style*="color: rgb(33, 37, 41);"],
+::ng-deep .img-comentario p[style*="color: rgb(17, 17, 17);"],
+::ng-deep p[style*="--clrSquiggleHighlightTextColor"] {
+  color: var(--text-color) !important;
+}
+
+::ng-deep .img-comentario p[style*="background-color"] {
+  color: #000 !important;
+}
+
+::ng-deep .img-comentario p[style*="background-color: transparent"],
+::ng-deep .img-comentario p[style*="background-color: rgba(0, 0, 0, 0)"] {
+  color: var(--text-color) !important;
+}
+
+::ng-deep .img-comentario strong[style*="rgb(0, 0, 0)"],
+::ng-deep .img-comentario strong[style*="rgb(0,0,0)"],
+::ng-deep .img-comentario strong[style*="color: black"],
+::ng-deep .img-comentario strong[style*="color: rgb(0, 0, 0)"],
+::ng-deep .img-comentario strong[style*="color: rgb(0,0,0)"],
+::ng-deep .img-comentario strong[style*="color:rgb(0, 0, 0)"],
+::ng-deep .img-comentario strong[style*="color:rgb(0,0,0)"],
+::ng-deep .img-comentario strong[style*="color: rgb(33, 37, 41);"],
+::ng-deep .img-comentario strong[style*="color: rgb(17, 17, 17);"],
+::ng-deep strong[style*="--clrSquiggleHighlightTextColor"] {
+  color: var(--text-color) !important;
+}
+
+::ng-deep .img-comentario em[style*="background-color"] {
+  color: #000 !important;
+}
+
+::ng-deep .img-comentario em[style*="background-color: transparent"],
+::ng-deep .img-comentario em[style*="background-color: rgba(0, 0, 0, 0)"] {
   color: var(--text-color) !important;
 }
 

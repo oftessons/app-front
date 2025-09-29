@@ -55,6 +55,8 @@ interface DadosCuriosidade {
 interface CuriosidadeResponse {
   mensagem: string;
   subtema: string;
+  tipoDeProva: string;
+  anos: string[];
   dadosCuriosidade: DadosCuriosidade[];
 }
 
@@ -91,6 +93,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   tiposDeProva = Object.values(TipoDeProva);
   anos = Object.values(Ano);
   anosPermitidosParaTrial: Ano[] = [Ano.ANO_2023, Ano.ANO_2024, Ano.ANO_2025];
+  tipoDeProvasPermitidosParaTrial: TipoDeProva[] = [TipoDeProva.AAO];
   dificuldades = Object.values(Dificuldade);
   subtemas = Object.values(Subtema);
   temas = Object.values(Tema);
@@ -98,6 +101,9 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   certoErrado = Object.values(CertasErradas);
   comentadas = Object.values(Comentada);
   mensagemSucesso: string = '';
+
+  anosComPremium: any[] = [];
+  tiposDeProvaComPremium: any[] = [];
 
   jaRespondeu: boolean = false;
   respondendo: boolean = false;
@@ -305,9 +311,16 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       this.getDescricaoTema(tema)
     );
     this.loadQuestao();
-    this.tiposDeProvaDescricoes = this.tiposDeProva.map((tipoDeProva) =>
-      this.getDescricaoTipoDeProva(tipoDeProva)
-    );
+    this.tiposDeProvaDescricoes = this.tiposDeProva
+      .filter((tipoProvaKey) => {
+        if(tipoProvaKey === TipoDeProva.SBRV) {
+          return this.isProf() || this.isAdmin();
+        }
+        return true;
+      })
+      .map((tipoDeProva) =>
+        this.getDescricaoTipoDeProva(tipoDeProva)
+      );
     this.anosDescricoes = this.anos.map((ano) => this.getDescricaoAno(ano));
     this.dificuldadesDescricoes = this.dificuldades.map((dificuldade) =>
       this.getDescricaoDificuldade(dificuldade)
@@ -329,6 +342,12 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     );
 
     this.subtemasAgrupadosPorTema = Object.entries(temasESubtemas)
+      .filter(([temaKey]) => {
+        if (temaKey === Tema.SBRV) {
+          return this.isProf() || this.isAdmin();
+        }
+        return true;
+      })
       .map(([temaKey, subtemas]) => {
         const temaEnum = temaKey as Tema;
         return {
@@ -336,7 +355,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
           value: `TEMA_${temaEnum}`,
           options: subtemas.map(subtema => ({
             label: this.getDescricaoSubtema(subtema),
-            value: subtema // O valor do subtema continua original
+            value: subtema
           }))
         };
       });
@@ -355,18 +374,77 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
             this.aplicarLimitacoesTrial();
             console.log('Usuário em período de teste. Aplicando limitações.');
           }
+          this.prepararArraysComPremium();
         },
         (error) => {
-          console.error('Erro ao verificar status:', error);
+          this.prepararArraysComPremium();
         }
       );
+    } else {
+      // Se não há usuário logado, preparar arrays
+      this.prepararArraysComPremium();
     }
   }
 
   private aplicarLimitacoesTrial(): void {
-    this.anosDescricoes = this.anos
-      .filter(ano => this.anosPermitidosParaTrial.includes(ano))
-      .map(ano => this.getDescricaoAno(ano));
+    this.anosDescricoes = this.anos.map((ano) => this.getDescricaoAno(ano));
+  }
+
+  isAnoBloqueadoParaTrial(ano: string): boolean {
+    if (!this.isTrialUser) return false;
+    const anoEnum = this.obterAnoEnum(ano);
+    return anoEnum ? !this.anosPermitidosParaTrial.includes(anoEnum) : false;
+  }
+
+  isTipoDeProvaBloqueadoParaTrial(tipoDeProva: string): boolean {
+    if (!this.isTrialUser) return false;
+    const tiposEspeciais = ['AAO'];
+    return tiposEspeciais.includes(tipoDeProva);
+  }
+
+  temItensBloqueadosParaTrial(): boolean {
+    if (this.isTrialUser) {
+      const temAnosBloqueados = this.multSelectAno.some(ano => this.isAnoBloqueadoParaTrial(ano));
+      if (temAnosBloqueados) return true;
+    }
+
+    const temTipoDeProvaBloqueado = this.multSelectTipoDeProva.some(tipoDeProva => this.isTipoDeProvaBloqueadoParaTrial(tipoDeProva));
+    return temTipoDeProvaBloqueado;
+  }
+
+  redirecionarParaUpgrade(): void {
+    this.router.navigate(['/planos']);
+  }
+
+  private prepararArraysComPremium(): void {
+    // Preparar anos com informação premium
+    this.anosComPremium = this.anos.map(ano => {
+      const descricao = this.getDescricaoAno(ano);
+      return {
+        label: descricao,
+        value: descricao,
+        isPremium: this.isTrialUser && this.isAnoBloqueadoParaTrial(descricao),
+        onPremiumClick: () => this.redirecionarParaUpgrade()
+      };
+    });
+
+    // Preparar tipos de prova com informação premium
+    this.tiposDeProvaComPremium = this.tiposDeProva
+      .filter((tipoProvaKey) => {
+        if(tipoProvaKey === TipoDeProva.SBRV) {
+          return this.isProf() || this.isAdmin();
+        }
+        return true;
+      })
+      .map(tipoDeProva => {
+        const descricao = this.getDescricaoTipoDeProva(tipoDeProva);
+        return {
+          label: descricao,
+          value: descricao,
+          isPremium: this.isTrialUser &&  descricao === 'AAO',
+          onPremiumClick: () => this.redirecionarParaUpgrade()
+        };
+      });
   }
 
   isPreviewVideo(url: string | boolean): boolean {
@@ -609,8 +687,12 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
 
   filtrarQuestoes(): void {
+    if (this.temItensBloqueadosParaTrial()) {
+      this.exibirMensagem('Usuários com conta gratuita têm acesso limitado a questões de 2023 a 2025.', 'erro');
+      return;
+    }
+    
     this.jaRespondeu = false;
-    this.questoesService.clearRequestsCache();
     this.respondidasAgora.clear();
     this.carregando = true;
     this.selectedOption = '';
@@ -635,16 +717,16 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     }
 
 
-    if (this.isTrialUser && this.multSelectAno.length > 0) {
-      const anosPermitidosDescricoes = this.anosPermitidosParaTrial.map(ano => this.getDescricaoAno(ano));
-      const temAnoNaoPermitido = this.multSelectAno.some(ano => !anosPermitidosDescricoes.includes(ano));
+    // if (this.isTrialUser && this.multSelectAno.length > 0) {
+    //   const anosPermitidosDescricoes = this.anosPermitidosParaTrial.map(ano => this.getDescricaoAno(ano));
+    //   const temAnoNaoPermitido = this.multSelectAno.some(ano => !anosPermitidosDescricoes.includes(ano));
 
-      if (temAnoNaoPermitido) {
-        this.exibirMensagem('Usuários com conta gratuita têm acesso limitado a questões de 2023 a 2025.', 'erro');
-        this.carregando = false;
-        return;
-      }
-    }
+    //   if (temAnoNaoPermitido) {
+    //     this.exibirMensagem('Usuários com conta gratuita têm acesso limitado a questões de 2023 a 2025.', 'erro');
+    //     this.carregando = false;
+    //     return;
+    //   }
+    // }
 
     if (this.multSelecDificuldade.length) {
       const dificuldadeSelecionada = this.multSelecDificuldade
@@ -771,7 +853,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
             index: index,
           }));
 
-          this.buscarCuriosidadesSeNecessario(filtros);
+          this.buscarCuriosidadesSeNecessario();
           this.toggleFiltros();
         }
 
@@ -900,6 +982,9 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       this.resetarOcorrenciasDeQuestao();
       this.carregarRespostaSeNecessario(this.questaoAtual.id);
       this.questoesStateService.setQuestaoAtual(this.questaoAtual);
+      this.fecharBalloon();
+      this.buscarCuriosidadesSeNecessario();
+
     } else {
       this.mensagemErro = 'Voce já está na primeira questão';
     }
@@ -922,6 +1007,9 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       this.resetarOcorrenciasDeQuestao();
       this.carregarRespostaSeNecessario(this.questaoAtual.id);
       this.questoesStateService.setQuestaoAtual(this.questaoAtual);
+      this.fecharBalloon();
+      this.buscarCuriosidadesSeNecessario();
+
 
     } else {
       this.mensagemErro = 'Não há mais questões, mas em breve novas questões estarão disponíveis.'
@@ -1044,7 +1132,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       comentada: this.mapearDescricoesParaEnums(this.multiSelectQuestoesComentadas, ComentadasDescricao),
     };
 
-    console.log(this.filtroASalvar);
 
     if (this.filtroASalvar) {
       const idUser = parseInt(this.usuario.id);
@@ -1151,7 +1238,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     }
   }
 
-
   isImage(url: string | null): boolean {
     return typeof url === 'string' && /\.(jpeg|jpg|gif|png)$/i.test(url);
   }
@@ -1195,6 +1281,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
         questaoId: this.questaoAtual.id,
         paginaAtual: this.paginaAtual
       };
+
       localStorage.setItem('questoesFiltroState', JSON.stringify(filtroState));
 
       this.navigateService.navigateTo(`/usuario/cadastro-questao/${this.questaoAtual.id}`, '/usuario/questoes');
@@ -1357,19 +1444,12 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     return this.filtrosBloqueados;
   }
 
-  buscarCuriosidadesSeNecessario(filtros: any): void {
-    const subtemasParaCuriosidades: string[] = [];
+  buscarCuriosidadesSeNecessario(): void {
+    const idQuestao = this.questaoAtual?.id;
 
-    if (this.multiSelectTemasSubtemasSelecionados && this.multiSelectTemasSubtemasSelecionados.length > 0) {
-      const subtemasSelecionados = this.multiSelectTemasSubtemasSelecionados.filter(item =>
-        typeof item === 'string' && !item.startsWith('TEMA_')
-      );
-      subtemasParaCuriosidades.push(...subtemasSelecionados);
-    }
+    if (idQuestao && !this.isTrialUser) {
 
-    if (subtemasParaCuriosidades.length > 0) {
-
-      this.questoesService.getCuriosidades(subtemasParaCuriosidades).subscribe(
+      this.questoesService.getCuriosidades(idQuestao).subscribe(
         (curiosidades: CuriosidadeResponse[]) => {
 
           this.curiosidades = curiosidades
@@ -1425,11 +1505,20 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     const porcentagemFormatada = dados.porcentagem.toFixed(1);
 
     const nomeSubtemaFormatado = this.getDescricaoSubtemaFormatada(curiosidade.subtema);
-    if (dados.qtdQuestoes === 0) {
-      return `O subtema "${nomeSubtemaFormatado}" não possui questões cadastradas nos últimos 3 anos (${dados.totalQuestoes} questões no total).`;
+    const tipoDeProvaFormatado = curiosidade.tipoDeProva;
+
+    let periodo = '';
+    if (curiosidade.anos && curiosidade.anos.length > 1) {
+      periodo = 'nos últimos três anos';
+    } else if (curiosidade.anos && curiosidade.anos.length === 1) {
+      periodo = `no ano "${curiosidade.anos[0]}"`;
     }
 
-    return `O subtema "${nomeSubtemaFormatado}" representa ${porcentagemFormatada}% das questões dos últimos 3 anos (${dados.qtdQuestoes} de ${dados.totalQuestoes} questões).`;
+    if (dados.qtdQuestoes === 0) {
+      return `O subtema "${nomeSubtemaFormatado}" não possui questões cadastradas para "${tipoDeProvaFormatado}" ${periodo}. (${dados.totalQuestoes} questões no total).`;
+    }
+
+    return `O subtema "${nomeSubtemaFormatado}" representa ${porcentagemFormatada}% das questões de "${tipoDeProvaFormatado}" ${periodo}. (${dados.qtdQuestoes} de ${dados.totalQuestoes} questões).`;
   }
 
   getDescricaoSubtemaFormatada(subtema: string): string {

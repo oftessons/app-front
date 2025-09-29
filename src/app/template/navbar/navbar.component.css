@@ -1,258 +1,263 @@
 .trial-banner {
-    background-color: #041e4e;
-    color: white;
-    padding: 8px 16px;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 16px;
-    position: fixed;
-    height: 50px;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1001;
+  background-color: #041e4e;
+  color: white;
+  padding: 8px 16px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  position: fixed;
+  height: 50px;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1001;
 }
 
 .trial-info {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .trial-info strong {
-    font-size: 18px;
+  font-size: 18px;
 }
 
 .btn-upgrade {
-    background: linear-gradient(90deg, #f0b90b, #d9a31d);
-    color: #0F1934;
-    font-weight: 600;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 4px;
-    font-weight: 500;
-    cursor: pointer;
-    text-wrap: nowrap;
-    transition: all 0.3s ease;
+  background: linear-gradient(90deg, #f0b90b, #d9a31d);
+  color: #0f1934;
+  font-weight: 600;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  text-wrap: nowrap;
+  transition: all 0.3s ease;
 }
 
 .btn-upgrade:hover {
-    background: linear-gradient(90deg, #d9a31d, #f0b90b);
-    transform: scale(1.05);
+  background: linear-gradient(90deg, #d9a31d, #f0b90b);
+  transform: scale(1.05);
 }
 
 .btn-upgrade:active {
-    background: linear-gradient(90deg, #f0b90b, #d9a31d);
-    transform: scale(0.95);
+  background: linear-gradient(90deg, #f0b90b, #d9a31d);
+  transform: scale(0.95);
 }
 
 .mat-toolbar-fixed {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 2;
-    background-color: #0F1934;
-    padding: 10px;
-    font-family: 'Nunito Sans', sans-serif;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  background-color: #0f1934;
+  padding: 10px;
+  font-family: "Nunito Sans", sans-serif;
 }
 
 .espacamento-toolbar {
-    margin-top: 50px;
+  margin-top: 50px;
 }
 
-.ml-2{
-    font-size: 15px;
-    font-weight: bold;
+.ml-2 {
+  font-size: 15px;
+  font-weight: bold;
 }
-.button-menu{
+.button-menu {
   vertical-align: middle;
-  color: #E7ECF6;
+  color: #e7ecf6;
 }
 
-.mat-drawer-content{
-    /* height: 100vh; */
-    background-color: #e3eaf0;
+.mat-drawer-content {
+  /* height: 100vh; */
+  background-color: #e3eaf0;
 }
 
-.link-icon{
-    color: #0D356A;
+.link-icon {
+  color: #0d356a;
 }
 .icon {
-    width: 20px; /* Ajuste conforme necessário */
-    height: 20px; /* Ajuste conforme necessário */
-    margin-right: 5px; /* Espaçamento entre o ícone e o texto */
-    margin-bottom: 10px;
-    margin-top: 6px;
+  width: 20px; /* Ajuste conforme necessário */
+  height: 20px; /* Ajuste conforme necessário */
+  margin-right: 5px; /* Espaçamento entre o ícone e o texto */
+  margin-bottom: 10px;
+  margin-top: 6px;
 }
 
 .logo {
-    width: 100px; /* Ajuste o valor conforme necessário para diminuir o tamanho */
-  
+  width: 100px; /* Ajuste o valor conforme necessário para diminuir o tamanho */
 }
 
-.btn-logout{
-    color: #FFFFFF;
-    border-radius: 8px;
+.navbar-brand {
+  position: relative;
+  right: -55px;
+}
+
+.btn-logout {
+  color: #ffffff;
+  border-radius: 8px;
 }
 
 .btn-logout:hover {
-    color: #FFFFFF;
-    background-color: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px); 
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
-    border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 /* SIDEBAR CSS */
 
 .mat-list-item {
-    position: relative; /* Permite posicionar elementos filhos relativamente a este elemento */
-    padding: 5px;
-    margin-top: 15px;
-    color: var(--text-color);
-    font-family: 'Nunito Sans', sans-serif;
+  position: relative; /* Permite posicionar elementos filhos relativamente a este elemento */
+  padding: 5px;
+  margin-top: 15px;
+  color: var(--text-color);
+  font-family: "Nunito Sans", sans-serif;
 }
 
 .mat-list-item:before {
+  content: ""; /* Adiciona um elemento antes do conteúdo do .mat-list-item */
+  position: absolute; /* Posiciona o elemento absolutamente em relação ao .mat-list-item */
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 3px; /* Largura da linha vertical */
+  background-color: #0d356a; /* Cor da linha vertical */
+  display: none; /* Inicialmente, a linha está oculta */
+  font-weight: bold;
+}
+
+.mat-list-item:hover:before {
+  display: block; /* Torna a linha vertical visível ao passar o mouse */
+  font-weight: bold;
+}
+
+.mat-list-item:hover {
+  background-color: var(
+    --bg-sidebar-active-link-hover
+  ); /* Cor de destaque ao passar o mouse */
+  font-weight: bold;
+}
+
+.mat-list-item:hover .icon {
+  color: #0d356a;
+}
+
+.mat-list-item:hover span {
+  color: var(--bg-sidebar-active-link-text);
+}
+
+/* Adaptações para dispositivos móveis */
+@media only screen and (max-width: 768px) {
+  .trial-info span {
+    font-size: 12px;
+  }
+
+  .trial-info strong {
+    font-size: 14px;
+  }
+
+  .btn-upgrade {
+    font-size: 14px;
+    padding: 4px 8px;
+  }
+
+  .mat-list-item {
+    margin-top: 10px;
+    padding: 10px; /* Aumenta o espaço interno para melhor experiência em telas menores */
+    font-family: "Nunito Sans", sans-serif;
+  }
+
+  .mat-list-item:before {
     content: ""; /* Adiciona um elemento antes do conteúdo do .mat-list-item */
     position: absolute; /* Posiciona o elemento absolutamente em relação ao .mat-list-item */
     top: 0;
     bottom: 0;
     left: 0;
     width: 3px; /* Largura da linha vertical */
-    background-color: #0D356A; /* Cor da linha vertical */
     display: none; /* Inicialmente, a linha está oculta */
-    font-weight: bold;
-}
+  }
 
-.mat-list-item:hover:before {
+  .mat-list-item:hover:before {
     display: block; /* Torna a linha vertical visível ao passar o mouse */
     font-weight: bold;
+  }
 }
 
-.mat-list-item:hover {
-    background-color: var(--bg-sidebar-active-link-hover); /* Cor de destaque ao passar o mouse */
-    font-weight: bold;
-}
-
-.mat-list-item:hover .icon {
-    color: #0D356A;
-}
-
-.mat-list-item:hover span {
-    color: var(--bg-sidebar-active-link-text);
-}
-
-/* Adaptações para dispositivos móveis */
-@media only screen and (max-width: 768px) {    
-    .trial-info span {
-        font-size: 12px;
-    }
-
-    .trial-info strong {
-        font-size: 14px;
-    }
-
-    .btn-upgrade {
-        font-size: 14px;
-        padding: 4px 8px;
-    }
-
-    .mat-list-item {
-        margin-top: 10px;
-        padding: 10px; /* Aumenta o espaço interno para melhor experiência em telas menores */
-        font-family: 'Nunito Sans', sans-serif;
-    }
-    
-    .mat-list-item:before {
-        content: ""; /* Adiciona um elemento antes do conteúdo do .mat-list-item */
-        position: absolute; /* Posiciona o elemento absolutamente em relação ao .mat-list-item */
-        top: 0;
-        bottom: 0;
-        left: 0;
-        width: 3px; /* Largura da linha vertical */       
-        display: none; /* Inicialmente, a linha está oculta */
-    }
-
-    .mat-list-item:hover:before {
-        display: block; /* Torna a linha vertical visível ao passar o mouse */
-        font-weight: bold;
-    }
-}
-
-.heading-home{
-    font-size: 0.87rem;
-    font-weight: bold;
-    text-transform: uppercase;
-    margin-left: 14px;
-    margin-top: 18px;
-    color: var(--text-color);
+.heading-home {
+  font-size: 0.87rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-left: 14px;
+  margin-top: 18px;
+  color: var(--text-color);
 }
 
 .active-link {
-    background-color: var(--bg-sidebar-active-link); 
-    font-weight: bold; 
-    color: var(--text-color); 
+  background-color: var(--bg-sidebar-active-link);
+  font-weight: bold;
+  color: var(--text-color);
 }
 
-
-.mat-drawer-sidenav{
-    width: 200px;
-    background-color: var(--bg-sidebar);
-    overflow-x: hidden;
-    margin-top: 15px;
-    font-family: 'Nunito Sans', sans-serif;
+.mat-drawer-sidenav {
+  width: 200px;
+  background-color: var(--bg-sidebar);
+  overflow-x: hidden;
+  margin-top: 15px;
+  font-family: "Nunito Sans", sans-serif;
 }
 
-.mat-drawer-footer{
-    display: flex;
-    background-color:  #8C8E94;
-    padding: 0.75rem;
-    padding-left: 1rem;
-    left: 0;
-    bottom: 0;
-    position: fixed;
-    width: 200px;
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-    align-items: center;
-    text-align: center;
+.mat-drawer-footer {
+  display: flex;
+  background-color: #8c8e94;
+  padding: 0.75rem;
+  padding-left: 1rem;
+  left: 0;
+  bottom: 0;
+  position: fixed;
+  width: 200px;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  align-items: center;
+  text-align: center;
 }
 
-.mat-drawer-content{
-    height: 100vh;
+.mat-drawer-content {
+  height: 100vh;
 }
-  
+
 /* CSS */
 .navbar {
-    min-height: 70px;
-    /* Altere a altura conforme desejado */
+  min-height: 70px;
+  /* Altere a altura conforme desejado */
 }
 
 .custom-bg {
-    background-color: #b6bcbc;
+  background-color: #b6bcbc;
 }
 
 .sb-nav-link-icon {
-    margin: 10px;
-    /* Adicione margem conforme desejado */
+  margin: 10px;
+  /* Adicione margem conforme desejado */
 }
 
 .icon-color {
-    color: #0D356A;
+  color: #0d356a;
 }
 
 .cor {
-    color: rgb(255, 255, 255);
-    /* Defina a cor do texto como branca */
-    font-weight: 400;
+  color: rgb(255, 255, 255);
+  /* Defina a cor do texto como branca */
+  font-weight: 400;
 }
 
 ::ng-deep .mat-drawer.mat-drawer-side {
-    z-index: 1000 !important;
+  z-index: 1000 !important;
 }
 .toggle-container {
   display: flex;
@@ -276,77 +281,82 @@
 }
 
 .slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    transition: 0.4s;
-    border-radius: 34px;
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 34px;
 }
 
 .slider:before {
-    position: absolute;
-    content: "";
-    height: 26px;
-    width: 26px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    transition: 0.4s;
-    border-radius: 50%;
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
 }
 
 input:checked + .slider {
-    background-color: #ffd54d;
+  background-color: #ffd54d;
 }
 
 input:checked + .slider:before {
-    transform: translateX(26px);
+  transform: translateX(26px);
 }
 
 /* Estilo para dispositivos móveis e tablets */
 @media (max-width: 991px) {
-    .navbar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    .navbar-brand{
-        display: flex;
-        align-items: center; /* Centraliza verticalmente */
-        margin-right: 200px;
-    }
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .navbar-brand {
+    display: flex;
+    align-items: center; /* Centraliza verticalmente */
+    margin-right: 200px;
+  }
 
-    .btn-link {
-        order: 1;
-    }
+  .btn-link {
+    order: 1;
+  }
 
-    .nav-link {
-        order: 3;
-    }
+  .nav-link {
+    order: 3;
+  }
+}
+
+@media (max-width: 550px) {
+  .navbar-brand {
+    position: static;
+  }
 }
 
 @media (max-width: 480px) {
-    .mat-toolbar-fixed {
-        padding: 0;
-    }
+  .mat-toolbar-fixed {
+    padding: 0;
+  }
 }
 
 @media (max-width: 371px) {
-    .navbar-brand img {
-        width: 190px;
-        height: auto;
-        align-items: center; 
-    }
+  .navbar-brand img {
+    width: 190px;
+    height: auto;
+    align-items: center;
+  }
 }
 
-
 .mat-list-base {
-    padding-top: 8px;
-    display: block;
-    -webkit-tap-highlight-color: transparent;
-    margin-bottom: 50px;
+  padding-top: 8px;
+  display: block;
+  -webkit-tap-highlight-color: transparent;
+  margin-bottom: 50px;
 }

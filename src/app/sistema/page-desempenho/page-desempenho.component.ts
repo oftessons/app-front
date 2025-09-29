@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
 import { QuestoesService } from 'src/app/services/questoes.service'; // Atualize o caminho se necessário
 import { Label } from 'ng2-charts';
 import { TemaDescricoes } from '../page-questoes/enums/tema-descricao';
 import { AuthService } from 'src/app/services/auth.service';
 import { Usuario } from 'src/app/login/usuario';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-page-desempenho',
@@ -13,6 +14,8 @@ import { Usuario } from 'src/app/login/usuario';
 })
 export class PageDesempenhoComponent implements OnInit {
   usuario!: Usuario;
+  alunoMentoradoId!: string;
+  nomeAlunoMentorado!: string;
 
   public pieChartsData: {
     title: string;
@@ -172,13 +175,24 @@ export class PageDesempenhoComponent implements OnInit {
 
   constructor(
     private questoesService: QuestoesService,
-    private authService: AuthService
-  ) {}
+    private authService: AuthService,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: { alunoId: string, nomeAluno: string } | null
+  ) {
+    if(data?.alunoId) {
+      this.alunoMentoradoId = data.alunoId;
+      this.nomeAlunoMentorado = data.nomeAluno;
+    }
+  }
 
   ngOnInit(): void {
     this.authService.obterUsuarioAutenticadoDoBackend().subscribe(
       (data) => {
         this.usuario = data;
+
+        if(this.alunoMentoradoId) {
+          this.usuario.id = this.alunoMentoradoId;
+        }
+
         const idUser = parseInt(this.usuario.id);
 
         this.questoesService

@@ -10,6 +10,21 @@ import {
   SimpleChanges
 } from '@angular/core';
 
+interface OptionWithPremium {
+  label: string;
+  value: any;
+  isPremium?: boolean;
+  onPremiumClick?: () => void;
+}
+
+interface GroupWithPremium {
+  label: string;
+  value: string;
+  options: OptionWithPremium[];
+  isPremium?: boolean;
+  onPremiumClick?: () => void;
+}
+
 @Component({
   selector: 'app-multiplo-select',
   templateUrl: './multiplo-select.component.html',
@@ -24,12 +39,14 @@ export class MultiploSelectComponent implements OnInit, OnChanges {
   @Input() multiple: boolean = false;
   @Input() searchable: boolean = false;
   @Input() disabled: boolean = false;
+  @Input() showPremiumIcons: boolean = false;
+  @Input() onPremiumClick: () => void = () => {};
 
   searchTerm: string = '';
   isOpen: boolean = false;
   filteredOptions: any[] = [];
 
-  constructor(private elementRef: ElementRef) {}
+  constructor(private readonly elementRef: ElementRef) {}
 
   ngOnInit(): void {
     if (this.multiple && !Array.isArray(this.selectedValue)) {
@@ -81,12 +98,12 @@ export class MultiploSelectComponent implements OnInit, OnChanges {
   isGroupedOptions(): boolean {
     return Array.isArray(this.options)
       && this.options.length > 0
-      && (this.options[0] as any).options !== undefined;
+      && (this.options[0]).options !== undefined;
   }
 
   getLabelFromValue(value: any): string {
     if (this.isGroupedOptions()) {
-      for (const group of this.options as any[]) {
+      for (const group of this.options) {
         if (group.value === value) {
           return group.label;
         }
@@ -97,7 +114,7 @@ export class MultiploSelectComponent implements OnInit, OnChanges {
       }
     }
     // Plano
-    const flat = (this.options as any[]).find(opt =>
+    const flat = (this.options).find(opt =>
       opt.value === value || opt === value
     );
     return flat?.label ?? flat ?? '';
@@ -160,6 +177,32 @@ export class MultiploSelectComponent implements OnInit, OnChanges {
         arrow.classList.remove('rotate');
       }
     }
+  }
+
+  isOptionPremium(option: any): boolean {
+    if (typeof option === 'string') return false;
+    return option.isPremium === true;
+  }
+
+  isGroupPremium(group: any): boolean {
+    return group.isPremium === true;
+  }
+
+  handlePremiumClick(event: Event, option?: any): void {
+    event.stopPropagation();
+    if (option?.onPremiumClick) {
+      option.onPremiumClick();
+    } else {
+      this.onPremiumClick();
+    }
+  }
+
+  getOptionLabel(option: any): string {
+    return typeof option === 'string' ? option : option.label;
+  }
+
+  getOptionValue(option: any): any {
+    return typeof option === 'string' ? option : option.value;
   }
 
   @HostListener('document:click', ['$event'])

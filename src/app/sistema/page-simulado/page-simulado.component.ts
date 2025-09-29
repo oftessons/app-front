@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, ChangeDetectorRef, HostListener, OnDestroy, Inject, Optional } from '@angular/core';
 import { TipoDeProva } from '../page-questoes/enums/tipoDeProva';
 import {
   getDescricaoAno,
@@ -38,7 +38,11 @@ import {
 } from '@angular/platform-browser';
 
 import { temasESubtemas } from '../page-questoes/enums/map-tema-subtema';
-import { filter } from 'rxjs/operators';
+import { catchError, filter, map, tap } from 'rxjs/operators';
+import { StatusSimulado } from '../meus-simulados/status-simulado';
+import { forkJoin, Observable, of } from 'rxjs';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Simulado } from '../simulado';
 
 declare var bootstrap: any;
 
@@ -47,7 +51,7 @@ declare var bootstrap: any;
   templateUrl: './page-simulado.component.html',
   styleUrls: ['./page-simulado.component.css'],
 })
-export class PageSimuladoComponent implements OnInit {
+export class PageSimuladoComponent implements OnInit, OnDestroy {
   carregando: boolean = false;
   nomeSimulado: string = '';
   descricaoSimulado: string = '';
@@ -66,7 +70,12 @@ export class PageSimuladoComponent implements OnInit {
   selectedOption: string = '';
 
   usuario!: Usuario;
+  usuarioLogado: Usuario | null = null;
   usuarioId!: number;
+
+  porcentagemAcertos: number = 0;
+  acertos: number = 0;
+  totalQuestoes: number = 0;
 
   @ViewChild('confirmacaoModalRef', { static: false })
   confirmacaoModal!: ElementRef;
@@ -94,6 +103,7 @@ export class PageSimuladoComponent implements OnInit {
   alertaVisivel = false;
 
   questaoAtual: Questao | null = null;
+  carregandoSimulado: boolean = false; // <-- ADICIONE ESTA LINHA
   paginaAtual: number = 0;
   filtros: any = {
     ano: null,
@@ -141,6 +151,7 @@ export class PageSimuladoComponent implements OnInit {
   questaoRespondida: boolean = false;
   visualizando: boolean = false;
   realizandoSimulado: boolean = true;
+  revisandoSimulado: boolean = false;
 
   dados: any;
   questaoDTO = new Questao();
@@ -160,7 +171,9 @@ export class PageSimuladoComponent implements OnInit {
   quantidadeDeQuestoesSelecionadasDescricoes: string[] = [];
   respostasSimuladoDescricao: string[] = [];
   idSimuladoRespondendo: number | null = null;
-
+  idAlunoMentorado: string = '';
+  nomeAlunoMentorado: string = '';
+  simuladoMentorado: Simulado | null = null;
 
   mostrarFiltros: boolean = false;
 
@@ -173,11 +186,17 @@ export class PageSimuladoComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private sanitizer: DomSanitizer,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: { alunoId: string, nomeAluno: string, simulado: Simulado } | null
   ) {
+    this.idAlunoMentorado = data?.alunoId || '';
+    this.nomeAlunoMentorado = data?.nomeAluno || '';
+    this.simuladoMentorado = data?.simulado || null;
   }
 
   ngOnInit() {
+    this.usuarioLogado = this.authService.getUsuarioAutenticado();
+
     this.carregarDadosIniciais();
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
@@ -189,118 +208,200 @@ export class PageSimuladoComponent implements OnInit {
 
   }
 
+  ngOnDestroy(): void {
+    this.salvarTempoAtual();
+
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
+    if (this.intervalContagemRegressiva) {
+      clearInterval(this.intervalContagemRegressiva);
+    }
+  }
+
+  salvarTempoAtual(): void {
+    if (this.isSimuladoIniciado && !this.simuladoFinalizado && this.simuladoIdRespondendo > 0) {
+      console.log(`Salvando tempo: ${this.tempo}s para o simulado ${this.simuladoIdRespondendo}`);
+
+      this.simuladoService.atualizarTempoSimulado(this.simuladoIdRespondendo, this.tempo)
+        .subscribe({
+          next: () => console.log('Tempo salvo com sucesso.'),
+          error: (err) => console.error('Erro ao salvar o tempo:', err)
+        });
+    }
+  }
+
   async carregarDadosIniciais() {
     try {
       await this.obterPerfilUsuario();
       this.dados = this.obterDados();
+      this.carregarFiltrosEDescricoes();
 
-      const meuSimulado = history.state.simulado;
+      const meuSimulado = this.simuladoMentorado ?? history.state.simulado;
       this.simuladoIdInicial = meuSimulado?.id;
 
       if (meuSimulado) {
         this.toggleFiltros();
-
-        this.prepararSimulado(meuSimulado);
-
-        this.realizandoSimulado = false;
-
+        this.simuladoIdRespondendo = meuSimulado.id;
+        this.idSimuladoRespondendo = meuSimulado.id;
+        const status = meuSimulado.statusSimulado as StatusSimulado;
+        this.prepararSimulado(meuSimulado, status);
       }
-
-      this.carregarFiltrosEDescricoes();
     } catch (error) {
       console.error('Erro ao carregar dados iniciais:', error);
     }
   }
 
-  private prepararSimulado(meuSimulado: any) {
-    this.toggleFiltros();
-    this.visualizando = true;
-    this.jaRespondeu = true;
+  private prepararSimulado(meuSimulado: any, status: StatusSimulado) {
     this.isMeuSimulado = true;
-    this.multiSelectedAno = meuSimulado.ano;
-    this.multiSelectedTipoDeProva = meuSimulado.tipoDeProva;
-    this.multiSelectedTema = meuSimulado.tema;
-    this.multiSelectedSubtema = meuSimulado.subtema;
-    this.multiSelectedDificuldade = meuSimulado.dificuldade;
-    this.selectedQuantidadeDeQuestoesSelecionadas = meuSimulado.qtdQuestoes;
-    this.selectedRespostasSimulado = meuSimulado.respostasSimulado;
     this.questoes = meuSimulado.questoes;
 
-    if (this.questoes) {
-      this.idsQuestoes = this.questoes.map((q) => q.id);
+    if (!this.questoes || this.questoes.length === 0) {
+      this.message = "Erro: As questões para este simulado não puderam ser carregadas.";
+      return;
+    }
+
+    this.idsQuestoes = this.questoes.map((q) => q.id);
+    this.resposta = '';
+
+    const tempoSalvo = meuSimulado.tempoDecorrido || 0;
+
+    if (status === StatusSimulado.EM_ANDAMENTO) {
+      this.carregandoSimulado = true;
+      this.realizandoSimulado = true;
+      this.isSimuladoIniciado = true;
+      this.isMeuSimulado = false;
+
+      this.carregarRespostasPreviamente().subscribe(() => {
+        this.visualizando = false;
+        this.jaRespondeu = false;
+
+        let proximaPagina = 0;
+        let todasRespondidas = true;
+        for (let i = 0; i < this.questoes.length; i++) {
+          if (!this.respostas[i]) {
+            proximaPagina = i;
+            todasRespondidas = false;
+            break;
+          }
+        }
+        if (todasRespondidas) { proximaPagina = this.questoes.length - 1; }
+
+        this.paginaAtual = proximaPagina;
+        this.questaoAtual = this.questoes[this.paginaAtual];
+        this.carregarRespostaAnterior();
+        this.iniciarSimulado(tempoSalvo);
+        this.contagemRegressivaSimuladoQuestao();
+        this.carregandoSimulado = false;
+        this.cdr.detectChanges();
+      });
+
+    } else if (status === StatusSimulado.FINALIZADO) {
+      this.visualizando = true;
+      this.jaRespondeu = true;
+      this.realizandoSimulado = false;
       this.paginaAtual = 0;
       this.questaoAtual = this.questoes[this.paginaAtual];
-      this.resposta = '';
-      this.carregarRespostasPreviamente();
-      this.respostaQuestao(this.questoes[this.paginaAtual].id, this.simuladoIdInicial);
       this.visualizarSimulado();
+      this.tempo = tempoSalvo;
+      this.tempoTotal = tempoSalvo;
+      this.cdr.detectChanges();
+
+      this.carregarRespostasPreviamente().subscribe(() => {
+        this.respostaQuestao(this.questoes[this.paginaAtual].id, this.simuladoIdInicial);
+        this.cdr.detectChanges();
+      });
+
+    } else if (status === StatusSimulado.NAO_INICIADO) {
+      this.isMeuSimulado = false;
+      this.simuladoService.iniciarSimulado(meuSimulado.id);
+      this.visualizando = false;
+      this.jaRespondeu = false;
+      this.realizandoSimulado = true;
+      this.paginaAtual = 0;
+      this.questaoAtual = this.questoes[this.paginaAtual];
+      this.iniciarSimulado(0);
+      this.contagemRegressivaSimuladoQuestao();
+      this.cdr.detectChanges();
     }
   }
 
-  private carregarFiltrosEDescricoes() {
-    this.tiposDeProvaDescricoes = this.tiposDeProva.map(this.getDescricaoTipoDeProva);
-    this.anosDescricoes = this.anos.map(this.getDescricaoAno);
-    this.dificuldadesDescricoes = this.dificuldades.map(this.getDescricaoDificuldade);
-    this.subtemasDescricoes = this.subtemas.map(this.getDescricaoSubtema);
-    this.temasDescricoes = this.temas.map(this.getDescricaoTema);
-    this.quantidadeDeQuestoesSelecionadasDescricoes =
-      this.quantidadeDeQuestoesSelecionadas.map(this.getDescricaoQuantidadeDeQuestoesSelecionadas);
-    this.respostasSimuladoDescricao = this.respostasSimulado.map(this.getDescricaoRespostasSimulado);
-
-    this.subtemasAgrupadosPorTema = Object.entries(temasESubtemas).map(([temaKey, subtemas]) => {
-      const temaEnum = temaKey as Tema;
-      return {
-        label: this.getDescricaoTema(temaEnum),
-        value: temaEnum,
-        options: subtemas.map(subtema => ({
-          label: this.getDescricaoSubtema(subtema),
-          value: subtema
-        }))
-      };
-    });
-  }
 
   finalizarSimulado() {
+    this.salvarTempoAtual();
+
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+      this.intervalId = null;
+    }
+    if (this.intervalContagemRegressiva) {
+      clearInterval(this.intervalContagemRegressiva);
+      this.intervalContagemRegressiva = null;
+    }
+
+    this.tempoTotal = this.tempo;
+
+    this.totalQuestoes = this.questoes.length;
+
     this.simuladoService
-      .finalizarSimulado(this.usuarioId, this.respostasList)
+      .finalizarSimulado(this.usuarioId, this.simuladoIdRespondendo, this.respostasList)
       .subscribe((resultado) => {
-        this.gerarGrafico(resultado.acertos, resultado.erros);
+        this.gerarGrafico(resultado.acertos, resultado.erros, this.totalQuestoes);
       });
+
     this.simuladoService.simuladoFinalizado();
     this.simuladoIniciado = false;
     this.simuladoFinalizado = true;
-    this.tempoTotal = this.tempo; // Tempo total em segundos
   }
 
-  gerarGrafico(acertos: number, erros: number) {
+  gerarGrafico(acertos: number, erros: number, qtdQuestoes: number) {
+    this.acertos = acertos;
+    this.totalQuestoes = qtdQuestoes;
+
+    if (this.totalQuestoes > 0) {
+      this.porcentagemAcertos = Math.round((this.acertos / this.totalQuestoes) * 100);
+    } else {
+      this.porcentagemAcertos = 0;
+    }
+
     if (this.chart) {
       this.chart.destroy();
     }
-    this.chart = new Chart('graficoBarras', {
-      type: 'pie',
+
+    this.chart = new Chart('graficoResultados', {
+      type: 'doughnut',
       data: {
         labels: ['Acertos', 'Erros'],
         datasets: [
           {
-            label: 'Quantidade',
             data: [acertos, erros],
-            backgroundColor: ['#4CAF50', '#F44336'],
+            backgroundColor: [
+              'rgba(46, 204, 113, 1)',
+              'rgba(231, 76, 60, 1)'],
+            borderColor: '#2c3e50',
+            borderWidth: 2
           },
         ],
       },
       options: {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
           legend: {
-            position: 'top',
+            display: false
           },
+          tooltip: {
+            enabled: true
+          },
+          doughnut: {
+            cutout: '75%'
+          }
         },
       },
     });
   }
 
   obterDados() {
-    // Simula a obtenção de dados
     return { exemplo: 'valor' };
   }
 
@@ -327,7 +428,7 @@ export class PageSimuladoComponent implements OnInit {
 
       if (data?.id) {
         this.usuario = data;
-        this.usuarioId = parseInt(this.usuario.id, 10);
+        this.usuarioId = this.idAlunoMentorado ? Number(this.idAlunoMentorado) : Number(this.usuario.id);
         console.log('Perfil do usuário:', this.usuarioId);
       } else {
         console.error('Erro: ID do usuário não encontrado.');
@@ -343,7 +444,6 @@ export class PageSimuladoComponent implements OnInit {
       this.mensagemDeAviso = `Você marcou a letra ${this.getLetraAlternativa(
         this.selectedOption
       )} como resposta, continue seus estudos e vá para a próxima questão 😃.`;
-      // Armazena a resposta para a questão atual
       this.respostas[this.paginaAtual] = this.selectedOption;
     } else {
       this.mensagemDeAviso =
@@ -380,9 +480,15 @@ export class PageSimuladoComponent implements OnInit {
           // Adicionar a resposta à lista de respostas do simulado
           this.respostasList.push({
             questaoId: questao.id,
+            temaQuestao: questao.tema,
+            subtemaQuestao: questao.subtema,
             selecionarOpcao: this.selectedOption,
+            simuladoId: respostaDTO.simuladoId,
             correta: resposta.correct,
           });
+
+          console.log('Respostas do simulado:', this.respostasList);
+
         },
         (error) => {
           console.error('Erro ao verificar resposta:', error);
@@ -390,6 +496,14 @@ export class PageSimuladoComponent implements OnInit {
             'Ocorreu um erro ao verificar a resposta. Por favor, tente novamente mais tarde.';
         }
       );
+  }
+
+  isAdmin(): boolean {
+    return this.usuarioLogado?.permissao === 'ROLE_ADMIN';
+  }
+
+  isProf(): boolean {
+    return this.usuarioLogado?.permissao === 'ROLE_PROFESSOR';
   }
 
   exibirGabarito() {
@@ -614,6 +728,7 @@ export class PageSimuladoComponent implements OnInit {
       return;
     }
 
+
     this.questoesService
       .filtrarSimulados(this.usuarioId, filtros, 0, 100)
       .subscribe(
@@ -725,23 +840,38 @@ export class PageSimuladoComponent implements OnInit {
       );
   }
 
-  carregarRespostasPreviamente(): void {
-    this.questoes.forEach((questao, index) => {
-      this.questoesService.questaoRespondida(this.usuarioId, questao.id, this.simuladoIdInicial).subscribe({
-        next: (resposta) => {
+  carregarRespostasPreviamente(): Observable<void> {
+    if (!this.questoes || this.questoes.length === 0) {
+      return of(void 0);
+    }
+
+    this.respostas = [];
+    this.respostasList = [];
+
+    const observables = this.questoes.map((questao, index) => {
+      return this.questoesService.questaoRespondida(this.usuarioId, questao.id, this.simuladoIdInicial).pipe(
+        tap(resposta => {
           if (resposta) {
             this.respostas[index] = resposta.opcaoSelecionada;
-            if (index === this.paginaAtual) {
-              this.selectedOption = resposta.opcaoSelecionada;
-              this.verificarRespostaUsuario(resposta);
-            }
+
+            this.respostasList.push({
+              questaoId: questao.id,
+              temaQuestao: questao.tema,
+              selecionarOpcao: resposta.opcaoSelecionada,
+              correta: resposta.correct,
+            });
           }
-        },
-        error: (erro) => {
+        }),
+        catchError(erro => {
           console.error(`Erro ao carregar resposta para a questão ${questao.id}:`, erro);
-        }
-      });
+          return of(null);
+        })
+      );
     });
+
+    return forkJoin(observables).pipe(
+      map(() => void 0)
+    );
   }
 
   carregarRespostaAnterior() {
@@ -771,10 +901,8 @@ export class PageSimuladoComponent implements OnInit {
   }
 
   proximaQuestao() {
-
-    if (!this.questaoRespondida) {
+    if (!this.questaoRespondida && !this.revisandoSimulado) {
       this.mensagemDeAviso = 'Questão não respondida. Por favor, responda antes de avançar.';
-      console.log(this.mensagemDeAviso);
       return;
     }
 
@@ -831,9 +959,9 @@ export class PageSimuladoComponent implements OnInit {
       ),
       questaoIds: this.idsQuestoes,
       respostasSimulado: this.selectedRespostasSimulado,
+      criadoPor: this.usuario.nome,
     };
 
-    // Validação básica
     if (
       !simulado.nomeSimulado ||
       !simulado.assunto ||
@@ -846,17 +974,22 @@ export class PageSimuladoComponent implements OnInit {
       return;
     }
 
-    // Chamada ao serviço
-    this.simuladoService.cadastrarSimulado(this.usuarioId, simulado).subscribe(
+    const idUsuario = localStorage.getItem('usuarioIdSimulado') !== null
+      ? Number(localStorage.getItem('usuarioIdSimulado'))
+      : this.usuarioId;
+
+    console.log(simulado);
+
+    this.simuladoService.cadastrarSimulado(idUsuario, simulado).subscribe(
       (response) => {
         this.exibirMensagem(
           'Seu simulado foi cadastrado com sucesso!',
           'sucesso'
         );
 
+
         this.simuladoIdRespondendo = response.id;
 
-        // Fechar modal automaticamente (usando Bootstrap ou outro método)
         const modalElement = document.getElementById('confirmacaoModal');
         if (modalElement) {
           const modalInstance = bootstrap.Modal.getInstance(modalElement);
@@ -872,6 +1005,37 @@ export class PageSimuladoComponent implements OnInit {
         this.exibirMensagem(errorMessage, 'erro');
       }
     );
+  }
+
+  private carregarFiltrosEDescricoes() {
+    this.tiposDeProvaDescricoes = this.tiposDeProva
+      .filter((tipoProvaKey) => {
+        if (tipoProvaKey == TipoDeProva.SBRV) {
+          return this.isProf() || this.isAdmin();
+        }
+        return true;
+      })
+
+      .map(this.getDescricaoTipoDeProva);
+    this.anosDescricoes = this.anos.map(this.getDescricaoAno);
+    this.dificuldadesDescricoes = this.dificuldades.map(this.getDescricaoDificuldade);
+    this.subtemasDescricoes = this.subtemas.map(this.getDescricaoSubtema);
+    this.temasDescricoes = this.temas.map(this.getDescricaoTema);
+    this.quantidadeDeQuestoesSelecionadasDescricoes =
+      this.quantidadeDeQuestoesSelecionadas.map(this.getDescricaoQuantidadeDeQuestoesSelecionadas);
+    this.respostasSimuladoDescricao = this.respostasSimulado.map(this.getDescricaoRespostasSimulado);
+
+    this.subtemasAgrupadosPorTema = Object.entries(temasESubtemas).map(([temaKey, subtemas]) => {
+      const temaEnum = temaKey as Tema;
+      return {
+        label: this.getDescricaoTema(temaEnum),
+        value: temaEnum,
+        options: subtemas.map(subtema => ({
+          label: this.getDescricaoSubtema(subtema),
+          value: subtema
+        }))
+      };
+    });
   }
 
   private mapearDescricoesParaEnums(
@@ -924,16 +1088,21 @@ export class PageSimuladoComponent implements OnInit {
     this.mostrarCardConfirmacao = false;
   }
 
-  iniciarSimulado(): void {
-    if (!this.isSimuladoIniciado) {
-      this.simuladoService.simuladoIniciado();
+  iniciarSimulado(tempoInicial: number = 0): void {
+
+    this.tempo = tempoInicial;
+    this.simuladoService.simuladoIniciado();
+
+    if (!this.intervalId) {
       this.isSimuladoIniciado = true;
       this.realizandoSimulado = true;
-      this.tempo = 0;
+
       this.intervalId = setInterval(() => {
         this.tempo++;
       }, 1000);
     }
+
+    // Essas flags controlam a exibição no HTML
     this.simuladoIniciado = true;
     this.simuladoFinalizado = false;
   }
@@ -964,6 +1133,7 @@ export class PageSimuladoComponent implements OnInit {
     }
     this.simuladoIniciado = true;
     this.simuladoFinalizado = false;
+    this.revisandoSimulado = true;
   }
 
   // Função para formatar o tempo decorrido (opcional)
@@ -986,8 +1156,6 @@ export class PageSimuladoComponent implements OnInit {
     if (id === null || isNaN(id)) {
       return;
     }
-
-    console.log(id);
 
     this.simuladoService.obterSimuladoPorId(id).subscribe(
       (data) => {

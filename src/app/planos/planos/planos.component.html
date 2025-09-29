@@ -2,9 +2,7 @@
   <div class="title-planos">
     <h2>Planos acessíveis para todos os perfis</h2>
     <p>
-      Escolha um plano e tenha acesso ilimitado a questões e aulas para turbinar
-      seus estudos. Resolva exercícios sem restrições, assista a videoaulas e
-      acompanhe seu progresso.
+      Escolha um plano e tenha acesso ilimitado a nossas questões e comentários.
     </p>
     <div class="alert alert-warning" *ngIf="mensagemExpirado">
       {{ mensagemExpirado }}
@@ -15,7 +13,7 @@
     <app-card-plano
         *ngIf="mostrarPlanoGratuito"
         titulo="7 dias Grátis"
-        [descricao]="['Acesso a um número limitado de questões e aulas.', 'Ideal para quem está começando ou quer experimentar a plataforma.', 'Sem compromisso, totalmente gratuito.']"
+        [descricao]="['Acesso a um número limitado de questões.', 'Ideal para quem está começando ou quer experimentar a plataforma.', 'Sem compromisso, totalmente gratuito.']"
         [preco]="''"
         textoParcelas="Gratuito"
         textoBotao="Teste 7 dias grátis"
@@ -40,10 +38,13 @@
 
     <app-card-plano
         titulo="QBank + Mentoria"
-        [descricao]="['Exploração detalhada do acervo da plataforma de +4 mil questões.',
-            'Mentoria personalizada para maximizar seu aprendizado.',
-            'Acompanhamento mensal com cronograma de estudo e revisões',
-            'Fichas de questões personalizadas para guia de estudo']"
+        [descricao]="[
+          'Banco de questões com mais de 4 mil questões.',
+          '+2500 questões comentadas ricas em ilustrações.',
+          'Assistente de IA que tira dúvidas, elabora novos comentários e explicações.',
+          'Mentoria de acompanhamento do desempenho com questões.',
+          'Fichas de simulados de acordo com a necessidade do aluno.'
+        ]"
         [preco]="450.26"
         [textoParcelas]="'6x'"
         textoBotao="Escolher plano"
@@ -51,16 +52,20 @@
         textoAdicional="Ou em 1x de R$2.400,00"
         corCabecalho="#041E4E"
         (botaoClicado)="onBotaoClicado()"
-        rota="plano/semestral">
+        [planoSelecionado]="'assinatura_semestral_parcelada'.toUpperCase()"
+        planoHotmart="5607714"
+        >
+        <!-- caso queira utilizar o componente detalhes-planos
+        basta remover planoSelecionado e planoHotmart e
+        setar rota="plano/semestral" -->
     </app-card-plano>
 
     <app-card-plano
         titulo="Anual"
         [descricao]="[
-          'Banco de questões com 4 mil questões.',
-          '+2500 questões comentadas.',
-          'Simulados personalizados, cronometrados com base na Prova Nacional de Oftalmologia.',
-          'Assistente de IA que tira dúvidas e oferece explicações detalhadas.'
+          'Banco de questões com mais de 4 mil questões.',
+          '+2500 questões comentadas ricas em ilustrações.',
+          'Assistente de IA que tira dúvidas, elabora novos comentários e explicações.'
           ]"
         [preco]="175.51"
         [textoParcelas]="'12x'"
@@ -69,7 +74,8 @@
         textoAdicional="ou em 1x de R$1.697,00"
         corCabecalho="#0F1934"
         (botaoClicado)="onBotaoClicado()"
-        rota="plano/anual">
+        [planoSelecionado]="'assinatura_anual_parcelada'.toUpperCase()"
+        planoHotmart="5089420">
     </app-card-plano>
     <!--
     <app-card-plano

@@ -13,6 +13,7 @@
     transform: translateY(-50%);
     transition: all 0.3s ease;
     pointer-events: none;
+    color: var(--text-color);
   }
   
   label.active {
@@ -79,6 +80,9 @@
   }
   
   .option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     padding: 10px;
     cursor: pointer;
     background: var(--bg-input);
@@ -192,6 +196,9 @@
   }
 
   .group-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     font-weight: bold;               
     font-size: 16px;                 
     padding: 8px 12px;                    
@@ -230,4 +237,43 @@
 
 .selected-value .remove-value {
   cursor: pointer;
+}
+
+.option-text {
+  flex: 1;
+}
+
+.premium-option {
+  opacity: 0.7;
+  position: relative;
+}
+
+.premium-badge {
+  background: linear-gradient(45deg, #007bff, #0056b3);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+  margin-left: 8px;
+}
+
+.premium-badge:hover {
+  background: linear-gradient(45deg, #0056b3, #003d82);
+  transform: scale(1.05);
+}
+
+.premium-badge i {
+  font-size: 0.6rem;
+  color: #ffc107;
+}
+
+.premium-option:hover .premium-badge {
+  background: linear-gradient(45deg, #3595fc, #1e87ff);
 }

@@ -13,6 +13,7 @@ import { Questao } from '../sistema/page-questoes/questao';
 import { Ano } from '../sistema/page-questoes/enums/ano';
 import { Resposta } from '../sistema/Resposta';
 import { RespostaDTO } from '../sistema/RespostaDTO';
+import { SugestaoQuestaoIResponseDTO } from '../sistema/page-mentoria/SugestaoQuestaoIResponseDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -24,7 +25,7 @@ export class QuestoesService {
   listaDeIdsFiltrados$ = this.listaDeIdsFiltrados.asObservable();
 
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   public obterIds(): void {
     console.log(this.listaDeIdsFiltrados);
@@ -32,7 +33,7 @@ export class QuestoesService {
 
 
   public setQuestoesFiltradas(questoes: any[]): void {
-    const ids = questoes.map(q => q.id); 
+    const ids = questoes.map(q => q.id);
     this.listaDeIdsFiltrados.next(ids);
   }
 
@@ -44,7 +45,7 @@ export class QuestoesService {
       return ids[indiceAtual + 1];
     }
 
-    return null; 
+    return null;
   }
 
   getAnteriorId(idAtual: number): number | null {
@@ -55,7 +56,7 @@ export class QuestoesService {
       return ids[indiceAtual - 1];
     }
 
-    return null; 
+    return null;
   }
 
   getAcertosEErrosPorTipoDeProva(usuarioId: number): Observable<any> {
@@ -165,6 +166,26 @@ export class QuestoesService {
     return throwError(errorMessage);
   }
 
+  obterSugestoesDeQuestoes(groups: number, limit: number): Observable<SugestaoQuestaoIResponseDTO[] | null> {
+    const url = `${this.apiURL}/sugestoes`;
+    const params = new HttpParams()
+      .set('groups', groups.toString())
+      .set('limit', limit.toString());
+
+    return this.http.get<SugestaoQuestaoIResponseDTO[]>(url, { params, observe: 'response' }).pipe(
+      map(response => {
+        if (response.status === 204) {
+          return null;
+        }
+        return response.body || null;
+      }),
+      catchError((error: HttpErrorResponse) => {
+        console.error('Erro ao obter sugestões de questões:', error);
+        return throwError('Erro ao obter sugestões de questões.');
+      })
+    );
+  }
+
   getQuestaoById(id: number): Observable<Questao> {
     return this.http.get<Questao>(`${this.apiURL}/${id}`);
   }
@@ -210,7 +231,7 @@ export class QuestoesService {
     }
 
     const request = this.http.get<Questao[]>(url, { params }).pipe(
-      shareReplay({ bufferSize: 1, refCount: false }) 
+      shareReplay({ bufferSize: 1, refCount: false })
     );
 
     this.requestsCache.set(cacheKey, request);
@@ -294,9 +315,9 @@ export class QuestoesService {
     correct: boolean;
     opcaoCorreta: string;
   } | null> {
-    
+
     let url = `${this.apiURL}/respondido/${idUser}?questaoId=${questaoId}&simuladoId=${simuladoId}`;
-    if(simuladoId === 0) {
+    if (simuladoId === 0) {
       url = `${this.apiURL}/respondido/${idUser}?questaoId=${questaoId}`;
     }
 
@@ -318,7 +339,7 @@ export class QuestoesService {
   }
 
   // Método correto para buscar questão por ID
-  buscarQuestaoPorId( 
+  buscarQuestaoPorId(
     usuarioId: number,
     questaoId: number
   ): Observable<Questao | null> {
@@ -357,16 +378,11 @@ export class QuestoesService {
   buscarAulaPorId(idUser: number, aulaId: number): Observable<any> {
     return this.http.get<any>(`/api/aulas/${idUser}/${aulaId}`);
   }
-  
-  getCuriosidades(subtemas: string[]): Observable<any[]> {
-    const url = `${this.apiURL}/curiosidades`;
-    let params = new HttpParams();
-    
-    subtemas.forEach(subtema => {
-      params = params.append('subtema', subtema);
-    });
 
-    return this.http.get<any[]>(url, { params }).pipe(
+  getCuriosidades(idQuestao: number): Observable<any[]> {
+    const url = `${this.apiURL}/curiosidades/${idQuestao}`;
+
+    return this.http.get<any[]>(url).pipe(
       catchError((error) => {
         console.error('Erro ao buscar curiosidades:', error);
         return throwError('Erro ao buscar curiosidades dos subtemas.');

@@ -1,11 +1,11 @@
 <div class="container pt-5">
     <div class="container mt-4">
-        
-            <div>
-                <h1 class="mt-4"> 👋 Seja Bem-vindo(a), {{ nomeUsuario }} </h1>
-                <h3 class="text-p"> <span> | </span> Painel de Controle</h3>
-            </div>
-        
+
+        <div>
+            <h1 class="mt-4"> 👋 Seja Bem-vindo(a), {{ nomeUsuario }} </h1>
+            <h3 class="text-p"> <span> | </span> Painel de Controle</h3>
+        </div>
+
 
         <div class="row">
             <div class="col-md-3 mb-4" *ngIf="possuiPermissao">
@@ -24,12 +24,13 @@
                     <div class="card-body text-center">
                         <h5 class="card-title"> Aulas</h5>
                         <div class="card-icon">
-                            <img src="assets/Icons/au-bra.svg" alt="Ícone de Aulas" class="icon"style="width: 50px; height: 50px;">
+                            <img src="assets/Icons/au-bra.svg" alt="Ícone de Aulas" class="icon"
+                                style="width: 50px; height: 50px;">
                         </div>
                         <a routerLink="/usuario/painel-de-aulas" class="btn btn-primary">Acessar ></a>
                     </div>
                 </div>
-            </div>               
+            </div>
             <div class="col-md-3 mb-4" *ngIf="possuiPermissao">
                 <div class="card">
                     <div class="card-body text-center">
@@ -79,7 +80,8 @@
                     <div class="card-body text-center">
                         <h5 class="card-title">Meus simulados</h5>
                         <div class="card-icon">
-                            <img src="assets/imagens/ibm-simulated.svg" alt="Ícone de Empresa de Engenharia" class="icon">
+                            <img src="assets/imagens/ibm-simulated.svg" alt="Ícone de Empresa de Engenharia"
+                                class="icon">
                         </div>
                         <a routerLink="/usuario/meus-simulados" class="btn btn-primary">Acessar ></a>
                     </div>
@@ -90,7 +92,8 @@
                     <div class="card-body text-center">
                         <h5 class="card-title"> Cadastro de Aulas</h5>
                         <div class="card-icon">
-                            <img src="assets/Icons/cad-aula.svg" alt="Ícone de Aulas" class="icon" style="width: 50px; height: 50px;">
+                            <img src="assets/Icons/cad-aula.svg" alt="Ícone de Aulas" class="icon"
+                                style="width: 50px; height: 50px;">
                         </div>
                         <a routerLink="/usuario/cadastro-aulas" class="btn btn-primary">Acessar ></a>
                     </div>
@@ -106,7 +109,7 @@
                         <a routerLink="/usuario/cadastro-questao" class="btn btn-primary">Acessar ></a>
                     </div>
                 </div>
-            </div>              
+            </div>
             <div class="col-md-3 mb-4" *ngIf="isAdmin() || isProf() && possuiPermissao">
                 <div class="card">
                     <div class="card-body text-center">
@@ -115,6 +118,17 @@
                             <img src="assets/imagens/bu.svg" alt="Ícone de Buscar" class="icon">
                         </div>
                         <a routerLink="/usuario/buscar-questão" class="btn btn-primary">Acessar ></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4" *ngIf="isAdmin() || isProf() && possuiPermissao">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Mentoria</h5>
+                        <div class="card-icon">
+                            <img src="assets/imagens/mentoria-icon.svg" alt="Ícone de Mentoria" class="icon">
+                        </div>
+                        <a routerLink="/usuario/sistema-mentoria" class="btn btn-primary">Acessar ></a>
                     </div>
                 </div>
             </div>
@@ -129,7 +143,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="col-md-3 mb-4" *ngIf="isProf() && possuiPermissao">
                 <div class="card">
                     <div class="card-body text-center">
@@ -153,9 +167,10 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- Modal -->
-            <div class="modal fade" id="tutorialModal" tabindex="-1" aria-labelledby="tutorialModalLabel" aria-hidden="true">
+            <div class="modal fade" id="tutorialModal" tabindex="-1" aria-labelledby="tutorialModalLabel"
+                aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -170,24 +185,22 @@
                         </div>
                     </div>
                 </div>
-        </div>
+            </div>
 
-        <div class="col-md-3 mb-4">
-            <div class="card card-pesquisa">
-                <div class="card-body text-center">
-                  <h5 class="p-title">Pesquisa de Satisfação</h5>
-                  <div class="card-icon">
-                    <img src="assets/Icons/pes.svg" alt="Ícone de Pesquisa" class="icon" style="width: 50px; height: 50px;">
-                  </div>
-                  <a 
-                    href="https://forms.gle/owp46GkkmZDNq4sq9" 
-                    class="btn btn-primary btn-pesquisa" 
-                    target="_blank" 
-                    rel="noopener noreferrer">
-                    Acessar >
-                  </a>
+            <div class="col-md-3 mb-4">
+                <div class="card card-pesquisa">
+                    <div class="card-body text-center">
+                        <h5 class="p-title">Pesquisa de Satisfação</h5>
+                        <div class="card-icon">
+                            <img src="assets/Icons/pes.svg" alt="Ícone de Pesquisa" class="icon"
+                                style="width: 50px; height: 50px;">
+                        </div>
+                        <a href="https://forms.gle/owp46GkkmZDNq4sq9" class="btn btn-primary btn-pesquisa"
+                            target="_blank" rel="noopener noreferrer">
+                            Acessar >
+                        </a>
+                    </div>
                 </div>
-              </div>                  
+            </div>
         </div>
     </div>
-</div>

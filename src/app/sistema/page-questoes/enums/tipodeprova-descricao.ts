@@ -6,4 +6,5 @@ export const TipoDeProvaDescricoes: Record<TipoDeProva, string> = {
   [TipoDeProva.PRATICA]: 'Prova de Imagens (Teórico-prática)',
   [TipoDeProva.AAO]: 'AAO',
   [TipoDeProva.ICO_FRCOPHTHO]: 'ICO/FRCOphto',
+  [TipoDeProva.SBRV]: 'SBRV'
 };

@@ -51,7 +51,6 @@ export class CadastroQuestaoComponent implements OnInit, AfterViewInit {
   imagePreviews: { [key: string]: string | ArrayBuffer | null } = {};
   id!: number;
   selectedAlternativa: number | undefined;
-  selectedSubtemaValue: Subtema | string | null = '';
 
   questaoIds: number[] = [];
   currentPage = 0;
@@ -72,9 +71,10 @@ export class CadastroQuestaoComponent implements OnInit, AfterViewInit {
   relevancias: string[] = Object.values(RelevanciaDescricao);
   subtemasAgrupadosPorTema: {
     label: string;
-    value: string;
-    options: { label: string; value: Subtema }[];
+    options: { label: string; value: string }[];
   }[] = [];
+  selectedSubtemaValue: Subtema | string | null = '';
+
 
 
   selectedImage: string = '';
@@ -170,7 +170,21 @@ export class CadastroQuestaoComponent implements OnInit, AfterViewInit {
             // console.log(questao)
             this.questaoDTO = questao;
             this.atualizarEditoresComDados();
-            this.selectedSubtemaValue = this.getSubtemaEnumFromDescription(this.questaoDTO.subtema as Subtema) as Subtema;
+
+
+            // Carregar o assunto da questão selecionada
+            const temaEnum = this.getTemaEnumFromDescription(this.questaoDTO.tema as Tema);
+            const subtemaEnum = this.getSubtemaEnumFromDescription(this.questaoDTO.subtema as Subtema);
+
+            if(temaEnum && subtemaEnum) {
+              this.selectedSubtemaValue = JSON.stringify({
+                tema: temaEnum,
+                subtema: subtemaEnum
+              });
+            }
+
+
+            // this.selectedSubtemaValue = this.getSubtemaEnumFromDescription(this.questaoDTO.subtema as Subtema) as Subtema;
             // console.log(this.questaoDTO.subtema as Subtema);
             // console.log(this.selectedSubtemaValue);
             this.questaoDTO.alternativas = this.questaoDTO.alternativas || [];
@@ -214,18 +228,21 @@ export class CadastroQuestaoComponent implements OnInit, AfterViewInit {
 
     this.subtemasAgrupadosPorTema = Object.entries(temasESubtemas)
       .map(([temaKey, subtemasArray]) => {
+        const temaPai = Tema[temaKey as keyof typeof Tema];
+
         return {
-          label: TemaDescricoes[temaKey as Tema],
-          value: Tema[temaKey as keyof typeof Tema],
+          label: TemaDescricoes[temaKey as Tema], 
           options: subtemasArray.map(subtemaValue => {
             return {
               label: SubtemaDescricoes[subtemaValue as Subtema],
-              value: subtemaValue
+              value: JSON.stringify({
+                tema: temaPai,
+                subtema: subtemaValue
+              })
             };
           })
         };
       });
-
   }
 
 
@@ -495,11 +512,18 @@ export class CadastroQuestaoComponent implements OnInit, AfterViewInit {
     this.loading = true;
 
     if (this.selectedSubtemaValue) {
+      const selecao = JSON.parse(this.selectedSubtemaValue);
+
       this.questaoDTO.assunto = {
-        tema: TemaDescricoes[this.findTemaForSubtema(this.selectedSubtemaValue as Subtema)!],
-        subtema: SubtemaDescricoes[this.selectedSubtemaValue as Subtema]
-      }
+        tema: TemaDescricoes[selecao.tema as Tema],
+        subtema: SubtemaDescricoes[selecao.subtema as Subtema]
+      };
+
+    } else {
+      console.error("Nenhum assunto selecionado!");
+      this.loading = false;
     }
+
 
     const quillEditor6 = document.querySelector('#editor6 .ql-editor');
     if (quillEditor6) {
@@ -586,12 +610,12 @@ export class CadastroQuestaoComponent implements OnInit, AfterViewInit {
     this.formData.append('questaoDTO', objetoJson);
 
 
-    console.log("Debugando");
-    console.log(this.questaoDTO.comentarioDaQuestao);
-    console.log(this.questaoDTO.comentarioDaQuestaoDois);
-    console.log(this.questaoDTO.comentarioDaQuestaoTres);
-    console.log(this.questaoDTO.comentarioDaQuestaoQuatro);
-    console.log(this.questaoDTO.comentarioDaQuestaoCinco);
+    // console.log("Debugando");
+    // console.log(this.questaoDTO.comentarioDaQuestao);
+    // console.log(this.questaoDTO.comentarioDaQuestaoDois);
+    // console.log(this.questaoDTO.comentarioDaQuestaoTres);
+    // console.log(this.questaoDTO.comentarioDaQuestaoQuatro);
+    // console.log(this.questaoDTO.comentarioDaQuestaoCinco);
 
 
     if (!this.questaoDTO.id) {
@@ -684,7 +708,15 @@ export class CadastroQuestaoComponent implements OnInit, AfterViewInit {
     }
   }
 
-  getSubtemaEnumFromDescription(description: string): Subtema | undefined {
+  private getTemaEnumFromDescription(description: string): Tema | undefined {
+    const temaKey = Object.keys(TemaDescricoes).find(
+      key => TemaDescricoes[key as Tema] === description
+    );
+    return temaKey ? Tema[temaKey as keyof typeof Tema] : undefined;
+  }
+
+
+  private getSubtemaEnumFromDescription(description: string): Subtema | undefined {
     for (const [subtemaKey, subtemaDescription] of Object.entries(SubtemaDescricoes)) {
       if (subtemaDescription === description) {
         return Subtema[subtemaKey as keyof typeof Subtema];
@@ -791,7 +823,6 @@ export class CadastroQuestaoComponent implements OnInit, AfterViewInit {
         innerEl.scrollTo({ top: 0, behavior: 'smooth' });
       }
     }, 50);
-
 
   }
 
