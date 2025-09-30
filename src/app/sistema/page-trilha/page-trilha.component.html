@@ -21,79 +21,95 @@
       <div class="trilha-path">
         <div class="semana-node left active">
           <div class="node-circle">
-            <ng-lottie 
-              [options]="obterOpcoesAnimacao('active')" 
-              width="90px" 
-              height="90px">
-            </ng-lottie>
+            <div class="node-inner-circle">
+              <ng-lottie 
+                [options]="obterOpcoesAnimacao('active')" 
+                width="90px" 
+                height="90px">
+              </ng-lottie>
+            </div>
           </div>
-          <span class="node-label">Semana 1</span>
+          <div  class="balloon-comecar">
+            <div class="balloon-content">
+              <span class="balloon-text">
+                <strong>Começar</strong>
+                Semana 1
+              </span>
+              <div class="balloon-arrow"></div>
+            </div>
+          </div>
         </div>
         
         <div class="semana-node locked">
           <div class="node-circle">
-            <ng-lottie 
-              [options]="obterOpcoesAnimacao('bloqueado')" 
-              width="90px" 
-              height="90px">
-            </ng-lottie>
+            <div class="node-inner-circle">
+              <ng-lottie 
+                [options]="obterOpcoesAnimacao('bloqueado')" 
+                width="90px" 
+                height="90px">
+              </ng-lottie>
+            </div>
           </div>
-          <span class="node-label">Semana 2</span>
         </div>
 
         <div class="semana-node right locked">
           <div class="node-circle">
-            <ng-lottie 
-              [options]="obterOpcoesAnimacao('bloqueado')" 
-              width="90px" 
-              height="90px">
-            </ng-lottie>
+            <div class="node-inner-circle">
+              <ng-lottie 
+                [options]="obterOpcoesAnimacao('bloqueado')" 
+                width="90px" 
+                height="90px">
+              </ng-lottie>
+            </div>
           </div>
-          <span class="node-label">Semana 3</span>
         </div>
 
         <div class="semana-node locked">
           <div class="node-circle">
-            <ng-lottie 
-              [options]="obterOpcoesAnimacao('bloqueado')" 
-              width="90px" 
-              height="90px">
-            </ng-lottie>
+            <div class="node-inner-circle">
+              <ng-lottie 
+                [options]="obterOpcoesAnimacao('bloqueado')" 
+                width="90px" 
+                height="90px">
+              </ng-lottie>
+            </div>
           </div>
-          <span class="node-label">Semana 4</span>
         </div>
 
         <div class="semana-node left locked">
           <div class="node-circle">
-            <ng-lottie 
-              [options]="obterOpcoesAnimacao('bloqueado')" 
-              width="90px" 
-              height="90px">
-            </ng-lottie>
+            <div class="node-inner-circle">
+              <ng-lottie 
+                [options]="obterOpcoesAnimacao('bloqueado')" 
+                width="90px" 
+                height="90px">
+              </ng-lottie>
+            </div>
           </div>
-          <span class="node-label">Semana 5</span>
         </div>
 
         <div class="semana-node locked">
           <div class="node-circle">
-            <ng-lottie 
-              [options]="obterOpcoesAnimacao('bloqueado')" 
-              width="90px" 
-              height="90px">
-            </ng-lottie>
+            <div class="node-inner-circle">
+              <ng-lottie 
+                [options]="obterOpcoesAnimacao('bloqueado')" 
+                width="90px" 
+                height="90px">
+              </ng-lottie>
+            </div>
           </div>
-          <span class="node-label">Semana 6</span>
         </div>
 
         <div class="semana-node right locked">
           <div class="node-circle">
-            <ng-lottie 
-              [options]="obterOpcoesAnimacao('bloqueado')" 
-              width="90px" 
-              height="90px">
-            </ng-lottie>
+            <div class="node-inner-circle">
+              <ng-lottie 
+                [options]="obterOpcoesAnimacao('bloqueado')" 
+                width="90px" 
+                height="90px">
+              </ng-lottie>
+            </div>
           </div>
-          <span class="node-label">Semana 7</span>
         </div>
       </div>
     </div>
@@ -103,19 +119,12 @@
       <div class="progress-card completed">
         <div class="card-header">
           <div class="card-title">
-            <div class="card-icon">
-              <ng-lottie 
-                [options]="obterOpcoesAnimacao('concluido')" 
-                width="40px" 
-                height="40px">
-              </ng-lottie>
-            </div>
             <div class="card-info">
               <h3>Catarata</h3>
               <p>Semana 1</p>
             </div>
           </div>
-          <span class="status-badge concluido">Concluído</span>
+          <div class="status-badge concluido"><span>Concluído</span></div>
         </div>
         
         <div class="card-stats">
@@ -130,7 +139,7 @@
           </div>
           <span class="progress-text">100%</span>
         </div>
-        <button class="action-btn refazer">Refazer trilha <img src="assets/Icons/arrow-left.svg" alt="setaDireta"></button>
+        <button class="action-btn refazer">Refazer trilha <img src="assets/Icons/arrow-updown.svg" alt="setaDireta"></button>
       </div>
 
       
@@ -164,7 +173,7 @@
           </div>
           <span class="progress-text">15%</span>
         </div>
-        <button class="action-btn refazer">Continuar <img src="assets/Icons/arrow-left.svg" alt="setaDireta"></button>
+        <button class="action-btn refazer">Continuar <img src="assets/Icons/arrow-updown.svg" alt="setaDireta"></button>
       </div>
     </div>
   </div>
