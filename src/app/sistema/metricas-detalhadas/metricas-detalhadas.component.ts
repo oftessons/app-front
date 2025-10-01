@@ -4,7 +4,7 @@ import Chart from 'chart.js';
 import { SimuladoService } from 'src/app/services/simulado.service';
 import { MetricaSubtema, MetricaTema } from './metrica-interface';
 import { forkJoin } from 'rxjs';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 interface GrupoSubtema {
   tema: string;
@@ -39,6 +39,7 @@ export class MetricasDetalhadasComponent implements OnInit, OnDestroy, AfterView
   constructor(
     private simuladoService: SimuladoService,
     private route: ActivatedRoute,
+    @Optional() public dialogRef: MatDialogRef<MetricasDetalhadasComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: { simuladoId: string } | null
   ) {
     this.simuladoIdAlunoMentorado = data?.simuladoId ? data?.simuladoId : null;
@@ -259,5 +260,11 @@ export class MetricasDetalhadasComponent implements OnInit, OnDestroy, AfterView
       });
       this.subtemaCharts.push(newChart);
     });
+  }
+
+  fecharPopup(): void {
+    if (this.dialogRef) {
+      this.dialogRef.close();
+    }
   }
 }

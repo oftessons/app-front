@@ -41,7 +41,7 @@ import { temasESubtemas } from '../page-questoes/enums/map-tema-subtema';
 import { catchError, filter, map, tap } from 'rxjs/operators';
 import { StatusSimulado } from '../meus-simulados/status-simulado';
 import { forkJoin, Observable, of } from 'rxjs';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Simulado } from '../simulado';
 
 declare var bootstrap: any;
@@ -187,6 +187,7 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
     private router: Router,
     private sanitizer: DomSanitizer,
     private cdr: ChangeDetectorRef,
+    @Optional() public dialogRef: MatDialogRef<PageSimuladoComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: { alunoId: string, nomeAluno: string, simulado: Simulado } | null
   ) {
     this.idAlunoMentorado = data?.alunoId || '';
@@ -1232,5 +1233,11 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
 
   isFiltroBloqueado(): boolean {
     return this.filtrosBloqueados;
+  }
+
+  fecharPopup(): void {
+    if (this.dialogRef) {
+      this.dialogRef.close();
+    }
   }
 }

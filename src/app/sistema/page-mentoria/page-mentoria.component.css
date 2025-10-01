@@ -387,3 +387,28 @@
     transform: translateY(0);
   }
 }
+
+.chart-container {
+  width: 100%;
+  max-width: 100%;
+  margin: auto;
+}
+
+.close-popup-button {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  font-size: 2.5rem;
+  font-weight: 300;
+  line-height: 1;
+  color: #888;
+  cursor: pointer;
+  z-index: 1050; 
+  padding: 0;
+}
+
+.close-popup-button:hover {
+  color: var(--text-color) !important;
+}

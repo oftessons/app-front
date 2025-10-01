@@ -7,7 +7,7 @@ import { ThemeService } from 'src/app/services/theme.service';
 import { Usuario } from 'src/app/login/usuario';
 import { StatusSimuladoDescricao } from './status-simulado-descricao';
 import { StatusSimulado } from './status-simulado';
-import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MetricasDetalhadasComponent } from '../metricas-detalhadas/metricas-detalhadas.component';
 import { PageSimuladoComponent } from '../page-simulado/page-simulado.component';
 
@@ -20,7 +20,7 @@ export class MeusSimuladosComponent implements OnInit {
   simulados: Simulado[] = [];
   usuario!: Usuario;
   usuarioId!: number;
-  carregando: boolean = true;  // Variável para indicar o estado de carregamento
+  carregando: boolean = true;  
   mensagemSucesso: string = '';
   ocultarFiltros: boolean = false;
   idAlunoMentorado!: string;
@@ -33,6 +33,7 @@ export class MeusSimuladosComponent implements OnInit {
     private authService: AuthService,
     private themeService: ThemeService,
     private readonly dialog: MatDialog,
+    @Optional() public dialogRef: MatDialogRef<MeusSimuladosComponent>,
 
     @Optional() @Inject(MAT_DIALOG_DATA) public data: { alunoId: string, nomeAluno: string } | null
   ) {
@@ -167,6 +168,12 @@ export class MeusSimuladosComponent implements OnInit {
 
   isDarkMode(): boolean {
     return this.themeService.isDarkMode();
+  }
+
+  fecharPopup(): void {
+    if (this.dialogRef) {
+      this.dialogRef.close();
+    }
   }
 }
 
