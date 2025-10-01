@@ -5,7 +5,7 @@ import { Label } from 'ng2-charts';
 import { TemaDescricoes } from '../page-questoes/enums/tema-descricao';
 import { AuthService } from 'src/app/services/auth.service';
 import { Usuario } from 'src/app/login/usuario';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-page-desempenho',
@@ -26,7 +26,7 @@ export class PageDesempenhoComponent implements OnInit {
     colors: any[];
   }[] = [];
 
-  
+
   // Gráfico 1: Acertos e Erros por Tipo de Prova
   public barChartOptions1: ChartOptions = {
     responsive: true,
@@ -176,9 +176,10 @@ export class PageDesempenhoComponent implements OnInit {
   constructor(
     private questoesService: QuestoesService,
     private authService: AuthService,
+    @Optional() public dialogRef: MatDialogRef<PageDesempenhoComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: { alunoId: string, nomeAluno: string } | null
   ) {
-    if(data?.alunoId) {
+    if (data?.alunoId) {
       this.alunoMentoradoId = data.alunoId;
       this.nomeAlunoMentorado = data.nomeAluno;
     }
@@ -189,7 +190,7 @@ export class PageDesempenhoComponent implements OnInit {
       (data) => {
         this.usuario = data;
 
-        if(this.alunoMentoradoId) {
+        if (this.alunoMentoradoId) {
           this.usuario.id = this.alunoMentoradoId;
         }
 
@@ -347,5 +348,11 @@ export class PageDesempenhoComponent implements OnInit {
     const year = new Date().getFullYear();
     const month = (index + 1).toString().padStart(2, '0');
     return `${month}/${year}`;
+  }
+
+  fecharPopup(): void {
+    if (this.dialogRef) {
+      this.dialogRef.close();
+    }
   }
 }

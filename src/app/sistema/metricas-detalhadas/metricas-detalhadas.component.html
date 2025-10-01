@@ -1,28 +1,37 @@
-<div class="metricas-container">
-  <div *ngIf="carregando" class="loading-spinner">
-    <p>Carregando métricas...</p>
-  </div>
+<div class="container pt-5 metricas-container" style="position: relative;">
 
-  <div *ngIf="!carregando">
+  <button *ngIf="simuladoIdAlunoMentorado" (click)="fecharPopup()" class="close-popup-button" aria-label="Fechar">
+    &times;
+  </button>
 
-    <div class="grafico-card">
-      <h2>Resultado por Tema</h2>
-      <div class="chart-wrapper">
-        <canvas id="graficoPorTema"></canvas>
-      </div>
+  <div class="container mt-4">
+
+    <div *ngIf="carregando" class="loading-spinner">
+      <p>Carregando métricas...</p>
     </div>
 
+    <div *ngIf="!carregando">
 
-    <div class="grafico-card">
-      <h2>Resultado por Subtema</h2>
+      <div class="grafico-card">
+        <h2>Resultado por Tema</h2>
+        <div class="chart-wrapper">
+          <canvas id="graficoPorTema"></canvas>
+        </div>
+      </div>
 
-      <div class="subtemas-grid-container">
-        <div *ngFor="let grupo of dadosAgrupadosPorTema" class="subtema-grupo">
-          <h3>{{ grupo.tema }}</h3>
-          <div class="chart-wrapper chart-wrapper-bar">
-            <canvas #subtemaCanvas></canvas>
+
+      <div class="grafico-card">
+        <h2>Resultado por Subtema</h2>
+
+        <div class="subtemas-grid-container">
+          <div *ngFor="let grupo of dadosAgrupadosPorTema" class="subtema-grupo">
+            <h3>{{ grupo.tema }}</h3>
+            <div class="chart-wrapper chart-wrapper-bar">
+              <canvas #subtemaCanvas></canvas>
+            </div>
           </div>
         </div>
+
       </div>
 
     </div>

@@ -153,7 +153,6 @@
   font-size: 16px;
 }
 
-
 .content-with-fixed-buttons {
   padding-bottom: 80px;
 }
@@ -179,8 +178,8 @@
 }
 
 .btn-responder:disabled {
-  background-color: #A9A9A9;
-  border-color: #A9A9A9;
+  background-color: #a9a9a9;
+  border-color: #a9a9a9;
 }
 
 /* Ajustes para posicionamento do chatbot */
@@ -307,7 +306,8 @@ body.has-fixed-buttons .chatbot-toggle-button {
   width: 280px;
 }
 
-.mat-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-form-field-flex {
+.mat-form-field-type-mat-select:not(.mat-form-field-disabled)
+  .mat-form-field-flex {
   cursor: pointer;
   background: aliceblue;
 }
@@ -355,7 +355,9 @@ body.has-fixed-buttons .chatbot-toggle-button {
     width: 80%;
   }
 
-  ::ng-deep .mat-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-form-field-flex {
+  ::ng-deep
+    .mat-form-field-type-mat-select:not(.mat-form-field-disabled)
+    .mat-form-field-flex {
     width: 100%;
   }
 
@@ -413,7 +415,6 @@ body.has-fixed-buttons .chatbot-toggle-button {
   margin-top: 20px;
 }
 
-
 .left-buttons {
   display: flex;
   justify-content: flex-start;
@@ -429,7 +430,6 @@ body.has-fixed-buttons .chatbot-toggle-button {
   gap: 10px;
   /* Espaçamento entre botões */
 }
-
 
 .btn-anterior,
 .btn-proxima,
@@ -626,25 +626,24 @@ canvas {
   transition: background-color 0.3s, border-color 0.3s;
 }
 
-
 .alternativa-certa::after {
-  content: '';
+  content: "";
   display: inline-block;
   width: 25px;
   height: 25px;
-  background-image: url('src/assets/Icons/confirmar.png');
+  background-image: url("src/assets/Icons/confirmar.png");
   background-size: cover;
   margin-left: 8px;
 }
 
 .alternativa-errada::after {
-  content: '';
+  content: "";
   display: inline-block;
   width: 25px;
   height: 25px;
-  background-image: url('src/assets/Icons/Error.png');
+  background-image: url("src/assets/Icons/Error.png");
   background-size: cover;
-  margin-left: 8px
+  margin-left: 8px;
 }
 
 .alternativa-input-group {
@@ -824,4 +823,23 @@ canvas {
     width: 48%;
     /* Largura de cada botão em uma linha (2 botões por linha) */
   }
+}
+
+.close-popup-button {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  font-size: 2.5rem;
+  font-weight: 300;
+  line-height: 1;
+  color: #888;
+  cursor: pointer;
+  z-index: 1050;
+  padding: 0;
+}
+
+.close-popup-button:hover {
+  color: var(--text-color) !important;
 }

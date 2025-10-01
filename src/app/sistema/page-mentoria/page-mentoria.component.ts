@@ -56,6 +56,7 @@ export class PageMentoriaComponent implements OnInit {
   paginaAtualSugestoes = 1;
   totalDePaginasSugestoes = 5; // Total de grupos a serem buscados
   limitePorPaginaSugestoes = 10;
+  popupDadosAlunoAberto: boolean = false;
 
   constructor(
     private readonly authService: AuthService,
@@ -124,24 +125,18 @@ export class PageMentoriaComponent implements OnInit {
     });
   }
 
-  // --- LÓGICA DO MODAL DE DETALHES DO ALUNO ---
 
-  /**
-   * Define o aluno a ser exibido no modal de detalhes, abrindo-o.
-   * @param usuario O objeto do usuário clicado.
-   */
   verDetalhesAluno(usuario: Usuario): void {
+    this.popupDadosAlunoAberto = true;
     this.alunoSelecionadoParaDetalhes = usuario;
   }
 
-  /**
-   * Limpa o aluno selecionado, fechando o modal de detalhes.
-   */
+
   fecharDetalhesAluno(): void {
+    this.popupDadosAlunoAberto = false;
     this.alunoSelecionadoParaDetalhes = null;
   }
 
-  // --- LÓGICA DE SUGESTÕES COM PAGINAÇÃO ---
   fetchPaginaDeSugestoes(pagina: number): void {
     this.carregandoSugestoes = true;
     this.sugestoesAgrupadas = [];

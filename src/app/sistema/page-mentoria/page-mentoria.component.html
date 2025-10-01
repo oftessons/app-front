@@ -31,7 +31,8 @@
                                     <div class="usuario-info">
                                         <h3>{{ usuario.nome }}</h3>
                                         <p><strong>Email:</strong> {{ usuario.email }}</p>
-                                        <p><strong>Tipo de Estudante:</strong> {{ usuario.tipoDeEstudante || 'Não informado' }}</p>
+                                        <p><strong>Tipo de Estudante:</strong> {{ usuario.tipoDeEstudante || 'Não
+                                            informado' }}</p>
                                     </div>
 
                                     <div class="usuario-card-acoes">
@@ -123,11 +124,14 @@
     </div>
 </div>
 
-<!-- =============================================================== -->
-<!-- ============= CÓDIGO DO MODAL (POPUP) DO ALUNO ================ -->
-<!-- =============================================================== -->
+
 <div *ngIf="alunoSelecionadoParaDetalhes" class="modal-overlay" (click)="fecharDetalhesAluno()">
     <div class="modal-content" (click)="$event.stopPropagation()">
+
+        <button *ngIf="popupDadosAlunoAberto" (click)="fecharDetalhesAluno()" class="close-popup-button"
+            aria-label="Fechar">
+            &times;
+        </button>
 
         <div class="modal-body">
             <div class="aluno-detalhe">

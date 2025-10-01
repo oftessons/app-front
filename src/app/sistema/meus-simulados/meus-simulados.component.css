@@ -1,28 +1,28 @@
 /* Estilo geral da container */
 .container {
-    max-width: 1300px;
-    padding: 10px;
-    font-family: 'Nunito Sans', sans-serif;
-  }
-  
-  /* Estilo dos textos */
-  .text-p {
-    font-size: 20px;
-    margin-top: 10px;
-    font-family: 'Nunito Sans', sans-serif;
-    color: var(--text-color);
-  }
-  
-  h5 {
-    color: #7E1313;
-  }
-  
-  p.card-text {
-    margin-top: 5px;
-    color: var(--text-color);
-  }
+  max-width: 1300px;
+  padding: 10px;
+  font-family: "Nunito Sans", sans-serif;
+}
 
-  /* Cards */
+/* Estilo dos textos */
+.text-p {
+  font-size: 20px;
+  margin-top: 10px;
+  font-family: "Nunito Sans", sans-serif;
+  color: var(--text-color);
+}
+
+h5 {
+  color: #7e1313;
+}
+
+p.card-text {
+  margin-top: 5px;
+  color: var(--text-color);
+}
+
+/* Cards */
 .card {
   background-color: var(--bg-container);
   border: 1px solid var(--border-color);
@@ -38,94 +38,118 @@
 .card-body {
   padding: 20px;
 }
-  
-  /* Ícones */
-  .icon {
-    width: 20px;
-    height: 20px;
-    vertical-align: middle;
-  }
-  
-  .icon-lista {
-    width: 30px;
-    height: 30px;
-    vertical-align: middle;
-  }
-  
-  /* Botões */
-  .btn-transparent-primary {
-    background-color: transparent;
-    color: var(--text-color);
-    border: 1px solid var(--text-color);
-  }
-  
-  .btn-transparent-primary:hover {
-    background-color: rgba(13, 110, 253, 0.1);
-  }
-  
-  .btn-transparent-danger {
-    background-color: transparent;
-    color: #ff0000;
-    border: 1px solid #ff0000;
+
+/* Ícones */
+.icon {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+}
+
+.icon-lista {
+  width: 30px;
+  height: 30px;
+  vertical-align: middle;
+}
+
+/* Botões */
+.btn-transparent-primary {
+  background-color: transparent;
+  color: var(--text-color);
+  border: 1px solid var(--text-color);
+}
+
+.btn-transparent-primary:hover {
+  background-color: rgba(13, 110, 253, 0.1);
+}
+
+.btn-transparent-danger {
+  background-color: transparent;
+  color: #ff0000;
+  border: 1px solid #ff0000;
+}
+
+.custom-alert {
+  background-color: #399918;
+  color: black;
+  padding: 10px;
+  margin-bottom: 15px;
+  text-align: center;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.btn-transparent-danger:hover {
+  background-color: rgba(220, 53, 69, 0.1);
+}
+
+/* Mensagem sem filtros */
+.no-filters-message {
+  background-color: #ffad60;
+  border-radius: 10px;
+  padding: 15px;
+  font-size: 14px;
+}
+
+.no-filters-message p {
+  margin: 0;
+}
+
+/* Responsividade */
+
+/* Celulares: botões empilhados verticalmente */
+@media (max-width: 768px) {
+  .card-body {
+    flex-direction: column; /* Empilha os botões */
+    align-items: flex-start; /* Alinha à esquerda */
   }
 
-  .custom-alert {
-    background-color: #399918;
-    color: black;
-    padding: 10px;
-    margin-bottom: 15px;
-    text-align: center;
-    border-radius: 5px;
-    font-weight: bold;
+  .card-body > div:last-child {
+    display: flex;
+    flex-direction: column;
+    width: 100%; /* Botões ocupam 100% da largura */
+    gap: 10px; /* Espaçamento entre botões */
   }
-  
-  
-  .btn-transparent-danger:hover {
-    background-color: rgba(220, 53, 69, 0.1);
+
+  .btn {
+    width: 100%; /* Cada botão ocupa toda a largura disponível */
   }
-  
-  /* Mensagem sem filtros */
-  .no-filters-message {
-    background-color: #FFAD60;
-    border-radius: 10px;
-    padding: 15px;
-    font-size: 14px;
+}
+
+/* Tablets: botões lado a lado */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .card-body {
+    flex-wrap: wrap; /* Permite que os itens quebrem linha */
+    gap: 15px; /* Espaçamento entre itens */
   }
-  
-  .no-filters-message p {
-    margin: 0;
+
+  .btn {
+    flex: 1 1 45%; /* Cada botão ocupa 45% da largura */
+    max-width: 45%;
   }
-  
-  /* Responsividade */
-  
-  /* Celulares: botões empilhados verticalmente */
-  @media (max-width: 768px) {
-    .card-body {
-      flex-direction: column; /* Empilha os botões */
-      align-items: flex-start; /* Alinha à esquerda */
-    }
-  
-    .card-body > div:last-child {
-      display: flex;
-      flex-direction: column;
-      width: 100%; /* Botões ocupam 100% da largura */
-      gap: 10px; /* Espaçamento entre botões */
-    }
-  
-    .btn {
-      width: 100%; /* Cada botão ocupa toda a largura disponível */
-    }
-  }
-  
-  /* Tablets: botões lado a lado */
-  @media (min-width: 768px) and (max-width: 1024px) {
-    .card-body {
-      flex-wrap: wrap; /* Permite que os itens quebrem linha */
-      gap: 15px; /* Espaçamento entre itens */
-    }
-  
-    .btn {
-      flex: 1 1 45%; /* Cada botão ocupa 45% da largura */
-      max-width: 45%;
-    }
-  }
+}
+
+.chart-container {
+  width: 100%;
+  max-width: 100%;
+  margin: auto;
+}
+
+.close-popup-button {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  font-size: 2.5rem;
+  font-weight: 300;
+  line-height: 1;
+  color: #888;
+  cursor: pointer;
+  z-index: 1050;
+  padding: 0;
+}
+
+.close-popup-button:hover {
+  color: var(--text-color) !important;
+}
