@@ -27,26 +27,27 @@ export class MetricasDetalhadasComponent implements OnInit, OnDestroy, AfterView
 
   temaChart: Chart | null = null;
   subtemaCharts: Chart[] = [];
-  
+
   private themeObserver!: MutationObserver;
 
   colorPalette = [
-    '#F2613F', '#3FD2F2', '#A53FF2', '#F2B83F',
-    '#3FF261', '#F23F92', '#3F6FF2'
+    '#3498DB', '#E74C3C', '#2ECC71', '#F1C40F', '#9B59B6', '#1ABC9C', '#E67E22',
+    '#34495E', '#F39C12', '#D35400', '#C0392B', '#8E44AD', '#2980B9', '#27AE60',
+    '#2C3E50', '#7F8C8D', '#16A085', '#D24D57', '#FDE3A7', '#4C566A'
   ];
 
   constructor(
     private simuladoService: SimuladoService,
     private route: ActivatedRoute,
-
     @Optional() @Inject(MAT_DIALOG_DATA) public data: { simuladoId: string } | null
-  ) { 
-
-    this.simuladoIdAlunoMentorado = data?.simuladoId ? data?.simuladoId : null; 
+  ) {
+    this.simuladoIdAlunoMentorado = data?.simuladoId ? data?.simuladoId : null;
   }
 
   ngOnInit(): void {
-    const simuladoId = this.simuladoIdAlunoMentorado ?  Number(this.simuladoIdAlunoMentorado) : Number(this.route.snapshot.paramMap.get('id'));
+    const simuladoId = this.simuladoIdAlunoMentorado
+      ? Number(this.simuladoIdAlunoMentorado)
+      : Number(this.route.snapshot.paramMap.get('id'));
 
     if (simuladoId && !isNaN(simuladoId)) {
       forkJoin({
@@ -70,14 +71,13 @@ export class MetricasDetalhadasComponent implements OnInit, OnDestroy, AfterView
         }
       });
     } else {
-      console.error("ID do simulado inválido ou não encontrado na URL.");
+      console.error("ID do simulado inválido ou não encontrado.");
       this.carregando = false;
     }
   }
 
   ngAfterViewInit(): void {
     this.observeThemeChanges();
-
     this.subtemaCanvases.changes.subscribe(() => {
       this.renderizarGraficosPorSubtema();
     });
@@ -87,16 +87,16 @@ export class MetricasDetalhadasComponent implements OnInit, OnDestroy, AfterView
     if (this.themeObserver) {
       this.themeObserver.disconnect();
     }
+    this.temaChart?.destroy();
+    this.subtemaCharts.forEach(chart => chart.destroy());
   }
 
   private observeThemeChanges(): void {
     const targetNode = document.body;
     const config = { attributes: true, attributeFilter: ['class'] };
-
-    const callback = (mutationsList: MutationRecord[], observer: MutationObserver) => {
-      for(const mutation of mutationsList) {
+    const callback = (mutationsList: MutationRecord[]) => {
+      for (const mutation of mutationsList) {
         if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-          console.log('Mudança de tema detectada! Redesenhando gráficos...');
           setTimeout(() => {
             this.renderizarGraficoPorTema();
             this.renderizarGraficosPorSubtema();
@@ -104,7 +104,6 @@ export class MetricasDetalhadasComponent implements OnInit, OnDestroy, AfterView
         }
       }
     };
-
     this.themeObserver = new MutationObserver(callback);
     this.themeObserver.observe(targetNode, config);
   }
@@ -123,6 +122,15 @@ export class MetricasDetalhadasComponent implements OnInit, OnDestroy, AfterView
     this.dadosAgrupadosPorTema = grupos;
   }
 
+
+  private getColorForIndex(index: number): string {
+    if (index < this.colorPalette.length) {
+      return this.colorPalette[index];
+    }
+    const hue = (index * 137.508) % 360;
+    return `hsl(${hue}, 70%, 60%)`;
+  }
+
   private renderizarGraficoPorTema(): void {
     if (!this.dadosTema || this.dadosTema.length === 0) return;
     const canvas = document.getElementById('graficoPorTema') as HTMLCanvasElement;
@@ -131,7 +139,7 @@ export class MetricasDetalhadasComponent implements OnInit, OnDestroy, AfterView
     if (this.temaChart) {
       this.temaChart.destroy();
     }
-    
+
     const styles = getComputedStyle(document.body);
     const textColor = styles.getPropertyValue('--text-color').trim();
     const placeholderColor = styles.getPropertyValue('--placeholder-color').trim();
@@ -150,8 +158,8 @@ export class MetricasDetalhadasComponent implements OnInit, OnDestroy, AfterView
         datasets: [{
           label: '% de Acertos',
           data: data,
-          backgroundColor: data.map((_, i) => this.colorPalette[i % this.colorPalette.length] + 'B3'),
-          borderColor: data.map((_, i) => this.colorPalette[i % this.colorPalette.length]),
+          backgroundColor: data.map((_, i) => this.getColorForIndex(i) + 'B3'),
+          borderColor: data.map((_, i) => this.getColorForIndex(i)),
           borderWidth: 1
         }]
       },
@@ -215,8 +223,8 @@ export class MetricasDetalhadasComponent implements OnInit, OnDestroy, AfterView
           datasets: [{
             label: '% de Acertos',
             data: data,
-            backgroundColor: data.map((_, i) => this.colorPalette[i % this.colorPalette.length] + 'B3'),
-            borderColor: data.map((_, i) => this.colorPalette[i % this.colorPalette.length]),
+            backgroundColor: data.map((_, i) => this.getColorForIndex(i) + 'B3'),
+            borderColor: data.map((_, i) => this.getColorForIndex(i)),
             borderWidth: 1
           }]
         },
