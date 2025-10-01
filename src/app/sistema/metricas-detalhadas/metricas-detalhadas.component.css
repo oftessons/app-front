@@ -32,8 +32,6 @@
 }
 
 .subtema-grupo {
-  /* --- CORREÇÃO APLICADA AQUI --- */
-  /* Força o conteúdo (o gráfico) a ficar dentro dos limites da sua célula na grade. */
   overflow: hidden;
 }
 
