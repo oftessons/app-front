@@ -1,181 +1,200 @@
-<div class="trilha-container container">
-  <div class="trilha-header">
-    <h1 class="trilha-title"><span> | </span>Trilha do Conhecimento</h1>
-    <div class="trilha-controls">
-      <div class="tema-selector">
-        <app-select-padrao
-          [options]="temas"
-          [(selectedValue)]="selectedTema"
-          label="Temas"
-          >
-        </app-select-padrao>
-      </div>
-      <button class="settings-btn">
-        <img [src]="!isDarkMode() ? 'assets/Icons/settings.svg' : 'assets/Icons/dark/settings-dark.svg'" alt="Ícone de Início" class="icon">
-      </button>
-    </div>
-  </div>
-
-  <div class="trilha-content">
-    <div class="trilha-mapa">
-      <div class="trilha-path">
-        <div class="semana-node left active">
-          <div class="node-circle">
-            <div class="node-inner-circle">
-              <ng-lottie 
-                [options]="obterOpcoesAnimacao('active')" 
-                width="90px" 
-                height="90px">
-              </ng-lottie>
-            </div>
-          </div>
-          <div  class="balloon-comecar">
-            <div class="balloon-content">
-              <span class="balloon-text">
-                <strong>Começar</strong>
-                Semana 1
-              </span>
-              <div class="balloon-arrow"></div>
-            </div>
-          </div>
+<div class="trilha">
+  <div class="trilha-container">
+    <div class="trilha-header">
+      <h1 class="trilha-title"><span> | </span>Trilha do Conhecimento</h1>
+      <div class="trilha-controls">
+        <div class="tema-selector">
+          <app-select-padrao
+            [options]="temas"
+            [(selectedValue)]="selectedTema"
+            label="Temas"
+            >
+          </app-select-padrao>
         </div>
-        
-        <div class="semana-node locked">
-          <div class="node-circle">
-            <div class="node-inner-circle">
-              <ng-lottie 
-                [options]="obterOpcoesAnimacao('bloqueado')" 
-                width="90px" 
-                height="90px">
-              </ng-lottie>
-            </div>
-          </div>
-        </div>
-
-        <div class="semana-node right locked">
-          <div class="node-circle">
-            <div class="node-inner-circle">
-              <ng-lottie 
-                [options]="obterOpcoesAnimacao('bloqueado')" 
-                width="90px" 
-                height="90px">
-              </ng-lottie>
-            </div>
-          </div>
-        </div>
-
-        <div class="semana-node locked">
-          <div class="node-circle">
-            <div class="node-inner-circle">
-              <ng-lottie 
-                [options]="obterOpcoesAnimacao('bloqueado')" 
-                width="90px" 
-                height="90px">
-              </ng-lottie>
-            </div>
-          </div>
-        </div>
-
-        <div class="semana-node left locked">
-          <div class="node-circle">
-            <div class="node-inner-circle">
-              <ng-lottie 
-                [options]="obterOpcoesAnimacao('bloqueado')" 
-                width="90px" 
-                height="90px">
-              </ng-lottie>
-            </div>
-          </div>
-        </div>
-
-        <div class="semana-node locked">
-          <div class="node-circle">
-            <div class="node-inner-circle">
-              <ng-lottie 
-                [options]="obterOpcoesAnimacao('bloqueado')" 
-                width="90px" 
-                height="90px">
-              </ng-lottie>
-            </div>
-          </div>
-        </div>
-
-        <div class="semana-node right locked">
-          <div class="node-circle">
-            <div class="node-inner-circle">
-              <ng-lottie 
-                [options]="obterOpcoesAnimacao('bloqueado')" 
-                width="90px" 
-                height="90px">
-              </ng-lottie>
-            </div>
-          </div>
-        </div>
+        <button class="settings-btn">
+          <img [src]="!isDarkMode() ? 'assets/Icons/settings.svg' : 'assets/Icons/dark/settings-dark.svg'" alt="Ícone de Início" class="icon">
+        </button>
       </div>
     </div>
 
-    
-    <div class="trilha-progress">
-      <div class="progress-card completed">
-        <div class="card-header">
-          <div class="card-title">
-            <div class="card-info">
-              <h3>Catarata</h3>
-              <p>Semana 1</p>
+    <div class="trilha-content">
+      <div class="trilha-mapa">
+        <div class="trilha-path">
+          <div class="semana-node center active">
+            <div class="node-circle">
+              <div class="node-inner-circle">
+                <ng-lottie 
+                  [options]="obterOpcoesAnimacao('active')" 
+                  width="90px" 
+                  height="90px">
+                </ng-lottie>
+              </div>
+            </div>
+            <div  class="balloon-comecar">
+              <div class="balloon-content">
+                <span class="balloon-text">
+                  <strong>Começar</strong>
+                  Semana 1
+                </span>
+                <div class="balloon-arrow"></div>
+              </div>
             </div>
           </div>
-          <div class="status-badge concluido"><span>Concluído</span></div>
-        </div>
-        
-        <div class="card-stats">
-          <span class="stat"><img [src]="!isDarkMode() ? 'assets/Icons/aula.svg' : 'assets/Icons/dark/aula-dark.svg'" alt="Ícone de aulas"> 2 aulas</span>
-          <span class="stat"><img [src]="!isDarkMode() ? 'assets/imagens/caderno.svg' : 'assets/Icons/dark/caderno-dark.svg'" alt="Ícone de questões"> 20 questões</span>
-          <span class="stat"><img [src]="!isDarkMode() ? 'assets/Icons/flashcards.svg' : 'assets/Icons/dark/flashcards-dark.svg'" alt="Ícone de flashcards"> 20 flashcards</span>
-          <span class="stat"><img [src]="!isDarkMode() ? 'assets/Icons/relogio.svg' : 'assets/Icons/dark/relogio-dark.svg'" alt="Ícone de tempo"> 1h30</span>
-        </div>
-        <div class="progress-container">
-          <div class="progress-bar">
-            <div class="progress-fill" style="width: 100%"></div>
+          
+          <div class="semana-node right locked">
+            <div class="node-circle">
+              <div class="node-inner-circle">
+                <ng-lottie 
+                  [options]="obterOpcoesAnimacao('bloqueado')" 
+                  width="90px" 
+                  height="90px">
+                </ng-lottie>
+              </div>
+            </div>
           </div>
-          <span class="progress-text">100%</span>
+
+          <div class="semana-node left locked">
+            <div class="node-circle">
+              <div class="node-inner-circle">
+                <ng-lottie 
+                  [options]="obterOpcoesAnimacao('bloqueado')" 
+                  width="90px" 
+                  height="90px">
+                </ng-lottie>
+              </div>
+            </div>
+          </div>
+
+          <div class="semana-node locked">
+            <div class="node-circle">
+              <div class="node-inner-circle">
+                <ng-lottie 
+                  [options]="obterOpcoesAnimacao('bloqueado')" 
+                  width="90px" 
+                  height="90px">
+                </ng-lottie>
+              </div>
+            </div>
+          </div>
+
+          <div class="semana-node right locked">
+            <div class="node-circle">
+              <div class="node-inner-circle">
+                <ng-lottie 
+                  [options]="obterOpcoesAnimacao('bloqueado')" 
+                  width="90px" 
+                  height="90px">
+                </ng-lottie>
+              </div>
+            </div>
+          </div>
+
+          <div class="semana-node left locked">
+            <div class="node-circle">
+              <div class="node-inner-circle">
+                <ng-lottie 
+                  [options]="obterOpcoesAnimacao('bloqueado')" 
+                  width="90px" 
+                  height="90px">
+                </ng-lottie>
+              </div>
+            </div>
+          </div>
+
+          <div class="semana-node center locked">
+            <div class="node-circle">
+              <div class="node-inner-circle">
+                <ng-lottie 
+                  [options]="obterOpcoesAnimacao('bloqueado')" 
+                  width="90px" 
+                  height="90px">
+                </ng-lottie>
+              </div>
+            </div>
+          </div>
+
+          <div class="semana-node right locked">
+            <div class="node-circle">
+              <div class="node-inner-circle">
+                <ng-lottie 
+                  [options]="obterOpcoesAnimacao('bloqueado')" 
+                  width="90px" 
+                  height="90px">
+                </ng-lottie>
+              </div>
+            </div>
+          </div>
+          
+          <div class="semana-node left locked">
+            <div class="node-circle">
+              <div class="node-inner-circle">
+                <ng-lottie 
+                  [options]="obterOpcoesAnimacao('bloqueado')" 
+                  width="90px" 
+                  height="90px">
+                </ng-lottie>
+              </div>
+            </div>
+          </div>
         </div>
-        <button class="action-btn refazer">Refazer trilha <img src="assets/Icons/arrow-updown.svg" alt="setaDireta"></button>
       </div>
 
       
-      <div class="progress-card completed">
-        <div class="card-header">
-          <div class="card-title">
-            <div class="card-icon">
-              <ng-lottie 
-                [options]="obterOpcoesAnimacao('andamento')" 
-                width="40px" 
-                height="40px">
-              </ng-lottie>
+      <div class="trilha-progress">
+        <div class="progress-card completed">
+          <div class="card-header">
+            <div class="card-title">
+              <div class="card-info">
+                <h3>Catarata</h3>
+                <p>Semana 1</p>
+              </div>
             </div>
-            <div class="card-info">
-              <h3>Óptica</h3>
-              <p>Semana 1</p>
-            </div>
+            <div class="status-badge concluido"><span>Concluído</span></div>
           </div>
-          <span class="status-badge andamento">Em andamento</span>
+          
+          <div class="card-stats">
+            <span class="stat"><img [src]="!isDarkMode() ? 'assets/Icons/aula.svg' : 'assets/Icons/dark/aula-dark.svg'" alt="Ícone de aulas"> 2 aulas</span>
+            <span class="stat"><img [src]="!isDarkMode() ? 'assets/imagens/caderno.svg' : 'assets/Icons/dark/caderno-dark.svg'" alt="Ícone de questões"> 20 questões</span>
+            <span class="stat"><img [src]="!isDarkMode() ? 'assets/Icons/flashcards.svg' : 'assets/Icons/dark/flashcards-dark.svg'" alt="Ícone de flashcards"> 20 flashcards</span>
+            <span class="stat"><img [src]="!isDarkMode() ? 'assets/Icons/relogio.svg' : 'assets/Icons/dark/relogio-dark.svg'" alt="Ícone de tempo"> 1h30</span>
+          </div>
+          <div class="progress-container">
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: 100%"></div>
+            </div>
+            <span class="progress-text">100%</span>
+          </div>
+          <button class="action-btn refazer">Refazer trilha <img src="assets/Icons/arrow-updown.svg" alt="setaDireta"></button>
         </div>
+
         
-        <div class="card-stats">
-          <span class="stat"><img [src]="!isDarkMode() ? 'assets/Icons/aula.svg' : 'assets/Icons/dark/aula-dark.svg'" alt="Ícone de aulas"> 2 aulas</span>
-          <span class="stat"><img [src]="!isDarkMode() ? 'assets/imagens/caderno.svg' : 'assets/Icons/dark/caderno-dark.svg'" alt="Ícone de questões"> 20 questões</span>
-          <span class="stat"><img [src]="!isDarkMode() ? 'assets/Icons/flashcards.svg' : 'assets/Icons/dark/flashcards-dark.svg'" alt="Ícone de flashcards"> 20 flashcards</span>
-          <span class="stat"><img [src]="!isDarkMode() ? 'assets/Icons/relogio.svg' : 'assets/Icons/dark/relogio-dark.svg'" alt="Ícone de tempo"> 1h30</span>
-        </div>
-        <div class="progress-container">
-          <div class="progress-bar">
-            <div class="progress-fill" style="width: 15%"></div>
+        <div class="progress-card completed">
+          <div class="card-header">
+            <div class="card-title">
+              <div class="card-info">
+                <h3>Óptica</h3>
+                <p>Semana 1</p>
+              </div>
+            </div>
+            <span class="status-badge andamento">Em andamento</span>
           </div>
-          <span class="progress-text">15%</span>
+          
+          <div class="card-stats">
+            <span class="stat"><img [src]="!isDarkMode() ? 'assets/Icons/aula.svg' : 'assets/Icons/dark/aula-dark.svg'" alt="Ícone de aulas"> 2 aulas</span>
+            <span class="stat"><img [src]="!isDarkMode() ? 'assets/imagens/caderno.svg' : 'assets/Icons/dark/caderno-dark.svg'" alt="Ícone de questões"> 20 questões</span>
+            <span class="stat"><img [src]="!isDarkMode() ? 'assets/Icons/flashcards.svg' : 'assets/Icons/dark/flashcards-dark.svg'" alt="Ícone de flashcards"> 20 flashcards</span>
+            <span class="stat"><img [src]="!isDarkMode() ? 'assets/Icons/relogio.svg' : 'assets/Icons/dark/relogio-dark.svg'" alt="Ícone de tempo"> 1h30</span>
+          </div>
+          <div class="progress-container">
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: 15%"></div>
+            </div>
+            <span class="progress-text">15%</span>
+          </div>
+          <button class="action-btn refazer">Continuar <img src="assets/Icons/arrow-updown.svg" alt="setaDireta"></button>
         </div>
-        <button class="action-btn refazer">Continuar <img src="assets/Icons/arrow-updown.svg" alt="setaDireta"></button>
       </div>
     </div>
-  </div>
 
+  </div>
 </div>

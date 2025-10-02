@@ -1,14 +1,20 @@
-.trilha-container {
-  padding: 20px;
-  padding-top: 120px;
-  min-height: 100vh;
+.trilha {
+  width: 100%;
   background: var(--trilha-bg);
+}
+
+.trilha-container {
+  padding-top: 100px;
+  min-height: 100vh;
+  max-width: 1300px;
+  margin: 0 auto;
 }
 
 .trilha-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 20px;
   margin-bottom: 30px;
 }
 
@@ -73,42 +79,19 @@
 }
 
 .trilha-mapa {
+  background-image: url('/assets/imagens/trilha/trilha-path.png');
+  background-position: top center;
+  background-repeat: no-repeat;
   flex: 1;
   position: relative;
   min-height: 500px;
-}
-
-.trilha-path-svg {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 400px;
-  height: 100%;
-  z-index: 1;
-  pointer-events: none;
-}
-
-.trilha-path-line {
-  opacity: 0.3;
-}
-
-.trilha-path-progress {
-  stroke-dasharray: 1000;
-  stroke-dashoffset: 1000;
-  transition: stroke-dashoffset 2s ease-in-out;
-  filter: drop-shadow(0 0 4px rgba(76, 175, 80, 0.5));
-}
-
-.trilha-path-progress.animate {
-  stroke-dashoffset: 700;
 }
 
 .trilha-path {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 40px; 
+  gap: 30px; 
   position: relative;
   z-index: 2;
 }
@@ -119,14 +102,15 @@
   align-items: center;
   position: relative;
   z-index: 2;
+  top: -20px;
 }
 
 .semana-node.left {
-  left: -80px;
+  left: -150px;
 }
 
 .semana-node.right {
-  left: 80px;
+  left: 145px;
 }
 
 .node-circle {
@@ -174,7 +158,7 @@
 
 .balloon-comecar {
   position: absolute;
-  top: 120px;
+  top: 105px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 100;
@@ -469,18 +453,30 @@
   cursor: not-allowed;
 }
 
-@media (max-width: 768px) {
-  .trilha-content {
-    flex-direction: column;
-    gap: 30px;
+@media (max-width: 1530px) {
+  .trilha-progress {
+    display: none;
   }
-  
+}
+
+@media (max-width: 768px) {
+  .trilha-container {
+    padding-top: 100px;
+  }
+
+  .trilha-content {
+    margin-top: 90px;
+  }
+
   .trilha-header {
-    flex-direction: column;
     gap: 15px;
     align-items: flex-start;
   }
-  
+
+  .tema-selector {
+    display: none;
+  }
+
   .card-stats {
     justify-content: space-between;
   }
@@ -488,14 +484,4 @@
   .stat {
     font-size: 12px;
   }
-}
-
-:host-context(.light-theme) .trilha-container {
-  --background-color: #ffffff;
-  --text-color: #333333;
-  --text-secondary: #666666;
-  --card-background: #f8f9fa;
-  --border-color: #e9ecef;
-  --hover-color: #e9ecef;
-  --progress-bg: #e9ecef;
 }
