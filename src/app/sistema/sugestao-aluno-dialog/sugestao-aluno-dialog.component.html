@@ -18,7 +18,7 @@
         <div class="sugestoes-grid" *ngIf="!carregandoSugestoes && sugestoesAgrupadas.length > 0">
             <div *ngFor="let sugestao of sugestoesAgrupadas" class="sugestao-card">
                 <div class="sugestao-header">
-                    <span class="sugestao-tag">{{ traduzirTema(sugestao.tema) }}</span>
+                    <span class="sugestao-tag">{{ traduzirTema(sugestao.tema) }} </span>
                     <span class="sugestao-tag">{{ traduzirSubtema(sugestao.subtema) }}</span>
                 </div>
                 <div class="sugestao-body">
@@ -34,11 +34,7 @@
                         </ul>
                     </details>
                 </div>
-                <div class="sugestao-actions">
-                    <button class="btn-criar-simulado-focado" (click)="criarSimuladoComFoco(sugestao)">
-                        Criar Simulado com Foco
-                    </button>
-                </div>
+
             </div>
         </div>
 
