@@ -169,7 +169,7 @@ export class QuestoesService {
   obterSugestoesDeQuestoes(userId: number, groups: number, limit: number): Observable<SugestaoQuestaoIResponseDTO[] | null> {
     const url = `${this.apiURL}/sugestoes`;
     const params = new HttpParams()
-      .set('userId', userId.toString())
+      .set('user_id', userId.toString())
       .set('groups', groups.toString())
       .set('limit', limit.toString());
 
