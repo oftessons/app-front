@@ -15,10 +15,10 @@ export class FiltroService {
   constructor(private http: HttpClient) {}
 
   // Método para cadastrar um novo filtro
-  salvarFiltro(filtro: FiltroDTO, userId: number): Observable<string> {
+  salvarFiltro(filtro: FiltroDTO, userId: number): Observable<any> {
     return this.http
-      .post<string>(`${this.apiURL}/${userId}`, filtro, { responseType: 'text' as 'json' }) 
-      .pipe(catchError(this.handleError<string>('salvarFiltro')));
+      .post<any>(`${this.apiURL}/${userId}`, filtro) 
+      .pipe(catchError(this.handleError<any>('salvarFiltro')));
   }
 
   // Método para obter todos os filtros
