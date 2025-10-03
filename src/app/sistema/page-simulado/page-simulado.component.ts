@@ -76,6 +76,7 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
   porcentagemAcertos: number = 0;
   acertos: number = 0;
   totalQuestoes: number = 0;
+  numQuestaoAtual: number = 1;
 
   @ViewChild('confirmacaoModalRef', { static: false })
   confirmacaoModal!: ElementRef;
@@ -256,6 +257,8 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
   private prepararSimulado(meuSimulado: any, status: StatusSimulado) {
     this.isMeuSimulado = true;
     this.questoes = meuSimulado.questoes;
+    this.totalQuestoes = this.questoes.length;
+
 
     if (!this.questoes || this.questoes.length === 0) {
       this.message = "Erro: As questões para este simulado não puderam ser carregadas.";
@@ -286,6 +289,7 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
             break;
           }
         }
+        this.numQuestaoAtual = proximaPagina + 1;
         if (todasRespondidas) { proximaPagina = this.questoes.length - 1; }
 
         this.paginaAtual = proximaPagina;
@@ -891,6 +895,7 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
   anteriorQuestao() {
     this.mensagemDeAviso = '';
     if (this.paginaAtual > 0) {
+      this.numQuestaoAtual--;
       this.paginaAtual--;
       this.questaoAtual = this.questoes[this.paginaAtual];
       this.mostrarGabarito = false;
@@ -908,6 +913,7 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
     }
 
     if (this.paginaAtual < this.questoes.length - 1) {
+      this.numQuestaoAtual++;
       this.paginaAtual++;
       this.tempoRestanteQuestaoSimulado = 160;
       this.questaoAtual = this.questoes[this.paginaAtual];
@@ -927,6 +933,8 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
       if (this.isMeuSimulado) {
         this.respostaQuestao(this.questoes[this.paginaAtual].id, this.simuladoIdInicial);
       }
+    } else {
+      this.mensagemDeAviso = 'Parabéns! Você chegou à última questão do simulado. Responda e finalize para ver seu resultado!';
     }
   }
 
@@ -988,6 +996,8 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
           'sucesso'
         );
 
+
+        this.totalQuestoes = this.idsQuestoes.length;
 
         this.simuladoIdRespondendo = response.id;
 
