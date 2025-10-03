@@ -166,9 +166,10 @@ export class QuestoesService {
     return throwError(errorMessage);
   }
 
-  obterSugestoesDeQuestoes(groups: number, limit: number): Observable<SugestaoQuestaoIResponseDTO[] | null> {
+  obterSugestoesDeQuestoes(userId: number, groups: number, limit: number): Observable<SugestaoQuestaoIResponseDTO[] | null> {
     const url = `${this.apiURL}/sugestoes`;
     const params = new HttpParams()
+      .set('userId', userId.toString())
       .set('groups', groups.toString())
       .set('limit', limit.toString());
 

@@ -93,7 +93,6 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="confirmacaoModalLabel">Salvar Simulado</h5>
-          <!--<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>-->
         </div>
         <div class="modal-body">
           <form class="form-group">
@@ -131,17 +130,18 @@
     </div>
     <div class="questao">
       <div *ngIf="simuladoIniciado && !simuladoFinalizado">
-        <!-- Exibe mensagem de sucesso ao cadastrar simulado para outra pessoa -->
         <div *ngIf="nomeAlunoMentorado" class="alert alert-success mt-3">
           Simulado cadastrado com sucesso!
         </div>
 
-        <!-- Só exibe as questões se NÃO estiver cadastrando para outra pessoa OU se não acabou de cadastrar -->
         <ng-container *ngIf="!(nomeAlunoMentorado)">
           <div class="identificadores-questao">
             <h3>ID: {{ questaoAtual.id }}</h3>
             <h3>Tema: {{ questaoAtual.tema }}</h3>
             <h3>Ano: {{ questaoAtual.ano }}</h3>
+
+            <h3 class="progresso-texto">Questão {{ numQuestaoAtual }} / {{ totalQuestoes }}</h3>
+
           </div>
 
           <div class="conteudo-questao">
@@ -172,10 +172,9 @@
                 <div class="form-group">
                   <div *ngFor="let alternativa of questaoAtual.alternativas; let i = index" class="alternativa"
                     [ngClass]="{ 
-            'alternativa-certa': respostaVerificada && alternativa.texto === respostaCorreta,
-            'alternativa-errada': respostaVerificada && alternativa.texto === respostaErrada
-
-          }">
+                      'alternativa-certa': respostaVerificada && alternativa.texto === respostaCorreta,
+                      'alternativa-errada': respostaVerificada && alternativa.texto === respostaErrada
+                    }">
                     <div class="alternativa-input-group">
                       <input type="radio" name="alternativa" [id]="'alternativa' + i" [value]="alternativa.texto"
                         [(ngModel)]="selectedOption" (change)="onOptionChange(alternativa.texto)"
@@ -209,32 +208,6 @@
                   controls controlsList="nodownload" class="questao-video">
                 </video>
               </ng-container>
-              <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestaoDois | safeHtml"></div>
-              <ng-container *ngIf="questaoAtual?.fotoDaQuestaoUrl">
-                <img *ngIf="isImage(questaoAtual.fotoDaRespostaDoisUrl)" [src]="questaoAtual.fotoDaRespostaDoisUrl"
-                  alt="Foto da questão" class="questao-foto">
-                <video *ngIf="isVideo(questaoAtual.fotoDaRespostaDoisUrl)" [src]="questaoAtual.fotoDaRespostaDoisUrl"
-                  controls controlsList="nodownload" class="questao-video">
-                </video>
-              </ng-container>
-              <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestaoTres | safeHtml"></div>
-              <ng-container *ngIf="questaoAtual?.fotoDaQuestaoUrl">
-                <img *ngIf="isImage(questaoAtual.fotoDaRespostaTresUrl)" [src]="questaoAtual.fotoDaRespostaTresUrl"
-                  alt="Foto da questão" class="questao-foto">
-                <video *ngIf="isVideo(questaoAtual.fotoDaRespostaTresUrl)" [src]="questaoAtual.fotoDaRespostaTresUrl"
-                  controls controlsList="nodownload" class="questao-video">
-                </video>
-              </ng-container>
-              <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestaoQuatro | safeHtml"></div>
-              <ng-container *ngIf="questaoAtual?.fotoDaQuestaoUrl">
-                <img *ngIf="isImage(questaoAtual.fotoDaRespostaQuatroUrl)" [src]="questaoAtual.fotoDaRespostaQuatroUrl"
-                  alt="Foto da questão" class="questao-foto">
-                <video *ngIf="isVideo(questaoAtual.fotoDaRespostaQuatroUrl)"
-                  [src]="questaoAtual.fotoDaRespostaQuatroUrl" controls controlsList="nodownload" class="questao-video">
-                </video>
-              </ng-container>
-              <p *ngIf="questaoAtual?.referenciaBi">Referência: {{ questaoAtual.referenciaBi }}</p>
-              <p *ngIf="questaoAtual?.comentadorDaQuestao">Comentado por: {{ questaoAtual.comentadorDaQuestao }}</p>
             </div>
 
             <div class="navigation-fixed">

@@ -46,6 +46,8 @@ import { PageRevisaoComponent } from './page-revisao/page-revisao.component';
 import { FlashcardsComponent } from './flashcards/flashcards.component';
 import { PageMentoriaComponent } from './page-mentoria/page-mentoria.component';
 import { MetricasDetalhadasComponent } from './metricas-detalhadas/metricas-detalhadas.component';
+import { SugestaoAlunoDialogComponent } from './sugestao-aluno-dialog/sugestao-aluno-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -82,6 +84,7 @@ import { MetricasDetalhadasComponent } from './metricas-detalhadas/metricas-deta
     PaginaInicialComponent,
     PageMentoriaComponent,
     MetricasDetalhadasComponent,
+    SugestaoAlunoDialogComponent,
     
   ],
   imports: [
@@ -97,6 +100,7 @@ import { MetricasDetalhadasComponent } from './metricas-detalhadas/metricas-deta
     EditorModule,
     SharedModule,
     ReactiveFormsModule
+    ,MatDialogModule
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA, // Permite o uso de elementos personalizados
