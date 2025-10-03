@@ -79,12 +79,19 @@
 }
 
 .trilha-mapa {
-  background-image: url('/assets/imagens/trilha/trilha-path.png');
   background-position: top center;
   background-repeat: no-repeat;
   flex: 1;
   position: relative;
   min-height: 500px;
+}
+
+.trilha-mapa {
+  background-image: url('/assets/imagens/trilha/trilha-path-brigth.png');
+}
+
+:host-context(.dark-mode) .trilha-mapa {
+  background-image: url('/assets/imagens/trilha/trilha-path.png');
 }
 
 .trilha-path {
@@ -106,7 +113,7 @@
 }
 
 .semana-node.left {
-  left: -150px;
+  left: -160px;
 }
 
 .semana-node.right {
@@ -179,7 +186,6 @@
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
   border: 3px solid #f0c24d;
   text-align: center;
-  min-width: 200px;
 }
 
 .balloon-text {
@@ -215,7 +221,7 @@
   height: 0;
   border-left: 12px solid transparent;
   border-right: 12px solid transparent;
-  border-bottom: 12px solid #d4a621;
+  border-bottom: 12px solid #c3991f;
 }
 
 @keyframes bounce {
