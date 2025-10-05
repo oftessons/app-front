@@ -90,7 +90,7 @@ export class MeusSimuladosComponent implements OnInit {
           });
         } else {
           // Caso contrário, navega normalmente
-          this.router.navigate(['/usuario/simulados'], { state: { simulado: data } });
+          this.router.navigate(['/usuario/simulados'], { state: { simulado: data, ocultarFiltros: true } });
         }
       },
       (error) => {

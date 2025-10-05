@@ -24,7 +24,7 @@ export class PageFiltroComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private themeService: ThemeService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.obterPerfilUsuario();
@@ -62,10 +62,10 @@ export class PageFiltroComponent implements OnInit {
       () => {
         // Atualizar a lista de filtros após deletar
         this.filtros = this.filtros.filter(filtro => filtro.id !== id);
-  
+
         // Definir a mensagem de sucesso
         this.mensagemSucesso = 'Filtro Deletado com Sucesso.';
-        
+
         // Esconder a mensagem após 3 segundos
         setTimeout(() => {
           this.mensagemSucesso = '';
@@ -76,18 +76,14 @@ export class PageFiltroComponent implements OnInit {
       }
     );
   }
-  
+
   editarFiltro(id: number): void {
-    this.filtroService.getFiltroById(id).subscribe(
-      (data) => {
-        console.log('Filtro:', data);
-        this.router.navigate(['/usuario/questoes'], { state: { questao: data } });
-      },
-      (error) => {
-        alert('Erro ao obter filtro por ID');
-        console.error('Erro ao obter simulado por ID:', error);
+    this.router.navigate(['/usuario/questoes'], {
+      state: {
+        filtroId: id,
+        revisandoFiltro: true
       }
-    )
+    });
   }
 
   isDarkMode(): boolean {

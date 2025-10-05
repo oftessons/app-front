@@ -6,6 +6,7 @@ import { catchError, map } from 'rxjs/operators';
 // Importar a interface para o DTO Filtro
 import { FiltroDTO } from '../sistema/filtroDTO';
 import { environment } from 'src/environments/environment';
+import { RespostasFiltroSessaoDTO } from '../sistema/page-questoes/RespostasFiltroSessaoDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -47,6 +48,12 @@ export class FiltroService {
     return this.http
       .put<void>(`${this.apiURL}/${id}`, filtro)
       .pipe(catchError(this.handleError<void>('editarFiltro')));
+  }
+
+  salvarQuestoesEmSessao(salvarRespostasFiltroDTO: RespostasFiltroSessaoDTO): Observable<string> {
+    return this.http
+      .post<string>(`${this.apiURL}/salvarQuestoesEmSessao`, salvarRespostasFiltroDTO)
+      .pipe(catchError(this.handleError<string>('salvarQuestoesEmSessao')));
   }
 
   // Função para tratamento de erros
