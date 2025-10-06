@@ -1,5 +1,9 @@
-<div class="container pt-5">
+<div class="container pt-5" style="position: relative;">
   <div class="container mt-4">
+
+    <button *ngIf="idAlunoMentorado" (click)="fecharPopupMentoria()" class="close-popup-button" aria-label="Fechar">
+      &times;
+    </button>
 
     <div *ngIf="carregandoEstadoInicial" class="text-center mt-5">
       <p class="bar-carregando">Carregando...</p>
@@ -9,7 +13,12 @@
     <div *ngIf="!carregandoEstadoInicial">
 
       <div class="header">
-        <h1 class="mt-4"><span> | </span> Questões</h1>
+        <h1 class="mt-4"><span> | </span>
+          <ng-container *ngIf="nomeAlunoMentorado; else questoesTitulo">
+            Criando simulado para "{{ nomeAlunoMentorado }}"
+          </ng-container>
+        </h1>
+        <ng-template #questoesTitulo>Questões</ng-template>
         <button *ngIf="!revisandoFiltroSalvo" class="btn-filtros" (click)="toggleFiltros()">
           <img src="assets/imagens/q-f.svg" alt="Ícone do Filtro" class="icon">
           Filtro
@@ -149,8 +158,11 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-            <button type="button" class="btn btn-success"
-              (click)="confirmarSalvarFiltro(nomeFiltroInput.value, descricaoFiltroInput.value)">Confirmar</button>
+            <button type="button" class="btn btn-success" [disabled]="carregandoSalvar"
+              (click)="confirmarSalvarFiltro(nomeFiltroInput.value, descricaoFiltroInput.value)">
+              <span *ngIf="carregandoSalvar" class="spinner-border spinner-border-sm"></span>
+              Confirmar
+            </button>
           </div>
         </div>
       </div>

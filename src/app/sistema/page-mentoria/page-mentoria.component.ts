@@ -11,6 +11,8 @@ import { PageSimuladoComponent } from '../page-simulado/page-simulado.component'
 import { SugestaoAlunoDialogComponent } from '../sugestao-aluno-dialog/sugestao-aluno-dialog.component';
 import { TipoUsuario } from 'src/app/login/enums/tipo-usuario';
 import { TipoUsuarioDescricao } from 'src/app/login/enums/tipo-usuario-descricao';
+import { PageFiltroComponent } from '../page-filtro/page-filtro.component';
+import { PageQuestoesComponent } from '../page-questoes/page-questoes.component';
 
 @Component({
   selector: 'app-page-mentoria',
@@ -98,6 +100,14 @@ export class PageMentoriaComponent implements OnInit {
 
   criarSimulado(usuario: Usuario): void {
     this.dialog.open(PageSimuladoComponent, {
+      width: '90vw', maxWidth: '1200px', maxHeight: '90vh',
+      data: { alunoId: usuario.id, nomeAluno: usuario.nome },
+      panelClass: 'dark-theme-dialog'
+    });
+  }
+
+  criarListaQuestoes(usuario: Usuario): void {
+    this.dialog.open(PageQuestoesComponent, {
       width: '90vw', maxWidth: '1200px', maxHeight: '90vh',
       data: { alunoId: usuario.id, nomeAluno: usuario.nome },
       panelClass: 'dark-theme-dialog'

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ElementRef, ViewChild, AfterViewChecked, PipeTransform } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef, ViewChild, AfterViewChecked, PipeTransform, Optional, Injectable, Inject } from '@angular/core';
 import { NavigationEnd, Router, RouterEvent } from '@angular/router';
 import { TipoDeProva } from './enums/tipoDeProva';
 import {
@@ -44,6 +44,7 @@ import { Comentada } from './enums/comentadas';
 import { ComentadasDescricao } from './enums/comentadas-descricao';
 import { RespostasFiltroSessaoDTO } from './RespostasFiltroSessaoDTO';
 import { of } from 'rxjs';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 
 declare var bootstrap: any;
@@ -82,6 +83,7 @@ interface CuriosidadeResponse {
 })
 export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   carregando: boolean = false;
+  carregandoSalvar: boolean = false;
   revisandoFiltroSalvo: boolean = false;
   carregandoEstadoInicial: boolean = true;
   filtroSelecionado: any;
@@ -125,7 +127,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
   respondidasAgora: Set<number> = new Set();
 
-  respostasSessao: RespostasFiltroSessaoDTO = {
+  respostasSessao: RespostasFiltroSessaoDTO | null = {
     questoesIds: [],
     idUsuario: 0,
     respostas: []
@@ -214,6 +216,9 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   curiosidades: any[] = [];
   curiosidadeAtual: number = 0;
 
+  nomeAlunoMentorado: string = '';
+  idAlunoMentorado: string = '';
+
   constructor(
     private questoesService: QuestoesService,
     private questoesStateService: QuestoesStateService,
@@ -223,8 +228,13 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     private sanitizer: DomSanitizer,
     private router: Router,
     private navigateService: NavigateService,
-    private stripeService: StripeService
+    private stripeService: StripeService,
+    @Optional() public dialogRef: MatDialogRef<PageQuestoesComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: { alunoId: string, nomeAluno: string } | null
   ) {
+
+    this.idAlunoMentorado = data?.alunoId || '';
+    this.nomeAlunoMentorado = data?.nomeAluno || '';
 
     this.router.events.pipe(
       filter((e): e is NavigationEnd => e instanceof NavigationEnd)
@@ -1152,8 +1162,17 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   confirmarSalvarFiltro(nomeFiltro: string, descricaoFiltro: string): void {
     if (!nomeFiltro) {
       this.exibirMensagem('O campo "Nome" é obrigatório.', 'erro');
+      this.fecharCardConfirmacao();
       return;
     }
+
+    if (this.questoes.length === 0) {
+      this.exibirMensagem('É necessário selecionar questões', 'erro');
+      this.fecharCardConfirmacao();
+      return;
+    }
+
+    console.log(this.questoes);
 
     this.multSelectTema = [];
     this.multSelectSubtema = [];
@@ -1183,7 +1202,9 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       questaoIds: this.questoes.map(q => q.id),
     };
 
-    const idUser = parseInt(this.usuario.id);
+    const idUser = this.idAlunoMentorado ? parseInt(this.idAlunoMentorado) : parseInt(this.usuario.id);
+
+    this.carregandoSalvar = true;
 
     this.filtroService.salvarFiltro(this.filtroASalvar, idUser).pipe(
       switchMap(responseDoFiltro => {
@@ -1216,13 +1237,16 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       next: (resultadoDaSessao) => {
         if (resultadoDaSessao) {
           console.log('Respostas da sessão também foram salvas com sucesso:', resultadoDaSessao);
+          this.respostasSessao = null;
         } else {
           console.log('Filtro salvo. Nenhuma resposta de sessão para persistir.');
         }
+        this.carregandoSalvar = false;
       },
       error: (error) => {
         const errorMessage = error?.error?.message || 'Ocorreu um erro ao salvar os dados. Por favor, tente novamente.';
         this.exibirMensagem(errorMessage, 'erro');
+        this.carregandoSalvar = false;
       }
     });
   }
@@ -1609,4 +1633,9 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     return this.curiosidades[this.curiosidadeAtual] || null;
   }
 
+  fecharPopupMentoria(): void {
+    if (this.dialogRef) {
+      this.dialogRef.close();
+    }
+  }
 }
