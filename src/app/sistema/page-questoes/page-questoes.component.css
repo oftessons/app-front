@@ -60,7 +60,7 @@
   margin-left: 12px;
 }
 
-.h2-result{
+.h2-result {
   margin-left: 12px;
 }
 
@@ -88,7 +88,7 @@
   border-radius: 15px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between  ;
+  justify-content: space-between;
   align-items: center;
   position: relative;
 }
@@ -118,7 +118,7 @@
 }
 
 .balloon-box {
-  filter: drop-shadow(0 0 3px rgba(0,0,0,.5));
+  filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.5));
 }
 
 .balloon-title {
@@ -190,7 +190,7 @@
 }
 
 .indicator-dot.active {
-  background-color: #041E4E;
+  background-color: #041e4e;
   transform: scale(1.2);
 }
 
@@ -201,7 +201,7 @@
   gap: 8px;
 }
 
-.balloon-btn{
+.balloon-btn {
   background-color: #0a1435;
   color: white;
   border: none;
@@ -213,7 +213,7 @@
 }
 
 .balloon-btn:hover {
-  background-color: #041E4E;
+  background-color: #041e4e;
 }
 
 @keyframes slideIn {
@@ -246,8 +246,12 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .upgrade-message {
@@ -264,7 +268,7 @@
 
 .btn-upgrade {
   background: linear-gradient(90deg, #f0b90b, #d9a31d);
-  color: #0F1934;
+  color: #0f1934;
   font-weight: 600;
   border: none;
   padding: 6px 12px;
@@ -327,6 +331,7 @@
   gap: 5px;
   color: var(--text-color);
 }
+
 .btn-filters {
   padding: 10px 20px;
   background-color: #007bff;
@@ -381,12 +386,11 @@
   gap: 10px; /* Espaço entre as seções */
 }
 
-.left-buttons, 
+.left-buttons,
 .right-buttons {
   display: flex;
   gap: 10px; /* Espaçamento entre botões */
 }
-
 
 .right-buttons button {
   flex: 1; /* Faz os botões se adaptarem ao espaço disponível */
@@ -419,7 +423,7 @@
 
 .progress {
   width: 100%;
-  background: #a9a8a8; 
+  background: #a9a8a8;
   border-radius: 8px;
   overflow: hidden;
   margin-bottom: 10px;
@@ -433,7 +437,7 @@
 
 .progress-inner {
   height: 40px;
-  background: #041E4E;
+  background: #041e4e;
   transition: width 0.4s ease;
 }
 
@@ -470,7 +474,7 @@
     align-items: stretch; /* Faz os botões preencherem toda a largura */
   }
 
-  .left-buttons, 
+  .left-buttons,
   .right-buttons {
     justify-content: center; /* Centraliza os botões */
   }
@@ -480,7 +484,7 @@
   }
 
   .conteudo-questao {
-   font-size: 16px;
+    font-size: 16px;
   }
 }
 
@@ -489,7 +493,9 @@
     flex-direction: column; /* Empilha os botões verticalmente */
   }
 
-  .btn-filtrar, .btn-salvar, .btn-filtrar-geral {
+  .btn-filtrar,
+  .btn-salvar,
+  .btn-filtrar-geral {
     width: 100%; /* Botões ocupam 100% da largura */
     margin-bottom: 10px; /* Espaçamento entre botões */
   }
@@ -506,7 +512,6 @@
     width: 100%; /* Ajuste a largura do contêiner geral */
   }
 }
-
 
 .icon {
   margin-right: 10px;
@@ -540,7 +545,7 @@
   margin-right: 10px;
   padding: 10px 20px;
   width: 230px;
-  background-color: #EDB120;
+  background-color: #edb120;
   color: #000000;
   border: none;
   border-radius: 5px;
@@ -583,7 +588,7 @@
   cursor: pointer;
   margin-left: auto;
   font-weight: 600;
-} 
+}
 
 .btn {
   padding: 10px 20px;
@@ -639,8 +644,7 @@ p {
   margin: 10px 0;
 }
 
-
-.espaco-select{
+.espaco-select {
   margin-bottom: 16px;
 }
 
@@ -733,7 +737,6 @@ p {
   align-items: center;
 }
 
-
 .btn-anterior,
 .btn-proxima,
 .btn-responder {
@@ -768,10 +771,10 @@ p {
   border-color: #399918;
 }
 .alert-danger {
-  background-color: #F5004F;
+  background-color: #f5004f;
   color: #ffffff;
   font-size: 16px;
-  border-color: #F5004F;
+  border-color: #f5004f;
 }
 
 .alternativa {
@@ -783,15 +786,19 @@ p {
   transition: background-color 0.3s, border-color 0.3s; /* Smooth transitions for background and border color */
 }
 
+.bar-carregando {
+  color: var(--text-color);
+}
+
 .alternativa:hover {
   background-color: var(--multiple-select-hover-bg);
   border-radius: 5px;
 }
 
 .error-message {
-  background-color: #FFAD60;
+  background-color: #ffad60;
   color: rgb(0, 0, 0);
-  border: 1px solid #FFAD60;
+  border: 1px solid #ffad60;
   border-radius: 5px;
   font-size: 14px;
   padding: 15px;
@@ -799,27 +806,26 @@ p {
   margin-top: 10px;
 }
 
-
 .alternativa-certa::after {
-  content: '';
+  content: "";
   display: inline-block;
-  width: 25px; 
-  height: 25px; 
-  background-image: url('src/assets/Icons/confirmar.png');
+  width: 25px;
+  height: 25px;
+  background-image: url("src/assets/Icons/confirmar.png");
   background-size: cover;
   padding-right: 25px;
   margin-left: 15px;
 }
 
 .alternativa-errada::after {
-  content: '';
+  content: "";
   display: inline-block;
-  width: 25px; 
+  width: 25px;
   height: 25px;
-  background-image: url('src/assets/Icons/Error.png');
+  background-image: url("src/assets/Icons/Error.png");
   background-size: cover;
   padding-right: 25px;
-    margin-left: 15px;
+  margin-left: 15px;
 }
 
 .alternativa-label {
@@ -869,22 +875,21 @@ p {
     gap: 10px; /* Espaçamento entre os botões */
   }
 
-  .btn-filtrar, 
-  .btn-salvar, 
+  .btn-filtrar,
+  .btn-salvar,
   .btn-filtrar-geral {
     flex: 1 1 30%; /* Cada botão ocupa 30% da linha */
     margin-bottom: 0; /* Remove o espaçamento vertical */
     max-width: 30%; /* Limita a largura para não exceder 30% */
   }
   .conteudo-questao {
-   font-size: 16px;
+    font-size: 16px;
   }
 }
 
 @media (max-width: 530px) {
   .balloon-container {
     right: -10px;
-    
   }
 }
 
@@ -895,7 +900,7 @@ p {
   }
 
   .identificadores-questao-resul h2 {
-  font-size: 16px;
+    font-size: 16px;
   }
 
   .btn-editar {
@@ -903,12 +908,11 @@ p {
     padding: 8px;
   }
   .conteudo-questao {
-   font-size: 16px;
+    font-size: 16px;
   }
 }
 
-
-.selecione-text{
+.selecione-text {
   font-size: 16px;
 }
 
@@ -1009,9 +1013,8 @@ p {
   word-break: break-word; /* Quebra palavras longas */
 }
 
-
 .letra-parenteses {
-  white-space: nowrap; 
+  white-space: nowrap;
   font-weight: bold;
   padding: 2px;
   margin-right: 10px;
@@ -1025,4 +1028,23 @@ p {
 
 .filtros-container-open {
   max-height: 0;
+}
+
+.close-popup-button {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  font-size: 2.5rem;
+  font-weight: 300;
+  line-height: 1;
+  color: #888;
+  cursor: pointer;
+  z-index: 1050;
+  padding: 0;
+}
+
+.close-popup-button:hover {
+  color: var(--text-color) !important;
 }

@@ -10,7 +10,6 @@ import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, map, shareReplay, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Questao } from '../sistema/page-questoes/questao';
-import { Ano } from '../sistema/page-questoes/enums/ano';
 import { Resposta } from '../sistema/Resposta';
 import { RespostaDTO } from '../sistema/RespostaDTO';
 import { SugestaoQuestaoIResponseDTO } from '../sistema/page-mentoria/SugestaoQuestaoIResponseDTO';
@@ -310,16 +309,21 @@ export class QuestoesService {
   questaoRespondida(
     idUser: number,
     questaoId: number,
-    simuladoId?: number
+    simuladoId?: number,
+    filtroId?: number
   ): Observable<{
     opcaoSelecionada: string;
     correct: boolean;
     opcaoCorreta: string;
   } | null> {
+    let url = `${this.apiURL}/respondido/${idUser}?questaoId=${questaoId}`;
 
-    let url = `${this.apiURL}/respondido/${idUser}?questaoId=${questaoId}&simuladoId=${simuladoId}`;
-    if (simuladoId === 0) {
-      url = `${this.apiURL}/respondido/${idUser}?questaoId=${questaoId}`;
+    // Só adiciona simuladoId e filtroId se forem definidos e diferentes de zero
+    if (simuladoId && simuladoId !== 0) {
+      url += `&simuladoId=${simuladoId}`;
+    }
+    if (filtroId && filtroId !== 0) {
+      url += `&filtroId=${filtroId}`;
     }
 
     return this.http
@@ -335,7 +339,7 @@ export class QuestoesService {
           }
           return response.body;
         }),
-        catchError((error) => throwError('Erro ao verificar a resposta.'))
+        catchError(() => throwError('Erro ao verificar a resposta.'))
       );
   }
 

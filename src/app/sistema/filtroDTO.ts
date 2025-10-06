@@ -10,4 +10,5 @@ export class FiltroDTO {
   certasErradas!: string[] | null;
   respostasSimulado!: string[] | null;
   comentada!: string[] | null;
+  questaoIds!: number[] | null;
 }

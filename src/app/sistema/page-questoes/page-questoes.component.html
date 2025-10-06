@@ -1,32 +1,52 @@
-<div class="container pt-5">
+<div class="container pt-5" style="position: relative;">
   <div class="container mt-4">
-    <div class="header">
-      <h1 class="mt-4"><span> | </span> Questões</h1>
-      <button class="btn-filtros" (click)="toggleFiltros()">
-        <img src="assets/imagens/q-f.svg" alt="Ícone do Filtro" class="icon">
-        Filtro
-      </button>
+
+    <button *ngIf="idAlunoMentorado" (click)="fecharPopupMentoria()" class="close-popup-button" aria-label="Fechar">
+      &times;
+    </button>
+
+    <div *ngIf="carregandoEstadoInicial" class="text-center mt-5">
+      <p class="bar-carregando">Carregando...</p>
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
     </div>
-  </div>
-  <div [ngClass]="{'filtros-container': true, 'filtros-container-open': mostrarFiltros}">
-    <div class="container">
-      <div class="filters-container">
-        <form #filtroForm="ngForm" (ngSubmit)="filtrarQuestoes()" class="consulta-form">
-          <div class="row">
-            <div class="col">
-              <div class="espaco-select">
-                <app-multiplo-select label="Tipo de Prova" [options]="tiposDeProvaComPremium"
-                  [(selectedValue)]="multSelectTipoDeProva" [multiple]="true" [showPremiumIcons]="true"
-                  [onPremiumClick]="redirecionarParaUpgrade.bind(this)" (selectedValueChange)="onTipoDeProvaChange()">
-                </app-multiplo-select>
-              </div>
-              <div class="espaco-select">
-                <app-multiplo-select label="Ano" [options]="anosComPremium" [(selectedValue)]="multSelectAno"
-                  [multiple]="true" [showPremiumIcons]="true" [onPremiumClick]="redirecionarParaUpgrade.bind(this)"
-                  [disabled]="isFiltroBloqueado()">
-                </app-multiplo-select>
-              </div>
-              <!--<div class="espaco-select">
+
+    <div *ngIf="!carregandoEstadoInicial">
+
+      <div class="header">
+        <h1 class="mt-4"><span> | </span>
+          <ng-container *ngIf="nomeAlunoMentorado; else questoesTitulo">
+            Criando simulado para "{{ nomeAlunoMentorado }}"
+          </ng-container>
+        </h1>
+        <ng-template #questoesTitulo>Questões</ng-template>
+        <button *ngIf="!revisandoFiltroSalvo" class="btn-filtros" (click)="toggleFiltros()">
+          <img src="assets/imagens/q-f.svg" alt="Ícone do Filtro" class="icon">
+          Filtro
+        </button>
+      </div>
+    </div>
+
+
+    <div *ngIf="!revisandoFiltroSalvo"
+      [ngClass]="{'filtros-container': true, 'filtros-container-open': mostrarFiltros}">
+      <div class="container">
+        <div class="filters-container">
+          <form #filtroForm="ngForm" (ngSubmit)="filtrarQuestoes()" class="consulta-form">
+            <div class="row">
+              <div class="col">
+                <div class="espaco-select">
+                  <app-multiplo-select label="Tipo de Prova" [options]="tiposDeProvaComPremium"
+                    [(selectedValue)]="multSelectTipoDeProva" [multiple]="true" [showPremiumIcons]="true"
+                    [onPremiumClick]="redirecionarParaUpgrade.bind(this)" (selectedValueChange)="onTipoDeProvaChange()">
+                  </app-multiplo-select>
+                </div>
+                <div class="espaco-select">
+                  <app-multiplo-select label="Ano" [options]="anosComPremium" [(selectedValue)]="multSelectAno"
+                    [multiple]="true" [showPremiumIcons]="true" [onPremiumClick]="redirecionarParaUpgrade.bind(this)"
+                    [disabled]="isFiltroBloqueado()">
+                  </app-multiplo-select>
+                </div>
+                <!--<div class="espaco-select">
               <app-multiplo-select
                 label="Tema"
                 [options]="temasDescricoes"
@@ -34,35 +54,35 @@
                 [multiple]="true">
               </app-multiplo-select>
             </div>-->
-              <div class="espaco-select">
-                <app-multiplo-select label="Assunto" [options]="subtemasAgrupadosPorTema"
-                  [(selectedValue)]="multiSelectTemasSubtemasSelecionados" [multiple]="true"
-                  (selectedValueChange)="onSelecaoChange($event)" a [searchable]="true">
-                </app-multiplo-select>
+                <div class="espaco-select">
+                  <app-multiplo-select label="Assunto" [options]="subtemasAgrupadosPorTema"
+                    [(selectedValue)]="multiSelectTemasSubtemasSelecionados" [multiple]="true"
+                    (selectedValueChange)="onSelecaoChange($event)" a [searchable]="true">
+                  </app-multiplo-select>
+                </div>
+                <div class="espaco-select">
+                  <app-multiplo-select label="Dificuldade" [options]="dificuldadesDescricoes"
+                    [(selectedValue)]="multSelecDificuldade" [multiple]="true">
+                  </app-multiplo-select>
+                </div>
               </div>
-              <div class="espaco-select">
-                <app-multiplo-select label="Dificuldade" [options]="dificuldadesDescricoes"
-                  [(selectedValue)]="multSelecDificuldade" [multiple]="true">
-                </app-multiplo-select>
-              </div>
-            </div>
-            <div class="col">
-              <div class="espaco-select">
-                <app-multiplo-select label="Questões" [options]="questoesCertasErradas"
-                  [(selectedValue)]="multiSelectCertoErrado" [multiple]="true">
-                </app-multiplo-select>
-              </div>
-              <div class="espaco-select">
-                <app-multiplo-select label="Respostas" [options]="respSimuladoDescricoes"
-                  [(selectedValue)]="multiSelectRespSimu" [multiple]="true">
-                </app-multiplo-select>
-              </div>
-              <div class="espaco-select">
-                <app-multiplo-select label="Comentários" [options]="questoesComentadas"
-                  [(selectedValue)]="multiSelectQuestoesComentadas" [multiple]="true">
-                </app-multiplo-select>
-              </div>
-              <!-- <div class="espaco-select">
+              <div class="col">
+                <div class="espaco-select">
+                  <app-multiplo-select label="Questões" [options]="questoesCertasErradas"
+                    [(selectedValue)]="multiSelectCertoErrado" [multiple]="true">
+                  </app-multiplo-select>
+                </div>
+                <div class="espaco-select">
+                  <app-multiplo-select label="Respostas" [options]="respSimuladoDescricoes"
+                    [(selectedValue)]="multiSelectRespSimu" [multiple]="true">
+                  </app-multiplo-select>
+                </div>
+                <div class="espaco-select">
+                  <app-multiplo-select label="Comentários" [options]="questoesComentadas"
+                    [(selectedValue)]="multiSelectQuestoesComentadas" [multiple]="true">
+                  </app-multiplo-select>
+                </div>
+                <!-- <div class="espaco-select">
               <app-multiplo-select
                 label="Subtema"
                 [options]="subtemasDescricoes"
@@ -70,45 +90,47 @@
                 [multiple]="true">
               </app-multiplo-select>
             </div> -->
-              <div class="espaco-select">
-                <app-input-padrao label="Pesquisar por palavra-chave" [(value)]="palavraChave" class="palavra-chave">
-                </app-input-padrao>
+                <div class="espaco-select">
+                  <app-input-padrao label="Pesquisar por palavra-chave" [(value)]="palavraChave" class="palavra-chave">
+                  </app-input-padrao>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div *ngIf="temItensBloqueadosParaTrial()" class="upgrade-message">
-            <div class="alert alert-warning d-flex align-items-center justify-content-between" role="alert">
-              <div>
-                <i class="fas fa-crown me-2"></i>
-                <span>Para acessar todas as questões e funcionalidades, </span>
+            <div *ngIf="temItensBloqueadosParaTrial()" class="upgrade-message">
+              <div class="alert alert-warning d-flex align-items-center justify-content-between" role="alert">
+                <div>
+                  <i class="fas fa-crown me-2"></i>
+                  <span>Para acessar todas as questões e funcionalidades, </span>
+                </div>
+                <button type="button" class="btn-upgrade" (click)="redirecionarParaUpgrade()">
+                  Assine agora!
+                </button>
               </div>
-              <button type="button" class="btn-upgrade" (click)="redirecionarParaUpgrade()">
-                Assine agora!
-              </button>
             </div>
-          </div>
 
-          <div *ngIf="message" class="alert alert-info mt-3 alert-custom" role="alert">
-            {{ message }}
-          </div>
+            <div *ngIf="message" class="alert alert-info mt-3 alert-custom" role="alert">
+              {{ message }}
+            </div>
 
-          <div *ngIf="mensagem" class="alert"
-            [ngClass]="{'alert-success': mensagem.tipo === 'sucesso', 'alert-danger': mensagem.tipo === 'erro'}">
-            {{ mensagem.texto }}
-          </div>
+            <div *ngIf="mensagem" class="alert"
+              [ngClass]="{'alert-success': mensagem.tipo === 'sucesso', 'alert-danger': mensagem.tipo === 'erro'}">
+              {{ mensagem.texto }}
+            </div>
 
 
-          <div class="button-row-filtro">
-            <button type="submit" class="btn-filtrar">Filtrar</button>
-            <button type="button" class="btn-filtrar-geral" (click)="LimparFiltro()">Limpar Filtro</button>
-            <button type="button" class="btn-salvar" (click)="abrirModal()">Salvar Filtro</button>
-          </div>
-        </form>
-        <mat-progress-bar class="progress-bar-spacing" *ngIf="carregando" mode="indeterminate"></mat-progress-bar>
+            <div class="button-row-filtro">
+              <button type="submit" class="btn-filtrar">Filtrar</button>
+              <button type="button" class="btn-filtrar-geral" (click)="LimparFiltro()">Limpar Filtro</button>
+              <button type="button" class="btn-salvar" (click)="abrirModal()">Salvar Filtro</button>
+            </div>
+          </form>
+          <mat-progress-bar class="progress-bar-spacing" *ngIf="carregando" mode="indeterminate"></mat-progress-bar>
+        </div>
       </div>
     </div>
   </div>
+
   <!-- Modal de confirmação -->
   <div>
     <div class="modal fade" id="confirmacaoModal" #confirmacaoModalRef tabindex="-1"
@@ -117,7 +139,7 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="confirmacaoModalLabel">Salvar Filtro</h5>
+            <h5 class="modal-title" id="confirmacaoModalLabel">Deseja salvar o filtro do seu simulado?</h5>
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
@@ -136,8 +158,11 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-            <button type="button" class="btn btn-success"
-              (click)="confirmarSalvarFiltro(nomeFiltroInput.value, descricaoFiltroInput.value)">Confirmar</button>
+            <button type="button" class="btn btn-success" [disabled]="carregandoSalvar"
+              (click)="confirmarSalvarFiltro(nomeFiltroInput.value, descricaoFiltroInput.value)">
+              <span *ngIf="carregandoSalvar" class="spinner-border spinner-border-sm"></span>
+              Confirmar
+            </button>
           </div>
         </div>
       </div>
