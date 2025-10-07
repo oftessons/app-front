@@ -13,6 +13,7 @@ import { Questao } from '../sistema/page-questoes/questao';
 import { Resposta } from '../sistema/Resposta';
 import { RespostaDTO } from '../sistema/RespostaDTO';
 import { SugestaoQuestaoIResponseDTO } from '../sistema/page-mentoria/SugestaoQuestaoIResponseDTO';
+import { RespostaSalva } from '../sistema/page-questoes/respostas-salvas';
 
 @Injectable({
   providedIn: 'root',
@@ -364,6 +365,11 @@ export class QuestoesService {
         );
       })
     );
+  }
+
+  getRespostasSalvasParaFiltro(usuarioId: number, filtroId: number): Observable<RespostaSalva[]> {
+    // A chamada continua a mesma, só o tipo de retorno que é mais específico
+    return this.http.get<RespostaSalva[]>(`${this.apiURL}/respostas/filtro/${filtroId}/usuario/${usuarioId}`);
   }
 
   // Método para obter acertos e erros de uma questão por ID
