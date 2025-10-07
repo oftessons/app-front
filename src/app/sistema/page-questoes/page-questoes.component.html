@@ -120,9 +120,9 @@
 
 
             <div class="button-row-filtro">
-              <button type="submit" class="btn-filtrar">Filtrar</button>
+              <button type="submit" class="btn-filtrar">Filtrar e salvar</button>
               <button type="button" class="btn-filtrar-geral" (click)="LimparFiltro()">Limpar Filtro</button>
-              <button type="button" class="btn-salvar" (click)="abrirModal()">Salvar Filtro</button>
+              <!--<button type="button" class="btn-salvar" (click)="abrirModal()">Salvar Filtro</button>-->
             </div>
           </form>
           <mat-progress-bar class="progress-bar-spacing" *ngIf="carregando" mode="indeterminate"></mat-progress-bar>
@@ -157,11 +157,11 @@
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Não salvar</button>
             <button type="button" class="btn btn-success" [disabled]="carregandoSalvar"
               (click)="confirmarSalvarFiltro(nomeFiltroInput.value, descricaoFiltroInput.value)">
               <span *ngIf="carregandoSalvar" class="spinner-border spinner-border-sm"></span>
-              Confirmar
+              Salvar
             </button>
           </div>
         </div>
