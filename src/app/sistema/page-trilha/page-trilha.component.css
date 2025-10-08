@@ -108,8 +108,10 @@
   flex-direction: column;
   align-items: center;
   position: relative;
-  z-index: 2;
+  z-index: 1;
   top: -20px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
 }
 
 .semana-node.left {
@@ -120,9 +122,100 @@
   left: 145px;
 }
 
+.semana-node.locked {
+  cursor: not-allowed;
+}
+
+.semana-node.completed {
+  cursor: pointer;
+  transform: scale(1.05);
+}
+
+.semana-node.active:hover:not(.locked) {
+  transform: scale(1.05);
+}
+
+.semana-node.expanded {
+  z-index: 100;
+}
+
+.semana-node.expanded .node-circle {
+  box-shadow: 0 0 0 4px rgba(237, 177, 32, 0.3);
+  transform: scale(1.1);
+}
+
+.progress-cards-inline {
+  display: none;
+  flex-direction: column;
+  position: absolute;
+  width: 100%;
+  max-width: 500px;
+  margin-top: 20px;
+  z-index: 101;
+  top: 100%;
+  right: 100%;
+}
+
+.balloon-arrow-top {
+  width: 0;
+  height: 0;
+  left: 106px;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-bottom: 20px solid var(--card-trilha-bg, #2a2a2a);
+  position: absolute;
+  z-index: 11;
+  filter: drop-shadow(0 -2px 4px rgba(0, 0, 0, 0.1));
+  animation: slideDown 0.3s ease-out;
+  transition: left 0.3s ease;
+}
+
+.cards-wrapper {
+  position: relative;
+  background-color: var(--card-trilha-bg, #2a2a2a);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  border: 2px solid var(--border-color, #444);
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 480px;
+  width: 100vw;
+  animation: slideDown 0.3s ease-out;
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  transition: all 0.3s ease;
+}
+
+.semana-node.center .cards-wrapper {
+  right: 110px;
+}
+
+.semana-node.left .cards-wrapper {
+  left: 40px;
+}
+
+.semana-node.right .cards-wrapper {
+  right: 250px;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .node-circle {
   width: 85px;
   height: 85px;
+  background: var(--yellow-linear);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -146,7 +239,6 @@
 }
 
 .semana-node.active .node-circle {
-  background: var(--yellow-linear);
   cursor: pointer;
 }
 
@@ -229,10 +321,10 @@
     transform: translateX(-50%) translateY(0);
   }
   40% {
-    transform: translateX(-50%) translateY(-5px);
+    transform: translateX(-50%) translateY(-3px);
   }
   60% {
-    transform: translateX(-50%) translateY(-2px);
+    transform: translateX(-50%) translateY(-5px);
   }
 }
 
@@ -463,6 +555,10 @@
   .trilha-progress {
     display: none;
   }
+
+  .progress-cards-inline {
+    display: flex;
+  }
 }
 
 @media (max-width: 768px) {
@@ -489,5 +585,18 @@
   
   .stat {
     font-size: 12px;
+  }
+
+  .progress-cards-inline {
+    max-width: calc(100vw - 40px);
+    padding: 0;
+  }
+
+  .cards-wrapper {
+    padding: 15px;
+  }
+
+  .progress-card {
+    padding: 15px;
   }
 }
