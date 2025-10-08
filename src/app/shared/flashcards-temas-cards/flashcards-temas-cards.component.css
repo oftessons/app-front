@@ -41,6 +41,7 @@
     align-items: center;
     cursor: pointer;
     user-select: none;
+    text-decoration: none;
     transition: background-color 0.2s ease;
 }
 
