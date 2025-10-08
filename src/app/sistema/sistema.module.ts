@@ -48,6 +48,7 @@ import { PageMentoriaComponent } from './page-mentoria/page-mentoria.component';
 import { MetricasDetalhadasComponent } from './metricas-detalhadas/metricas-detalhadas.component';
 import { SugestaoAlunoDialogComponent } from './sugestao-aluno-dialog/sugestao-aluno-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { TemaFlashcardsComponent } from './tema-flashcards/tema-flashcards.component';
 
 @NgModule({
   declarations: [
@@ -85,6 +86,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     PageMentoriaComponent,
     MetricasDetalhadasComponent,
     SugestaoAlunoDialogComponent,
+    TemaFlashcardsComponent,
     
   ],
   imports: [

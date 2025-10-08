@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 
+
 @Component({
   selector: 'app-flashcards-temas-cards',
   templateUrl: './flashcards-temas-cards.component.html',
