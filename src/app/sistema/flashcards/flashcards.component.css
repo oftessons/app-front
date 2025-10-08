@@ -1,0 +1,18 @@
+.container {
+    max-width: 1300px;
+    padding: 10px;
+    font-family: 'Nunito Sans', sans-serif;
+}
+
+.title {
+    margin-top: 100px;
+    font-size: 24px;
+    padding-left: 32px;
+}
+
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+    gap: 40px;
+
+}
