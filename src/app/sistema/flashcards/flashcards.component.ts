@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Tema } from '../page-questoes/enums/tema';
+import { TemaDescricoes } from '../page-questoes/enums/tema-descricao';
 
 export interface TemaInfo {
   titulo: string;
@@ -19,11 +21,17 @@ export class FlashcardsComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    this.listaDeTemas = [
-      { titulo: 'Catarata', qtdFlashcards: 52, rota: '/usuario/flashcards/catarata' },
-      { titulo: 'Glaucoma', qtdFlashcards: 78, rota: '/usuario/flashcards/glaucoma' },
-      { titulo: 'Retina', qtdFlashcards: 112, rota: '/usuario/flashcards/retina' },
-      { titulo: 'Córnea', qtdFlashcards: 89, rota: '/usuario/flashcards/cornea' }
-    ];
-  }
+  this.listaDeTemas = Object.values(Tema).map(valorEnum => {
+        
+        const titulo = TemaDescricoes[valorEnum];
+        const rotaFormatada = valorEnum.toLowerCase();
+
+        return {
+          titulo: titulo,
+          qtdFlashcards: 0,
+          rota: `/usuario/flashcards/${rotaFormatada}`
+        };
+      });
+    }
+
 }
