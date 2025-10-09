@@ -144,6 +144,11 @@
   transform: scale(1.1);
 }
 
+.semana-node.selected .node-circle {
+  box-shadow: 0 0 0 4px rgba(237, 177, 32, 0.3);
+  transform: scale(1.1);
+}
+
 .progress-cards-inline {
   display: none;
   flex-direction: column;
@@ -365,6 +370,43 @@
   overflow-y: auto; 
 }
 
+.no-cards-message {
+  background-color: var(--bg-container);
+  border-radius: 12px;
+  padding: 40px 20px;
+  border: 1px solid var(--border-color, #444);
+  text-align: center;
+  opacity: 0.8;
+}
+
+.no-cards-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  opacity: 0.6;
+}
+
+.no-cards-message h4 {
+  margin: 0 0 12px 0;
+  font-size: 18px;
+  color: var(--text-color);
+}
+
+.no-cards-message p {
+  margin: 0 0 16px 0;
+  color: var(--text-secondary, #aaa);
+  font-size: 14px;
+}
+
+.unlock-hint {
+  display: inline-block;
+  background-color: var(--yellow-linear);
+  color: #000;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
 .progress-card {
   background-color: var(--card-trilha-bg, #2a2a2a);
   border-radius: 12px;
@@ -543,7 +585,7 @@
 }
 
 .action-btn.iniciar:hover {
-  background-color: #3a7bd5;
+  filter: brightness(0.9);
 }
 
 .action-btn.locked {

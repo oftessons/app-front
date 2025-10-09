@@ -10,6 +10,7 @@ import { AnimationOptions } from 'ngx-lottie';
 export class PageTrilhaComponent implements OnInit {
   selectedTema: string = 'Todos os temas';
   expandedNodeIndex: number | null = null;
+  selectedNodeIndex: number | null = null;
 
   temas: string[] = [
     'Todos os temas',
@@ -69,16 +70,16 @@ export class PageTrilhaComponent implements OnInit {
       }
     ] },
     { numero: 3, status: 'active', cards: [
-      {
-        titulo: 'Catarata',
-        semana: 'Semana 3',
-        status: 'nao-iniciado',
-        aulas: 2,
-        questoes: 20,
-        flashcards: 20,
-        tempo: '1h30',
-        progresso: 0
-      }
+      // {
+      //   titulo: 'Catarata',
+      //   semana: 'Semana 3',
+      //   status: 'nao-iniciado',
+      //   aulas: 2,
+      //   questoes: 20,
+      //   flashcards: 20,
+      //   tempo: '1h30',
+      //   progresso: 0
+      // }
     ] },
     { numero: 4, status: 'locked', cards: [] },
     { numero: 5, status: 'locked', cards: [] },
@@ -118,6 +119,10 @@ export class PageTrilhaComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    const initialWeekIndex = this.semanas.findIndex(s => s.status === 'active');
+    if (initialWeekIndex !== -1) {
+      this.selectedNodeIndex = initialWeekIndex;
+    }
   }
 
   obterOpcoesAnimacao(status: string): AnimationOptions {
@@ -140,15 +145,24 @@ export class PageTrilhaComponent implements OnInit {
   toggleNode(index: number, status: string): void {
     if (status === 'locked') return;
     
+    // Para telas grandes (>1530px), atualiza apenas o selectedNodeIndex
+    // Para telas pequenas (<1530px), controla o expandedNodeIndex também
+    
     if (this.expandedNodeIndex === index) {
       this.expandedNodeIndex = null;
     } else {
       this.expandedNodeIndex = index;
     }
+
+    this.selectedNodeIndex = index;
   }
 
   isNodeExpanded(index: number): boolean {
     return this.expandedNodeIndex === index;
+  }
+
+  isNodeSelected(index: number): boolean {
+    return this.selectedNodeIndex === index;
   }
 
   getPositionClass(index: number): string {
@@ -171,6 +185,24 @@ export class PageTrilhaComponent implements OnInit {
 
   getStatusBadgeClass(status: string): string {
     return status;
+  }
+
+  get selectedWeekCards() {
+    if (this.selectedNodeIndex === null) {
+      const activeWeek = this.semanas.find(s => s.status === 'active' || s.status === 'completed');
+      return activeWeek?.cards || [];
+    }
+    
+    return this.semanas[this.selectedNodeIndex]?.cards || [];
+  }
+
+  get selectedWeekInfo() {
+    if (this.selectedNodeIndex === null) {
+      const activeWeek = this.semanas.find(s => s.status === 'active' || s.status === 'completed');
+      return activeWeek || this.semanas[0];
+    }
+    
+    return this.semanas[this.selectedNodeIndex] || this.semanas[0];
   }
 
   @HostListener('document:click', ['$event'])
