@@ -16,6 +16,8 @@ import { AppRoutingModule } from '../app-routing.module';
 import { ModalDeleteComponent } from './modal-delete/modal-delete.component';
 import { PageEmDesenvolvimentoComponent } from './page-em-desenvolvimento/page-em-desenvolvimento.component';
 import { FlashcardsTemasCardsComponent } from './flashcards-temas-cards/flashcards-temas-cards.component';
+import { FlashcardsSubtemasComponent } from './flashcards-subtemas/flashcards-subtemas.component';
+import { MatProgressBarModule } from "@angular/material/progress-bar";
 
 @NgModule({
   declarations: [
@@ -28,15 +30,17 @@ import { FlashcardsTemasCardsComponent } from './flashcards-temas-cards/flashcar
     CardPlanoComponent,
     ModalDeleteComponent,
     PageEmDesenvolvimentoComponent,
-    FlashcardsTemasCardsComponent
+    FlashcardsTemasCardsComponent,
+    FlashcardsSubtemasComponent
   ],
   imports: [
     CommonModule,
     MatIconModule,
     ImageResizeModule,
     FormsModule,
-    AppRoutingModule
-  ],
+    AppRoutingModule,
+    MatProgressBarModule
+],
   exports: [
     SelectPadraoComponent,
     ImageResizeModule,
@@ -47,7 +51,8 @@ import { FlashcardsTemasCardsComponent } from './flashcards-temas-cards/flashcar
     ModalComponent,
     CardPlanoComponent,
     PageEmDesenvolvimentoComponent,
-    FlashcardsTemasCardsComponent
+    FlashcardsTemasCardsComponent,
+    FlashcardsSubtemasComponent,
   ]
 })
 export class SharedModule { }

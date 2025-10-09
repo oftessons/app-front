@@ -70,3 +70,14 @@
     color: #F6F8FE;
     background-color: #254170; 
 }
+
+.subtemas-flashcards {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg-sidebar);
+    padding: 20px;
+    border-radius: 16px;
+    margin-top: 16px;
+    width: 100%;
+    gap: 16px;
+}
