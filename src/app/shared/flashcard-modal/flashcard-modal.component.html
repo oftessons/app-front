@@ -1,0 +1,20 @@
+<div class="modal" *ngIf="isVisible">
+
+    <div class="modal-content-wrapper">
+
+        <div class="main-container">
+            <img class="modal-background-image" src="../../../assets/imagens/modal-background.png" alt="Fundo do modal">
+            <div class="modal-conteudo">
+                <h2>Catarata</h2>
+                <p>Qual estrutura é responsável pela drenagem do humor aquoso?</p>
+                <a class="button-resposta">Mostrar Resposta</a>
+            </div>
+        </div>
+
+        <div class="button-fechar">
+            <button (click)="onCloseClick()">&times;</button>
+        </div>
+
+    </div>
+
+</div>

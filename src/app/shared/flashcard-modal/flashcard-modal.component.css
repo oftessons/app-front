@@ -1,0 +1,110 @@
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content-wrapper {
+  position: relative;
+}
+
+.main-container {
+    display: flex;
+    background: linear-gradient(180deg, #122441, #0C121F);
+    width: 90%;
+    max-width: 418px;
+    min-height: 490px;
+    border-radius: 12px;
+    border: 1px solid #3a487a;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+    position: relative;
+    padding: 10px;
+    overflow: hidden;
+}
+
+.modal-conteudo {
+  position: relative;
+  z-index: 2;
+  padding: 50px 30px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+}
+
+.modal-background-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 20px;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  z-index: 1;
+}
+
+h2 {
+    font-size: 32px;
+    font-weight: bold;
+    color: #E3E3E3;
+}
+
+p {
+    color: #FFFFFF;
+    font-size: 18px;
+}
+
+.button-resposta {
+    background-color: #28A745;
+    color: #F6F8FE;
+    border-radius: 8px;
+    font-size: 16px;
+    width: 100%;
+    padding: 12px 12px;
+    cursor: pointer;
+    user-select: none;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+.button-resposta:hover {
+    color: #F6F8FE;
+    background-color: #21963d;
+}
+
+.button-fechar {
+  position: absolute;
+  top: 0px;
+  right: -30px;
+}
+
+.button-fechar button {
+    background-color: rgba(35, 35, 36, 0.8);
+    color: #e0e0e0;
+    border: 1px solid #555;
+    border-radius: 8px;
+    width: 48px;
+    height: 48px;
+    font-size: 28px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    line-height: 1;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(2px);
+}
+
+.button-fechar button:hover {
+  background-color: rgba(50, 50, 65, 0.9);
+  color: #ffffff;
+}

@@ -7,7 +7,7 @@
                 <h1>{{tema}}</h1>
                 <p>Cards estudados: <span>{{cards_estudados}}/{{cards_totais}}</span></p>
             </div>
-            <a class="card-button">Estudar cards<img src="../../../assets//Icons/Right-icon.svg"></a>
+            <a class="card-button" (click)="openFlashcard()">Estudar cards<img src="../../../assets//Icons/Right-icon.svg"></a>
         </div>
 
         <div class="subtemas-flashcards">
@@ -19,6 +19,9 @@
                 [porcentagem]="0">
             ></app-flashcards-subtemas>
         </div>
+        <app-flashcard-modal [isVisible]="isFlashcardModalVisible" (close)="closeFlashcard()">
+
+        </app-flashcard-modal>
     </div>
 </div>
 

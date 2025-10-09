@@ -43,6 +43,18 @@ export class TemaFlashcardsComponent implements OnInit {
     }
   }
 
+
+  isFlashcardModalVisible = false;
+
+
+  openFlashcard(): void {
+    this.isFlashcardModalVisible = true;
+  }
+
+  closeFlashcard(): void {
+    this.isFlashcardModalVisible = false;
+  }
+
   voltar(): void {
     this.location.back();
   }

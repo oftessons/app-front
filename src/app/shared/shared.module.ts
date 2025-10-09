@@ -18,6 +18,7 @@ import { PageEmDesenvolvimentoComponent } from './page-em-desenvolvimento/page-e
 import { FlashcardsTemasCardsComponent } from './flashcards-temas-cards/flashcards-temas-cards.component';
 import { FlashcardsSubtemasComponent } from './flashcards-subtemas/flashcards-subtemas.component';
 import { MatProgressBarModule } from "@angular/material/progress-bar";
+import { FlashcardModalComponent } from './flashcard-modal/flashcard-modal.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { MatProgressBarModule } from "@angular/material/progress-bar";
     ModalDeleteComponent,
     PageEmDesenvolvimentoComponent,
     FlashcardsTemasCardsComponent,
-    FlashcardsSubtemasComponent
+    FlashcardModalComponent,
+    FlashcardsSubtemasComponent,
   ],
   imports: [
     CommonModule,
@@ -53,6 +55,7 @@ import { MatProgressBarModule } from "@angular/material/progress-bar";
     PageEmDesenvolvimentoComponent,
     FlashcardsTemasCardsComponent,
     FlashcardsSubtemasComponent,
+    FlashcardModalComponent,
   ]
 })
 export class SharedModule { }
