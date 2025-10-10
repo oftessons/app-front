@@ -1,20 +1,86 @@
 <div class="modal" *ngIf="isVisible">
+  <div class="modal-content-wrapper">
+    <div
+      class="main-container"
+      [ngClass]="{ 'summary-active': estado_atual === 'summary' }"
+    >
+      <img
+        *ngIf="estado_atual !== 'summary'"
+        class="modal-background-image"
+        src="../../../assets/imagens/modal-background.png"
+        alt="Fundo do modal"
+      />
+      <div
+        class="modal-conteudo"
+        [ngSwitch]="estado_atual"
+        [ngClass]="{ 'summary-active': estado_atual === 'summary' }"
+      >
+        <ng-container *ngSwitchCase="'question'">
+          <h2 class="tema-title">CATARATA</h2>
+          <p>Qual estrutura é responsável pela drenagem do humor aquoso?</p>
+          <a class="button-resposta" (click)="showAnswer()">Mostrar Resposta</a>
+        </ng-container>
 
-    <div class="modal-content-wrapper">
-
-        <div class="main-container">
-            <img class="modal-background-image" src="../../../assets/imagens/modal-background.png" alt="Fundo do modal">
-            <div class="modal-conteudo">
-                <h2>Catarata</h2>
-                <p>Qual estrutura é responsável pela drenagem do humor aquoso?</p>
-                <a class="button-resposta">Mostrar Resposta</a>
+        <ng-container *ngSwitchCase="'answer'">
+          <h2 class="tema-title">CATARATA</h2>
+          <div class="answer-section">
+            <h2 class="resposta-title">{{ answer }}</h2>
+            <p class="answer-text">{{ answerDescription }}</p>
+          </div>
+          <div class="rating-section">
+            <p class="rating-text">O quanto você sabia dessa questão?</p>
+            <div class="rating-buttons">
+              <span class="rating-values-text">Nada</span>
+              <button class="rating-btn rating-1" (click)="rateAnswer(1)">
+                1
+              </button>
+              <button class="rating-btn rating-2" (click)="rateAnswer(2)">
+                2
+              </button>
+              <button class="rating-btn rating-3" (click)="rateAnswer(3)">
+                3
+              </button>
+              <button class="rating-btn rating-4" (click)="rateAnswer(4)">
+                4
+              </button>
+              <button class="rating-btn rating-5" (click)="rateAnswer(5)">
+                5
+              </button>
+              <span class="rating-values-text">Muito</span>
             </div>
-        </div>
+          </div>
+        </ng-container>
 
-        <div class="button-fechar">
-            <button (click)="onCloseClick()">&times;</button>
-        </div>
+        <ng-container *ngSwitchCase="'summary'" class="summary">
+          <div class="porcentagem-section">
+            <h2 class="parabens">Parabéns!</h2>
+            <p class="summary-text">
+              Seu desempenho geral foi maior que
+              <span class="porcentagem">80%</span>
+            </p>
+          </div>
 
+          <div class="summary-stats">
+            <div class="stat-card">
+              <img src="../../../assets/Icons/clock.svg" />
+              <span class="stat-value">20 min 33 seg</span>
+              <span class="stat-label">Tempo</span>
+            </div>
+            <div class="stat-card">
+              <img src="../../../assets/Icons/flashcards-summary.svg" alt="" />
+              <span class="stat-value">12</span>
+              <span class="stat-label">Cards Estudados</span>
+            </div>
+          </div>
+          <button class="summary-btn" (click)="onCloseClick()">
+            Voltar para o início
+          </button>
+        </ng-container>
+      </div>
     </div>
 
+    <div class="button-fechar" *ngIf="estado_atual !== 'summary'">
+      <button (click)="onCloseClick()">&times;</button>
+    </div>
+  </div>
 </div>

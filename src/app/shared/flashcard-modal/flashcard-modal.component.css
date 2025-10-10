@@ -16,17 +16,18 @@
 }
 
 .main-container {
-    display: flex;
-    background: linear-gradient(180deg, #122441, #0C121F);
-    width: 90%;
-    max-width: 418px;
-    min-height: 490px;
-    border-radius: 12px;
-    border: 1px solid #3a487a;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.4);
-    position: relative;
-    padding: 10px;
-    overflow: hidden;
+  display: flex;
+  background: linear-gradient(180deg, #122441, #0c121f);
+  width: 90%;
+  min-width: 354px;
+  max-width: 418px;
+  min-height: 490px;
+  border-radius: 12px;
+  border: 1px solid #3a487a;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+  position: relative;
+  padding: 10px;
+  overflow: hidden;
 }
 
 .modal-conteudo {
@@ -52,33 +53,166 @@
   z-index: 1;
 }
 
-h2 {
-    font-size: 32px;
-    font-weight: bold;
-    color: #E3E3E3;
+.tema-tittle {
+  font-size: 32px;
+  font-weight: 600;
+  color: #e3e3e3;
 }
 
 p {
-    color: #FFFFFF;
-    font-size: 18px;
+  color: #ffffff;
+  font-size: 18px;
+}
+
+.resposta-title {
+  font-size: 24px;
+  color: var(--yellow) !important;
+}
+
+.answer-text {
+  font-size: 14px;
+}
+
+.rating-text {
+  color: var(--text-color);
+  font-size: 12px;
+}
+
+.rating-buttons {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  align-items: center;
+}
+
+.rating-values-text {
+  font-size: 12px;
+  color: #f6f8fe;
+}
+
+.rating-btn {
+  padding: 12px 16px;
+  border-radius: 8px;
+  color: #f6f8fe;
+  border: 0px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.rating-1 {
+  background-color: #dc624b;
+}
+
+.rating-2 {
+  background-color: #ed8309;
+}
+
+.rating-3 {
+  background-color: var(--yellow);
+}
+
+.rating-4 {
+  background-color: #2ebf4f;
+}
+
+.rating-5 {
+  background-color: #005914;
+}
+
+.porcentagem-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.parabens {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.summary-text {
+  font-size: 16px !important;
+  color: var(--text-color) !important;
+}
+
+.porcentagem {
+  color: #28a745;
+}
+
+.summary-stats {
+  display: flex;
+  gap: 16px;
+}
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  background-color: #12151E;
+  width: 160px;
+  height: 117px;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 6px;
+  border-radius: 16px;
+}
+
+.stat-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #FFFFFF;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: var(--text-color);
+}
+
+.summary-active {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  background: #010015;
+  max-width:500px;
+  width: 100%;
+}
+
+.summary-btn {
+  width: 100%;
+  padding: 6px 8px;
+  border-radius: 8px;
+  font-size: 16px;
+  color: #F6F8FE;
+  border: 1px solid #253C66;
+  background-color: transparent;
+  user-select: none;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.summary-btn:hover {
+  background-color: #040322;
+
 }
 
 .button-resposta {
-    background-color: #28A745;
-    color: #F6F8FE;
-    border-radius: 8px;
-    font-size: 16px;
-    width: 100%;
-    padding: 12px 12px;
-    cursor: pointer;
-    user-select: none;
-    text-decoration: none;
-    transition: background-color 0.2s ease;
+  background-color: #28a745;
+  color: #f6f8fe;
+  border-radius: 8px;
+  font-size: 16px;
+  width: 100%;
+  padding: 12px 12px;
+  cursor: pointer;
+  user-select: none;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
 }
 
 .button-resposta:hover {
-    color: #F6F8FE;
-    background-color: #21963d;
+  color: #f6f8fe;
+  background-color: #21963d;
 }
 
 .button-fechar {
@@ -88,20 +222,20 @@ p {
 }
 
 .button-fechar button {
-    background-color: rgba(35, 35, 36, 0.8);
-    color: #e0e0e0;
-    border: 1px solid #555;
-    border-radius: 8px;
-    width: 48px;
-    height: 48px;
-    font-size: 28px;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    line-height: 1;
-    transition: all 0.2s ease;
-    backdrop-filter: blur(2px);
+  background-color: rgba(35, 35, 36, 0.8);
+  color: #e0e0e0;
+  border: 1px solid #555;
+  border-radius: 8px;
+  width: 48px;
+  height: 48px;
+  font-size: 28px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 1;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(2px);
 }
 
 .button-fechar button:hover {
