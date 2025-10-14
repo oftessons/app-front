@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ElementRef, ViewChild, AfterViewChecked, PipeTransform, Optional, Injectable, Inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef, ViewChild, AfterViewChecked, PipeTransform, Optional, Injectable, Inject, ChangeDetectorRef } from '@angular/core';
 import { NavigationEnd, Router, RouterEvent } from '@angular/router';
 import { TipoDeProva } from './enums/tipoDeProva';
 import {
@@ -231,6 +231,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     private router: Router,
     private navigateService: NavigateService,
     private stripeService: StripeService,
+    private cdr: ChangeDetectorRef,
     @Optional() public dialogRef: MatDialogRef<PageQuestoesComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: { alunoId: string, nomeAluno: string } | null
   ) {
@@ -249,6 +250,10 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   }
 
   ngOnInit(): void {
+    if (localStorage.getItem('respostasSalvas')) {
+      this.recuperarRespostasSalvasLocalStorage();
+    }
+
     this.carregandoEstadoInicial = true;
 
     this.usuarioLogado = this.authService.getUsuarioAutenticado();
@@ -280,6 +285,8 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
         next: (meuFiltro) => {
           if (meuFiltro) {
             this.preencherDadosDoFiltro(meuFiltro);
+
+            
           } else {
             this.exibirMensagem('Filtro não encontrado.', 'erro');
           }
@@ -394,6 +401,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
   ngAfterViewChecked(): void {
     this.resizeImages();
+
   }
 
   private verificarStatusUsuario(): void {
@@ -885,6 +893,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
             index: index,
           }));
 
+
           this.buscarCuriosidadesSeNecessario();
           this.abrirModal();
           this.toggleFiltros();
@@ -964,6 +973,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
   private buscarRespostaSalva(questaoId: number): void {
     if (!questaoId) {
+      this.buscarRespostaSalva(questaoId);
       return;
     }
 
@@ -1148,9 +1158,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
           (a) => a.texto === this.selectedOption
         );
 
-        console.log("ID do filtro")
-        console.log(this.filtroIdRespondendo);
-
         if (alternativaSelecionada) {
           const respostaDTO: RespostaDTO = {
             questaoId: questao.id,
@@ -1201,6 +1208,9 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
               } else {
                 this.porcentagens = new Map([[this.selectedOption, '1%']]);
               }
+
+              // Salvar resposta localmente para evitar delay ao navegar
+              this.respostasSalvas.set(questao.id, resposta);
 
               // Após enviar a resposta, obtenha as porcentagens de respostas
               this.questoesService.getAcertosErrosQuestao(questao.id).subscribe(
@@ -1392,10 +1402,21 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   }
 
   private carregarRespostaSeNecessario(questaoId: number): void {
+    // Primeiro tenta carregar do cache local
+    if (this.respostasSalvas.has(questaoId)) {
+      const respostaSalva = this.respostasSalvas.get(questaoId)!;
+      this.verificarRespostaUsuario(respostaSalva);
+      this.jaRespondeu = true;
+      this.mostrarPorcentagem = true;
+      return;
+    }
+
+    // Se não estiver no cache, busca do servidor se foi respondida nesta sessão
     if (this.respondidasAgora.has(questaoId)) {
       this.questoesService.questaoRespondida(this.usuarioId, questaoId, 0).subscribe({
         next: (resposta) => {
           if (resposta) {
+            this.respostasSalvas.set(questaoId, resposta);
             this.verificarRespostaUsuario(resposta);
             this.jaRespondeu = true;
             this.mostrarPorcentagem = true;
@@ -1405,6 +1426,15 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
           console.error("Erro ao verificar a resposta do usuário", error);
         }
       });
+    } else {
+      // Se não há resposta, reseta o estado
+      this.jaRespondeu = false;
+      this.mostrarPorcentagem = false;
+      this.respostaVerificada = false;
+      this.respostaCorreta = null;
+      this.respostaErrada = null;
+      this.selectedOption = '';
+      this.isRespostaCorreta = false;
     }
   }
 
@@ -1438,6 +1468,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
   editQuestao(): void {
     if (this.questaoAtual?.id) {
+      this.guardarRespostasSalvasLocalStorage();
       const filtroState = {
         multSelectAno: this.multSelectAno,
         multSelecDificuldade: this.multSelecDificuldade,
@@ -1449,12 +1480,39 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
         multiSelectRespSimu: this.multiSelectRespSimu,
         palavraChave: this.palavraChave,
         questaoId: this.questaoAtual.id,
-        paginaAtual: this.paginaAtual
+        paginaAtual: this.paginaAtual,
       };
 
       localStorage.setItem('questoesFiltroState', JSON.stringify(filtroState));
 
       this.navigateService.navigateTo(`/usuario/cadastro-questao/${this.questaoAtual.id}`, '/usuario/questoes');
+    }
+  }
+
+  guardarRespostasSalvasLocalStorage(): void {
+    if (this.respostasSalvas && this.respostasSalvas.size > 0) {
+      const respostasArray = Array.from(this.respostasSalvas.entries()).map(([questaoId, resposta]) => ({
+        questaoId,
+        resposta
+      }));
+      localStorage.setItem('respostasSalvas', JSON.stringify(respostasArray));
+    }
+  }
+
+  recuperarRespostasSalvasLocalStorage(): void {
+    const respostasSalvasJson = localStorage.getItem('respostasSalvas');
+    if (respostasSalvasJson) {
+      try {
+        const respostasArray = JSON.parse(respostasSalvasJson) as { questaoId: number, resposta: Resposta }[];
+        this.respostasSalvas.clear();
+        respostasArray.forEach(({ questaoId, resposta }) => {
+          this.respostasSalvas.set(questaoId, resposta);
+        });
+        localStorage.removeItem('respostasSalvas');
+
+      } catch (e) {
+        console.error('Erro ao recuperar respostas salvas do localStorage:', e);
+      }
     }
   }
 
@@ -1578,6 +1636,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
             this.paginaAtual = 0;
             this.questaoAtual = this.questoes[0];
           }
+
         } else {
           this.message = "Nenhuma questão encontrada com os filtros anteriores.";
           this.loadQuestao();
@@ -1591,6 +1650,18 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
         this.loadQuestao();
       }
     );
+  }
+
+  selecionarQuestaoPeloIndice(index: number): void {
+    this.resetarOcorrenciasDeQuestao();
+
+    this.paginaAtual = index;
+    this.questaoAtual = this.questoes[this.paginaAtual];
+    this.questoesStateService.setQuestaoAtual(this.questaoAtual);
+
+    if (this.questaoAtual) {
+      this.buscarRespostaSalva(this.questaoAtual.id);
+    }
   }
 
   isDarkMode(): boolean {
