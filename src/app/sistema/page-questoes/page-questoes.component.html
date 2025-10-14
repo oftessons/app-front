@@ -203,10 +203,13 @@
           </div>
         </div>
       </h2>
-      <select (change)="selecionarQuestao($event)" class="question-dropdown">
-        <option *ngFor="let item of navegacaoPorQuestao" [value]="item.index">
-          {{ 'Questão ' + (item.index + 1) }}
+      <select class="question-dropdown" aria-label="Selecione a questão" [(ngModel)]="paginaAtual"
+        (ngModelChange)="selecionarQuestaoPeloIndice($event)">
+
+        <option *ngFor="let item of navegacaoPorQuestao; let i = index" [value]="i">
+          Questão {{ i + 1 }} de {{ numeroDeQuestoes }}
         </option>
+
       </select>
     </div>
     <div class="questao">

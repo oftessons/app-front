@@ -34,7 +34,7 @@
             <input *ngIf="editMode" [(ngModel)]="usuario.nome" class="form-control" />
           </p>
           <p><strong>Tipo de estudante: </strong>
-            <span *ngIf="!editMode"> {{ usuario.tipoDeEstudante }}</span>
+            <span *ngIf="!editMode"> {{ traduzirTipoEstudanteUsuario(usuario.tipoDeEstudante) }}</span>
             <input *ngIf="editMode" [(ngModel)]="usuario.tipoDeEstudante" class="form-control" />
           </p>
           <p><strong>E-mail: </strong>
