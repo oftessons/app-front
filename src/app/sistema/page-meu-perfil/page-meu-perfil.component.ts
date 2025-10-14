@@ -149,4 +149,9 @@ export class PageMeuPerfilComponent implements OnInit {
   voltarPerfil(): void {
     this.router.navigate(['/usuario/dashboard']);
   }
+
+  traduzirTipoEstudanteUsuario(tipoUsuario: string): string {
+    return TipoUsuarioDescricao[tipoUsuario as TipoUsuario] || 'Descrição não disponível';
+  }
+
 }
