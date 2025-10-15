@@ -286,7 +286,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
           if (meuFiltro) {
             this.preencherDadosDoFiltro(meuFiltro);
 
-            
+
           } else {
             this.exibirMensagem('Filtro não encontrado.', 'erro');
           }
@@ -836,6 +836,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
       if (questaoComentadaSelecionada) filtros.comentada = questaoComentadaSelecionada;
     }
+
 
     if (this.multiSelectTemasSubtemasSelecionados && this.multiSelectTemasSubtemasSelecionados.length > 0) {
       const temasSelecionados: string[] = [];
@@ -1517,6 +1518,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   }
 
   aplicarFiltrosRestaurados(questaoId: number): void {
+
     this.carregando = true;
 
     const filtros: any = {};
@@ -1585,9 +1587,10 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
 
       for (const item of this.multiSelectTemasSubtemasSelecionados) {
-        if (typeof item === 'string') {
-          if (this.isTema(item)) {
-            temasSelecionados.push(item);
+        if (typeof item === 'string' && item.startsWith('TEMA_')) {
+          const temaOriginal = item.substring(5);
+          if (this.isTema(temaOriginal)) {
+            temasSelecionados.push(temaOriginal);
           } else if (this.isSubtema(item)) {
             subtemasSelecionados.push(item);
           }
