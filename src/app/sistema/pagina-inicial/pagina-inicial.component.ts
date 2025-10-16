@@ -90,47 +90,56 @@ export class PaginaInicialComponent implements OnInit {
     {
       nome: 'Gustavo Paz',
       foto: 'assets/imagens/professores/gustavo-paz.png',
-      experiencia: 'Especialista em Catarata. Oftalmologista pela Obras Sociais Irmã Dulce - Salvador. Fellowship de Catarata pelo Hospital Humberto Castro Lima.'
+      especialidade: 'Catarata', 
+      experiencia: 'Oftalmologista pela Obras Sociais Irmã Dulce - Salvador. Fellowship de Catarata pelo Hospital Humberto Castro Lima.'
     },
     {
       nome: 'Mariana Melo',
       foto: 'assets/imagens/professores/mariana-melo.png',
-      experiencia: 'Especialista em Retina e Vítreo. Oftalmologista pela FAV. Fellowship de Retina e Vítreo pela FAV.'
+      especialidade: 'Retina e Vítreo', 
+      experiencia: 'Oftalmologista pela FAV. Fellowship de Retina e Vítreo pela FAV.'
     },
     {
       nome: 'Mariana Gurgel',
       foto: 'assets/imagens/professores/mariana-gurgel.png',
-      experiencia: 'Especialista em Glaucoma. Oftalmologista pela Fundação Altino Ventura. Fellowship em Glaucoma pela Fundação Altino Ventura.'
+      especialidade: 'Glaucoma', 
+      experiencia: 'Oftalmologista pela Fundação Altino Ventura. Fellowship em Glaucoma pela Fundação Altino Ventura.'
     },
     {
       nome: 'Sarah Nápoli',
       foto: 'assets/imagens/professores/sarah-napoli.png',
-      experiencia: 'Especialista em Uveíte. Oftalmologista pelo CLIHON - BA. Fellowship em Retina Clínica, Oncologia e Uveítes pela Unifesp - SP.'
+      especialidade: 'Uveíte', 
+      experiencia: 'Oftalmologista pelo CLIHON - BA. Fellowship em Retina Clínica, Oncologia e Uveítes pela Unifesp - SP.'
     },
     {
       nome: 'Raianne Lima',
       foto: 'assets/imagens/professores/raianne-lima.png',
-      experiencia: 'Especialista em Oculoplástica. Oftalmologista pelo HCOE - BA. Fellowship em Plástica, Órbita e Vias Lacrimais pela FAV.'
+      especialidade: 'Oculoplástica', 
+      experiencia: 'Oftalmologista pelo HCOE - BA. Fellowship em Plástica, Órbita e Vias Lacrimais pela FAV.'
     },
     {
       nome: 'Marcela Raposo',
       foto: 'assets/imagens/professores/marcela-raposo.png',
-      experiencia: 'Especialista em Córnea, Cirurgia Refrativa e transplante. Oftalmologista pela Fundação Altino Ventura - Recife. Fellowship em Córnea pelo Banco de Olhos de Sorocaba.'
+      especialidade: 'Córnea, Cirurgia Refrativa e Transplante', 
+      experiencia: 'Oftalmologista pela Fundação Altino Ventura - Recife. Fellowship em Córnea pelo Banco de Olhos de Sorocaba.'
     },
     {
       nome: 'Lyvia Nunes',
       foto: 'assets/imagens/professores/lyvia-nunes.png',
-      experiencia: 'Especialista em Retina e Vítreo. Oftalmologista pelo Cenoft - João Pessoa. Fellowship em Retina Cirúrgica pela Fundação Altino Ventura'
+      especialidade: 'Retina e Vítreo', 
+      experiencia: 'Oftalmologista pelo Cenoft - João Pessoa. Fellowship em Retina Cirúrgica pela Fundação Altino Ventura'
     },
     {
       nome: 'Lídia Guedes',
       foto: 'assets/imagens/professores/lidia-guedes.png',
-      experiencia: 'Especialista em Oncologia. Oftalmologista pelo HC-UFPE. Fellowship em Oncologia e Ultrassonografia Ocular pela Unifesp.'
+      especialidade: 'Oncologia', 
+      experiencia: 'Oftalmologista pelo HC-UFPE. Fellowship em Oncologia e Ultrassonografia Ocular pela Unifesp.'
     },
     {
       nome: 'Carla Tavares',
       foto: 'assets/imagens/professores/carla-tavares.png',
-      experiencia: 'Especialista em Lentes de Contato. Oftamologista pela Unicamp - São Paulo. Fellowship em Lentes de Contato pela Unifesp.'
+      especialidade: 'Lentes de Contato', 
+      experiencia: 'Oftamologista pela Unicamp - São Paulo. Fellowship em Lentes de Contato pela Unifesp.'
     }
   ];
 
@@ -138,37 +147,44 @@ export class PaginaInicialComponent implements OnInit {
     {
       nome: 'Antônio Cassiano',
       foto: 'assets/imagens/professores/antonio-cassiano.png',
-      experiencia: 'Especialista em Retina e Vítreo. Oftalmologista pela FAV. Fellowship de Retina e Vítreo pela FAV.'
+      especialidade: 'Retina e Vítreo', 
+      experiencia: 'Oftalmologista pela FAV. Fellowship de Retina e Vítreo pela FAV.'
     },
     {
       nome: 'Lyndon Serra',
       foto: 'assets/imagens/professores/lyndon-serra.png',
-      experiencia: 'Especialista em Glaucoma. Oftamologista pela FAMEMENE. Fellowship em Glaucoma pela FAV.'
+      especialidade: 'Glaucoma', 
+      experiencia: 'Oftalmologista pela FAMEMENE. Fellowship em Glaucoma pela FAV.'
     },
     {
       nome: 'Gabriela Martins',
       foto: 'assets/imagens/professores/gabriela-martins.png',
-      experiencia: 'Especialista em Retina e Vítreo. Oftalmologista pela Santa Casa da Bahia. Fellowship em Retina Cirúrgica pela pela Santa Casa da Bahia.'
+      especialidade: 'Retina e Vítreo', 
+      experiencia: 'Oftalmologista pela Santa Casa da Bahia. Fellowship em Retina Cirúrgica pela pela Santa Casa da Bahia.'
     },
     {
       nome: 'Clara Menezes',
       foto: 'assets/imagens/professores/clara-menezes.png',
+      especialidade: 'Q-Bank Team', 
       experiencia: 'Residente de Oftamologia na Escola Cearence'
     },
     {
       nome: 'Hélio Ferreira',
       foto: 'assets/imagens/professores/helio-ferreira.png',
+      especialidade: 'Q-Bank Team', 
       experiencia: 'Residente de Oftamologia na SEOPE'
     },
     {
       nome: 'Matheus Leal',
       foto: 'assets/imagens/professores/matheus-leal.png',
+      especialidade: 'Q-Bank Team', 
       experiencia: 'Residente de Oftamologia na FAV'
     },
     {
       nome: 'Mateus Araújo',
       foto: 'assets/imagens/professores/mateus-araujo.png',
-      experiencia: 'Especialista em Córnea e Refrativa. Oftalmologista pelo Hospital Universitário Onofre Lopes - Natal. Fellowship Córnea e Refrativa pela Fundação Altino Ventura.'
+      especialidade: 'Córnea e Refrativa', 
+      experiencia: 'Oftalmologista pelo Hospital Universitário Onofre Lopes - Natal. Fellowship Córnea e Refrativa pela Fundação Altino Ventura.'
     }
   ];
 

@@ -752,6 +752,23 @@ label {
   margin: 0;
 }
 
+.professor-especialidade {
+  font-size: 16px;
+  font-weight: 600;
+  color: #3B5FA0;
+  margin: 0;
+  padding: 6px 16px;
+  background: linear-gradient(135deg, rgba(59, 95, 160, 0.1), rgba(59, 95, 160, 0.05));
+  border-radius: 20px;
+  display: inline-block;
+  align-self: center;
+}
+
+.professor-card.comentador .professor-especialidade {
+  color: #d9a41d;
+  background: linear-gradient(135deg, rgba(217, 164, 29, 0.15), rgba(237, 177, 32, 0.08));
+}
+
 .professor-experiencia {
   font-size: 15px;
   line-height: 1.6;
@@ -843,14 +860,15 @@ label {
   .register-grid {
     grid-template-columns: 1fr;
   }
+  
+
+  .depoimentos-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 576px) {
   .features-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .depoimentos-grid {
     grid-template-columns: 1fr;
   }
   
@@ -938,6 +956,11 @@ label {
 
   .professor-nome {
     font-size: 20px;
+  }
+
+  .professor-especialidade {
+    font-size: 14px;
+    padding: 5px 14px;
   }
 
   .professor-experiencia {
