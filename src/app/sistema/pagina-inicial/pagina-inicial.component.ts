@@ -86,85 +86,90 @@ export class PaginaInicialComponent implements OnInit {
     }
   ];
 
-  planos = [
-    // {
-    //   titulo: 'Mensal',
-    //   preco: 397.00,
-    //   descricao: [
-    //     'Revisão rápida sobre qualquer tema ou assunto.',
-    //     'Ideal para quem busca agilidade no aprendizado.',
-    //     'Acesso flexível ao conteúdo essencial.'
-    //   ],
-    //   corCabecalho: '#253c66',
-    //   recomendado: false,
-    // },
-    // {
-    //   titulo: 'Semestral',
-    //   preco: 116.16,
-    //   mostrarPorMes: true,
-    //   descricao: [
-    //     'Exploração detalhada do acervo da plataforma.',
-    //     'Estudo com tempo para absorver conhecimento.',
-    //     'Perfeito para uma aprendizagem profunda e completa.'
-    //   ],
-    //   corCabecalho: '#041E4E',
-    //   textoAdicional: 'R$697,00 por 6 meses',
-    //   recomendado: false,
-    // },
+  professoresAulas = [
     {
-      titulo: 'Qbank + Mentoria',
-      preco: 450.26,
-      mostrarPorMes: true,
-      descricao: [
-        'Exploração detalhada do acervo da plataforma.',
-        'Estudo com tempo para absorver conhecimento.',
-        'Perfeito para uma aprendizagem profunda e completa.'
-      ],
-      corCabecalho: '#041E4E',
-      textoParcelas: '6x',
-      textoAdicional: 'ou em 1x de R$2.400,00',
-      recomendado: false,
+      nome: 'Gustavo Paz',
+      foto: 'assets/imagens/professores/gustavo-paz.png',
+      experiencia: 'Especialista em Catarata. Oftalmologista pela Obras Sociais Irmã Dulce - Salvador. Fellowship de Catarata pelo Hospital Humberto Castro Lima.'
     },
     {
-      titulo: 'Anual',
-      preco: 175.51,
-      mostrarPorMes: true,
-      descricao: [
-        'Banco de questões com 4 mil questões.',
-        '+2500 questões comentadas.',
-        'Simulados personalizados, cronometrados com base na Prova Nacional de Oftalmologia.',
-        'Assistente de IA que tira dúvidas e oferece explicações detalhadas.'
-      ],
-      corCabecalho: '#0F1934',
-      textoParcelas: '12x',
-      textoAdicional: 'ou em 1x de R$1.697,00',
-      recomendado: true,
+      nome: 'Mariana Melo',
+      foto: 'assets/imagens/professores/mariana-melo.png',
+      experiencia: 'Especialista em Retina e Vítreo. Oftalmologista pela FAV. Fellowship de Retina e Vítreo pela FAV.'
     },
-    //{
-    //  titulo: 'Banco + Flashcards',
-    //  preco: 132.50,
-    //  mostrarPorMes: true,
-    //  descricao: [
-    //    'Acesso completo a todos os módulos e conteúdos.',
-    //    'Estude de forma rápida e eficiente com cartões de memorização.',
-    //    'Ideal para quem busca uma formação abrangente e eficiente.',
-    //  ],
-    //  corCabecalho: '#253c66',
-    //  textoAdicional: 'R$ 1.590,00 por 1 ano',
-    //  recomendado: false,
-    //},
-    //{
-    //  titulo: 'Flashcards',
-    //  preco: 65.83,
-    //  descricao: [
-    //    'Estude de forma rápida e eficiente com cartões de memorização.',
-    //    'Ideal para revisar conceitos importantes em poucos minutos.',
-    //    'Método comprovado para melhorar a fixação e a recordação de informações.',
-    //  ],
-    //  corCabecalho: '#041E4E',
-    //  textoAdicional: 'R$789,99 por 1 ano',
-    //  recomendado: false,
-    //}
+    {
+      nome: 'Mariana Gurgel',
+      foto: 'assets/imagens/professores/mariana-gurgel.png',
+      experiencia: 'Especialista em Glaucoma. Oftalmologista pela Fundação Altino Ventura. Fellowship em Glaucoma pela Fundação Altino Ventura.'
+    },
+    {
+      nome: 'Sarah Nápoli',
+      foto: 'assets/imagens/professores/sarah-napoli.png',
+      experiencia: 'Especialista em Uveíte. Oftalmologista pelo CLIHON - BA. Fellowship em Retina Clínica, Oncologia e Uveítes pela Unifesp - SP.'
+    },
+    {
+      nome: 'Raianne Lima',
+      foto: 'assets/imagens/professores/raianne-lima.png',
+      experiencia: 'Especialista em Oculoplástica. Oftalmologista pelo HCOE - BA. Fellowship em Plástica, Órbita e Vias Lacrimais pela FAV.'
+    },
+    {
+      nome: 'Marcela Raposo',
+      foto: 'assets/imagens/professores/marcela-raposo.png',
+      experiencia: 'Especialista em Córnea, Cirurgia Refrativa e transplante. Oftalmologista pela Fundação Altino Ventura - Recife. Fellowship em Córnea pelo Banco de Olhos de Sorocaba.'
+    },
+    {
+      nome: 'Lyvia Nunes',
+      foto: 'assets/imagens/professores/lyvia-nunes.png',
+      experiencia: 'Especialista em Retina e Vítreo. Oftalmologista pelo Cenoft - João Pessoa. Fellowship em Retina Cirúrgica pela Fundação Altino Ventura'
+    },
+    {
+      nome: 'Lídia Guedes',
+      foto: 'assets/imagens/professores/lidia-guedes.png',
+      experiencia: 'Especialista em Oncologia. Oftalmologista pelo HC-UFPE. Fellowship em Oncologia e Ultrassonografia Ocular pela Unifesp.'
+    },
+    {
+      nome: 'Carla Tavares',
+      foto: 'assets/imagens/professores/carla-tavares.png',
+      experiencia: 'Especialista em Lentes de Contato. Oftamologista pela Unicamp - São Paulo. Fellowship em Lentes de Contato pela Unifesp.'
+    }
+  ];
+
+  professoresComentadores = [
+    {
+      nome: 'Antônio Cassiano',
+      foto: 'assets/imagens/professores/antonio-cassiano.png',
+      experiencia: 'Especialista em Retina e Vítreo. Oftalmologista pela FAV. Fellowship de Retina e Vítreo pela FAV.'
+    },
+    {
+      nome: 'Lyndon Serra',
+      foto: 'assets/imagens/professores/lyndon-serra.png',
+      experiencia: 'Especialista em Glaucoma. Oftamologista pela FAMEMENE. Fellowship em Glaucoma pela FAV.'
+    },
+    {
+      nome: 'Gabriela Martins',
+      foto: 'assets/imagens/professores/gabriela-martins.png',
+      experiencia: 'Especialista em Retina e Vítreo. Oftalmologista pela Santa Casa da Bahia. Fellowship em Retina Cirúrgica pela pela Santa Casa da Bahia.'
+    },
+    {
+      nome: 'Clara Menezes',
+      foto: 'assets/imagens/professores/clara-menezes.png',
+      experiencia: 'Residente de Oftamologia na Escola Cearence'
+    },
+    {
+      nome: 'Hélio Ferreira',
+      foto: 'assets/imagens/professores/helio-ferreira.png',
+      experiencia: 'Residente de Oftamologia na SEOPE'
+    },
+    {
+      nome: 'Matheus Leal',
+      foto: 'assets/imagens/professores/matheus-leal.png',
+      experiencia: 'Residente de Oftamologia na FAV'
+    },
+    {
+      nome: 'Mateus Araújo',
+      foto: 'assets/imagens/professores/mateus-araujo.png',
+      experiencia: 'Especialista em Córnea e Refrativa. Oftalmologista pelo Hospital Universitário Onofre Lopes - Natal. Fellowship Córnea e Refrativa pela Fundação Altino Ventura.'
+    }
   ];
 
   constructor(

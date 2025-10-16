@@ -6,7 +6,7 @@
     <div class="nav-links">
       <a href="#hero" (click)="scrollToSection('hero'); $event.preventDefault()" class="active">Início</a>
       <a href="#depoimentos" (click)="scrollToSection('depoimentos'); $event.preventDefault()">Depoimentos</a>
-      <a href="#plans" (click)="scrollToSection('plans'); $event.preventDefault()">Planos</a>
+      <a href="#professores" (click)="scrollToSection('professores'); $event.preventDefault()">Professores</a>
     </div>
   </nav>
 
@@ -223,31 +223,59 @@
     </div>
   </section>
 
-  <section id="plans" class="plans-section">
+  <section id="professores" class="professores-section">
     <div class="container">
-      <div class="plans-border">
-        <div class="plans-header">          
-          <h2 class="plans-title">Planos acessíveis para todos os perfis</h2>
-          <p class="plans-subtitle">Escolha o plano que melhor se adapta a você e comece sua jornada de aprendizado.</p>
+      <div class="professores-border">
+        <div class="professores-header">          
+          <h2 class="professores-title">Conheça Nossa Equipe</h2>
+          <p class="professores-subtitle">Especialistas renomados que ministram aulas e comentam as questões da plataforma</p>
         </div>
-        <div class="plans-grid">
-          <app-card-plano 
-            *ngFor="let plan of planos"
-            [titulo]="plan.titulo"
-            [descricao]="plan.descricao"
-            [preco]="plan.preco"
-            [textoBotao]="'Escolher plano'"
-            [recomendado]="plan.recomendado"
-            [corCabecalho]="plan.corCabecalho || ''"
-            [textoAdicional]="plan.textoAdicional || ''"
-            [textoParcelas]="plan.textoParcelas || ''"
-            rota="#hero">
-          </app-card-plano>
+
+        <!-- Professores que dão aulas -->
+        <div class="professores-categoria">
+          <div class="categoria-header">
+            <div class="categoria-icon">
+              <img src="assets/Icons/au-bra.svg" alt="" srcset="">
+            </div>
+            <h3 class="categoria-title">Equipe de Aulas</h3>
+          </div>
+          <p class="categoria-descricao">Profissionais que ministram as videoaulas e conteúdos didáticos da plataforma</p>
+          <div class="professores-grid">
+            <div class="professor-card" *ngFor="let professor of professoresAulas">
+              <div class="professor-foto">
+                <img [src]="professor.foto" [alt]="professor.nome" />
+              </div>
+              <div class="professor-info">
+                <h3 class="professor-nome">{{ professor.nome }}</h3>
+                <p class="professor-experiencia">{{ professor.experiencia }}</p>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="plans-footer">
-          <p>Sujeito às condições estabelecidas nos nossos <a href="assets/docs/pp.pdf" target="_blank">Termos de Uso</a> 
-            e <a href="assets/docs/pp.pdf" target="_blank">Política de Assinatura</a>.
-          </p>
+
+        <!-- Divisor -->
+        <div class="categoria-divisor"></div>
+
+        <!-- Professores comentadores -->
+        <div class="professores-categoria">
+          <div class="categoria-header">
+            <div class="categoria-icon comentador">
+              <img src="assets/Icons/dark/caderno-dark.svg" alt="" srcset="">
+            </div>
+            <h3 class="categoria-title comentador">Equipe de comentário de Questões</h3>
+          </div>
+          <p class="categoria-descricao">Especialistas responsáveis pelos comentários detalhados das questões</p>
+          <div class="professores-grid">
+            <div class="professor-card comentador" *ngFor="let professor of professoresComentadores">
+              <div class="professor-foto comentador">
+                <img [src]="professor.foto" [alt]="professor.nome" />
+              </div>
+              <div class="professor-info">
+                <h3 class="professor-nome">{{ professor.nome }}</h3>
+                <p class="professor-experiencia">{{ professor.experiencia }}</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -256,7 +284,7 @@
   <div class="section-indicator">
   <a href="#hero" class="section-dot" data-section="hero"></a>
   <a href="#depoimentos" class="section-dot" data-section="depoimentos"></a>
-  <a href="#plans" class="section-dot" data-section="plans"></a>
+  <a href="#professores" class="section-dot" data-section="professores"></a>
   </div>
 
   <footer class="footer">
