@@ -31,8 +31,8 @@ interface GroupWithPremium {
   styleUrls: ['./multiplo-select.component.css']
 })
 export class MultiploSelectComponent implements OnInit, OnChanges {
-  @Input() label: string = ''; 
-  @Input() options: any[] = []; 
+  @Input() label: string = '';
+  @Input() options: any[] = [];
   @Input() selectedValue: any[] | any;
   @Output() selectedValueChange = new EventEmitter<any>();
   @Input() customStyles: { [key: string]: string } = {};
@@ -40,13 +40,13 @@ export class MultiploSelectComponent implements OnInit, OnChanges {
   @Input() searchable: boolean = false;
   @Input() disabled: boolean = false;
   @Input() showPremiumIcons: boolean = false;
-  @Input() onPremiumClick: () => void = () => {};
+  @Input() onPremiumClick: () => void = () => { };
 
   searchTerm: string = '';
   isOpen: boolean = false;
   filteredOptions: any[] = [];
 
-  constructor(private readonly elementRef: ElementRef) {}
+  constructor(private readonly elementRef: ElementRef) { }
 
   ngOnInit(): void {
     if (this.multiple && !Array.isArray(this.selectedValue)) {
@@ -66,13 +66,13 @@ export class MultiploSelectComponent implements OnInit, OnChanges {
     }
 
     if (changes.disabled && this.disabled) {
-      this.isOpen = false; 
+      this.isOpen = false;
       this.updateArrowRotation();
     }
   }
 
   onSearchTermChange(): void {
-    if(this.disabled) return;
+    if (this.disabled) return;
 
     const normalize = (str: string) =>
       str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
@@ -80,13 +80,16 @@ export class MultiploSelectComponent implements OnInit, OnChanges {
 
     if (this.isGroupedOptions()) {
       this.filteredOptions = this.options
-        .map(group => ({
-          ...group,
-          options: group.options.filter((opt: any) =>
+        .map((group: any) => {
+          const matchesGroupLabel = normalize(group.label).includes(term);
+          const options = matchesGroupLabel
+        ? group.options 
+        : group.options.filter((opt: any) =>
             normalize(opt.label).includes(term)
-          )
-        }))
-        .filter(group => group.options.length > 0);
+          );
+          return { ...group, options };
+        })
+        .filter((group: any) => group.options.length > 0 || normalize(group.label).includes(term));
     } else {
       this.filteredOptions = this.options.filter((opt: any) => {
         const label = typeof opt === 'string' ? opt : opt.label;

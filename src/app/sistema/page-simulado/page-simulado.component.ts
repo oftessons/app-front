@@ -211,14 +211,16 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.salvarTempoAtual();
+    this.finalizarSimulado();
 
-    if (this.intervalId) {
-      clearInterval(this.intervalId);
-    }
-    if (this.intervalContagemRegressiva) {
-      clearInterval(this.intervalContagemRegressiva);
-    }
+    // this.salvarTempoAtual();
+
+    // if (this.intervalId) {
+    //   clearInterval(this.intervalId);
+    // }
+    // if (this.intervalContagemRegressiva) {
+    //   clearInterval(this.intervalContagemRegressiva);
+    // }
   }
 
   salvarTempoAtual(): void {
@@ -907,7 +909,7 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
   }
 
   proximaQuestao() {
-    if (!this.questaoRespondida && !this.revisandoSimulado) {
+    if (!this.questaoRespondida && !this.revisandoSimulado && this.tempoRestanteQuestaoSimulado > 0) {
       this.mensagemDeAviso = 'Questão não respondida. Por favor, responda antes de avançar.';
       return;
     }
