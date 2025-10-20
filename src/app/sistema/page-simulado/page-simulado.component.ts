@@ -211,7 +211,9 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.finalizarSimulado();
+    if( this.isSimuladoIniciado && !this.simuladoFinalizado) {
+      this.finalizarSimulado();
+    }
 
     // this.salvarTempoAtual();
 
