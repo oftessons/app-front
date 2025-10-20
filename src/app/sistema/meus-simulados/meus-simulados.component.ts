@@ -127,8 +127,6 @@ export class MeusSimuladosComponent implements OnInit {
     switch (status) {
       case StatusSimulado.NAO_INICIADO:
         return 'Iniciar simulado';
-      case StatusSimulado.EM_ANDAMENTO:
-        return 'Retornar ao simulado';
       case StatusSimulado.FINALIZADO:
         return 'Revisar simulado';
       default:

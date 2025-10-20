@@ -211,14 +211,16 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.salvarTempoAtual();
+    this.finalizarSimulado();
 
-    if (this.intervalId) {
-      clearInterval(this.intervalId);
-    }
-    if (this.intervalContagemRegressiva) {
-      clearInterval(this.intervalContagemRegressiva);
-    }
+    // this.salvarTempoAtual();
+
+    // if (this.intervalId) {
+    //   clearInterval(this.intervalId);
+    // }
+    // if (this.intervalContagemRegressiva) {
+    //   clearInterval(this.intervalContagemRegressiva);
+    // }
   }
 
   salvarTempoAtual(): void {
