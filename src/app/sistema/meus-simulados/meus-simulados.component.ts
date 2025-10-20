@@ -25,6 +25,7 @@ export class MeusSimuladosComponent implements OnInit {
   ocultarFiltros: boolean = false;
   idAlunoMentorado!: string;
   nomeAlunoMentorado!: string;
+  bloqueado: boolean = false;
 
 
   constructor(
@@ -130,6 +131,7 @@ export class MeusSimuladosComponent implements OnInit {
       case StatusSimulado.FINALIZADO:
         return 'Revisar simulado';
       default:
+        this.bloqueado = true;
         return 'Processando...';
     }
   }

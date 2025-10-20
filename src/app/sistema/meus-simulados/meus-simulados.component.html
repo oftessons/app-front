@@ -46,7 +46,7 @@
               </p>
             </div>
             <div>
-              <button class="btn btn-transparent-primary ms-2" (click)="editarSimulado(simulado.id!)">
+              <button class="btn btn-transparent-primary ms-2" (click)="editarSimulado(simulado.id!)" [disabled]="bloqueado"src/app/sistema/page-simulado/page-simulado.component.ts>
                 {{ getBotaoSimuladoTexto(simulado.statusSimulado) }}
                 <img [src]="!isDarkMode() ? 'assets/imagens/fil.svg' : 'assets/Icons/dark/fil-dark.svg'"
                   alt="Ícone de Visualizar" class="icon me-1">
