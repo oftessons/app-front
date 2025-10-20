@@ -80,13 +80,16 @@ export class MultiploSelectComponent implements OnInit, OnChanges {
 
     if (this.isGroupedOptions()) {
       this.filteredOptions = this.options
-        .map(group => ({
-          ...group,
-          options: group.options.filter((opt: any) =>
+        .map((group: any) => {
+          const matchesGroupLabel = normalize(group.label).includes(term);
+          const options = matchesGroupLabel
+        ? group.options 
+        : group.options.filter((opt: any) =>
             normalize(opt.label).includes(term)
-          )
-        }))
-        .filter(group => group.options.length > 0 || normalize(group.label).includes(term));
+          );
+          return { ...group, options };
+        })
+        .filter((group: any) => group.options.length > 0 || normalize(group.label).includes(term));
     } else {
       this.filteredOptions = this.options.filter((opt: any) => {
         const label = typeof opt === 'string' ? opt : opt.label;
