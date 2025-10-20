@@ -909,7 +909,7 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
   }
 
   proximaQuestao() {
-    if (!this.questaoRespondida && !this.revisandoSimulado) {
+    if (!this.questaoRespondida && !this.revisandoSimulado && this.tempoRestanteQuestaoSimulado > 0) {
       this.mensagemDeAviso = 'Questão não respondida. Por favor, responda antes de avançar.';
       return;
     }
