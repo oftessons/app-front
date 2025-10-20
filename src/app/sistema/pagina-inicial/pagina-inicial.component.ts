@@ -139,7 +139,25 @@ export class PaginaInicialComponent implements OnInit {
       nome: 'Carla Tavares',
       foto: 'assets/imagens/professores/carla-tavares.png',
       especialidade: 'Lentes de Contato', 
-      experiencia: 'Oftamologista pela Unicamp - São Paulo. Fellowship em Lentes de Contato pela Unifesp.'
+      experiencia: 'Oftalmologista pela Unicamp - São Paulo. Fellowship em Lentes de Contato pela Unifesp.'
+    },
+    {
+      nome: 'Gabriela Gusmão',
+      foto: 'assets/imagens/professores/gabriela-gusmao.png',
+      especialidade: 'Oftalmopediatria e Estrabismo', 
+      experiencia: 'Oftalmologista pela Unifesp. Fellowship em Oftalmopediatria e Estrabismo pela Unifesp.'
+    },
+    {
+      nome: 'Letícia da Fonte',
+      foto: 'assets/imagens/professores/leticia-da-fonte.png',
+      especialidade: 'Retina e Vítreo',
+      experiencia: 'Oftalmologista pela FAV. Fellowship em Retina e Vítreo pela FAV.'
+    },
+    {
+      nome: 'Letícia Amorim',
+      foto: 'assets/imagens/professores/leticia-amorim.png',
+      especialidade: 'Glaucoma e Neuroftalmologia',
+      experiencia: 'Oftalmologista pela Fundação Altino Ventura - Recife. Fellowship Glaucoma e Neuroftalmologia - Unifesp.'
     }
   ];
 
@@ -154,37 +172,37 @@ export class PaginaInicialComponent implements OnInit {
       nome: 'Lyndon Serra',
       foto: 'assets/imagens/professores/lyndon-serra.png',
       especialidade: 'Glaucoma', 
-      experiencia: 'Oftalmologista pela FAMEMENE. Fellowship em Glaucoma pela FAV.'
-    },
-    {
-      nome: 'Gabriela Martins',
-      foto: 'assets/imagens/professores/gabriela-martins.png',
-      especialidade: 'Retina e Vítreo', 
-      experiencia: 'Oftalmologista pela Santa Casa da Bahia. Fellowship em Retina Cirúrgica pela pela Santa Casa da Bahia.'
+      experiencia: 'Oftalmologista pela FAMENE. Fellowship em Glaucoma pela FAV.'
     },
     {
       nome: 'Clara Menezes',
       foto: 'assets/imagens/professores/clara-menezes.png',
       especialidade: 'Q-Bank Team', 
-      experiencia: 'Residente de Oftamologia na Escola Cearence'
+      experiencia: 'Residente de Oftalmologia na Escola Cearense'
     },
     {
       nome: 'Hélio Ferreira',
       foto: 'assets/imagens/professores/helio-ferreira.png',
       especialidade: 'Q-Bank Team', 
-      experiencia: 'Residente de Oftamologia na SEOPE'
+      experiencia: 'Residente de Oftalmologia - SEOPE'
     },
     {
       nome: 'Matheus Leal',
       foto: 'assets/imagens/professores/matheus-leal.png',
       especialidade: 'Q-Bank Team', 
-      experiencia: 'Residente de Oftamologia na FAV'
+      experiencia: 'Residente de Oftalmologia - FAV'
     },
     {
       nome: 'Mateus Araújo',
       foto: 'assets/imagens/professores/mateus-araujo.png',
       especialidade: 'Córnea e Refrativa', 
       experiencia: 'Oftalmologista pelo Hospital Universitário Onofre Lopes - Natal. Fellowship Córnea e Refrativa pela Fundação Altino Ventura.'
+    },
+    {
+      nome: 'Taíse Araújo',
+      foto: 'assets/imagens/professores/taise-araujo.png',
+      especialidade: 'Q-Bank Team',
+      experiencia: 'Residente de Oftalmologia - FAV'
     }
   ];
 
