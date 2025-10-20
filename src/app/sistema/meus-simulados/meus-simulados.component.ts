@@ -130,7 +130,7 @@ export class MeusSimuladosComponent implements OnInit {
       case StatusSimulado.FINALIZADO:
         return 'Revisar simulado';
       default:
-        return 'Ação';
+        return 'Processando...';
     }
   }
 
