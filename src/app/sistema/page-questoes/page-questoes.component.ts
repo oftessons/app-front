@@ -286,7 +286,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
           if (meuFiltro) {
             this.preencherDadosDoFiltro(meuFiltro);
 
-
           } else {
             this.exibirMensagem('Filtro não encontrado.', 'erro');
           }
@@ -343,23 +342,43 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       });
     }
 
-    if (meuFiltro.questoes && meuFiltro.questoes.length > 0) {
-      this.questoes = meuFiltro.questoes;
-      this.numeroDeQuestoes = this.questoes.length;
-      this.paginaAtual = 0;
-      this.questaoAtual = this.questoes[this.paginaAtual];
-      this.navegacaoPorQuestao = this.questoes.map((q, index) => ({ questao: q, index: index }));
+    if (meuFiltro.questoesIds && meuFiltro.questoesIds.length > 0) {
+      
+      const idsNumber = meuFiltro.questoesIds.map((id: any) => Number(id));
+      console.log('IDs das questões do filtro salvo:', idsNumber);
 
-      this.carregarProgressoDoFiltro();
+      this.filtroService.carregarQuestoesSalvas(idsNumber).subscribe({
+        next: (questoesCarregadas) => {
+          this.questoes = questoesCarregadas;
 
-      if (this.usuarioId && this.questaoAtual) {
-        this.buscarRespostaSalva(this.questaoAtual.id);
-      }
+          if (this.questoes && this.questoes.length > 0) {
+            this.numeroDeQuestoes = this.questoes.length;
+            this.paginaAtual = 0;
+            this.questaoAtual = this.questoes[this.paginaAtual];
+            this.navegacaoPorQuestao = this.questoes.map((q, index) => ({ questao: q, index: index }));
+
+            console.log('Questões carregadas do filtro salvo:', this.questoes);
+
+            this.carregarProgressoDoFiltro();
+
+            if (this.usuarioId && this.questaoAtual) {
+              this.buscarRespostaSalva(this.questaoAtual.id);
+            }
+          } else {
+            this.message = "Nenhuma questão foi encontrada para este filtro.";
+          }
+        },
+        error: (error) => {
+          console.error('Erro ao carregar questões salvas:', error);
+          this.message = "Ocorreu um erro ao carregar as questões.";
+        }
+      }); 
+
     } else {
       this.message = "Este filtro salvo não contém questões.";
     }
-  }
 
+  }
   private inicializarDescricoes(): void {
 
     this.tiposDeProvaDescricoes = this.tiposDeProva
@@ -886,6 +905,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
         } else {
           this.message = '';
           this.questoes = questoes;
+
           this.paginaAtual = 0;
           this.questaoAtual = this.questoes[this.paginaAtual];
 
