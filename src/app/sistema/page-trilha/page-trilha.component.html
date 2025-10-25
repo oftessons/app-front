@@ -94,7 +94,10 @@
                     <span class="progress-text">{{ card.progresso }}%</span>
                   </div>
                   
-                  <button class="action-btn" [class.refazer]="card.status === 'concluido'" [class.iniciar]="card.status !== 'concluido'">
+                  <button class="action-btn" 
+                          [class.refazer]="card.status === 'concluido'" 
+                          [class.iniciar]="card.status !== 'concluido'"
+                          (click)="abrirModalTrilha(card)">
                     {{ card.status === 'concluido' ? 'Refazer trilha' : (card.status === 'andamento' ? 'Continuar' : 'Iniciar trilha') }}
                     <img src="assets/Icons/arrow-updown.svg" alt="setaDireta">
                   </button>
@@ -150,7 +153,8 @@
           
           <button class="action-btn" 
                   [class.refazer]="card.status === 'concluido'" 
-                  [class.iniciar]="card.status !== 'concluido'">
+                  [class.iniciar]="card.status !== 'concluido'"
+                  (click)="abrirModalTrilha(card)">
             {{ card.status === 'concluido' ? 'Refazer trilha' : (card.status === 'andamento' ? 'Continuar' : 'Iniciar trilha') }}
             <img src="assets/Icons/arrow-updown.svg" alt="setaDireta">
           </button>

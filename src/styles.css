@@ -34,6 +34,8 @@
   --trilha-bg: none;
   --trilha-balloon-bg: #0a1435;
   --trilha-balloon-border: #0a1435;
+  --trilha-questao-bg: #7e808130;
+  --trilha-modal-bg: #ffffff;
 
   --blue: #007bff;
   --light-blue: #3B5FA0;
@@ -97,6 +99,8 @@ body.dark-mode {
   --trilha-bg: linear-gradient(to bottom, #122D4B, #091C34, #07172E);
   --trilha-balloon-bg: linear-gradient(to right, #f5cf507a, #fec1257f);
   --trilha-balloon-border: #f5ce50;
+  --trilha-questao-bg: #38383852;
+  --trilha-modal-bg: #010015;
 }
 
 body.dark-mode .mat-drawer-content {

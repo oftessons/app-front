@@ -15,6 +15,7 @@ import { CardPlanoComponent } from './card-plano/card-plano.component';
 import { AppRoutingModule } from '../app-routing.module';
 import { ModalDeleteComponent } from './modal-delete/modal-delete.component';
 import { PageEmDesenvolvimentoComponent } from './page-em-desenvolvimento/page-em-desenvolvimento.component';
+import { ModalTrilhaComponent } from './modal-trilha/modal-trilha.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { PageEmDesenvolvimentoComponent } from './page-em-desenvolvimento/page-e
     ModalComponent,
     CardPlanoComponent,
     ModalDeleteComponent,
-    PageEmDesenvolvimentoComponent
+    PageEmDesenvolvimentoComponent,
+    ModalTrilhaComponent
   ],
   imports: [
     CommonModule,
@@ -44,7 +46,11 @@ import { PageEmDesenvolvimentoComponent } from './page-em-desenvolvimento/page-e
     MultiploSelectComponent,
     ModalComponent,
     CardPlanoComponent,
-    PageEmDesenvolvimentoComponent
+    PageEmDesenvolvimentoComponent,
+    ModalTrilhaComponent
+  ],
+  entryComponents: [
+    ModalTrilhaComponent
   ]
 })
 export class SharedModule { }

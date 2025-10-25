@@ -1,0 +1,223 @@
+<!-- Modal Overlay -->
+<div class="modal-trilha-overlay" (click)="onModalClose()">
+  <div class="modal-trilha-bg"></div>
+  
+  <div class="modal-trilha-wrapper">
+    <div class="modal-trilha-container" [class]="size" (click)="$event.stopPropagation()">
+      
+      <!-- ==================== MODO: SELEÇÃO DE ETAPAS ==================== -->
+      <ng-container *ngIf="modoAtual === 'selecao'">
+        <div class="modal-trilha-header">
+          <div>
+            <h2 class="modal-trilha-title">{{ trilhaData.titulo }}</h2>
+            <p class="modal-trilha-subtitle" *ngIf="trilhaData.descricao">{{ trilhaData.descricao }}</p>
+          </div>
+          <button class="modal-trilha-close" (click)="onModalClose()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M18 6L6 18M6 6l12 12" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="modal-trilha-content">
+          <div class="etapas-container">
+            
+            <!-- Questões Pré -->
+            <div class="etapa-card" [class.bloqueada]="etapaBloqueada('questoes-pre')" [class.completa]="etapasCompletas.has('questoes-pre')">
+              <div class="etapa-numero">1</div>
+              <div class="etapa-info">
+                <h3>Questões de Aquecimento</h3>
+                <p>{{ getQuantidade('questoes-pre') }} questões</p>
+                <div class="etapa-status" *ngIf="etapasCompletas.has('questoes-pre')">✓ Concluído</div>
+              </div>
+              <button class="btn-etapa" [disabled]="etapaBloqueada('questoes-pre')" (click)="iniciarEtapa('questoes-pre')">
+                {{ etapasCompletas.has('questoes-pre') ? 'Refazer' : 'Iniciar' }}
+              </button>
+            </div>
+
+            <div class="etapa-seta">→</div>
+
+            <!-- Aulas -->
+            <div class="etapa-card" [class.bloqueada]="etapaBloqueada('aulas')" [class.completa]="etapasCompletas.has('aulas')">
+              <div class="etapa-numero">2</div>
+              <div class="etapa-info">
+                <h3>Vídeo Aulas</h3>
+                <p>{{ getQuantidade('aulas') }} aulas</p>
+                <div class="etapa-status" *ngIf="etapasCompletas.has('aulas')">✓ Concluído</div>
+                <div class="etapa-bloqueio" *ngIf="etapaBloqueada('aulas')">🔒 Bloqueado</div>
+              </div>
+              <button class="btn-etapa" [disabled]="etapaBloqueada('aulas')" (click)="iniciarEtapa('aulas')">
+                {{ etapasCompletas.has('aulas') ? 'Rever' : 'Assistir' }}
+              </button>
+            </div>
+
+            <div class="etapa-seta">→</div>
+
+            <!-- Questões Pós -->
+            <div class="etapa-card" [class.bloqueada]="etapaBloqueada('questoes-pos')" [class.completa]="etapasCompletas.has('questoes-pos')">
+              <div class="etapa-numero">3</div>
+              <div class="etapa-info">
+                <h3>Questões Pós-Teste</h3>
+                <p>{{ getQuantidade('questoes-pos') }} questões</p>
+                <div class="etapa-status" *ngIf="etapasCompletas.has('questoes-pos')">✓ Concluído</div>
+                <div class="etapa-bloqueio" *ngIf="etapaBloqueada('questoes-pos')">🔒 Bloqueado</div>
+              </div>
+              <button class="btn-etapa" [disabled]="etapaBloqueada('questoes-pos')" (click)="iniciarEtapa('questoes-pos')">
+                {{ etapasCompletas.has('questoes-pos') ? 'Refazer' : 'Iniciar' }}
+              </button>
+            </div>
+
+            <div class="etapa-seta">→</div>
+
+            <!-- Flashcards -->
+            <div class="etapa-card" [class.bloqueada]="etapaBloqueada('flashcards')" [class.completa]="etapasCompletas.has('flashcards')">
+              <div class="etapa-numero">4</div>
+              <div class="etapa-info">
+                <h3>Flashcards</h3>
+                <p>{{ getQuantidade('flashcards') }} flashcards</p>
+                <div class="etapa-status" *ngIf="etapasCompletas.has('flashcards')">✓ Concluído</div>
+                <div class="etapa-bloqueio" *ngIf="etapaBloqueada('flashcards')">🔒 Bloqueado</div>
+              </div>
+              <button class="btn-etapa" [disabled]="etapaBloqueada('flashcards')" (click)="iniciarEtapa('flashcards')">
+                {{ etapasCompletas.has('flashcards') ? 'Rever' : 'Revisar' }}
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="modal-trilha-progress">
+          <div class="progress-label">
+            <span>Progresso da Trilha</span>
+            <span class="progress-value">{{ getPorcentagemProgresso() }}%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" [style.width.%]="getPorcentagemProgresso()"></div>
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- ==================== MODO: EXECUTANDO QUESTÕES ==================== -->
+      <ng-container *ngIf="modoAtual === 'executando' && (etapaAtual === 'questoes-pre' || etapaAtual === 'questoes-pos')">
+        <div class="modal-trilha-header questoes-header">
+          <div class="questoes-header-info">
+            <button class="btn-voltar" (click)="voltarParaSelecao()">← Voltar</button>
+            <div>
+              <h2 class="modal-trilha-title">{{ tipoQuestoesAtual === 'pre' ? 'Questões de Aquecimento' : 'Questões Pós-Teste' }}</h2>
+              <p class="modal-trilha-subtitle">Questão {{ questaoAtualIndex + 1 }} de {{ totalQuestoes }}</p>
+            </div>
+          </div>
+          <button class="modal-trilha-close" (click)="onModalClose()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M18 6L6 18M6 6l12 12" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="modal-trilha-content questoes-content">
+          <div class="questao-container" *ngIf="questaoAtual">
+            <div class="questao-info-header">
+              <span class="questao-badge">ID: {{ questaoAtual.id }}</span>
+              <span class="questao-badge">Tema: {{ questaoAtual.assunto }}</span>
+              <span class="questao-badge">Ano: {{ questaoAtual.ano }}</span>
+            </div>
+						<div class="questao-content">
+							<div class="questao-enunciado">
+								<p>{{ questaoAtual.enunciado }}</p>
+							</div>
+							
+							<div class="questao-alternativas">
+								<div *ngFor="let alt of questaoAtual.alternativas" 
+								class="alternativa-item"
+								[class.selecionada]="respostaSelecionada(alt.letra) && !jaRespondeu"
+								[class.correta]="jaRespondeu && alt.letra === questaoAtual.respostaCorreta"
+								[class.incorreta]="jaRespondeu && respostaSelecionada(alt.letra) && alt.letra !== questaoAtual.respostaCorreta"
+								(click)="selecionarResposta(alt.letra)">
+                <div class="alternativa-radio">
+									<span class="radio-circle" [class.checked]="respostaSelecionada(alt.letra)"></span>
+                </div>
+                <div class="alternativa-content">
+									<strong>{{ alt.letra }}</strong>
+                  <span>{{ alt.texto }}</span>
+                </div>
+              </div>
+						</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="questoes-footer">
+          <div class="right-buttons">
+            <button class="btn-anterior" [disabled]="questaoAtualIndex === 0" (click)="questaoAnterior()">
+              Anterior
+            </button>
+            <button class="btn-responder" 
+                    [disabled]="!respostasUsuario.has(questaoAtualIndex) || jaRespondeu"
+                    (click)="responderQuestao()">
+              Responder
+            </button>
+            <button class="btn-proxima" 
+                    [disabled]="!jaRespondeu"
+                    (click)="proximaQuestao()">
+              {{ questaoAtualIndex === totalQuestoes - 1 ? 'Finalizar' : 'Próxima' }}
+            </button>
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- ==================== MODO: RESUMO ==================== -->
+      <ng-container *ngIf="modoAtual === 'resumo'">
+        <div class="modal-trilha-header resumo-header">
+          <div>
+            <h2 class="modal-trilha-title">Você desbloqueou o próximo passo!</h2>
+            <p class="modal-trilha-subtitle">Dê continuidade e assista a aula para fixar o conteúdo.</p>
+          </div>
+          <button class="modal-trilha-close" (click)="onModalClose()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M18 6L6 18M6 6l12 12" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="modal-trilha-content resumo-content">
+          <!-- Cards de Estatísticas -->
+          <div class="resumo-stats-cards" *ngIf="etapaAtual === 'questoes-pre' || etapaAtual === 'questoes-pos'">
+            <div class="card-estatistica-resumo">
+              <img src="assets/Icons/x.svg" alt="Ícone de Respostas Erradas">
+              <div class="card-text-estatistica-resumo">
+                <h3>{{ erros }}</h3>
+                <p>Respostas Erradas</p>
+              </div>
+            </div>
+            <div class="card-estatistica-resumo">
+              <img src="assets/Icons/v.svg" alt="Ícone de Respostas Certas">
+              <div class="card-text-estatistica-resumo">
+                <h3>{{ acertos }}</h3>
+                <p>Respostas Certas</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Botões de Ação -->
+          <div class="resumo-actions">
+            <button class="btn-sair-trilha" (click)="voltarParaSelecao()">
+              Sair da trilha
+            </button>
+            <button class="btn-assistir-agora" 
+                    *ngIf="proximaEtapaDesbloqueada()"
+                    (click)="iniciarEtapa(proximaEtapaDesbloqueada()!)">
+              Assistir agora
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <div class="trilha-completa-message" *ngIf="!proximaEtapaDesbloqueada()">
+              <p>🏆 Parabéns! Você completou todas as etapas desta trilha.</p>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+    </div>
+  </div>
+</div>
