@@ -1,0 +1,18 @@
+<div *ngIf="aberto" class="modal-geral" role="dialog" [attr.aria-modal]="aberto ? 'true' : 'false'">
+  <div class="modal-bg" (click)="closePopup()"></div>
+
+  <div class="modal-wrapper">
+    <div class="modal-container">
+      <button class="modal-close" (click)="closePopup()">×</button>
+      <div class="modal-box">
+        <div class="birthday-content">
+          <div class="birthday-icon"><img [src]="icon" alt="Badge" /></div>
+          <div class="birthday-text">
+            <h1 class="user-name">Parabéns! 🎉</h1>
+            <p class="birthday-message">{{finalMessage}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

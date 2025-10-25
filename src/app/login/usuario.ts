@@ -1,4 +1,4 @@
-import { Permissao } from "./Permissao"; 
+import { Permissao } from "./Permissao";
 
 export class Usuario {
   id!: string;
@@ -13,9 +13,10 @@ export class Usuario {
   nome!: string;
   confirmPassword!: string;
   tipoUsuario!: string;
-  permissao!: Permissao;  
+  permissao!: Permissao;
   bolsaAssinatura!: boolean;
   diasDeTeste!: number;
   dataInicioBolsa?: Date;
+  dataNascimento!: Date | null;
   tipoDeEstudante!: string;
 }

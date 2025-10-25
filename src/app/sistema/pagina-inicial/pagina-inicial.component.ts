@@ -21,6 +21,7 @@ export class PaginaInicialComponent implements OnInit {
   telefone: string = '';
   cidade: string = '';
   estado: string = '';
+  dataNascimento:Date | null = null;
   tipoDeEstudante: string = '';
   consentimento: boolean = false;
 
@@ -39,12 +40,12 @@ export class PaginaInicialComponent implements OnInit {
     number: false,
     specialChar: false,
   };
-  
+
   passwordVisible: { [key: string]: boolean } = {
     password: false,
     confirmPassword: false
   };
-  
+
   registerForm!: FormGroup;
   errors: string[] = [];
   camposComErro: string[] = [];
@@ -181,6 +182,7 @@ export class PaginaInicialComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       telefone: ['', Validators.required],
       cidade: ['', Validators.required],
+      dataNascimento: [null, Validators.required],
       estado: ['', Validators.required],
       tipoDeEstudante: ['RESIDENTE', Validators.required],
       password: ['', [Validators.required, Validators.minLength(6)]],
@@ -188,18 +190,18 @@ export class PaginaInicialComponent implements OnInit {
     }, {
       validator: this.passwordMatchValidator
     });
-    
+
     this.checkScreenSize();
     this.initCarousel();
-    
+
     window.addEventListener('resize', () => {
       this.checkScreenSize();
       this.initCarousel();
     });
-    
+
     this.startAutoPlay();
   }
-  
+
   ngOnDestroy(): void {
     this.stopAutoPlay();
   }
@@ -207,12 +209,12 @@ export class PaginaInicialComponent implements OnInit {
   passwordMatchValidator(form: FormGroup) {
     const password = form.get('password')?.value;
     const confirmPassword = form.get('confirmPassword')?.value;
-    
+
     if (password !== confirmPassword) {
       form.get('confirmPassword')?.setErrors({ passwordMismatch: true });
       return { passwordMismatch: true };
     }
-    
+
     return null;
   }
 
@@ -224,6 +226,7 @@ export class PaginaInicialComponent implements OnInit {
     this.validarCampoObrigatorio('nome', 'O campo nome é obrigatório');
     this.validarCampoObrigatorio('email', 'O campo e-mail é obrigatório');
     this.validarCampoObrigatorio('telefone', 'O campo telefone é obrigatório');
+    this.validarCampoObrigatorio('dataNascimento', 'O campo data de nascimento é obrigatório');
     this.validarCampoObrigatorio('cidade', 'O campo cidade é obrigatório');
     this.validarCampoObrigatorio('estado', 'O campo estado é obrigatório');
 
@@ -242,7 +245,7 @@ export class PaginaInicialComponent implements OnInit {
     } else if (!/[!@#$%^&*]/.test(this.password)) {
       this.adicionarErro('password', 'A senha deve conter pelo menos um caractere especial');
     }
-    
+
     if (this.password !== this.confirmPassword) {
       this.adicionarErro('confirmPassword', 'As senhas não coincidem');
     }
@@ -257,6 +260,7 @@ export class PaginaInicialComponent implements OnInit {
     usuario.nome = this.nome;
     usuario.confirmPassword = this.confirmPassword;
     usuario.telefone = this.telefone;
+    usuario.dataNascimento = this.dataNascimento;
     usuario.cidade = this.cidade;
     usuario.estado = this.estado;
     usuario.tipoDeEstudante = this.tipoDeEstudante;
@@ -270,11 +274,12 @@ export class PaginaInicialComponent implements OnInit {
           this.email = '';
           this.nome = '';
           this.confirmPassword = '';
+          this.dataNascimento = null;
           this.telefone = '';
           this.cidade = '';
           this.estado = '';
           this.errors = [];
-          
+
           setTimeout(() => {
             this.router.navigate(['/login']);
           }, 3000);
@@ -344,140 +349,140 @@ export class PaginaInicialComponent implements OnInit {
   checkActiveSection() {
     const sections = document.querySelectorAll('section[id]');
     const scrollPosition = window.scrollY + window.innerHeight / 3;
-    
+
     sections.forEach(section => {
       const sectionTop = (section as HTMLElement).offsetTop;
       const sectionHeight = (section as HTMLElement).offsetHeight;
       const sectionId = section.getAttribute('id');
-      
+
       if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
         document.querySelectorAll('.nav-links a').forEach(link => {
           link.classList.remove('active');
         });
-        
+
         document.querySelectorAll('.section-dot').forEach(dot => {
           dot.classList.remove('active');
         });
-        
+
         const navLink = document.querySelector(`.nav-links a[href*="${sectionId}"]`);
         const sectionDot = document.querySelector(`.section-dot[href*="${sectionId}"]`);
-        
+
         if (navLink) navLink.classList.add('active');
 
         if (sectionDot) sectionDot.classList.add('active');
       }
     });
   }
-  
+
   checkScreenSize() {
     this.isMobile = window.innerWidth < 768;
   }
-  
+
   initCarousel() {
     const itemsToShow = this.isMobile ? 1 : 2;
-    
+
     this.depoimentosExibidos = this.depoimentos.slice(0, itemsToShow);
     this.currentDepoimentoIndex = 0;
   }
-  
+
   nextDepoimento() {
     this.stopAutoPlay();
     const itemsToShow = this.isMobile ? 1 : 2;
-    
-    
+
+
     const gridElement = document.querySelector('.depoimentos-grid') as HTMLElement;
     if (gridElement) {
       gridElement.style.opacity = '0';
       gridElement.style.transform = 'translateX(-15px)';
-      
+
       setTimeout(() => {
-        
+
         this.currentDepoimentoIndex = (this.currentDepoimentoIndex + 1) % (this.depoimentos.length - itemsToShow + 1);
         this.depoimentosExibidos = this.depoimentos.slice(this.currentDepoimentoIndex, this.currentDepoimentoIndex + itemsToShow);
-        
-        
+
+
         setTimeout(() => {
           gridElement.style.opacity = '1';
           gridElement.style.transform = 'translateX(0)';
         }, 50);
       }, 300);
     } else {
-      
+
       this.currentDepoimentoIndex = (this.currentDepoimentoIndex + 1) % (this.depoimentos.length - itemsToShow + 1);
       this.depoimentosExibidos = this.depoimentos.slice(this.currentDepoimentoIndex, this.currentDepoimentoIndex + itemsToShow);
     }
-    
+
     this.startAutoPlay();
   }
-  
+
   prevDepoimento() {
     this.stopAutoPlay();
     const itemsToShow = this.isMobile ? 1 : 2;
-    
-    
+
+
     const gridElement = document.querySelector('.depoimentos-grid') as HTMLElement;
     if (gridElement) {
       gridElement.style.opacity = '0';
       gridElement.style.transform = 'translateX(15px)';
-      
+
       setTimeout(() => {
-        
+
         this.currentDepoimentoIndex = (this.currentDepoimentoIndex - 1 + this.depoimentos.length - itemsToShow + 1) % (this.depoimentos.length - itemsToShow + 1);
         this.depoimentosExibidos = this.depoimentos.slice(this.currentDepoimentoIndex, this.currentDepoimentoIndex + itemsToShow);
-        
-        
+
+
         setTimeout(() => {
           gridElement.style.opacity = '1';
           gridElement.style.transform = 'translateX(0)';
         }, 50);
       }, 300);
     } else {
-      
+
       this.currentDepoimentoIndex = (this.currentDepoimentoIndex - 1 + this.depoimentos.length - itemsToShow + 1) % (this.depoimentos.length - itemsToShow + 1);
       this.depoimentosExibidos = this.depoimentos.slice(this.currentDepoimentoIndex, this.currentDepoimentoIndex + itemsToShow);
     }
-    
+
     this.startAutoPlay();
   }
-  
+
   goToDepoimento(index: number) {
     this.stopAutoPlay();
     const itemsToShow = this.isMobile ? 1 : 2;
-    
-    
+
+
     if (index >= 0 && index <= this.depoimentos.length - itemsToShow) {
-      
+
       const gridElement = document.querySelector('.depoimentos-grid') as HTMLElement;
       if (gridElement) {
         gridElement.style.opacity = '0';
-        
+
         setTimeout(() => {
-          
+
           this.currentDepoimentoIndex = index;
           this.depoimentosExibidos = this.depoimentos.slice(this.currentDepoimentoIndex, this.currentDepoimentoIndex + itemsToShow);
-          
-          
+
+
           setTimeout(() => {
             gridElement.style.opacity = '1';
             gridElement.style.transform = 'translateX(0)';
           }, 50);
         }, 300);
       } else {
-        
+
         this.currentDepoimentoIndex = index;
         this.depoimentosExibidos = this.depoimentos.slice(this.currentDepoimentoIndex, this.currentDepoimentoIndex + itemsToShow);
       }
     }
-    
+
     this.startAutoPlay();
   }
-  
+
   startAutoPlay() {
     this.carouselInterval = setInterval(() => {
       this.nextDepoimento();
     }, this.autoPlayInterval);
   }
-  
+
   stopAutoPlay() {
     if (this.carouselInterval) {
       clearInterval(this.carouselInterval);

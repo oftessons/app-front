@@ -59,6 +59,7 @@ export class PermissaoAdminComponent implements OnInit {
     cidade: new FormControl('',),
     tipoUsuario: new FormControl('', { validators: [Validators.required] }),
     bolsa: new FormControl(false),
+    dataNascimento: new FormControl(null, [Validators.required]),
     quantidadeDiasBolsa: new FormControl([null, [Validators.required, Validators.min(1)]])
   });
 
@@ -109,7 +110,8 @@ export class PermissaoAdminComponent implements OnInit {
       estado: [''],
       tipoUsuario: [''],
       bolsa: [''],
-      quantidadeDiasBolsa: ['']
+      quantidadeDiasBolsa: [''],
+      dataNascimento: [''],
     });
 
     this.usuarioFormUpdate = this.formBuilder.group({
@@ -174,6 +176,7 @@ export class PermissaoAdminComponent implements OnInit {
     const usuario = new Usuario();
     usuario.password = userData.password;
     usuario.confirmPassword = userData.confirmPassword;
+    usuario.dataNascimento = userData.dataNascimento;
     usuario.nome = userData.nome;
     usuario.email = userData.email;
     usuario.telefone = userData.telefone;
@@ -281,7 +284,7 @@ export class PermissaoAdminComponent implements OnInit {
 
         // feedback de sucesso
         this.snackBar.open('Usuário removido com sucesso!', '✕', {
-          duration: 5000,                   
+          duration: 5000,
           panelClass: ['snackbar-success'],
           horizontalPosition: 'right',
           verticalPosition: 'top',
@@ -316,7 +319,7 @@ export class PermissaoAdminComponent implements OnInit {
         deletarTextoBotao: 'Excluir',
         size: 'md'
       },
-      () => this.removerUsuario(usuario.id) 
+      () => this.removerUsuario(usuario.id)
     );
   }
 
@@ -343,7 +346,8 @@ export class PermissaoAdminComponent implements OnInit {
       telefone: '',
       estado: '',
       cidade: '',
-      tipoUsuario: ''
+      tipoUsuario: '',
+      dataNascimento: '',
     });
 
   }

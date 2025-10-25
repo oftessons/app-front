@@ -39,15 +39,15 @@
                                                 </div>
                                               </div>
                                             </div>
-                                        </div>                               
+                                        </div>
 
                                         <div class="form-group align-items-center justify-content-between mt-4 mb-0">
                                             <div class="col-sm-12 col-md-6">
                                                 <button type="submit" class="btn btn-primary btn-lg btn-block">Entrar</button>
                                             </div>
                                         </div>
-                                        
-                                        <div class="form-group col-sm-12 col-md-6 text-center"> 
+
+                                        <div class="form-group col-sm-12 col-md-6 text-center">
                                             <a href="#" class="small mb-1 text-decoration-none text-primary forgot-password-link" (click)="forgotPassword($event)">
                                                 <span>Esqueceu sua senha?</span> Recupere aqui!
                                             </a>
@@ -70,7 +70,7 @@
                                         <div class="form-group col-sm-12 col-md-6">
                                             <label for="password" class="small mb-1" style="font-size: 1.2em;">Senha *</label>
                                             <div class="input-group">
-                                                <input type="password" id="password" name="password" [(ngModel)]="password" class="form-control py-2 responsive-input" placeholder="Digite sua senha" required 
+                                                <input type="password" id="password" name="password" [(ngModel)]="password" class="form-control py-2 responsive-input" placeholder="Digite sua senha" required
                                                 (input)="validatePassword()" (focus)="showTooltip = true" (blur)="showTooltip = false"/>
                                                 <div class="input-group-append">
                                                     <div class="btn btn-outline-secondary" type="button" (click)="togglePasswordVisibility('password')">
@@ -79,7 +79,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            
+
                                             <!-- <div class="password-errors">
                                                 <div *ngFor="let error of errors" class="error-tooltip">{{error}}</div>
                                             </div> -->
@@ -143,7 +143,7 @@
                                             <label class="small mb-1" style="font-size: 1.2em;">Estado *</label>
                                             <input type="text" name="estado" [(ngModel)]="estado" class="form-control py-2 responsive-input" placeholder="Digite seu Estado" required />
                                         </div>
-                                        
+
                                         <div class="form-group col-sm-12 col-md-6">
                                             <label class="small mb-1" style="font-size: 1.2em;">Você é? *</label>
                                             <select name="tipoEstudante" [(ngModel)]="tipoDeEstudante" class="form-select py-2 responsive-input" required>
@@ -151,15 +151,20 @@
                                                 <option *ngFor="let tipo of tiposUsuario" [value]="tipo.key">
                                                     {{ tipo.description }}
                                                 </option>
-                                            </select>                                              
+                                            </select>
                                         </div>
+
+                                      <div class="form-group col-sm-12 col-md-6">
+                                        <label class="small mb-1" style="font-size: 1.2em;">Data de Nascimento *</label>
+                                        <input type="date" name="dataNascimento" [(ngModel)]="dataNascimento" class="form-control py-2 responsive-input" placeholder="DD/MM/AAAA" required />
+                                      </div>
 
                                         <!-- Checkbox para consentimento dos termos -->
                                         <div class="col-sm-12 mt-3 termos">
                                             <input type="checkbox" id="consentimento" [(ngModel)]="consentimento" name="consentimento" required />
                                             <label for="consentimento" class="ms-2">
-                                                Eu concordo com os 
-                                                <a href="assets/docs/pp.pdf" target="_blank">Termos de Uso</a> e a 
+                                                Eu concordo com os
+                                                <a href="assets/docs/pp.pdf" target="_blank">Termos de Uso</a> e a
                                                 <a href="assets/docs/pp.pdf" target="_blank">Política de Privacidade</a>.
                                             </label>
                                         </div>
@@ -179,14 +184,14 @@
                                             <label class="small mb-1 senha">E-mail para recuperação de senha da plataforma</label>
                                             <input type="email" name="forgotEmail" [(ngModel)]="forgotEmail" class="form-control" placeholder="Digite seu e-mail cadastrado para recuperar sua senha" required />
                                         </div>
-                                    
+
                                         <div class="form-group align-items-center justify-content-between mt-4 mb-0 d-flex">
                                             <button type="button" class="btn btn-danger btn-lg me-2 editar btn-custom" (click)="cancelForgotPassword()">Voltar</button>
                                             <button type="submit" class="btn btn-success btn-lg me-2 editar btn-custom">Enviar</button>
-                                        </div>                                        
-                                    
+                                        </div>
+
                                     </form>
-                                    
+
                                 </div>
 
                                 <div class="card-footer text-center">
@@ -195,7 +200,7 @@
                                             <span class="white-text">Ainda não possui uma conta? </span> <span class="green-text">Crie agora!</span>
                                         </a>
                                     </div>
-                                </div> 
+                                </div>
                             </div>
                         </div>
                     </div>

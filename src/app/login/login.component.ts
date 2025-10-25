@@ -21,6 +21,7 @@ export class LoginComponent implements OnInit {
   telefone: string = '';
   cidade: string = '';
   estado: string = '';
+  dataNascimento: Date | null = null;
   cadastrando: boolean = false;
   mensagemSucesso: string = '';
   errors: string[] = [];
@@ -29,16 +30,16 @@ export class LoginComponent implements OnInit {
   tipoDeEstudante: string = '';
   usuario!: Usuario | null;
   permissaoUsuario: Permissao = Permissao.USER;
-  
+
   tiposUsuario = Object.keys(TipoUsuario).map(key => ({
     key,
     value: TipoUsuario[key as keyof typeof TipoUsuario],
     description: TipoUsuarioDescricao[TipoUsuario[key as keyof typeof TipoUsuario]]
   }));
-  
+
   confirmPasswordError: string | null = null;
   confirmPassword: string = '';
-  consentimento: boolean = false;  
+  consentimento: boolean = false;
 
   showTooltip: boolean = false;
   passwordValidations = {
@@ -67,7 +68,7 @@ export class LoginComponent implements OnInit {
       username: this.email,
       password: this.password
     };
-    
+
     sessionStorage.setItem('pending_login_data', JSON.stringify(loginData));
     localStorage.removeItem('access_token');
     localStorage.removeItem('user_id');
@@ -91,7 +92,7 @@ export class LoginComponent implements OnInit {
   preparaCadastrar(event: Event) {
     event.preventDefault();
     this.cadastrando = true;
-    this.showForgotPassword = false; 
+    this.showForgotPassword = false;
   }
 
   cancelaCadastro() {
@@ -153,6 +154,10 @@ export class LoginComponent implements OnInit {
     passwordValidationErrors.push("Selecione o tipo de usuário.");
   }
 
+  if (!this.dataNascimento){
+    passwordValidationErrors.push("O campo de data de nascimento é obrigatório.");
+  }
+
   // Se houver erros de validação, armazene-os em this.errors e não prossiga
   if (passwordValidationErrors.length > 0) {
     this.errors = passwordValidationErrors;
@@ -172,6 +177,7 @@ export class LoginComponent implements OnInit {
     usuario.confirmPassword = this.confirmPassword;
     usuario.telefone = this.telefone;
     usuario.cidade = this.cidade;
+    usuario.dataNascimento = this.dataNascimento!;
     usuario.estado = this.estado;
     usuario.tipoDeEstudante = this.tipoDeEstudante;
 
@@ -185,6 +191,7 @@ export class LoginComponent implements OnInit {
           this.email = '';
           this.nome = '';
           this.confirmPassword = '';
+          this.dataNascimento = null;
           this.telefone = '';
           this.cidade = '';
           this.estado = '';
@@ -222,14 +229,14 @@ export class LoginComponent implements OnInit {
   forgotPassword(event: Event) {
     event.preventDefault();
     this.showForgotPassword = true;
-    this.cadastrando = false; 
+    this.cadastrando = false;
   }
 
   sendForgotPasswordEmail() {
     this.authService.forgotPassword(this.forgotEmail).subscribe(
       (response: any) => {
         this.mensagemSucesso = response.message;
-        this.showForgotPassword = false; 
+        this.showForgotPassword = false;
         this.forgotEmail = '';
       },
       (error) => {
@@ -242,7 +249,7 @@ export class LoginComponent implements OnInit {
         }
       }
     );
-  }  
+  }
 
   cancelForgotPassword() {
     this.showForgotPassword = false;

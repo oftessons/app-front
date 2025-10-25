@@ -54,10 +54,10 @@ export class ValidacaoAcessoComponent {
       (response: any) => {
         const access_token = response.access_token;
         localStorage.setItem('access_token', access_token);
-  
+
         const userId = this.authService.getUserIdFromToken() ?? '';
         localStorage.setItem('user_id', userId);
-  
+
         const usuario: Usuario = {
           id: userId,
           fotoUrl: null,
@@ -72,15 +72,16 @@ export class ValidacaoAcessoComponent {
           confirmPassword: '',
           tipoUsuario: '',
           bolsaAssinatura: response.bolsa || false,
+          dataNascimento : response.dataNascimento ? new Date(response.dataNascimento) : new Date(),
           diasDeTeste: response.quantidadeDiasBolsa || 0,
           permissao: response.authorities.length > 0 ? response.authorities[0] : null,
           tipoDeEstudante: response.tipoDeEstudante || '',
         };
-        
+
         localStorage.setItem('usuario', JSON.stringify(usuario));
 
         this.mensagemSucesso = 'Login realizado com sucesso. Redirecionando...';
-  
+
         if (
           usuario.permissao === 'ROLE_ADMIN' ||
           usuario.permissao === 'ROLE_USER' ||

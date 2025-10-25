@@ -1,0 +1,124 @@
+.modal-geral {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  padding-bottom: 200px;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  cursor: pointer;
+}
+
+.modal-wrapper {
+  position: relative;
+  z-index: 100;
+  width: 50%;
+  max-width: 600px;
+  height: 371px;
+  display: flex;
+}
+
+.modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: white;
+  cursor: pointer;
+  z-index: 10001;
+}
+
+.modal-container {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  animation: slideIn 0.3s ease-out;
+}
+
+
+.modal-box {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.birthday-header {
+  background: linear-gradient(135deg, #041e4e 0%, #041e4e 100%);
+  padding: 2rem;
+  text-align: center;
+  border-radius: 8px 8px 0 0;
+  position: fixed;
+  overflow: hidden;
+}
+
+.birthday-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #001236;
+  padding: 1.5rem 1rem 2rem; /* padding reduzido */
+  text-align: center;
+}
+
+.birthday-icon {
+  width: auto;
+  height: auto;
+  margin-bottom: 0.5rem; /* aproxima a imagem do texto */
+  justify-content: center;
+
+}
+
+.user-name {
+  color: #667eea;
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 0.5rem 0 0; /* reduz espaço entre ícone e título */
+  font-family: "Nunito Sans", sans-serif;
+}
+
+.birthday-message {
+  color: #d0d6e1;
+  font-size: 1.1rem;
+  margin: 1.5rem 0 0;
+  line-height: 1.4;
+}
+
+.birthday-text {
+  color: #f7fafc;
+  font-size: 1.2rem;
+  margin-top: 0; /* remove espaçamento extra */
+  padding-bottom: 0; /* evita afastamento */
+}
+
+
+
+.birthday-wishes {
+  background-color: #f7fafc;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1.5rem;
+}
+
+.birthday-wishes p {
+  color: #2d3748;
+  margin: 0;
+  font-style: italic;
+}
+
+
+

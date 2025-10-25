@@ -53,6 +53,9 @@
             <span *ngIf="!editMode"> {{ usuario.estado }}</span>
             <input *ngIf="editMode" [(ngModel)]="usuario.estado" class="form-control" />
           </p>
+          <p><strong *ngIf="!editMode">DataNascimento: </strong>
+            <span *ngIf="!editMode"> {{ usuario.dataNascimento }}</span>
+          </p>
         </div>
       </div>
       <div class="profile-actions">
@@ -61,7 +64,7 @@
       </div>
     </div>
   </div>
-  
+
   <div class="container-geral">
     <div *ngIf="conteudoAtual === 'assinaturas'">
       <!-- Conteúdo das assinaturas -->

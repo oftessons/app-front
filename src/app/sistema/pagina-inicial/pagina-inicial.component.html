@@ -24,22 +24,22 @@
           </div>
           <div class="register-body">
             <form (submit)="cadastrar()">
-              <div class="column-form">             
+              <div class="column-form">
                 <div class="form-group">
                   <label class="small mb-1">Nome *</label>
-                  <input type="text" name="nome" [(ngModel)]="nome" 
-                    class="form-control py-2" 
+                  <input type="text" name="nome" [(ngModel)]="nome"
+                    class="form-control py-2"
                     [ngClass]="{'input-error': camposComErro.includes('nome')}"
                     placeholder="Digite o seu nome" required />
                   <small class="text-danger" *ngIf="camposComErro.includes('nome')">
                     {{ obterMensagemErro('nome') }}
                   </small>
                 </div>
-                
+
                 <div class="form-group">
                   <label class="small mb-1">E-mail *</label>
-                  <input type="email" name="email" [(ngModel)]="email" 
-                    class="form-control py-2" 
+                  <input type="email" name="email" [(ngModel)]="email"
+                    class="form-control py-2"
                     [ngClass]="{'input-error': camposComErro.includes('email')}"
                     placeholder="Digite seu e-mail" required />
                   <small class="text-danger" *ngIf="camposComErro.includes('email')">
@@ -51,12 +51,12 @@
                   <div class="password-container-tooltip">
                     <label class="small mb-1">Senha *</label>
                     <div class="input-group">
-                      <input type="password" name="password" [(ngModel)]="password" 
-                        class="form-control py-2" 
+                      <input type="password" name="password" [(ngModel)]="password"
+                        class="form-control py-2"
                         [ngClass]="{'input-error': camposComErro.includes('password') || camposComErro.includes('confirmPassword')}"
-                        placeholder="Digite sua senha" required 
-                        (input)="validatePassword()" 
-                        (focus)="showTooltip = true" 
+                        placeholder="Digite sua senha" required
+                        (input)="validatePassword()"
+                        (focus)="showTooltip = true"
                         (blur)="showTooltip = false"/>
                       <div class="input-group-append">
                         <div class="btn btn-outline-secondary" type="button" (click)="togglePasswordVisibility('password')">
@@ -83,15 +83,15 @@
                     {{ obterMensagemErro('confirmPassword') }}
                   </small>
                 </div>
-                
+
                 <div class="form-group">
                   <label class="small mb-1">Confirmar Senha *</label>
                   <div class="input-group">
-                    <input type="password" name="confirmPassword" 
-                    [(ngModel)]="confirmPassword" 
+                    <input type="password" name="confirmPassword"
+                    [(ngModel)]="confirmPassword"
                     [ngClass]="{'input-error': camposComErro.includes('confirmPassword')}"
-                    class="form-control py-2" 
-                    placeholder="Confirme sua senha" 
+                    class="form-control py-2"
+                    placeholder="Confirme sua senha"
                     required />
                     <div class="input-group-append">
                       <div class="btn" type="button" (click)="togglePasswordVisibility('confirmPassword')">
@@ -101,53 +101,53 @@
                     </div>
                   </div>
                 </div>
-                
-                
+
+
                 <div class="form-group">
                   <label class="small mb-1">Telefone *</label>
-                  <input type="text" name="telefone" 
-                  [(ngModel)]="telefone" 
+                  <input type="text" name="telefone"
+                  [(ngModel)]="telefone"
                   [ngClass]="{'input-error': camposComErro.includes('telefone')}"
-                  class="form-control py-2" 
-                  placeholder="Digite seu telefone" 
+                  class="form-control py-2"
+                  placeholder="Digite seu telefone"
                   required />
                   <small class="text-danger" *ngIf="camposComErro.includes('telefone')">
                     {{ obterMensagemErro('telefone') }}
                   </small>
                 </div>
-                
+
                 <div class="form-group">
                   <label class="small mb-1">Cidade *</label>
-                  <input type="text" name="cidade" 
-                  [(ngModel)]="cidade" 
+                  <input type="text" name="cidade"
+                  [(ngModel)]="cidade"
                   [ngClass]="{'input-error': camposComErro.includes('cidade')}"
-                  class="form-control py-2" 
-                  placeholder="Digite sua cidade" 
+                  class="form-control py-2"
+                  placeholder="Digite sua cidade"
                   required />
                   <small class="text-danger" *ngIf="camposComErro.includes('cidade')">
                     {{ obterMensagemErro('cidade') }}
                   </small>
                 </div>
-                
+
                 <div class="form-group">
                   <label class="small mb-1">Estado *</label>
-                  <input type="text" name="estado" 
-                  [(ngModel)]="estado" 
+                  <input type="text" name="estado"
+                  [(ngModel)]="estado"
                   [ngClass]="{'input-error': camposComErro.includes('estado')}"
-                  class="form-control py-2" 
-                  placeholder="Digite seu Estado" 
+                  class="form-control py-2"
+                  placeholder="Digite seu Estado"
                   required />
                   <small class="text-danger" *ngIf="camposComErro.includes('estado')">
                     {{ obterMensagemErro('estado') }}
                   </small>
                 </div>
-                
+
                 <div class="form-group">
                   <label class="small mb-1">Você é: *</label>
-                  <select name="tipoEstudante" 
-                  [(ngModel)]="tipoDeEstudante" 
+                  <select name="tipoEstudante"
+                  [(ngModel)]="tipoDeEstudante"
                   [ngClass]="{'input-error': camposComErro.includes('tipoDeEstudante')}"
-                  class="form-select py-2" 
+                  class="form-select py-2"
                   required>
                     <option value="" disabled selected>Selecione o tipo de usuário</option>
                     <option *ngFor="let tipo of tiposUsuario" [value]="tipo.key">
@@ -158,19 +158,31 @@
                     {{ obterMensagemErro('tipoDeEstudante') }}
                   </small>
                 </div>
-                
+
+                <div class="form-group">
+                  <label class="small mb-1">Data de Nascimento</label>
+                  <input type="date" name="dataNascimento" [(ngModel)]="dataNascimento"
+                         [ngClass]="{'input-error': camposComErro.includes('dataNascimento')}"
+                         class="form-control py-2"
+                         placeholder="Selecione sua data de nascimento"
+                         required />
+                  <small class="text-danger" *ngIf="camposComErro.includes('dataNascimento')">
+                    {{ obterMensagemErro('dataNascimento') }}
+                  </small>
+                </div>
+
                 <div class="col-sm-12 mt-3">
                   <div class="form-check">
                     <input type="checkbox" id="consentimento" [(ngModel)]="consentimento" name="consentimento" class="form-check-input" required />
                     <label for="consentimento" class="form-check-label">
-                      Eu concordo com os 
-                      <a href="assets/docs/pp.pdf" target="_blank">Termos de Uso</a> e a 
+                      Eu concordo com os
+                      <a href="assets/docs/pp.pdf" target="_blank">Termos de Uso</a> e a
                       <a href="assets/docs/pp.pdf" target="_blank">Política de Privacidade</a>.
                     </label>
                   </div>
                 </div>
               </div>
-              
+
               <div class="form-group mt-4 mb-0">
                 <div class="d-flex justify-content-between">
                   <button type="submit" class="btn btn-submit" [disabled]="!consentimento">Cadastrar</button>
@@ -212,8 +224,8 @@
         <div class="carousel-controls">
           <button class="carousel-control prev" (click)="prevDepoimento()">❮</button>
           <div class="carousel-dots">
-            <span *ngFor="let _, let i = index; of: depoimentos.slice(0, depoimentos.length - (isMobile ? 0 : 1))" 
-                  class="carousel-dot" 
+            <span *ngFor="let _, let i = index; of: depoimentos.slice(0, depoimentos.length - (isMobile ? 0 : 1))"
+                  class="carousel-dot"
                   [class.active]="i === currentDepoimentoIndex"
                   (click)="goToDepoimento(i)"></span>
           </div>
@@ -226,12 +238,12 @@
   <section id="plans" class="plans-section">
     <div class="container">
       <div class="plans-border">
-        <div class="plans-header">          
+        <div class="plans-header">
           <h2 class="plans-title">Planos acessíveis para todos os perfis</h2>
           <p class="plans-subtitle">Escolha o plano que melhor se adapta a você e comece sua jornada de aprendizado.</p>
         </div>
         <div class="plans-grid">
-          <app-card-plano 
+          <app-card-plano
             *ngFor="let plan of planos"
             [titulo]="plan.titulo"
             [descricao]="plan.descricao"
@@ -245,7 +257,7 @@
           </app-card-plano>
         </div>
         <div class="plans-footer">
-          <p>Sujeito às condições estabelecidas nos nossos <a href="assets/docs/pp.pdf" target="_blank">Termos de Uso</a> 
+          <p>Sujeito às condições estabelecidas nos nossos <a href="assets/docs/pp.pdf" target="_blank">Termos de Uso</a>
             e <a href="assets/docs/pp.pdf" target="_blank">Política de Assinatura</a>.
           </p>
         </div>
