@@ -43,7 +43,7 @@ export class PageMentoriaComponent implements OnInit {
 
   fetchListaCompletaAlunos(): void {
     this.carregandoAlunos = true;
-    this.authService.visualizarUsuarios().subscribe({
+    this.authService.visualizarAlunosMentoria().subscribe({
       next: (data: Usuario[] | null) => {
         this.listaCompletaAlunos = data || [];
         this.opcoesAlunosParaFiltro = this.listaCompletaAlunos.map(aluno => ({

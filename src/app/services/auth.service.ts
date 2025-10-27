@@ -9,7 +9,7 @@ import { Usuario } from '../login/usuario';
 import { map } from 'rxjs/internal/operators/map';
 import { Permissao } from '../login/Permissao';
 import { catchError } from 'rxjs/operators';
-import { HttpErrorResponse, HttpResponse  } from '@angular/common/http';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { throwError } from 'rxjs';
 import { LoginDTO } from '../sistema/LoginDTO';
 import { MFACodigoDTO } from '../sistema/MFACodigoDTO';
@@ -28,31 +28,31 @@ export class AuthService {
   jwtHelper: JwtHelperService = new JwtHelperService();
   private cachePermissao$: Observable<any> | null = null;
 
-  
+
   constructor(
     private http: HttpClient
   ) { }
 
-  obterToken(){
+  obterToken() {
     return localStorage.getItem('access_token');
   }
 
-  encerrarSessao(){
+  encerrarSessao() {
     localStorage.removeItem('access_token')
   }
 
   forgotPassword(email: string): Observable<any> {
     return this.http.post(`${this.apiURL}/recuperar-senha?email=${email}`, {});
-  }  
+  }
 
   resetPassword(token: string, newPassword: string) {
     const body = { newPassword: newPassword };
-    
+
     return this.http.post(`${this.apiURL}/reset-password?token=${token}`, body, {
       headers: { 'Content-Type': 'application/json' }
     });
   }
-  
+
 
   obterUsuarioAutenticadoDoBackend(): Observable<Usuario> {
     return this.http.get<Usuario>(`${this.apiURL}/perfil`).pipe(
@@ -65,7 +65,7 @@ export class AuthService {
   }
 
   verificarPermissao(): Observable<any> {
-    if (this.cachePermissao$) {      
+    if (this.cachePermissao$) {
       return this.cachePermissao$;
     }
 
@@ -94,24 +94,24 @@ export class AuthService {
     )
 
   }
-    
+
   atualizarUsuario(usuario: Usuario, fotoDoPerfil?: File | null): Observable<Usuario> {
     const formData: FormData = new FormData();
     formData.append('usuario', new Blob([JSON.stringify(usuario)], { type: 'application/json' }));
-  
+
     if (fotoDoPerfil) {
       formData.append('fotoDoPerfil', fotoDoPerfil);
     }
-    
+
     return this.http.put<Usuario>(`${this.apiURL}/update/${usuario.id}`, formData)
-    .pipe(
-      catchError((error: HttpErrorResponse) => {
-        if (error.status === 422) {
-          return throwError('Já existe um usuário com este username na nossa base de dados. Tente outro');
-        }
-        return throwError("O servidor não está funcionando corretamente.");
-      })
-    );
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 422) {
+            return throwError('Já existe um usuário com este username na nossa base de dados. Tente outro');
+          }
+          return throwError("O servidor não está funcionando corretamente.");
+        })
+      );
   }
 
   removerUsuario(id: string): Observable<any> {
@@ -121,7 +121,7 @@ export class AuthService {
   getUsuarioAutenticado(): Usuario | null {
     const userJson = localStorage.getItem('usuario'); // Assumindo que o usuário está salvo no localStorage
     if (userJson) {
-        return JSON.parse(userJson); // Retorna o usuário como objeto
+      return JSON.parse(userJson); // Retorna o usuário como objeto
     }
     return null; // Retorna null se não houver usuário
   }
@@ -142,7 +142,7 @@ export class AuthService {
     );
   }
 
-  
+
   salvarUsuarioAutenticado(usuario: Usuario) {
     const token = this.obterToken();
     if (token) {
@@ -151,9 +151,9 @@ export class AuthService {
     }
   }
 
-  isAuthenticated() : boolean {
+  isAuthenticated(): boolean {
     const token = this.obterToken();
-    if(token){
+    if (token) {
       const expired = this.jwtHelper.isTokenExpired(token)
 
       return !expired;
@@ -163,7 +163,7 @@ export class AuthService {
 
   salvar(usuario: Usuario, perm: Permissao): Observable<any> {
     const { permissao: userPermissao } = this.getUsuarioAutenticado() || {};
-  
+
     let request: Observable<any>;
     if (userPermissao === Permissao.ADMIN && perm === Permissao.PROFESSOR.valueOf()) {
       request = this.cadastrarProfessor(usuario);
@@ -172,7 +172,7 @@ export class AuthService {
     } else {
       request = this.cadastrarAluno(usuario);
     }
-  
+
     return request.pipe(
       catchError((error: HttpErrorResponse) => {
         if (error.status === 422) {
@@ -183,7 +183,7 @@ export class AuthService {
     );
   }
 
-  private cadastrarAluno(usuario: Usuario): Observable<any> { 
+  private cadastrarAluno(usuario: Usuario): Observable<any> {
     return this.http.post(`${this.apiURL}/cadastro/USER`, usuario)
       .pipe(
         catchError((error: HttpErrorResponse) => {
@@ -206,7 +206,7 @@ export class AuthService {
         })
       );
   }
-  
+
   private cadastrarProfessor(usuario: Usuario): Observable<any> {
     return this.http.post(`${this.apiURL}/cadastro/PROFESSOR`, usuario)
       .pipe(
@@ -225,22 +225,38 @@ export class AuthService {
         if (response.status === 204) {
           return null;
         }
-        return response.body || null; 
+        return response.body || null;
       }),
       catchError((error: HttpErrorResponse) => {
-       
+
         return throwError(
           'Erro ao visualizar alunos. Por favor, tente novamente.'
         );
       })
     );
   }
-  
+
+  public visualizarAlunosMentoria(): Observable<Usuario[] | null> {
+    return this.http.get<Usuario[]>(`${this.apiURL}/mentoria/visualizar-alunos`, { observe: 'response' }).pipe(
+      map((response) => {
+        if (response.status === 204) {
+          return null;
+        }
+        return response.body || null;
+      }),
+      catchError((error: HttpErrorResponse) => {
+        console.error('Erro ao visualizar alunos de mentoria: ', error);
+        return throwError(
+          'Erro ao visualizar alunos de mentoria. Por favor, tente novamente.'
+        );
+      })
+    );
+  }
 
   public visualizarUsuarios(): Observable<Usuario[] | null> {
     return this.http.get<Usuario[]>(`${this.apiURL}/visualizar/ADMIN`, { observe: 'response' }).pipe(
       map((response) => {
-        if(response.status === 204) {
+        if (response.status === 204) {
           return null;
         }
         return response.body || null;
@@ -253,8 +269,8 @@ export class AuthService {
       })
     )
   }
-   
-  
+
+
   public visualizarUsuarioPorId(id: string): Observable<Usuario> {
     return this.http.get<Usuario>(`${this.apiURL}/visualizarUsuario/${id}`)
   }
@@ -264,16 +280,17 @@ export class AuthService {
     return this.http.post<any>(`${this.apiURL}/2fa/send-code`, loginData, { headers, observe: 'response' });
   }
 
-  verify2FACode(codeMFA: MFACodigoDTO): Observable<any>{
-    const headers = new HttpHeaders({'Content-Type': 'application/json'});
+  verify2FACode(codeMFA: MFACodigoDTO): Observable<any> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
     return this.http.post<boolean>(`${this.apiURL}/2fa/verify-code`, codeMFA, { headers });
   }
-  
-  tentarLogar( username: string, password: string ) : Observable<any> {    const params = new HttpParams()
-                        .set('username', username)
-                        .set('password', password)
-                        .set('grant_type', 'password')
+
+  tentarLogar(username: string, password: string): Observable<any> {
+    const params = new HttpParams()
+      .set('username', username)
+      .set('password', password)
+      .set('grant_type', 'password')
 
 
     const headers = {
@@ -281,7 +298,7 @@ export class AuthService {
       'Content-Type': 'application/x-www-form-urlencoded'
     }
 
-    return this.http.post( this.tokenURL, params.toString(), { headers });
+    return this.http.post(this.tokenURL, params.toString(), { headers });
   }
 
   verificarBolsaExpirada(): Observable<boolean> {

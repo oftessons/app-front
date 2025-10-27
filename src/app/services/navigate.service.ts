@@ -24,7 +24,7 @@ export class NavigateService {
         if (origin) {
             return this.router.navigate([origin]);  
         } else {
-            return this.router.navigate(['/']);  
+            return this.router.navigate(['/usuario/dashboard']);
+            }
         }
     }
-}
