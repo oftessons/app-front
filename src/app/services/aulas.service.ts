@@ -1,9 +1,11 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpEventType, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment.prod';
 import { catchError, map, tap } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
 import { Aula } from '../sistema/painel-de-aulas/aula';
+import { AulaDTO } from '../sistema/cadastro-de-aulas/AulaDTO';
+
 
 @Injectable({
   providedIn: 'root'
@@ -11,27 +13,36 @@ import { Aula } from '../sistema/painel-de-aulas/aula';
 export class AulasService {
 
   apiURL: string = environment.apiURLBase + '/api/aulas';
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-  salvar(formData: FormData): Observable<any> {
-    return this.http.post(`${this.apiURL}/cadastro`, formData, {
-      responseType: 'text'
-    }).pipe(
-      map((response) => ({ message: response })),
-      catchError((error) => {
-        let errorMessage = 'Erro ao salvar a aula.';
-  
-        if (error.error instanceof ErrorEvent) {
-          errorMessage = `Erro: ${error.error.message}`;
-        } else if (error.status) {
-          errorMessage = `Erro no servidor: ${error.status} - ${error.message}`;
-        }
-        console.error(errorMessage);
-        return throwError(() => new Error(errorMessage));
-      })
-    );
+  salvar(formData: FormData): Observable<HttpEvent<Aula>> {
+    const url = `${this.apiURL}/cadastro`;
+
+    const req = new HttpRequest('POST', url, formData, {
+      reportProgress: true,
+    });
+
+    return this.http.request(req);
   }
-  
+
+
+  iniciarUpload(request: { aulaDTO: AulaDTO, fileName: string, contentType: string }): Observable<{ uploadId: string, key: string }> {
+    const url = `${this.apiURL}/iniciar-upload`;
+    return this.http.post<{ uploadId: string, key: string }>(url, request);
+  }
+
+
+  gerarUrlParte(key: string, uploadId: string, partNumber: number): Observable<{ presignedUrl: string }> {
+    const url = `${this.apiURL}/gerar-url-parte`;
+    const request = { key, uploadId, partNumber };
+    return this.http.post<{ presignedUrl: string }>(url, request);
+  }
+
+
+  finalizarUpload(formData: FormData): Observable<Aula> {
+    const url = `${this.apiURL}/finalizar-upload`;
+    return this.http.post<Aula>(url, formData);
+  }
 
   listarAulasPorCategoria(categoria: string): Observable<Aula[]> {
     const url = `${this.apiURL}/${categoria}`;
@@ -92,11 +103,11 @@ export class AulasService {
   }
 
   deletar(id: number): Observable<any> {
-    return this.http.delete(`${this.apiURL}/${id}`, {responseType: 'text'}).pipe(
+    return this.http.delete(`${this.apiURL}/${id}`, { responseType: 'text' }).pipe(
       map((response) => ({ message: response })),
       catchError((error) => {
         let errorMessage = 'Erro ao deletar a aula.';
-  
+
         if (error.error instanceof ErrorEvent) {
           errorMessage = `Erro: ${error.error.message}`;
         } else if (error.status) {
@@ -115,7 +126,7 @@ export class AulasService {
       map((response) => ({ message: response })),
       catchError((error) => {
         let errorMessage = 'Erro ao atualizar a aula.';
-  
+
         if (error.error instanceof ErrorEvent) {
           errorMessage = `Erro: ${error.error.message}`;
         } else if (error.status) {

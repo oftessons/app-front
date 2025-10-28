@@ -263,10 +263,13 @@ input[type="text"]::placeholder {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
-
 
 .btn-secondary {
   margin-top: 12px;
@@ -277,7 +280,7 @@ input[type="text"]::placeholder {
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  margin-right: 10px
+  margin-right: 10px;
 }
 
 @media screen and (max-width: 768px) {
@@ -318,4 +321,71 @@ input[type="text"]::placeholder {
     display: flex;
     flex-direction: column !important;
   }
+}
+
+/* Adicione este CSS ao seu arquivo .css */
+
+/* Usei 'loading-spinner-small' para não conflitar com seu 'loading-spinner'
+  que parece ser para a tela inteira.
+*/
+.loading-spinner-small {
+  border: 4px solid #f3f3f3; /* Cinza claro */
+  border-top: 4px solid #3498db; /* Azul */
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+/* Esta animação 'spin' provavelmente já existe no seu CSS 
+  por causa do '.loading-spinner'. Se não existir, adicione-a.
+*/
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Isso ajuda a centralizar o spinner e o texto "Anexando..." 
+  dentro da caixa de upload.
+*/
+.upload-placeholder {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Garanta que seu overlay fique centralizado */
+.loading-overlay {
+  /* ... (seus estilos existentes: position, top, left, width, height, background) ... */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white; /* ou a cor que preferir */
+  z-index: 1000;
+}
+
+/* Estilos básicos da barra de progresso (se não usar Bootstrap) */
+.progress {
+  width: 70%;
+  background-color: #e9ecef;
+  border-radius: 0.25rem;
+  height: 25px;
+  overflow: hidden; /* Garante que a barra interna não vaze */
+}
+
+.progress-bar {
+  height: 100%;
+  background-color: #007bff;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: width 0.3s ease; /* Animação suave */
+  white-space: nowrap; /* Impede que o texto quebre */
 }

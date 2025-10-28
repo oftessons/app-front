@@ -949,7 +949,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     }
 
 
-    this.questoesService.filtrarQuestoes(this.usuarioId, filtros, 0, 0).subscribe(
+    this.questoesService.filtrarQuestoes(this.usuarioId, filtros, 0, 50).subscribe(
       (questoes: Questao[]) => {
         if (questoes.length === 0) {
           this.message = this.getMensagemNenhumaQuestaoEncontrada(filtros);
