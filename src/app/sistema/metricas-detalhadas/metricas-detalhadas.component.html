@@ -1,9 +1,7 @@
 <div class="container pt-5 metricas-container" style="position: relative;">
-
   <button *ngIf="simuladoIdAlunoMentorado" (click)="fecharPopup()" class="close-popup-button" aria-label="Fechar">
     &times;
   </button>
-
   <div class="container mt-4">
 
     <div *ngIf="carregando" class="loading-spinner">
@@ -12,29 +10,57 @@
 
     <div *ngIf="!carregando">
 
+      <!-- Resultado por Tema (Inalterado) -->
       <div class="grafico-card">
         <h2>Resultado por Tema</h2>
-        <div class="chart-wrapper">
-          <canvas id="graficoPorTema"></canvas>
+
+        <div class="graficos-subtema-wrapper">
+
+          <div *ngFor="let fragmento of dadosTemaFragmentados" class="chart-wrapper-single">
+
+            <div class="chart-canvas-wrapper">
+              <canvas #temaCanvas></canvas>
+            </div>
+
+          </div>
         </div>
       </div>
 
 
+      <!-- Resultado por Subtema (Modificado com loop interno) -->
       <div class="grafico-card">
         <h2>Resultado por Subtema</h2>
 
         <div class="subtemas-grid-container">
+
+          <!-- Loop externo: Cria o card (ex: "AAO Adapted") -->
           <div *ngFor="let grupo of dadosAgrupadosPorTema" class="subtema-grupo">
-            <h3>{{ grupo.tema }}</h3>
-            <div class="chart-wrapper chart-wrapper-bar">
-              <canvas #subtemaCanvas></canvas>
+
+            <h3 class="titulo-subtema-enfase">
+              {{ grupo.tema }}
+              <span class="metricas-titulo-enfase">
+                (Acertos: {{ grupo.percentualAcertos | number:'1.1-2' }}%)
+              </span>
+            </h3>
+
+            <!-- NOVO: Wrapper para os gráficos (1 ou mais) -->
+            <div class="graficos-subtema-wrapper">
+
+              <!-- Loop interno: Cria um gráfico para cada fragmento -->
+              <div *ngFor="let fragmento of grupo.subtemasFragmentados" class="chart-container-single">
+                <div class="chart-wrapper-single">
+                  <div class="chart-canvas-wrapper">
+                    <!-- O ViewChildren vai pegar CADA canvas gerado aqui -->
+                    <canvas #acertosCanvas></canvas>
+                  </div>
+                </div>
+              </div>
+
             </div>
+
           </div>
         </div>
-
       </div>
-
     </div>
-
   </div>
 </div>
