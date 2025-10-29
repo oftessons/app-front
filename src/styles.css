@@ -7,6 +7,7 @@
   --primary-color: #0a1435;
 
   --text-color: #212529;
+  --text-color-secondary: #6c757d;
   --bg-geral: #E3EAF0;
   --bg-navbar: #0a1435;
   --bg-sidebar: #f2f2f2;
@@ -60,6 +61,7 @@
 
 body.dark-mode {
   --text-color: #e3e3e3;
+  --text-color-secondary: #a0a0a0;
   --bg-geral: #1a1e22;
   --bg-navbar: #000021;
   --bg-sidebar: #14181a;

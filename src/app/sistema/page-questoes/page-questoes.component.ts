@@ -112,6 +112,8 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   filtroIdRespondendo: number = 0;
   anosComPremium: any[] = [];
   tiposDeProvaComPremium: any[] = [];
+  listaDeIds: number[] = [];
+  private questaoCache = new Map<number, Questao>();
 
   jaRespondeu: boolean = false;
   respondendo: boolean = false;
@@ -286,7 +288,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
           if (meuFiltro) {
             this.preencherDadosDoFiltro(meuFiltro);
 
-
           } else {
             this.exibirMensagem('Filtro não encontrado.', 'erro');
           }
@@ -343,21 +344,92 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       });
     }
 
-    if (meuFiltro.questoes && meuFiltro.questoes.length > 0) {
-      this.questoes = meuFiltro.questoes;
-      this.numeroDeQuestoes = this.questoes.length;
+    if (meuFiltro.questoesIds && meuFiltro.questoesIds.length > 0) {
+
+      this.listaDeIds = meuFiltro.questoesIds.map((id: any) => Number(id));
+      this.numeroDeQuestoes = this.listaDeIds.length;
       this.paginaAtual = 0;
-      this.questaoAtual = this.questoes[this.paginaAtual];
-      this.navegacaoPorQuestao = this.questoes.map((q, index) => ({ questao: q, index: index }));
+
+      this.navegacaoPorQuestao = this.listaDeIds.map((id, index) => ({ id: id, index: index }));
+
 
       this.carregarProgressoDoFiltro();
 
-      if (this.usuarioId && this.questaoAtual) {
-        this.buscarRespostaSalva(this.questaoAtual.id);
-      }
     } else {
       this.message = "Este filtro salvo não contém questões.";
     }
+  }
+
+
+  carregarQuestaoDaPagina(): void {
+    if (this.listaDeIds.length === 0) return;
+
+    this.carregando = true;
+    this.questaoAtual = null;
+
+    const idDaQuestao = this.listaDeIds[this.paginaAtual];
+
+    if (this.questaoCache.has(idDaQuestao)) {
+      this.processarQuestaoCarregada(this.questaoCache.get(idDaQuestao)!);
+    } else {
+      this.questoesService.buscarQuestaoPorId(this.usuarioId, idDaQuestao).subscribe({
+        next: (questaoCarregada) => {
+          if (questaoCarregada) {
+            this.questaoCache.set(idDaQuestao, questaoCarregada); 
+            this.processarQuestaoCarregada(questaoCarregada);
+          } else {
+            this.message = 'Questão não encontrada.';
+            this.carregando = false;
+          }
+        },
+        error: (err) => {
+          // ... seu tratamento de erro
+          this.carregando = false;
+        }
+      });
+    }
+  }
+
+  private prebuscarProximaQuestao(): void {
+    const proximaPagina = this.paginaAtual + 1;
+
+    if (proximaPagina < this.listaDeIds.length) {
+      const proximoId = this.listaDeIds[proximaPagina];
+
+      if (!this.questaoCache.has(proximoId)) {
+        this.questoesService.buscarQuestaoPorId(this.usuarioId, proximoId).subscribe({
+          next: (questaoPrebuscada) => {
+            if (questaoPrebuscada) {
+              this.questaoCache.set(proximoId, questaoPrebuscada);
+              console.log(`Questão ${proximoId} pré-buscada e salva no cache.`);
+            }
+          },
+          error: (err) => {
+            console.error(`Erro ao pré-buscar questão ${proximoId}:`, err);
+          }
+        });
+      }
+    }
+  }
+
+  private processarQuestaoCarregada(questao: Questao): void {
+    this.questaoAtual = questao;
+    this.questoesStateService.setQuestaoAtual(this.questaoAtual);
+
+    this.sanitizerEnunciado = this.applyClassesToEnunciado(this.questaoAtual.enunciadoDaQuestao || '');
+
+    const selectElements = document.querySelector('.question-dropdown') as HTMLSelectElement;
+    if (selectElements) {
+      selectElements.selectedIndex = this.paginaAtual;
+    }
+
+    if (this.usuarioId && this.questaoAtual) {
+      this.buscarRespostaSalva(this.questaoAtual.id);
+    }
+
+    this.carregando = false;
+
+    this.prebuscarProximaQuestao();
   }
 
   private inicializarDescricoes(): void {
@@ -886,6 +958,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
         } else {
           this.message = '';
           this.questoes = questoes;
+
           this.paginaAtual = 0;
           this.questaoAtual = this.questoes[this.paginaAtual];
 
@@ -921,10 +994,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
 
   private carregarProgressoDoFiltro(): void {
-    if (!this.filtroIdRespondendo || this.filtroIdRespondendo === 0) {
-      return;
-    }
-
     this.carregando = true;
     this.questoesService.getRespostasSalvasParaFiltro(this.usuarioId, this.filtroIdRespondendo)
       .subscribe({
@@ -937,8 +1006,15 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
           let proximaPaginaNaoRespondida = 0;
           let todasRespondidas = true;
 
-          for (let i = 0; i < this.questoes.length; i++) {
-            const questaoId = this.questoes[i].id;
+          if (respostas.length === 0) {
+            // Não há progresso, apenas carregue a primeira questão (página 0)
+            console.log("Estou aqui");
+            this.paginaAtual = 0;
+            this.carregarQuestaoDaPagina();
+            return;
+          }
+          for (let i = 0; i < this.listaDeIds.length; i++) { // <-- MUDANÇA
+            const questaoId = this.listaDeIds[i]; // <-- MUDANÇA
             if (!this.respostasSalvas.has(questaoId)) {
               proximaPaginaNaoRespondida = i;
               todasRespondidas = false;
@@ -947,27 +1023,22 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
           }
 
           if (todasRespondidas) {
-            proximaPaginaNaoRespondida = this.questoes.length > 0 ? this.questoes.length - 1 : 0;
+            proximaPaginaNaoRespondida = this.listaDeIds.length > 0 ? this.listaDeIds.length - 1 : 0; // <-- MUDANÇA
           }
+          // --- FIM DA LÓGICA CORRIGIDA ---
 
           this.paginaAtual = proximaPaginaNaoRespondida;
-          this.questaoAtual = this.questoes[this.paginaAtual];
-          this.questoesStateService.setQuestaoAtual(this.questaoAtual);
 
-          const selectElements = document.querySelector('.question-dropdown') as HTMLSelectElement;
-          if (selectElements) {
-            selectElements.selectedIndex = this.paginaAtual;
-          }
-
-          if (this.questaoAtual) {
-            this.buscarRespostaSalva(this.questaoAtual.id);
-          }
-          this.carregando = false;
+          // Agora, carregue a questão da página que encontramos
+          this.carregarQuestaoDaPagina();
+          // O 'this.carregando = false' será feito dentro de carregarQuestaoDaPagina
         },
         error: (error) => {
           console.error('Erro ao carregar progresso do filtro:', error);
           this.exibirMensagem('Não foi possível carregar seu progresso anterior.', 'erro');
-          this.carregando = false;
+          // Fallback: carregar a primeira questão
+          this.paginaAtual = 0;
+          this.carregarQuestaoDaPagina();
         }
       });
   }
@@ -1107,6 +1178,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
       this.paginaAtual--;
       this.questaoAtual = this.questoes[this.paginaAtual];
+      this.carregarQuestaoDaPagina();
 
       this.resetarOcorrenciasDeQuestao();
       this.questoesStateService.setQuestaoAtual(this.questaoAtual);
@@ -1122,7 +1194,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   }
 
   proximaQuestao() {
-    if (this.paginaAtual < this.questoes.length - 1) {
+    if (this.paginaAtual < this.numeroDeQuestoes - 1) {
       const selectElements = document.querySelector('.question-dropdown') as HTMLSelectElement;
 
       if (selectElements) {
@@ -1132,6 +1204,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
       this.paginaAtual++;
       this.questaoAtual = this.questoes[this.paginaAtual];
+      this.carregarQuestaoDaPagina();
 
       this.resetarOcorrenciasDeQuestao();
       this.questoesStateService.setQuestaoAtual(this.questaoAtual);
@@ -1661,6 +1734,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     this.paginaAtual = index;
     this.questaoAtual = this.questoes[this.paginaAtual];
     this.questoesStateService.setQuestaoAtual(this.questaoAtual);
+    this.carregarQuestaoDaPagina();
 
     if (this.questaoAtual) {
       this.buscarRespostaSalva(this.questaoAtual.id);

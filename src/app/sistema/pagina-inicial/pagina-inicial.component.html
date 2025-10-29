@@ -4,17 +4,111 @@
       <img src="assets/imagens/logoq-bank.svg" alt="Oftlessons Logo" />
     </div>
     <div class="nav-links">
-      <a href="#hero" (click)="scrollToSection('hero'); $event.preventDefault()" class="active">Início</a>
+      <a href="#professores" (click)="scrollToSection('professores'); $event.preventDefault()">Equipe</a>
       <a href="#depoimentos" (click)="scrollToSection('depoimentos'); $event.preventDefault()">Depoimentos</a>
-      <a href="#plans" (click)="scrollToSection('plans'); $event.preventDefault()">Planos</a>
+      <a href="#hero" (click)="scrollToSection('hero'); $event.preventDefault()" class="active">Cadastro</a>
     </div>
   </nav>
 
-  <section id="hero" class="hero-section">
+  <section id="professores" class="professores-section">
+    <div class="container">
+      <div class="professores-border">
+        <div class="professores-header">
+          <h2 class="professores-title">Nossa Equipe</h2>
+          <p class="professores-subtitle">Subespecialistas que ministram aulas e comentam as questões da plataforma</p>
+        </div>
+
+        <!-- Professores que dão aulas -->
+        <div class="professores-categoria">
+          <div class="categoria-header">
+            <div class="categoria-icon">
+              <img src="assets/Icons/au-bra.svg" alt="" srcset="">
+            </div>
+            <h3 class="categoria-title">Equipe de Aulas</h3>
+          </div>
+          <p class="categoria-descricao">Profissionais que ministram as videoaulas e conteúdos didáticos da plataforma</p>
+          <div class="professores-grid">
+            <div class="professor-card" *ngFor="let professor of professoresAulas">
+              <div class="professor-foto">
+                <img [src]="professor.foto" [alt]="professor.nome" />
+              </div>
+              <div class="professor-info">
+                <h3 class="professor-nome">{{ professor.nome }}</h3>
+                <p class="professor-especialidade" *ngIf="professor.especialidade">{{ professor.especialidade }}</p>
+                <p class="professor-experiencia">{{ professor.experiencia }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Divisor -->
+        <div class="categoria-divisor"></div>
+
+        <!-- Professores comentadores -->
+        <div class="professores-categoria">
+          <div class="categoria-header">
+            <div class="categoria-icon comentador">
+              <img src="assets/Icons/dark/caderno-dark.svg" alt="" srcset="">
+            </div>
+            <h3 class="categoria-title comentador">Equipe de Comentários de Questões</h3>
+          </div>
+          <p class="categoria-descricao">Especialistas responsáveis pelos comentários detalhados das questões</p>
+          <div class="professores-grid">
+            <div class="professor-card comentador" *ngFor="let professor of professoresComentadores">
+              <div class="professor-foto comentador">
+                <img [src]="professor.foto" [alt]="professor.nome" />
+              </div>
+              <div class="professor-info">
+                <h3 class="professor-nome">{{ professor.nome }}</h3>
+                <p class="professor-especialidade" *ngIf="professor.especialidade">{{ professor.especialidade }}</p>
+                <p class="professor-experiencia">{{ professor.experiencia }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="depoimentos" class="depoimentos-section">
+    <div class="container">
+      <h2 class="depoimento-title">Depoimentos</h2>
+      <div class="carousel-container">
+        <div class="depoimentos-grid">
+          <div class="depoimento-card" *ngFor="let depoimento of depoimentosExibidos">
+            <div class="depoimento-author">
+              <div class="depoimento-avatar">
+                <img [src]="depoimento.image" alt="{{ depoimento.name }}" />
+              </div>
+              <div class="depoimento-info">
+                <h4>{{ depoimento.name }}</h4>
+                <p>{{ depoimento.role }}</p>
+              </div>
+            </div>
+            <div class="depoimento-content">
+              <p>"{{ depoimento.content }}"</p>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-controls">
+          <button class="carousel-control prev" (click)="prevDepoimento()">❮</button>
+          <div class="carousel-dots">
+            <span *ngFor="let _, let i = index; of: depoimentos.slice(0, depoimentos.length - (isMobile ? 0 : 1))"
+                  class="carousel-dot"
+                  [class.active]="i === currentDepoimentoIndex"
+                  (click)="goToDepoimento(i)"></span>
+          </div>
+          <button class="carousel-control next" (click)="nextDepoimento()">❯</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+    <section id="hero" class="hero-section">
     <div class="container">
       <div class="hero-content">
         <div class="hero-text">
-          <h1><span>Domine</span> os conceitos que <span>caem</span> na Prova Nacional de <span>Oftamologia</span></h1>
+          <h1><span>Domine</span> os conceitos que <span>caem</span> na Prova Nacional de <span>Oftalmologia</span></h1>
           <p>Não é sobre estudar tudo, é sobre estudar certo.</p>
         </div>
         <div class="register-card">
@@ -201,74 +295,11 @@
     </div>
   </section>
 
-  <section id="depoimentos" class="depoimentos-section">
-    <div class="container">
-      <h2 class="depoimento-title">Depoimentos</h2>
-      <div class="carousel-container">
-        <div class="depoimentos-grid">
-          <div class="depoimento-card" *ngFor="let depoimento of depoimentosExibidos">
-            <div class="depoimento-author">
-              <div class="depoimento-avatar">
-                <img [src]="depoimento.image" alt="{{ depoimento.name }}" />
-              </div>
-              <div class="depoimento-info">
-                <h4>{{ depoimento.name }}</h4>
-                <p>{{ depoimento.role }}</p>
-              </div>
-            </div>
-            <div class="depoimento-content">
-              <p>"{{ depoimento.content }}"</p>
-            </div>
-          </div>
-        </div>
-        <div class="carousel-controls">
-          <button class="carousel-control prev" (click)="prevDepoimento()">❮</button>
-          <div class="carousel-dots">
-            <span *ngFor="let _, let i = index; of: depoimentos.slice(0, depoimentos.length - (isMobile ? 0 : 1))"
-                  class="carousel-dot"
-                  [class.active]="i === currentDepoimentoIndex"
-                  (click)="goToDepoimento(i)"></span>
-          </div>
-          <button class="carousel-control next" (click)="nextDepoimento()">❯</button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="plans" class="plans-section">
-    <div class="container">
-      <div class="plans-border">
-        <div class="plans-header">
-          <h2 class="plans-title">Planos acessíveis para todos os perfis</h2>
-          <p class="plans-subtitle">Escolha o plano que melhor se adapta a você e comece sua jornada de aprendizado.</p>
-        </div>
-        <div class="plans-grid">
-          <app-card-plano
-            *ngFor="let plan of planos"
-            [titulo]="plan.titulo"
-            [descricao]="plan.descricao"
-            [preco]="plan.preco"
-            [textoBotao]="'Escolher plano'"
-            [recomendado]="plan.recomendado"
-            [corCabecalho]="plan.corCabecalho || ''"
-            [textoAdicional]="plan.textoAdicional || ''"
-            [textoParcelas]="plan.textoParcelas || ''"
-            rota="#hero">
-          </app-card-plano>
-        </div>
-        <div class="plans-footer">
-          <p>Sujeito às condições estabelecidas nos nossos <a href="assets/docs/pp.pdf" target="_blank">Termos de Uso</a>
-            e <a href="assets/docs/pp.pdf" target="_blank">Política de Assinatura</a>.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
 
   <div class="section-indicator">
-  <a href="#hero" class="section-dot" data-section="hero"></a>
-  <a href="#depoimentos" class="section-dot" data-section="depoimentos"></a>
-  <a href="#plans" class="section-dot" data-section="plans"></a>
+    <a href="#professores" class="section-dot" data-section="professores"></a>
+    <a href="#depoimentos" class="section-dot" data-section="depoimentos"></a>
+    <a href="#hero" class="section-dot" data-section="hero"></a>
   </div>
 
   <footer class="footer">
