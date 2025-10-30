@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Tema } from '../page-questoes/enums/tema';  // Importando o enum Tema
+import { Tema } from '../page-questoes/enums/tema';
 import { TemaDescricoes } from '../page-questoes/enums/tema-descricao';
 import { FlashcardService } from 'src/app/services/flashcards.service';
 

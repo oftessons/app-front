@@ -6,6 +6,7 @@ import { SubtemaDescricoes } from '../page-questoes/enums/subtema-descricao';
 import { temasESubtemas } from '../page-questoes/enums/map-tema-subtema';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
+import { FlashcardService, SubtemaStatsDTO } from 'src/app/services/flashcards.service'; // Certifique-se que o caminho está correto
 
 @Component({
   selector: 'app-tema-flashcards',
@@ -17,35 +18,64 @@ export class TemaFlashcardsComponent implements OnInit {
   @Input() cards_estudados: number = 0;
   @Input() cards_totais: number = 0;
 
-  listaDeSubtemas: Subtema[] = [];
-
   subtemaDescricoes = SubtemaDescricoes;
 
-  constructor(private route: ActivatedRoute, private location: Location) {}
+
+  public subtemaStatsList: SubtemaStatsDTO[] = [];
+
+  constructor(
+    private route: ActivatedRoute,
+    private location: Location,
+    private flashcardService: FlashcardService
+  ) {}
 
   ngOnInit(): void {
     const temaIdUrl = this.route.snapshot.paramMap.get('temaId');
 
     if (temaIdUrl) {
+
       const temaKey = Object.keys(Tema).find(
-        (key) => Tema[key as keyof typeof Tema].toLowerCase() === temaIdUrl
+        (key) => (Tema[key as keyof typeof Tema]).toLowerCase() === temaIdUrl
       ) as keyof typeof Tema | undefined;
 
       if (temaKey) {
-        const temaEnum = Tema[temaKey];
-
-        this.tema = TemaDescricoes[temaEnum];
-        this.listaDeSubtemas = temasESubtemas[temaEnum] || [];
-        this.cards_totais = this.listaDeSubtemas.length;
+        this.tema = TemaDescricoes[Tema[temaKey]];
       } else {
         this.tema = 'Tema não encontrado';
       }
+
+
+      this.flashcardService.getStatsPorTema(temaIdUrl).subscribe({
+        next: (statsList) => {
+
+          this.subtemaStatsList = statsList;
+
+
+          this.cards_estudados = statsList.reduce(
+            (acumulador, subtema) => acumulador + subtema.flashcardsEstudados, 0
+          );
+          this.cards_totais = statsList.reduce(
+            (acumulador, subtema) => acumulador + subtema.totalFlashcards, 0
+          );
+        },
+        error: (err) => {
+          console.error('Erro ao buscar estatísticas dos subtemas:', err);
+          this.cards_estudados = 0;
+          this.cards_totais = 0;
+          this.subtemaStatsList = [];
+        }
+      });
     }
   }
 
 
-  isFlashcardModalVisible = false;
+  public getDescricao(key: string): string {
+    const enumKey = key.toUpperCase() as Subtema;
+    return this.subtemaDescricoes[enumKey] || key;
+  }
 
+
+  isFlashcardModalVisible = false;
 
   openFlashcard(): void {
     this.isFlashcardModalVisible = true;

@@ -12,17 +12,19 @@
 
         <div class="subtemas-flashcards">
             <app-flashcards-subtemas
-                *ngFor="let subtemaItem of listaDeSubtemas"
-                [subtema]="subtemaDescricoes[subtemaItem] || subtemaItem"
-                [cards_total]="15"  
-                [cards_estudados]="0" 
-                [porcentagem]="0">
-            ></app-flashcards-subtemas>
-        </div>
+                *ngFor="let stat of subtemaStatsList"
+                
+                [subtema]="getDescricao(stat.subtema)"
+                
+                [cards_total]="stat.totalFlashcards"
+                
+                [cards_estudados]="stat.flashcardsEstudados"
+                
+                [porcentagem]="(stat.totalFlashcards > 0) ? (stat.flashcardsEstudados / stat.totalFlashcards * 100) : 0">
+            </app-flashcards-subtemas>
+             </div>
+        
         <app-flashcard-modal [isVisible]="isFlashcardModalVisible" (close)="closeFlashcard()">
-
         </app-flashcard-modal>
     </div>
 </div>
-
-

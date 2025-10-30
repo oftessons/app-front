@@ -9,7 +9,7 @@ export class FlashcardsSubtemasComponent implements OnInit {
   @Input() subtema: string = 'Subtema';
   @Input() porcentagem: number = 0;
   @Input() cards_estudados: number = 0;
-  @Input() cards_total: number = 12;
+  @Input() cards_total: number = 0;
  
   constructor() { }
 
