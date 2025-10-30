@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { SelectPadraoComponent } from './select-padrao/select-padrao.component';
 import { InputPadraoComponent } from './input-padrao/input-padrao.component';
 import { ImageResizeModule } from './image-resize/image-resize.module';
+import { LottieModule } from 'ngx-lottie';
 
 // material imports
 import { MatIconModule } from "@angular/material/icon";
@@ -35,7 +36,8 @@ import { ModalTrilhaComponent } from './modal-trilha/modal-trilha.component';
     MatIconModule,
     ImageResizeModule,
     FormsModule,
-    AppRoutingModule
+    AppRoutingModule,
+    LottieModule
   ],
   exports: [
     SelectPadraoComponent,

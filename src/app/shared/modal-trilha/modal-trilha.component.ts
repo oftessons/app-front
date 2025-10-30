@@ -8,6 +8,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { TrilhaData } from 'src/app/services/modal-trilha.service';
+import { AnimationOptions } from 'ngx-lottie';
 
 type TipoConteudo = 'questoes-pre' | 'aulas' | 'questoes-pos' | 'flashcards';
 type ModoVisualizacao = 'selecao' | 'executando' | 'resumo';
@@ -27,45 +28,51 @@ export class ModalTrilhaComponent implements OnInit {
   @Output() closeModal = new EventEmitter<void>();
   @Output() iniciarTrilha = new EventEmitter<TipoConteudo>();
 
-  // Controle de fluxo
   modoAtual: ModoVisualizacao = 'selecao';
   etapaAtual: TipoConteudo = 'questoes-pre';
   etapasCompletas: Set<string> = new Set();
   
-  // Controle de questões
   questaoAtualIndex: number = 0;
   respostasUsuario: Map<number, string> = new Map();
   questoesAtuais: any[] = [];
   tipoQuestoesAtual: 'pre' | 'pos' = 'pre';
-  jaRespondeu: boolean = false; // Controle se já respondeu a questão atual
-  isRespostaCorreta: boolean = false; // Se a resposta está correta
+  jaRespondeu: boolean = false; 
+  isRespostaCorreta: boolean = false; 
 
-  // Controle de aulas
   aulaAtualIndex: number = 0;
   
-  // Estatísticas do resumo
   acertos: number = 0;
   erros: number = 0;
+  flashcardsEstudados: number = 0;
+  tempoTotal: string = '';
 
-  // Expor Math para o template
+  animacaoDesbloqueioOptions: AnimationOptions = {
+    path: 'assets/animations/trofeu.json',
+    loop: false,
+    autoplay: true
+  };
+
+  
   Math = Math;
 
   constructor() {}
 
   ngOnInit(): void {
-    // Inicializa etapas completas se fornecidas
+    
     if (this.trilhaData?.etapasCompletas) {
       this.etapasCompletas = new Set(this.trilhaData.etapasCompletas);
     }
     
-    // Define etapa atual baseada no progresso
     if (this.trilhaData?.etapaAtual) {
       this.etapaAtual = this.trilhaData.etapaAtual;
     }
+
+    const primeiraEtapa = this.proximaEtapaDesbloqueada();
+    if (primeiraEtapa) {
+      this.iniciarEtapa(primeiraEtapa);
+    }
   }
 
-  // ============ CONTROLE DE FLUXO ============
-  
   iniciarEtapa(tipo: TipoConteudo): void {
     this.etapaAtual = tipo;
     this.modoAtual = 'executando';
@@ -80,19 +87,24 @@ export class ModalTrilhaComponent implements OnInit {
   }
 
   voltarParaSelecao(): void {
-    this.modoAtual = 'selecao';
-    this.questaoAtualIndex = 0;
-    this.aulaAtualIndex = 0;
+    
+    const proximaEtapa = this.proximaEtapaDesbloqueada();
+    if (proximaEtapa) {
+      this.questaoAtualIndex = 0;
+      this.aulaAtualIndex = 0;
+      this.iniciarEtapa(proximaEtapa);
+    } else {
+      
+      this.onModalClose();
+    }
   }
 
   etapaBloqueada(tipo: TipoConteudo): boolean {
     const ordem: TipoConteudo[] = ['questoes-pre', 'aulas', 'questoes-pos', 'flashcards'];
     const indexAtual = ordem.indexOf(tipo);
     
-    // Primeira etapa sempre desbloqueada
     if (indexAtual === 0) return false;
     
-    // Verifica se a etapa anterior foi completa
     const etapaAnterior = ordem[indexAtual - 1];
     return !this.etapasCompletas.has(etapaAnterior);
   }
@@ -106,10 +118,8 @@ export class ModalTrilhaComponent implements OnInit {
       }
     }
     
-    return null; // Todas completas
+    return null; 
   }
-
-  // ============ QUESTÕES ============
 
   iniciarQuestoes(tipo: 'questoes-pre' | 'questoes-pos'): void {
     this.tipoQuestoesAtual = tipo === 'questoes-pre' ? 'pre' : 'pos';
@@ -129,7 +139,6 @@ export class ModalTrilhaComponent implements OnInit {
   }
 
   selecionarResposta(alternativa: string): void {
-    // Só permite selecionar se ainda não respondeu
     if (!this.jaRespondeu) {
       this.respostasUsuario.set(this.questaoAtualIndex, alternativa);
     }
@@ -144,13 +153,10 @@ export class ModalTrilhaComponent implements OnInit {
       const respostaUsuario = this.respostasUsuario.get(this.questaoAtualIndex);
       const questao = this.questaoAtual;
       
-      // Verifica se a resposta está correta
       this.isRespostaCorreta = respostaUsuario === questao.respostaCorreta;
       
-      // Marca que já respondeu esta questão
       this.jaRespondeu = true;
       
-      // Aqui você pode adicionar lógica para exibir feedback visual
       console.log(this.isRespostaCorreta ? 'Resposta correta!' : 'Resposta incorreta!');
     }
   }
@@ -158,7 +164,7 @@ export class ModalTrilhaComponent implements OnInit {
   proximaQuestao(): void {
     if (this.questaoAtualIndex < this.questoesAtuais.length - 1) {
       this.questaoAtualIndex++;
-      this.jaRespondeu = false; // Reset para a próxima questão
+      this.jaRespondeu = false; 
       this.isRespostaCorreta = false;
     } else {
       this.finalizarQuestoes();
@@ -168,13 +174,13 @@ export class ModalTrilhaComponent implements OnInit {
   questaoAnterior(): void {
     if (this.questaoAtualIndex > 0) {
       this.questaoAtualIndex--;
-      // Verifica se já tinha respondido esta questão antes
+      
       this.jaRespondeu = this.respostasUsuario.has(this.questaoAtualIndex);
     }
   }
 
   finalizarQuestoes(): void {
-    // Calcular estatísticas
+    
     this.acertos = 0;
     this.erros = 0;
     
@@ -187,23 +193,17 @@ export class ModalTrilhaComponent implements OnInit {
       }
     });
 
-    // Marcar etapa como completa
     const etapaKey = this.tipoQuestoesAtual === 'pre' ? 'questoes-pre' : 'questoes-pos';
     this.etapasCompletas.add(etapaKey);
     
-    // Mostrar resumo
     this.modoAtual = 'resumo';
   }
 
-  // ============ AULAS ============
-
   iniciarAulas(): void {
     this.aulaAtualIndex = 0;
-    // Aqui você pode abrir um player de vídeo ou redirecionar
+    
     console.log('Iniciando aulas:', this.trilhaData.aulas);
     
-    // Para o exemplo, vamos marcar como completo imediatamente
-    // Na implementação real, você vai marcar quando todas as aulas forem assistidas
     this.marcarAulasCompletas();
   }
 
@@ -212,14 +212,20 @@ export class ModalTrilhaComponent implements OnInit {
     this.modoAtual = 'resumo';
   }
 
-  // ============ FLASHCARDS ============
-
   iniciarFlashcards(): void {
     console.log('Iniciando flashcards:', this.trilhaData.flashcards);
-    this.iniciarTrilha.emit('flashcards');
+    
+    this.flashcardsEstudados = this.trilhaData?.flashcards?.length || 0;
+    
+    this.marcarFlashcardsCompletos();
   }
 
-  // ============ HELPERS ============
+  marcarFlashcardsCompletos(): void {
+    this.etapasCompletas.add('flashcards');
+    this.modoAtual = 'resumo';
+  }
+
+  
 
   getQuantidade(tipo: TipoConteudo): number {
     switch (tipo) {
@@ -270,9 +276,45 @@ export class ModalTrilhaComponent implements OnInit {
   }
 
   getPorcentagemProgresso(): number {
-    const total = 4; // Total de etapas
+    const total = 4; 
     const completas = this.etapasCompletas.size;
     return Math.round((completas / total) * 100);
+  }
+
+  getNomeBotaoProximaEtapa(): string {
+    const proximaEtapa = this.proximaEtapaDesbloqueada();
+    switch (proximaEtapa) {
+      case 'questoes-pre':
+        return 'Iniciar questões';
+      case 'aulas':
+        return 'Assistir agora';
+      case 'questoes-pos':
+        return 'Fazer pós-teste';
+      case 'flashcards':
+        return 'Revisar flashcards';
+      default:
+        return 'Continuar';
+    }
+  }
+
+  getSubtituloResumo(): string {
+    const proximaEtapa = this.proximaEtapaDesbloqueada();
+    switch (proximaEtapa) {
+      case 'aulas':
+        return 'Dê continuidade e assista a aula para fixar o conteúdo.';
+      case 'questoes-pos':
+        return 'Complete o pós-teste para avaliar seu aprendizado.';
+      case 'flashcards':
+        return 'Revise os flashcards para memorizar o conteúdo.';
+      default:
+        return 'Continue sua jornada de aprendizado.';
+    }
+  }
+
+  calcularDesempenho(): number {
+    const total = this.acertos + this.erros;
+    if (total === 0) return 0;
+    return Math.round((this.acertos / total) * 100);
   }
 
   onModalClose(): void {

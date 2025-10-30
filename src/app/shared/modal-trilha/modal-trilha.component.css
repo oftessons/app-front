@@ -60,10 +60,10 @@
 }
 
 .modal-trilha-title {
-  font-size: 24px;
-  font-weight: 700;
-  margin: 0;
-  line-height: 1.2;
+  font-size: 24px !important;
+  font-weight: 700 !important;
+  margin: 0 !important;
+  line-height: 1.2 !important;
 }
 
 .modal-trilha-subtitle {
@@ -383,7 +383,6 @@
 }
 
 .progress-value {
-  color: #f5ce50;
   font-size: 1rem;
 }
 
@@ -476,8 +475,8 @@
 
 .etapa-card {
   flex: 1;
-  min-width: 200px;
-  background: var(--progress-bg);
+  height: 100%;
+  background: var(--trilha-questao-bg);
   border-radius: 12px;
   padding: 1.5rem;
   display: flex;
@@ -493,7 +492,6 @@
 }
 
 .etapa-card.completa {
-  background: #f0fdf4;
   border-color: #22c55e;
 }
 
@@ -771,7 +769,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 6px 20px;
+  padding: 12px 16px;
   width: 130px;
   border: none;
   border-radius: 5px;
@@ -791,7 +789,7 @@
 }
 
 .btn-responder {
-  background-color: #28a745;
+  background-color: var(--green);
 }
 
 .btn-anterior:disabled {
@@ -813,21 +811,65 @@
 
 /* ==================== RESUMO ==================== */
 .resumo-header {
-  padding: 2rem;
-}
-
-.resumo-header .modal-trilha-title,
-.resumo-header .modal-trilha-subtitle {
-  color: white !important;
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem 1.5rem;
 }
 
 .resumo-content {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2rem;
-  padding: 3rem 2rem;
+  gap: 1.5rem;
+  padding: 0 2rem 3rem 2rem;
   text-align: center;
+}
+
+.resumo-animation {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.resumo-animation ng-lottie {
+  max-width: 300px;
+  width: 100%;
+}
+
+.resumo-header-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: 600px;
+  width: 100%;
+}
+
+.resumo-header-text .modal-trilha-title {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+.resumo-header-text .modal-trilha-subtitle {
+  margin: 0;
+  font-size: 16px;
+  color: var(--text-color);
+  opacity: 0.8;
+}
+
+.resumo-header-text .modal-trilha-subtitle.tempo-total {
+  padding: 8px 16px;
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 8px;
+  display: inline-block;
+  margin: 0 auto;
+}
+
+.resumo-header-text .modal-trilha-subtitle.tempo-total strong {
+  color: #3b82f6;
 }
 
 .resumo-stats-cards {
@@ -843,7 +885,7 @@
   flex-direction: column;
   align-items: flex-start;
   width: 100%;
-  background: var(--bg-container);
+  background: var(--trilha-questao-bg);
   padding: 20px;
   border-radius: 16px;
   gap: 16px;
@@ -858,20 +900,23 @@
 
 .card-text-estatistica-resumo {
   color: var(--text-color);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
 }
 
 .card-text-estatistica-resumo h3 {
-  margin: 0 0 8px 0;
-  font-size: 24px;
+  margin: 0 0 4px 0;
+  font-size: 32px;
   font-weight: 700;
-  text-align: left;
 }
 
 .card-text-estatistica-resumo p {
   margin: 0;
   font-size: 14px;
   color: var(--text-color);
-  opacity: 0.8;
+  opacity: 0.7;
 }
 
 /* Ações do Resumo */
@@ -888,7 +933,7 @@
   padding: 12px 24px;
   background: transparent;
   color: var(--text-color);
-  border: 2px solid var(--border-color);
+  border: 2px solid #ef4444;
   border-radius: 8px;
   font-size: 16px;
   font-weight: 600;
@@ -898,13 +943,13 @@
 }
 
 .btn-sair-trilha:hover {
-  border-color: #f5ce50;
-  background: rgba(245, 206, 80, 0.1);
+  border-color: #dc2626;
+  background: rgba(239, 68, 68, 0.1);
 }
 
 .btn-assistir-agora {
   padding: 12px 24px;
-  background: linear-gradient(135deg, #34a853 0%, #2d8e47 100%);
+  background: var(--green);
   color: white;
   border: none;
   border-radius: 8px;
@@ -957,7 +1002,10 @@
     transform: rotate(90deg);
   }
 
-  
+  .resumo-animation ng-lottie {
+    max-width: 250px;
+  }
+
   .card-estatistica-resumo {
     max-width: 100%;
   }
@@ -973,6 +1021,10 @@
 }
 
 @media (max-width: 480px) {
+  .resumo-animation ng-lottie {
+    max-width: 200px;
+  }
+
   .resumo-stats-cards {
     flex-direction: column;
     align-items: center;
