@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { Tema } from '../page-questoes/enums/tema';
+import { Tema } from '../page-questoes/enums/tema';  // Importando o enum Tema
 import { TemaDescricoes } from '../page-questoes/enums/tema-descricao';
+import { FlashcardService } from 'src/app/services/flashcards.service';
 
 export interface TemaInfo {
   titulo: string;
   qtdFlashcards: number;
   rota: string;
 }
-
 
 @Component({
   selector: 'app-flashcards',
@@ -18,20 +18,30 @@ export class FlashcardsComponent implements OnInit {
 
   listaDeTemas: TemaInfo[] = [];
 
-  constructor() { }
+  constructor(private flashcardService: FlashcardService) { }
 
   ngOnInit(): void {
-  this.listaDeTemas = Object.values(Tema).map(valorEnum => {
+    this.flashcardService.getFlashcardsContador().subscribe(
+      (dados) => {
+        console.log(dados);
         
-        const titulo = TemaDescricoes[valorEnum];
-        const rotaFormatada = valorEnum.toLowerCase();
+        this.listaDeTemas = Object.values(Tema).map(tema => {
+          const temaInfo = dados.find(info => info.tema === tema);
+          const qtdFlashcards = temaInfo ? (temaInfo.total || 0) : 0;
+          const titulo = TemaDescricoes[tema] || 'Tema não encontrado';
+          const rotaFormatada = tema.toLowerCase();
 
-        return {
-          titulo: titulo,
-          qtdFlashcards: 0,
-          rota: `/usuario/flashcards/${rotaFormatada}`
-        };
-      });
-    }
+          return {
+            titulo: titulo,
+            qtdFlashcards: qtdFlashcards,
+            rota: `/usuario/flashcards/${rotaFormatada}`
+          };
+        });
+      },
+      (error) => {
+        console.log('Erro ao buscar flashcards: ', error);
+      }
+    );
+  }
 
 }
