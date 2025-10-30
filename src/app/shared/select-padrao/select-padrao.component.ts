@@ -19,7 +19,7 @@ import {
 export class SelectPadraoComponent implements OnInit, OnChanges {
   @Input() label: string = '';
   @Input() options: any[] = [];
-  @Input() selectedValue: any; 
+  @Input() selectedValue: any;
   @Output() selectedValueChange: EventEmitter<any> = new EventEmitter<any>();
   @Input() customStyles: { [key: string]: string } = {};
   @Input() searchable: boolean = false;
@@ -29,7 +29,7 @@ export class SelectPadraoComponent implements OnInit, OnChanges {
   isOpen: boolean = false;
   filteredOptions: any[] = [];
 
-  constructor(private elementRef: ElementRef) {}
+  constructor(private elementRef: ElementRef) { }
 
   ngOnInit(): void {
     this.filteredOptions = this.options;
@@ -56,13 +56,16 @@ export class SelectPadraoComponent implements OnInit, OnChanges {
 
     if (this.isGroupedOptions()) {
       this.filteredOptions = this.options
-        .map(theme => ({ 
-          ...theme,
-          options: theme.options.filter((subitem: any) => 
-            normalize(subitem.label).includes(term)
-          )
-        }))
-        .filter(theme => theme.options.length > 0);
+        .map((group: any) => {
+          const matchesGroupLabel = normalize(group.label).includes(term);
+          const options = matchesGroupLabel
+            ? group.options
+            : group.options.filter((opt: any) =>
+              normalize(opt.label).includes(term)
+            );
+          return { ...group, options };
+        })
+        .filter((group: any) => group.options.length > 0 || normalize(group.label).includes(term));
     } else {
       this.filteredOptions = this.options.filter((opt: any) => {
         const label = typeof opt === 'string' ? opt : opt.label;
@@ -76,7 +79,7 @@ export class SelectPadraoComponent implements OnInit, OnChanges {
       Array.isArray(this.options) &&
       this.options.length > 0 &&
       (this.options[0] as any).options !== undefined &&
-      Array.isArray((this.options[0] as any).options) 
+      Array.isArray((this.options[0] as any).options)
     );
   }
 
@@ -101,7 +104,7 @@ export class SelectPadraoComponent implements OnInit, OnChanges {
       );
       return found?.label ?? found ?? '';
     }
-    return ''; 
+    return '';
   }
 
   onSelect(value: any): void {
