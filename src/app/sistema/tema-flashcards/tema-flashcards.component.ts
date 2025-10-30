@@ -6,7 +6,10 @@ import { SubtemaDescricoes } from '../page-questoes/enums/subtema-descricao';
 import { temasESubtemas } from '../page-questoes/enums/map-tema-subtema';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
-import { FlashcardService, SubtemaStatsDTO } from 'src/app/services/flashcards.service'; // Certifique-se que o caminho está correto
+import {
+  FlashcardService,
+  SubtemaStatsDTO,
+} from 'src/app/services/flashcards.service';
 
 @Component({
   selector: 'app-tema-flashcards',
@@ -18,10 +21,10 @@ export class TemaFlashcardsComponent implements OnInit {
   @Input() cards_estudados: number = 0;
   @Input() cards_totais: number = 0;
 
+  listaDeSubtemas: Subtema[] = [];
   subtemaDescricoes = SubtemaDescricoes;
 
-
-  public subtemaStatsList: SubtemaStatsDTO[] = [];
+  private statsMap = new Map<string, SubtemaStatsDTO>();
 
   constructor(
     private route: ActivatedRoute,
@@ -31,49 +34,73 @@ export class TemaFlashcardsComponent implements OnInit {
 
   ngOnInit(): void {
     const temaIdUrl = this.route.snapshot.paramMap.get('temaId');
+    let temaKey: keyof typeof Tema | undefined;
 
     if (temaIdUrl) {
-
-      const temaKey = Object.keys(Tema).find(
-        (key) => (Tema[key as keyof typeof Tema]).toLowerCase() === temaIdUrl
+      temaKey = Object.keys(Tema).find(
+        (key) => Tema[key as keyof typeof Tema].toLowerCase() === temaIdUrl
       ) as keyof typeof Tema | undefined;
 
       if (temaKey) {
-        this.tema = TemaDescricoes[Tema[temaKey]];
+        const temaEnum = Tema[temaKey];
+        this.tema = TemaDescricoes[temaEnum];
+        this.listaDeSubtemas = temasESubtemas[temaEnum] || [];
       } else {
         this.tema = 'Tema não encontrado';
       }
 
+      if (temaKey) {
+        this.flashcardService.getFlashcardsContador().subscribe({
+          next: (listaDeTodosOsTemas) => {
+            const temaInfo = listaDeTodosOsTemas.find(
+              (t) => t.tema.toUpperCase() === (temaKey as string)
+            );
+            if (temaInfo) {
+              this.cards_totais = temaInfo.total || 0;
+              this.cards_estudados = temaInfo.qtdFlashcards || 0;
+            }
+          },
+          error: (err) => {
+            console.error('[HEADER] Erro ao buscar contador:', err);
+            this.cards_estudados = 0;
+            this.cards_totais = 0;
+          },
+        });
+      }
 
-      this.flashcardService.getStatsPorTema(temaIdUrl).subscribe({
+      this.flashcardService.getStatsPorTema(temaIdUrl.toUpperCase()).subscribe({
         next: (statsList) => {
-
-          this.subtemaStatsList = statsList;
-
-
-          this.cards_estudados = statsList.reduce(
-            (acumulador, subtema) => acumulador + subtema.flashcardsEstudados, 0
-          );
-          this.cards_totais = statsList.reduce(
-            (acumulador, subtema) => acumulador + subtema.totalFlashcards, 0
-          );
+          this.statsMap.clear();
+          for (const stat of statsList) {
+            this.statsMap.set(stat.subtema.toUpperCase(), stat);
+          }
         },
         error: (err) => {
-          console.error('Erro ao buscar estatísticas dos subtemas:', err);
-          this.cards_estudados = 0;
-          this.cards_totais = 0;
-          this.subtemaStatsList = [];
-        }
+          console.error('[SUBTEMAS] Erro ao buscar stats dos subtemas:', err);
+          this.statsMap.clear();
+        },
       });
     }
   }
 
+  public getStatsDoSubtema(subtemaKey: Subtema): {
+    total: number;
+    estudados: number;
+    porcentagem: number;
+  } {
+    const stats = this.statsMap.get(subtemaKey);
 
-  public getDescricao(key: string): string {
-    const enumKey = key.toUpperCase() as Subtema;
-    return this.subtemaDescricoes[enumKey] || key;
+    if (!stats) {
+      return { total: 0, estudados: 0, porcentagem: 0 };
+    }
+
+    const total = (stats as any).total || 0;
+    const estudados = (stats as any).estudados || 0;
+
+    const porcentagem = total > 0 ? (estudados / total) * 100 : 0;
+
+    return { total, estudados, porcentagem };
   }
-
 
   isFlashcardModalVisible = false;
 
