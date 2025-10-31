@@ -477,6 +477,127 @@ button:disabled .chatbot-logo {
 .bot-message {
   background-color: #e8f5e9;
   margin-right: auto;
+  opacity: 0;
+  animation: fadeInSlideUp 0.6s ease-out forwards;
+}
+
+.bot-message.animate-reveal {
+  animation: fadeInSlideUp 0.8s ease-out forwards;
+}
+
+
+@keyframes fadeInSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+.bot-message .message-content {
+  animation: revealContent 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes revealContent {
+  0% {
+    opacity: 0;
+    clip-path: inset(0 0 100% 0);
+  }
+  100% {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+
+.bot-message .message-content > * {
+  animation: fadeInElement 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+.bot-message .message-content > *:nth-child(1) {
+  animation-delay: 0.2s;
+}
+
+.bot-message .message-content > *:nth-child(2) {
+  animation-delay: 0.3s;
+}
+
+.bot-message .message-content > *:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+.bot-message .message-content > *:nth-child(4) {
+  animation-delay: 0.5s;
+}
+
+.bot-message .message-content > *:nth-child(5) {
+  animation-delay: 0.6s;
+}
+
+.bot-message .message-content > *:nth-child(n+6) {
+  animation-delay: 0.7s;
+}
+
+@keyframes fadeInElement {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+.bot-message ::ng-deep markdown h1,
+.bot-message ::ng-deep markdown h2,
+.bot-message ::ng-deep markdown h3 {
+  animation: fadeInElement 0.5s ease-out forwards;
+  opacity: 0;
+}
+
+.bot-message ::ng-deep markdown table {
+  animation: fadeInElement 0.8s ease-out forwards;
+  animation-delay: 0.4s;
+  opacity: 0;
+}
+
+.bot-message ::ng-deep markdown ul,
+.bot-message ::ng-deep markdown ol {
+  animation: fadeInElement 0.6s ease-out forwards;
+  animation-delay: 0.3s;
+  opacity: 0;
+}
+
+.bot-message ::ng-deep markdown p {
+  animation: fadeInElement 0.5s ease-out forwards;
+  opacity: 0;
+}
+
+.bot-message ::ng-deep markdown p:nth-of-type(1) {
+  animation-delay: 0.1s;
+}
+
+.bot-message ::ng-deep markdown p:nth-of-type(2) {
+  animation-delay: 0.2s;
+}
+
+.bot-message ::ng-deep markdown p:nth-of-type(3) {
+  animation-delay: 0.3s;
+}
+
+.bot-message ::ng-deep markdown p:nth-of-type(4) {
+  animation-delay: 0.4s;
+}
+
+.bot-message ::ng-deep markdown p:nth-of-type(n+5) {
+  animation-delay: 0.5s;
 }
 
 .typing-message {
@@ -597,6 +718,7 @@ button:disabled .chatbot-logo {
   text-align: left;
   border: 1px solid #ddd;
   font-weight: 600;
+  min-width: 160px;
   white-space: nowrap;
 }
 
@@ -671,14 +793,14 @@ button:disabled .chatbot-logo {
   }
 
   
-  ::ng-deep markdown table {
+  ::ng-deep .markdown-content table {
     font-size: 0.75em;
     display: block;
     overflow-x: auto;
   }
 
-  ::ng-deep markdown table th,
-  ::ng-deep markdown table td {
+  ::ng-deep .markdown-content table th,
+  ::ng-deep .markdown-content table td {
     padding: 6px 8px;
     min-width: 80px;
   }
@@ -686,5 +808,135 @@ button:disabled .chatbot-logo {
   .chatbot-logo {
     width: 24px;
     height: 24px;
+  }
+}
+
+.markdown-content-content {
+  line-height: 1.6;
+  word-wrap: break-word;
+}
+
+
+::ng-deep .math-inline {
+  display: inline;
+  margin: 0 2px;
+}
+
+::ng-deep .math-inline .katex {
+  font-size: 1.05em;
+}
+
+
+::ng-deep .math-block {
+  display: block;
+  margin: 12px 0;
+  padding: 10px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  text-align: center;
+}
+
+::ng-deep .math-block .katex-display {
+  margin: 0;
+}
+
+::ng-deep .math-block .katex {
+  font-size: 1.15em;
+}
+
+
+::ng-deep .math-block::-webkit-scrollbar {
+  height: 6px;
+}
+
+::ng-deep .math-block::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+::ng-deep .math-block::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 3px;
+}
+
+::ng-deep .math-block::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+
+::ng-deep .math-error {
+  color: #d32f2f;
+  background-color: #ffebee;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border-left: 3px solid #d32f2f;
+  font-family: monospace;
+  font-size: 0.9em;
+}
+
+
+::ng-deep .bot-message .katex {
+  color: inherit;
+}
+
+::ng-deep .user-message .katex {
+  color: inherit;
+}
+
+
+::ng-deep .message-content .katex {
+  font-size: 1.1em;
+}
+
+::ng-deep .message-content .katex-display {
+  margin: 1em 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+::ng-deep .message-content .katex-html {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+
+::ng-deep .message-content table {
+  overflow-x: auto;
+  display: block;
+  max-width: 100%;
+}
+
+::ng-deep .message-content table .katex {
+  font-size: 0.9em;
+  white-space: nowrap;
+}
+
+::ng-deep markdown table td,
+::ng-deep markdown table th {
+  white-space: normal;
+  word-break: normal;
+  overflow-wrap: normal;
+}
+
+
+::ng-deep markdown table td > *,
+::ng-deep markdown table th > * {
+  display: inline;
+}
+
+::ng-deep markdown table td .katex,
+::ng-deep markdown table th .katex {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+
+@media (max-width: 768px) {
+  ::ng-deep .message-content .katex {
+    font-size: 1em;
+  }
+  
+  ::ng-deep .message-content .katex-display {
+    font-size: 0.9em;
   }
 }
