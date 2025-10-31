@@ -66,4 +66,8 @@ export class FlashcardService {
       { params }
     );
   }
+
+  deleteFlashcard(id: number): Observable<string>{
+    return this.http.delete(`${this.apiUrl}/${id}`, { responseType: 'text'})
+  }
 }

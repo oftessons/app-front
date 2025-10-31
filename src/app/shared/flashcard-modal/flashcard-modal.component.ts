@@ -3,7 +3,6 @@ import {
   EventEmitter,
   Input,
   OnChanges,
-  OnInit,
   Output,
   SimpleChanges,
 } from '@angular/core';
@@ -12,9 +11,10 @@ import {
   FlashcardService,
 } from 'src/app/services/flashcards.service';
 import { TemaDescricoes } from 'src/app/sistema/page-questoes/enums/tema-descricao';
-import { SubtemaDescricoes } from 'src/app/sistema/page-questoes/enums/subtema-descricao';
 import { Tema } from 'src/app/sistema/page-questoes/enums/tema';
 import { Subtema } from 'src/app/sistema/page-questoes/enums/subtema';
+import { AuthService } from 'src/app/services/auth.service';
+
 type FlashcardsState = 'question' | 'answer' | 'summary';
 
 @Component({
@@ -22,7 +22,7 @@ type FlashcardsState = 'question' | 'answer' | 'summary';
   templateUrl: './flashcard-modal.component.html',
   styleUrls: ['./flashcard-modal.component.css'],
 })
-export class FlashcardModalComponent implements OnInit, OnChanges {
+export class FlashcardModalComponent implements OnChanges {
   @Input() isVisible = false;
   @Input() temaEstudo: string = '';
   @Input() subtemaEstudo?: Subtema;
@@ -30,6 +30,8 @@ export class FlashcardModalComponent implements OnInit, OnChanges {
   @Output() close = new EventEmitter<void>();
 
   estado_atual: FlashcardsState = 'question';
+
+  public isDeleteModalVisible = false;
 
   public currentCard: Flashcard | null = null;
   private cardsVistos = new Set<number>();
@@ -39,16 +41,42 @@ export class FlashcardModalComponent implements OnInit, OnChanges {
   private stats: { cardId: number; rating: number }[] = [];
 
   private temaDescricoes = TemaDescricoes;
-  private subtemaDescricoes = SubtemaDescricoes;
 
   private isLoadingNextCard = false;
 
   private sessaoStartTime: number = 0;
   public tempoDecorrido: string = '00 min 00 seg';
 
-  constructor(private flashcardService: FlashcardService) {}
+  constructor(
+    private flashcardService: FlashcardService,
+    private authService: AuthService
+  ) {}
 
-  ngOnInit(): void {}
+  public get PermissaoFlashcards(): boolean {
+    const token = this.authService.obterToken();
+    if (!token) {
+      return false;
+    }
+
+    try {
+      const decodedToken = this.authService.jwtHelper.decodeToken(token);
+      const userRoles: string[] = decodedToken?.authorities || decodedToken?.roles || [];
+
+      if (userRoles.length === 0) {
+        const singleRole = decodedToken?.role;
+        if (!singleRole) return false;
+        return singleRole === 'ADMIN' || singleRole === 'PROFESSOR';
+      }
+
+      return userRoles.includes('ADMIN') || 
+             userRoles.includes('PROFESSOR') ||
+             userRoles.includes('ROLE_ADMIN') ||
+             userRoles.includes('ROLE_PROFESSOR');
+
+    } catch (error) {
+      return false;
+    }
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['isVisible'] && changes['isVisible'].currentValue === true) {
@@ -82,6 +110,7 @@ export class FlashcardModalComponent implements OnInit, OnChanges {
     this.estado_atual = 'question';
     this.currentCard = null;
     this.flashcards = [];
+    this.isDeleteModalVisible = false;
   }
 
   onCloseClick(): void {
@@ -123,11 +152,7 @@ export class FlashcardModalComponent implements OnInit, OnChanges {
               this.mostrarSumario();
             }
           },
-          error: (err) => {
-            console.error(
-              'Falha na busca, retornando estatísticas',
-              err
-            );
+          error: () => {
             this.mostrarSumario();
           },
         });
@@ -153,11 +178,23 @@ export class FlashcardModalComponent implements OnInit, OnChanges {
             tryFallback();
           }
         },
-        error: (err) => {
-          console.error('Busca Ideal falhou, tentando fallback.', err);
+        error: () => {
           tryFallback();
         },
       });
+  }
+
+  openDeleteModal(): void {
+    this.isDeleteModalVisible = true;
+  }
+
+  onDeleteModalClose(): void {
+    this.isDeleteModalVisible = false;
+  }
+
+  onDeleteConfirm(): void {
+    this.isDeleteModalVisible = false;
+    this.onCloseClick();
   }
 
   private mapearRatingParaDificuldade(rating: number): string {

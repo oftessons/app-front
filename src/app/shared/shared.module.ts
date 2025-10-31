@@ -19,6 +19,7 @@ import { FlashcardsTemasCardsComponent } from './flashcards-temas-cards/flashcar
 import { FlashcardsSubtemasComponent } from './flashcards-subtemas/flashcards-subtemas.component';
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { FlashcardModalComponent } from './flashcard-modal/flashcard-modal.component';
+import { DeletarFlashcardModalComponent } from './deletar-flashcard-modal/deletar-flashcard-modal.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { FlashcardModalComponent } from './flashcard-modal/flashcard-modal.compo
     FlashcardsTemasCardsComponent,
     FlashcardModalComponent,
     FlashcardsSubtemasComponent,
+    DeletarFlashcardModalComponent,
   ],
   imports: [
     CommonModule,

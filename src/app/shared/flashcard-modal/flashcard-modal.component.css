@@ -202,7 +202,7 @@ p {
   color: #f6f8fe;
   border-radius: 8px;
   font-size: 16px;
-  width: 100%;
+  width: 90%;
   padding: 12px 12px;
   cursor: pointer;
   user-select: none;
@@ -241,4 +241,23 @@ p {
 .button-fechar button:hover {
   background-color: rgba(50, 50, 65, 0.9);
   color: #ffffff;
+}
+
+.buttons-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  width: 100%;
+  gap: 4px;
+  margin-left: 12px;
+}
+
+.deletar-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
