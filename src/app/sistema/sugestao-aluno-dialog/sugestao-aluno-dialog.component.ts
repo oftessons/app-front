@@ -5,7 +5,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { QuestoesService } from 'src/app/services/questoes.service';
-import { SugestaoQuestaoIResponseDTO } from '../page-mentoria/SugestaoQuestaoIResponseDTO';
+import { SugestaoQuestaoResponseDTO } from '../page-mentoria/SugestaoQuestaoIResponseDTO';
 import { Tema } from '../page-questoes/enums/tema';
 import { Subtema } from '../page-questoes/enums/subtema';
 import { TipoDeProva } from '../page-questoes/enums/tipoDeProva';
@@ -62,14 +62,16 @@ export class SugestaoAlunoDialogComponent implements OnInit {
     this.sugestoesAgrupadas = [];
 
     this.questoesService.obterSugestoesDeQuestoes(this.alunoId, pagina, this.limitePorPagina).subscribe({
-      next: (resultado: SugestaoQuestaoIResponseDTO[] | null) => {
-        const sugestoes: SugestaoQuestao[] = resultado ? resultado.map(dto => ({
-          question_id: dto.question_id,
-          question_text: dto.question_text,
-          theme: dto.theme,
-          subtheme: dto.subtheme,
-          exam_type: dto.exam_type
-        })) : [];
+      next: (resultado: SugestaoQuestaoResponseDTO[] | null) => {
+      const sugestoes: SugestaoQuestao[] = resultado ? resultado.reduce((acc: SugestaoQuestao[], dto) => {
+        return acc.concat(dto.suggestions.map((suggestion: { question_id: any; question_text: any; theme: any; subtheme: any; exam_type: any; }) => ({
+        question_id: suggestion.question_id,
+        question_text: suggestion.question_text,
+        theme: suggestion.theme,
+        subtheme: suggestion.subtheme,
+        exam_type: suggestion.exam_type
+        })));
+      }, []) : [];
 
         this.agruparSugestoes(sugestoes);
         this.carregandoSugestoes = false;
