@@ -60,7 +60,6 @@ export class InicioComponent implements OnInit {
   }
 
   abrirModalConfiguracaoTrilha(): void {
-    this.Router.navigate(['/usuario/trilha']); //! remover para implementar modal
     // this.modalTrilhaAberto = true;
   }
 

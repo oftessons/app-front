@@ -8,6 +8,7 @@ import { interval, Subscription } from 'rxjs';
 import { filter, delay } from 'rxjs/operators';
 import { ThemeService } from 'src/app/services/theme.service';
 import { Usuario } from 'src/app/login/usuario';
+import { Permissao } from 'src/app/login/Permissao';
 
 @Component({
   selector: 'app-navbar',
@@ -18,6 +19,7 @@ export class NavbarComponent {
   @ViewChild('sidenav') sidenav!: MatSidenav;
   nomeUsuario: string = ''; // Variável para armazenar o nome do usuário
   possuiPermissao: boolean = true;
+  isAdmin: boolean = false;
 
   usuarioLogado: Usuario | null = null;
   
@@ -46,6 +48,10 @@ export class NavbarComponent {
     );
 
     this.usuarioLogado = this.authService.getUsuarioAutenticado();
+    
+    if (this.usuarioLogado) {
+      this.isAdmin = this.usuarioLogado.permissao === Permissao.ADMIN;
+    }
     
     // Inicializar posição baseado no estado inicial da sidebar
     setTimeout(() => {
