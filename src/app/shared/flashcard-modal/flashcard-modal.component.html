@@ -16,16 +16,16 @@
         [ngClass]="{ 'summary-active': estado_atual === 'summary' }"
       >
         <ng-container *ngSwitchCase="'question'">
-          <h2 class="tema-title">CATARATA</h2>
-          <p>Qual estrutura é responsável pela drenagem do humor aquoso?</p>
+          <h2 class="tema-title">{{ getTemaNome() }}</h2>
+          <p>{{ currentCard?.pergunta }}</p>
           <a class="button-resposta" (click)="showAnswer()">Mostrar Resposta</a>
         </ng-container>
 
         <ng-container *ngSwitchCase="'answer'">
-          <h2 class="tema-title">CATARATA</h2>
+          <h2 class="tema-title">{{ getTemaNome() }}</h2>
           <div class="answer-section">
-            <h2 class="resposta-title">{{ answer }}</h2>
-            <p class="answer-text">{{ answerDescription }}</p>
+            <h2 class="resposta-title">Resposta</h2>
+            <p class="answer-text">{{ currentCard?.resposta }}</p>
           </div>
           <div class="rating-section">
             <p class="rating-text">O quanto você sabia dessa questão?</p>
@@ -55,20 +55,20 @@
           <div class="porcentagem-section">
             <h2 class="parabens">Parabéns!</h2>
             <p class="summary-text">
-              Seu desempenho geral foi maior que
-              <span class="porcentagem">80%</span>
+              Seu desempenho geral foi de
+              <span class="porcentagem">{{ porcentagemAcerto | number: '1.0-0' }}%</span>
             </p>
           </div>
 
           <div class="summary-stats">
             <div class="stat-card">
               <img src="../../../assets/Icons/clock.svg" />
-              <span class="stat-value">20 min 33 seg</span>
+              <span class="stat-value">{{ tempoDecorrido }}</span>
               <span class="stat-label">Tempo</span>
             </div>
             <div class="stat-card">
               <img src="../../../assets/Icons/flashcards-summary.svg" alt="" />
-              <span class="stat-value">12</span>
+              <span class="stat-value">{{ totalCardsEstudados }}</span>
               <span class="stat-label">Cards Estudados</span>
             </div>
           </div>

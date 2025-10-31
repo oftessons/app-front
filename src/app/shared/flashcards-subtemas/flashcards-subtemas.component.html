@@ -6,10 +6,10 @@
         <div class="content">
             <span class="title">{{subtema}}</span>
             <div class="cards-estudados-container">
-                <mat-progress-bar class="progress-bar" mode="determinate" value={{porcentagem}}></mat-progress-bar>
+                <mat-progress-bar class="progress-bar" mode="determinate" [value]="porcentagem"></mat-progress-bar>
                 <span class="cards-estudados">{{cards_estudados}}/{{cards_total}} Cards Estudados</span>
             </div>
         </div>
-        <a class="button-right"><img src="../../../assets/Icons/Right-icon.svg" alt=""></a>
+        <a class="button-right" (click)="onStudyClick()"><img src="../../../assets/Icons/Right-icon.svg" alt=""></a>
     </div>
 </div>

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-flashcards-subtemas',
@@ -9,11 +9,16 @@ export class FlashcardsSubtemasComponent implements OnInit {
   @Input() subtema: string = 'Subtema';
   @Input() porcentagem: number = 0;
   @Input() cards_estudados: number = 0;
-  @Input() cards_total: number = 0;
+  @Input() cards_total: number = 12;
  
+  @Output() study = new EventEmitter<void>();
+
   constructor() { }
 
   ngOnInit(): void {
   }
 
+  onStudyClick(): void {
+    this.study.emit();
+  }
 }

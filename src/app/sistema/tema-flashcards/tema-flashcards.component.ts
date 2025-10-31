@@ -6,10 +6,7 @@ import { SubtemaDescricoes } from '../page-questoes/enums/subtema-descricao';
 import { temasESubtemas } from '../page-questoes/enums/map-tema-subtema';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
-import {
-  FlashcardService,
-  SubtemaStatsDTO,
-} from 'src/app/services/flashcards.service';
+import { FlashcardService, SubtemaStatsDTO, Flashcard } from 'src/app/services/flashcards.service'; 
 
 @Component({
   selector: 'app-tema-flashcards',
@@ -23,8 +20,16 @@ export class TemaFlashcardsComponent implements OnInit {
 
   listaDeSubtemas: Subtema[] = [];
   subtemaDescricoes = SubtemaDescricoes;
-
+  
   private statsMap = new Map<string, SubtemaStatsDTO>();
+
+  public isFlashcardModalVisible = false;
+  
+  public temaEstudo: string = '';
+  public subtemaEstudo?: Subtema;
+  public flashcardsIniciais: Flashcard[] = [];
+
+  private temaIdUrl: string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -33,83 +38,90 @@ export class TemaFlashcardsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const temaIdUrl = this.route.snapshot.paramMap.get('temaId');
+    const idUrl = this.route.snapshot.paramMap.get('temaId');
+    if (!idUrl) {
+      this.tema = 'Tema não encontrado';
+      return;
+    }
+    
+    this.temaIdUrl = idUrl;
     let temaKey: keyof typeof Tema | undefined;
 
-    if (temaIdUrl) {
-      temaKey = Object.keys(Tema).find(
-        (key) => Tema[key as keyof typeof Tema].toLowerCase() === temaIdUrl
-      ) as keyof typeof Tema | undefined;
+    temaKey = Object.keys(Tema).find(
+      (key) => (Tema[key as keyof typeof Tema]).toLowerCase() === this.temaIdUrl
+    ) as keyof typeof Tema | undefined;
 
-      if (temaKey) {
-        const temaEnum = Tema[temaKey];
-        this.tema = TemaDescricoes[temaEnum];
-        this.listaDeSubtemas = temasESubtemas[temaEnum] || [];
-      } else {
-        this.tema = 'Tema não encontrado';
-      }
+    if (temaKey) {
+      const temaEnum = Tema[temaKey];
+      this.tema = TemaDescricoes[temaEnum];
+      this.listaDeSubtemas = temasESubtemas[temaEnum] || [];
+    } else {
+      this.tema = 'Tema não encontrado';
+    }
 
-      if (temaKey) {
-        this.flashcardService.getFlashcardsContador().subscribe({
-          next: (listaDeTodosOsTemas) => {
-            const temaInfo = listaDeTodosOsTemas.find(
-              (t) => t.tema.toUpperCase() === (temaKey as string)
-            );
-            if (temaInfo) {
-              this.cards_totais = temaInfo.total || 0;
-              this.cards_estudados = temaInfo.qtdFlashcards || 0;
-            }
-          },
-          error: (err) => {
-            console.error('[HEADER] Erro ao buscar contador:', err);
-            this.cards_estudados = 0;
-            this.cards_totais = 0;
-          },
-        });
-      }
-
-      this.flashcardService.getStatsPorTema(temaIdUrl.toUpperCase()).subscribe({
-        next: (statsList) => {
-          this.statsMap.clear();
-          for (const stat of statsList) {
-            this.statsMap.set(stat.subtema.toUpperCase(), stat);
+    if (temaKey) {
+      this.flashcardService.getFlashcardsContador().subscribe({
+        next: (listaDeTodosOsTemas) => {
+          const temaInfo = listaDeTodosOsTemas.find(
+            (t) => t.tema.toUpperCase() === (temaKey as string)
+          );
+          if (temaInfo) {
+            this.cards_totais = temaInfo.total || 0;
+            this.cards_estudados = temaInfo.qtdFlashcards || 0;
           }
-        },
-        error: (err) => {
-          console.error('[SUBTEMAS] Erro ao buscar stats dos subtemas:', err);
-          this.statsMap.clear();
         },
       });
     }
+
+    this.flashcardService.getStatsPorTema(this.temaIdUrl.toUpperCase()).subscribe({
+      next: (statsList) => {
+        this.statsMap.clear();
+        for (const stat of statsList) {
+          this.statsMap.set(stat.subtema.toUpperCase(), stat);
+        }
+      },
+    });
   }
 
-  public getStatsDoSubtema(subtemaKey: Subtema): {
-    total: number;
-    estudados: number;
-    porcentagem: number;
-  } {
+  public getStatsDoSubtema(subtemaKey: Subtema): { total: number, estudados: number, porcentagem: number } {
     const stats = this.statsMap.get(subtemaKey);
-
     if (!stats) {
       return { total: 0, estudados: 0, porcentagem: 0 };
     }
-
-    const total = (stats as any).total || 0;
+    const total = (stats as any).total || 0; 
     const estudados = (stats as any).estudados || 0;
-
-    const porcentagem = total > 0 ? (estudados / total) * 100 : 0;
-
+    const porcentagem = (total > 0) ? (estudados / total * 100) : 0;
+    
     return { total, estudados, porcentagem };
   }
+  
+  iniciarEstudoTemaTodo(): void {
+    this.flashcardService.getFlashcardsParaEstudar(this.temaIdUrl).subscribe(cards => {
+      this.iniciarSessao(cards, this.temaIdUrl, undefined);
+    });
+  }
 
-  isFlashcardModalVisible = false;
+  iniciarEstudoSubtema(subtemaKey: Subtema): void {
+    this.flashcardService.getFlashcardsParaEstudar(this.temaIdUrl, subtemaKey).subscribe(cards => {
+      this.iniciarSessao(cards, this.temaIdUrl, subtemaKey);
+    });
+  }
 
-  openFlashcard(): void {
-    this.isFlashcardModalVisible = true;
+  private iniciarSessao(cards: Flashcard[], tema: string, subtema?: Subtema): void {
+    if (cards && cards.length > 0) {
+      this.flashcardsIniciais = cards;
+      this.temaEstudo = tema;
+      this.subtemaEstudo = subtema;
+      this.isFlashcardModalVisible = true;
+    } else {
+      console.log('Nenhum flashcard encontrado para esta seleção.');
+      // TODO: Adicionar um Toastr/Snackbar de "Nenhum card encontrado"
+    }
   }
 
   closeFlashcard(): void {
     this.isFlashcardModalVisible = false;
+    this.flashcardsIniciais = [];
   }
 
   voltar(): void {

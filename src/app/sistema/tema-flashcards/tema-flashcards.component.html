@@ -11,7 +11,7 @@
           Cards estudados: <span>{{ cards_estudados }}/{{ cards_totais }}</span>
         </p>
       </div>
-      <a class="card-button" (click)="openFlashcard()"
+      <a class="card-button" (click)="iniciarEstudoTemaTodo()"
         >Estudar cards<img src="../../../assets//Icons/Right-icon.svg"
       /></a>
     </div>
@@ -23,6 +23,7 @@
         [cards_total]="getStatsDoSubtema(subtemaKey).total"
         [cards_estudados]="getStatsDoSubtema(subtemaKey).estudados"
         [porcentagem]="getStatsDoSubtema(subtemaKey).porcentagem"
+        (study)="iniciarEstudoSubtema(subtemaKey)"
       >
       </app-flashcards-subtemas>
     </div>
@@ -30,6 +31,9 @@
     <app-flashcard-modal
       [isVisible]="isFlashcardModalVisible"
       (close)="closeFlashcard()"
+      [flashcards]="flashcardsIniciais"
+      [temaEstudo]="temaEstudo"
+      [subtemaEstudo]="subtemaEstudo"
     >
     </app-flashcard-modal>
   </div>
