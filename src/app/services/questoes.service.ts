@@ -12,7 +12,7 @@ import { environment } from 'src/environments/environment';
 import { Questao } from '../sistema/page-questoes/questao';
 import { Resposta } from '../sistema/Resposta';
 import { RespostaDTO } from '../sistema/RespostaDTO';
-import { SugestaoQuestaoIResponseDTO } from '../sistema/page-mentoria/SugestaoQuestaoIResponseDTO';
+import { SugestaoQuestaoResponseDTO } from '../sistema/page-mentoria/SugestaoQuestaoIResponseDTO';
 import { RespostaSalva } from '../sistema/page-questoes/respostas-salvas';
 
 @Injectable({
@@ -166,14 +166,14 @@ export class QuestoesService {
     return throwError(errorMessage);
   }
 
-  obterSugestoesDeQuestoes(userId: number, groups: number, limit: number): Observable<SugestaoQuestaoIResponseDTO[] | null> {
+  obterSugestoesDeQuestoes(userId: number, groups: number, limit: number): Observable<SugestaoQuestaoResponseDTO[] | null> {
     const url = `${this.apiURL}/sugestoes`;
     const params = new HttpParams()
       .set('user_id', userId.toString())
       .set('groups', groups.toString())
       .set('limit', limit.toString());
 
-    return this.http.get<SugestaoQuestaoIResponseDTO[]>(url, { params, observe: 'response' }).pipe(
+    return this.http.get<SugestaoQuestaoResponseDTO[]>(url, { params, observe: 'response' }).pipe(
       map(response => {
         if (response.status === 204) {
           return null;

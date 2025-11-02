@@ -18,12 +18,12 @@
         <div class="sugestoes-grid" *ngIf="!carregandoSugestoes && sugestoesAgrupadas.length > 0">
             <div *ngFor="let sugestao of sugestoesAgrupadas" class="sugestao-card">
                 <div class="sugestao-header">
-                    <span class="sugestao-tag">{{ traduzirTema(sugestao.tema) }} </span>
+                    <h3 class="sugestao-tag">{{ traduzirTema(sugestao.tema) }} </h3>
                     <span class="sugestao-tag">{{ traduzirSubtema(sugestao.subtema) }}</span>
                 </div>
                 <div class="sugestao-body">
                     <h4>Foco em: {{ traduzirSubtema(sugestao.subtema) }}</h4>
-                    <h5>Tipo de prova: {{ traduzirTipoDeProva(sugestao.tipoDeProva) }}</h5>
+                    <h4>Tipo de prova: {{ traduzirTipoDeProva(sugestao.tipoDeProva) }}</h4>
                     <p>Notamos uma dificuldade recorrente neste assunto.</p>
                     <details class="exemplos-questoes" *ngIf="sugestao.questoes.length > 0">
                         <summary>Ver exemplos de questões ({{ sugestao.questoes.length }})</summary>

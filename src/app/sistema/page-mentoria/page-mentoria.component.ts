@@ -7,7 +7,6 @@ import { AuthService } from 'src/app/services/auth.service';
 import { PageDesempenhoComponent } from '../page-desempenho/page-desempenho.component';
 import { MeusSimuladosComponent } from '../meus-simulados/meus-simulados.component';
 import { PageSimuladoComponent } from '../page-simulado/page-simulado.component';
-// Importe o novo componente de diálogo que será criado
 import { SugestaoAlunoDialogComponent } from '../sugestao-aluno-dialog/sugestao-aluno-dialog.component';
 import { TipoUsuario } from 'src/app/login/enums/tipo-usuario';
 import { TipoUsuarioDescricao } from 'src/app/login/enums/tipo-usuario-descricao';
@@ -46,12 +45,23 @@ export class PageMentoriaComponent implements OnInit {
     this.authService.visualizarAlunosMentoria().subscribe({
       next: (data: Usuario[] | null) => {
         this.listaCompletaAlunos = data || [];
-        this.opcoesAlunosParaFiltro = this.listaCompletaAlunos.map(aluno => ({
-          label: aluno.permissao === Permissao.BOLSISTA.valueOf().substring(5)
-            ? `${aluno.nome} (Bolsista)`
-            : aluno.nome,
-          value: Number(aluno.id)
-        }));
+        this.opcoesAlunosParaFiltro = this.listaCompletaAlunos.map(aluno => {
+          let label = aluno.nome;
+          const permissao = aluno.permissao;
+          
+          if (permissao === Permissao.BOLSISTA.valueOf().substring(5)) {
+            label = `${aluno.nome} (Bolsista)`;
+          } else if (permissao === Permissao.USER.valueOf().substring(5)) {
+            label = `${aluno.nome} (Aluno)`;
+          } else if (permissao === Permissao.PROFESSOR.valueOf().substring(5)) {
+            label = `${aluno.nome} (Professor)`;
+          } 
+          
+          return {
+            label: label,
+            value: Number(aluno.id)
+          };
+        });
         this.carregandoAlunos = false;
       },
       error: (error) => {
@@ -115,7 +125,6 @@ export class PageMentoriaComponent implements OnInit {
     });
   }
 
-  // NOVO MÉTODO para ver sugestões personalizadas por IA
   verSugestoes(usuario: Usuario): void {
     this.dialog.open(SugestaoAlunoDialogComponent, {
       width: '90vw', maxWidth: '1200px', maxHeight: '90vh',
