@@ -28,12 +28,13 @@
   z-index: 100;
   width: 100%;
   max-width: 650px;
-  max-height: 60vh;
+  max-height: 70vh;
   margin: 0 1rem;
   padding: 1rem;
   box-sizing: border-box;
   justify-content: center;
   display: flex;
+
 }
 
 .modal-close {
@@ -60,6 +61,7 @@
   border-radius: 16px;
   overflow: hidden;
   width: 650px;
+  height: auto;
   padding: 23px;
   box-sizing: border-box;
   margin: 0 auto;
@@ -129,16 +131,26 @@
 .birthday-cta{
   padding: 18px;
   background-color: #28A745;
+ background-image: linear-gradient(90deg, #EDB120 0%, #EDB120 100%);
+  background-size: 0 100%;
+  background-position: left center;
+  background-repeat: no-repeat;
   border-radius: 8px;
-  margin-top: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 26px;
   width: 180px;
   height: 48px;
   border: none;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-size 0.45s cubic-bezier(.2,.8,.2,1), color 0.2s;
+  color: #F6F8FE;
+  font-weight: 550;
 }
-.birthday-cta:hover {
-  background-color: #218838;
+.birthday-cta:hover{
+  background-size: 100% 100%;
+  color: #fff;
 }
 .textbtn{
   display: flex;
@@ -149,6 +161,17 @@
   font-family: "Nunito Sans", sans-serif;
   margin:0 0.6rem auto;
   flex-direction: row;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 

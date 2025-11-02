@@ -28,6 +28,7 @@ export class HappyMessagePopupComponent implements OnInit {
   @Input() initialMessage : string = "";
    tipo: 'bday' | '6m' | '1a' | '2a' | '30d' | '3m' | '7d' | null = null;
 
+
   estiloMensagem3Meses = {
     color: '#E3E3E3',
     fontSize: '1.2rem',
@@ -77,6 +78,7 @@ export class HappyMessagePopupComponent implements OnInit {
     const key = `comem-exibida-${tipo}-${this.hojeISO()}`;
     localStorage.setItem(key, '1');
   }
+
 
   verifyWhichMessageToShow(): void {
     this.parabensService.VerificarComemoracaoHj().subscribe(
