@@ -1,5 +1,7 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { LottieModule } from 'ngx-lottie';
+import player from 'lottie-web';
 
 import { SistemaRoutingModule } from './sistema-routing.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -50,7 +52,12 @@ import { SugestaoAlunoDialogComponent } from './sugestao-aluno-dialog/sugestao-a
 import { MatDialogModule } from '@angular/material/dialog';
 import { TemaFlashcardsComponent } from './tema-flashcards/tema-flashcards.component';
 import { FlashcardsCadastroComponent } from './flashcards-cadastro/flashcards-cadastro.component';
-import { QuillModule } from "ngx-quill";
+import { QuillModule } from 'ngx-quill';
+
+// Função necessária para o ngx-lottie
+export function playerFactory() {
+  return player;
+}
 
 @NgModule({
   declarations: [
@@ -90,7 +97,6 @@ import { QuillModule } from "ngx-quill";
     SugestaoAlunoDialogComponent,
     TemaFlashcardsComponent,
     FlashcardsCadastroComponent,
-    
   ],
   imports: [
     CommonModule,
@@ -106,8 +112,10 @@ import { QuillModule } from "ngx-quill";
     SharedModule,
     ReactiveFormsModule,
     MatDialogModule,
-    QuillModule
-],
+    QuillModule,
+    LottieModule.forRoot({ player: playerFactory }),
+  ],
+
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA, // Permite o uso de elementos personalizados
   ],

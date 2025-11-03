@@ -282,7 +282,7 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
           this.isCitarQuestao = false;
           this.citarQuestao = new Questao();
 
-          this.scrollToBottom();
+          this.scrollToBotMessage();
         },
         error => {
           this.messages = this.messages.filter(msg => msg !== typingMsg);
@@ -298,7 +298,7 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
           this.chatBotStateService.addMessage(errorMsg);
           this.isCitarQuestao = false;
           this.citarQuestao = new Questao();
-          this.scrollToBottom();
+          this.scrollToBotMessage();
         }
       );
     }
@@ -313,6 +313,19 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
     setTimeout(() => {
       chatBodyElement.scrollTop = chatBodyElement.scrollHeight;
     }, 100);
+  }
+
+  scrollToBotMessage(): void {
+    const chatBodyElement = this.chatBody.nativeElement;
+    setTimeout(() => {
+      
+      const botMessages = chatBodyElement.querySelectorAll('.bot-message');
+      if (botMessages.length > 0) {
+        const lastBotMessage = botMessages[botMessages.length - 1] as HTMLElement;
+        
+        lastBotMessage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 200); 
   }
   
   async enviarParaSuporte(): Promise<void> {

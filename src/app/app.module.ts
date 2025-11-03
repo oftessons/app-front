@@ -28,10 +28,12 @@ import { DetalhesPlanosComponent } from './planos/detalhes-planos/detalhes-plano
 import { PagamentoConcluidoComponent } from './planos/pagamento-concluido/pagamento-concluido.component';
 import { ValidacaoAcessoComponent } from './validacao-acesso/validacao-acesso.component';
 import { ChatBotWhatsappComponent } from './chat-bot-whatsapp/chat-bot-whatsapp.component';
-import { MarkdownModule } from 'ngx-markdown';
+import { MarkdownModule, MarkedOptions } from 'ngx-markdown';
 import { QuestoesStateService } from './services/questao-state.service';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import katex from 'katex';
+import { KatexRenderDirective } from './chat-bot/katex-render.directive';
 
 
 
@@ -48,6 +50,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
     PagamentoConcluidoComponent,
     ValidacaoAcessoComponent,
     ChatBotWhatsappComponent,
+    KatexRenderDirective,
   ],
   imports: [
     MatDialogModule,
@@ -67,7 +70,15 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
     SharedModule,
     MatProgressBarModule,
     MatSnackBarModule,
-    MarkdownModule.forRoot(),
+    MarkdownModule.forRoot({
+      markedOptions: {
+        provide: MarkedOptions,
+        useValue: {
+          gfm: true,
+          breaks: true,
+        },
+      },
+    }),
     QuillModule.forRoot({
       customOptions: [{
         import: 'formats/font',

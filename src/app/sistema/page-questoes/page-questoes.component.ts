@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ElementRef, ViewChild, AfterViewChecked, PipeTransform, Optional, Injectable, Inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef, ViewChild, AfterViewChecked, PipeTransform, Optional, Injectable, Inject, ChangeDetectorRef } from '@angular/core';
 import { NavigationEnd, Router, RouterEvent } from '@angular/router';
 import { TipoDeProva } from './enums/tipoDeProva';
 import {
@@ -112,6 +112,8 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   filtroIdRespondendo: number = 0;
   anosComPremium: any[] = [];
   tiposDeProvaComPremium: any[] = [];
+  listaDeIds: number[] = [];
+  private questaoCache = new Map<number, Questao>();
 
   jaRespondeu: boolean = false;
   respondendo: boolean = false;
@@ -231,6 +233,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     private router: Router,
     private navigateService: NavigateService,
     private stripeService: StripeService,
+    private cdr: ChangeDetectorRef,
     @Optional() public dialogRef: MatDialogRef<PageQuestoesComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: { alunoId: string, nomeAluno: string } | null
   ) {
@@ -249,6 +252,10 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   }
 
   ngOnInit(): void {
+    if (localStorage.getItem('respostasSalvas')) {
+      this.recuperarRespostasSalvasLocalStorage();
+    }
+
     this.carregandoEstadoInicial = true;
 
     this.usuarioLogado = this.authService.getUsuarioAutenticado();
@@ -280,6 +287,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
         next: (meuFiltro) => {
           if (meuFiltro) {
             this.preencherDadosDoFiltro(meuFiltro);
+
           } else {
             this.exibirMensagem('Filtro não encontrado.', 'erro');
           }
@@ -336,21 +344,92 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       });
     }
 
-    if (meuFiltro.questoes && meuFiltro.questoes.length > 0) {
-      this.questoes = meuFiltro.questoes;
-      this.numeroDeQuestoes = this.questoes.length;
+    if (meuFiltro.questoesIds && meuFiltro.questoesIds.length > 0) {
+
+      this.listaDeIds = meuFiltro.questoesIds.map((id: any) => Number(id));
+      this.numeroDeQuestoes = this.listaDeIds.length;
       this.paginaAtual = 0;
-      this.questaoAtual = this.questoes[this.paginaAtual];
-      this.navegacaoPorQuestao = this.questoes.map((q, index) => ({ questao: q, index: index }));
+
+      this.navegacaoPorQuestao = this.listaDeIds.map((id, index) => ({ id: id, index: index }));
+
 
       this.carregarProgressoDoFiltro();
 
-      if (this.usuarioId && this.questaoAtual) {
-        this.buscarRespostaSalva(this.questaoAtual.id);
-      }
     } else {
       this.message = "Este filtro salvo não contém questões.";
     }
+  }
+
+
+  carregarQuestaoDaPagina(): void {
+    if (this.listaDeIds.length === 0) return;
+
+    this.carregando = true;
+    this.questaoAtual = null;
+
+    const idDaQuestao = this.listaDeIds[this.paginaAtual];
+
+    if (this.questaoCache.has(idDaQuestao)) {
+      this.processarQuestaoCarregada(this.questaoCache.get(idDaQuestao)!);
+    } else {
+      this.questoesService.buscarQuestaoPorId(this.usuarioId, idDaQuestao).subscribe({
+        next: (questaoCarregada) => {
+          if (questaoCarregada) {
+            this.questaoCache.set(idDaQuestao, questaoCarregada); 
+            this.processarQuestaoCarregada(questaoCarregada);
+          } else {
+            this.message = 'Questão não encontrada.';
+            this.carregando = false;
+          }
+        },
+        error: (err) => {
+          // ... seu tratamento de erro
+          this.carregando = false;
+        }
+      });
+    }
+  }
+
+  private prebuscarProximaQuestao(): void {
+    const proximaPagina = this.paginaAtual + 1;
+
+    if (proximaPagina < this.listaDeIds.length) {
+      const proximoId = this.listaDeIds[proximaPagina];
+
+      if (!this.questaoCache.has(proximoId)) {
+        this.questoesService.buscarQuestaoPorId(this.usuarioId, proximoId).subscribe({
+          next: (questaoPrebuscada) => {
+            if (questaoPrebuscada) {
+              this.questaoCache.set(proximoId, questaoPrebuscada);
+              console.log(`Questão ${proximoId} pré-buscada e salva no cache.`);
+            }
+          },
+          error: (err) => {
+            console.error(`Erro ao pré-buscar questão ${proximoId}:`, err);
+          }
+        });
+      }
+    }
+  }
+
+  private processarQuestaoCarregada(questao: Questao): void {
+    this.questaoAtual = questao;
+    this.questoesStateService.setQuestaoAtual(this.questaoAtual);
+
+    this.sanitizerEnunciado = this.applyClassesToEnunciado(this.questaoAtual.enunciadoDaQuestao || '');
+
+    const selectElements = document.querySelector('.question-dropdown') as HTMLSelectElement;
+    if (selectElements) {
+      selectElements.selectedIndex = this.paginaAtual;
+    }
+
+    if (this.usuarioId && this.questaoAtual) {
+      this.buscarRespostaSalva(this.questaoAtual.id);
+    }
+
+    this.carregando = false;
+
+    this.prebuscarProximaQuestao();
   }
 
   private inicializarDescricoes(): void {
@@ -394,6 +473,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
   ngAfterViewChecked(): void {
     this.resizeImages();
+
   }
 
   private verificarStatusUsuario(): void {
@@ -829,6 +909,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       if (questaoComentadaSelecionada) filtros.comentada = questaoComentadaSelecionada;
     }
 
+
     if (this.multiSelectTemasSubtemasSelecionados && this.multiSelectTemasSubtemasSelecionados.length > 0) {
       const temasSelecionados: string[] = [];
       const subtemasSelecionados: string[] = [];
@@ -877,6 +958,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
         } else {
           this.message = '';
           this.questoes = questoes;
+
           this.paginaAtual = 0;
           this.questaoAtual = this.questoes[this.paginaAtual];
 
@@ -884,6 +966,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
             questao: questao,
             index: index,
           }));
+
 
           this.buscarCuriosidadesSeNecessario();
           this.abrirModal();
@@ -911,10 +994,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
 
   private carregarProgressoDoFiltro(): void {
-    if (!this.filtroIdRespondendo || this.filtroIdRespondendo === 0) {
-      return;
-    }
-
     this.carregando = true;
     this.questoesService.getRespostasSalvasParaFiltro(this.usuarioId, this.filtroIdRespondendo)
       .subscribe({
@@ -927,8 +1006,15 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
           let proximaPaginaNaoRespondida = 0;
           let todasRespondidas = true;
 
-          for (let i = 0; i < this.questoes.length; i++) {
-            const questaoId = this.questoes[i].id;
+          if (respostas.length === 0) {
+            // Não há progresso, apenas carregue a primeira questão (página 0)
+            console.log("Estou aqui");
+            this.paginaAtual = 0;
+            this.carregarQuestaoDaPagina();
+            return;
+          }
+          for (let i = 0; i < this.listaDeIds.length; i++) { // <-- MUDANÇA
+            const questaoId = this.listaDeIds[i]; // <-- MUDANÇA
             if (!this.respostasSalvas.has(questaoId)) {
               proximaPaginaNaoRespondida = i;
               todasRespondidas = false;
@@ -937,33 +1023,29 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
           }
 
           if (todasRespondidas) {
-            proximaPaginaNaoRespondida = this.questoes.length > 0 ? this.questoes.length - 1 : 0;
+            proximaPaginaNaoRespondida = this.listaDeIds.length > 0 ? this.listaDeIds.length - 1 : 0; // <-- MUDANÇA
           }
+          // --- FIM DA LÓGICA CORRIGIDA ---
 
           this.paginaAtual = proximaPaginaNaoRespondida;
-          this.questaoAtual = this.questoes[this.paginaAtual];
-          this.questoesStateService.setQuestaoAtual(this.questaoAtual);
 
-          const selectElements = document.querySelector('.question-dropdown') as HTMLSelectElement;
-          if (selectElements) {
-            selectElements.selectedIndex = this.paginaAtual;
-          }
-
-          if (this.questaoAtual) {
-            this.buscarRespostaSalva(this.questaoAtual.id);
-          }
-          this.carregando = false;
+          // Agora, carregue a questão da página que encontramos
+          this.carregarQuestaoDaPagina();
+          // O 'this.carregando = false' será feito dentro de carregarQuestaoDaPagina
         },
         error: (error) => {
           console.error('Erro ao carregar progresso do filtro:', error);
           this.exibirMensagem('Não foi possível carregar seu progresso anterior.', 'erro');
-          this.carregando = false;
+          // Fallback: carregar a primeira questão
+          this.paginaAtual = 0;
+          this.carregarQuestaoDaPagina();
         }
       });
   }
 
   private buscarRespostaSalva(questaoId: number): void {
     if (!questaoId) {
+      this.buscarRespostaSalva(questaoId);
       return;
     }
 
@@ -1096,6 +1178,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
       this.paginaAtual--;
       this.questaoAtual = this.questoes[this.paginaAtual];
+      this.carregarQuestaoDaPagina();
 
       this.resetarOcorrenciasDeQuestao();
       this.questoesStateService.setQuestaoAtual(this.questaoAtual);
@@ -1111,7 +1194,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   }
 
   proximaQuestao() {
-    if (this.paginaAtual < this.questoes.length - 1) {
+    if (this.paginaAtual < this.numeroDeQuestoes - 1) {
       const selectElements = document.querySelector('.question-dropdown') as HTMLSelectElement;
 
       if (selectElements) {
@@ -1121,6 +1204,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
       this.paginaAtual++;
       this.questaoAtual = this.questoes[this.paginaAtual];
+      this.carregarQuestaoDaPagina();
 
       this.resetarOcorrenciasDeQuestao();
       this.questoesStateService.setQuestaoAtual(this.questaoAtual);
@@ -1147,9 +1231,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
         const alternativaSelecionada = questao.alternativas.find(
           (a) => a.texto === this.selectedOption
         );
-
-        console.log("ID do filtro")
-        console.log(this.filtroIdRespondendo);
 
         if (alternativaSelecionada) {
           const respostaDTO: RespostaDTO = {
@@ -1201,6 +1282,9 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
               } else {
                 this.porcentagens = new Map([[this.selectedOption, '1%']]);
               }
+
+              // Salvar resposta localmente para evitar delay ao navegar
+              this.respostasSalvas.set(questao.id, resposta);
 
               // Após enviar a resposta, obtenha as porcentagens de respostas
               this.questoesService.getAcertosErrosQuestao(questao.id).subscribe(
@@ -1392,10 +1476,21 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   }
 
   private carregarRespostaSeNecessario(questaoId: number): void {
+    // Primeiro tenta carregar do cache local
+    if (this.respostasSalvas.has(questaoId)) {
+      const respostaSalva = this.respostasSalvas.get(questaoId)!;
+      this.verificarRespostaUsuario(respostaSalva);
+      this.jaRespondeu = true;
+      this.mostrarPorcentagem = true;
+      return;
+    }
+
+    // Se não estiver no cache, busca do servidor se foi respondida nesta sessão
     if (this.respondidasAgora.has(questaoId)) {
       this.questoesService.questaoRespondida(this.usuarioId, questaoId, 0).subscribe({
         next: (resposta) => {
           if (resposta) {
+            this.respostasSalvas.set(questaoId, resposta);
             this.verificarRespostaUsuario(resposta);
             this.jaRespondeu = true;
             this.mostrarPorcentagem = true;
@@ -1405,6 +1500,15 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
           console.error("Erro ao verificar a resposta do usuário", error);
         }
       });
+    } else {
+      // Se não há resposta, reseta o estado
+      this.jaRespondeu = false;
+      this.mostrarPorcentagem = false;
+      this.respostaVerificada = false;
+      this.respostaCorreta = null;
+      this.respostaErrada = null;
+      this.selectedOption = '';
+      this.isRespostaCorreta = false;
     }
   }
 
@@ -1438,6 +1542,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
   editQuestao(): void {
     if (this.questaoAtual?.id) {
+      this.guardarRespostasSalvasLocalStorage();
       const filtroState = {
         multSelectAno: this.multSelectAno,
         multSelecDificuldade: this.multSelecDificuldade,
@@ -1449,7 +1554,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
         multiSelectRespSimu: this.multiSelectRespSimu,
         palavraChave: this.palavraChave,
         questaoId: this.questaoAtual.id,
-        paginaAtual: this.paginaAtual
+        paginaAtual: this.paginaAtual,
       };
 
       localStorage.setItem('questoesFiltroState', JSON.stringify(filtroState));
@@ -1458,7 +1563,35 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     }
   }
 
+  guardarRespostasSalvasLocalStorage(): void {
+    if (this.respostasSalvas && this.respostasSalvas.size > 0) {
+      const respostasArray = Array.from(this.respostasSalvas.entries()).map(([questaoId, resposta]) => ({
+        questaoId,
+        resposta
+      }));
+      localStorage.setItem('respostasSalvas', JSON.stringify(respostasArray));
+    }
+  }
+
+  recuperarRespostasSalvasLocalStorage(): void {
+    const respostasSalvasJson = localStorage.getItem('respostasSalvas');
+    if (respostasSalvasJson) {
+      try {
+        const respostasArray = JSON.parse(respostasSalvasJson) as { questaoId: number, resposta: Resposta }[];
+        this.respostasSalvas.clear();
+        respostasArray.forEach(({ questaoId, resposta }) => {
+          this.respostasSalvas.set(questaoId, resposta);
+        });
+        localStorage.removeItem('respostasSalvas');
+
+      } catch (e) {
+        console.error('Erro ao recuperar respostas salvas do localStorage:', e);
+      }
+    }
+  }
+
   aplicarFiltrosRestaurados(questaoId: number): void {
+
     this.carregando = true;
 
     const filtros: any = {};
@@ -1527,9 +1660,10 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
 
       for (const item of this.multiSelectTemasSubtemasSelecionados) {
-        if (typeof item === 'string') {
-          if (this.isTema(item)) {
-            temasSelecionados.push(item);
+        if (typeof item === 'string' && item.startsWith('TEMA_')) {
+          const temaOriginal = item.substring(5);
+          if (this.isTema(temaOriginal)) {
+            temasSelecionados.push(temaOriginal);
           } else if (this.isSubtema(item)) {
             subtemasSelecionados.push(item);
           }
@@ -1578,6 +1712,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
             this.paginaAtual = 0;
             this.questaoAtual = this.questoes[0];
           }
+
         } else {
           this.message = "Nenhuma questão encontrada com os filtros anteriores.";
           this.loadQuestao();
@@ -1591,6 +1726,19 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
         this.loadQuestao();
       }
     );
+  }
+
+  selecionarQuestaoPeloIndice(index: number): void {
+    this.resetarOcorrenciasDeQuestao();
+
+    this.paginaAtual = index;
+    this.questaoAtual = this.questoes[this.paginaAtual];
+    this.questoesStateService.setQuestaoAtual(this.questaoAtual);
+    this.carregarQuestaoDaPagina();
+
+    if (this.questaoAtual) {
+      this.buscarRespostaSalva(this.questaoAtual.id);
+    }
   }
 
   isDarkMode(): boolean {

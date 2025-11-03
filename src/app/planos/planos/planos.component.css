@@ -129,3 +129,44 @@
     width: 70%;
   }
 }
+
+@media (max-width: 480px) {
+  .main-container {
+    margin: 8px;
+    padding: 16px;
+  }
+
+  .title-planos h2 {
+    font-size: 20px;
+    margin: 12px;
+  }
+
+  .title-planos p {
+    width: 100%;
+    font-size: 12px;
+    margin: 12px;
+  }
+
+  .planos-container {
+    gap: 32px;
+    margin: 8px;
+    justify-items: center;
+    grid-template-columns: 1fr; 
+  }
+
+  .planos-footer span,
+  .planos-footer a {
+    font-size: 12px;
+    margin: 8px;
+  }
+
+  .texto-informativo {
+    font-size: 14px;
+    margin-top: 16px;
+    padding: 0 8px;
+  }
+
+  .texto-informativo p {
+    margin-bottom: 4px;
+  }
+}

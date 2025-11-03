@@ -44,9 +44,9 @@
                 <span class="ml-2">Início</span>
             </a>
 
-            <a mat-list-item routerLink="/usuario/trilha" [ngClass]="{'active-link': isActive('/usuario/trilha')}">
+            <a mat-list-item *ngIf="isAdmin" routerLink="/usuario/trilha" [ngClass]="{'active-link': isActive('/usuario/trilha')}">
                 <img [src]="!isDarkMode() ? 'assets/Icons/trilha.svg' : 'assets/Icons/dark/trilha-dark.svg'"
-                    alt="Ícone de Início" class="icon">
+                    alt="Ícone de Trilha" class="icon">
                 <span class="ml-2">Trilha do Conhecimento</span>
             </a>
 
@@ -70,7 +70,7 @@
                     alt="Ícone de Questões" class="icon">
                 <span class="ml-2">Questões</span>
             </a>
-            <a mat-list-item *ngIf="possuiPermissao" routerLink="/usuario/flashcards"
+            <a mat-list-item *ngIf="isAdmin" routerLink="/usuario/flashcards"
                 [ngClass]="{'active-link': isActive('/usuario/flashcards')}">
                 <img [src]="!isDarkMode() ? 'assets/Icons/flashcards.svg' : 'assets/Icons/dark/flashcards-dark.svg'"
                     alt="Ícone de Flashcards" class="icon">

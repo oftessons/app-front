@@ -7,6 +7,7 @@
   --primary-color: #0a1435;
 
   --text-color: #212529;
+  --text-color-secondary: #6c757d;
   --bg-geral: #E3EAF0;
   --bg-navbar: #0a1435;
   --bg-sidebar: #f2f2f2;
@@ -27,15 +28,26 @@
   --button-disabled-bg: #cccccc;
   --nav-button-bg: #686868;
   --filtro-bg: #94979d;
+  --button-bg: #f0f0f0;
+  --card-trilha-bg: #ffffff;
+  --progress-bg: #e9ecef;
+  --trilha-bg: none;
+  --trilha-balloon-bg: #0a1435;
+  --trilha-balloon-border: #0a1435;
+  --trilha-questao-bg: #7e808130;
+  --trilha-modal-bg: #e3e3e3;
 
   --blue: #007bff;
+  --light-blue: #3B5FA0;
   --indigo: #6610f2;
   --purple: #6f42c1;
   --pink: #e83e8c;
   --red: #dc3545;
   --orange: #fd7e14;
   --yellow: #EDB120;
+  --yellow-linear: linear-gradient(to right, #f5ce50, #febf25);
   --green: #28a745;
+  --green-transparent: #28a7467d;
   --teal: #20c997;
   --cyan: #17a2b8;
   --white: #fff;
@@ -60,6 +72,7 @@
 
 body.dark-mode {
   --text-color: #e3e3e3;
+  --text-color-secondary: #a0a0a0;
   --bg-geral: #1a1e22;
   --bg-navbar: #000021;
   --bg-sidebar: #14181a;
@@ -80,6 +93,14 @@ body.dark-mode {
   --button-disabled-bg: #3a3a3a;
   --nav-button-bg: #686868;
   --filtro-bg: #0d1011;
+  --button-bg: #2a2a2a;
+  --card-trilha-bg: #14181a66;
+  --progress-bg: #2c2f35;
+  --trilha-bg: linear-gradient(to bottom, #122D4B, #091C34, #07172E);
+  --trilha-balloon-bg: linear-gradient(to right, #f5cf507a, #fec1257f);
+  --trilha-balloon-border: #f5ce50;
+  --trilha-questao-bg: #38383852;
+  --trilha-modal-bg: #010015;
 }
 
 body.dark-mode .mat-drawer-content {
@@ -6294,7 +6315,6 @@ a.close.disabled {
 
 .modal.show .modal-dialog {
   transform: none;
-  margin-top: 150px;
 }
 
 
@@ -6317,8 +6337,8 @@ a.close.disabled {
 .modal-dialog {
   position: relative;
   width: auto;
-  margin: 0.5rem;
   pointer-events: none;
+  margin: 0 auto !important;
   z-index: 1100;
 }
 
@@ -6358,11 +6378,8 @@ a.close.disabled {
 
 .modal.show .modal-content {
   max-width: 600px;
-  /* Define um tamanho máximo para o modal */
   margin: auto;
   border-radius: 10px;
-  /* Bordas arredondadas para um design mais bonito */
-  margin-bottom: 300px;
 }
 
 
@@ -6479,7 +6496,7 @@ a.close.disabled {
 .mat-typography h5 {
   font: 400 16px / 20px Roboto, "Helvetica Neue", sans-serif !important;
   margin: 0 !important;
-  color: #fff;
+  color: #fff !important;
 }
 
 .modal-title {
@@ -6519,7 +6536,7 @@ a.close.disabled {
 @media (min-width: 576px) {
   .modal-dialog {
     max-width: 500px;
-    margin: 1.75rem auto;
+    margin: 0 auto;
   }
 
   .modal-dialog-scrollable {

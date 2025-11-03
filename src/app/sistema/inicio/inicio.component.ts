@@ -60,7 +60,6 @@ export class InicioComponent implements OnInit {
   }
 
   abrirModalConfiguracaoTrilha(): void {
-    this.Router.navigate(['/usuario/trilha']); //! remover para implementar modal
     // this.modalTrilhaAberto = true;
   }
 
@@ -132,7 +131,7 @@ export class InicioComponent implements OnInit {
   }
 
   redirecionarFlashcard() {
-    this.Router.navigate(['/usuario/flashcards']);
+    // this.Router.navigate(['/usuario/flashcards']);
   }
   
   exibirMensagem(tipo: string): void {
