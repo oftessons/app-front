@@ -49,6 +49,8 @@ import { MetricasDetalhadasComponent } from './metricas-detalhadas/metricas-deta
 import { SugestaoAlunoDialogComponent } from './sugestao-aluno-dialog/sugestao-aluno-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { TemaFlashcardsComponent } from './tema-flashcards/tema-flashcards.component';
+import { FlashcardsCadastroComponent } from './flashcards-cadastro/flashcards-cadastro.component';
+import { QuillModule } from "ngx-quill";
 
 @NgModule({
   declarations: [
@@ -87,6 +89,7 @@ import { TemaFlashcardsComponent } from './tema-flashcards/tema-flashcards.compo
     MetricasDetalhadasComponent,
     SugestaoAlunoDialogComponent,
     TemaFlashcardsComponent,
+    FlashcardsCadastroComponent,
     
   ],
   imports: [
@@ -101,9 +104,10 @@ import { TemaFlashcardsComponent } from './tema-flashcards/tema-flashcards.compo
     NgxPaginationModule,
     EditorModule,
     SharedModule,
-    ReactiveFormsModule
-    ,MatDialogModule
-  ],
+    ReactiveFormsModule,
+    MatDialogModule,
+    QuillModule
+],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA, // Permite o uso de elementos personalizados
   ],

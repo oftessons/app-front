@@ -113,9 +113,6 @@ export class TemaFlashcardsComponent implements OnInit {
       this.temaEstudo = tema;
       this.subtemaEstudo = subtema;
       this.isFlashcardModalVisible = true;
-    } else {
-      console.log('Nenhum flashcard encontrado para esta seleção.');
-      // TODO: Adicionar um Toastr/Snackbar de "Nenhum card encontrado"
     }
   }
 

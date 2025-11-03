@@ -35,6 +35,7 @@ import { FlashcardsComponent } from './flashcards/flashcards.component';
 import { BolsaGuardService } from '../services/bolsa.guard';
 import { MetricasDetalhadasComponent } from './metricas-detalhadas/metricas-detalhadas.component';
 import { TemaFlashcardsComponent } from './tema-flashcards/tema-flashcards.component'; 
+import { FlashcardsCadastroComponent } from './flashcards-cadastro/flashcards-cadastro.component';
 
 
 const routes: Routes = [
@@ -125,7 +126,20 @@ const routes: Routes = [
         component: MetricasDetalhadasComponent,
         canActivate: [AuthGuard],
         data: { roles: ['ADMIN', 'PROFESSOR', 'USER'] }
+      },
+      {
+        path: 'cadastro-flashcard',
+        component: FlashcardsCadastroComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['ADMIN', 'PROFESSOR']}
+      },
+      { 
+        path: 'cadastro-flashcard/:id',
+         component: FlashcardsCadastroComponent, 
+         canActivate: [AuthGuard], 
+         data: { roles: ['ADMIN', 'PROFESSOR'] }
       }
+
     ]
   }
 ];

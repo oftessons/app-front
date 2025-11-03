@@ -25,6 +25,29 @@ export interface Flashcard {
   relevancia: number;
 }
 
+export interface ReqSalvarFlashcardDTO {
+  pergunta: string;
+  resposta: string;
+  tema: string;
+  subtema: string;
+  dificuldade: string;
+  relevancia: number;
+  createdBy: number;
+}
+
+export interface ReqAtualizarFlashcardDTO {
+  pergunta: string;
+  resposta: string;
+  tema: string;
+  subtema: string;
+  dificuldade: string;
+  relevancia: number;
+}
+
+export interface TotalEstudadosDTO {
+  totalEstudados: number;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -67,7 +90,42 @@ export class FlashcardService {
     );
   }
 
-  deleteFlashcard(id: number): Observable<string>{
-    return this.http.delete(`${this.apiUrl}/${id}`, { responseType: 'text'})
+  deleteFlashcard(id: number): Observable<string> {
+    return this.http.delete(`${this.apiUrl}/${id}`, { responseType: 'text' });
+  }
+
+  salvarFlashcard(dto: ReqSalvarFlashcardDTO): Observable<string> {
+    return this.http.post(`${this.apiUrl}/cadastrar`, dto, {
+      responseType: 'text',
+    });
+  }
+
+  atualizarFlashcard(
+    id: number,
+    dto: ReqAtualizarFlashcardDTO
+  ): Observable<string> {
+    return this.http.put(`${this.apiUrl}/atualizarFlashcard/${id}`, dto, {
+      responseType: 'text',
+    });
+  }
+
+  getTotalEstudados(): Observable<TotalEstudadosDTO> {
+    return this.http.get<TotalEstudadosDTO>(`${this.apiUrl}/total-estudados`);
+  }
+
+  buscarFlashcards(
+    tema?: string,
+    subtema?: string,
+    dificuldade?: string,
+    relevancia?: number,
+    pergunta?: string
+  ): Observable<Flashcard[]> {
+    let params = new HttpParams();
+    if (tema) params = params.set('tema', tema.toUpperCase());
+    if (subtema) params = params.set('subtema', subtema.toUpperCase());
+    if (dificuldade) params = params.set('dificuldade', dificuldade);
+    if (relevancia !== undefined && relevancia !== null) params = params.set('relevancia', String(relevancia));
+    if (pergunta) params = params.set('pergunta', pergunta);
+    return this.http.get<Flashcard[]>(`${this.apiUrl}/buscar-flashcards-filtro`, { params });
   }
 }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Tema } from '../page-questoes/enums/tema';
 import { TemaDescricoes } from '../page-questoes/enums/tema-descricao';
 import { FlashcardService } from 'src/app/services/flashcards.service';
+import { Router } from '@angular/router';
 
 export interface TemaInfo {
   titulo: string;
@@ -18,7 +19,11 @@ export class FlashcardsComponent implements OnInit {
 
   listaDeTemas: TemaInfo[] = [];
 
-  constructor(private flashcardService: FlashcardService) { }
+  constructor(private flashcardService: FlashcardService, private router: Router) { }
+
+  navigateToCadastro(){
+    this.router.navigate(['/usuario/cadastro-flashcard'])
+  }
 
   ngOnInit(): void {
     this.flashcardService.getFlashcardsContador().subscribe(
@@ -38,9 +43,6 @@ export class FlashcardsComponent implements OnInit {
           };
         });
       },
-      (error) => {
-        console.log('Erro ao buscar flashcards: ', error);
-      }
     );
   }
 

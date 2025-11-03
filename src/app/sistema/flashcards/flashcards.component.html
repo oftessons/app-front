@@ -1,16 +1,18 @@
 <div class="container pt-5">
   <div class="container mt-4">
+    <div class="header">
       <h1 class="mt-4"><span>|</span> Flashcards</h1>
-      <div class="cards-grid">
-        <app-flashcards-temas-cards
-          *ngFor="let info of listaDeTemas"
-          [tema]="info.titulo"
-          [numeroFlashcards]="info.qtdFlashcards"
-          [caminho]="info.rota">
+      <button class="button" (click)="navigateToCadastro()">Criar Flashcards</button>
+    </div>
+    <div class="cards-grid">
+      <app-flashcards-temas-cards
+        *ngFor="let info of listaDeTemas"
+        [tema]="info.titulo"
+        [numeroFlashcards]="info.qtdFlashcards"
+        [caminho]="info.rota"
+      >
         >
-        </app-flashcards-temas-cards>
-      </div>
+      </app-flashcards-temas-cards>
+    </div>
   </div>
-
 </div>
-

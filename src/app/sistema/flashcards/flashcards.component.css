@@ -16,3 +16,25 @@
     gap: 40px;
 
 }
+
+.header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.button {
+    padding: 12px 16px;
+    height: 50%;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #ffffff;
+    background-color: #3B5FA0;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: #234178;
+}
