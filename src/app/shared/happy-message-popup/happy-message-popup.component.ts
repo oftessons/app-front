@@ -140,7 +140,7 @@ export class HappyMessagePopupComponent implements OnInit {
         }
 
         this.aberto = true;
-        // this.marcarMostradoHoje(tipo);
+        this.marcarMostradoHoje(this.tipo);
       },
       err => console.error('Erro ao verificar comemoração', err)
     );

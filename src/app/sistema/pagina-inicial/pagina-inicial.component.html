@@ -197,19 +197,6 @@
                 </div>
 
                 <div class="form-group">
-                  <label class="small mb-1">Data de Nascimento</label>
-                  <input type="date" name="dataNascimento" [(ngModel)]="dataNascimento"
-                         [ngClass]="{'input-error': camposComErro.includes('dataNascimento')}"
-                         class="form-control py-2"
-                         placeholder="Selecione sua data de nascimento"
-                         required />
-                  <small class="text-danger" *ngIf="camposComErro.includes('dataNascimento')">
-                    {{ obterMensagemErro('dataNascimento') }}
-                  </small>
-                </div>
-
-
-                <div class="form-group">
                   <label class="small mb-1">Telefone *</label>
                   <input type="text" name="telefone"
                   [(ngModel)]="telefone"
@@ -245,6 +232,18 @@
                   required />
                   <small class="text-danger" *ngIf="camposComErro.includes('estado')">
                     {{ obterMensagemErro('estado') }}
+                  </small>
+                </div>
+
+                <div class="form-group">
+                  <label class="small mb-1">Data de Nascimento *</label>
+                  <input type="date" name="dataNascimento" [(ngModel)]="dataNascimento"
+                         [ngClass]="{'input-error': camposComErro.includes('dataNascimento')}"
+                         class="form-control py-2"
+                         placeholder="Selecione sua data de nascimento"
+                         required />
+                  <small class="text-danger" *ngIf="camposComErro.includes('dataNascimento')">
+                    {{ obterMensagemErro('dataNascimento') }}
                   </small>
                 </div>
 
