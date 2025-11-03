@@ -1,0 +1,83 @@
+.container {
+    max-width: 1300px;
+    padding: 10px;
+    font-family: 'Nunito Sans', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.button-voltar {
+    color: #F6F8FE;
+    display: flex;
+    font-size: 16px;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+    text-decoration: none;
+    margin-bottom: 32px;
+}
+
+.button-voltar:hover {
+    color: #F6F8FE;
+}
+
+.header {
+    width: 100%;
+    padding: 20px 32px;
+    background: linear-gradient(360deg, rgba(37, 60, 102, 0.5), #253C66);
+    border-radius: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.info {
+    color: #F6F8FE;
+}
+
+.info h1{
+    font-size: 28px;
+}
+
+.info p {
+    font-size: 14px;
+}
+
+.info span {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.card-button {
+    color: #F6F8FE;
+    background-color: #3B5FA0;
+    padding: 16px 12px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.card-button:hover {
+    color: #F6F8FE;
+    background-color: #254170; 
+}
+
+.subtemas-flashcards {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg-sidebar);
+    padding: 20px;
+    border-radius: 16px;
+    margin-top: 16px;
+    width: 100%;
+    gap: 16px;
+}

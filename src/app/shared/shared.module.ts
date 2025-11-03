@@ -6,7 +6,7 @@ import { ImageResizeModule } from './image-resize/image-resize.module';
 import { LottieModule } from 'ngx-lottie';
 
 // material imports
-import { MatIconModule } from "@angular/material/icon";
+import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { ModuloAulasComponent } from './modulo-aulas/modulo-aulas.component';
 import { PlaylistModeComponent } from './playlist-mode/playlist-mode.component';
@@ -16,6 +16,11 @@ import { CardPlanoComponent } from './card-plano/card-plano.component';
 import { AppRoutingModule } from '../app-routing.module';
 import { ModalDeleteComponent } from './modal-delete/modal-delete.component';
 import { PageEmDesenvolvimentoComponent } from './page-em-desenvolvimento/page-em-desenvolvimento.component';
+import { FlashcardsTemasCardsComponent } from './flashcards-temas-cards/flashcards-temas-cards.component';
+import { FlashcardsSubtemasComponent } from './flashcards-subtemas/flashcards-subtemas.component';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { FlashcardModalComponent } from './flashcard-modal/flashcard-modal.component';
+import { DeletarFlashcardModalComponent } from './deletar-flashcard-modal/deletar-flashcard-modal.component';
 import { ModalTrilhaComponent } from './modal-trilha/modal-trilha.component';
 
 @NgModule({
@@ -29,7 +34,11 @@ import { ModalTrilhaComponent } from './modal-trilha/modal-trilha.component';
     CardPlanoComponent,
     ModalDeleteComponent,
     PageEmDesenvolvimentoComponent,
-    ModalTrilhaComponent
+    FlashcardsTemasCardsComponent,
+    FlashcardModalComponent,
+    FlashcardsSubtemasComponent,
+    DeletarFlashcardModalComponent,
+    ModalTrilhaComponent,
   ],
   imports: [
     CommonModule,
@@ -37,8 +46,10 @@ import { ModalTrilhaComponent } from './modal-trilha/modal-trilha.component';
     ImageResizeModule,
     FormsModule,
     AppRoutingModule,
-    LottieModule
+    MatProgressBarModule,
+    LottieModule,
   ],
+
   exports: [
     SelectPadraoComponent,
     ImageResizeModule,
@@ -49,10 +60,11 @@ import { ModalTrilhaComponent } from './modal-trilha/modal-trilha.component';
     ModalComponent,
     CardPlanoComponent,
     PageEmDesenvolvimentoComponent,
-    ModalTrilhaComponent
+    FlashcardsTemasCardsComponent,
+    FlashcardsSubtemasComponent,
+    FlashcardModalComponent,
+    ModalTrilhaComponent,
   ],
-  entryComponents: [
-    ModalTrilhaComponent
-  ]
+  entryComponents: [ModalTrilhaComponent],
 })
-export class SharedModule { }
+export class SharedModule {}

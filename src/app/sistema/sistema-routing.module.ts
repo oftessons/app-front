@@ -34,6 +34,8 @@ import { PageMentoriaComponent } from './page-mentoria/page-mentoria.component';
 import { FlashcardsComponent } from './flashcards/flashcards.component';
 import { BolsaGuardService } from '../services/bolsa.guard';
 import { MetricasDetalhadasComponent } from './metricas-detalhadas/metricas-detalhadas.component';
+import { TemaFlashcardsComponent } from './tema-flashcards/tema-flashcards.component'; 
+import { FlashcardsCadastroComponent } from './flashcards-cadastro/flashcards-cadastro.component';
 
 
 const routes: Routes = [
@@ -66,6 +68,7 @@ const routes: Routes = [
       { path: 'simulados', component: PageSimuladoComponent },
       { path: 'simulados/:id', component: PageSimuladoComponent },
       { path: 'meus-simulados', component: MeusSimuladosComponent },
+      { path: 'flashcards/:temaId', component: TemaFlashcardsComponent },
       { 
         path: 'forbidden', 
         component: ForbiddenComponent // Certifique-se de criar este componente
@@ -123,7 +126,20 @@ const routes: Routes = [
         component: MetricasDetalhadasComponent,
         canActivate: [AuthGuard],
         data: { roles: ['ADMIN', 'PROFESSOR', 'USER'] }
+      },
+      {
+        path: 'cadastro-flashcard',
+        component: FlashcardsCadastroComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['ADMIN', 'PROFESSOR']}
+      },
+      { 
+        path: 'cadastro-flashcard/:id',
+         component: FlashcardsCadastroComponent, 
+         canActivate: [AuthGuard], 
+         data: { roles: ['ADMIN', 'PROFESSOR'] }
       }
+
     ]
   }
 ];

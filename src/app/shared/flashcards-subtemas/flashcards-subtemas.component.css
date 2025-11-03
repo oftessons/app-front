@@ -1,0 +1,64 @@
+.container {
+    padding: 12px;
+    border-radius: 16px;
+    background-color: #1E1E1E;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    width: 100%;
+}
+
+.icon {
+    background-color: rgba(59, 95, 160, 0.4);
+    padding: 12px;
+    border-radius: 8px;
+    flex-shrink: 0;
+    border: 1px solid #3B5FA0;
+}
+
+.content-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.title {
+    font-size: 18px;
+    color: #FFFFFF;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.cards-estudados {
+    color: var(--text-color);
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.cards-estudados-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.progress-bar {
+    border-radius: 8px;
+    flex-shrink: 0;
+    width: 200px;
+    background-color: #696D79;
+}
+
+.button-right {
+    background-color: #3B5FA0;
+    padding: 8px;
+    border-radius: 8px;
+    margin-right: 8px;
+    cursor: pointer;
+    user-select: none;
+    text-decoration: none;
+}
+
+.button-right:hover {
+    background-color: #254170; 
+}
