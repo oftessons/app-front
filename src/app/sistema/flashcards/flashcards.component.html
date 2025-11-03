@@ -1,6 +1,18 @@
-<app-page-em-desenvolvimento 
-  titulo="Flashcards"
-  subtitulo="Estamos preparando uma seção especial para você revisar e consolidar seu conhecimento!"
-  [mostrarIcone]="true"
-  [mostrarBotaoVoltar]="true">
-</app-page-em-desenvolvimento>
+<div class="container pt-5">
+  <div class="container mt-4">
+    <div class="header">
+      <h1 class="mt-4"><span>|</span> Flashcards</h1>
+      <button class="button" (click)="navigateToCadastro()">Criar Flashcards</button>
+    </div>
+    <div class="cards-grid">
+      <app-flashcards-temas-cards
+        *ngFor="let info of listaDeTemas"
+        [tema]="info.titulo"
+        [numeroFlashcards]="info.qtdFlashcards"
+        [caminho]="info.rota"
+      >
+        >
+      </app-flashcards-temas-cards>
+    </div>
+  </div>
+</div>

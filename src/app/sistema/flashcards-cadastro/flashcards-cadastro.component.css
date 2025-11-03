@@ -1,0 +1,143 @@
+.container {
+  max-width: 1300px;
+  padding: 10px;
+  font-family: "Nunito Sans", sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.button-voltar {
+  color: #f6f8fe;
+  display: flex;
+  font-size: 16px;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  text-decoration: none;
+  margin-bottom: 32px;
+}
+
+.button-voltar:hover {
+  color: #f6f8fe;
+}
+
+.container-cadastro {
+  border-radius: 8px;
+  width: 100%;
+}
+
+.header {
+  background-color: #0f1934;
+  width: 100%;
+  padding: 20px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.header h1 {
+  font-size: 18px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.cadastro {
+  display: flex;
+  background-color: #0d1011;
+  padding: 20px;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+  border-radius: 8px;
+}
+
+.espaco-select {
+  width: 49.4%;
+  min-width: 200px;
+}
+
+.dropdown {
+  color: #ffffff;
+}
+
+.linha-dropdowns-simples {
+  width: 100%;
+  display: flex;
+  gap: 16px;
+}
+
+.espaco-select-simple {
+  flex-grow: 1;
+  flex-basis: 49%;
+  min-width: 200px;
+}
+
+::ng-deep .item-disabled {
+  opacity: 0.6;
+  font-weight: bold;
+  pointer-events: none;
+}
+
+::ng-deep .group-label {
+  opacity: 0.6;
+  font-weight: bold;
+  pointer-events: none;
+}
+
+::ng-deep .espaco-select-simple .selected-list {
+  color: #ffffff !important;
+  font-size: 16px !important;
+}
+
+.texto-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.espaco-texto {
+  width: 100%;
+}
+
+.label {
+  font-size: 16px;
+  color: #f6f8fe;
+  margin-bottom: 8px;
+}
+
+::ng-deep .ql-toolbar {
+  background-color: #ffffff;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+::ng-deep .ql-container {
+  background-color: #ffffff;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  min-height: 200px;
+}
+
+::ng-deep .ql-editor {
+  color: #000000;
+}
+
+.button {
+  padding: 12px 16px;
+  height: 50%;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #ffffff;
+  background-color: #3b5fa0;
+  transition: background-color 0.3s ease;
+}
+
+.button:hover {
+  background-color: #234178;
+}

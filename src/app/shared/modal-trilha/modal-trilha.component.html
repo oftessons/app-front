@@ -1,0 +1,158 @@
+<!-- Modal Overlay -->
+<div class="modal-trilha-overlay" (click)="onModalClose()">
+  <div class="modal-trilha-bg"></div>
+  
+  <div class="modal-trilha-wrapper">
+    <div class="modal-trilha-container" [class]="size" (click)="$event.stopPropagation()">
+      
+      <!-- ==================== MODO: EXECUTANDO QUESTÕES ==================== -->
+      <ng-container *ngIf="modoAtual === 'executando' && (etapaAtual === 'questoes-pre' || etapaAtual === 'questoes-pos')">
+        <div class="modal-trilha-header questoes-header">
+          <div class="questoes-header-info">
+            <div>
+              <h2 class="modal-trilha-title">{{ tipoQuestoesAtual === 'pre' ? 'Questões de Aquecimento' : 'Questões Pós-Teste' }}</h2>
+              <p class="modal-trilha-subtitle">Questão {{ questaoAtualIndex + 1 }} de {{ totalQuestoes }}</p>
+            </div>
+          </div>
+          <button class="modal-trilha-close" (click)="onModalClose()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M18 6L6 18M6 6l12 12" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="modal-trilha-content questoes-content">
+          <div class="questao-container" *ngIf="questaoAtual">
+            <div class="questao-info-header">
+              <span class="questao-badge">ID: {{ questaoAtual.id }}</span>
+              <span class="questao-badge">Tema: {{ questaoAtual.assunto }}</span>
+              <span class="questao-badge">Ano: {{ questaoAtual.ano }}</span>
+              <span class="questao-badge">Tipo de Prova: {{ questaoAtual.tipoProva }}</span>
+            </div>
+						<div class="questao-content">
+							<div class="questao-enunciado">
+								<p>{{ questaoAtual.enunciado }}</p>
+							</div>
+							
+							<div class="questao-alternativas">
+								<div *ngFor="let alt of questaoAtual.alternativas" 
+								class="alternativa-item"
+								[class.selecionada]="respostaSelecionada(alt.letra) && !jaRespondeu"
+								[class.correta]="jaRespondeu && alt.letra === questaoAtual.respostaCorreta"
+								[class.incorreta]="jaRespondeu && respostaSelecionada(alt.letra) && alt.letra !== questaoAtual.respostaCorreta"
+								(click)="selecionarResposta(alt.letra)">
+                <div class="alternativa-radio">
+									<span class="radio-circle" [class.checked]="respostaSelecionada(alt.letra)"></span>
+                </div>
+                <div class="alternativa-content">
+									<strong>{{ alt.letra }}</strong>
+                  <span>{{ alt.texto }}</span>
+                </div>
+              </div>
+						</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="questoes-footer">
+          <div class="right-buttons">
+            <button class="btn-anterior" [disabled]="questaoAtualIndex === 0" (click)="questaoAnterior()">
+              Anterior
+            </button>
+            <button class="btn-responder" 
+                    [disabled]="!respostasUsuario.has(questaoAtualIndex) || jaRespondeu"
+                    (click)="responderQuestao()">
+              Responder
+            </button>
+            <button class="btn-proxima" 
+                    [disabled]="!jaRespondeu"
+                    (click)="proximaQuestao()">
+              {{ questaoAtualIndex === totalQuestoes - 1 ? 'Finalizar' : 'Próxima' }}
+            </button>
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- ==================== MODO: RESUMO ==================== -->
+      <ng-container *ngIf="modoAtual === 'resumo'">
+        <div class="modal-trilha-header resumo-header">
+          <button class="modal-trilha-close" (click)="onModalClose()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M18 6L6 18M6 6l12 12" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="modal-trilha-content resumo-content">
+          <!-- Animação de Desbloqueio -->
+          <div class="resumo-animation">
+            <ng-lottie 
+              [options]="animacaoDesbloqueioOptions" 
+              [width]="'300px'"
+            ></ng-lottie>
+          </div>
+
+          <!-- Título e Subtítulo -->
+          <div class="resumo-header-text">
+            <h2 class="modal-trilha-title">
+              {{ !proximaEtapaDesbloqueada() ? 'Parabéns, trilha concluída!' : 'Você desbloqueou o próximo passo!' }}
+            </h2>
+            <p class="modal-trilha-subtitle" *ngIf="proximaEtapaDesbloqueada()">
+              {{ getSubtituloResumo() }}
+            </p>
+            <p class="modal-trilha-subtitle tempo-total" *ngIf="tempoTotal">
+              Tempo Total: <strong>{{ tempoTotal }}</strong>
+            </p>
+          </div>
+
+          <!-- Cards de Estatísticas para Questões -->
+          <div class="resumo-stats-cards" *ngIf="etapaAtual === 'questoes-pre' || etapaAtual === 'questoes-pos'">
+            <div class="card-estatistica-resumo card-pos-teste">
+              <div class="card-icon-wrapper erro">
+                <img src="assets/Icons/x.svg" alt="Ícone de Respostas Erradas">
+              </div>
+              <div class="card-text-estatistica-resumo">
+                <h3>{{ erros }}</h3>
+                <p>Respostas Erradas</p>
+              </div>
+            </div>
+            <div class="card-estatistica-resumo card-pos-teste">
+              <div class="card-icon-wrapper acerto">
+                <img src="assets/Icons/v.svg" alt="Ícone de Respostas Certas">
+              </div>
+              <div class="card-text-estatistica-resumo">
+                <h3>{{ acertos }}</h3>
+                <p>Respostas Certas</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cards de Estatísticas para Flashcards -->
+          <div class="resumo-stats-cards" *ngIf="etapaAtual === 'flashcards'">
+            <div class="card-estatistica-resumo card-flashcard">
+              <div class="card-text-estatistica-resumo">
+                <h3>{{ flashcardsEstudados }}</h3>
+                <p>Cards Estudados</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Botões de Ação -->
+          <div class="resumo-actions">
+            <button class="btn-sair-trilha" (click)="onModalClose()">
+              Voltar para o início
+            </button>
+            <button class="btn-assistir-agora" 
+                    *ngIf="proximaEtapaDesbloqueada()"
+                    (click)="iniciarEtapa(proximaEtapaDesbloqueada()!)">
+              {{ getNomeBotaoProximaEtapa() }}
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

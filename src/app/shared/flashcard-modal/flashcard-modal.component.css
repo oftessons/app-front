@@ -1,0 +1,264 @@
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content-wrapper {
+  position: relative;
+}
+
+.main-container {
+  display: flex;
+  background: linear-gradient(180deg, #122441, #0c121f);
+  width: 418px;
+  min-height: 490px;
+  border-radius: 12px;
+  border: 1px solid #3a487a;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+  position: relative;
+  padding: 10px;
+  overflow: hidden;
+}
+
+.modal-conteudo {
+  position: relative;
+  z-index: 2;
+  padding: 40px 30px 50px 30px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+}
+
+.modal-background-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 20px;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  z-index: 1;
+}
+
+.tema-tittle {
+  font-size: 32px;
+  font-weight: 600;
+  color: #e3e3e3;
+}
+
+p {
+  color: #ffffff;
+  font-size: 18px;
+}
+
+.resposta-title {
+  font-size: 24px;
+  color: var(--yellow) !important;
+}
+
+.text {
+  font-size: 14px;
+  color: #ffffff;
+}
+
+.rating-text {
+  color: var(--text-color);
+  font-size: 12px;
+}
+
+.rating-buttons {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  align-items: center;
+}
+
+.rating-values-text {
+  font-size: 12px;
+  color: #f6f8fe;
+}
+
+.rating-btn {
+  padding: 12px 16px;
+  border-radius: 8px;
+  color: #f6f8fe;
+  border: 0px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.rating-1 {
+  background-color: #dc624b;
+}
+
+.rating-2 {
+  background-color: #ed8309;
+}
+
+.rating-3 {
+  background-color: var(--yellow);
+}
+
+.rating-4 {
+  background-color: #2ebf4f;
+}
+
+.rating-5 {
+  background-color: #005914;
+}
+
+.porcentagem-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.parabens {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.summary-text {
+  font-size: 16px !important;
+  color: var(--text-color) !important;
+}
+
+.porcentagem {
+  color: #28a745;
+}
+
+.summary-stats {
+  display: flex;
+  gap: 16px;
+}
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  background-color: #12151e;
+  width: 160px;
+  height: 117px;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 6px;
+  border-radius: 16px;
+}
+
+.stat-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: var(--text-color);
+}
+
+.summary-active {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  background: #010015;
+  max-width: 500px;
+  width: 100%;
+}
+
+.summary-btn {
+  width: 100%;
+  padding: 6px 8px;
+  border-radius: 8px;
+  font-size: 16px;
+  color: #f6f8fe;
+  border: 1px solid #253c66;
+  background-color: transparent;
+  user-select: none;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.summary-btn:hover {
+  background-color: #040322;
+}
+
+.button-resposta {
+  background-color: #28a745;
+  color: #f6f8fe;
+  border-radius: 8px;
+  font-size: 16px;
+  width: 90%;
+  padding: 12px 12px;
+  cursor: pointer;
+  user-select: none;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.button-resposta:hover {
+  color: #f6f8fe;
+  background-color: #21963d;
+}
+
+.button-fechar {
+  position: absolute;
+  top: 0px;
+  right: -60px;
+}
+
+.button-fechar button {
+  background-color: rgba(35, 35, 36, 0.8);
+  color: #e0e0e0;
+  border: 1px solid #555;
+  border-radius: 8px;
+  width: 48px;
+  height: 48px;
+  font-size: 28px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 1;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(2px);
+}
+
+.button-fechar button:hover {
+  background-color: rgba(50, 50, 65, 0.9);
+  color: #ffffff;
+}
+
+.buttons-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  width: 95%;
+  gap: 4px;
+}
+
+.deletar-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.editar-button{
+  cursor: pointer;
+}

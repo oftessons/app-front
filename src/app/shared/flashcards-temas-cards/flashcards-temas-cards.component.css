@@ -1,0 +1,51 @@
+.card-container {
+    background-color: var(--bg-sidebar);
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.icon-container {
+    background-color: rgba(59, 95, 160, 40%);
+    width: 48px;
+    height: 48px;
+    padding: 12;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #3B5FA0;
+    border-radius: 8px;
+}
+
+.tema-title {
+    font-size: 18px;
+    font-weight: 500;
+    margin-top: 16px;
+    margin-bottom: 4px;
+}
+
+.flashcards-numbers {
+    color: #E3E3E3;
+    font-size: 14px;
+    margin-bottom: 38px;
+}
+
+.card-button {
+    color: #F6F8FE;
+    background-color: #3B5FA0;
+    padding: 12px 8px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+.card-button:hover {
+    color: #F6F8FE;
+    background-color: #254170; 
+}

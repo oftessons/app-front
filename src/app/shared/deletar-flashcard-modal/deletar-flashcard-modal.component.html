@@ -1,0 +1,45 @@
+<div class="modal-backdrop">
+  <div class="modal-card" (click)="$event.stopPropagation()" [ngSwitch]="estado">
+    
+    <ng-container *ngSwitchCase="'confirmation'">
+      <img src="../../../assets/Icons/lixeira-flashcards.svg" alt="Excluir" class="modal-icon">
+
+      <h2 class="modal-title">Excluir Flashcard</h2>
+
+      <p class="modal-description">Você realmente deseja excluir esse flashcard?</p>
+
+      <div class="modal-actions">
+        <button 
+          type="button" 
+          class="btn btn-cancel" 
+          (click)="onCancelClick()" 
+          [disabled]="isLoading">
+          Cancelar
+        </button>
+        <button 
+          type="button" 
+          class="btn btn-confirm" 
+          (click)="onConfirmClick()" 
+          [disabled]="isLoading">
+          <span *ngIf="!isLoading">Excluir agora</span>
+          <span *ngIf="isLoading">Excluindo...</span>
+        </button>
+      </div>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'success'">
+      <img src="../../../assets/Icons/check.svg" alt="Sucesso" class="modal-icon success-icon">
+
+      <h2 class="modal-title">Flashcard excluído!</h2>
+
+      <p class="modal-description">Seu flashcard foi excluído com sucesso.</p>
+
+      <div class="modal-actions">
+        <button type="button" class="btn btn-single" (click)="onFinalCloseClick()">
+          Ok, fechar
+        </button>
+      </div>
+    </ng-container>
+
+  </div>
+</div>

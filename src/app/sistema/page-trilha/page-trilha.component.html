@@ -1,6 +1,173 @@
-<app-page-em-desenvolvimento 
-  titulo="Trilha de Aprendizado"
-  subtitulo="Estamos preparando uma experiência incrível de aprendizado personalizado para você!"
-  [mostrarIcone]="true"
-  [mostrarBotaoVoltar]="true">
-</app-page-em-desenvolvimento>
+<div class="trilha">
+  <div class="trilha-container">
+    <div class="trilha-header">
+      <h1 class="trilha-title"><span> | </span>Trilha do Conhecimento</h1>
+      <div class="trilha-controls">
+        <div class="tema-selector">
+          <app-select-padrao
+            [options]="temas"
+            [(selectedValue)]="selectedTema"
+            label="Temas"
+            >
+          </app-select-padrao>
+        </div>
+        <button class="settings-btn">
+          <img [src]="!isDarkMode() ? 'assets/Icons/settings.svg' : 'assets/Icons/dark/settings-dark.svg'" alt="Ícone de Início" class="icon">
+        </button>
+      </div>
+    </div>
+
+    <div class="trilha-content">
+      <div class="trilha-mapa">
+        <div class="trilha-path">
+          <div *ngFor="let semana of semanas; let i = index" 
+               class="semana-node"
+               [class.center]="getPositionClass(i) === 'center'"
+               [class.left]="getPositionClass(i) === 'left'"
+               [class.right]="getPositionClass(i) === 'right'"
+               [class.active]="semana.status === 'active'"
+               [class.completed]="semana.status === 'completed'"
+               [class.locked]="semana.status === 'locked'"
+               [class.expanded]="isNodeExpanded(i)"
+               [class.selected]="isNodeSelected(i)"
+               (click)="toggleNode(i, semana.status)">
+            <div class="node-circle">
+              <div class="node-inner-circle">
+                <ng-lottie 
+                  [options]="obterOpcoesAnimacao(semana.status === 'locked' ? 'bloqueado' : (semana.status === 'completed' ? 'concluido' : 'ativo'))" 
+                  [width]="obterLarguraAnimacao(semana.status === 'locked' ? 'bloqueado' : (semana.status === 'completed' ? 'concluido' : 'ativo'))"
+                ></ng-lottie>
+              </div>
+            </div>
+            
+            <!-- Balão "Começar" para semana ativa -->
+            <div *ngIf="semana.status === 'active' && !isNodeExpanded(i)" class="balloon-comecar">
+              <div class="balloon-content">
+                <span class="balloon-text">
+                  <strong>Começar</strong>
+                  Semana {{ semana.numero }}
+                </span>
+                <div class="balloon-arrow"></div>
+              </div>
+            </div>
+            
+            <!-- Progress cards inline - visível apenas em telas < 1530px -->
+            <div class="progress-cards-inline" *ngIf="isNodeExpanded(i) && semana.cards.length > 0">
+              <div class="balloon-arrow-top"></div>
+              <div class="cards-wrapper">
+                <div *ngFor="let card of semana.cards" class="progress-card" [class.completed]="card.status === 'concluido'">
+                  <div class="card-header">
+                    <div class="card-title">
+                      <div class="card-info">
+                        <h3>{{ card.titulo }}</h3>
+                        <p>{{ card.semana }}</p>
+                      </div>
+                    </div>
+                    <div class="status-badge" [class]="getStatusBadgeClass(card.status)">
+                      <span>{{ getStatusBadgeText(card.status) }}</span>
+                    </div>
+                  </div>
+                  
+                  <div class="card-stats">
+                    <span class="stat">
+                      <img [src]="!isDarkMode() ? 'assets/Icons/aula.svg' : 'assets/Icons/dark/aula-dark.svg'" alt="Ícone de aulas"> 
+                      {{ card.aulas }} aulas
+                    </span>
+                    <span class="stat">
+                      <img [src]="!isDarkMode() ? 'assets/imagens/caderno.svg' : 'assets/Icons/dark/caderno-dark.svg'" alt="Ícone de questões"> 
+                      {{ card.questoes }} questões
+                    </span>
+                    <span class="stat">
+                      <img [src]="!isDarkMode() ? 'assets/Icons/flashcards.svg' : 'assets/Icons/dark/flashcards-dark.svg'" alt="Ícone de flashcards"> 
+                      {{ card.flashcards }} flashcards
+                    </span>
+                    <span class="stat">
+                      <img [src]="!isDarkMode() ? 'assets/Icons/relogio.svg' : 'assets/Icons/dark/relogio-dark.svg'" alt="Ícone de tempo"> 
+                      {{ card.tempo }}
+                    </span>
+                  </div>
+                  
+                  <div class="progress-container">
+                    <div class="progress-bar">
+                      <div class="progress-fill" [style.width.%]="card.progresso"></div>
+                    </div>
+                    <span class="progress-text">{{ card.progresso }}%</span>
+                  </div>
+                  
+                  <button class="action-btn" 
+                          [class.refazer]="card.status === 'concluido'" 
+                          [class.iniciar]="card.status !== 'concluido'"
+                          (click)="abrirModalTrilha(card)">
+                    {{ card.status === 'concluido' ? 'Refazer trilha' : (card.status === 'andamento' ? 'Continuar' : 'Iniciar trilha') }}
+                    <img src="assets/Icons/arrow-updown.svg" alt="setaDireta">
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="trilha-progress">
+        <div *ngFor="let card of selectedWeekCards" 
+             class="progress-card" 
+             [class.completed]="card.status === 'concluido'">
+          <div class="card-header">
+            <div class="card-title">
+              <div class="card-info">
+                <h3>{{ card.titulo }}</h3>
+                <p>{{ card.semana }}</p>
+              </div>
+            </div>
+            <div class="status-badge" [class]="getStatusBadgeClass(card.status)">
+              <span>{{ getStatusBadgeText(card.status) }}</span>
+            </div>
+          </div>
+          
+          <div class="card-stats">
+            <span class="stat">
+              <img [src]="!isDarkMode() ? 'assets/Icons/aula.svg' : 'assets/Icons/dark/aula-dark.svg'" alt="Ícone de aulas"> 
+              {{ card.aulas }} aulas
+            </span>
+            <span class="stat">
+              <img [src]="!isDarkMode() ? 'assets/imagens/caderno.svg' : 'assets/Icons/dark/caderno-dark.svg'" alt="Ícone de questões"> 
+              {{ card.questoes }} questões
+            </span>
+            <span class="stat">
+              <img [src]="!isDarkMode() ? 'assets/Icons/flashcards.svg' : 'assets/Icons/dark/flashcards-dark.svg'" alt="Ícone de flashcards"> 
+              {{ card.flashcards }} flashcards
+            </span>
+            <span class="stat">
+              <img [src]="!isDarkMode() ? 'assets/Icons/relogio.svg' : 'assets/Icons/dark/relogio-dark.svg'" alt="Ícone de tempo"> 
+              {{ card.tempo }}
+            </span>
+          </div>
+          
+          <div class="progress-container">
+            <div class="progress-bar">
+              <div class="progress-fill" [style.width.%]="card.progresso"></div>
+            </div>
+            <span class="progress-text">{{ card.progresso }}%</span>
+          </div>
+          
+          <button class="action-btn" 
+                  [class.refazer]="card.status === 'concluido'" 
+                  [class.iniciar]="card.status !== 'concluido'"
+                  (click)="abrirModalTrilha(card)">
+            {{ card.status === 'concluido' ? 'Refazer trilha' : (card.status === 'andamento' ? 'Continuar' : 'Iniciar trilha') }}
+            <img src="assets/Icons/arrow-updown.svg" alt="setaDireta">
+          </button>
+        </div>
+
+        <!-- Mensagem quando não há cards disponíveis -->
+        <div *ngIf="selectedWeekCards.length === 0" class="no-cards-message">
+          <h4>Semana {{ selectedWeekInfo.numero }}</h4>
+          <p>Esta semana ainda não possui conteúdo disponível.</p>
+          <span class="unlock-hint"></span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
