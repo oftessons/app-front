@@ -17,6 +17,7 @@ import {
   ReqAtualizarFlashcardDTO,
 } from 'src/app/services/flashcards.service';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-flashcards-cadastro',
@@ -59,7 +60,8 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
     private location: Location,
     private flashcardService: FlashcardService,
     private router: Router,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private authService: AuthService
   ) {
     const navigation = this.router.getCurrentNavigation();
     if (navigation?.extras?.state) {
@@ -124,51 +126,79 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    const temaSelecionado = this.encontrarTemaDoSubtema(
-      this.assuntoSelecionado
-    );
-    if (!temaSelecionado) {
-      alert('Erro: Tema não encontrado para o subtema selecionado.');
-      return;
-    }
+    this.authService.obterUsuarioAutenticadoDoBackend().subscribe({
+      next: (usuarioDoBackend) => {
+        if (!usuarioDoBackend || !usuarioDoBackend.id) {
+          alert(
+            'Erro crítico: Não foi possível obter os dados do usuário logado. Faça o login novamente.'
+          );
+          this.router.navigate(['/login']);
+          return;
+        }
 
-    if (this.modoEdicao && this.flashcardParaEditar) {
-      const dto: ReqAtualizarFlashcardDTO = {
-        pergunta: this.perguntaHtml,
-        resposta: this.respostaHtml,
-        tema: temaSelecionado,
-        subtema: this.assuntoSelecionado,
-        dificuldade: this.dificuldadeSelecionada,
-        relevancia: this.relevanciaSelecionada,
-      };
-      this.flashcardService
-        .atualizarFlashcard(this.flashcardParaEditar.id, dto)
-        .subscribe({
-          next: () => {
-            alert('Flashcard atualizado com sucesso!');
-            this.voltar();
-          },
-        });
-    } else {
-      const dto: ReqSalvarFlashcardDTO = {
-        pergunta: this.perguntaHtml,
-        resposta: this.respostaHtml,
-        tema: temaSelecionado,
-        subtema: this.assuntoSelecionado,
-        dificuldade: this.dificuldadeSelecionada,
-        relevancia: this.relevanciaSelecionada,
-        createdBy: 0,
-      };
-      this.flashcardService.salvarFlashcard(dto).subscribe({
-        next: () => {
-          alert('Flashcard salvo com sucesso!');
-          this.voltar();
-        },
-        error: (erro) => {
-          alert(`Erro ao salvar: ${erro.error?.message || erro.message}`);
-        },
-      });
-    }
+        const userIdNumerico = parseInt(String(usuarioDoBackend.id), 10);
+        if (isNaN(userIdNumerico)) {
+          alert('Erro crítico: O ID do usuário retornado é inválido.');
+          return;
+        }
+
+        const temaSelecionado = this.encontrarTemaDoSubtema(
+          this.assuntoSelecionado!
+        );
+        if (!temaSelecionado) {
+          alert('Erro: Tema não encontrado para o subtema selecionado.');
+          return;
+        }
+
+        if (this.modoEdicao && this.flashcardParaEditar) {
+          const dto: ReqAtualizarFlashcardDTO = {
+            pergunta: this.perguntaHtml,
+            resposta: this.respostaHtml,
+            tema: temaSelecionado,
+            subtema: this.assuntoSelecionado!,
+            dificuldade: this.dificuldadeSelecionada!,
+            relevancia: this.relevanciaSelecionada!,
+          };
+          this.flashcardService
+            .atualizarFlashcard(this.flashcardParaEditar.id, dto)
+            .subscribe({
+              next: () => {
+                alert('Flashcard atualizado com sucesso!');
+                this.voltar();
+              },
+              error: (erro) => {
+                alert(
+                  `Erro ao atualizar: ${erro.error || 'Erro desconhecido'}`
+                );
+              },
+            });
+        } else {
+          const dto: ReqSalvarFlashcardDTO = {
+            pergunta: this.perguntaHtml,
+            resposta: this.respostaHtml,
+            tema: temaSelecionado,
+            subtema: this.assuntoSelecionado!,
+            dificuldade: this.dificuldadeSelecionada!,
+            relevancia: this.relevanciaSelecionada!,
+            createdBy: userIdNumerico,
+          };
+          this.flashcardService.salvarFlashcard(dto).subscribe({
+            next: () => {
+              alert('Flashcard salvo com sucesso!');
+              this.voltar();
+            },
+            error: (erro) => {
+              alert(`Erro ao salvar: ${erro.error}`);
+            },
+          });
+        }
+      },
+      error: (err) => {
+        console.error('Erro ao buscar perfil do usuário:', err);
+        alert('Erro ao buscar dados do usuário. Sua sessão pode ter expirado.');
+        this.router.navigate(['/login']);
+      },
+    });
   }
 
   private encontrarTemaDoSubtema(subtemaKey: string): string | null {
@@ -178,7 +208,7 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
     }
     return null;
   }
-  
+
   private canon(s: string): string {
     return s
       .normalize('NFD')
