@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { SelectPadraoComponent } from './select-padrao/select-padrao.component';
 import { InputPadraoComponent } from './input-padrao/input-padrao.component';
 import { ImageResizeModule } from './image-resize/image-resize.module';
+import { LottieModule } from 'ngx-lottie';
 
 // material imports
 import { MatIconModule } from "@angular/material/icon";
@@ -15,6 +16,7 @@ import { CardPlanoComponent } from './card-plano/card-plano.component';
 import { AppRoutingModule } from '../app-routing.module';
 import { ModalDeleteComponent } from './modal-delete/modal-delete.component';
 import { PageEmDesenvolvimentoComponent } from './page-em-desenvolvimento/page-em-desenvolvimento.component';
+import { ModalTrilhaComponent } from './modal-trilha/modal-trilha.component';
 
 @NgModule({
   declarations: [
@@ -26,14 +28,16 @@ import { PageEmDesenvolvimentoComponent } from './page-em-desenvolvimento/page-e
     ModalComponent,
     CardPlanoComponent,
     ModalDeleteComponent,
-    PageEmDesenvolvimentoComponent
+    PageEmDesenvolvimentoComponent,
+    ModalTrilhaComponent
   ],
   imports: [
     CommonModule,
     MatIconModule,
     ImageResizeModule,
     FormsModule,
-    AppRoutingModule
+    AppRoutingModule,
+    LottieModule
   ],
   exports: [
     SelectPadraoComponent,
@@ -44,7 +48,11 @@ import { PageEmDesenvolvimentoComponent } from './page-em-desenvolvimento/page-e
     MultiploSelectComponent,
     ModalComponent,
     CardPlanoComponent,
-    PageEmDesenvolvimentoComponent
+    PageEmDesenvolvimentoComponent,
+    ModalTrilhaComponent
+  ],
+  entryComponents: [
+    ModalTrilhaComponent
   ]
 })
 export class SharedModule { }
