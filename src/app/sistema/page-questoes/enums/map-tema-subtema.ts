@@ -253,25 +253,24 @@ export const temasESubtemas: Record<Tema, Subtema[]> = {
     Subtema.VVPP_IE_E_PNEUMATICA,
   ],
   [Tema.SBRV]: [
+    Subtema.BASES,
     Subtema.CIRURGIA_MACULAR,
     Subtema.COROIDE_NERVO_OPTICO,
     Subtema.DESCOLAMENTO_DE_RETINA,
     Subtema.DISTROFIAS,
     Subtema.DMRI,
+    Subtema.DOENCAS_VASCULARES,
+    Subtema.ESPECTRO_PAQUICOROIDE,
     Subtema.INFECCIOSAS,
     Subtema.INFLAMATORIA,
     Subtema.MICROANGIOPATIAS,
+    Subtema.OUTROS,
     Subtema.PONTOS_BRANCOS,
     Subtema.PRINCIPIOS_CIRURGICOS,
+    Subtema.PROPEDEUTICA,
     Subtema.RETINA_VITREO,
     Subtema.RETINOPATIA_DIABETICA,
-    Subtema.ESPECTRO_PAQUICOROIDE,
-    Subtema.TRAUMA,
-    Subtema.BASES,
-    Subtema.PROPEDEUTICA,
-    Subtema.DOENCAS_VASCULARES,
-    Subtema.OUTROS
-
+    Subtema.TRAUMA
   ],
   [Tema.TUMORES_INTRAOCULARES]: [
     Subtema.FACOMATOSES,

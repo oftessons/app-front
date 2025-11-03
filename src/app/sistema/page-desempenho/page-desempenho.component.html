@@ -1,5 +1,10 @@
 <div class="container pt-5">
-  <div class="container mt-4">
+  <div class="container mt-4" style="position: relative;">
+
+    <button *ngIf="alunoMentoradoId" (click)="fecharPopup()" class="close-popup-button" aria-label="Fechar">
+      &times;
+    </button>
+
     <h1 class="mt-4">
       <span> | </span>
       <ng-container *ngIf="alunoMentoradoId; else meuDesempenho">
@@ -17,13 +22,8 @@
 
           <ng-container *ngIf="(pie.data[0] + pie.data[1]) > 0; else noData">
             <div class="chart-container" style="position: relative; height: 240px; width: 100%;">
-              <canvas baseChart
-                      [data]="pie.data"
-                      [labels]="pie.labels"
-                      [chartType]="pie.chartType"
-                      [options]="pie.options"
-                      [colors]="pie.colors"
-                      [legend]="true">
+              <canvas baseChart [data]="pie.data" [labels]="pie.labels" [chartType]="pie.chartType"
+                [options]="pie.options" [colors]="pie.colors" [legend]="true">
               </canvas>
             </div>
           </ng-container>
@@ -33,19 +33,15 @@
           </ng-template>
         </div>
       </div>
-    </div> 
+    </div>
 
 
     <div class="row">
       <div class="col-md-12">
         <div class="chart-container">
           <div style="display: block;">
-            <canvas baseChart
-                    [datasets]="barChartData3"
-                    [labels]="barChartLabels3"
-                    [options]="barChartOptions3"
-                    [legend]="barChartLegend"
-                    [chartType]="barChartType3">
+            <canvas baseChart [datasets]="barChartData3" [labels]="barChartLabels3" [options]="barChartOptions3"
+              [legend]="barChartLegend" [chartType]="barChartType3">
             </canvas>
           </div>
         </div>
@@ -56,13 +52,9 @@
       <div class="col-md-12 p-3">
         <div class="chart-container">
           <div style="display: block;" class="container-height">
-            <canvas baseChart
-              [datasets]="barChartData2"
-              [labels]="barChartLabels2"
-              [options]="barChartOptions2"
-              [legend]="barChartLegend"
-              [chartType]="barChartType">
-          </canvas>
+            <canvas baseChart [datasets]="barChartData2" [labels]="barChartLabels2" [options]="barChartOptions2"
+              [legend]="barChartLegend" [chartType]="barChartType">
+            </canvas>
           </div>
         </div>
       </div>
@@ -72,13 +64,9 @@
       <div class="col-md-12">
         <div class="chart-container">
           <div style="display: block;" class="container-height">
-            <canvas baseChart
-              [datasets]="barChartData4"
-              [labels]="barChartLabels4"
-              [options]="barChartOptions4"
-              [legend]="barChartLegend"
-              [chartType]="barChartType">
-          </canvas>
+            <canvas baseChart [datasets]="barChartData4" [labels]="barChartLabels4" [options]="barChartOptions4"
+              [legend]="barChartLegend" [chartType]="barChartType">
+            </canvas>
           </div>
         </div>
       </div>

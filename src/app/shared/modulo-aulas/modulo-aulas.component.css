@@ -1,11 +1,11 @@
 .card {
   width: 300px;
-  border: 1px solid #cccccc;
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   font-family: Arial, sans-serif;
-  background-color: #ffffff;
+  background-color: var(--bg-container);
   height: 380px;
 }
 
@@ -29,12 +29,12 @@
 .card-title {
   font-size: 20px;
   margin-bottom: 8px;
-  color: #000000;
+  color: var(--text-color);
 }
 
 .card-description {
   font-size: 14px;
-  color: #555555;
+  color: var(--text-color-secondary);
   margin-bottom: 16px;
 }
 

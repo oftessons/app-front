@@ -393,7 +393,7 @@
 
 .no-cards-message p {
   margin: 0 0 16px 0;
-  color: var(--text-secondary, #aaa);
+  color: var(--text-color-secondary, #aaa);
   font-size: 14px;
 }
 
@@ -469,7 +469,7 @@
 
 .card-info p {
   margin: 0;
-  color: var(--text-secondary, #aaa);
+  color: var(--text-color-secondary, #aaa);
   font-size: 14px;
 }
 
@@ -507,7 +507,7 @@
   padding: 4px 8px;
   border-radius: 24px;
   background-color: #ffffff1b;
-  color: var(--text-secondary, #aaa);
+  color: var(--text-color-secondary, #aaa);
   display: flex;
   align-items: center;
   gap: 4px;
@@ -545,7 +545,7 @@
 
 .progress-text {
   font-size: 12px;
-  color: var(--text-secondary, #aaa);
+  color: var(--text-color-secondary, #aaa);
   display: block;
 }
 

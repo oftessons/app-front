@@ -10,10 +10,10 @@ import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, map, shareReplay, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Questao } from '../sistema/page-questoes/questao';
-import { Ano } from '../sistema/page-questoes/enums/ano';
 import { Resposta } from '../sistema/Resposta';
 import { RespostaDTO } from '../sistema/RespostaDTO';
-import { SugestaoQuestaoIResponseDTO } from '../sistema/page-mentoria/SugestaoQuestaoIResponseDTO';
+import { SugestaoQuestaoResponseDTO } from '../sistema/page-mentoria/SugestaoQuestaoIResponseDTO';
+import { RespostaSalva } from '../sistema/page-questoes/respostas-salvas';
 
 @Injectable({
   providedIn: 'root',
@@ -166,13 +166,14 @@ export class QuestoesService {
     return throwError(errorMessage);
   }
 
-  obterSugestoesDeQuestoes(groups: number, limit: number): Observable<SugestaoQuestaoIResponseDTO[] | null> {
+  obterSugestoesDeQuestoes(userId: number, groups: number, limit: number): Observable<SugestaoQuestaoResponseDTO[] | null> {
     const url = `${this.apiURL}/sugestoes`;
     const params = new HttpParams()
+      .set('user_id', userId.toString())
       .set('groups', groups.toString())
       .set('limit', limit.toString());
 
-    return this.http.get<SugestaoQuestaoIResponseDTO[]>(url, { params, observe: 'response' }).pipe(
+    return this.http.get<SugestaoQuestaoResponseDTO[]>(url, { params, observe: 'response' }).pipe(
       map(response => {
         if (response.status === 204) {
           return null;
@@ -309,16 +310,21 @@ export class QuestoesService {
   questaoRespondida(
     idUser: number,
     questaoId: number,
-    simuladoId?: number
+    simuladoId?: number,
+    filtroId?: number
   ): Observable<{
     opcaoSelecionada: string;
     correct: boolean;
     opcaoCorreta: string;
   } | null> {
+    let url = `${this.apiURL}/respondido/${idUser}?questaoId=${questaoId}`;
 
-    let url = `${this.apiURL}/respondido/${idUser}?questaoId=${questaoId}&simuladoId=${simuladoId}`;
-    if (simuladoId === 0) {
-      url = `${this.apiURL}/respondido/${idUser}?questaoId=${questaoId}`;
+    // Só adiciona simuladoId e filtroId se forem definidos e diferentes de zero
+    if (simuladoId && simuladoId !== 0) {
+      url += `&simuladoId=${simuladoId}`;
+    }
+    if (filtroId && filtroId !== 0) {
+      url += `&filtroId=${filtroId}`;
     }
 
     return this.http
@@ -334,7 +340,7 @@ export class QuestoesService {
           }
           return response.body;
         }),
-        catchError((error) => throwError('Erro ao verificar a resposta.'))
+        catchError(() => throwError('Erro ao verificar a resposta.'))
       );
   }
 
@@ -359,6 +365,11 @@ export class QuestoesService {
         );
       })
     );
+  }
+
+  getRespostasSalvasParaFiltro(usuarioId: number, filtroId: number): Observable<RespostaSalva[]> {
+    // A chamada continua a mesma, só o tipo de retorno que é mais específico
+    return this.http.get<RespostaSalva[]>(`${this.apiURL}/respostas/filtro/${filtroId}/usuario/${usuarioId}`);
   }
 
   // Método para obter acertos e erros de uma questão por ID

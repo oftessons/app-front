@@ -131,7 +131,7 @@ export class InicioComponent implements OnInit {
   }
 
   redirecionarFlashcard() {
-    this.Router.navigate(['/usuario/flashcards']);
+    // this.Router.navigate(['/usuario/flashcards']);
   }
   
   exibirMensagem(tipo: string): void {

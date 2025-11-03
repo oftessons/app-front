@@ -6,20 +6,29 @@ import { catchError, map } from 'rxjs/operators';
 // Importar a interface para o DTO Filtro
 import { FiltroDTO } from '../sistema/filtroDTO';
 import { environment } from 'src/environments/environment';
+import { RespostasFiltroSessaoDTO } from '../sistema/page-questoes/RespostasFiltroSessaoDTO';
+import { Questao } from '../sistema/page-questoes/questao';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FiltroService {
   apiURL: string = environment.apiURLBase + '/api/filtro';
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   // Método para cadastrar um novo filtro
-  salvarFiltro(filtro: FiltroDTO, userId: number): Observable<string> {
+  salvarFiltro(filtro: FiltroDTO, userId: number): Observable<any> {
     return this.http
-      .post<string>(`${this.apiURL}/${userId}`, filtro, { responseType: 'text' as 'json' }) 
-      .pipe(catchError(this.handleError<string>('salvarFiltro')));
+      .post<any>(`${this.apiURL}/${userId}`, filtro)
+      .pipe(catchError(this.handleError<any>('salvarFiltro')));
   }
+
+  carregarQuestoesSalvas(questoesIds: number[]): Observable<Questao[]> {
+    return this.http
+      .post<Questao[]>(`${this.apiURL}/carregar-questoes-salvas`, questoesIds)
+      .pipe(catchError(this.handleError<Questao[]>('carregarQuestoesSalvar')));
+  }
+  
 
   // Método para obter todos os filtros
   getFiltros(userId: number): Observable<FiltroDTO[]> {
@@ -47,6 +56,12 @@ export class FiltroService {
     return this.http
       .put<void>(`${this.apiURL}/${id}`, filtro)
       .pipe(catchError(this.handleError<void>('editarFiltro')));
+  }
+
+  salvarQuestoesEmSessao(salvarRespostasFiltroDTO: RespostasFiltroSessaoDTO): Observable<string> {
+    return this.http
+      .post<string>(`${this.apiURL}/salvarQuestoesEmSessao`, salvarRespostasFiltroDTO)
+      .pipe(catchError(this.handleError<string>('salvarQuestoesEmSessao')));
   }
 
   // Função para tratamento de erros

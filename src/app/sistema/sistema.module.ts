@@ -48,6 +48,8 @@ import { PageRevisaoComponent } from './page-revisao/page-revisao.component';
 import { FlashcardsComponent } from './flashcards/flashcards.component';
 import { PageMentoriaComponent } from './page-mentoria/page-mentoria.component';
 import { MetricasDetalhadasComponent } from './metricas-detalhadas/metricas-detalhadas.component';
+import { SugestaoAlunoDialogComponent } from './sugestao-aluno-dialog/sugestao-aluno-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 // Função necessária para o ngx-lottie
 export function playerFactory() {
@@ -89,6 +91,7 @@ export function playerFactory() {
     PaginaInicialComponent,
     PageMentoriaComponent,
     MetricasDetalhadasComponent,
+    SugestaoAlunoDialogComponent,
     
   ],
   imports: [
@@ -104,7 +107,8 @@ export function playerFactory() {
     EditorModule,
     SharedModule,
     ReactiveFormsModule,
-    LottieModule.forRoot({ player: playerFactory })
+    LottieModule.forRoot({ player: playerFactory }),
+    MatDialogModule
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA, // Permite o uso de elementos personalizados

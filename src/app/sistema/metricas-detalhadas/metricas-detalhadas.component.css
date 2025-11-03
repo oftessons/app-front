@@ -21,34 +21,6 @@
   padding-bottom: 10px;
 }
 
-.chart-wrapper {
-  position: relative;
-  height: 40vh;
-  width: 100%;
-}
-
-.chart-wrapper-bar {
-  height: 250px;
-}
-
-.subtema-grupo {
-  /* --- CORREÇÃO APLICADA AQUI --- */
-  /* Força o conteúdo (o gráfico) a ficar dentro dos limites da sua célula na grade. */
-  overflow: hidden;
-}
-
-.subtema-grupo:first-child {
-  border-top: none;
-  margin-top: 0;
-  padding-top: 0;
-}
-
-.subtema-grupo h3 {
-  text-align: center;
-  color: var(--placeholder-color);
-  margin-bottom: 15px;
-}
-
 .loading-spinner {
   text-align: center;
   padding: 50px;
@@ -66,4 +38,153 @@
   .subtemas-grid-container {
     grid-template-columns: 1fr;
   }
+}
+
+.close-popup-button {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  font-size: 2.5rem;
+  font-weight: 300;
+  line-height: 1;
+  color: #888;
+  cursor: pointer;
+  z-index: 1050;
+  padding: 0;
+}
+
+.close-popup-button:hover {
+  color: var(--text-color) !important;
+}
+
+.subtema-grupo {
+  border: 1px solid var(--border-color, #eee);
+  border-radius: 12px;
+  padding: 20px;
+  background-color: var(--bg-container, #ffffff);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin-bottom: 25px;
+  overflow: hidden;
+}
+
+.subtema-grupo:first-child {
+  border-top: none;
+  margin-top: 0;
+  padding-top: 20px;
+}
+
+.titulo-subtema-enfase {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-color-dark) 100%);
+  color: var(--text-color);
+  padding: 16px 20px;
+  border-radius: 10px;
+  margin-top: 0;
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 1.4em;
+  font-weight: 700;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  letter-spacing: 0.5px;
+}
+
+.metricas-titulo-enfase {
+  display: block;
+  font-size: 0.8em;
+  font-weight: 400;
+  margin-top: 8px;
+  opacity: 0.95;
+  letter-spacing: normal;
+}
+
+/* Container flex para alinhar o gráfico */
+.chart-container-single {
+  display: flex;
+  justify-content: center;
+  /* Centraliza o conteúdo horizontalmente */
+  align-items: center;
+  width: 100%;
+}
+
+/* Wrapper para cada gráfico individual (tema ou subtema) */
+.chart-wrapper-single {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Centraliza o título h4 e o canvas */
+  width: 100%;
+  /* Ocupa a largura total disponível pelo container */
+  /* Remove max-width genérico daqui, será aplicado especificamente */
+}
+
+/* Título "Acertos" de cada gráfico (dentro dos subtemas) */
+.chart-wrapper-single h4 {
+  font-size: 1.1em;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 10px;
+  text-align: center;
+  /* Garante que o título "Acertos" esteja centralizado */
+}
+
+
+.chart-canvas-wrapper {
+  position: relative;
+  height: 350px;
+  width: 100%;
+  max-width: 400px;
+  /* <--- Tamanho unificado */
+  margin-left: auto;
+  /* Centraliza o canvas wrapper */
+  margin-right: auto;
+  /* Centraliza o canvas wrapper */
+}
+
+/* NOVO: Wrapper para os múltiplos gráficos de subtema dentro de um Grupo */
+.graficos-subtema-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  /* Permite que os gráficos quebrem a linha */
+  justify-content: center;
+  /* Centraliza os gráficos */
+  gap: 20px;
+  /* Espaço entre os gráficos */
+  width: 100%;
+  /* Garante que o wrapper ocupe toda a largura do subtema-grupo */
+}
+
+/* Regras específicas para os gráficos de TEMA */
+.grafico-card:first-of-type .chart-wrapper-single {
+  max-width: 400px;
+  /* <--- AJUSTADO DE 500px para 400px */
+  margin: 0 auto;
+  /* Garante que o wrapper também se centralize */
+}
+
+.grafico-card:first-of-type .chart-wrapper-single h4 {
+  display: none;
+  /* Esconde o h4 "Acertos" do gráfico de Tema */
+}
+
+
+/* Regras específicas para os gráficos de SUBTEMA */
+.subtema-grupo .chart-wrapper-single {
+  max-width: 400px;
+  /* Mantém o max-width */
+  width: 100%;
+  /* Garante que o wrapper ocupe o espaço */
+  margin: 0 auto;
+  /* Centraliza o wrapper dentro do .graficos-subtema-wrapper */
+
+  /* Propriedades flex removidas/anuladas para evitar o crescimento indesejado */
+  flex-grow: 0;
+  flex-shrink: 1;
+  flex-basis: auto;
+  /* Reseta o flex-basis */
+}
+
+/* Ajuste de fonte da legenda */
+:host ::ng-deep .chartjs-render-monitor {
+  font-size: 10px;
 }

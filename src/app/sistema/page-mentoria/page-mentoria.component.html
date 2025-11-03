@@ -1,4 +1,4 @@
-<div class="container pt-5">
+<div class="container pt-5 mentoria-container">
     <div class="container mt-4">
 
         <h1 class="mt-4">
@@ -18,7 +18,7 @@
 
                     <div class="conteudo-principal">
                         <div *ngIf="carregandoAlunos" class="feedback-container">
-                            <p>Carregando lista de alunos...</p>
+                            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
                         </div>
 
                         <ul class="mentored-users-list" *ngIf="!carregandoAlunos && alunosFiltrados.length > 0">
@@ -31,11 +31,12 @@
                                     <div class="usuario-info">
                                         <h3>{{ usuario.nome }}</h3>
                                         <p><strong>Email:</strong> {{ usuario.email }}</p>
-                                        <p><strong>Tipo de Estudante:</strong> {{ usuario.tipoDeEstudante || 'Não informado' }}</p>
+                                        <p><strong>Tipo de Estudante:</strong> {{
+                                            traduzirTipoUsuario(usuario.tipoDeEstudante) || 'Não
+                                            informado' }}</p>
                                     </div>
 
                                     <div class="usuario-card-acoes">
-                                        <!-- BOTÃO ATUALIZADO PARA ABRIR O MODAL -->
                                         <button class="btn-card btn-desempenho" (click)="verDetalhesAluno(usuario)">
                                             Ver Dados
                                         </button>
@@ -48,6 +49,13 @@
                                         </button>
                                         <button class="btn-card btn-criar-simulado" (click)="criarSimulado(usuario)">
                                             Criar Simulado
+                                        </button>
+                                        <button class="btn-card btn-criar-simulado" (click)="criarListaQuestoes(usuario)">
+                                            Criar Lista de Questões
+                                        </button>
+                                        <button class="btn-card btn-criar-simulado btn-sugestoes"
+                                            (click)="verSugestoes(usuario)">
+                                            Ver Sugestões (IA)
                                         </button>
                                     </div>
                                 </div>
@@ -64,70 +72,18 @@
                 </div>
             </mat-tab>
 
-            <mat-tab label="Pontos de Atenção da Turma">
-                <div class="tab-content">
-                    <div class="sugestoes-container">
-                        <h3 class="sugestoes-titulo">Sugestões de Pontos de Atenção</h3>
-                        <p class="sugestoes-subtitulo">Com base no desempenho recente de todos os alunos, sugerimos
-                            focar em
-                            simulados sobre os seguintes tópicos:</p>
-
-                        <div *ngIf="carregandoSugestoes" class="feedback-container">
-                            <p>Analisando dados e gerando sugestões...</p>
-                        </div>
-
-                        <div class="sugestoes-grid" *ngIf="!carregandoSugestoes && sugestoesAgrupadas.length > 0">
-                            <div *ngFor="let sugestao of sugestoesAgrupadas" class="sugestao-card">
-                                <div class="sugestao-header">
-                                    <span class="sugestao-tag">{{ traduzirTema(sugestao.tema) }}</span>
-                                    <span class="sugestao-tag">{{ traduzirSubtema(sugestao.subtema) }}</span>
-                                </div>
-                                <div class="sugestao-body">
-                                    <h4>Foco em: {{ traduzirSubtema(sugestao.subtema) }}</h4>
-                                    <h5>Tipo de prova: {{ traduzirTipoDeProva(sugestao.tipoDeProva) }}</h5>
-                                    <p>Notamos uma dificuldade recorrente neste assunto.</p>
-                                    <details class="exemplos-questoes">
-                                        <summary>Ver exemplos de questões ({{ sugestao.questoes.length }})</summary>
-                                        <ul>
-                                            <li *ngFor="let questao of sugestao.questoes"
-                                                [innerHTML]="sanitizer.bypassSecurityTrustHtml(questao.question_text)">
-                                            </li>
-                                        </ul>
-                                    </details>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div *ngIf="!carregandoSugestoes && sugestoesAgrupadas.length === 0" class="feedback-container">
-                            <p>Nenhum ponto de atenção encontrado para este grupo.</p>
-                        </div>
-
-                        <div class="pagination-container" *ngIf="!carregandoSugestoes && totalDePaginasSugestoes > 0">
-                            <button class="pagination-button" (click)="irParaPaginaSugestoes(paginaAtualSugestoes - 1)"
-                                [disabled]="paginaAtualSugestoes === 1">
-                                Anterior
-                            </button>
-                            <span class="pagination-info">
-                                Grupo {{ paginaAtualSugestoes }} de {{ totalDePaginasSugestoes }}
-                            </span>
-                            <button class="pagination-button" (click)="irParaPaginaSugestoes(paginaAtualSugestoes + 1)"
-                                [disabled]="paginaAtualSugestoes === totalDePaginasSugestoes">
-                                Próxima
-                            </button>
-                        </div>
-
-                    </div>
-                </div>
-            </mat-tab>
         </mat-tab-group>
     </div>
 </div>
 
-<!-- =============================================================== -->
-<!-- ============= CÓDIGO DO MODAL (POPUP) DO ALUNO ================ -->
-<!-- =============================================================== -->
+
 <div *ngIf="alunoSelecionadoParaDetalhes" class="modal-overlay" (click)="fecharDetalhesAluno()">
     <div class="modal-content" (click)="$event.stopPropagation()">
+
+        <button *ngIf="popupDadosAlunoAberto" (click)="fecharDetalhesAluno()" class="close-popup-button"
+            aria-label="Fechar">
+            &times;
+        </button>
 
         <div class="modal-body">
             <div class="aluno-detalhe">
@@ -156,7 +112,7 @@
             </div>
             <div class="aluno-detalhe">
                 <strong>Tipo de Estudante:</strong>
-                <p>{{ alunoSelecionadoParaDetalhes.tipoDeEstudante || 'Não informado' }}</p>
+                <p>{{ traduzirTipoUsuario(alunoSelecionadoParaDetalhes.tipoDeEstudante) || 'Não informado' }}</p>
             </div>
         </div>
 

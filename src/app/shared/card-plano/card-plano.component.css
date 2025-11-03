@@ -6,7 +6,11 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   max-width: 100%;
   width: 350px;
-  min-height: 455px;
+  min-height: 550px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
 }
 
 .card-header {
@@ -16,6 +20,7 @@
   border-radius: 16px 0 24px 0;
   width: 60%;
   display: flex;
+  flex-shrink: 0;
 }
 
 .card-header h3 {
@@ -27,6 +32,8 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  flex-grow: 1;
+  min-height: 0;
 }
 
 .card h3 {
@@ -76,8 +83,9 @@
   flex-direction: column;
   align-items: center;
   padding: 0;
-  margin-bottom: 40px;
+  margin-bottom: 24px;
   margin-top: 24px;
+  flex-grow: 1;
 }
 
 .card-body li {
@@ -85,6 +93,7 @@
   font-size: 16px;
   text-align: start;
   width: 80%;
+  line-height: 1.5;
 }
 
 .badge-recomendado {
@@ -97,6 +106,7 @@
   border-radius: 4px;
   font-size: 22px;
   font-weight: 500;
+  z-index: 1;
 }
 
 .btn-plano {
@@ -109,6 +119,8 @@
   font-size: 16px;
   font-weight: 500;
   cursor: pointer;
+  margin-top: auto;
+  flex-shrink: 0;
 }
 
 .btn-plano:hover {
@@ -122,5 +134,35 @@
 
   .card-header {
     width: 70%;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-container {
+    padding: 8px;
+  }
+
+  .card {
+    width: 100%;
+    min-height: 500px;
+  }
+
+  .card-header {
+    width: 80%;
+    margin-right: 20px;
+  }
+
+  .value h4 {
+    font-size: 28px;
+  }
+
+  .value span,
+  .value p {
+    font-size: 14px;
+  }
+
+  .card-body li {
+    font-size: 14px;
+    width: 90%;
   }
 }

@@ -1,97 +1,116 @@
 .container {
-    max-width: 1300px;
-    padding: 6px;
-    font-family: 'Nunito Sans', sans-serif;
+  max-width: 1300px;
+  padding: 6px;
+  font-family: "Nunito Sans", sans-serif;
 }
 
-.text-p{
-    font-size: 20px;
-    margin-top: 10px;
-    font-family: 'Nunito Sans', sans-serif;
+.text-p {
+  font-size: 20px;
+  margin-top: 10px;
+  font-family: "Nunito Sans", sans-serif;
 }
 
 .row {
-    display: flex;
-    flex-wrap: wrap;
-    margin-right: -15px;
-    margin-left: -15px;
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -15px;
+  margin-left: -15px;
 }
 
 .col-md-6 {
-    position: relative;
-    width: 100%;
-    padding-right: 15px;
-    padding-left: 15px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+  position: relative;
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .col-md-12 {
-    position: relative;
-    width: 100%;
-    padding-right: 15px;
-    padding-left: 15px;
+  position: relative;
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
 }
 
 .chart-container {
-    width: 100%; /* Ajusta o container para ocupar toda a largura disponível */
-    max-width: 100%; /* Garante que o container não exceda 100% da largura */
-    padding: 10px;
-    background-color: var(--bg-container);
-    border: 2px solid var(--border-color);
-    border-radius: 5px;
-    margin-bottom: 20px;
+  width: 100%; /* Ajusta o container para ocupar toda a largura disponível */
+  max-width: 100%; /* Garante que o container não exceda 100% da largura */
+  padding: 10px;
+  background-color: var(--bg-container);
+  border: 2px solid var(--border-color);
+  border-radius: 5px;
+  margin-bottom: 20px;
 }
 
 .chart-container-large {
-    width: 100%; /* Ajusta o container para ocupar toda a largura disponível */
-    max-width: 100%; /* Garante que o container não exceda 100% da largura */
-    padding: 10px;
-    background-color: #f2f2f2;
-    border: 2px solid #8C8E94;
-    border-radius: 5px;
-    margin-bottom: 20px;
+  width: 100%; /* Ajusta o container para ocupar toda a largura disponível */
+  max-width: 100%; /* Garante que o container não exceda 100% da largura */
+  padding: 10px;
+  background-color: #f2f2f2;
+  border: 2px solid #8c8e94;
+  border-radius: 5px;
+  margin-bottom: 20px;
 }
 
 .chart-wrapper {
-    background-color: var(--bg-container) !important;
+  background-color: var(--bg-container) !important;
 }
 
 .chart-wrapper h5 {
-    color: var(--text-color) !important;
-    font-weight: bold;
+  color: var(--text-color) !important;
+  font-weight: bold;
 }
 
 .text-muted {
-    color: var(--text-color) !important;
+  color: var(--text-color) !important;
 }
 
 @media (min-width: 768px) {
-    .col-md-6 {
-      flex: 0 0 50%;
-      max-width: 50%;
-    }
-    .col-md-12 {
-      flex: 0 0 100%;
-      max-width: 100%;
-    }
+  .col-md-6 {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+  .col-md-12 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
 }
 
-.container-height{
-    height: auto !important;
+.container-height {
+  height: auto !important;
 }
 
 .container-height canvas {
-    display: block !important;
-    width: 100% !important;
-    height: 100% !important;
-    max-height: 470px !important;
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-height: 470px !important;
 }
 
 .chart-container {
-    width: 100%;
-    max-width: 100%;
-    margin: auto;
+  width: 100%;
+  max-width: 100%;
+  margin: auto;
+}
+
+.close-popup-button {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  font-size: 2.5rem;
+  font-weight: 300;
+  line-height: 1;
+  color: #888;
+  cursor: pointer;
+  z-index: 1050; 
+  padding: 0;
+}
+
+.close-popup-button:hover {
+  color: var(--text-color) !important;
 }

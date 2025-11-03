@@ -41,7 +41,7 @@
         </div>
       </div>
       <div class="message-content">
-        <markdown *ngIf="message.type === 'bot' && !isTyping(message)" [data]="message.text"></markdown>
+        <markdown katex-render *ngIf="message.type === 'bot' && !isTyping(message)" [data]="message.text"></markdown>
         <markdown *ngIf="message.type === 'user' || isTyping(message)">{{ message.text }}</markdown>
       </div>
       <div *ngIf="isTyping(message)" class="typing-indicator">

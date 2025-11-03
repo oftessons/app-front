@@ -85,7 +85,7 @@
                                             </div> -->
                                             <!-- Tooltip para Regras de Senha -->
                                             <div *ngIf="showTooltip" class="password-tooltip">
-                                                <p class="tooltip-title">A senha precisa ter:</p>
+                                                <p class="tooltip-title">A senha precisa ter :</p>
                                                 <ul>
                                                 <li [class.valid]="passwordValidations.minLength">
                                                     <i class="fas fa-exclamation-circle"></i>
@@ -154,7 +154,6 @@
                                             </select>                                              
                                         </div>
 
-                                        <!-- Checkbox para consentimento dos termos -->
                                         <div class="col-sm-12 mt-3 termos">
                                             <input type="checkbox" id="consentimento" [(ngModel)]="consentimento" name="consentimento" required />
                                             <label for="consentimento" class="ms-2">
