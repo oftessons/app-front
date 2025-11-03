@@ -39,11 +39,11 @@
 
 .modal-close {
   position: absolute;
-  top: 3rem;
-  right: 3rem;
+  top: 3.5rem;
+  right: 3.5rem;
   background: none;
   border: none;
-  font-size: 2rem;
+  font-size: 2.5rem;
   color: white;
   cursor: pointer;
   z-index: 10001;
@@ -74,6 +74,12 @@
   justify-content: center;
   background-color: #001236;
   padding: 1.5rem 1rem 2rem;
+  border-radius: 16px;
+    background-image: radial-gradient(
+      farthest-corner at 50% 120px,
+      #2a4d7b 0%,
+     #001236 30%
+    );
   text-align: center;
 }
 
@@ -87,6 +93,7 @@
   padding: 12px;
   position: relative;
   overflow: visible;
+
 }
 
 .user-name {
