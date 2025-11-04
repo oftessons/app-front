@@ -41,6 +41,12 @@ export class HappyMessagePopupComponent implements OnInit {
     autoplay: false
   };
 
+  bdayAnimationOptions: AnimationOptions = {
+    path: 'assets/animations/Surprise-Birthday.json',
+    loop: true,
+    autoplay: true
+  }
+
 
 
   estiloMensagem3Meses = {
@@ -53,7 +59,27 @@ export class HappyMessagePopupComponent implements OnInit {
     flexDirection: 'row'
   };
 
+estiloMensagemAniversario = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+  backgroundColor: '#001236',
+  padding: '10rem 1rem 2rem',
+  gap: '10px',
+  borderRadius: '16px',
+  textAlign: 'center'
+};
 
+ estiloAnimacaoAniversario = {
+    position: 'absolute',
+    bottom: '0',
+    transform: 'translate(-50%, 35%)',
+    pointerEvents: 'none',
+    transition: 'transform 0.6s ease, opacity 0.4s ease',
+    opacity: '1',
+
+  };
 
   constructor(
     private authService: AuthService,
@@ -67,6 +93,8 @@ export class HappyMessagePopupComponent implements OnInit {
         return this.confeteAnimationOptions;
       case 'para':
         return this.confeteBlockedOptions;
+      case 'bday':
+        return this.bdayAnimationOptions;
       default:
         return this.confeteBlockedOptions;
     }
@@ -134,7 +162,6 @@ export class HappyMessagePopupComponent implements OnInit {
 
 
         if (this.tipo === 'bday') {
-          this.icon = "assets/imagens/Frame_255.png";
           this.comemoracao = "Feliz Aniversário!";
           this.finalMessage = this.messageBirthday.replace("{{nomeUsuario}}", this.nomeUsuario);
         }else if (this.tipo === '30d') {

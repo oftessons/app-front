@@ -111,8 +111,9 @@
   opacity: 1;
 }
 
+
 .lottie-overlay {
-  width: 500px !important;
+  width: 400px !important;
   height: auto !important;
   display: flex;
 }

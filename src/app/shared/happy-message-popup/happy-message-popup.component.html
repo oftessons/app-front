@@ -3,16 +3,15 @@
 
   <div class="modal-wrapper">
       <div class="modal-box">
-        <div class="birthday-content">
+        <div class="birthday-content" [ngStyle]="tipo === 'bday' ? estiloMensagemAniversario : {}">
           <button class="modal-close" (click)="closePopup()">×</button>
          <div class="birthday-icon">
 
-            <img [src]="icon" alt="Badge" />
-          <div class="lottie-container" [class.show]="aberto">
+            <img *ngIf="tipo !== 'bday'" [src]="icon" alt="Badge" />
+          <div class="lottie-container" [ngStyle]="tipo === 'bday' ? estiloAnimacaoAniversario : {}" [class.show]="aberto">
             <ng-lottie
               class="lottie-overlay"
-              [options]="obterOpcoesAnimacao(aberto ? 'comemorar' : 'para')"
-
+              [options]="obterOpcoesAnimacao(tipo !== 'bday' ? 'comemorar' : (tipo === 'bday' ? 'bday' : 'para'))"
             ></ng-lottie>
           </div>
           </div>
