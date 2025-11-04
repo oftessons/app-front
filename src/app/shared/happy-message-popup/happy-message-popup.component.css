@@ -1,0 +1,207 @@
+.modal-geral {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  padding-bottom: 200px;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-bg {
+  position: absolute;
+  inset: 0;                /* cobre toda a área do modal-geral */
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(2px);
+  cursor: pointer;
+  z-index: 0;              /* fica atrás do conteúdo do modal */
+}
+
+.modal-wrapper {
+  position: relative;
+  z-index: 100;
+  width: 100%;
+  max-width: 650px;
+  max-height: 70vh;
+  margin: 0 1rem;
+  padding: 1rem;
+  box-sizing: border-box;
+  justify-content: center;
+  display: flex;
+
+}
+
+.modal-close {
+  position: absolute;
+  top: 3.5rem;
+  right: 3.5rem;
+  background: none;
+  border: none;
+  font-size: 2.5rem;
+  color: white;
+  cursor: pointer;
+  z-index: 10001;
+}
+
+.modal-container {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  animation: slideIn 0.3s ease-out;
+}
+
+
+.modal-box {
+  border-radius: 16px;
+  overflow: hidden;
+  width: 650px;
+  height: auto;
+  padding: 23px;
+  box-sizing: border-box;
+  margin: 0 auto;
+}
+
+.birthday-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #001236;
+  padding: 1.5rem 1rem 2rem;
+  border-radius: 16px;
+    background-image: radial-gradient(
+      farthest-corner at 50% 120px,
+      #2a4d7b 0%,
+     #001236 30%
+    );
+  text-align: center;
+}
+
+.birthday-icon {
+  width: auto;
+  height: auto;
+  margin-bottom: 0.5rem; /* aproxima a imagem do texto */
+  justify-content: center;
+  display: flex;
+  border-radius: 50%;
+  padding: 12px;
+  position: relative;
+  overflow: visible;
+
+}
+
+.lottie-container {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translate(-50%, 10%); /* começa "dentro" (para baixo) */
+  pointer-events: none;
+  transition: transform 0.6s ease, opacity 0.4s ease;
+  opacity: 0;
+}
+
+.lottie-container.show {
+  transform: translate(-50%, 40%); /* movimenta para fora da imagem */
+  opacity: 1;
+}
+
+
+.lottie-overlay {
+  width: 400px !important;
+  height: auto !important;
+  display: flex;
+}
+
+.user-name {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin: 0.5rem 0 0; /* reduz espaço entre ícone e título */
+  font-family: "Nunito Sans", sans-serif;
+}
+
+.birthday-message {
+  color: #E3E3E3;
+  font-size: 1.2rem;
+  margin: 1rem 0 0;
+  line-height: 1.9;
+  display: flex;
+  padding: 0 1rem;
+  flex-direction: column;
+}
+
+.birthday-text {
+  color: #f7fafc;
+  font-size: 1.2rem;
+  margin-top: 0; /* remove espaçamento extra */
+  padding-bottom: 0; /* evita afastamento */
+}
+
+
+
+.birthday-wishes {
+  background-color: #f7fafc;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1.5rem;
+}
+
+.birthday-wishes p {
+  color: #2d3748;
+  margin: 0;
+  font-style: italic;
+}
+
+.birthday-cta{
+  padding: 18px;
+  background-color: #28A745;
+ background-image: linear-gradient(90deg, #EDB120 0%, #EDB120 100%);
+  background-size: 0 100%;
+  background-position: left center;
+  background-repeat: no-repeat;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 26px;
+  width: 180px;
+  height: 48px;
+  border: none;
+  cursor: pointer;
+  transition: background-size 0.45s cubic-bezier(.2,.8,.2,1), color 0.2s;
+  color: #F6F8FE;
+  font-weight: 550;
+}
+.birthday-cta:hover{
+  background-size: 100% 100%;
+  color: #fff;
+}
+.textbtn{
+  display: flex;
+  text-align: center;
+  color: #F6F8FE;
+  font-size: 17px;
+  font-weight: 550;
+  font-family: "Nunito Sans", sans-serif;
+  margin:0 0.6rem auto;
+  flex-direction: row;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+
+

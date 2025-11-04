@@ -9,6 +9,9 @@
         <li>
           <button [ngClass]="{'active': conteudoAtual === 'assinaturas'}" (click)="mostrarConteudo('assinaturas')">Assinatura</button>
         </li>
+        <li>
+          <button [ngClass]="{'active': conteudoAtual === 'preferencias'}" (click)="mostrarConteudo('preferencias')">Preferência</button>
+        </li>
       </ul>
     </div>
   </div>
@@ -53,6 +56,9 @@
             <span *ngIf="!editMode"> {{ usuario.estado }}</span>
             <input *ngIf="editMode" [(ngModel)]="usuario.estado" class="form-control" />
           </p>
+          <p><strong *ngIf="!editMode">DataNascimento: </strong>
+            <span *ngIf="!editMode"> {{ usuario.dataNascimento }}</span>
+          </p>
         </div>
       </div>
       <div class="profile-actions">
@@ -61,7 +67,7 @@
       </div>
     </div>
   </div>
-  
+
   <div class="container-geral">
     <div *ngIf="conteudoAtual === 'assinaturas'">
       <!-- Conteúdo das assinaturas -->
@@ -89,6 +95,37 @@
         <hr>
       </div>
       <button class="btn-assinatura" (click)="exibirPortalAssinatura()">Abrir Portal de Assinatura e Pagamentos</button>
+    </div>
+
+    <div *ngIf="conteudoAtual === 'preferencias'">
+      <h1 class="mt-4"><span> | </span>Preferências</h1>
+      <div class="preferencias-content">
+        <div class="preferencias-grid">
+          <div class="preferencia-card">
+            <div>
+              <h2>Animações ativadas</h2>
+            </div>
+            <div class="toggle-container">
+              <label class="switch">
+                <input name="darkModeToggle" type="checkbox" >
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="preferencia-card">
+            <div>
+              <h2>Efeitos sonoros ativados</h2>
+            </div>
+              <div class="toggle-container">
+                <label class="switch">
+                  <input name="darkModeToggle" type="checkbox">
+                  <span class="slider"></span>
+                </label>
+              </div>
+            </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
