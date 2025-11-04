@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {AuthService} from "../../services/auth.service";
 import {ParabensService} from "../../services/parabens.service";
+import {AnimationOptions} from "ngx-lottie";
 
 
 @Component({
@@ -26,7 +27,20 @@ export class HappyMessagePopupComponent implements OnInit {
   @Input() finalMessage : string = "";
   @Input() icon : string = ''
   @Input() initialMessage : string = "";
-   tipo: 'bday' | '6m' | '1a' | '2a' | '30d' | '3m' | '7d' | null = null;
+  tipo: 'bday' | '6m' | '1a' | '2a' | '30d' | '3m' | '7d' | null = null;
+
+  confeteAnimationOptions: AnimationOptions = {
+    path: 'assets/animations/Flex-Confetti.json',
+    loop: true,
+    autoplay: true
+  };
+
+  confeteBlockedOptions: AnimationOptions = {
+    path: 'assets/animations/Flex-Confetti.json',
+    loop: false,
+    autoplay: false
+  };
+
 
 
   estiloMensagem3Meses = {
@@ -40,10 +54,28 @@ export class HappyMessagePopupComponent implements OnInit {
   };
 
 
+
   constructor(
     private authService: AuthService,
     private parabensService: ParabensService
   ) { }
+
+
+  obterOpcoesAnimacao(status: string): AnimationOptions {
+    switch (status) {
+      case 'comemorar':
+        return this.confeteAnimationOptions;
+      case 'para':
+        return this.confeteBlockedOptions;
+      default:
+        return this.confeteBlockedOptions;
+    }
+  }
+
+
+
+
+
 
   ngOnInit(): void {
     this.obterNomeUsuario();
@@ -94,10 +126,12 @@ export class HappyMessagePopupComponent implements OnInit {
 
         if (!this.tipo) { this.aberto = false; return; }
 
+
         if (this.jaMostrouHoje(this.tipo)) {
           this.aberto = false;
           return;
         }
+
 
         if (this.tipo === 'bday') {
           this.icon = "assets/imagens/Frame_255.png";

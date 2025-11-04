@@ -6,46 +6,15 @@
         <div class="birthday-content">
           <button class="modal-close" (click)="closePopup()">×</button>
          <div class="birthday-icon">
-            <svg viewBox="0 0 72 72" preserveAspectRatio="xMidYMid slice"
-                 style="position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:0;">
-              <!-- Confetti pieces: diferentes cores, tempos e posições -->
-              <rect x="8" y="-8" width="4" height="8" fill="#F94144" opacity="0.95">
-                <animate attributeName="y" from="-12" to="84" dur="1.8s" repeatCount="indefinite" begin="0s" />
-                <animateTransform attributeName="transform" type="rotate" from="0 10 10" to="360 10 10" dur="1.8s" repeatCount="indefinite" />
-              </rect>
-
-              <rect x="18" y="-10" width="3" height="6" fill="#F3722C" opacity="0.95">
-                <animate attributeName="y" from="-14" to="84" dur="2.1s" repeatCount="indefinite" begin="0.2s" />
-                <animateTransform attributeName="transform" type="rotate" from="0 19 10" to="-360 19 10" dur="2.1s" repeatCount="indefinite" />
-              </rect>
-
-              <rect x="28" y="-6" width="5" height="7" fill="#F9C74F" opacity="0.95">
-                <animate attributeName="y" from="-10" to="84" dur="1.6s" repeatCount="indefinite" begin="0.4s" />
-                <animateTransform attributeName="transform" type="rotate" from="0 30 10" to="360 30 10" dur="1.6s" repeatCount="indefinite" />
-              </rect>
-
-              <rect x="38" y="-12" width="4" height="9" fill="#90BE6D" opacity="0.95">
-                <animate attributeName="y" from="-16" to="84" dur="2.3s" repeatCount="indefinite" begin="0.6s" />
-                <animateTransform attributeName="transform" type="rotate" from="0 40 10" to="-360 40 10" dur="2.3s" repeatCount="indefinite" />
-              </rect>
-
-              <rect x="48" y="-9" width="3" height="6" fill="#577590" opacity="0.95">
-                <animate attributeName="y" from="-13" to="84" dur="1.9s" repeatCount="indefinite" begin="0.8s" />
-                <animateTransform attributeName="transform" type="rotate" from="0 50 10" to="360 50 10" dur="1.9s" repeatCount="indefinite" />
-              </rect>
-
-              <circle cx="58" cy="-8" r="3" fill="#B5179E" opacity="0.95">
-                <animate attributeName="cy" from="-14" to="84" dur="2s" repeatCount="indefinite" begin="0.3s" />
-                <animateTransform attributeName="transform" type="rotate" from="0 58 10" to="-360 58 10" dur="2s" repeatCount="indefinite" />
-              </circle>
-
-              <rect x="12" y="-7" width="3" height="6" fill="#06D6A0" opacity="0.95">
-                <animate attributeName="y" from="-12" to="84" dur="2.2s" repeatCount="indefinite" begin="1s" />
-                <animateTransform attributeName="transform" type="rotate" from="0 14 10" to="360 14 10" dur="2.2s" repeatCount="indefinite" />
-              </rect>
-            </svg>
 
             <img [src]="icon" alt="Badge" />
+          <div class="lottie-container" [class.show]="aberto">
+            <ng-lottie
+              class="lottie-overlay"
+              [options]="obterOpcoesAnimacao(aberto ? 'comemorar' : 'para')"
+
+            ></ng-lottie>
+          </div>
           </div>
 
           <div class="birthday-text">

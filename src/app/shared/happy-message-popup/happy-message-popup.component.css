@@ -96,6 +96,27 @@
 
 }
 
+.lottie-container {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translate(-50%, 10%); /* começa "dentro" (para baixo) */
+  pointer-events: none;
+  transition: transform 0.6s ease, opacity 0.4s ease;
+  opacity: 0;
+}
+
+.lottie-container.show {
+  transform: translate(-50%, 40%); /* movimenta para fora da imagem */
+  opacity: 1;
+}
+
+.lottie-overlay {
+  width: 500px !important;
+  height: auto !important;
+  display: flex;
+}
+
 .user-name {
   font-size: 1.8rem;
   font-weight: bold;
