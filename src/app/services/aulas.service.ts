@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpHeaders, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment.prod';
 import { catchError, map, tap } from 'rxjs/operators';
@@ -11,27 +11,19 @@ import { Aula } from '../sistema/painel-de-aulas/aula';
 export class AulasService {
 
   apiURL: string = environment.apiURLBase + '/api/aulas';
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-  salvar(formData: FormData): Observable<any> {
-    return this.http.post(`${this.apiURL}/cadastro`, formData, {
-      responseType: 'text'
-    }).pipe(
-      map((response) => ({ message: response })),
-      catchError((error) => {
-        let errorMessage = 'Erro ao salvar a aula.';
-  
-        if (error.error instanceof ErrorEvent) {
-          errorMessage = `Erro: ${error.error.message}`;
-        } else if (error.status) {
-          errorMessage = `Erro no servidor: ${error.status} - ${error.message}`;
-        }
-        console.error(errorMessage);
-        return throwError(() => new Error(errorMessage));
-      })
-    );
+
+  salvar(formData: FormData): Observable<HttpEvent<any>> { 
+    const url = `${this.apiURL}/cadastro`;
+
+    const req = new HttpRequest('POST', url, formData, {
+      reportProgress: true,
+      responseType: 'text' 
+    });
+
+    return this.http.request(req);
   }
-  
 
   listarAulasPorCategoria(categoria: string): Observable<Aula[]> {
     const url = `${this.apiURL}/${categoria}`;
@@ -92,11 +84,11 @@ export class AulasService {
   }
 
   deletar(id: number): Observable<any> {
-    return this.http.delete(`${this.apiURL}/${id}`, {responseType: 'text'}).pipe(
+    return this.http.delete(`${this.apiURL}/${id}`, { responseType: 'text' }).pipe(
       map((response) => ({ message: response })),
       catchError((error) => {
         let errorMessage = 'Erro ao deletar a aula.';
-  
+
         if (error.error instanceof ErrorEvent) {
           errorMessage = `Erro: ${error.error.message}`;
         } else if (error.status) {
@@ -115,7 +107,7 @@ export class AulasService {
       map((response) => ({ message: response })),
       catchError((error) => {
         let errorMessage = 'Erro ao atualizar a aula.';
-  
+
         if (error.error instanceof ErrorEvent) {
           errorMessage = `Erro: ${error.error.message}`;
         } else if (error.status) {
