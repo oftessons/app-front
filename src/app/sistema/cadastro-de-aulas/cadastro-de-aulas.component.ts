@@ -35,6 +35,9 @@ export class CadastroDeAulasComponent implements OnInit {
   fotoPreviews: { [key: string]: string | ArrayBuffer | null } = {};
 
   categoria: string[] = Object.values(Categoria);
+  categoriaFormatada: string[] = Object.values(Categoria).map(cat =>
+    cat.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, char => char.toUpperCase())
+  );
   arquivos: File[] = [];
 
   isEditMode: boolean = false;
@@ -45,7 +48,7 @@ export class CadastroDeAulasComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private aulasService: AulasService,
     private themeService: ThemeService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     console.log('ngOnInit chamado');
@@ -124,15 +127,17 @@ export class CadastroDeAulasComponent implements OnInit {
   }
 
   onSubmit(): void {
-    console.log('FormulÃ¡rio enviado');
-    this.isLoading = true; 
+    console.log('Formulário enviado');
+    this.isLoading = true;
     this.successMessage = null;
     this.errorMessage = null;
 
     this.formData = new FormData();
-    
-    const objetoJson = this.aulaDTO.id 
-      ? this.aulaDTO.toJsonUpdate() 
+
+    this.aulaDTO.categoria = this.getCategoriaEnum(this.aulaDTO.categoria) as Categoria;
+
+    const objetoJson = this.aulaDTO.id
+      ? this.aulaDTO.toJsonUpdate()
       : JSON.stringify(this.aulaDTO);
 
     console.log('Objeto JSON', objetoJson);
@@ -141,9 +146,9 @@ export class CadastroDeAulasComponent implements OnInit {
       this.formData.append('video', this.video);
     }
 
-    if(!this.aulaDTO.id){
+    if (!this.aulaDTO.id) {
       this.formData.append('aulaDTO', objetoJson);
-    }else{
+    } else {
       const jsonBlob = new Blob([objetoJson], { type: 'application/json' });
       this.formData.append('aulaDTO', jsonBlob);
       console.log('Objeto JSON Blob', jsonBlob);
@@ -155,7 +160,6 @@ export class CadastroDeAulasComponent implements OnInit {
       });
     }
 
-    // Log the formData content
     this.formData.forEach((value, key) => {
       console.log(key, value);
     });
@@ -248,14 +252,14 @@ export class CadastroDeAulasComponent implements OnInit {
       event.stopPropagation();
     }
 
-    if(this.aulaDTO.id){
+    if (this.aulaDTO.id) {
       if (field === 'video') {
         this.video = null;
         this.aulaDTO.urlVideo = null;
         this.fotoPreviews[field] = null;
         this.videoInput.nativeElement.value = '';
       }
-    }else{
+    } else {
       if (field === 'video') {
         this.video = null;
         this.fotoPreviews[field] = null;
@@ -267,4 +271,12 @@ export class CadastroDeAulasComponent implements OnInit {
   isDarkMode(): boolean {
     return this.themeService.isDarkMode();
   }
+
+  getCategoriaEnum(categoria: string): Categoria | null {
+    const categoriaEnum = Object.values(Categoria).find(
+      cat => cat === categoria || cat.replace(/_/g, ' ').toLowerCase() === categoria.toLowerCase()
+    );
+    return categoriaEnum || null;
+  }
+
 }
