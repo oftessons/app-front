@@ -1,0 +1,86 @@
+
+.modal-box {
+  background-color: #2a4d7b;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 600px;
+  height: 60vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding: 20px;
+}
+
+.modal-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 2rem 6rem 1rem 1rem;
+}
+
+.ofensiva-tittle {
+  color: #FFBF23;
+  font-size: 1.9rem;
+  font-family: Bakbak One, sans-serif;
+  font-weight: bold;
+}
+
+.modal-image {
+  max-width: 100%;
+  width: 70px;
+}
+.modal-image-container {
+  position: absolute;
+  top: 50px;
+  right: 70px;
+}
+.ofensiva-text {
+  color: #fff;
+  font-size: 1.2rem;
+  margin-top: 1rem;
+  margin-right: 5rem;
+  line-height: 1.6;
+  font-weight: 500;
+}
+
+.modal-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 1rem;
+}
+
+.days-container {
+  background-color: #F6F8FE;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.day {
+  color: #2a4d7b;
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-weight: 600;
+}
+
+.boneca-ofensivo {
+  width: 300px;
+  position: absolute;
+  bottom: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+@media (max-width: 600px) {
+  .modal-box {
+    width: 90%;
+    max-width: 500px;
+  }
+
+  .boneca-ofensivo {
+    width: 250px;
+  }
+}

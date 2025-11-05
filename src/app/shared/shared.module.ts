@@ -23,6 +23,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { FlashcardModalComponent } from './flashcard-modal/flashcard-modal.component';
 import { DeletarFlashcardModalComponent } from './deletar-flashcard-modal/deletar-flashcard-modal.component';
 import { ModalTrilhaComponent } from './modal-trilha/modal-trilha.component';
+import { OfensivaComponent } from './ofensiva/ofensiva.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { ModalTrilhaComponent } from './modal-trilha/modal-trilha.component';
     FlashcardsSubtemasComponent,
     DeletarFlashcardModalComponent,
     ModalTrilhaComponent,
-    HappyMessagePopupComponent
+    HappyMessagePopupComponent,
+    OfensivaComponent
   ],
   imports: [
     CommonModule,
@@ -67,6 +69,7 @@ import { ModalTrilhaComponent } from './modal-trilha/modal-trilha.component';
     FlashcardsSubtemasComponent,
     FlashcardModalComponent,
     ModalTrilhaComponent,
+    OfensivaComponent,
   ],
   entryComponents: [ModalTrilhaComponent],
 })

@@ -7,6 +7,7 @@
 .header {
   display: flex;
   justify-content: space-between;
+  flex-direction: row;
   align-items: center;
 }
 
@@ -16,7 +17,14 @@
 }
 
 .filtro-select {
-  width: 200px; 
+  width: 200px;
+}
+
+
+.ofensiva-section {
+  display: flex;
+  justify-content: flex-end;
+
 }
 
 ::ng-deep .filtro-select .mat-form-field-flex,
@@ -73,7 +81,7 @@
 
 .banner-text {
   font-size: 24px;
-  
+
   h2 {
     color: #ffffff !important;
     font-size: 24px;
@@ -182,7 +190,7 @@
 .mensagem {
   margin-top: 10px;
   padding: 10px;
-  background-color: #cfe2ff; 
+  background-color: #cfe2ff;
   color: #000;
   border-radius: 10px;
   font-size: 14px;
