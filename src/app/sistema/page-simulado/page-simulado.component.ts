@@ -1099,7 +1099,7 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
     this.mensagem = { texto, tipo };
     setTimeout(() => {
       this.mensagem = null;
-    }, 5000); 
+    }, 5000);
   }
 
   abrirModal(): void {
