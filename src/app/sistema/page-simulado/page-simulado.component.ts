@@ -213,9 +213,9 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.isSimuladoIniciado && !this.simuladoFinalizado) {
-      this.finalizarSimulado();
-    }
+    // if (this.isSimuladoIniciado && !this.simuladoFinalizado) {
+    //   this.finalizarSimulado();
+    // }
 
     this.questoesStateService.setQuestaoAtual(null);
 
