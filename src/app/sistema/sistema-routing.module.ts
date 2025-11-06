@@ -36,6 +36,7 @@ import { BolsaGuardService } from '../services/bolsa.guard';
 import { MetricasDetalhadasComponent } from './metricas-detalhadas/metricas-detalhadas.component';
 import { TemaFlashcardsComponent } from './tema-flashcards/tema-flashcards.component'; 
 import { FlashcardsCadastroComponent } from './flashcards-cadastro/flashcards-cadastro.component';
+import { CanDeactivateSimuladoGuard } from '../services/CanDeactivateSimulado.Guard';
 
 
 const routes: Routes = [
@@ -65,7 +66,7 @@ const routes: Routes = [
       { path:'modulo-uveite-oncologia-ocular', component:ModuloUveiteOncologiaOcularComponent},
       { path: 'desempenho', component: PageDesempenhoComponent },
       { path: 'minha-conta', component: PageMeuPerfilComponent },
-      { path: 'simulados', component: PageSimuladoComponent },
+      { path: 'simulados', component: PageSimuladoComponent, canDeactivate: [CanDeactivateSimuladoGuard] },
       { path: 'simulados/:id', component: PageSimuladoComponent },
       { path: 'meus-simulados', component: MeusSimuladosComponent },
       { path: 'flashcards/:temaId', component: TemaFlashcardsComponent },
