@@ -213,7 +213,7 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if( this.isSimuladoIniciado && !this.simuladoFinalizado) {
+    if (this.isSimuladoIniciado && !this.simuladoFinalizado) {
       this.finalizarSimulado();
     }
 
@@ -306,9 +306,9 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
         this.iniciarSimulado(tempoSalvo);
         this.contagemRegressivaSimuladoQuestao();
         this.carregandoSimulado = false;
-        
+
         this.atualizarQuestaoAtual();
-        
+
         this.cdr.detectChanges();
       });
 
@@ -321,9 +321,9 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
       this.visualizarSimulado();
       this.tempo = tempoSalvo;
       this.tempoTotal = tempoSalvo;
-      
+
       this.atualizarQuestaoAtual();
-      
+
       this.cdr.detectChanges();
 
       this.carregarRespostasPreviamente().subscribe(() => {
@@ -341,10 +341,10 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
       this.questaoAtual = this.questoes[this.paginaAtual];
       this.iniciarSimulado(0);
       this.contagemRegressivaSimuladoQuestao();
-      
+
       // Atualizar a questão atual no serviço de estado
       this.atualizarQuestaoAtual();
-      
+
       this.cdr.detectChanges();
     }
   }
@@ -847,7 +847,7 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
             this.idsQuestoes = questoes.map((q) => q.id);
             this.paginaAtual = 0;
             this.questaoAtual = this.questoes[this.paginaAtual];
-            
+
             this.atualizarQuestaoAtual();
           }
           this.resposta = '';
@@ -929,7 +929,7 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
       this.respostaErrada = '';
       this.respostaVerificada = false;
       this.carregarRespostaAnterior(); // Chame a função para carregar a resposta anterior
-      
+
       this.atualizarQuestaoAtual();
     }
   }
@@ -957,7 +957,7 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
 
       clearInterval(this.intervalContagemRegressiva);
       this.contagemRegressivaSimuladoQuestao();
-      
+
       this.atualizarQuestaoAtual();
 
       if (this.isMeuSimulado) {
@@ -1099,7 +1099,7 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
     this.mensagem = { texto, tipo };
     setTimeout(() => {
       this.mensagem = null;
-    }, 5000); // Mensagem desaparece após 5 segundos
+    }, 5000); 
   }
 
   abrirModal(): void {
@@ -1115,6 +1115,14 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
       this.fecharCardConfirmacao();
 
     });
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  unloadNotification($event: any): void {
+    if (this.isSimuladoIniciado && !this.simuladoFinalizado) {
+      this.finalizarSimulado();
+      $event.returnValue = true;
+    }
   }
 
   cancelarSimulado(): void {
@@ -1194,7 +1202,7 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
 
   revisarSimulado(id: number | null) {
 
-    if (id === null || isNaN(id)) {
+    if (id === null || Number.isNaN(id)) {
       return;
     }
 
