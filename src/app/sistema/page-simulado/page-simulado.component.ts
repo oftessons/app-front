@@ -213,9 +213,9 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.isSimuladoIniciado && !this.simuladoFinalizado) {
-      this.finalizarSimulado();
-    }
+    // if (this.isSimuladoIniciado && !this.simuladoFinalizado) {
+    //   this.finalizarSimulado();
+    // }
 
     this.questoesStateService.setQuestaoAtual(null);
 
@@ -1099,7 +1099,7 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
     this.mensagem = { texto, tipo };
     setTimeout(() => {
       this.mensagem = null;
-    }, 5000); 
+    }, 5000);
   }
 
   abrirModal(): void {
