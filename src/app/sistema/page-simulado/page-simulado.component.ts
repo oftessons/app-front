@@ -27,6 +27,7 @@ import { Resposta } from '../Resposta';
 import { AuthService } from 'src/app/services/auth.service';
 import { Usuario } from 'src/app/login/usuario';
 import { SimuladoService } from 'src/app/services/simulado.service';
+import { QuestoesStateService } from 'src/app/services/questao-state.service';
 import { QuantidadeDeQuestoesSelecionadas } from '../page-questoes/enums/quant-questoes';
 import { RespostasSimulado } from '../page-questoes/enums/resp-simu';
 import Chart from 'chart.js';
@@ -188,6 +189,7 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
     private router: Router,
     private sanitizer: DomSanitizer,
     private cdr: ChangeDetectorRef,
+    private questoesStateService: QuestoesStateService,
     @Optional() public dialogRef: MatDialogRef<PageSimuladoComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: { alunoId: string, nomeAluno: string, simulado: Simulado } | null
   ) {
@@ -214,6 +216,8 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
     if( this.isSimuladoIniciado && !this.simuladoFinalizado) {
       this.finalizarSimulado();
     }
+
+    this.questoesStateService.setQuestaoAtual(null);
 
     // this.salvarTempoAtual();
 
@@ -302,6 +306,9 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
         this.iniciarSimulado(tempoSalvo);
         this.contagemRegressivaSimuladoQuestao();
         this.carregandoSimulado = false;
+        
+        this.atualizarQuestaoAtual();
+        
         this.cdr.detectChanges();
       });
 
@@ -314,6 +321,9 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
       this.visualizarSimulado();
       this.tempo = tempoSalvo;
       this.tempoTotal = tempoSalvo;
+      
+      this.atualizarQuestaoAtual();
+      
       this.cdr.detectChanges();
 
       this.carregarRespostasPreviamente().subscribe(() => {
@@ -331,6 +341,10 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
       this.questaoAtual = this.questoes[this.paginaAtual];
       this.iniciarSimulado(0);
       this.contagemRegressivaSimuladoQuestao();
+      
+      // Atualizar a questão atual no serviço de estado
+      this.atualizarQuestaoAtual();
+      
       this.cdr.detectChanges();
     }
   }
@@ -833,6 +847,8 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
             this.idsQuestoes = questoes.map((q) => q.id);
             this.paginaAtual = 0;
             this.questaoAtual = this.questoes[this.paginaAtual];
+            
+            this.atualizarQuestaoAtual();
           }
           this.resposta = '';
           this.mostrarGabarito = false;
@@ -896,6 +912,12 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
     }
   }
 
+  private atualizarQuestaoAtual(): void {
+    if (this.questaoAtual) {
+      this.questoesStateService.setQuestaoAtual(this.questaoAtual);
+    }
+  }
+
   anteriorQuestao() {
     this.mensagemDeAviso = '';
     if (this.paginaAtual > 0) {
@@ -907,6 +929,8 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
       this.respostaErrada = '';
       this.respostaVerificada = false;
       this.carregarRespostaAnterior(); // Chame a função para carregar a resposta anterior
+      
+      this.atualizarQuestaoAtual();
     }
   }
 
@@ -933,6 +957,8 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
 
       clearInterval(this.intervalContagemRegressiva);
       this.contagemRegressivaSimuladoQuestao();
+      
+      this.atualizarQuestaoAtual();
 
       if (this.isMeuSimulado) {
         this.respostaQuestao(this.questoes[this.paginaAtual].id, this.simuladoIdInicial);
