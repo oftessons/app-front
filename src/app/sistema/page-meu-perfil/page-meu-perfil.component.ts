@@ -110,7 +110,7 @@ export class PageMeuPerfilComponent implements OnInit {
     this.vendasService.obterPortalAcesso().subscribe(
       (response) => {
         window.location.href = response.url;
-        console.log('Portal de assinatura exibido com sucesso:', response);
+
       },
       (error) => {
         console.error('Erro ao exibir portal de assinatura:', error);
