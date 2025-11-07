@@ -2,24 +2,26 @@
   <div class="modal-box">
 
     <div class="modal-header">
-      <h1><span class="ofensiva-tittle">1 dia de ofensiva</span></h1>
+      <p><span class="ofensiva-tittle">{{diasOfensiva}} dia de ofensiva</span></p>
       <p class="ofensiva-text">Continue acessando o Oftlessons diariamente para manter sua ofensiva!</p>
     </div>
+
     <div class="modal-image-container">
       <img src="assets/imagens/storm.svg" alt="storm" class="modal-image" />
     </div>
 
-    <div class="modal-content">
+    <div class="modal-content-days">
       <div class="days-container">
-        <span class="day">Seg</span>
-        <span class="day">Ter</span>
-        <span class="day">Qua</span>
-        <span class="day">Qui</span>
-        <span class="day">Sex</span>
-        <span class="day">Sab</span>
-        <span class="day">Dom</span>
+        <span class="day"><span class="day-elipse" [style]="naOfensiva ? naOfensivaStyle : noOfensivaStyle"><div [style]="checkMarkcontainer" ><img src="assets/imagens/check.svg" class="checkMark"></div></span>Seg</span>
+        <span class="day"><span class="day-elipse" ></span>Ter</span>
+        <span class="day"><span class="day-elipse" ></span>Qua</span>
+        <span class="day"><span class="day-elipse" ></span>Qui</span>
+        <span class="day"><span class="day-elipse" ></span>Sex</span>
+        <span class="day"><span class="day-elipse" ></span>Sab</span>
+        <span class="day"><span class="day-elipse" ></span>Dom</span>
       </div>
     </div>
+
 
     <img src="assets/imagens/boneca-ofensivo-removebg.png" alt="boneca ofensivo" class="boneca-ofensivo" />
   </div>

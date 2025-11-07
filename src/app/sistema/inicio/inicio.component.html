@@ -13,51 +13,57 @@
           ></app-select-padrao>
         </div>
       </div>
-      <div class="estatisticas">
-        <div class="card-estatistica">
-          <img [src]="isDarkMode() ? 'assets/Icons/dark/v-dark.svg' : 'assets/Icons/v.svg'" alt="Ícone de Respostas Certas">
-          <div class="card-text-estatistica">
-            <h3>{{ respostasCertas }}</h3>
-            <p>Respostas Certas</p>
+     <div class="content-inicio">
+      <div class="banner-statics">
+        <div class="banner-trilha">
+          <div class="banner-text">
+            <h2>Revise seus estudos e aprenda como nunca antes!</h2>
+            <p>Crie sua programação de estudos e conquiste novos resultados.</p>
           </div>
+          <button
+            class="banner-button"
+            (click)="abrirModalConfiguracaoTrilha()"
+            >
+            Criar minha trilha de revisões
+            <img src="assets/Icons/arrow-updown.svg" alt="seta">
+          </button>
         </div>
-        <div class="card-estatistica">
-          <img [src]="isDarkMode() ? 'assets/Icons/dark/x-dark.svg' : 'assets/Icons/x.svg'" alt="Ícone de Respostas Erradas">
-          <div class="card-text-estatistica">
-            <h3>{{ respostasErradas }}</h3>
-            <p>Respostas Erradas</p>
-          </div>
+         <div class="cards-inicio">
+           <div class="estatisticas">
+             <div class="card-estatistica">
+               <img [src]="isDarkMode() ? 'assets/Icons/dark/v-dark.svg' : 'assets/Icons/v.svg'" alt="Ícone de Respostas Certas">
+               <div class="card-text-estatistica">
+                 <h3>{{ respostasCertas }}</h3>
+                 <p>Respostas Certas</p>
+               </div>
+             </div>
+             <div class="card-estatistica">
+               <img [src]="isDarkMode() ? 'assets/Icons/dark/x-dark.svg' : 'assets/Icons/x.svg'" alt="Ícone de Respostas Erradas">
+               <div class="card-text-estatistica">
+                 <h3>{{ respostasErradas }}</h3>
+                 <p>Respostas Erradas</p>
+               </div>
+             </div>
+             <div class="card-estatistica">
+               <img [src]="isDarkMode() ? 'assets/Icons/dark/au-ofi-dark.svg' : 'assets/Icons/au-ofi.svg'" alt="Ícone de Aulas">
+               <div class="card-text-estatistica">
+                 <h3>{{ aulasAssistidas }}</h3>
+                 <p>Aulas Assistidas</p>
+               </div>
+             </div>
+             <div class="card-estatistica">
+               <img [src]="isDarkMode() ? 'assets/Icons/dark/flashcards-dark.svg' : 'assets/Icons/flashcards.svg'" alt="Ícone de Flashcards">
+               <div class="card-text-estatistica">
+                 <h3>{{ flashcardsEstudados }}</h3>
+                 <p>Flashcards Estudados</p>
+               </div>
+             </div>
+           </div>
         </div>
-        <div class="card-estatistica">
-          <img [src]="isDarkMode() ? 'assets/Icons/dark/au-ofi-dark.svg' : 'assets/Icons/au-ofi.svg'" alt="Ícone de Aulas">
-          <div class="card-text-estatistica">
-            <h3>{{ aulasAssistidas }}</h3>
-            <p>Aulas Assistidas</p>
-          </div>
-        </div>
-        <div class="card-estatistica">
-          <img [src]="isDarkMode() ? 'assets/Icons/dark/flashcards-dark.svg' : 'assets/Icons/flashcards.svg'" alt="Ícone de Flashcards">
-          <div class="card-text-estatistica">
-            <h3>{{ flashcardsEstudados }}</h3>
-            <p>Flashcards Estudados</p>
-          </div>
-        </div>
-      </div>
-      <div class="banner-trilha">
-        <div class="banner-text">
-          <h2>Revise seus estudos e aprenda como nunca antes!</h2>
-          <p>Crie sua programação de estudos e conquiste novos resultados.</p>
-        </div>
-        <button
-          class="banner-button"
-          (click)="abrirModalConfiguracaoTrilha()"
-          >
-          Criar minha trilha de revisões
-          <img src="assets/Icons/arrow-updown.svg" alt="seta">
-        </button>
-      </div>
+     </div>
      <div class="ofensiva-section">
        <app-ofensiva></app-ofensiva>
+     </div>
      </div>
    </div>
     <div class="section">

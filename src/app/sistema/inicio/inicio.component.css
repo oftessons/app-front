@@ -11,6 +11,24 @@
   align-items: center;
 }
 
+.banner-statics{
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+}
+
+.header-top{
+  width: 100%;
+}
+.content-inicio{
+  margin-top: 24px;
+  gap: 24px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+
 .welcome-message {
   margin: 0;
   font-size: 28px;
@@ -21,11 +39,12 @@
 }
 
 
-.ofensiva-section {
-  display: flex;
-  justify-content: flex-end;
+/*.ofensiva-section {*/
 
-}
+/*  display: flex;*/
+/*  justify-content: flex-end;*/
+
+/*}*/
 
 ::ng-deep .filtro-select .mat-form-field-flex,
 ::ng-deep .filtro-select .select-dropdown {
@@ -51,6 +70,10 @@
   gap: 16px;
 }
 
+.cards-inicio{
+  width: 100%;
+  height: 200px;
+}
 .card-text-estatistica {
   color: var(--text-color);
     h3 {

@@ -1,17 +1,19 @@
 
 .modal-box {
-  background-color: #2a4d7b;
+  background-color: #0a1435;
   border-radius: 12px;
   width: 100%;
-  max-width: 600px;
-  height: 60vh;
+  max-width: 450px;
+  height: 380px;
   display: flex;
+  overflow: hidden;
   flex-direction: column;
   position: relative;
-  padding: 20px;
+  padding: 1px;
 }
 
 .modal-header {
+  background: none;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -19,59 +21,98 @@
   padding: 2rem 6rem 1rem 1rem;
 }
 
+
 .ofensiva-tittle {
   color: #FFBF23;
-  font-size: 1.9rem;
+  font-size: 1.6rem;
   font-family: Bakbak One, sans-serif;
-  font-weight: bold;
+  font-weight: 400;
 }
 
 .modal-image {
+  display: flex;
+  flex-direction: column;
   max-width: 100%;
-  width: 70px;
+  width: 55px;
+  height: auto;
 }
+
 .modal-image-container {
   position: absolute;
-  top: 50px;
-  right: 70px;
+  top: 20px;
+  right: 20px;
 }
 .ofensiva-text {
   color: #fff;
-  font-size: 1.2rem;
-  margin-top: 1rem;
-  margin-right: 5rem;
-  line-height: 1.6;
-  font-weight: 500;
+  text-align: left;
+  font-size: 0.7rem;
+  line-height: 1rem;
+  font-weight: 400;
 }
 
-.modal-content {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.modal-content-days{
+  width: 90%;
+  background-color: #696D79;
   padding-top: 1rem;
+  border-radius: 10px; /* menos “altura” e respiro lateral */
+  margin: 0 0.8rem;    /* tira aquele 10rem gigante */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-.days-container {
-  background-color: #F6F8FE;
-  border-radius: 12px;
+.days-container{
   display: flex;
-  justify-content: space-between;
+  justify-content: center;  /* agrupa centralizado */
+  align-items: flex-start;
+  gap: 16px;                /* espaço igual entre os dias (ajuste se quiser) */
   width: 100%;
 }
 
-.day {
-  color: #2a4d7b;
-  padding: 10px 15px;
-  border-radius: 5px;
+.day{
+  display: flex;
+  flex-direction: column;   /* bolinha em cima, texto embaixo */
+  align-items: center;
+  gap: 4px;                 /* 4px entre bolinha e o texto */
+  color: #E2E1DC;
   font-weight: 600;
+  font-size: 14px;
+  padding: 6px 0;           /* tira o padding lateral que “empurra” o layout */
 }
 
+/* bolinha (mantida, só garantindo box-sizing e display) */
+.day-elipse{
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #8F97A6;
+  display: block; /* usa block para não “esticar” */
+  box-sizing: border-box;   /* garante 20x20 já com a borda */
+}
+
+.checkMark{
+  width: 12px;
+  height: 12px;
+  font-weight: bold;
+  background: none;
+}
+
+checkMarkcontainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+
 .boneca-ofensivo {
-  width: 300px;
+  width: 200px;
   position: absolute;
   bottom: -50px;
   left: 50%;
-  transform: translateX(-50%);
+  top: 77%;
+  transform: translateX(-50%) translateY(-38%);
 }
 
 @media (max-width: 600px) {
