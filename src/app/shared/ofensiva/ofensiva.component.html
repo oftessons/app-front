@@ -12,13 +12,13 @@
 
     <div class="modal-content-days">
       <div class="days-container">
-        <span class="day"><span class="day-elipse" [style]="naOfensiva ? naOfensivaStyle : noOfensivaStyle"><div [style]="checkMarkcontainer" ><img src="assets/imagens/check.svg" class="checkMark"></div></span>Seg</span>
-        <span class="day"><span class="day-elipse" ></span>Ter</span>
-        <span class="day"><span class="day-elipse" ></span>Qua</span>
-        <span class="day"><span class="day-elipse" ></span>Qui</span>
-        <span class="day"><span class="day-elipse" ></span>Sex</span>
-        <span class="day"><span class="day-elipse" ></span>Sab</span>
-        <span class="day"><span class="day-elipse" ></span>Dom</span>
+        <span class="day"><span class="day-elipse" [style]="segNaOfensiva ? naOfensivaStyle : noOfensivaStyle"><div [style]="checkMarkcontainer" ><img src="assets/imagens/check.svg" *ngIf="segNaOfensiva" class="checkMark"></div></span>Seg</span>
+        <span class="day"><span class="day-elipse" [style]="terNaOfensiva ? naOfensivaStyle : noOfensivaStyle " ><div [style]="checkMarkcontainer" ><img src="assets/imagens/check.svg" *ngIf="terNaOfensiva" class="checkMark"></div></span>Ter</span>
+        <span class="day"><span class="day-elipse" [style]="quaNaOfensiva ? naOfensivaStyle : noOfensivaStyle " ><div [style]="checkMarkcontainer" ><img src="assets/imagens/check.svg" *ngIf="quaNaOfensiva" class="checkMark"></div></span>Qua</span>
+        <span class="day"><span class="day-elipse" [style]="quiNaOfensiva ? naOfensivaStyle : noOfensivaStyle " ><div [style]="checkMarkcontainer" ><img src="assets/imagens/check.svg" *ngIf="quiNaOfensiva" class="checkMark"></div></span>Qui</span>
+        <span class="day"><span class="day-elipse" [style]="sexNaOfensiva ? naOfensivaStyle : noOfensivaStyle " ><div [style]="checkMarkcontainer" ><img src="assets/imagens/check.svg" *ngIf="sexNaOfensiva" class="checkMark"></div></span>Sex</span>
+        <span class="day"><span class="day-elipse" [style]="sabNaOfensiva ? naOfensivaStyle : noOfensivaStyle " ><div [style]="checkMarkcontainer" ><img src="assets/imagens/check.svg" *ngIf="sabNaOfensiva" class="checkMark"></div></span>Sab</span>
+        <span class="day"><span class="day-elipse" [style]="domNaOfensiva ? naOfensivaStyle : noOfensivaStyle " ><div [style]="checkMarkcontainer" ><img src="assets/imagens/check.svg" *ngIf="domNaOfensiva" class="checkMark"></div></span>Dom</span>
       </div>
     </div>
 

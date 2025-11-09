@@ -58,7 +58,7 @@
   margin: 0 0.8rem;    /* tira aquele 10rem gigante */
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
 }
 
 .days-container{
@@ -86,11 +86,14 @@
   height: 20px;
   border-radius: 50%;
   border: 2px solid #8F97A6;
-  display: block; /* usa block para não “esticar” */
+  display: flex; /* usa block para não “esticar” */
   box-sizing: border-box;   /* garante 20x20 já com a borda */
 }
 
 .checkMark{
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 12px;
   height: 12px;
   font-weight: bold;
@@ -107,8 +110,10 @@ checkMarkcontainer {
 
 
 .boneca-ofensivo {
-  width: 200px;
+  max-width: 200px;
   position: absolute;
+  display: flex;
+  flex-direction: column;
   bottom: -50px;
   left: 50%;
   top: 77%;
