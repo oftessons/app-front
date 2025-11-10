@@ -10,7 +10,9 @@ import { Aula } from '../painel-de-aulas/aula';
 import { AulasService } from 'src/app/services/aulas.service';
 
 import { HttpClient, HttpEvent, HttpEventType, HttpResponse } from '@angular/common/http';
-import { Subscription } from 'rxjs';
+import { of, Subscription } from 'rxjs';
+import { CadastroAulaResponse } from './cadastro-aulas-response';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-cadastro-de-aulas',
@@ -106,79 +108,107 @@ export class CadastroDeAulasComponent implements OnInit {
       window.scrollTo(0, 0);
       return;
     }
-
     if (!this.aulaDTO.descricao || this.aulaDTO.descricao.trim() === '') {
       this.errorMessage = 'Por favor, informe a descrição da aula antes de salvar.';
       window.scrollTo(0, 0);
       return;
     }
 
+    if (!this.isEditMode && !this.video) {
+      this.errorMessage = 'Por favor, selecione um arquivo de vídeo para cadastrar a aula.';
+      window.scrollTo(0, 0);
+      return;
+    }
 
     console.log('Formulário enviado');
     this.isLoading = true;
     this.uploadProgress = 0;
 
-    this.formData = new FormData();
-    this.aulaDTO.categoria = this.getCategoriaEnum(this.aulaDTO.categoria) as Categoria;
-    const objetoJson = this.aulaDTO.id ? this.aulaDTO.toJsonUpdate() : JSON.stringify(this.aulaDTO);
 
     if (this.video) {
-      this.formData.append('video', this.video);
+      this.aulaDTO.keyVideo = this.video.name;
+      this.aulaDTO.contentTypeVideo = this.video.type || 'application/octet-stream';
+      this.aulaDTO.videoContentLength = this.video.size;
     }
-    if (!this.aulaDTO.id) {
-      this.formData.append('aulaDTO', objetoJson);
-    } else {
-      const jsonBlob = new Blob([objetoJson], { type: 'application/json' });
-      this.formData.append('aulaDTO', jsonBlob);
+
+    if (this.usuario) {
+      this.aulaDTO.idUser = this.usuario.id;
     }
+
+    this.aulaDTO.categoria = this.getCategoriaEnum(this.aulaDTO.categoria) as Categoria;
+
+    const formData = new FormData();
+
+    formData.append('aulaDTO', JSON.stringify(this.aulaDTO));
+
     if (this.arquivos.length > 0) {
       this.arquivos.forEach((arquivo) => {
-        this.formData.append(`arquivos`, arquivo);
+        formData.append(`arquivos`, arquivo);
       });
     }
 
-    if (!this.aulaDTO.id) {
 
-      this.aulasService.salvar(this.formData).subscribe(
-        (event: HttpEvent<any>) => {
-          switch (event.type) {
-            case HttpEventType.Sent:
-              console.log('Requisição enviada!');
-              break;
-            case HttpEventType.UploadProgress:
-              if (event.total) {
-                this.uploadProgress = Math.round((100 * event.loaded) / event.total);
-              }
-              break;
-            case HttpEventType.Response:
-              console.log('Resposta completa do servidor:', event);
-              this.isLoading = false;
+    if (!this.isEditMode) {
 
-              if (event.status >= 200 && event.status < 300) {
-                this.successMessage = 'Aula salva com sucesso!';
-              } else {
-                this.errorMessage = 'O servidor respondeu, mas com um status inesperado.';
-              }
-              break;
+      this.currentUploadState = 'Cadastrando metadados da aula...';
+
+      this.uploadSubscription = this.aulasService.cadastrarAula(formData).pipe(
+
+        switchMap((event: HttpEvent<any>) => {
+          if (event.type === HttpEventType.Response) {
+
+            this.currentUploadState = 'Enviando vídeo para o S3...';
+            const response = event.body as CadastroAulaResponse;
+
+            console.log('URL pré-assinada recebida:', response.presignedUrl);
+
+            return this.aulasService.uploadVideoS3(
+              response.presignedUrl,
+              this.video!,
+              this.aulaDTO.contentTypeVideo!,
+            );
+          }
+          return of(null);
+        })
+
+      ).subscribe({
+        next: (event: HttpEvent<any> | null) => {
+
+          if (event === null) {
+            return;
+          }
+
+          // Aqui estamos ouvindo os eventos da ETAPA 2 (Upload para o S3)
+          if (event.type === HttpEventType.UploadProgress && event.total) {
+            this.uploadProgress = Math.round(100 * (event.loaded / event.total));
+          } else if (event instanceof HttpResponse) {
+
+            // SUCESSO TOTAL!
+            this.uploadProgress = 100;
+            this.currentUploadState = 'Concluído!';
+            this.successMessage = 'Aula salva e vídeo enviado com sucesso!';
+            this.isLoading = false;
+            this.resetForm();
           }
         },
-        (error) => {
+        error: (err) => {
+          console.error('Erro em uma das etapas do upload:', err);
+          this.errorMessage = `Erro no upload: ${err.message || 'Verifique o console.'}`;
           this.isLoading = false;
           this.uploadProgress = 0;
-          console.error('ERRO DETALHADO:', error);
-
-          if (error.status >= 200 && error.status < 300) {
-            console.warn('Caiu no bloco de erro mesmo com status de sucesso. Provável erro de parse JSON.');
-            this.successMessage = 'Aula salva com sucesso! (Alerta de parse)';
-            this.errorMessage = null;
-          } else {
-            this.errorMessage = `Erro ao salvar: ${error.message || 'Erro desconhecido'}`;
-          }
+          this.currentUploadState = 'Falhou';
         }
-      );
+      });
+
     } else {
-      this.aulasService.atualizar(this.aulaDTO.id, this.formData).subscribe(
-        (event: HttpEvent<any>) => {
+
+      if (this.video) {
+        formData.append('video', this.video);
+      }
+
+      this.currentUploadState = 'Atualizando aula...';
+      this.uploadSubscription = this.aulasService.atualizar(this.aulaDTO.id!, formData).subscribe({
+        next: (event: HttpEvent<any>) => {
           switch (event.type) {
             case HttpEventType.Sent:
               console.log('Requisição de atualização enviada!');
@@ -191,16 +221,18 @@ export class CadastroDeAulasComponent implements OnInit {
             case HttpEventType.Response:
               this.isLoading = false;
               this.successMessage = 'Aula atualizada com sucesso!';
+              this.currentUploadState = 'Concluído!';
               console.log('Atualização concluída!', event.body);
               break;
           }
         },
-        (error) => {
+        error: (error) => {
           this.isLoading = false;
+          this.currentUploadState = 'Falhou';
           this.errorMessage = 'Erro ao atualizar a aula.';
           console.error('Erro ao atualizar:', error);
         }
-      );
+      });
     }
   }
 
@@ -212,8 +244,10 @@ export class CadastroDeAulasComponent implements OnInit {
     if (this.videoInput) {
       this.videoInput.nativeElement.value = '';
     }
-    // Opcional: Redirecionar
-    // this.router.navigate(['/usuario/dashboard']);
+    this.uploadProgress = 0;
+    this.currentUploadState = 'Aguardando...';
+    this.isEditMode = false;
+    this.idAula = null;
   }
 
 
@@ -224,7 +258,7 @@ export class CadastroDeAulasComponent implements OnInit {
         this.isVideoLoading = true;
 
         if (file.type.startsWith('video/')) {
-          const MAX_FILE_SIZE = 5 * 1024 * 1024 * 1024; // 5GB em bytes
+          const MAX_FILE_SIZE = 5 * 1024 * 1024 * 1024; // 5GB
 
           if (file.size > MAX_FILE_SIZE) {
             this.isVideoLoading = false;
@@ -234,40 +268,32 @@ export class CadastroDeAulasComponent implements OnInit {
           }
 
           this.revokePreviewUrl(field);
-          this.video = file;
+          this.video = file; // Armazena o arquivo de vídeo
 
-          // Para vídeos grandes, criar preview pode travar o navegador
+          // Sua lógica de preview para vídeos grandes está ótima, vamos manter
           const MAX_PREVIEW_SIZE = 100 * 1024 * 1024; // 100MB
 
           if (file.size <= MAX_PREVIEW_SIZE) {
-            // Só cria preview para vídeos menores
             this.fotoPreviews[field] = URL.createObjectURL(file);
           } else {
-            // Para vídeos grandes, apenas indica que foi selecionado
             this.fotoPreviews[field] = 'large-video-selected';
-            console.log(`Vídeo grande selecionado: ${(file.size / (1024 * 1024)).toFixed(2)}MB`);
           }
 
           this.isVideoLoading = false;
-        } else if (file.type.startsWith('image/')) {
+        } else {
+          // (Mantida sua lógica para lidar com imagens como "vídeo")
           this.revokePreviewUrl(field);
           this.video = file;
           const reader = new FileReader();
           reader.onload = () => { this.fotoPreviews[field] = reader.result; };
           reader.onloadend = () => { this.isVideoLoading = false; };
-          reader.onerror = () => {
-            this.isVideoLoading = false;
-            this.errorMessage = "Erro ao ler a imagem.";
-          };
+          reader.onerror = () => { this.isVideoLoading = false; this.errorMessage = "Erro ao ler a imagem."; };
           reader.readAsDataURL(file);
-        } else {
-          this.isVideoLoading = false;
-          this.errorMessage = "Formato de arquivo não suportado.";
-          this.removeFile(field);
         }
       }
     }
   }
+
 
   onDrop(event: DragEvent, field: string) {
     event.preventDefault();
