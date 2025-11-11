@@ -54,6 +54,17 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
   usuario!: Usuario;
   chatHistory: ApiChatRequestResponse[] = [];
   botAvatar: string = 'assets/Icons/logo-OFT.png';
+  showPromptSuggestions: boolean = false;
+
+  promptSuggestions: string[] = [
+    'Explique detalhadamente esta questão',
+    'Elabore 5 questões deste tópico',
+    'Faça um resumo sobre o tema deste tópico',
+    'Mnemônicos deste tópico',
+    'Reescreva de forma mais didática',
+    'Elabore uma história engraçada',
+    'Cite referências atualizadas sobre este tópico'
+  ];
 
   isDragging: boolean = false;
   dragOffset = { x: 0, y: 0 };
@@ -95,6 +106,13 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
     }
 
     this.updateMaxHeight();
+
+    document.addEventListener('click', (event) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest('.prompt-toggle-btn') && !target.closest('.prompt-suggestions-dropdown')) {
+        this.showPromptSuggestions = false;
+      }
+    });
 
     const savedSize = localStorage.getItem('chatbot-size');
     if (savedSize) {
@@ -259,6 +277,36 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
     };
     this.messages.push(welcomeMsg);
     this.chatBotStateService.addMessage(welcomeMsg);
+  }
+
+  togglePromptSuggestions(): void {
+    this.showPromptSuggestions = !this.showPromptSuggestions;
+  }
+
+  selectPrompt(prompt: string): void {
+    this.userMessage = prompt;
+    this.showPromptSuggestions = false;
+    
+    const questaoAtual = this.questoesStateService.getQuestaoAtual();
+    if (questaoAtual) {
+      this.isCitarQuestao = true;
+      this.citarQuestao = questaoAtual;
+    }
+    
+    setTimeout(() => {
+      const textInput = document.querySelector('.user-text-input') as HTMLTextAreaElement;
+      if (textInput) {
+        textInput.focus();
+      }
+    }, 100);
+  }
+
+  hasUserMessages(): boolean {
+    return this.messages.some(msg => msg.type === 'user');
+  }
+
+  closePromptSuggestions(): void {
+    this.showPromptSuggestions = false;
   }
 
   sendMessage(): void {

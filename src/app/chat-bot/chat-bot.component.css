@@ -319,13 +319,258 @@
   background-color: #ffffff;
   text-align: center;
   padding-bottom: 10px;
+  position: relative;
 }
 
 .support-options {
   display: flex;
   justify-content: flex-start;
+  align-items: center;
   width: 100%;
   gap: 10px;
+}
+
+.prompt-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f5ce50 0%, #febf25 100%);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.prompt-toggle-btn:hover {
+  transform: scale(1.15);
+  box-shadow: 0 4px 12px rgba(245, 206, 80, 0.5);
+}
+
+.prompt-toggle-btn.active {
+  transform: rotate(45deg);
+  background: linear-gradient(135deg, #febf25 0%, #f5ce50 100%);
+  box-shadow: 0 4px 12px rgba(245, 206, 80, 0.6);
+}
+
+.prompt-toggle-btn.active .plus-icon {
+  transform: rotate(0deg);
+}
+
+.prompt-toggle-btn:active {
+  transform: scale(1.05);
+}
+
+.plus-icon {
+  font-size: 22px;
+  color: #0f1934;
+  font-weight: bold;
+  line-height: 1;
+  transition: transform 0.3s ease;
+}
+
+.prompt-suggestions-dropdown {
+  position: absolute;
+  bottom: 130px;
+  left: 10px;
+  right: 10px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  max-height: 280px;
+  overflow-y: auto;
+  z-index: 100;
+  animation: slideUp 0.3s ease-out;
+  border: 1px solid #e0e0e0;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.prompt-item {
+  padding: 13px 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-bottom: 1px solid #f1f1f1;
+  font-size: 13.5px;
+  color: #333;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.prompt-item::before {
+  content: '→';
+  opacity: 0;
+  margin-right: 8px;
+  transition: opacity 0.2s ease;
+  color: #f5ce50;
+  font-weight: bold;
+}
+
+.prompt-item:hover::before {
+  opacity: 1;
+}
+
+.prompt-item:last-child {
+  border-bottom: none;
+}
+
+.prompt-item:hover {
+  background: linear-gradient(90deg, #f8f8f8 0%, #ffffff 100%);
+  padding-left: 20px;
+}
+
+.prompt-item:active {
+  background: linear-gradient(90deg, #e8f5e9 0%, #f1f8f1 100%);
+  color: #0f1934;
+}
+
+.prompt-suggestions-dropdown::-webkit-scrollbar {
+  width: 6px;
+}
+
+.prompt-suggestions-dropdown::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.prompt-suggestions-dropdown::-webkit-scrollbar-thumb {
+  background: linear-gradient(to right, #f5ce50, #febf25);
+  border-radius: 10px;
+}
+
+.prompt-suggestions-initial {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  text-align: center;
+  height: 100%;
+}
+
+.suggestions-icon {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  img{
+    height: 40px;
+    width: 40px;
+  }
+}
+
+.prompt-suggestions-initial h2 {
+  color: #0f1934 !important;
+  width: 260px;
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: left;
+  margin: 0;
+  margin-left: 8px;
+}
+
+.suggestion-cards {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  width: 100%;
+  padding: 5px 0;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  position: relative;
+}
+
+.suggestion-cards::after {
+  content: '';
+  position: sticky;
+  right: 0;
+  width: 30px;
+  height: 100%;
+  background: linear-gradient(to left, rgba(255, 255, 255, 0.9), transparent);
+  pointer-events: none;
+}
+
+.suggestion-cards::-webkit-scrollbar {
+  height: 6px;
+}
+
+.suggestion-cards::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+  margin: 0 10px;
+}
+
+.suggestion-cards::-webkit-scrollbar-thumb {
+  background: linear-gradient(to right, #f5ce50, #febf25);
+  border-radius: 10px;
+}
+
+.suggestion-cards::-webkit-scrollbar-thumb:hover {
+  background: #f5ce50;
+}
+
+.suggestion-card {
+  display: flex;
+  align-items: center;
+  background: #ebf7ff;
+  border-radius: 16px;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: left;
+  width: 200px;
+  flex-shrink: 0;
+}
+
+.suggestion-card:hover {
+  border-color: #f5ce50;
+  transform: translateY(-3px);
+}
+
+.suggestion-card:active {
+  transform: translateY(-1px);
+}
+
+.card-title {
+  font-weight: 600;
+  color: #0f1934;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.card-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #f5ce50 0%, #febf25 100%);
+  color: #0f1934;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  box-shadow: 0 2px 4px rgba(245, 206, 80, 0.3);
+}
+
+.suggestion-card.with-question {
+  border-color: #f5ce50;
+  background: linear-gradient(135deg, #fffef5 0%, #ffffff 100%);
+}
+
+.suggestion-card.with-question:hover {
+  border-color: #febf25;
+  box-shadow: 0 6px 16px rgba(245, 206, 80, 0.3);
 }
 
 .suporte-btn {
@@ -881,6 +1126,31 @@ button:disabled .chatbot-logo {
   .chatbot-logo {
     width: 24px;
     height: 24px;
+  }
+
+  .prompt-suggestions-dropdown {
+    bottom: 115px;
+    max-height: 240px;
+  }
+
+  .suggestion-cards {
+    gap: 10px;
+    padding-bottom: 8px;
+  }
+
+  .suggestion-card {
+    padding: 12px 14px;
+    min-width: 180px;
+    max-width: 180px;
+  }
+
+  .card-title {
+    font-size: 12px;
+  }
+
+  .card-badge {
+    font-size: 9px;
+    padding: 3px 6px;
   }
 }
 

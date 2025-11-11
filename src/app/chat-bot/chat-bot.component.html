@@ -67,12 +67,35 @@
         <span class="dot"></span>
       </div>
     </div>
+        <!-- Sugestões de prompts quando o chat está vazio -->
+    <div class="prompt-suggestions-initial" *ngIf="!hasUserMessages()">
+      <div class="suggestions-icon">
+        <img src="assets/Icons/logo-oft-preta.svg" alt="logo oftlessons">
+        <h2>Explore os prompts iniciais ou escreva sua pergunta</h2>
+      </div>
+      <div class="suggestion-cards">
+        <div class="suggestion-card" *ngFor="let prompt of promptSuggestions" (click)="selectPrompt(prompt)" [class.with-question]="temQuestaoParaCitar()">
+          <div class="card-badge" *ngIf="temQuestaoParaCitar()">Com citação da questão</div>
+          <div class="card-title">{{ prompt }}</div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="chatbot-footer">
     <div class="support-options">
+      <button class="prompt-toggle-btn" (click)="togglePromptSuggestions()" [class.active]="showPromptSuggestions">
+        <span class="plus-icon">+</span>
+      </button>
       <button [disabled]="!temQuestaoParaCitar()" [class.active]="isCitarQuestao" class="citarQuestao" (click)="citarQuestaoAtual(userMessage)"><div [class.active]="isCitarQuestao" class="citarQuestao-butao-texto">Citar Questão</div><img src="assets/Icons/x.png" [class.active]="isCitarQuestao"></button>
       <button class="suporte-btn" (click)="enviarParaSuporte()"> <img style="width: 20px;" src="assets/Icons/whatsapp-verde.svg" alt="whatsapp">Suporte WhatsApp</button>
+    </div>
+    
+    <!-- Lista de prompts que aparece ao clicar no + -->
+    <div class="prompt-suggestions-dropdown" *ngIf="showPromptSuggestions">
+      <div class="prompt-item" *ngFor="let prompt of promptSuggestions" (click)="selectPrompt(prompt)">
+        {{ prompt }}
+      </div>
     </div>
     <div class="text-input-container"> 
       <textarea
