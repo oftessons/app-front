@@ -60,6 +60,13 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
   currentPosition = 'bottom-right';
   isTransitioning: boolean = false;
 
+  isResizing: boolean = false;
+  resizeStartPos = { x: 0, y: 0 };
+  initialSize = { width: 350, height: 470 };
+  currentSize = { width: 350, height: 470 };
+  minSize = { width: 300, height: 450 };
+  maxSize = { width: 900, height: 900 };
+
   @ViewChild('chatBody') chatBody!: ElementRef;
 
   @HostBinding('class.dragging') get isDraggingClass() { return this.isDragging; }
@@ -85,6 +92,22 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
     const savedPosition = localStorage.getItem('chatbot-position');
     if (savedPosition && ['top-left', 'top-right', 'bottom-left', 'bottom-right'].includes(savedPosition)) {
       this.currentPosition = savedPosition;
+    }
+
+    this.updateMaxHeight();
+
+    const savedSize = localStorage.getItem('chatbot-size');
+    if (savedSize) {
+      try {
+        const size = JSON.parse(savedSize);
+        
+        size.height = Math.min(size.height, this.maxSize.height);
+        size.width = Math.min(size.width, this.maxSize.width);
+        this.currentSize = size;
+        this.initialSize = size;
+      } catch (e) {
+        console.error('Erro ao carregar tamanho salvo:', e);
+      }
     }
 
     this.simuladoService.simuladoAtivo$.subscribe((simuladoAtivo => {
@@ -134,6 +157,8 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
         this.usuario = usuario;
       }
     );
+
+    window.addEventListener('resize', this.onWindowResize.bind(this));
   }
 
   ngAfterViewChecked(): void {
@@ -150,6 +175,7 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
     if (this.navCheckInterval) {
       clearInterval(this.navCheckInterval);
     }
+    window.removeEventListener('resize', this.onWindowResize.bind(this));
   }
 
   citarQuestaoAtual(message: string): void {
@@ -663,6 +689,132 @@ ${ultimasMensagens}
       this.renderer.removeStyle(element, 'bottom');
       this.renderer.removeStyle(element, 'transform');
     }, 50);
+  }
+
+  private updateMaxHeight(): void {
+    const windowHeight = window.innerHeight;
+    const availableHeight = windowHeight - 100;
+    this.maxSize.height = Math.min(availableHeight, 900);
+    
+    if (this.maxSize.height < this.minSize.height) {
+      this.maxSize.height = this.minSize.height;
+    }
+    
+    if (this.currentSize.height > this.maxSize.height) {
+      this.currentSize.height = this.maxSize.height;
+    }
+  }
+
+  private onWindowResize(): void {
+    this.updateMaxHeight();
+  }
+  
+  onResizeStart(event: MouseEvent): void {
+    
+    if (window.innerWidth <= 768) return;
+    
+    this.isResizing = true;
+    this.resizeStartPos = { x: event.clientX, y: event.clientY };
+    this.initialSize = { ...this.currentSize };
+    
+    document.addEventListener('mousemove', this.onResizeMove.bind(this));
+    document.addEventListener('mouseup', this.onResizeEnd.bind(this));
+    
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  onResizeTouchStart(event: TouchEvent): void {
+    
+    if (window.innerWidth <= 768) return;
+    
+    const touch = event.touches[0];
+    this.isResizing = true;
+    this.resizeStartPos = { x: touch.clientX, y: touch.clientY };
+    this.initialSize = { ...this.currentSize };
+    
+    document.addEventListener('touchmove', this.onResizeTouchMove.bind(this));
+    document.addEventListener('touchend', this.onResizeTouchEnd.bind(this));
+    
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  onResizeMove(event: MouseEvent): void {
+    if (!this.isResizing) return;
+    
+    const deltaX = event.clientX - this.resizeStartPos.x;
+    const deltaY = event.clientY - this.resizeStartPos.y;
+    
+    let newWidth = this.initialSize.width;
+    let newHeight = this.initialSize.height;
+    
+    if (this.currentPosition.includes('right')) {
+      newWidth = this.initialSize.width - deltaX;
+    } else {
+      newWidth = this.initialSize.width + deltaX;
+    }
+    
+    if (this.currentPosition.includes('bottom')) {
+      newHeight = this.initialSize.height - deltaY;
+    } else {
+      newHeight = this.initialSize.height + deltaY;
+    }
+    
+    newWidth = Math.max(this.minSize.width, Math.min(this.maxSize.width, newWidth));
+    newHeight = Math.max(this.minSize.height, Math.min(this.maxSize.height, newHeight));
+    
+    this.currentSize = { width: newWidth, height: newHeight };
+  }
+
+  onResizeTouchMove(event: TouchEvent): void {
+    if (!this.isResizing) return;
+    
+    const touch = event.touches[0];
+    const deltaX = touch.clientX - this.resizeStartPos.x;
+    const deltaY = touch.clientY - this.resizeStartPos.y;
+    
+    let newWidth = this.initialSize.width;
+    let newHeight = this.initialSize.height;
+    
+    if (this.currentPosition.includes('right')) {
+      newWidth = this.initialSize.width - deltaX;
+    } else {
+      newWidth = this.initialSize.width + deltaX;
+    }
+    
+    if (this.currentPosition.includes('bottom')) {
+      newHeight = this.initialSize.height - deltaY;
+    } else {
+      newHeight = this.initialSize.height + deltaY;
+    }
+    
+    newWidth = Math.max(this.minSize.width, Math.min(this.maxSize.width, newWidth));
+    newHeight = Math.max(this.minSize.height, Math.min(this.maxSize.height, newHeight));
+    
+    this.currentSize = { width: newWidth, height: newHeight };
+  }
+
+  onResizeEnd(event: MouseEvent): void {
+    if (!this.isResizing) return;
+    
+    this.isResizing = false;
+    
+    document.removeEventListener('mousemove', this.onResizeMove.bind(this));
+    document.removeEventListener('mouseup', this.onResizeEnd.bind(this));
+    
+    localStorage.setItem('chatbot-size', JSON.stringify(this.currentSize));
+  }
+
+  onResizeTouchEnd(event: TouchEvent): void {
+    if (!this.isResizing) return;
+    
+    this.isResizing = false;
+    
+    document.removeEventListener('touchmove', this.onResizeTouchMove.bind(this));
+    document.removeEventListener('touchend', this.onResizeTouchEnd.bind(this));
+    
+    localStorage.setItem('chatbot-size', JSON.stringify(this.currentSize));
   }
 }
 

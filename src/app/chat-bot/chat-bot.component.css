@@ -64,6 +64,9 @@
   overflow: hidden;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   transition: transform 1s ease-in-out, box-shadow 0.3s ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .chatbot-container.dragging {
@@ -73,6 +76,70 @@
 
 .chatbot-container.transitioning {
   transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.chatbot-container.resizing {
+  user-select: none;
+  transition: none !important;
+}
+
+/* Handle de redimensionamento */
+.resize-handle {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  z-index: 1001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #888;
+  opacity: 0.5;
+  transition: all 0.2s ease;
+  border-radius: 4px;
+}
+
+.resize-handle:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.resize-handle:active {
+  opacity: 1;
+  color: var(--primary-color); 
+  transform: scale(1.05);
+}
+
+.chatbot-container.resizing .resize-handle {
+  opacity: 1;
+  color: var(--primary-color); 
+}
+
+/* Posicionamento do handle baseado na posição do chatbot */
+.resize-handle.top-left {
+  bottom: 0;
+  right: 0;
+  cursor: nwse-resize;
+}
+
+.resize-handle.top-right {
+  bottom: 0;
+  left: 0;
+  cursor: nesw-resize;
+  transform: rotate(90deg);
+}
+
+.resize-handle.bottom-left {
+  top: 0;
+  right: 0;
+  cursor: nesw-resize;
+  transform: rotate(270deg);
+}
+
+.resize-handle.bottom-right {
+  top: 0;
+  left: 0;
+  cursor: nwse-resize;
+  transform: rotate(180deg);
 }
 
 .chatbot-header {
@@ -124,7 +191,8 @@
 }
 
 .chatbot-body {
-  height: 300px;
+  flex: 1;
+  min-height: 250px;
   padding: 15px;
   overflow-y: auto;
   font-family: "Roboto", sans-serif;
@@ -206,7 +274,7 @@
   display: flex;
   align-items: flex-start;
   resize: none;
-  width: 80%;
+  width: 100%;
   padding: 10px;
   padding-right: 15px;
   border: 1px solid #000;
@@ -780,8 +848,13 @@ button:disabled .chatbot-logo {
   }
 
   .chatbot-container {
-    width: calc(100vw - 40px);
-    max-width: 350px;
+    width: calc(100vw - 40px) !important;
+    max-width: 350px !important;
+    height: 470px !important;
+  }
+
+  .resize-handle {
+    display: none !important;
   }
 
   .message {

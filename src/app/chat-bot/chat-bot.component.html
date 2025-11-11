@@ -13,7 +13,24 @@
 
 <div class="chatbot-container" 
      [class.nav-active]="isNavigationBarActive"
+     [class.resizing]="isResizing"
+     [style.width.px]="currentSize.width"
+     [style.height.px]="currentSize.height"
      [@chatBotAnimation]="isOpen ? 'open' : 'closed'">
+  
+  <div class="resize-handle" 
+       [class.top-left]="currentPosition === 'top-left'"
+       [class.top-right]="currentPosition === 'top-right'"
+       [class.bottom-left]="currentPosition === 'bottom-left'"
+       [class.bottom-right]="currentPosition === 'bottom-right'"
+       (mousedown)="onResizeStart($event)"
+       (touchstart)="onResizeTouchStart($event)"
+       title="Arrastar para redimensionar">
+    <svg width="16" height="16" viewBox="0 0 16 16">
+      <path d="M14 2L2 14M14 6L6 14M14 10L10 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+  </div>
+
   <div class="chatbot-header" 
        (mousedown)="onDragStart($event)"
        (touchstart)="onTouchStart($event)"
