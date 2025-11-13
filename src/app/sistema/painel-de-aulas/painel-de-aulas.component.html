@@ -1,18 +1,14 @@
 <div class="container pt-5">
-    <div class="container mt-4">
-      <div class="header">
-        <h1 class="mt-4"><span> | </span> Aulas</h1>
-      </div>
+  <div class="container mt-4">
+    <div class="header">
+      <h1 class="mt-4"><span> | </span> Aulas</h1>
     </div>
-    <section class="containerCards">
-      <app-modulo-aulas
-        *ngFor="let aula of aulas"
-        [title]="aula.title"
-        [description]="aula.description"
-        [imageUrl]="aula.imageUrl"
-        [buttonText]="'Acessar conteúdo'"
-        [route]="aula.route"
-      ></app-modulo-aulas>
-    </section>
   </div>
-  
+  <section class="containerCards">
+    <div *ngFor="let aula of aulas" (click)="navegarParaAula(aula.slug)" style="cursor: pointer;"
+      class="card-wrapper-clicavel">
+      <app-modulo-aulas [title]="aula.title" [description]="aula.description" [imageUrl]="aula.imageUrl"
+        [buttonText]="'Acessar conteúdo'"></app-modulo-aulas>
+    </div>
+  </section>
+</div>

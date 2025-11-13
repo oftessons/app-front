@@ -34,86 +34,88 @@ import { PageMentoriaComponent } from './page-mentoria/page-mentoria.component';
 import { FlashcardsComponent } from './flashcards/flashcards.component';
 import { BolsaGuardService } from '../services/bolsa.guard';
 import { MetricasDetalhadasComponent } from './metricas-detalhadas/metricas-detalhadas.component';
-import { TemaFlashcardsComponent } from './tema-flashcards/tema-flashcards.component'; 
+import { TemaFlashcardsComponent } from './tema-flashcards/tema-flashcards.component';
 import { FlashcardsCadastroComponent } from './flashcards-cadastro/flashcards-cadastro.component';
 import { CanDeactivateSimuladoGuard } from '../services/CanDeactivateSimulado.Guard';
+import { ModuloDeAulasComponent } from './modulo-de-aulas/modulo-de-aulas.component';
 
 
 const routes: Routes = [
-  { 
-    path: 'usuario', 
-    component: LayoutComponent,  
-    canActivate: [AuthGuard, BolsaGuardService], 
+  {
+    path: 'usuario',
+    component: LayoutComponent,
+    canActivate: [AuthGuard, BolsaGuardService],
     children: [
-      { path: 'inicio', component: InicioComponent},
+      { path: 'inicio', component: InicioComponent },
       { path: 'trilha', component: PageTrilhaComponent },
       { path: 'revisao', component: PageRevisaoComponent },
       { path: 'dashboard', component: DashboardComponent },
       { path: 'questoes', component: PageQuestoesComponent },
       { path: 'flashcards', component: FlashcardsComponent },
       { path: 'filtro', component: PageFiltroComponent },
-      { path: 'painel-de-aulas', component: PainelDeAulasComponent},
-      { path: 'modulo-catarata', component:ModuloCatarataComponent},
-      { path:'modulo-cirurgia-refrativa', component: ModuloCirurgiaRefrativaComponent},
-      { path:'modulo-cornea-conjuntiva-esclera', component: ModuloCorneaConjutivaEscleraComponent},
-      { path:'modulo-estrabismo-e-oftalmoped', component:ModuloEstrabismoEOftalmopedComponent},
-      { path:'modulo-farmacologia', component:ModuloFarmacologiaComponent},
-      { path:'modulo-glaucoma', component:ModuloGlaucomaComponent},
-      { path:'modulo-lentes-de-contato', component:ModuloLentesDeContatoComponent},
-      { path:'modulo-optica-refratometria-visao-subnormal', component:ModuloOpticaRefratometriaVisaoSubnormalComponent},
-      { path:'modulo-plastica-e-orbita', component:ModuloPlasticaEOrbitaComponent},
-      { path:'modulo-retina', component:ModuloRetinaComponent},
-      { path:'modulo-uveite-oncologia-ocular', component:ModuloUveiteOncologiaOcularComponent},
+      { path: 'painel-de-aulas', component: PainelDeAulasComponent },
+      // { path: 'modulo-catarata', component:ModuloDeAulasComponent},
+      // { path:'modulo-cirurgia-refrativa', component: ModuloDeAulasComponent},
+      // { path:'modulo-cornea-conjuntiva-esclera', component: ModuloDeAulasComponent},
+      // { path:'modulo-estrabismo-e-oftalmoped', component:ModuloDeAulasComponent},
+      // { path:'modulo-farmacologia', component:ModuloDeAulasComponent},
+      // { path:'modulo-glaucoma', component:ModuloDeAulasComponent},
+      // { path:'modulo-lentes-de-contato', component:ModuloDeAulasComponent},
+      // { path:'modulo-optica-refratometria-visao-subnormal', component:ModuloDeAulasComponent},
+      // { path:'modulo-plastica-e-orbita', component:ModuloDeAulasComponent},
+      // { path:'modulo-retina', component:ModuloDeAulasComponent},
+      // { path:'modulo-uveite-oncologia-ocular', component:ModuloDeAulasComponent},
+      { path: 'painel-de-aulas/:modulo', component: ModuloDeAulasComponent },
       { path: 'desempenho', component: PageDesempenhoComponent },
       { path: 'minha-conta', component: PageMeuPerfilComponent },
       { path: 'simulados', component: PageSimuladoComponent, canDeactivate: [CanDeactivateSimuladoGuard] },
       { path: 'simulados/:id', component: PageSimuladoComponent },
       { path: 'meus-simulados', component: MeusSimuladosComponent },
       { path: 'flashcards/:temaId', component: TemaFlashcardsComponent },
-      { 
-        path: 'forbidden', 
+      {
+        path: 'forbidden',
         component: ForbiddenComponent // Certifique-se de criar este componente
       },
-      { 
-        path: 'cadastro-questao', 
-        component: CadastroQuestaoComponent, 
-        canActivate: [AuthGuard], 
-        data: { roles: ['ADMIN', 'PROFESSOR'] }
-      },
-      { 
-        path: 'cadastro-questao/:id', 
-        component: CadastroQuestaoComponent, 
-        canActivate: [AuthGuard], 
-        data: { roles: ['ADMIN', 'PROFESSOR'] }
-      },
-      { 
-        path: 'cadastro-aulas', 
-        component: CadastroDeAulasComponent, 
-        canActivate: [AuthGuard], 
-        data: { roles: ['ADMIN', 'PROFESSOR'] }
-      },
-      { 
-        path: 'cadastro-aulas/:id', 
-        component: CadastroDeAulasComponent, 
-        canActivate: [AuthGuard], 
-        data: { roles: ['ADMIN', 'PROFESSOR'] }
-      },
-      { 
-        path: 'buscar-questão', 
-        component: ListaQuestoesComponent, 
-        canActivate: [AuthGuard], 
+      {
+        path: 'cadastro-questao',
+        component: CadastroQuestaoComponent,
+        canActivate: [AuthGuard],
         data: { roles: ['ADMIN', 'PROFESSOR'] }
       },
       {
-        path: 'permissao-admin', 
-        component: PermissaoAdminComponent, 
-        canActivate: [AuthGuard], 
+        path: 'cadastro-questao/:id',
+        component: CadastroQuestaoComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['ADMIN', 'PROFESSOR'] }
+      },
+      {
+        path: 'cadastro-aulas',
+        component: CadastroDeAulasComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['ADMIN', 'PROFESSOR'] }
+      },
+      {
+        path: 'cadastro-aulas/:id',
+        component: CadastroDeAulasComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['ADMIN', 'PROFESSOR'] }
+      },
+      {
+        path: 'buscar-questão',
+        component: ListaQuestoesComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['ADMIN', 'PROFESSOR'] }
+      },
+      {
+        path: 'permissao-admin',
+        component: PermissaoAdminComponent,
+        canActivate: [AuthGuard],
         data: { role: 'ADMIN' }
       },
       {
         path: 'permissao-professor',
-        component: PermissaoProfessorComponent, 
-        canActivate: [AuthGuard], 
+        component: PermissaoProfessorComponent,
+        canActivate: [AuthGuard],
         data: { role: 'PROFESSOR' }
       },
       {
@@ -132,13 +134,13 @@ const routes: Routes = [
         path: 'cadastro-flashcard',
         component: FlashcardsCadastroComponent,
         canActivate: [AuthGuard],
-        data: { roles: ['ADMIN', 'PROFESSOR']}
+        data: { roles: ['ADMIN', 'PROFESSOR'] }
       },
-      { 
+      {
         path: 'cadastro-flashcard/:id',
-         component: FlashcardsCadastroComponent, 
-         canActivate: [AuthGuard], 
-         data: { roles: ['ADMIN', 'PROFESSOR'] }
+        component: FlashcardsCadastroComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['ADMIN', 'PROFESSOR'] }
       }
 
     ]

@@ -53,6 +53,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { TemaFlashcardsComponent } from './tema-flashcards/tema-flashcards.component';
 import { FlashcardsCadastroComponent } from './flashcards-cadastro/flashcards-cadastro.component';
 import { QuillModule } from 'ngx-quill';
+import { ModuloDeAulasComponent } from './modulo-de-aulas/modulo-de-aulas.component';
 
 // Função necessária para o ngx-lottie
 export function playerFactory() {
@@ -97,6 +98,7 @@ export function playerFactory() {
     SugestaoAlunoDialogComponent,
     TemaFlashcardsComponent,
     FlashcardsCadastroComponent,
+    ModuloDeAulasComponent,
   ],
   imports: [
     CommonModule,
