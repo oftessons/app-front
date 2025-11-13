@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-// Correção: Ajustando o caminho de importação. 
-// Assumindo que a pasta 'enums' está no mesmo nível deste componente.
 import { Categoria } from './enums/categoria';
 import { CategoriaDescricoes } from './enums/categoria-descricao';
 

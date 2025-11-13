@@ -1,4 +1,3 @@
-/* === LAYOUT GERAL E TÍTULO === */
 .mentoria-container {
   padding: 2.5rem;
 }
@@ -17,7 +16,6 @@
   margin-right: 0.75rem;
 }
 
-/* === ESTILOS PARA AS ABAS (MAT TABS) === */
 .mentoria-tabs {
   margin-top: 24px;
 }

@@ -7,8 +7,14 @@
   <section class="containerCards">
     <div *ngFor="let aula of aulas" (click)="navegarParaAula(aula.slug)" style="cursor: pointer;"
       class="card-wrapper-clicavel">
-      <app-modulo-aulas [title]="aula.title" [description]="aula.description" [imageUrl]="aula.imageUrl"
-        [buttonText]="'Acessar conteúdo'"></app-modulo-aulas>
+      <div class="card">
+        <img [src]="aula.imageUrl" [alt]="aula.title" class="card-img">
+        <div class="card-body">
+          <h3 class="card-title">{{ aula.title }}</h3>
+          <p class="card-description">{{ aula.description }}</p>
+          <button (click)="navegarParaAula(aula.slug)" class="btn btn-primary">Acessar conteúdo</button>
+        </div>
+      </div>
     </div>
   </section>
 </div>
