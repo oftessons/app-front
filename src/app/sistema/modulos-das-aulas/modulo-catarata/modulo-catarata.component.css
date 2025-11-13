@@ -199,3 +199,14 @@
     margin-bottom: 3rem;
   }
 }
+
+.video-container {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  /* o container ganha altura automaticamente */
+}
+
+.video-container .video-js {
+  width: 100%;
+  height: 100%;
+}

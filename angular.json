@@ -30,6 +30,7 @@
               "src/assets"
             ],
             "styles": [
+              "node_modules/video.js/dist/video-js.css",
               "src/styles.css",
               "src/custom-theme.scss",
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
@@ -51,7 +52,7 @@
                 {
                   "type": "any",
                   "maximumWarning": "2.5mb",
-                   "maximumError": "3mb"
+                  "maximumError": "3mb"
                 }
               ],
               "optimization": true,
@@ -111,6 +112,7 @@
               "src/assets"
             ],
             "styles": [
+              "./node_modules/video.js/dist/video-js.css",
               "./node_modules/quill/dist/quill.core.css",
               "./node_modules/quill/dist/quill.bubble.css",
               "./node_modules/quill/dist/quill.snow.css",

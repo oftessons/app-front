@@ -1,35 +1,49 @@
 <div class="container pt-5">
   <div class="container mt-4">
     <div class="header">
-      <h1 class="mt-4"><span> | </span>Modulo de {{ categoria }} </h1>
+      <h1 class="mt-4"><span> | </span>Modulo de {{ categoria }}</h1>
     </div>
 
     <div class="grid-container">
+      <!-- COLUNA ESQUERDA: vídeo + info da aula -->
       <div class="principal-info">
         <div class="video-container" *ngIf="aulas.length > 0; else noDataTemplate">
 
-          <div class="loading-overlay" *ngIf="isLoadingVideo">
+          <!-- Overlay de carregamento -->
+          <div class="loading-overlay" *ngIf="isLoadingVideo" aria-live="polite">
             <span>Carregando vídeo...</span>
           </div>
 
-          <video #videoPlayer controls controlsList="nodownload" class="video-player" [src]="safeVideoUrl"
-            preload="none" *ngIf="videoAtual" (ended)="marcarComoAssistido(videoAtualIndex)" (ended)="onVideoEnded()"
+          <!-- Player (fonte é definida via Video.js no TS) -->
+          <video #videoPlayer id="catarata-player" class="video-js vjs-default-skin vjs-big-play-centered video-player"
+            controls playsinline disablePictureInPicture controlsList="nodownload noplaybackrate"
             (contextmenu)="$event.preventDefault()">
-            Seu navegador não suporta o elemento de vídeo.
+            <p class="vjs-no-js">
+              Para ver este vídeo, por favor ative o JavaScript e considere
+              atualizar para um navegador que
+              <a href="https://videojs.com/html5-video-support/" target="_blank" rel="noopener noreferrer">
+                suporta vídeo HTML5
+              </a>.
+            </p>
           </video>
         </div>
 
+        <!-- Template quando não há aulas -->
         <ng-template #noDataTemplate>
           <div class="no-data">
-            <img src="assets/imagens/not-data-aulas.png" alt="No Data">
+            <img src="assets/imagens/not-data-aulas.png" alt="Sem aulas cadastradas">
             <p>Não há nenhuma aula cadastrada</p>
           </div>
         </ng-template>
+
+        <!-- Informações da aula atual -->
         <div class="info-aula">
           <div *ngIf="aulas.length > 0">
             <h3>{{ videoAtual?.titulo }}</h3>
             <p>{{ videoAtual?.descricao }}</p>
           </div>
+
+          <!-- Materiais / documentos da aula -->
           <div class="arquivos-aula">
             <h4>Material da Aula</h4>
             <hr>
@@ -39,8 +53,10 @@
                 <div class="list-group-item" *ngFor="let documento of videoAtual?.documentos">
                   <span>{{ formatFileName(documento.key) }}</span>
                   <div>
-                    <button class="btn-vizualizar" (click)="viewPdf(documento.url)"><i
-                        class="fas fa-eye"></i>Visualizar</button>
+                    <button class="btn-vizualizar" (click)="viewPdf(documento.url)">
+                      <i class="fas fa-eye" aria-hidden="true"></i>
+                      Visualizar
+                    </button>
                   </div>
                 </div>
               </div>
@@ -51,6 +67,8 @@
           </div>
         </div>
       </div>
+
+      <!-- COLUNA DIREITA: playlist -->
       <div class="playlist-container">
         <app-playlist-mode [aulas]="aulas" [titulo]="categoria" [categoria]="categoria"
           [videoAtualIndex]="videoAtualIndex" [videosAssistidos]="videosAssistidos"
