@@ -5,6 +5,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
 import { Aula } from '../sistema/painel-de-aulas/aula';
 import { CadastroAulaResponse } from '../sistema/cadastro-de-aulas/cadastro-aulas-response';
+import { VideoUrlResponse } from '../sistema/modulo-de-aulas/video-url-response';
 
 @Injectable({
 
@@ -79,15 +80,13 @@ export class AulasService {
   }
 
 
-
-  obterUrlDeVideo(aulaId: number): Observable<{ presignedGetUrl: string }> {
+  obterUrlDeVideo(aulaId: number): Observable<VideoUrlResponse> {
     const url = `${this.apiURL}/${aulaId}/play`;
-
-    return this.http.get<{ presignedGetUrl: string }>(url);
-
+    
+    return this.http.get<VideoUrlResponse>(url, {
+      withCredentials: true
+    });
   }
-
-
 
   listarAulasPorCategoria(categoria: string): Observable<Aula[]> {
     const url = `${this.apiURL}/${categoria}`;
