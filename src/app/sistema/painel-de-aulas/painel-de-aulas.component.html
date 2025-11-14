@@ -12,6 +12,18 @@
         <div class="card-body">
           <h3 class="card-title">{{ aula.title }}</h3>
           <p class="card-description">{{ aula.description }}</p>
+
+          <div class="progress-section">
+            <div class="progress-info" *ngIf="aula.progresso > 0">
+              <span>{{ aula.progresso | number:'1.0-0' }}% Concluído</span>
+            </div>
+            <div class="progress-info" *ngIf="!aula.progresso || aula.progresso === 0">
+              <span>Não iniciado</span>
+            </div>
+            <div class="progress-bar-container">
+              <div class="progress-bar-fill" [style.width]="aula.progresso + '%'"></div>
+            </div>
+          </div>
           <button (click)="navegarParaAula(aula.slug)" class="btn btn-primary">Acessar conteúdo</button>
         </div>
       </div>

@@ -33,17 +33,39 @@ export class PainelDeAulasComponent implements OnInit {
       title: descricao,
       description: this.getDescriptionText(categoria),
       imageUrl: this.categoriaImagens[categoria],
-      slug: this.generateSlug(descricao)
+      slug: this.generateSlug(descricao),
+      progresso: 0 // <-- ADICIONADO: Inicializa o progresso como 0
     };
   });
 
-  constructor(private router: Router) { }
+  constructor(
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     console.log('PainelDeAulasComponent carregado.');
-    console.log(this.aulas);
-
+    // 4. Chame a função para carregar o progresso
+    // this.carregarProgressoModulos();
   }
+
+  // private carregarProgressoModulos(): void {
+  //   this.progressoService.obterProgressoModulos().subscribe({
+  //     next: (progressoMap) => {
+  //       // 'progressoMap' vem do serviço (ex: Map<Categoria, number>)
+  //       this.aulas.forEach(aula => {
+  //         const progresso = progressoMap.get(aula.categoria);
+  //         if (progresso) {
+  //           aula.progresso = progresso;
+  //         }
+  //       });
+  //       console.log('Progresso do usuário carregado e mesclado:', this.aulas);
+  //     },
+  //     error: (err) => {
+  //       console.error('Erro ao carregar progresso do usuário:', err);
+  //       // O painel ainda funciona, mas mostrará 0% para tudo
+  //     }
+  //   });
+  // }
 
   generateSlug(text: string): string {
     return text
