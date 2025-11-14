@@ -100,9 +100,9 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
       this.perguntaHtml = card.pergunta;
       this.respostaHtml = card.resposta;
       setTimeout(() => {
-        this.relevanciaSelecionada = card.relevancia;
+        this.relevanciaSelecionada = card.relevancia ?? null;
         this.dificuldadeSelecionada = this.normalizarDificuldade(
-          card.dificuldade
+          card.dificuldade ?? null
         );
         this.assuntoSelecionado = this.findMatchingSubtema(card.subtema);
         this.cdRef.detectChanges();
@@ -115,14 +115,8 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
   }
 
   salvar(): void {
-    if (
-      !this.assuntoSelecionado ||
-      !this.dificuldadeSelecionada ||
-      !this.relevanciaSelecionada ||
-      !this.perguntaHtml ||
-      !this.respostaHtml
-    ) {
-      alert('Por favor, preencha todos os campos.');
+    if (!this.assuntoSelecionado || !this.perguntaHtml || !this.respostaHtml) {
+      alert('Por favor, preencha todos os campos obrigatórios.');
       return;
     }
 
@@ -150,15 +144,24 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
           return;
         }
 
+        let dificuldadeFinal: string = this.dificuldadeSelecionada || 'MEDIO';
+
+        let relevanciaFinal: number | null = this.relevanciaSelecionada ?? null;
+
         if (this.modoEdicao && this.flashcardParaEditar) {
+          if (relevanciaFinal == null) {
+            relevanciaFinal = this.flashcardParaEditar.relevancia ?? 5;
+          }
+
           const dto: ReqAtualizarFlashcardDTO = {
             pergunta: this.perguntaHtml,
             resposta: this.respostaHtml,
             tema: temaSelecionado,
             subtema: this.assuntoSelecionado!,
-            dificuldade: this.dificuldadeSelecionada!,
-            relevancia: this.relevanciaSelecionada!,
+            dificuldade: dificuldadeFinal,
+            relevancia: relevanciaFinal!,
           };
+
           this.flashcardService
             .atualizarFlashcard(this.flashcardParaEditar.id, dto)
             .subscribe({
@@ -167,8 +170,13 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
                 this.voltar();
               },
               error: (erro) => {
+                console.error('Erro ao atualizar flashcard:', erro);
                 alert(
-                  `Erro ao atualizar: ${erro.error || 'Erro desconhecido'}`
+                  `Erro ao atualizar: ${
+                    (erro as any)?.error ||
+                    (erro as any)?.message ||
+                    'Erro desconhecido'
+                  }`
                 );
               },
             });
@@ -178,17 +186,29 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
             resposta: this.respostaHtml,
             tema: temaSelecionado,
             subtema: this.assuntoSelecionado!,
-            dificuldade: this.dificuldadeSelecionada!,
-            relevancia: this.relevanciaSelecionada!,
+            dificuldade: dificuldadeFinal,
+            relevancia: relevanciaFinal,
             createdBy: userIdNumerico,
           };
+
           this.flashcardService.salvarFlashcard(dto).subscribe({
             next: () => {
               alert('Flashcard salvo com sucesso!');
               this.voltar();
             },
             error: (erro) => {
-              alert(`Erro ao salvar: ${erro.error}`);
+              console.error('Erro ao salvar flashcard:', erro);
+
+              const mensagem =
+                typeof erro === 'string'
+                  ? erro
+                  : (erro as any)?.error
+                  ? (erro as any).error
+                  : (erro as any)?.message
+                  ? (erro as any).message
+                  : 'Erro desconhecido ao salvar o flashcard.';
+
+              alert(`Erro ao salvar: ${mensagem}`);
             },
           });
         }

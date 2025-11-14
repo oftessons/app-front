@@ -6499,6 +6499,29 @@ a.close.disabled {
   color: #fff !important;
 }
 
+.mat-select-panel.custom-dropdown {
+  background-color: #24344f;
+  width: auto !important;
+  margin-top: 24px;
+}
+
+.custom-dropdown .mat-option .mat-option-text {
+  color: #ffffff;
+}
+
+.custom-dropdown .mat-option.mat-selected:not(.mat-option-disabled) .mat-option-text {
+  color: #ffffff !important;
+}
+
+.custom-dropdown .mat-option:hover,
+.custom-dropdown .mat-option.mat-active {
+  background-color: #234178;
+}
+
+.custom-dropdown .mat-option.mat-selected {
+  background-color: #3b5fa0 !important;
+}
+
 .modal-title {
   margin-bottom: 0;
   line-height: 1.5;

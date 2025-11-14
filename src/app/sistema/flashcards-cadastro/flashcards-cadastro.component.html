@@ -16,7 +16,7 @@
       <div class="cadastro">
         <div class="espaco-select">
           <app-multiplo-select
-            label="Assunto"
+            label="Assunto *"
             [options]="subtemasAgrupadosPorTema"
             [(selectedValue)]="assuntoSelecionado"
             [multiple]="false"
@@ -52,14 +52,14 @@
 
         <div class="texto-container">
           <div class="espaço-texto">
-            <label class="label">Pergunta</label>
+            <label class="label">Pergunta *</label>
             <quill-editor
               [(ngModel)]="perguntaHtml"
               [placeholder]="'Digite a pergunta aqui'"
             ></quill-editor>
           </div>
           <div class="espaço-texto">
-            <label class="label">Resposta</label>
+            <label class="label">Resposta *</label>
             <quill-editor
               [(ngModel)]="respostaHtml"
               [placeholder]="'Digite a resposta aqui'"

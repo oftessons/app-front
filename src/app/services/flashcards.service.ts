@@ -21,8 +21,8 @@ export interface Flashcard {
   subtema: string;
   pergunta: string;
   resposta: string;
-  dificuldade: string;
-  relevancia: number;
+  dificuldade: string | null;
+  relevancia: number | null;
 }
 
 export interface ReqSalvarFlashcardDTO {
@@ -31,8 +31,8 @@ export interface ReqSalvarFlashcardDTO {
   tema: string;
   subtema: string;
   dificuldade: string;
-  relevancia: number;
-  createdBy: number;
+  relevancia?: number | null;
+  createdBy?: number;
 }
 
 export interface ReqAtualizarFlashcardDTO {
@@ -49,22 +49,19 @@ export interface TotalEstudadosDTO {
 }
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class FlashcardService {
   private apiUrl = `${environment.apiURLBase}/api/flashcard`;
+
   constructor(private http: HttpClient) {}
 
   getFlashcardsContador(): Observable<ContadorFlashcardsTemaDTO[]> {
-    return this.http.get<ContadorFlashcardsTemaDTO[]>(
-      `${this.apiUrl}/contar-por-tema-e-geral`
-    );
+    return this.http.get<ContadorFlashcardsTemaDTO[]>(`${this.apiUrl}/contar-por-tema-e-geral`);
   }
 
   getStatsPorTema(tema: string): Observable<SubtemaStatsDTO[]> {
-    return this.http.get<SubtemaStatsDTO[]>(
-      `${this.apiUrl}/${tema.toUpperCase()}/subtemas-e-estudados`
-    );
+    return this.http.get<SubtemaStatsDTO[]>(`${this.apiUrl}/${tema.toUpperCase()}/subtemas-e-estudados`);
   }
 
   getFlashcardsParaEstudar(
@@ -84,10 +81,7 @@ export class FlashcardService {
       params = params.set('dificuldade', dificuldade);
     }
 
-    return this.http.get<Flashcard[]>(
-      `${this.apiUrl}/buscar-flashcards-filtro`,
-      { params }
-    );
+    return this.http.get<Flashcard[]>(`${this.apiUrl}/buscar-flashcards-filtro`, { params });
   }
 
   deleteFlashcard(id: number): Observable<string> {
@@ -96,16 +90,13 @@ export class FlashcardService {
 
   salvarFlashcard(dto: ReqSalvarFlashcardDTO): Observable<string> {
     return this.http.post(`${this.apiUrl}/cadastrar`, dto, {
-      responseType: 'text',
+      responseType: 'text'
     });
   }
 
-  atualizarFlashcard(
-    id: number,
-    dto: ReqAtualizarFlashcardDTO
-  ): Observable<string> {
+  atualizarFlashcard(id: number, dto: ReqAtualizarFlashcardDTO): Observable<string> {
     return this.http.put(`${this.apiUrl}/atualizarFlashcard/${id}`, dto, {
-      responseType: 'text',
+      responseType: 'text'
     });
   }
 
@@ -121,11 +112,28 @@ export class FlashcardService {
     pergunta?: string
   ): Observable<Flashcard[]> {
     let params = new HttpParams();
-    if (tema) params = params.set('tema', tema.toUpperCase());
-    if (subtema) params = params.set('subtema', subtema.toUpperCase());
-    if (dificuldade) params = params.set('dificuldade', dificuldade);
-    if (relevancia !== undefined && relevancia !== null) params = params.set('relevancia', String(relevancia));
-    if (pergunta) params = params.set('pergunta', pergunta);
+    if (tema) {
+      params = params.set('tema', tema.toUpperCase());
+    }
+    if (subtema) {
+      params = params.set('subtema', subtema.toUpperCase());
+    }
+    if (dificuldade) {
+      params = params.set('dificuldade', dificuldade);
+    }
+    if (relevancia !== undefined && relevancia !== null) {
+      params = params.set('relevancia', String(relevancia));
+    }
+    if (pergunta) {
+      params = params.set('pergunta', pergunta);
+    }
     return this.http.get<Flashcard[]>(`${this.apiUrl}/buscar-flashcards-filtro`, { params });
+  }
+
+  importarFlashcardsCsv(tema: string, csv: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('tema', tema.toUpperCase());
+    formData.append('csv', csv, csv.name);
+    return this.http.post(`${this.apiUrl}/cadastrar-csv`, formData);
   }
 }
