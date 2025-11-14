@@ -55,6 +55,7 @@ const routes: Routes = [
       // { path:'modulo-retina', component:ModuloDeAulasComponent},
       // { path:'modulo-uveite-oncologia-ocular', component:ModuloDeAulasComponent},
       { path: 'painel-de-aulas/:modulo', component: ModuloDeAulasComponent },
+      { path: 'painel-de-aulas/:modulo/:aulaSlug', component: ModuloDeAulasComponent },
       { path: 'desempenho', component: PageDesempenhoComponent },
       { path: 'minha-conta', component: PageMeuPerfilComponent },
       { path: 'simulados', component: PageSimuladoComponent, canDeactivate: [CanDeactivateSimuladoGuard] },

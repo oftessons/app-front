@@ -2,7 +2,7 @@
 
     <div class="container mt-4" *ngIf="!erro; else errorTemplate">
         <div class="header">
-            <h1 class="mt-4"><span> | </span>Modulo de {{ descricao }} </h1>
+            <h1 class="mt-4"><span> | </span>Módulo de {{ descricao }} </h1>
         </div>
 
         <div class="grid-container">
@@ -17,8 +17,8 @@
 
                         <video #videoPlayer id="catarata-player"
                             class="video-js vjs-default-skin vjs-big-play-centered video-player" controls playsinline
-                            disablePictureInPicture controlsList="nodownload"
-                            (contextmenu)="$event.preventDefault()" (ended)="onVideoEnded()">
+                            disablePictureInPicture controlsList="nodownload" (contextmenu)="$event.preventDefault()"
+                            (ended)="onVideoEnded()">
 
                             <p class="vjs-no-js">
                                 Para ver este vídeo, por favor ative o JavaScript e considere
@@ -66,7 +66,7 @@
             <div class="playlist-container">
                 <app-playlist-mode *ngIf="categoria" [aulas]="aulas" [titulo]="descricao" [categoria]="categoria"
                     [videoAtualIndex]="videoAtualIndex" [videosAssistidos]="videosAssistidos"
-                    (aulaSelecionada)="reproduzirVideo($event.aula, $event.index)">
+                    (aulaSelecionada)="selecionarVideo($event.aula)">
                 </app-playlist-mode>
             </div>
         </div>
