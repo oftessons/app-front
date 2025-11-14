@@ -284,7 +284,6 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
   }
 
   selectPrompt(prompt: string): void {
-    this.userMessage = prompt;
     this.showPromptSuggestions = false;
     
     const questaoAtual = this.questoesStateService.getQuestaoAtual();
@@ -293,12 +292,8 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
       this.citarQuestao = questaoAtual;
     }
     
-    setTimeout(() => {
-      const textInput = document.querySelector('.user-text-input') as HTMLTextAreaElement;
-      if (textInput) {
-        textInput.focus();
-      }
-    }, 100);
+    this.userMessage = `<prompt>${prompt}</prompt>`;
+    this.sendMessage();
   }
 
   hasUserMessages(): boolean {
