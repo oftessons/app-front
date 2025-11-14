@@ -37,6 +37,7 @@ export class CadastroDeAulasComponent implements OnInit {
 
   aula: Aula = new Aula();
   idAula: number | null = null;
+  idAulaCadastrando: number | null = null;
 
   video: File | null = null;
   selectedImage: string = '';
@@ -92,6 +93,18 @@ export class CadastroDeAulasComponent implements OnInit {
     if (this.uploadSubscription) {
       this.uploadSubscription.unsubscribe();
       this.uploadSubscription = null;
+
+      if (this.idAulaCadastrando) {
+        this.aulasService.deletar(this.idAulaCadastrando).subscribe({
+          next: () => {
+            console.log('Aula deletada com sucesso após cancelamento do upload.');
+          },
+          error: (error) => {
+            console.error('Erro ao deletar a aula após cancelamento do upload:', error);
+          }
+
+        });
+      }
     }
     this.isLoading = false;
     this.uploadProgress = 0;
@@ -120,7 +133,7 @@ export class CadastroDeAulasComponent implements OnInit {
       return;
     }
 
-    console.log('Formulário enviado');
+
     this.isLoading = true;
     this.uploadProgress = 0;
 
@@ -152,7 +165,7 @@ export class CadastroDeAulasComponent implements OnInit {
 
       this.currentUploadState = 'Cadastrando metadados da aula...';
 
-      this.uploadSubscription = this.aulasService.cadastrarAula(formData).pipe(
+      this.aulasService.cadastrarAula(formData).pipe(
 
         switchMap((event: HttpEvent<any>) => {
           if (event.type === HttpEventType.Response) {
@@ -160,13 +173,19 @@ export class CadastroDeAulasComponent implements OnInit {
             this.currentUploadState = 'Enviando vídeo para o S3...';
             const response = event.body as CadastroAulaResponse;
 
+            this.idAulaCadastrando = response.aulaId;
+
             console.log('URL pré-assinada recebida:', response.presignedUrl);
 
-            return this.aulasService.uploadVideoS3(
+            const uploadObservable = this.aulasService.uploadVideoS3(
               response.presignedUrl,
               this.video!,
               this.aulaDTO.contentTypeVideo!,
             );
+
+            this.uploadSubscription = uploadObservable.subscribe();
+
+            return uploadObservable;
           }
           return of(null);
         })
@@ -178,12 +197,10 @@ export class CadastroDeAulasComponent implements OnInit {
             return;
           }
 
-          // Aqui estamos ouvindo os eventos da ETAPA 2 (Upload para o S3)
           if (event.type === HttpEventType.UploadProgress && event.total) {
             this.uploadProgress = Math.round(100 * (event.loaded / event.total));
           } else if (event instanceof HttpResponse) {
 
-            // SUCESSO TOTAL!
             this.uploadProgress = 100;
             this.currentUploadState = 'Concluído!';
             this.successMessage = 'Aula salva e vídeo enviado com sucesso!';

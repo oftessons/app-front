@@ -1,6 +1,6 @@
 export interface CadastroAulaResponse {
 
-    id: number;
+    aulaId: number;
     presignedUrl: string;
 
 }
