@@ -83,10 +83,12 @@
 }
 
 ::ng-deep .group-label {
-  opacity: 0.6;
+  opacity: 0.8;
   font-weight: bold;
-  pointer-events: none;
+  cursor: pointer;
+  pointer-events: auto;
 }
+
 
 ::ng-deep .espaco-select-simple .selected-list {
   color: #ffffff !important;

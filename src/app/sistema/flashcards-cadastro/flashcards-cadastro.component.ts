@@ -29,6 +29,7 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
     label: string;
     temaKey: string;
     disabled?: boolean;
+    selectable?: boolean;
     options: { label: string; value: string }[];
   }[] = [];
 
@@ -71,27 +72,31 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
     }
   }
 
-  ngOnInit(): void {
-    this.subtemasAgrupadosPorTema = Object.entries(temasESubtemas).map(
-      ([temaKey, subtemas]) => {
-        const temaEnum = temaKey as Tema;
-        const temaLabel = TemaDescricoes[temaEnum] || temaKey;
-        return {
-          label: temaLabel,
-          temaKey: temaKey,
-          disabled: true,
-          options: subtemas.map((subtema) => {
-            const subtemaKey =
-              typeof subtema === 'number'
-                ? (Subtema as any)[subtema]
-                : (subtema as any);
-            const subtemaLabel = SubtemaDescricoes[subtema] || subtemaKey;
-            return { label: subtemaLabel, value: subtemaKey };
-          }),
-        };
-      }
-    );
-  }
+ngOnInit(): void {
+  this.subtemasAgrupadosPorTema = Object.entries(temasESubtemas).map(
+    ([temaKey, subtemas]) => {
+      const temaEnum = temaKey as Tema;
+      const temaLabel = TemaDescricoes[temaEnum] || temaKey;
+
+      const subtemaOptions = subtemas.map((subtema) => {
+        const subtemaKey =
+          typeof subtema === 'number'
+            ? (Subtema as any)[subtema]
+            : (subtema as any);
+        const subtemaLabel = SubtemaDescricoes[subtema] || subtemaKey;
+        return { label: subtemaLabel, value: subtemaKey };
+      });
+
+      return {
+        label: temaLabel,
+        temaKey: temaKey,
+        value: temaKey,
+        options: subtemaOptions,
+      };
+    }
+  );
+}
+
 
   ngAfterViewInit(): void {
     if (this.flashcardParaEditar) {
@@ -99,12 +104,21 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
       const card = this.flashcardParaEditar;
       this.perguntaHtml = card.pergunta;
       this.respostaHtml = card.resposta;
+
       setTimeout(() => {
         this.relevanciaSelecionada = card.relevancia ?? null;
         this.dificuldadeSelecionada = this.normalizarDificuldade(
           card.dificuldade ?? null
         );
-        this.assuntoSelecionado = this.findMatchingSubtema(card.subtema);
+
+        if (card.subtema && !this.isSubtemaFallbackDoTema(card)) {
+          this.assuntoSelecionado = this.findMatchingSubtema(card.subtema);
+        } else if (card.tema) {
+          this.assuntoSelecionado = this.findMatchingTema(card.tema);
+        } else {
+          this.assuntoSelecionado = null;
+        }
+
         this.cdRef.detectChanges();
       }, 0);
     }
@@ -136,16 +150,22 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
           return;
         }
 
-        const temaSelecionado = this.encontrarTemaDoSubtema(
+        const temaSelecionado = this.encontrarTemaAPartirDoAssunto(
           this.assuntoSelecionado!
         );
         if (!temaSelecionado) {
-          alert('Erro: Tema não encontrado para o subtema selecionado.');
+          alert(
+            'Erro: não foi possível determinar o tema a partir do assunto selecionado.'
+          );
           return;
         }
 
-        let dificuldadeFinal: string = this.dificuldadeSelecionada || 'MEDIO';
+        const subtemaParaEnvio = this.resolveSubtemaParaEnvio(
+          this.assuntoSelecionado!,
+          temaSelecionado
+        );
 
+        let dificuldadeFinal: string = this.dificuldadeSelecionada || 'MEDIO';
         let relevanciaFinal: number | null = this.relevanciaSelecionada ?? null;
 
         if (this.modoEdicao && this.flashcardParaEditar) {
@@ -157,7 +177,7 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
             pergunta: this.perguntaHtml,
             resposta: this.respostaHtml,
             tema: temaSelecionado,
-            subtema: this.assuntoSelecionado!,
+            subtema: subtemaParaEnvio,
             dificuldade: dificuldadeFinal,
             relevancia: relevanciaFinal!,
           };
@@ -185,7 +205,7 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
             pergunta: this.perguntaHtml,
             resposta: this.respostaHtml,
             tema: temaSelecionado,
-            subtema: this.assuntoSelecionado!,
+            subtema: subtemaParaEnvio,
             dificuldade: dificuldadeFinal,
             relevancia: relevanciaFinal,
             createdBy: userIdNumerico,
@@ -221,12 +241,42 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
     });
   }
 
-  private encontrarTemaDoSubtema(subtemaKey: string): string | null {
+  private encontrarTemaAPartirDoAssunto(chaveAssunto: string): string | null {
+    if (!chaveAssunto) return null;
+
+    const grupoTemaDireto = this.subtemasAgrupadosPorTema.find(
+      (g) => g.temaKey === chaveAssunto
+    );
+    if (grupoTemaDireto) {
+      return grupoTemaDireto.temaKey;
+    }
+
     for (const grupo of this.subtemasAgrupadosPorTema) {
-      const found = grupo.options.find((opt) => opt.value === subtemaKey);
+      const found = grupo.options.find((opt) => opt.value === chaveAssunto);
       if (found) return grupo.temaKey;
     }
+
     return null;
+  }
+
+  private resolveSubtemaParaEnvio(
+    assunto: string,
+    temaSelecionado: string
+  ): string {
+    const ehTema = this.subtemasAgrupadosPorTema.some(
+      (g) => g.temaKey === assunto
+    );
+
+    if (ehTema) {
+      return this.canon(temaSelecionado);
+    }
+
+    return assunto;
+  }
+
+  private isSubtemaFallbackDoTema(card: Flashcard): boolean {
+    if (!card.tema || !card.subtema) return false;
+    return this.canon(card.subtema) === this.canon(card.tema);
   }
 
   private canon(s: string): string {
@@ -255,6 +305,16 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
         const key = this.canon(String(opt.value));
         if (key === wanted) return opt.value;
       }
+    }
+    return null;
+  }
+
+  private findMatchingTema(v?: string | null): string | null {
+    if (!v) return null;
+    const wanted = this.canon(v);
+    for (const g of this.subtemasAgrupadosPorTema) {
+      const key = this.canon(g.temaKey);
+      if (key === wanted) return g.temaKey;
     }
     return null;
   }
