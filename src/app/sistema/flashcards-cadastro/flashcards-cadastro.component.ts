@@ -29,6 +29,7 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
     label: string;
     temaKey: string;
     disabled?: boolean;
+    selectable?: boolean;
     options: { label: string; value: string }[];
   }[] = [];
 
@@ -53,6 +54,9 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
   perguntaHtml = '';
   respostaHtml = '';
 
+  fotoSelecionada: File | null = null;
+  fotoPreview: string | ArrayBuffer | null = null;
+
   flashcardParaEditar: Flashcard | null = null;
   modoEdicao = false;
 
@@ -76,18 +80,21 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
       ([temaKey, subtemas]) => {
         const temaEnum = temaKey as Tema;
         const temaLabel = TemaDescricoes[temaEnum] || temaKey;
+
+        const subtemaOptions = subtemas.map((subtema) => {
+          const subtemaKey =
+            typeof subtema === 'number'
+              ? (Subtema as any)[subtema]
+              : (subtema as any);
+          const subtemaLabel = SubtemaDescricoes[subtema] || subtemaKey;
+          return { label: subtemaLabel, value: subtemaKey };
+        });
+
         return {
           label: temaLabel,
           temaKey: temaKey,
-          disabled: true,
-          options: subtemas.map((subtema) => {
-            const subtemaKey =
-              typeof subtema === 'number'
-                ? (Subtema as any)[subtema]
-                : (subtema as any);
-            const subtemaLabel = SubtemaDescricoes[subtema] || subtemaKey;
-            return { label: subtemaLabel, value: subtemaKey };
-          }),
+          value: temaKey,
+          options: subtemaOptions,
         };
       }
     );
@@ -99,14 +106,48 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
       const card = this.flashcardParaEditar;
       this.perguntaHtml = card.pergunta;
       this.respostaHtml = card.resposta;
+
+      if (card.fotoUrl) {
+        this.fotoPreview = card.fotoUrl;
+      }
+
       setTimeout(() => {
-        this.relevanciaSelecionada = card.relevancia;
+        this.relevanciaSelecionada = card.relevancia ?? null;
         this.dificuldadeSelecionada = this.normalizarDificuldade(
-          card.dificuldade
+          card.dificuldade ?? null
         );
-        this.assuntoSelecionado = this.findMatchingSubtema(card.subtema);
+
+        if (card.subtema && !this.isSubtemaFallbackDoTema(card)) {
+          this.assuntoSelecionado = this.findMatchingSubtema(card.subtema);
+        } else if (card.tema) {
+          this.assuntoSelecionado = this.findMatchingTema(card.tema);
+        } else {
+          this.assuntoSelecionado = null;
+        }
+
         this.cdRef.detectChanges();
       }, 0);
+    }
+  }
+
+  onFileSelected(event: any): void {
+    const file: File = event.target.files[0];
+    if (file) {
+      this.fotoSelecionada = file;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.fotoPreview = e.target?.result ?? null;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  removerImagem(): void {
+    this.fotoSelecionada = null;
+    this.fotoPreview = null;
+    const fileInput = document.getElementById('fileInput') as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = '';
     }
   }
 
@@ -115,14 +156,8 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
   }
 
   salvar(): void {
-    if (
-      !this.assuntoSelecionado ||
-      !this.dificuldadeSelecionada ||
-      !this.relevanciaSelecionada ||
-      !this.perguntaHtml ||
-      !this.respostaHtml
-    ) {
-      alert('Por favor, preencha todos os campos.');
+    if (!this.assuntoSelecionado || !this.perguntaHtml || !this.respostaHtml) {
+      alert('Por favor, preencha todos os campos obrigatórios.');
       return;
     }
 
@@ -142,33 +177,54 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
           return;
         }
 
-        const temaSelecionado = this.encontrarTemaDoSubtema(
+        const temaSelecionado = this.encontrarTemaAPartirDoAssunto(
           this.assuntoSelecionado!
         );
         if (!temaSelecionado) {
-          alert('Erro: Tema não encontrado para o subtema selecionado.');
+          alert(
+            'Erro: não foi possível determinar o tema a partir do assunto selecionado.'
+          );
           return;
         }
+
+        const subtemaParaEnvio = this.resolveSubtemaParaEnvio(
+          this.assuntoSelecionado!,
+          temaSelecionado
+        );
+
+        const dificuldadeFinal = this.dificuldadeSelecionada
+          ? this.dificuldadeSelecionada
+          : (null as any);
+
+        const relevanciaFinal = this.relevanciaSelecionada
+          ? this.relevanciaSelecionada
+          : (null as any);
 
         if (this.modoEdicao && this.flashcardParaEditar) {
           const dto: ReqAtualizarFlashcardDTO = {
             pergunta: this.perguntaHtml,
             resposta: this.respostaHtml,
             tema: temaSelecionado,
-            subtema: this.assuntoSelecionado!,
-            dificuldade: this.dificuldadeSelecionada!,
-            relevancia: this.relevanciaSelecionada!,
+            subtema: subtemaParaEnvio,
+            dificuldade: dificuldadeFinal,
+            relevancia: relevanciaFinal,
           };
+
           this.flashcardService
-            .atualizarFlashcard(this.flashcardParaEditar.id, dto)
+            .atualizarFlashcard(this.flashcardParaEditar.id, dto, this.fotoSelecionada || undefined)
             .subscribe({
               next: () => {
                 alert('Flashcard atualizado com sucesso!');
                 this.voltar();
               },
               error: (erro) => {
+                console.error('Erro ao atualizar flashcard:', erro);
                 alert(
-                  `Erro ao atualizar: ${erro.error || 'Erro desconhecido'}`
+                  `Erro ao atualizar: ${
+                    (erro as any)?.error ||
+                    (erro as any)?.message ||
+                    'Erro desconhecido'
+                  }`
                 );
               },
             });
@@ -177,18 +233,30 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
             pergunta: this.perguntaHtml,
             resposta: this.respostaHtml,
             tema: temaSelecionado,
-            subtema: this.assuntoSelecionado!,
-            dificuldade: this.dificuldadeSelecionada!,
-            relevancia: this.relevanciaSelecionada!,
+            subtema: subtemaParaEnvio,
+            dificuldade: dificuldadeFinal,
+            relevancia: relevanciaFinal,
             createdBy: userIdNumerico,
           };
-          this.flashcardService.salvarFlashcard(dto).subscribe({
+
+          this.flashcardService.salvarFlashcard(dto, this.fotoSelecionada || undefined).subscribe({
             next: () => {
               alert('Flashcard salvo com sucesso!');
               this.voltar();
             },
             error: (erro) => {
-              alert(`Erro ao salvar: ${erro.error}`);
+              console.error('Erro ao salvar flashcard:', erro);
+
+              const mensagem =
+                typeof erro === 'string'
+                  ? erro
+                  : (erro as any)?.error
+                  ? (erro as any).error
+                  : (erro as any)?.message
+                  ? (erro as any).message
+                  : 'Erro desconhecido ao salvar o flashcard.';
+
+              alert(`Erro ao salvar: ${mensagem}`);
             },
           });
         }
@@ -201,12 +269,42 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
     });
   }
 
-  private encontrarTemaDoSubtema(subtemaKey: string): string | null {
+  private encontrarTemaAPartirDoAssunto(chaveAssunto: string): string | null {
+    if (!chaveAssunto) return null;
+
+    const grupoTemaDireto = this.subtemasAgrupadosPorTema.find(
+      (g) => g.temaKey === chaveAssunto
+    );
+    if (grupoTemaDireto) {
+      return grupoTemaDireto.temaKey;
+    }
+
     for (const grupo of this.subtemasAgrupadosPorTema) {
-      const found = grupo.options.find((opt) => opt.value === subtemaKey);
+      const found = grupo.options.find((opt) => opt.value === chaveAssunto);
       if (found) return grupo.temaKey;
     }
+
     return null;
+  }
+
+  private resolveSubtemaParaEnvio(
+    assunto: string,
+    temaSelecionado: string
+  ): string {
+    const ehTema = this.subtemasAgrupadosPorTema.some(
+      (g) => g.temaKey === assunto
+    );
+
+    if (ehTema) {
+      return this.canon(temaSelecionado);
+    }
+
+    return assunto;
+  }
+
+  private isSubtemaFallbackDoTema(card: Flashcard): boolean {
+    if (!card.tema || !card.subtema) return false;
+    return this.canon(card.subtema) === this.canon(card.tema);
   }
 
   private canon(s: string): string {
@@ -235,6 +333,16 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
         const key = this.canon(String(opt.value));
         if (key === wanted) return opt.value;
       }
+    }
+    return null;
+  }
+
+  private findMatchingTema(v?: string | null): string | null {
+    if (!v) return null;
+    const wanted = this.canon(v);
+    for (const g of this.subtemasAgrupadosPorTema) {
+      const key = this.canon(g.temaKey);
+      if (key === wanted) return g.temaKey;
     }
     return null;
   }

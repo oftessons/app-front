@@ -7,13 +7,16 @@
 
     <div class="container-cadastro">
       <div class="header">
-        <h1>{{ modoEdicao ? 'Editar Flashcard' : 'Cadastrar Flashcard' }}</h1>
+        <h1>{{ modoEdicao ? "Editar Flashcard" : "Cadastrar Flashcard" }}</h1>
+        <button class="button" (click)="salvar()">
+          {{ modoEdicao ? "Atualizar Flashcard" : "Salvar Flashcard" }}
+        </button>
       </div>
 
       <div class="cadastro">
         <div class="espaco-select">
           <app-multiplo-select
-            label="Assunto"
+            label="Assunto *"
             [options]="subtemasAgrupadosPorTema"
             [(selectedValue)]="assuntoSelecionado"
             [multiple]="false"
@@ -47,19 +50,47 @@
           </div>
         </div>
 
+        <div class="imagem-container">
+          <label class="label">Imagem do Flashcard (Opcional)</label>
+          <div class="input-file-wrapper">
+            <input 
+              type="file" 
+              id="fileInput" 
+              accept="image/*" 
+              (change)="onFileSelected($event)" 
+              class="input-file"
+            />
+            <label for="fileInput" class="file-label">
+              <span *ngIf="!fotoPreview">Clique para adicionar uma imagem</span>
+              <span *ngIf="fotoPreview">Alterar imagem</span>
+            </label>
+          </div>
+
+          <div class="preview-container" *ngIf="fotoPreview">
+            <img [src]="fotoPreview" alt="Pré-visualização" class="preview-img" />
+            <button class="btn-remover-img" (click)="removerImagem()">Remover</button>
+          </div>
+        </div>
+
         <div class="texto-container">
           <div class="espaço-texto">
-            <label class="label">Pergunta</label>
-            <quill-editor [(ngModel)]="perguntaHtml" [placeholder]="'Digite a pergunta aqui'"></quill-editor>
+            <label class="label">Pergunta *</label>
+            <quill-editor
+              [(ngModel)]="perguntaHtml"
+              [placeholder]="'Digite a pergunta aqui'"
+            ></quill-editor>
           </div>
           <div class="espaço-texto">
-            <label class="label">Resposta</label>
-            <quill-editor [(ngModel)]="respostaHtml" [placeholder]="'Digite a resposta aqui'"></quill-editor>
+            <label class="label">Resposta *</label>
+            <quill-editor
+              [(ngModel)]="respostaHtml"
+              [placeholder]="'Digite a resposta aqui'"
+            ></quill-editor>
           </div>
         </div>
 
         <button class="button" (click)="salvar()">
-          {{ modoEdicao ? 'Atualizar Flashcard' : 'Salvar Flashcard' }}
+          {{ modoEdicao ? "Atualizar Flashcard" : "Salvar Flashcard" }}
         </button>
       </div>
     </div>

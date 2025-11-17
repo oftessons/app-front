@@ -31,7 +31,7 @@
 .modal-conteudo {
   position: relative;
   z-index: 2;
-  padding: 40px 30px 50px 30px;
+  padding: 15px 30px 50px 30px;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -51,10 +51,11 @@
   z-index: 1;
 }
 
-.tema-tittle {
-  font-size: 32px;
+.tema-title {
+  font-size: 16px;
   font-weight: 600;
   color: #e3e3e3;
+  margin: 0;
 }
 
 p {
@@ -72,10 +73,7 @@ p {
   color: #ffffff;
 }
 
-.rating-text {
-  color: var(--text-color);
-  font-size: 12px;
-}
+/* Removido rating-buttons e rating-text */
 
 .rating-buttons {
   display: flex;
@@ -206,11 +204,27 @@ p {
   user-select: none;
   text-decoration: none;
   transition: background-color 0.2s ease;
+  margin-top: 8px;
 }
 
 .button-resposta:hover {
   color: #f6f8fe;
   background-color: #21963d;
+}
+
+.button-next {
+  background-color: #3b5fa0;
+  margin-top: 20px; 
+}
+
+.button-next:hover {
+  background-color: #234178;
+}
+
+.next-button-section {
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
 .button-fechar {
@@ -245,7 +259,7 @@ p {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
-  width: 95%;
+  align-items: center;
   gap: 4px;
 }
 
@@ -261,4 +275,39 @@ p {
 
 .editar-button{
   cursor: pointer;
+}
+
+.header-content {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  padding: 8px;
+  justify-content: space-between;
+}
+
+.tema-resposta {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 8px;
+}
+
+/* NOVOS ESTILOS DE IMAGEM */
+.image-display-wrapper {
+    width: 100%;
+    max-height: 250px;
+    margin: 15px 0 10px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.question-image-modal, .answer-image-modal {
+    max-width: 90%;
+    max-height: 250px;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
