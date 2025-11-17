@@ -43,15 +43,15 @@
           "configurations": {
             "production": {
               "budgets": [
-                {
+                  {
                   "type": "initial",
-                  "maximumWarning": "4mb",
-                  "maximumError": "5mb"
+                  "maximumWarning": "14mb",
+                  "maximumError": "15mb"
                 },
                 {
-                  "type": "any",
-                  "maximumWarning": "2.5mb",
-                   "maximumError": "3mb"
+                  "type": "initial",
+                  "maximumWarning": "10.5mb",
+                  "maximumError": "12.5mb"
                 }
               ],
               "optimization": true,

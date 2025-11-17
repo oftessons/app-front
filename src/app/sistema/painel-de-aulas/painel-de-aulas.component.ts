@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { Categoria } from './enums/categoria';
+import { CategoriaDescricoes } from './enums/categoria-descricao';
 
 @Component({
   selector: 'app-painel-de-aulas',
@@ -6,76 +9,91 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./painel-de-aulas.component.css']
 })
 export class PainelDeAulasComponent implements OnInit {
-  aulas = [
-    {
-      title: 'Catarata',
-      description: 'Entenda tudo sobre catarata.',
-      imageUrl: 'assets/imagens/modulo-aula/Catarata.jpeg',
-      route: 'usuario/modulo-catarata'
-    },
-    {
-      title: 'Cirurgia Refrativa',
-      description: 'Conheça as técnicas de cirurgia refrativa.',
-      imageUrl: 'assets/imagens/modulo-aula/Cirurgiarefrativa.webp',
-      route: 'usuario/modulo-cirurgia-refrativa'
-    },
-    {
-      title: 'Córnea, Conjuntiva e Esclera',
-      description: 'Estude os detalhes da córnea, conjuntiva e esclera.',
-      imageUrl: 'assets/imagens/modulo-aula/Cornea.jpeg',
-      route: 'usuario/modulo-cornea-conjuntiva-esclera'
-    },
-    {
-      title: 'Estrabismo e Oftalmopediatria',
-      description: 'Saiba mais sobre estrabismo e oftalmopediatria.',
-      imageUrl: 'assets/imagens/modulo-aula/Estrabismopediatria.webp',
-      route: 'usuario/modulo-estrabismo-e-oftalmoped'
-    },
-    {
-      title: 'Farmacologia',
-      description: 'Explore a farmacologia oftalmológica.',
-      imageUrl: 'assets/imagens/modulo-aula/Farmacologia.jpeg',
-      route: 'usuario/modulo-farmacologia'
-    },
-    {
-      title: 'Glaucoma',
-      description: 'Compreenda os aspectos do glaucoma.',
-      imageUrl: 'assets/imagens/modulo-aula/GLaucoma.jpeg',
-      route: 'usuario/modulo-glaucoma'
-    },
-    {
-      title: 'Lentes de Contato',
-      description: 'Descubra o mundo das lentes de contato.',
-      imageUrl: 'assets/imagens/modulo-aula/Lentedecontato.jpeg',
-      route: 'usuario/modulo-lentes-de-contato'
-    },
-    {
-      title: 'Óptica, Refratometria e Visão Subnormal',
-      description: 'Aprenda sobre óptica e visão subnormal.',
-      imageUrl: 'assets/imagens/modulo-aula/Optica.jpeg',
-      route: 'usuario/modulo-optica-refratometria-visao-subnormal'
-    },
-    {
-      title: 'Plástica e Órbita',
-      description: 'Estude a plástica ocular e órbita.',
-      imageUrl: 'assets/imagens/modulo-aula/OrbitaePlastica.jpeg',
-      route: 'usuario/modulo-plastica-e-orbita'
-    },
-    {
-      title: 'Retina',
-      description: 'Saiba mais sobre doenças e tratamentos da retina.',
-      imageUrl: 'assets/imagens/modulo-aula/Retina.jpeg',
-      route: 'usuario/modulo-retina'
-    },
-    {
-      title: 'Uveíte e Oncologia Ocular',
-      description: 'Explore uveítes e oncologia ocular.',
-      imageUrl: 'assets/imagens/modulo-aula/Uveite.webp',
-      route: 'usuario/modulo-uveite-oncologia-ocular'
-    },
-  ];
 
-  constructor() {}
+  private categoriaImagens: { [key in Categoria]: string } = {
+    [Categoria.CATARATA]: 'assets/imagens/modulo-aula/Catarata.jpeg',
+    [Categoria.CIRURGIA_REFRATIVA]: 'assets/imagens/modulo-aula/Cirurgiarefrativa.webp',
+    [Categoria.CORNEA_CONJUNTIVA_E_ESCLERA]: 'assets/imagens/modulo-aula/Cornea.jpeg',
+    [Categoria.ESTRABISMO_E_OFTALMOPEATRIA]: 'assets/imagens/modulo-aula/Estrabismopediatria.webp',
+    [Categoria.FARMACOLOGIA]: 'assets/imagens/modulo-aula/Farmacologia.jpeg',
+    [Categoria.GLAUCOMA]: 'assets/imagens/modulo-aula/GLaucoma.jpeg',
+    [Categoria.LENTES_DE_CONTATO]: 'assets/imagens/modulo-aula/Lentedecontato.jpeg',
+    [Categoria.OPTICA_REFRAOMETRIA_E_VISAO_SUBNORMAL]: 'assets/imagens/modulo-aula/Optica.jpeg',
+    [Categoria.PLASTICA_E_ORBITA]: 'assets/imagens/modulo-aula/OrbitaePlastica.jpeg',
+    [Categoria.RETINA]: 'assets/imagens/modulo-aula/Retina.jpeg',
+    [Categoria.UVEITE_E_ONCOLOGIA_OCULAR]: 'assets/imagens/modulo-aula/Uveite.webp',
+  };
 
-  ngOnInit(): void {}
+  aulas = Object.keys(Categoria).map((key) => {
+    const categoria = Categoria[key as keyof typeof Categoria];
+    const descricao = CategoriaDescricoes[categoria];
+
+    return {
+      categoria: categoria,
+      title: descricao,
+      description: this.getDescriptionText(categoria),
+      imageUrl: this.categoriaImagens[categoria],
+      slug: this.generateSlug(descricao),
+      progresso: 0 // <-- ADICIONADO: Inicializa o progresso como 0
+    };
+  });
+
+  constructor(
+    private router: Router
+  ) { }
+
+  ngOnInit(): void {
+    console.log('PainelDeAulasComponent carregado.');
+    // 4. Chame a função para carregar o progresso
+    // this.carregarProgressoModulos();
+  }
+
+  // private carregarProgressoModulos(): void {
+  //   this.progressoService.obterProgressoModulos().subscribe({
+  //     next: (progressoMap) => {
+  //       // 'progressoMap' vem do serviço (ex: Map<Categoria, number>)
+  //       this.aulas.forEach(aula => {
+  //         const progresso = progressoMap.get(aula.categoria);
+  //         if (progresso) {
+  //           aula.progresso = progresso;
+  //         }
+  //       });
+  //       console.log('Progresso do usuário carregado e mesclado:', this.aulas);
+  //     },
+  //     error: (err) => {
+  //       console.error('Erro ao carregar progresso do usuário:', err);
+  //       // O painel ainda funciona, mas mostrará 0% para tudo
+  //     }
+  //   });
+  // }
+
+  generateSlug(text: string): string {
+    return text
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .replace(/ /g, '-')
+      .replace(/[^\w-]+/g, '');
+  }
+
+  private getDescriptionText(categoria: Categoria): string {
+    const descriptions: { [key in Categoria]: string } = {
+      [Categoria.CATARATA]: 'Entenda tudo sobre catarata.',
+      [Categoria.CIRURGIA_REFRATIVA]: 'Conheça as técnicas de cirurgia refrativa.',
+      [Categoria.CORNEA_CONJUNTIVA_E_ESCLERA]: 'Estude os detalhes da córnea, conjuntiva e esclera.',
+      [Categoria.ESTRABISMO_E_OFTALMOPEATRIA]: 'Saiba mais sobre estrabismo e oftalmopediatria.',
+      [Categoria.FARMACOLOGIA]: 'Explore a farmacologia oftalmológica.',
+      [Categoria.GLAUCOMA]: 'Compreenda os aspectos do glaucoma.',
+      [Categoria.LENTES_DE_CONTATO]: 'Descubra o mundo das lentes de contato.',
+      [Categoria.OPTICA_REFRAOMETRIA_E_VISAO_SUBNORMAL]: 'Aprenda sobre óptica e visão subnormal.',
+      [Categoria.PLASTICA_E_ORBITA]: 'Estude a plástica ocular e órbita.',
+      [Categoria.RETINA]: 'Saiba mais sobre doenças e tratamentos da retina.',
+      [Categoria.UVEITE_E_ONCOLOGIA_OCULAR]: 'Explore uveítes e oncologia ocular.',
+    };
+    return descriptions[categoria] || 'Descrição não disponível';
+  }
+
+  navegarParaAula(slug: string): void {
+    this.router.navigate(['/usuario/painel-de-aulas', slug]);
+  }
 }

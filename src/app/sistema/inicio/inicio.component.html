@@ -47,7 +47,7 @@
         <h2>Revise seus estudos e aprenda como nunca antes!</h2>
         <p>Crie sua programação de estudos e conquiste novos resultados.</p>
       </div>
-      <button 
+      <button
         class="banner-button"
         (click)="abrirModalConfiguracaoTrilha()"
         >
@@ -95,8 +95,8 @@
               </div>
               <button (click)="redirecionarFlashcard()" class="btn btn-primary">
                 Acessar >
-              </button>            
-              <!--               
+              </button>
+              <!--
               <div *ngIf="mostrarMensagemFlashcard" class="mensagem">
                 Em breve novas funcionalidades disponíveis para você 😃.
               </div>
@@ -116,10 +116,10 @@
                <div class="card-icon">
                 <img src="assets/Icons/pes.svg" alt="Ícone de Pesquisa" class="icon" style="width: 50px; height: 50px;">
               </div>
-              <a 
-                href="https://forms.gle/owp46GkkmZDNq4sq9" 
-                class="btn btn-primary btn-pesquisa" 
-                target="_blank" 
+              <a
+                href="https://forms.gle/owp46GkkmZDNq4sq9"
+                class="btn btn-primary btn-pesquisa"
+                target="_blank"
                 rel="noopener noreferrer">
                 Acessar >
               </a>
@@ -142,32 +142,32 @@
       <div class="form-group">
         <label>Quais dias você quer revisar? *</label>
         <div class="dias-semana">
-          <button 
-            class="btn-dia" 
+          <button
+            class="btn-dia"
             [ngClass]="{'selected': verificarDiaSelecionado('Segunda')}"
             (click)="toggleDiaSelecionado('Segunda')">Segunda</button>
-          <button 
-            class="btn-dia" 
+          <button
+            class="btn-dia"
             [ngClass]="{'selected': verificarDiaSelecionado('Terça')}"
             (click)="toggleDiaSelecionado('Terça')">Terça</button>
-          <button 
-            class="btn-dia" 
+          <button
+            class="btn-dia"
             [ngClass]="{'selected': verificarDiaSelecionado('Quarta')}"
             (click)="toggleDiaSelecionado('Quarta')">Quarta</button>
-          <button 
-            class="btn-dia" 
+          <button
+            class="btn-dia"
             [ngClass]="{'selected': verificarDiaSelecionado('Quinta')}"
             (click)="toggleDiaSelecionado('Quinta')">Quinta</button>
-          <button 
-            class="btn-dia" 
+          <button
+            class="btn-dia"
             [ngClass]="{'selected': verificarDiaSelecionado('Sexta')}"
             (click)="toggleDiaSelecionado('Sexta')">Sexta</button>
-          <button 
-            class="btn-dia" 
+          <button
+            class="btn-dia"
             [ngClass]="{'selected': verificarDiaSelecionado('Sábado')}"
             (click)="toggleDiaSelecionado('Sábado')">Sábado</button>
-          <button 
-            class="btn-dia" 
+          <button
+            class="btn-dia"
             [ngClass]="{'selected': verificarDiaSelecionado('Domingo')}"
             (click)="toggleDiaSelecionado('Domingo')">Domingo</button>
         </div>
@@ -203,13 +203,13 @@
         ></app-multiplo-select>
       </div>
     </div>
-    
+
     <div class="modal-footer">
-      <button class="btn btn-cancel" 
+      <button class="btn btn-cancel"
         (click)="fecharModalConfiguracaoTrilha()">
         Cancelar
       </button>
-      <button class="btn btn-save" 
+      <button class="btn btn-save"
         (click)="salvarConfiguracoesTrilha()">
         Salvar
       </button>
@@ -225,13 +225,13 @@
       </div>
     </div>
     <div class="modal-footer-comecar">
-      <button class="btn btn-cancel" 
+      <button class="btn btn-cancel"
         (click)="fecharModalConfirmacao()">
         Iniciar mais tarde
       </button>
       <button class="btn btn-comecar"
         (click)="iniciarTrilhaAgora()">
-        Começar agora 
+        Começar agora
         <img src="assets/Icons/arrow-updown.svg" alt="seta">
       </button>
     </div>

@@ -1,126 +1,146 @@
 <div *ngIf="usuario && (usuario.permissao === Permissao.ADMIN || usuario.permissao === Permissao.PROFESSOR)">
-    <div class="container pt-5">
-     <div class="container mt-4 container-geral">
-       <div class="header-container">
-         <h2>Cadastro de aulas</h2>
-       </div>
-       <form class="form-cad" #aulaForm="ngForm" (ngSubmit)="onSubmit()">
-         <div class="row" *ngIf="aulaDTO.id">
-           <div class="col-md-6">
-             <div class="form-group">
-               <label>ID:</label>
-               <input type="text" class="form-control" name="id" [(ngModel)]="aulaDTO.id" disabled>
-             </div>
-           </div>
-         </div>
-   
-         <div>
-           <hr class="line">
-           <span class="div-section">
-             Selecione o módulo da aula:
-           </span>
-           <hr class="line">
-         </div>
-
-         <div class="col-md-6">
+  <div class="container pt-5">
+    <div class="container mt-4 container-geral">
+      <div class="header-container">
+        <h2>Cadastro de aulas</h2>
+      </div>
+      <form class="form-cad" #aulaForm="ngForm" (ngSubmit)="onSubmit()">
+        <div class="row" *ngIf="aulaDTO.id">
+          <div class="col-md-6">
             <div class="form-group">
-              <app-select-padrao
-                label="Módulo"
-                [options]="categoria"
-                [(selectedValue)]="aulaDTO.categoria"
-                >
-              </app-select-padrao>
+              <label>ID:</label>
+              <input type="text" class="form-control" name="id" [(ngModel)]="aulaDTO.id" disabled>
             </div>
           </div>
-   
-         <div>
-           <hr class="line">
-           <span class="div-section">
-             Digite os dados da vídeoaula:
-           </span>
-           <hr class="line">
-         </div>
-         <div class="cont-imgs">
+        </div>
+
+        <div>
+          <hr class="line">
+          <span class="div-section">
+            Selecione o módulo da aula:
+          </span>
+          <hr class="line">
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-group">
+            <app-select-padrao label="Módulo" [options]="categoriaFormatada" [(selectedValue)]="aulaDTO.categoria">
+            </app-select-padrao>
+          </div>
+        </div>
+
+        <div>
+          <hr class="line">
+          <span class="div-section">
+            Digite os dados da vídeoaula:
+          </span>
+          <hr class="line">
+        </div>
+        <div class="cont-imgs">
           <div class="form-group">
             <div class="image-upload" (drop)="onDrop($event, 'video')" (dragover)="onDragOver($event)">
-              <input #videoInput type="file" id="video" name="video"
-                (change)="onFileSelected($event, 'video')" accept="image/*,video/*" style="display: none;" />
+              <input #videoInput type="file" id="video" name="video" (change)="onFileSelected($event, 'video')"
+                accept="image/*,video/*" style="display: none;" />
               <label for="video">
                 <div class="foto-preview" id="fotoPreview">
                   <ng-container *ngIf="fotoPreviews['video']">
                     <div class="preview-container">
-                      <img *ngIf="isPreviewImage(fotoPreviews['video'])" [src]="fotoPreviews['video']" alt="Image Preview" />
-                      <video *ngIf="isPreviewVideo(fotoPreviews['video'])" [src]="fotoPreviews['video']" controls></video>
+                      <img *ngIf="isPreviewImage(fotoPreviews['video'])" [src]="fotoPreviews['video']"
+                        alt="Image Preview" />
+                      <video *ngIf="isPreviewVideo(fotoPreviews['video'])" [src]="fotoPreviews['video']"
+                        controls></video>
                       <button type="button" class="btn-remove-image" (click)="removeFile('video', $event)">
                         <i class="fas fa-times"></i>
                       </button>
                     </div>
                   </ng-container>
+
                   <span *ngIf="!fotoPreviews['video']" class="upload-placeholder">
-                    <img [src]="!isDarkMode() ? 'assets/imagens/filme.svg' : 'assets/Icons/dark/filme-dark.svg'" style="width: 50px;" class="upload-icon">
-                    Clique para fazer upload do vídeo
+
+                    <ng-container *ngIf="isVideoLoading">
+                      <div class="loading-spinner-small"></div>
+                      <span style="margin-top: 10px;">Anexando vídeo...</span>
+                    </ng-container>
+
+                    <ng-container *ngIf="!isVideoLoading">
+                      <img [src]="!isDarkMode() ? 'assets/imagens/filme.svg' : 'assets/Icons/dark/filme-dark.svg'"
+                        style="width: 50px;" class="upload-icon">
+                      Clique para fazer upload do vídeo
+                    </ng-container>
+
                   </span>
                 </div>
               </label>
             </div>
           </div>
         </div>
-         
-         <div class="form-group">
-            <label for="titulo">Título:</label>
-            <input type="text" id="titulo" name="tituloAula" class="form-control" placeholder="Digite o título da aula" 
+
+        <div class="form-group">
+          <label for="titulo">Título:</label>
+          <input type="text" id="titulo" name="tituloAula" class="form-control" placeholder="Digite o título da aula"
             [(ngModel)]="aulaDTO.titulo" required>
-          </div>
-          <div class="form-group">
-            <label for="descricao">Descrição:</label>
-            <textarea id="descricao" name="descricaoDaAula" class="form-control" rows="3" placeholder="Digite a descrição da aula" 
-            [(ngModel)]="aulaDTO.descricao" required></textarea>
-          </div>
+        </div>
+        <div class="form-group">
+          <label for="descricao">Descrição:</label>
+          <textarea id="descricao" name="descricaoDaAula" class="form-control" rows="3"
+            placeholder="Digite a descrição da aula" [(ngModel)]="aulaDTO.descricao" required></textarea>
+        </div>
 
-          <!-- Input para upload de PDF -->
-          <div class="form-group">
-            <label for="arquivos">Upload de PDF:</label>
-            <input type="file" id="arquivo" name="arquivo" class="form-control" accept="application/pdf" (change)="onPdfSelected($event)">
-            <small class="form-text text-muted">Você pode enviar até 3 arquivos PDF.</small>
-          </div>
+        <div class="form-group">
+          <label for="arquivos">Upload de PDF:</label>
+          <input type="file" id="arquivo" name="arquivo" class="form-control" accept="application/pdf"
+            (change)="onPdfSelected($event)">
+          <small class="form-text text-muted">Você pode enviar até 3 arquivos PDF.</small>
+        </div>
 
-          <!-- Exibir PDFs enviados -->
-          <div class="form-group" *ngIf="arquivos.length > 0">
-            <label>Arquivos PDF para envio:</label>
-            <ul class="list-group">
-              <li class="list-group-item" *ngFor="let arquivo of arquivos; let i = index">
-                {{ arquivo.name }}
-                <button type="button" class="btn btn-danger btn-sm float-right" (click)="removePdf(i)">Remover</button>
-              </li>
-            </ul>
-          </div>
+        <div class="form-group" *ngIf="arquivos.length > 0">
+          <label>Arquivos PDF para envio:</label>
+          <ul class="list-group">
+            <li class="list-group-item" *ngFor="let arquivo of arquivos; let i = index">
+              {{ arquivo.name }}
+              <button type="button" class="btn btn-danger btn-sm float-right" (click)="removePdf(i)">Remover</button>
+            </li>
+          </ul>
+        </div>
 
-            <div *ngIf="isLoading" class="loading-overlay">
-              <div class="loading-spinner"></div>
-              <p>Salvando aula, aguarde...</p>
+        <div *ngIf="isLoading" class="loading-overlay">
+          <p>Enviando aula, aguarde...</p>
+
+          <div class="progress" style="width: 70%; height: 25px; margin-top: 15px;">
+            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+              [style.width.%]="uploadProgress" [attr.aria-valuenow]="uploadProgress" aria-valuemin="0"
+              aria-valuemax="100">
+              {{ uploadProgress }}%
             </div>
+          </div>
 
-          
-            <div *ngIf="successMessage" class="alert alert-success">
-              {{ successMessage }}
-            </div>
-            <div *ngIf="errorMessage" class="alert alert-danger">
-              {{ errorMessage }}
-            </div>
+          <button *ngIf="uploadProgress > 0" type="button" class="btn btn-danger btn-cancelar"
+            (click)="cancelUpload()">
+            <i class="fas fa-times"></i> Cancelar Upload
+          </button>
 
-          
-            <div class="container mt-4 container-btn">
-              <button type="button" class="btn btn-secondary" routerLink="/usuario/dashboard" *ngIf="!aulaDTO.id">
-                Voltar
-              </button>
-              <button type="submit" class="btn btn-primary" *ngIf="!aulaDTO.id" [disabled]="isLoading">
-                Salvar
-              </button>
-              <button type="submit" class="btn btn-primary" *ngIf="aulaDTO.id" [disabled]="isLoading">
-                Atualizar
-              </button>
-            </div>
-       </form>
-   </div>
-   </div>
+        </div>
+
+        <div *ngIf="successMessage" class="alert alert-success">
+          {{ successMessage }}
+        </div>
+        <div *ngIf="errorMessage" class="alert alert-danger">
+          {{ errorMessage }}
+        </div>
+
+
+        <div class="container mt-4 container-btn">
+          <button type="button" class="btn btn-secondary" routerLink="/usuario/dashboard" *ngIf="!aulaDTO.id">
+            Voltar
+          </button>
+          <button type="submit" class="btn btn-primary" *ngIf="!aulaDTO.id" [disabled]="isLoading">
+            Salvar
+          </button>
+          <button type="submit" class="btn btn-primary" *ngIf="aulaDTO.id" [disabled]="isLoading">
+            Atualizar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>

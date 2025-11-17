@@ -2,7 +2,7 @@
     <div class="container mt-4">
       <h1 class="mt-4"> <span> | </span> Permissões </h1>
     </div>
-  
+
     <div class="container">
       <div class="header-cont">
         <h1>Cadastrar usuários</h1>
@@ -20,7 +20,7 @@
       <div class="alert alert-warning mt-3 feedback-message" *ngFor="let error of errors" >
       {{ error }}
     </div>
-  
+
     <h2>Professores</h2>
     <div class="table-responsive">
         <table class="tabela">
@@ -58,7 +58,7 @@
             <button class="nav-button" (click)="nextPage('professores')" [disabled]="pageIndexProfessores >= totalPagesProfessores - 1">&gt;</button>
         </div>
     </div>
-  
+
     <h2>Alunos</h2>
     <div class="table-responsive">
       <table class="tabela">
@@ -98,7 +98,7 @@
           <button class="nav-button" (click)="nextPage('alunos')" [disabled]="pageIndexAlunos >= totalPagesAlunos - 1">&gt;</button>
       </div>
     </div>
-  
+
 
     <h2>Bolsistas</h2>
     <div class="table-responsive">
@@ -156,7 +156,7 @@
             </h3>
           </div>
         </div>
-  
+
         <form [formGroup]="usuarioFormCadastro" class="form-content">
           <div class="grid grid-cols-12 gap-x-6 space-y-4">
             <!--Mensagem de erros-->
@@ -169,7 +169,7 @@
                 <input type="text" formControlName="username" name="username" autocomplete="off" class="form-control py-2 responsive-input" placeholder="Digite seu username" required />
             </div> -->
 
-            
+
             <div class="form-group">
                 <label class="small mb-1" style="font-size: 1.2em;">E-mail *</label>
                 <input type="email" formControlName="email" name="email" class="form-control py-2 responsive-input" placeholder="Digite seu e-mail" required />
@@ -222,6 +222,18 @@
                 <input type="text" formControlName="estado" name="estado" class="form-control py-2 responsive-input" placeholder="Digite seu Estado" required />
             </div>
 
+
+            <div class="form-group">
+              <label class="small mb-1" style="font-size: 1.2em;">Data de Nascimento</label>
+              <input
+                type="date"
+                formControlName="dataNascimento"
+                name="dataNascimento"
+                class="form-control py-2 responsive-input"
+                placeholder="Selecione a data de nascimento"
+              />
+            </div>
+
             <div class="form-group">
               <label for="tipoUsuario" class="small mb-1">Tipo de Usuário *</label>
               <select
@@ -235,18 +247,18 @@
                 <option *ngFor="let tipo of tiposPermissao" (value)="tipo">{{ tipo }}</option>
               </select>
             </div>
-            
+
             <div *ngIf="usuarioFormCadastro.get('tipoUsuario')?.value === 'BOLSISTA'">
               <div>
                 <label for="quantidadeDiasBolsa" class="small mb-1">Quantidade de Dias da Bolsa</label>
                 <input type="number" formControlName="quantidadeDiasBolsa" placeholder="Informe a quantidade de dias da bolsa" class="form-control py-2 responsive-input" />
               </div>
             </div>
-          
+
           </div>
         </form>
       </div>
-  
+
       <div class="button-container">
         <button type="button" class="btn button-cancel" (click)="closeModalCadastrar()">
           Cancelar
@@ -272,10 +284,10 @@
             </h3>
           </div>
         </div>
-  
+
         <form [formGroup]="usuarioFormUpdate" class="form-content">
           <div class="grid grid-cols-12 gap-x-6 space-y-4">
-            
+
             <div class="alert alert-danger" *ngFor="let error of modalErrors" >
               {{ error }}
             </div>
@@ -309,7 +321,7 @@
                 <input type="text" formControlName="nome" name="nome" class="form-control py-2 responsive-input" placeholder="Digite o seu nome"  />
             </div>
 
-            
+
             <div class="form-group">
                 <label class="small mb-1" style="font-size: 1.2em;">Celular</label>
                 <input type="text" formControlName="telefone" name="telefone" class="form-control py-2 responsive-input" placeholder="Digite o Celular (XX) XXXX-XXX" required />
@@ -323,11 +335,11 @@
             <div class="form-group">
                 <label class="small mb-1" style="font-size: 1.2em;">Estado</label>
                 <input type="text" formControlName="estado" name="estado" class="form-control py-2 responsive-input" placeholder="Digite seu Estado" required />
-            </div>  
+            </div>
           </div>
         </form>
       </div>
-  
+
       <div class="button-container">
         <button type="button" class="btn button-cancel" (click)="closeModalAtualizar()">
           Cancelar

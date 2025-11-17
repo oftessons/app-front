@@ -16,6 +16,7 @@ import { CardPlanoComponent } from './card-plano/card-plano.component';
 import { AppRoutingModule } from '../app-routing.module';
 import { ModalDeleteComponent } from './modal-delete/modal-delete.component';
 import { PageEmDesenvolvimentoComponent } from './page-em-desenvolvimento/page-em-desenvolvimento.component';
+import { HappyMessagePopupComponent } from './happy-message-popup/happy-message-popup.component';
 import { FlashcardsTemasCardsComponent } from './flashcards-temas-cards/flashcards-temas-cards.component';
 import { FlashcardsSubtemasComponent } from './flashcards-subtemas/flashcards-subtemas.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -39,6 +40,7 @@ import { ModalTrilhaComponent } from './modal-trilha/modal-trilha.component';
     FlashcardsSubtemasComponent,
     DeletarFlashcardModalComponent,
     ModalTrilhaComponent,
+    HappyMessagePopupComponent
   ],
   imports: [
     CommonModule,
@@ -60,6 +62,7 @@ import { ModalTrilhaComponent } from './modal-trilha/modal-trilha.component';
     ModalComponent,
     CardPlanoComponent,
     PageEmDesenvolvimentoComponent,
+    HappyMessagePopupComponent,
     FlashcardsTemasCardsComponent,
     FlashcardsSubtemasComponent,
     FlashcardModalComponent,

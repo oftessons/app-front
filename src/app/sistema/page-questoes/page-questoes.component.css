@@ -578,6 +578,17 @@
   margin-top: 20px;
 }
 
+.btn-balloon {
+  padding: 9px 8px;
+  width: 90px;
+  background-color: #041e4e;
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
 .btn-editar {
   padding: 9px 8px;
   width: 200px;

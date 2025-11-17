@@ -1775,11 +1775,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
           this.curiosidadeAtual = 0;
 
-          setTimeout(() => {
-            if (this.curiosidades.length > 0) {
-              this.mostrarBalloon = true;
-            }
-          }, 2000);
         },
         (error) => {
           console.error('Erro ao buscar curiosidades:', error);
@@ -1790,8 +1785,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
   fecharBalloon(): void {
     this.mostrarBalloon = false;
-    this.curiosidades = [];
-    this.curiosidadeAtual = 0;
   }
 
   proximaCuriosidade(): void {
@@ -1858,6 +1851,14 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   fecharPopupMentoria(): void {
     if (this.dialogRef) {
       this.dialogRef.close();
+    }
+  }
+
+  toggleBalloon() {
+    if(this.mostrarBalloon == true){
+      this.mostrarBalloon = false;
+    } else {
+      this.mostrarBalloon = true;
     }
   }
 }
