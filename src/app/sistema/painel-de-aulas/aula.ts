@@ -3,7 +3,7 @@ import { Categoria } from './enums/categoria';
 export class Aula {
   id!: number;
   diaDoCadastro!: string;
-  idUser!: number;
+  idUser!: string;
   title!: string;
   video!: File;
   urlVideo!: string | null;
@@ -13,6 +13,10 @@ export class Aula {
   arquivo!: File;
   urlArquivo!: string;
   keyArquivo!: string;
+  keyVideo!: string;
+  contentTypeVideo!: string;
+  videoContentLength!: number;
+
   documentos?: { id: number; url: string; key: string }[];
 
   toJson(): string {

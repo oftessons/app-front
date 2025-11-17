@@ -1,4 +1,3 @@
-// Crie um arquivo: can-deactivate-simulado.guard.ts
 import { Injectable } from '@angular/core';
 import { CanDeactivate } from '@angular/router';
 import { PageSimuladoComponent } from '../sistema/page-simulado/page-simulado.component';
@@ -17,10 +16,9 @@ export class CanDeactivateSimuladoGuard implements CanDeactivate<PageSimuladoCom
             if (confirmar) {
                 component.finalizarSimulado();
                 return true; 
-            } else {
-                return false;
-            }
+            } 
         }
-        return true; 
+        
+        return false; 
     }
 }
