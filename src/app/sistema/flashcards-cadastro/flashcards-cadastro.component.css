@@ -89,7 +89,6 @@
   pointer-events: auto;
 }
 
-
 ::ng-deep .espaco-select-simple .selected-list {
   color: #ffffff !important;
   font-size: 16px !important;
@@ -110,6 +109,67 @@
   font-size: 16px;
   color: #f6f8fe;
   margin-bottom: 8px;
+}
+
+.imagem-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.input-file-wrapper {
+  position: relative;
+}
+
+.input-file {
+  display: none; 
+}
+
+.file-label {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #3b5fa0;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  text-align: center;
+}
+
+.file-label:hover {
+  background-color: #234178;
+}
+
+.preview-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.preview-img {
+  max-width: 200px;
+  max-height: 200px;
+  border-radius: 8px;
+  border: 1px solid #3b5fa0;
+  object-fit: cover;
+}
+
+.btn-remover-img {
+  background-color: #d9534f;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-remover-img:hover {
+  background-color: #c9302c;
 }
 
 ::ng-deep .ql-toolbar {

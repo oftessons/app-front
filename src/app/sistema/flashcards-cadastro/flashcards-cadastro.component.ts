@@ -54,6 +54,9 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
   perguntaHtml = '';
   respostaHtml = '';
 
+  fotoSelecionada: File | null = null;
+  fotoPreview: string | ArrayBuffer | null = null;
+
   flashcardParaEditar: Flashcard | null = null;
   modoEdicao = false;
 
@@ -104,6 +107,10 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
       this.perguntaHtml = card.pergunta;
       this.respostaHtml = card.resposta;
 
+      if (card.fotoUrl) {
+        this.fotoPreview = card.fotoUrl;
+      }
+
       setTimeout(() => {
         this.relevanciaSelecionada = card.relevancia ?? null;
         this.dificuldadeSelecionada = this.normalizarDificuldade(
@@ -120,6 +127,27 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
 
         this.cdRef.detectChanges();
       }, 0);
+    }
+  }
+
+  onFileSelected(event: any): void {
+    const file: File = event.target.files[0];
+    if (file) {
+      this.fotoSelecionada = file;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.fotoPreview = e.target?.result ?? null;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  removerImagem(): void {
+    this.fotoSelecionada = null;
+    this.fotoPreview = null;
+    const fileInput = document.getElementById('fileInput') as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = '';
     }
   }
 
@@ -183,7 +211,7 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
           };
 
           this.flashcardService
-            .atualizarFlashcard(this.flashcardParaEditar.id, dto)
+            .atualizarFlashcard(this.flashcardParaEditar.id, dto, this.fotoSelecionada || undefined)
             .subscribe({
               next: () => {
                 alert('Flashcard atualizado com sucesso!');
@@ -211,7 +239,7 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
             createdBy: userIdNumerico,
           };
 
-          this.flashcardService.salvarFlashcard(dto).subscribe({
+          this.flashcardService.salvarFlashcard(dto, this.fotoSelecionada || undefined).subscribe({
             next: () => {
               alert('Flashcard salvo com sucesso!');
               this.voltar();

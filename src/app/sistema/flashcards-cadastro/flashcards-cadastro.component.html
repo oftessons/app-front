@@ -50,6 +50,28 @@
           </div>
         </div>
 
+        <div class="imagem-container">
+          <label class="label">Imagem do Flashcard (Opcional)</label>
+          <div class="input-file-wrapper">
+            <input 
+              type="file" 
+              id="fileInput" 
+              accept="image/*" 
+              (change)="onFileSelected($event)" 
+              class="input-file"
+            />
+            <label for="fileInput" class="file-label">
+              <span *ngIf="!fotoPreview">Clique para adicionar uma imagem</span>
+              <span *ngIf="fotoPreview">Alterar imagem</span>
+            </label>
+          </div>
+
+          <div class="preview-container" *ngIf="fotoPreview">
+            <img [src]="fotoPreview" alt="Pré-visualização" class="preview-img" />
+            <button class="btn-remover-img" (click)="removerImagem()">Remover</button>
+          </div>
+        </div>
+
         <div class="texto-container">
           <div class="espaço-texto">
             <label class="label">Pergunta *</label>

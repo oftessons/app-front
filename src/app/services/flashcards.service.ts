@@ -29,6 +29,7 @@ export interface Flashcard {
   resposta: string;
   dificuldade: string | null;
   relevancia: number | null;
+  fotoUrl?: string;
 }
 
 export interface ReqSalvarFlashcardDTO {
@@ -101,7 +102,7 @@ export class FlashcardService {
     return this.http.delete(`${this.apiUrl}/${id}`, { responseType: 'text' });
   }
 
-  salvarFlashcard(dto: ReqSalvarFlashcardDTO): Observable<string> {
+  salvarFlashcard(dto: ReqSalvarFlashcardDTO, foto?: File): Observable<string> {
     const formData = new FormData();
 
     formData.append('pergunta', dto.pergunta);
@@ -124,12 +125,16 @@ export class FlashcardService {
       formData.append('createdBy', String(dto.createdBy));
     }
 
+    if (foto) {
+      formData.append('foto', foto);
+    }
+
     return this.http.post(`${this.apiUrl}/cadastrar`, formData, {
       responseType: 'text'
     });
   }
 
-  atualizarFlashcard(id: number, dto: ReqAtualizarFlashcardDTO): Observable<string> {
+  atualizarFlashcard(id: number, dto: ReqAtualizarFlashcardDTO, foto?: File): Observable<string> {
     const formData = new FormData();
 
     formData.append('pergunta', dto.pergunta);
@@ -146,6 +151,10 @@ export class FlashcardService {
 
     if (dto.relevancia) {
       formData.append('relevancia', String(dto.relevancia));
+    }
+
+    if (foto) {
+      formData.append('foto', foto);
     }
 
     return this.http.post(`${this.apiUrl}/atualizarFlashcard/${id}`, formData, {
@@ -192,6 +201,12 @@ export class FlashcardService {
 
   avaliarFlashcard(dto: ReqAvaliarFlashcardDTO): Observable<string> {
     return this.http.post(`${this.apiUrl}/avaliar`, dto, {
+      responseType: 'text'
+    });
+  }
+  
+  finalizarSessao(sessaoId: number): Observable<string> {
+    return this.http.post(`${this.apiUrl}/finalizar-sessao/${sessaoId}`, {}, {
       responseType: 'text'
     });
   }
