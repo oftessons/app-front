@@ -72,31 +72,30 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
     }
   }
 
-ngOnInit(): void {
-  this.subtemasAgrupadosPorTema = Object.entries(temasESubtemas).map(
-    ([temaKey, subtemas]) => {
-      const temaEnum = temaKey as Tema;
-      const temaLabel = TemaDescricoes[temaEnum] || temaKey;
+  ngOnInit(): void {
+    this.subtemasAgrupadosPorTema = Object.entries(temasESubtemas).map(
+      ([temaKey, subtemas]) => {
+        const temaEnum = temaKey as Tema;
+        const temaLabel = TemaDescricoes[temaEnum] || temaKey;
 
-      const subtemaOptions = subtemas.map((subtema) => {
-        const subtemaKey =
-          typeof subtema === 'number'
-            ? (Subtema as any)[subtema]
-            : (subtema as any);
-        const subtemaLabel = SubtemaDescricoes[subtema] || subtemaKey;
-        return { label: subtemaLabel, value: subtemaKey };
-      });
+        const subtemaOptions = subtemas.map((subtema) => {
+          const subtemaKey =
+            typeof subtema === 'number'
+              ? (Subtema as any)[subtema]
+              : (subtema as any);
+          const subtemaLabel = SubtemaDescricoes[subtema] || subtemaKey;
+          return { label: subtemaLabel, value: subtemaKey };
+        });
 
-      return {
-        label: temaLabel,
-        temaKey: temaKey,
-        value: temaKey,
-        options: subtemaOptions,
-      };
-    }
-  );
-}
-
+        return {
+          label: temaLabel,
+          temaKey: temaKey,
+          value: temaKey,
+          options: subtemaOptions,
+        };
+      }
+    );
+  }
 
   ngAfterViewInit(): void {
     if (this.flashcardParaEditar) {
@@ -165,21 +164,22 @@ ngOnInit(): void {
           temaSelecionado
         );
 
-        let dificuldadeFinal: string = this.dificuldadeSelecionada || 'MEDIO';
-        let relevanciaFinal: number | null = this.relevanciaSelecionada ?? null;
+        const dificuldadeFinal = this.dificuldadeSelecionada
+          ? this.dificuldadeSelecionada
+          : (null as any);
+
+        const relevanciaFinal = this.relevanciaSelecionada
+          ? this.relevanciaSelecionada
+          : (null as any);
 
         if (this.modoEdicao && this.flashcardParaEditar) {
-          if (relevanciaFinal == null) {
-            relevanciaFinal = this.flashcardParaEditar.relevancia ?? 5;
-          }
-
           const dto: ReqAtualizarFlashcardDTO = {
             pergunta: this.perguntaHtml,
             resposta: this.respostaHtml,
             tema: temaSelecionado,
             subtema: subtemaParaEnvio,
             dificuldade: dificuldadeFinal,
-            relevancia: relevanciaFinal!,
+            relevancia: relevanciaFinal,
           };
 
           this.flashcardService
