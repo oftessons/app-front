@@ -257,11 +257,14 @@ export class ModuloDeAulasComponent implements OnInit, OnDestroy {
         if (!this.player) return;
 
         const url = this.normalizeUrl(res.videoUrl);
+    
         const source: any = {
           src: url,
           type: 'application/x-mpegURL',
           withCredentials: true
         };
+
+        console.log("Debug: Carregando vídeo com URL", url);
 
         this.player.playbackRate(1);
         this.player.pause();
