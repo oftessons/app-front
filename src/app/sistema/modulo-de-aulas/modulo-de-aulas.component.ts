@@ -252,15 +252,18 @@ export class ModuloDeAulasComponent implements OnInit, OnDestroy {
 
     this.isLoadingVideo = true;
     this.aulasService.obterUrlDeVideo(aula.id).subscribe({
-      next: (res: VideoUrlResponse & { withCredentials?: boolean }) => {
+      next: (res: VideoUrlResponse) => {
         this.isLoadingVideo = false;
         if (!this.player) return;
 
         const url = this.normalizeUrl(res.videoUrl);
-        const source: any = { src: url, type: 'application/x-mpegURL' };
-        if (res.withCredentials === true) source.withCredentials = true;
+        const source: any = {
+          src: url,
+          type: 'application/x-mpegURL',
+          withCredentials: true
+        };
 
-        this.player.playbackRate(1.0);
+        this.player.playbackRate(1);
         this.player.pause();
         this.player.src(source);
         this.player.load();
