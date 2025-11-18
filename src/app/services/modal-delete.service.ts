@@ -19,7 +19,8 @@ export class ModalDeleteService {
 
   openModal(
     config?: Partial<ModalDeleteComponent>,
-    onConfirmDelete?: () => void
+    onConfirmDelete?: () => void,
+    onCancel?: () => void
   ): void {
     if (!this.outlet) throw new Error('Outlet não registrado!');
     this.outlet.clear();
@@ -32,6 +33,7 @@ export class ModalDeleteService {
     }
 
     this.modalRef.instance.closeModal.subscribe(() => {
+      if (onCancel) onCancel();
       this.closeModal();
     });
 
