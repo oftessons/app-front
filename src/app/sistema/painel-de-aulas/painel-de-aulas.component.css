@@ -1,157 +1,361 @@
-.header {
-  margin-left: -30px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.header h1 {
-  margin: 0 0 2rem 0;
-  padding-bottom: 0.5rem;
-
-}
-
-.container {
-  max-width: 1300px;
-  padding: 10px;
+/* ==================== CONTAINER PRINCIPAL ==================== */
+.aulas-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 3rem;
+  margin-top: 80px;
   font-family: "Nunito Sans", sans-serif;
 }
 
-.containerCards {
+/* ==================== HEADER ==================== */
+.aulas-header {
+  margin-bottom: 2.5rem;
+}
+
+.header-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.page-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-color);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.title-accent {
+  color: #3b82f6;
+  font-size: 2.5rem;
+  font-weight: 300;
+}
+
+.page-subtitle {
+  font-size: 1rem;
+  color: var(--text-color);
+  opacity: 0.7;
+  margin: 0;
+  margin-left: 1.2rem;
+}
+
+/* ==================== GRID DE AULAS ==================== */
+.aulas-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  margin-top: 20px;
-  gap: 24px;
-  justify-items: center;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
 }
 
-@media (max-width: 768px) {
-  .containerCards {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto;
-    margin: 24px;
-    align-items: center;
-    justify-content: center;
-  }
-}
-
-.container {
-  width: 95%;
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
-.containerCards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  padding-bottom: 3rem;
-}
-
-.card-wrapper-clicavel {
+/* ==================== CARD WRAPPER ==================== */
+.aula-card-wrapper {
   cursor: pointer;
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.card {
-  background-color: var(--bg-container);
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+/* ==================== CARD ==================== */
+.aula-card {
+  background: var(--bg-container);
+  border-radius: 16px;
   overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.3s ease;
   height: 100%;
   display: flex;
   flex-direction: column;
 }
 
-.card-wrapper-clicavel:hover .card {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+.aula-card-wrapper:hover .aula-card {
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
 }
 
-.card-img {
+/* ==================== IMAGEM DO CARD ==================== */
+.card-image-wrapper {
+  position: relative;
   width: 100%;
-  height: 200px;
-  object-fit: cover;
+  height: 180px;
+  overflow: hidden;
 }
 
-.card-body {
-  padding: 1.5rem;
+.card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.aula-card-wrapper:hover .card-image {
+  transform: scale(1.05);
+}
+
+/* Overlay da imagem */
+.image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.4) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.aula-card-wrapper:hover .image-overlay {
+  opacity: 1;
+}
+
+.play-button {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #3b82f6;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  transform: scale(0.8);
+  transition: transform 0.3s ease;
+}
+
+.aula-card-wrapper:hover .play-button {
+  transform: scale(1);
+}
+
+/* Badge de status */
+.status-badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.status-badge.completed {
+  background: rgba(34, 197, 94, 0.9);
+  color: white;
+}
+
+.status-badge.in-progress {
+  background: rgba(59, 130, 246, 0.9);
+  color: white;
+}
+
+.status-badge.not-started {
+  background: rgba(249, 115, 22, 0.9);
+  color: white;
+}
+
+/* ==================== CONTEÚDO DO CARD ==================== */
+.card-content {
+  padding: 1rem;
   display: flex;
   flex-direction: column;
+  gap: 0.75rem;
   flex-grow: 1;
 }
 
 .card-title {
-  font-size: 1.25rem;
-  font-weight: 600;
+  font-size: 1.1rem;
+  font-weight: 700;
   color: var(--text-color);
   margin: 0;
-  margin-bottom: 0.5rem;
-}
-
-.card-description {
-  font-size: 0.9rem;
-  color: var(--text-color);
-  line-height: 1.5;
-  margin: 0;
-  flex-grow: 1;
-  margin-bottom: 1.5rem;
-}
-
-.btn-primary {
-  background-color: #007bff;
-  border-color: #007bff;
-  color: var(--text-color);
-  font-weight: 500;
-  padding: 0.75rem 1rem;
-  border-radius: 8px;
-  text-align: center;
-  text-decoration: none;
-  cursor: pointer;
-  border: none;
-  transition: background-color 0.2s;
-
-  align-self: center;
-}
-
-.btn-primary:hover {
-  background-color: #0056b3;
-  border-color: #0056b3;
-}
-
-.progress-section {
-  margin-top: auto;
-  padding-top: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-.progress-info {
-  font-size: 0.85rem;
-  color: var(--text-color);
-  opacity: 0.8;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
-}
-
-.progress-bar-container {
-  width: 100%;
-  height: 8px;
-  background-color: #3a3b3c;
-  border-radius: 4px;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-.progress-bar-fill {
-  height: 100%;
-  background-color: #007bff;
-  border-radius: 4px;
-  transition: width 0.4s ease-out;
-}
-
 .card-description {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: var(--text-color);
+  opacity: 0.8;
   line-height: 1.5;
   margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex-grow: 1;
+}
+
+/* ==================== PROGRESSO ==================== */
+.progress-wrapper {
+  margin-top: auto;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.progress-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-color);
+  opacity: 0.7;
+}
+
+.progress-percentage {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #3b82f6;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  background: rgba(59, 130, 246, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);
+  border-radius: 10px;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%);
+  animation: shimmer 2s infinite;
+}
+
+.progress-fill.full {
+  background: linear-gradient(90deg, #22c55e 0%, #16a34a 100%);
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* ==================== BOTÃO DE AÇÃO ==================== */
+.btn-action {
+  width: 100%;
+  padding: 0.75rem 1.25rem;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  margin-top: 0.75rem;
+}
+
+.btn-action:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(59, 130, 246, 0.3);
+}
+
+.btn-action:active {
+  transform: translateY(0);
+}
+
+.btn-action svg {
+  transition: transform 0.3s ease;
+}
+
+.btn-action:hover svg {
+  transform: translateX(4px);
+}
+
+/* ==================== RESPONSIVIDADE ==================== */
+@media (max-width: 1204px) {
+  .aulas-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 1024px) {
+  .aulas-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .aulas-container {
+    padding: 1.5rem 1rem 2rem;
+  }
+
+  .page-title {
+    font-size: 1.5rem;
+  }
+
+  .title-accent {
+    font-size: 2rem;
+  }
+
+  .page-subtitle {
+    font-size: 0.9rem;
+    margin-left: 2rem;
+  }
+
+  .aulas-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .card-image-wrapper {
+    height: 200px;
+  }
+
+  .card-content {
+    padding: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-title {
+    font-size: 1.25rem;
+  }
+
+  .title-accent {
+    font-size: 1.75rem;
+  }
+
+  .card-image-wrapper {
+    height: 180px;
+  }
+
+  .status-badge {
+    top: 12px;
+    right: 12px;
+    padding: 4px 10px;
+    font-size: 0.7rem;
+  }
 }
