@@ -63,8 +63,17 @@
                         <p>{{ card.semana }}</p>
                       </div>
                     </div>
-                    <div class="status-badge" [class]="getStatusBadgeClass(card.status)">
-                      <span>{{ getStatusBadgeText(card.status) }}</span>
+                    <div class="card-header-actions">
+                      <button 
+                        *ngIf="canEditContent()" 
+                        class="btn-editar-card"
+                        (click)="abrirModalEdicao(card, $event)"
+                        title="Editar conteúdo da semana">
+                        <img src="assets/Icons/lapis.svg" alt="Editar">
+                      </button>
+                      <div class="status-badge" [class]="getStatusBadgeClass(card.status)">
+                        <span>{{ getStatusBadgeText(card.status) }}</span>
+                      </div>
                     </div>
                   </div>
                   
@@ -120,8 +129,17 @@
                 <p>{{ card.semana }}</p>
               </div>
             </div>
-            <div class="status-badge" [class]="getStatusBadgeClass(card.status)">
-              <span>{{ getStatusBadgeText(card.status) }}</span>
+            <div class="card-header-actions">
+              <button 
+                *ngIf="canEditContent()" 
+                class="btn-editar-card"
+                (click)="abrirModalEdicao(card, $event)"
+                title="Editar conteúdo da semana">
+                <img src="assets/Icons/lapis.svg" alt="Editar">
+              </button>
+              <div class="status-badge" [class]="getStatusBadgeClass(card.status)">
+                <span>{{ getStatusBadgeText(card.status) }}</span>
+              </div>
             </div>
           </div>
           

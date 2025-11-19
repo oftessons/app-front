@@ -1,0 +1,208 @@
+<div class="modal-overlay">
+  <div class="modal-container">
+    <div class="modal-header">
+      <h2 class="modal-title">
+        <span class="title-icon"><img src="assets/Icons/lapis.svg" alt="" srcset=""></span>
+        Editar Conteúdo - Semana {{ semanaNumero }}
+      </h2>
+      <button class="btn-close" (click)="cancelar()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M18 6L6 18M6 6l12 12" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <!-- Informações básicas -->
+      <div class="info-section">
+        <div class="form-group">
+          <label for="titulo">Título da Semana</label>
+          <input 
+            type="text" 
+            id="titulo" 
+            [(ngModel)]="titulo" 
+            placeholder="Ex: Catarata Básica"
+            class="form-input">
+        </div>
+        
+        <div class="form-group">
+          <label for="descricao">Descrição (opcional)</label>
+          <textarea 
+            id="descricao" 
+            [(ngModel)]="descricao" 
+            placeholder="Adicione uma descrição para esta semana..."
+            class="form-textarea"
+            rows="3"></textarea>
+        </div>
+      </div>
+
+      <!-- Abas de conteúdo -->
+      <div class="tabs-container">
+        <div class="tabs-header">
+          <button 
+            class="tab-btn" 
+            [class.active]="abaAtiva === 'questoes-pre'"
+            (click)="trocarAba('questoes-pre')">
+            <img [src]="!isDarkMode() ? 'assets/imagens/caderno.svg' : 'assets/Icons/dark/caderno-dark.svg'" alt="Questões">
+            Questões Pré-Teste
+          </button>
+          <button 
+            class="tab-btn" 
+            [class.active]="abaAtiva === 'aulas'"
+            (click)="trocarAba('aulas')">
+            <img [src]="!isDarkMode() ? 'assets/Icons/aula.svg' : 'assets/Icons/dark/aula-dark.svg'" alt="Aulas">
+            Aulas
+          </button>
+          <button 
+            class="tab-btn" 
+            [class.active]="abaAtiva === 'questoes-pos'"
+            (click)="trocarAba('questoes-pos')">
+            <img [src]="!isDarkMode() ? 'assets/imagens/caderno.svg' : 'assets/Icons/dark/caderno-dark.svg'" alt="Questões">
+            Questões Pós-Teste
+          </button>
+          <button 
+            class="tab-btn" 
+            [class.active]="abaAtiva === 'flashcards'"
+            (click)="trocarAba('flashcards')">
+            <img [src]="!isDarkMode() ? 'assets/Icons/flashcards.svg' : 'assets/Icons/dark/flashcards-dark.svg'" alt="Flashcards">
+            Flashcards
+          </button>
+        </div>
+
+        <div class="tabs-content">
+          <!-- Conteúdo: Questões Pré-Teste -->
+          <div class="tab-panel" *ngIf="abaAtiva === 'questoes-pre'">
+            <div class="filter-info">
+              <h3>Configurar Filtros para Questões Pré-Teste</h3>
+              <p class="filter-description">
+                Selecione os filtros para definir quais questões aparecerão no pré-teste desta semana.
+                <span class="filter-count">{{ getFiltrosAtivos('pre') }}</span>
+              </p>
+              <button class="btn-clear-filters" (click)="limparFiltros('pre')">
+                Limpar todos os filtros
+              </button>
+            </div>
+
+            <div class="filters-grid">
+              <div class="filter-select">
+                <app-multiplo-select 
+                  label="Temas" 
+                  [options]="temasDescricoes"
+                  [(selectedValue)]="multSelectTemasPre" 
+                  [multiple]="true">
+                </app-multiplo-select>
+              </div>
+
+              <div class="filter-select">
+                <app-multiplo-select 
+                  label="Anos" 
+                  [options]="anosDescricoes"
+                  [(selectedValue)]="multSelectAnosPre" 
+                  [multiple]="true">
+                </app-multiplo-select>
+              </div>
+
+              <div class="filter-select">
+                <app-multiplo-select 
+                  label="Tipo de Prova" 
+                  [options]="tiposDeProvaDescricoes"
+                  [(selectedValue)]="multSelectTiposProvaPre" 
+                  [multiple]="true">
+                </app-multiplo-select>
+              </div>
+
+              <div class="filter-select">
+                <app-multiplo-select 
+                  label="Dificuldade" 
+                  [options]="dificuldadesDescricoes"
+                  [(selectedValue)]="multSelectDificuldadesPre" 
+                  [multiple]="true">
+                </app-multiplo-select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Conteúdo: Aulas -->
+          <div class="tab-panel" *ngIf="abaAtiva === 'aulas'">
+            <div class="placeholder-content">
+              <img src="assets/Icons/aula.svg" alt="Aulas" class="placeholder-icon">
+              <h3>Seleção de Aulas</h3>
+              <p>Funcionalidade em desenvolvimento. Em breve você poderá selecionar as aulas para esta semana.</p>
+            </div>
+          </div>
+
+          <!-- Conteúdo: Questões Pós-Teste -->
+          <div class="tab-panel" *ngIf="abaAtiva === 'questoes-pos'">
+            <div class="filter-info">
+              <h3>Configurar Filtros para Questões Pós-Teste</h3>
+              <p class="filter-description">
+                Selecione os filtros para definir quais questões aparecerão no pós-teste desta semana.
+                <span class="filter-count">{{ getFiltrosAtivos('pos') }}</span>
+              </p>
+              <button class="btn-clear-filters" (click)="limparFiltros('pos')">
+                Limpar todos os filtros
+              </button>
+            </div>
+
+            <div class="filters-grid">
+              <div class="filter-select">
+                <app-multiplo-select 
+                  label="Temas" 
+                  [options]="temasDescricoes"
+                  [(selectedValue)]="multSelectTemasPos" 
+                  [multiple]="true">
+                </app-multiplo-select>
+              </div>
+
+              <div class="filter-select">
+                <app-multiplo-select 
+                  label="Anos" 
+                  [options]="anosDescricoes"
+                  [(selectedValue)]="multSelectAnosPos" 
+                  [multiple]="true">
+                </app-multiplo-select>
+              </div>
+
+              <div class="filter-select">
+                <app-multiplo-select 
+                  label="Tipo de Prova" 
+                  [options]="tiposDeProvaDescricoes"
+                  [(selectedValue)]="multSelectTiposProvaPos" 
+                  [multiple]="true">
+                </app-multiplo-select>
+              </div>
+
+              <div class="filter-select">
+                <app-multiplo-select 
+                  label="Dificuldade" 
+                  [options]="dificuldadesDescricoes"
+                  [(selectedValue)]="multSelectDificuldadesPos" 
+                  [multiple]="true">
+                </app-multiplo-select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Conteúdo: Flashcards -->
+          <div class="tab-panel" *ngIf="abaAtiva === 'flashcards'">
+            <div class="placeholder-content">
+              <img src="assets/Icons/flashcards.svg" alt="Flashcards" class="placeholder-icon">
+              <h3>Seleção de Flashcards</h3>
+              <p>Funcionalidade em desenvolvimento. Em breve você poderá selecionar os flashcards para esta semana.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-secondary" (click)="cancelar()">
+        Cancelar
+      </button>
+      <button class="btn-primary" (click)="salvar()">
+        <img src="assets/Icons/check.svg" alt="Salvar">
+        Salvar Alterações
+      </button>
+    </div>
+  </div>
+</div>

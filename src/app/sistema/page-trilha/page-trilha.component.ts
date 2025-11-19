@@ -2,6 +2,10 @@ import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
 import { ThemeService } from 'src/app/services/theme.service';
 import { AnimationOptions } from 'ngx-lottie';
 import { ModalTrilhaService, TrilhaData } from 'src/app/services/modal-trilha.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ModalEditarSemanaTrilhaComponent, ConteudoSemana } from 'src/app/shared/modal-editar-semana-trilha/modal-editar-semana-trilha.component';
+import { AuthService } from 'src/app/services/auth.service';
+import { Usuario } from 'src/app/login/usuario';
 
 @Component({
   selector: 'app-page-trilha',
@@ -12,6 +16,7 @@ export class PageTrilhaComponent implements OnInit {
   selectedTema: string = 'Todos os temas';
   expandedNodeIndex: number | null = null;
   selectedNodeIndex: number | null = null;
+  usuarioLogado: Usuario | null = null;
 
   temas: string[] = [
     'Todos os temas',
@@ -48,46 +53,75 @@ export class PageTrilhaComponent implements OnInit {
         }
       ]
     },
-    { numero: 2, status: 'completed', cards: [
-      {
-        titulo: 'Catarata',
-        semana: 'Semana 2',
-        status: 'concluido',
-        aulas: 2,
-        questoes: 20,
-        flashcards: 20,
-        tempo: '1h30',
-        progresso: 100
-      },
-      {
-        titulo: 'Óptica',
-        semana: 'Semana 2',
-        status: 'concluido',
-        aulas: 2,
-        questoes: 20,
-        flashcards: 20,
-        tempo: '1h30',
-        progresso: 100
-      }
-    ] },
-    { numero: 3, status: 'active', cards: [
-      {
-        titulo: 'Catarata',
-        semana: 'Semana 3',
-        status: 'nao-iniciado',
-        aulas: 2,
-        questoes: 1,
-        flashcards: 20,
-        tempo: '1h30',
-        progresso: 0
-      }
-    ] },
+    { 
+      numero: 2, 
+      status: 'completed', 
+      cards: [
+        {
+          titulo: 'Catarata',
+          semana: 'Semana 2',
+          status: 'concluido',
+          aulas: 2,
+          questoes: 20,
+          flashcards: 20,
+          tempo: '1h30',
+          progresso: 100
+        },
+        {
+          titulo: 'Óptica',
+          semana: 'Semana 2',
+          status: 'concluido',
+          aulas: 2,
+          questoes: 20,
+          flashcards: 20,
+          tempo: '1h30',
+          progresso: 100
+        }
+      ] 
+    },
+    { 
+      numero: 3, 
+      status: 'active', 
+      cards: [
+        {
+          titulo: 'Catarata',
+          semana: 'Semana 3',
+          status: 'nao-iniciado',
+          aulas: 2,
+          questoes: 1,
+          flashcards: 20,
+          tempo: '1h30',
+          progresso: 0
+        }
+      ] 
+    },
     { numero: 4, status: 'locked', cards: [] },
     { numero: 5, status: 'locked', cards: [] },
     { numero: 6, status: 'locked', cards: [] },
     { numero: 7, status: 'locked', cards: [] },
     { numero: 8, status: 'locked', cards: [] },
-    { numero: 9, status: 'locked', cards: [] }
+    { numero: 9, status: 'locked', cards: [] },
+    { numero: 10, status: 'locked', cards: [] },
+    { numero: 11, status: 'locked', cards: [] },
+    { numero: 12, status: 'locked', cards: [] },
+    { numero: 13, status: 'locked', cards: [] },
+    { numero: 14, status: 'locked', cards: [] },
+    { numero: 15, status: 'locked', cards: [] },
+    { numero: 16, status: 'locked', cards: [] },
+    { numero: 17, status: 'locked', cards: [] },
+    { numero: 18, status: 'locked', cards: [] },
+    { numero: 19, status: 'locked', cards: [] },
+    { numero: 20, status: 'locked', cards: [] },
+    { numero: 21, status: 'locked', cards: [] },
+    { numero: 22, status: 'locked', cards: [] },
+    { numero: 23, status: 'locked', cards: [] },
+    { numero: 24, status: 'locked', cards: [] },
+    { numero: 25, status: 'locked', cards: [] },
+    { numero: 26, status: 'locked', cards: [] },
+    { numero: 27, status: 'locked', cards: [] },
+    { numero: 28, status: 'locked', cards: [] },
+    { numero: 29, status: 'locked', cards: [] },
+    { numero: 30, status: 'locked', cards: [] },
   ];
 
   eyeAnimationOptions: AnimationOptions = {
@@ -117,7 +151,9 @@ export class PageTrilhaComponent implements OnInit {
   constructor(
     private themeService: ThemeService,
     private elementRef: ElementRef,
-    private modalTrilhaService: ModalTrilhaService
+    private modalTrilhaService: ModalTrilhaService,
+    private dialog: MatDialog,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
@@ -125,6 +161,8 @@ export class PageTrilhaComponent implements OnInit {
     if (initialWeekIndex !== -1) {
       this.selectedNodeIndex = initialWeekIndex;
     }
+    
+    this.usuarioLogado = this.authService.getUsuarioAutenticado();
   }
 
   obterOpcoesAnimacao(status: string): AnimationOptions {
@@ -168,8 +206,8 @@ export class PageTrilhaComponent implements OnInit {
   }
 
   getPositionClass(index: number): string {
-    const positions = ['center', 'right', 'left', 'center', 'right', 'left', 'center', 'right', 'left'];
-    return positions[index] || 'center';
+    const positions = ['center', 'right', 'left'];
+    return positions[index % positions.length];
   }
 
   getStatusBadgeText(status: string): string {
@@ -347,5 +385,51 @@ export class PageTrilhaComponent implements OnInit {
     alert(`Iniciando ${flashcards.length} flashcards!`);
     // TODO: Implementar navegação para página de flashcards
     // this.router.navigate(['/flashcards'], { queryParams: { trilha: true } });
+  }
+
+  isAdmin(): boolean {
+    return this.usuarioLogado?.permissao === 'ROLE_ADMIN';
+  }
+
+  isProf(): boolean {
+    return this.usuarioLogado?.permissao === 'ROLE_PROFESSOR';
+  }
+
+  canEditContent(): boolean {
+    return this.isAdmin() || this.isProf();
+  }
+
+  abrirModalEdicao(card: any, event?: Event): void {
+    if (event) {
+      event.stopPropagation();
+    }
+
+    const dialogRef = this.dialog.open(ModalEditarSemanaTrilhaComponent, {
+      width: '900px',
+      maxWidth: '95vw',
+      maxHeight: '90vh',
+      panelClass: 'modal-editar-semana-trilha',
+      data: {
+        semanaNumero: this.selectedWeekInfo.numero,
+        titulo: card.titulo,
+        descricao: card.descricao || '',
+        filtrosQuestoesPre: card.filtrosQuestoesPre || {},
+        filtrosQuestoesPos: card.filtrosQuestoesPos || {}
+      } as ConteudoSemana
+    });
+
+    dialogRef.afterClosed().subscribe((resultado: ConteudoSemana | undefined) => {
+      if (resultado) {
+        console.log('Conteúdo atualizado:', resultado);
+        // TODO: Chamar serviço para salvar as alterações no backend
+        // this.trilhaService.atualizarConteudoSemana(resultado).subscribe(...)
+        
+        // Por enquanto, apenas atualizar o card localmente
+        card.titulo = resultado.titulo;
+        card.descricao = resultado.descricao;
+        card.filtrosQuestoesPre = resultado.filtrosQuestoesPre;
+        card.filtrosQuestoesPos = resultado.filtrosQuestoesPos;
+      }
+    });
   }
 }
