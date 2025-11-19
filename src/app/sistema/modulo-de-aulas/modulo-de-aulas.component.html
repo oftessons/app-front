@@ -11,14 +11,14 @@
                 <ng-container *ngIf="aulas.length > 0; else noDataTemplate">
                     <div class="video-container">
 
-                        <div class="loading-overlay" *ngIf="isLoadingVideo" aria-live="polite">
+                        <!-- <div class="loading-overlay" *ngIf="isLoadingVideo" aria-live="polite">
                             <span>Carregando vídeo...</span>
-                        </div>
+                        </div> -->
 
                         <video #videoPlayer id="catarata-player"
                             class="video-js vjs-default-skin vjs-big-play-centered video-player" controls playsinline
-                            disablePictureInPicture controlsList="nodownload" (contextmenu)="$event.preventDefault()"
-                            (ended)="onVideoEnded()">
+                            controlsList="nodownload" (contextmenu)="$event.preventDefault()" (ended)="onVideoEnded()"
+                            crossorigin="use-credentials">
 
                             <p class="vjs-no-js">
                                 Para ver este vídeo, por favor ative o JavaScript e considere

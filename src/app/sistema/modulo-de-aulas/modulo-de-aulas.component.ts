@@ -108,7 +108,8 @@ export class ModuloDeAulasComponent implements OnInit, OnDestroy {
       aspectRatio: '16:9',
       html5: { vhs: { withCredentials: true } },
       controlBar: {
-        playbackRateMenuButton: true
+        playbackRateMenuButton: true,
+        pictureInPictureToggle: true
       },
       playbackRates: [0.5, 0.75, 1, 1.25, 1.5, 2]
     } as any, () => {
