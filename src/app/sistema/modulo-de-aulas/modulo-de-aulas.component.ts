@@ -116,6 +116,36 @@ export class ModuloDeAulasComponent implements OnInit, OnDestroy {
         }
       },
 
+      userActions: {
+        hotkeys: (event: KeyboardEvent) => {
+          if (!this.player) return;
+
+          if (event.key === ' ' || event.code === 'Space') {
+            if (this.player.paused()) {
+              this.player.play();
+            } else {
+              this.player.pause();
+            }
+            event.preventDefault();
+          }
+
+          if (event.key === 'ArrowRight') {
+            const currentTime = this.player.currentTime();
+            if (currentTime !== undefined) {
+              this.player.currentTime(currentTime + 5);
+            }
+          }
+
+          if (event.key === 'ArrowLeft') {
+            const currentTime = this.player.currentTime();
+            if (currentTime !== undefined) {
+              this.player.currentTime(currentTime - 5);
+            }
+            event.preventDefault();
+          }
+        }
+      },
+
       playbackRates: [0.5, 0.75, 1, 1.25, 1.5, 2]
     } as any, () => {
       this.ready = true;
