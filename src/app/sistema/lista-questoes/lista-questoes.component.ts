@@ -216,15 +216,20 @@ export class ListaQuestoesComponent implements OnInit {
     if (this.categoriaSelecionada) {
       const categoriaDescricao = CategoriaDescricoes[this.categoriaSelecionada];
       console.log('Categoria selecionada:', categoriaDescricao);
+      this.mensagemAula = '';
+      this.mensagemSucessoAula = '';
+      
       this.aulasService.listarAulasPorCategoria(categoriaDescricao).subscribe(
         (response: Aula[]) => {
           this.aulas = response;
-          this.mensagemSucessoAula = 'Aulas encontradas com sucesso!';
-          this.mensagemAula = '';
+          if (response.length === 0) {
+            this.mensagemAula = 'Nenhuma aula encontrada para a categoria selecionada.';
+          } else {
+            this.mensagemSucessoAula = 'Aulas encontradas com sucesso!';
+          }
         },
         (error) => {
-          this.mensagemAula =
-            'Erro ao buscar aulas. Por favor, tente novamente.';
+          this.mensagemAula = 'Erro ao buscar aulas. Por favor, tente novamente.';
           this.mensagemSucessoAula = '';
           console.error('Erro ao buscar aulas:', error);
         }
