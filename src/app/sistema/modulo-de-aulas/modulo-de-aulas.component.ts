@@ -35,7 +35,6 @@ export class ModuloDeAulasComponent implements OnInit, OnDestroy {
   categoria: Categoria | undefined;
   descricao: string = '';
 
-  // Setter reativo para videoAtual
   private _videoAtual: Aula | null = null;
   get videoAtual(): Aula | null {
     return this._videoAtual;
@@ -107,13 +106,20 @@ export class ModuloDeAulasComponent implements OnInit, OnDestroy {
       fluid: true,
       aspectRatio: '16:9',
       html5: { vhs: { withCredentials: true } },
+
       controlBar: {
         playbackRateMenuButton: true,
-        pictureInPictureToggle: true
+        pictureInPictureToggle: true,
+        skipButtons: {
+          forward: 5,
+          backward: 5
+        }
       },
+
       playbackRates: [0.5, 0.75, 1, 1.25, 1.5, 2]
     } as any, () => {
       this.ready = true;
+
       this.player!.on('ended', () => this.onVideoEnded());
       this.player!.on('error', () => {
         const err = this.player!.error();
@@ -222,7 +228,6 @@ export class ModuloDeAulasComponent implements OnInit, OnDestroy {
 
     const primeiroSlug = this.generateSlug(this.aulas[0].titulo);
 
-    // Esta navegação está CORRETA. Ela anexa o slug à rota .../:modulo
     this.router.navigate([primeiroSlug], {
       relativeTo: this.route,
       replaceUrl: true
@@ -258,7 +263,7 @@ export class ModuloDeAulasComponent implements OnInit, OnDestroy {
         if (!this.player) return;
 
         const url = this.normalizeUrl(res.videoUrl);
-    
+
         const source: any = {
           src: url,
           type: 'application/x-mpegURL',
