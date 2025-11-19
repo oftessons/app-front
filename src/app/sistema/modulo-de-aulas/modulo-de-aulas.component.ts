@@ -228,7 +228,6 @@ export class ModuloDeAulasComponent implements OnInit, OnDestroy {
 
     const primeiroSlug = this.generateSlug(this.aulas[0].titulo);
 
-    // Esta navegação está CORRETA. Ela anexa o slug à rota .../:modulo
     this.router.navigate([primeiroSlug], {
       relativeTo: this.route,
       replaceUrl: true
