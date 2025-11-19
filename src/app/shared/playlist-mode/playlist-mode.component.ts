@@ -18,7 +18,9 @@ export class PlaylistModeComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.videoAtualIndex = this.aulas.length > 0 ? this.videoAtualIndex : -1;
+  }
 
   isModalOpen = false;
 
