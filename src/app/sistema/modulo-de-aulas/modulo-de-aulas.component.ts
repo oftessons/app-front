@@ -214,35 +214,23 @@ export class ModuloDeAulasComponent implements OnInit, OnDestroy {
           if (aulaEncontrada) {
             this.videoAtual = aulaEncontrada;
           } else {
-            console.warn(`Aula slug "${aulaSlug}" não encontrada. Redirecionando...`);
-            this.redirectToPrimeiraAula();
+            console.warn(`Aula slug "${aulaSlug}" não encontrada.`);
           }
-        } else {
-          this.redirectToPrimeiraAula();
+        } else if (this.aulas.length > 0) {
+          // Se não há slug na URL, seleciona a primeira aula mas não carrega o vídeo
+          this._videoAtual = this.aulas[0];
+          this.videoAtualIndex = 0;
         }
       });
   }
 
-  private redirectToPrimeiraAula(): void {
-    if (!this.aulas || this.aulas.length === 0) return;
-
-    const primeiroSlug = this.generateSlug(this.aulas[0].titulo);
-
-    this.router.navigate([primeiroSlug], {
-      relativeTo: this.route,
-      replaceUrl: true
-    });
-  }
-
-  // selecionarVideo agora NAVEGA
   public selecionarVideo(aula: Aula): void {
-    const slug = this.generateSlug(aula.titulo);
+    if (!this.moduloSlug) return;
 
-    // *** ÚNICA MUDANÇA É AQUI ***
-    // Adicionado '../' para navegar "para cima" antes de adicionar o novo slug
-    this.router.navigate(['../', slug], {
-      relativeTo: this.route,
-      replaceUrl: false // false = adiciona ao histórico (bom p/ botão voltar)
+    const aulaSlug = this.generateSlug(aula.titulo);
+
+    this.router.navigate(['usuario', 'painel-de-aulas', this.moduloSlug, aulaSlug], {
+      replaceUrl: false
     });
   }
 
@@ -272,8 +260,8 @@ export class ModuloDeAulasComponent implements OnInit, OnDestroy {
 
         console.log("Debug: Carregando vídeo com URL", url);
 
-        this.player.playbackRate(1);
         this.player.pause();
+
         this.player.src(source);
         this.player.load();
 
@@ -283,17 +271,6 @@ export class ModuloDeAulasComponent implements OnInit, OnDestroy {
           this.player!.off('error', onErr);
         };
         this.player.one('error', onErr);
-
-        this.player.one('loadedmetadata', () => {
-          const p = this.player!.play();
-          if (p?.catch) {
-            p.catch((e: any) => {
-              if (e?.name !== 'AbortError') {
-                console.warn('Play bloqueado/autoplay ou outro erro:', e);
-              }
-            });
-          }
-        });
       },
       error: (err) => {
         console.error("Erro ao obter URL do vídeo", err);
