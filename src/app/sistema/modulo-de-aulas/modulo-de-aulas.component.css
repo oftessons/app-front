@@ -8,6 +8,37 @@
   margin-bottom: 24px;
 }
 
+.btn-voltar {
+    display: flex;
+    align-items: center;
+    padding: 0;
+    padding-bottom: 16px;
+    gap: 8px;
+    border-radius: 4px;
+    background-color: transparent;
+    color: var(--text-color);
+    cursor: pointer;
+    font-size: 24px;
+    border: none;;
+    transition: all .2s ease;
+}
+
+.btn-voltar:hover {
+  filter: brightness(0.9);
+}
+
+.btn-voltar:active {
+  transform: scale(0.95);
+}
+
+.fa-arrow-left {
+  padding: 6px;
+  height: 32px;
+  width: 32px;
+  border-radius: 999px;
+  background: var(--button-bg);
+}
+
 .grid-container {
   display: grid;
   grid-template-columns: 3fr 1fr;
@@ -47,6 +78,103 @@ span {
 .info-aula p {
   font-size: 16px;
   color: var(--text-color);
+}
+
+.aula-header {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.title-rating-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.title-rating-row h3 {
+  margin: 0;
+  flex: 1;
+}
+
+.description-rating-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.description-rating-row p {
+  margin: 0;
+  flex: 1;
+}
+
+.estrelas-aula {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.stars {
+  display: flex;
+  user-select: none;
+  align-items: center;
+}
+
+.star-icon {
+  width: 24px;
+  height: 24px;
+  padding-right: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  pointer-events: auto;
+  -webkit-tap-highlight-color: transparent;
+  opacity: 0.4;
+}
+
+.star-icon.star-filled,
+.star-icon.star-hover {
+  opacity: 1;
+  filter: brightness(1.1);
+}
+
+.star-icon:hover {
+  transform: scale(1.15);
+  opacity: 1;
+}
+
+.star-icon:active {
+  transform: scale(0.95);
+}
+
+.average-rating {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--text-color);
+}
+
+.rating-value {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.average-star-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.average-star {
+  font-size: 16px;
+  color: #fbbf24;
+}
+
+.rating-count {
+  color: #9ca3af;
+  font-size: 13px;
 }
 
 .arquivos-aula {
@@ -191,6 +319,43 @@ span {
     width: 100%;
     padding: 6px 12px;
     font-size: 14px;
+  }
+
+  .title-rating-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .title-rating-row h3 {
+    font-size: 20px;
+  }
+
+  .description-rating-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .star-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .stars i {
+    font-size: 20px;
+  }
+
+  .average-rating {
+    font-size: 13px;
+  }
+
+  .rating-value {
+    font-size: 14px;
+  }
+
+  .average-star-icon {
+    width: 14px;
+    height: 14px;
   }
 }
 

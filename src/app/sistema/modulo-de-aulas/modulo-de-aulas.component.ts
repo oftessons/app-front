@@ -2,10 +2,13 @@ import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/co
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { AulasService } from 'src/app/services/aulas.service';
+import { AvaliacaoAulaService } from 'src/app/services/avaliacao-aula.service';
+import { ThemeService } from 'src/app/services/theme.service';
 import { Aula } from 'src/app/sistema/painel-de-aulas/aula';
 import { Categoria } from '../painel-de-aulas/enums/categoria';
 import { CategoriaDescricoes } from '../painel-de-aulas/enums/categoria-descricao';
 import { VideoUrlResponse } from './video-url-response';
+import { AvaliacaoAula } from './avaliacao-aula';
 
 import videojs from 'video.js';
 import { Subject } from 'rxjs';
@@ -48,11 +51,18 @@ export class ModuloDeAulasComponent implements OnInit, OnDestroy {
     if (aula) {
       this.videoAtualIndex = this.aulas.findIndex(a => a.id === aula.id);
       this.carregarVideo(aula);
+      this.carregarAvaliacaoAula(aula.id);
     }
   }
 
   videoAtualIndex: number = 0;
   videosAssistidos: boolean[] = [];
+
+  avaliacaoAtual: number = 0;
+  mediaAvaliacoes: number = 0;
+  totalAvaliacoes: number = 0;
+  estrelas: number[] = [1, 2, 3, 4, 5];
+  hoverStar: number = 0;
 
   isLoadingVideo: boolean = false;
   isLoadingPage: boolean = true;
@@ -64,6 +74,8 @@ export class ModuloDeAulasComponent implements OnInit, OnDestroy {
 
   constructor(
     private aulasService: AulasService,
+    private avaliacaoService: AvaliacaoAulaService,
+    private themeService: ThemeService,
     private route: ActivatedRoute,
     private location: Location,
     private router: Router
@@ -320,5 +332,106 @@ export class ModuloDeAulasComponent implements OnInit, OnDestroy {
 
   viewPdf(url: string): void {
     window.open(url, '_blank');
+  }
+
+  voltarPagina(): void {
+    this.location.back();
+  }
+
+  carregarAvaliacaoAula(idAula: number): void {
+    this.avaliacaoService.obterAvaliacaoUsuario(idAula)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (avaliacao) => {
+          this.avaliacaoAtual = avaliacao?.nota || 0;
+        },
+        error: (error) => {
+          //console.error('Erro ao carregar avaliação do usuário:', error);
+          this.avaliacaoAtual = 0;
+        }
+      });
+
+    this.avaliacaoService.obterMediaAvaliacoes(idAula)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (media) => {
+          this.mediaAvaliacoes = media.media || 0;
+          this.totalAvaliacoes = media.total || 0;
+        },
+        error: (error) => {
+          //console.error('Erro ao carregar média de avaliações:', error);
+          this.mediaAvaliacoes = 0;
+          this.totalAvaliacoes = 0;
+        }
+      });
+  }
+
+  avaliarAula(nota: number): void {
+    if (!this.videoAtual?.id) {
+      //console.error('Nenhuma aula selecionada para avaliar');
+      return;
+    }
+
+    this.avaliacaoAtual = nota;
+
+    const avaliacao: AvaliacaoAula = {
+      idAula: this.videoAtual.id,
+      nota: nota
+    };
+
+    //console.log('📤 Enviando avaliação:', avaliacao);
+
+    this.avaliacaoService.avaliarAula(avaliacao)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.carregarAvaliacaoAula(this.videoAtual!.id);
+          //console.log(`✅ Aula avaliada com ${nota} estrelas`);
+        },
+        error: (error) => {
+          //console.error('❌ Erro ao avaliar aula:', error);
+        }
+      });
+  }
+
+  onStarHover(star: number): void {
+    this.hoverStar = star;
+  }
+
+  onStarLeave(): void {
+    this.hoverStar = 0;
+  }
+
+  isStarFilled(star: number): boolean {
+    if (this.hoverStar > 0) {
+      return star <= this.hoverStar;
+    }
+    return star <= this.avaliacaoAtual;
+  }
+
+  getStarIcon(star: number): string {
+    const isFilled = this.isStarFilled(star);
+    const isDark = this.themeService.isDarkMode();
+
+    if (isDark) {
+      return isFilled 
+        ? 'assets/Icons/dark/estrela-preenchida-dark.svg' 
+        : 'assets/Icons/dark/estrela-vazia-dark.svg';
+    } else {
+      return isFilled 
+        ? 'assets/Icons/estrela-preenchida.svg' 
+        : 'assets/Icons/estrela-vazia.svg';
+    }
+  }
+
+  getStarClass(star: number): string {
+    return this.isStarFilled(star) ? 'fas fa-star' : 'far fa-star';
+  }
+
+  getAverageStarIcon(): string {
+    const isDark = this.themeService.isDarkMode();
+    return isDark 
+      ? 'assets/Icons/dark/estrela-preenchida-dark.svg'
+      : 'assets/Icons/estrela-preenchida.svg';
   }
 }
