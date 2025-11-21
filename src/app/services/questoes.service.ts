@@ -20,7 +20,7 @@ import { RespostaSalva } from '../sistema/page-questoes/respostas-salvas';
 })
 export class QuestoesService {
   apiURL: string = environment.apiURLBase + '/api/questoes';
-  private readonly requestsCache: Map<string, Observable<Questao[]>> = new Map(); // Usaremos um Map para o cache
+  private readonly requestsCache: Map<string, Observable<Questao[]>> = new Map();
   private readonly listaDeIdsFiltrados = new BehaviorSubject<number[]>([]);
   listaDeIdsFiltrados$ = this.listaDeIdsFiltrados.asObservable();
 
@@ -121,10 +121,8 @@ export class QuestoesService {
           let errorMessage = '';
 
           if (error.error instanceof ErrorEvent) {
-            // Erro no lado do cliente
             errorMessage = `Erro: ${error.error.message}`;
           } else {
-            // Erro no lado do servidor
             errorMessage = `Erro no servidor: ${error.status}, ${error.message}`;
           }
           console.error(errorMessage);
@@ -208,7 +206,6 @@ export class QuestoesService {
     const url = `${this.apiURL}/filtro/${userId}`;
     let params = new HttpParams();
 
-    // Adicione os filtros como parâmetros de consulta
     for (const filtro in filtros) {
       if (filtros.hasOwnProperty(filtro) && filtros[filtro] !== null) {
         if (Array.isArray(filtros[filtro])) {
@@ -221,7 +218,7 @@ export class QuestoesService {
       }
     }
 
-    // Adicione os parâmetros de paginação
+
     params = params.set('page', page.toString());
     params = params.set('size', size.toString());
 
@@ -319,7 +316,6 @@ export class QuestoesService {
   } | null> {
     let url = `${this.apiURL}/respondido/${idUser}?questaoId=${questaoId}`;
 
-    // Só adiciona simuladoId e filtroId se forem definidos e diferentes de zero
     if (simuladoId && simuladoId !== 0) {
       url += `&simuladoId=${simuladoId}`;
     }
@@ -344,7 +340,6 @@ export class QuestoesService {
       );
   }
 
-  // Método correto para buscar questão por ID
   buscarQuestaoPorId(
     usuarioId: number,
     questaoId: number
@@ -354,9 +349,9 @@ export class QuestoesService {
     return this.http.get<Questao>(url, { observe: 'response' }).pipe(
       map((response) => {
         if (response.status === 204) {
-          return null; // Retorna null se não houver questão encontrada
+          return null;
         }
-        return response.body || null; // Retorna a questão se for encontrada
+        return response.body || null;
       }),
       catchError((error: HttpErrorResponse) => {
         console.error('Erro ao buscar questão:', error);
@@ -368,11 +363,9 @@ export class QuestoesService {
   }
 
   getRespostasSalvasParaFiltro(usuarioId: number, filtroId: number): Observable<RespostaSalva[]> {
-    // A chamada continua a mesma, só o tipo de retorno que é mais específico
     return this.http.get<RespostaSalva[]>(`${this.apiURL}/respostas/filtro/${filtroId}/usuario/${usuarioId}`);
   }
 
-  // Método para obter acertos e erros de uma questão por ID
   getAcertosErrosQuestao(idQuestao: number): Observable<Map<string, string>> {
     const url = `${this.apiURL}/acertos-erros-questao/${idQuestao}`;
 

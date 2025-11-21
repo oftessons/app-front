@@ -94,6 +94,9 @@ export class FlashcardModalComponent implements OnChanges {
       this.cardsVistos.add(this.currentCard.id);
       this.cardStartTime = Date.now();
       this.estado_atual = 'question';
+      console.log(`[DEBUG - MODAL] Sessão iniciada. Card ID: ${this.currentCard.id}`);
+      console.log(`[DEBUG - MODAL] Foto Pergunta (Exibindo): ${this.currentCard.fotoUrlResposta}`);
+      console.log(`[DEBUG - MODAL] Foto Resposta (Exibindo): ${this.currentCard.fotoUrlPergunta}`);
     } else {
       this.onCloseClick();
     }
@@ -112,6 +115,7 @@ export class FlashcardModalComponent implements OnChanges {
 
   showAnswer(): void {
     this.estado_atual = 'answer';
+    console.log(`[DEBUG - MODAL] Mudando para estado: answer. Foto Resposta (Exibindo): ${this.currentCard?.fotoUrlPergunta}`);
   }
 
   rateAnswer(rating: number): void {
@@ -137,6 +141,8 @@ export class FlashcardModalComponent implements OnChanges {
     this.totalCardsEstudados = this.stats.length;
 
     const idealDificuldade = this.mapearRatingParaDificuldade(rating);
+    console.log(`[DEBUG - MODAL] Avaliação enviada. Buscando próximo card com dificuldade ideal: ${idealDificuldade}`);
+
 
     const handleResponse = (response: SessaoEstudoDTO) => {
       const list = response.listaFlashcards || [];
@@ -148,12 +154,17 @@ export class FlashcardModalComponent implements OnChanges {
         this.cardStartTime = Date.now();
         this.estado_atual = 'question';
         this.isLoadingNextCard = false;
+        console.log(`[DEBUG - MODAL] Próximo card carregado. ID: ${this.currentCard.id}`);
+        console.log(`[DEBUG - MODAL] Foto Pergunta (Exibindo): ${this.currentCard.fotoUrlResposta}`);
+        console.log(`[DEBUG - MODAL] Foto Resposta (Exibindo): ${this.currentCard.fotoUrlPergunta}`);
       } else {
+        console.log('[DEBUG - MODAL] Nenhum novo card encontrado. Mostrando sumário.');
         this.mostrarSumario();
       }
     };
 
     const handleError = () => {
+      console.error('[DEBUG - MODAL] Erro ao buscar próximo card (fallback também falhou). Mostrando sumário.');
       this.mostrarSumario();
     };
 
@@ -161,7 +172,8 @@ export class FlashcardModalComponent implements OnChanges {
       .getFlashcardsParaEstudar(this.temaEstudo, this.subtemaEstudo, idealDificuldade)
       .subscribe({
         next: (res) => handleResponse(res),
-        error: () => {
+        error: (err) => {
+            console.warn(`[DEBUG - MODAL] Erro ao buscar com dificuldade (${idealDificuldade}). Tentando fallback...`, err);
           this.flashcardService
             .getFlashcardsParaEstudar(this.temaEstudo, this.subtemaEstudo)
             .subscribe({
@@ -219,6 +231,7 @@ export class FlashcardModalComponent implements OnChanges {
 
   editarFlashcard(): void {
     if (!this.currentCard) return;
+    console.log(`[DEBUG - MODAL] Navegando para edição do Flashcard ID: ${this.currentCard.id}`);
     this.router.navigate(['/usuario/cadastro-flashcard', this.currentCard.id], {
       state: { flashcard: this.currentCard },
     });
