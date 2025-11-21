@@ -312,6 +312,49 @@ input:checked + .slider:before {
   transform: translateX(26px);
 }
 
+.ofensiva-badge {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Ícone SVG */
+.icone-raio {
+    width: 34px;
+    height: auto;
+}
+
+/* Fundo amarelo da etiqueta */
+.badge-container {
+    background: linear-gradient(180deg, #ffe27a 0%, #ffca2c 100%);
+    border: 3px solid #ffffff;
+    border-radius: 8px;
+    padding: 2px 6px;
+    display: flex;
+    align-items: center;
+    margin: 10px;
+}
+
+/* Caixa interna do número */
+.badge-numero-box {
+    background: #a8861b;
+    padding: 2px 10px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Número */
+.badge-numero {
+    font-size: 16px;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: 1px;
+}
+
+
+
 /* Estilo para dispositivos móveis e tablets */
 @media (max-width: 991px) {
   .navbar {

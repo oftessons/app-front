@@ -9,6 +9,7 @@ import { filter, delay } from 'rxjs/operators';
 import { ThemeService } from 'src/app/services/theme.service';
 import { Usuario } from 'src/app/login/usuario';
 import { Permissao } from 'src/app/login/Permissao';
+import { OfensivaService } from 'src/app/services/ofensiva.service';
 
 @Component({
   selector: 'app-navbar',
@@ -32,8 +33,12 @@ export class NavbarComponent {
   private routerSubscription?: Subscription;
   private dataFimTeste?: Date;
 
+  ofensivaAtual: string = '000';
+  private ofensivaSub: Subscription | null = null;
+
   constructor(
     private breakpointObserver: BreakpointObserver,
+    private ofensivaService: OfensivaService,
     private authService: AuthService,
     private router: Router,
     private stripeService: StripeService,
@@ -70,6 +75,12 @@ export class NavbarComponent {
         response => this.possuiPermissao = response.accessGranted,
         err => console.error('Erro ao buscar a permissão ', err)
     );
+
+    this.ofensivaSub = this.ofensivaService.dadosOfensiva$.subscribe(dados => {
+      if (dados) {
+        this.ofensivaAtual = dados.ofensivaAtual.toString().padStart(3, '0');
+      }
+    });
 
     this.routerSubscription = this.router.events
       .pipe(
