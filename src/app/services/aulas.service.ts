@@ -31,19 +31,16 @@ export class AulasService {
   }
 
 
-  uploadVideoS3(
-    presignedUrl: string,
-    videoFile: File,
-    contentType: string
+  uploadVideoVdoCipher(
+    clientPayload: CadastroAulaResponse['clientPayload'],
+    videoFile: File
   ): Observable<HttpEvent<any>> {
 
     return new Observable(subscriber => {
-
       const xhr = new XMLHttpRequest();
 
-      xhr.open('PUT', presignedUrl, true);
-
-      xhr.setRequestHeader('Content-Type', contentType);
+      // uploadLink vem do clientPayload
+      xhr.open('POST', clientPayload.uploadLink, true);
 
       xhr.upload.onprogress = (event: ProgressEvent) => {
         if (event.lengthComputable) {
@@ -54,6 +51,7 @@ export class AulasService {
           });
         }
       };
+
       xhr.onload = () => {
         if (xhr.status >= 200 && xhr.status < 300) {
           subscriber.next(new HttpResponse({
@@ -62,27 +60,37 @@ export class AulasService {
           }));
           subscriber.complete();
         } else {
-          subscriber.error(new Error(`Falha no upload S3: ${xhr.statusText}`));
+          subscriber.error(new Error(`Falha no upload VdoCipher: ${xhr.status} - ${xhr.statusText}`));
         }
       };
 
       xhr.onerror = () => {
-        subscriber.error(new Error('Falha de rede no upload para o S3.'));
+        subscriber.error(new Error('Falha de rede no upload para VdoCipher.'));
       };
-      xhr.onabort = () => {
-        subscriber.complete();
-      };
-      xhr.send(videoFile);
-      return () => {
-        xhr.abort();
-      };
+
+      xhr.onabort = () => subscriber.complete();
+
+      const formData = new FormData();
+      formData.append('policy', clientPayload.policy);
+      formData.append('key', clientPayload.key);
+      formData.append('x-amz-signature', clientPayload['x-amz-signature']);
+      formData.append('x-amz-algorithm', clientPayload['x-amz-algorithm']);
+      formData.append('x-amz-date', clientPayload['x-amz-date']);
+      formData.append('x-amz-credential', clientPayload['x-amz-credential']);
+      formData.append('success_action_status', '201');
+      formData.append('success_action_redirect', '');
+      formData.append('file', videoFile);
+
+      xhr.send(formData);
+
+      return () => xhr.abort();
     });
   }
 
 
   obterUrlDeVideo(aulaId: number): Observable<VideoUrlResponse> {
     const url = `${this.apiURL}/${aulaId}/play`;
-    
+
     return this.http.get<VideoUrlResponse>(url, {
       withCredentials: true
     });

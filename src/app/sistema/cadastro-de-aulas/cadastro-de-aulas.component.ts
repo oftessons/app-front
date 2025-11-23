@@ -166,21 +166,16 @@ export class CadastroDeAulasComponent implements OnInit {
       this.currentUploadState = 'Cadastrando metadados da aula...';
 
       this.aulasService.cadastrarAula(formData).pipe(
-
         switchMap((event: HttpEvent<any>) => {
           if (event.type === HttpEventType.Response) {
+            this.currentUploadState = 'Enviando vídeo para o VdoCipher...';
 
-            this.currentUploadState = 'Enviando vídeo para o S3...';
             const response = event.body as CadastroAulaResponse;
-
             this.idAulaCadastrando = response.aulaId;
 
-            console.log('URL pré-assinada recebida:', response.presignedUrl);
-
-            const uploadObservable = this.aulasService.uploadVideoS3(
-              response.presignedUrl,
-              this.video!,
-              this.aulaDTO.contentTypeVideo!,
+            const uploadObservable = this.aulasService.uploadVideoVdoCipher(
+              response.clientPayload,
+              this.video!
             );
 
             this.uploadSubscription = uploadObservable.subscribe();
@@ -189,21 +184,16 @@ export class CadastroDeAulasComponent implements OnInit {
           }
           return of(null);
         })
-
       ).subscribe({
         next: (event: HttpEvent<any> | null) => {
-
-          if (event === null) {
-            return;
-          }
+          if (!event) return;
 
           if (event.type === HttpEventType.UploadProgress && event.total) {
             this.uploadProgress = Math.round(100 * (event.loaded / event.total));
           } else if (event instanceof HttpResponse) {
-
             this.uploadProgress = 100;
             this.currentUploadState = 'Concluído!';
-            this.successMessage = 'Aula salva e vídeo enviado com sucesso! Estamos processando o vídeo, isso pode levar alguns minutos.';
+            this.successMessage = 'Aula salva e vídeo enviado com sucesso para o VdoCipher! O processamento pode levar alguns minutos.';
             this.isLoading = false;
             this.resetForm();
           }
