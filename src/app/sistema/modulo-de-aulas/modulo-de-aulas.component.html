@@ -16,7 +16,6 @@
                 <ng-container *ngIf="aulas.length > 0; else noDataTemplate">
                     <div class="video-container">
 
-                        <!-- PLACEHOLDER: Quando não há vídeo selecionado -->
                         <div class="no-video-selected" *ngIf="!videoAtual">
                             <div class="placeholder-content">
                                 <i class="fas fa-play-circle"></i>
@@ -25,15 +24,13 @@
                             </div>
                         </div>
 
-                        <!-- PLAYER VDOCIPHER: Iframe -->
-                        <!-- Só renderiza se tivermos a URL segura pronta -->
                         <div *ngIf="videoAtual && vdoCipherUrl" style="width: 100%; height: 100%; position: relative;">
                             <iframe [src]="vdoCipherUrl" style="width:100%; height:100%; border:0;"
                                 allow="encrypted-media; fullscreen; picture-in-picture" allowfullscreen="true">
                             </iframe>
                         </div>
 
-                        <!-- Loading state para o vídeo -->
+                        
                         <div *ngIf="videoAtual && !vdoCipherUrl && isLoadingVideo" class="loading-overlay">
                             <span>Carregando player...</span>
                         </div>
