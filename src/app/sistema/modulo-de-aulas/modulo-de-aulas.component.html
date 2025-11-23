@@ -7,7 +7,7 @@
 
         <button type="button" class="btn-voltar me-2" (click)="voltarPagina()">
             <i class="fa fa-arrow-left"></i>
-            voltar
+            Voltar
         </button>
 
         <div class="grid-container">
@@ -15,20 +15,28 @@
 
                 <ng-container *ngIf="aulas.length > 0; else noDataTemplate">
                     <div class="video-container">
-                        <video #videoPlayer id="catarata-player"
-                            class="video-js vjs-default-skin vjs-big-play-centered video-player" playsinline
-                            controlsList="nodownload" (contextmenu)="$event.preventDefault()"
-                            crossorigin="use-credentials">
 
-                            <p class="vjs-no-js">
-                                Para ver este vídeo, por favor ative o JavaScript e considere
-                                atualizar para um navegador que
-                                <a href="https://videojs.com/html5-video-support/" target="_blank"
-                                    rel="noopener noreferrer">
-                                    suporta vídeo HTML5
-                                </a>.
-                            </p>
-                        </video>
+                        <!-- PLACEHOLDER: Quando não há vídeo selecionado -->
+                        <div class="no-video-selected" *ngIf="!videoAtual">
+                            <div class="placeholder-content">
+                                <i class="fas fa-play-circle"></i>
+                                <h3>Nenhum vídeo selecionado</h3>
+                                <p>Escolha uma aula na lista ao lado para começar a assistir.</p>
+                            </div>
+                        </div>
+
+                        <!-- PLAYER VDOCIPHER: Iframe -->
+                        <!-- Só renderiza se tivermos a URL segura pronta -->
+                        <div *ngIf="videoAtual && vdoCipherUrl" style="width: 100%; height: 100%; position: relative;">
+                            <iframe [src]="vdoCipherUrl" style="width:100%; height:100%; border:0;"
+                                allow="encrypted-media; fullscreen; picture-in-picture" allowfullscreen="true">
+                            </iframe>
+                        </div>
+
+                        <!-- Loading state para o vídeo -->
+                        <div *ngIf="videoAtual && !vdoCipherUrl && isLoadingVideo" class="loading-overlay">
+                            <span>Carregando player...</span>
+                        </div>
 
                     </div>
                 </ng-container>
@@ -39,19 +47,13 @@
                             <h3>{{ videoAtual?.titulo }}</h3>
                             <div class="estrelas-aula">
                                 <div class="stars">
-                                    <img 
-                                        *ngFor="let star of estrelas" 
-                                        [src]="getStarIcon(star)"
-                                        [alt]="'Estrela ' + star"
-                                        class="star-icon"
-                                        [class.star-filled]="isStarFilled(star)"
-                                        [class.star-hover]="star <= hoverStar"
-                                        (click)="avaliarAula(star)"
-                                        (mouseenter)="onStarHover(star)"
+                                    <img *ngFor="let star of estrelas" [src]="getStarIcon(star)"
+                                        [alt]="'Estrela ' + star" class="star-icon"
+                                        [class.star-filled]="isStarFilled(star)" [class.star-hover]="star <= hoverStar"
+                                        (click)="avaliarAula(star)" (mouseenter)="onStarHover(star)"
                                         (mouseleave)="onStarLeave()"
                                         [attr.aria-label]="'Avaliar com ' + star + ' estrela' + (star > 1 ? 's' : '')"
-                                        role="button"
-                                        tabindex="0">
+                                        role="button" tabindex="0">
                                 </div>
                             </div>
                         </div>
@@ -60,18 +62,24 @@
                             <div class="average-rating" *ngIf="totalAvaliacoes > 0">
                                 <span class="rating-value">{{ mediaAvaliacoes | number:'1.1-1' }}</span>
                                 <img [src]="getAverageStarIcon()" alt="Estrela" class="average-star-icon">
-                                <span class="rating-count">({{ totalAvaliacoes }} {{ totalAvaliacoes === 1 ? 'avaliação' : 'avaliações' }})</span>
+                                <span class="rating-count">({{ totalAvaliacoes }} {{ totalAvaliacoes === 1 ? 'avaliação'
+                                    : 'avaliações' }})</span>
                             </div>
                         </div>
                     </div>
 
-                    <div class="arquivos-aula">
+                    <!-- Placeholder info quando não há vídeo -->
+                    <div *ngIf="aulas.length > 0 && !videoAtual" class="info-placeholder">
+                        <h3>Bem-vindo ao Módulo</h3>
+                        <p>Selecione uma aula na lista para ver o conteúdo.</p>
+                    </div>
+
+                    <div class="arquivos-aula" *ngIf="videoAtual">
                         <h4>Material da Aula</h4>
                         <hr>
-                        <div
-                            *ngIf="videoAtual && videoAtual.documentos && videoAtual.documentos.length > 0; else noMaterialTemplate">
+                        <div *ngIf="videoAtual.documentos && videoAtual.documentos.length > 0; else noMaterialTemplate">
                             <div class="list-group">
-                                <div class="list-group-item" *ngFor="let documento of videoAtual?.documentos">
+                                <div class="list-group-item" *ngFor="let documento of videoAtual.documentos">
                                     <span>{{ formatFileName(documento.key) }}</span>
                                     <div>
                                         <button class="btn-vizualizar" (click)="viewPdf(documento.url)">
