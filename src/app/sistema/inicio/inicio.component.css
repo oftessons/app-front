@@ -16,7 +16,7 @@
 }
 
 .filtro-select {
-  width: 200px; 
+  width: 200px;
 }
 
 ::ng-deep .filtro-select .mat-form-field-flex,
@@ -45,15 +45,16 @@
 
 .card-text-estatistica {
   color: var(--text-color);
-    h3 {
-      margin-bottom: 8px;
-      font-size: 24px;
-    }
 
-    p {
-      margin: 0;
-      font-size: 14px;
-    }
+  h3 {
+    margin-bottom: 8px;
+    font-size: 24px;
+  }
+
+  p {
+    margin: 0;
+    font-size: 14px;
+  }
 }
 
 .banner-trilha {
@@ -73,7 +74,7 @@
 
 .banner-text {
   font-size: 24px;
-  
+
   h2 {
     color: #ffffff !important;
     font-size: 24px;
@@ -114,7 +115,7 @@
 }
 
 .section {
-  margin-top: 40px;
+  margin-top: 20px;
 
   h2 {
     font-size: 24px;
@@ -150,6 +151,7 @@
 
 .card.satisfacao {
   background: var(--yellow);
+
   h5 {
     color: #0F1934 !important;
   }
@@ -164,6 +166,7 @@
   margin-top: 10px;
   height: 50px;
 }
+
 .icon-fi {
   width: 55px;
   height: 55px;
@@ -175,6 +178,7 @@
   background-color: transparent;
   border-color: transparent;
 }
+
 .btn:hover {
   color: #a2cdff;
 }
@@ -182,7 +186,7 @@
 .mensagem {
   margin-top: 10px;
   padding: 10px;
-  background-color: #cfe2ff; 
+  background-color: #cfe2ff;
   color: #000;
   border-radius: 10px;
   font-size: 14px;
@@ -200,7 +204,7 @@
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  transition:left 0.3s ease;
+  transition: left 0.3s ease;
 }
 
 .modal-trilha {
@@ -319,6 +323,263 @@
   height: 150px;
 }
 
+.container-principal{
+  display: grid;
+  margin-top: 24px;
+  grid-template-columns: 4fr 1fr;  /* esquerda maior, direita menor */
+  width: 100%;
+  align-items: stretch;
+}
+
+.container-esquerda{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-right: 24px;
+}
+
+.container-direita{
+  display: flex;
+  height: 95%;
+  width: 250px;
+}
+/* Card Principal */
+.card-ofensiva {
+  display: flex;
+  flex-grow: 1  ;
+  position: relative;
+  overflow: hidden;
+  padding: 20px 20px 0 20px;
+  border-radius: 16px;
+  border-bottom: 4px solid rgba(110, 120, 179, 0.30);
+  background: linear-gradient(180deg, #122D4B 0%, #091C34 47.92%, #07172E 92.05%);
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 16px;
+  align-self: stretch;
+}
+
+/* Header: "1 dia de ofensiva" e Raio */
+.ofensiva-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 5px;
+  position: relative;
+}
+
+.ofensiva-dias {
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: #FFC107;
+  line-height: 1;
+  margin-right: 8px;
+}
+
+.ofensiva-raio {
+  width: 40px;
+  height: auto;
+  filter: drop-shadow(0 0 5px rgba(255, 193, 7, 0.6));
+}
+
+.ofensiva-titulo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #FFC107; /* Amarelo Ouro */
+  text-align: center;
+  margin: 0 0 15px 0;
+  text-transform: lowercase; /* Conforme imagem "dia de ofensiva" */
+}
+
+/* Texto "Continue acessando..." */
+.ofensiva-footer-text {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #E0E0E0;
+  margin-bottom: 25px;
+  line-height: 1.4;
+  z-index: 2;
+}
+
+/* Container dos Dias da Semana */
+.dias-semana-ofensiva {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 20px;
+  z-index: 2; /* Ficar acima do robô se necessário */
+}
+
+/* ESTILO DOS DIAS (Círculo + Texto) 
+   Usamos padding-top para dar espaço para o círculo desenhado com ::before 
+*/
+.dia-circulo {
+  position: relative;
+  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end; /* Texto fica no fundo */
+  
+  font-size: 0.75rem; /* Tamanho do texto "Seg" */
+  color: #A0AEC0;     /* Cor do texto inativo */
+  font-weight: 600;
+  
+  padding-top: 32px; /* Espaço reservado para o círculo (24px altura + margem) */
+  min-width: 30px;
+  cursor: default;
+}
+
+/* O Círculo (Inativo) */
+.dia-circulo::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid #4A5568; /* Borda cinza/azulada */
+  background-color: transparent;
+  
+  transition: all 0.3s ease;
+}
+
+/* Estado ATIVO (Dia Concluído) */
+.dia-circulo.active {
+  color: white; /* Texto fica branco */
+}
+
+/* O Círculo (Ativo - Verde com Check) */
+.dia-circulo.active::before {
+  background-color: #28A745; /* Verde Sucesso */
+  border-color: #28A745;
+  
+  /* Ícone de Check (SVG) centralizado */
+  /* Certifique-se que o caminho do ícone está correto */
+  background-image: url('..//..//..//assets/Icons/check.svg'); 
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 14px;
+  box-shadow: 0 0 8px rgba(40, 167, 69, 0.6); /* Brilho verde */
+}
+
+/* Robô Mascote */
+.foto-robo {
+  margin-top: auto; /* Empurra para o fundo do card */
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.foto-robo img {
+  width: 150px; /* Ajuste conforme o tamanho real da sua imagem */
+  height: auto;
+  margin-bottom: -20px; /* Efeito de sair levemente do card ou encostar na borda */
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
+}
+
+/* Loading State */
+app-loading-simple {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  min-height: 300px;
+}
+
+
+.modal-body-ofensiva .dia-nome {
+  color: #FFF;
+  opacity: 0.8;
+}
+
+/* --- Modal de Ofensiva (Novo) --- */
+.modal-trilha.modal-ofensiva {
+  /* (O fundo azul escuro do seu modal) */
+  background: #1E1E2F;
+  border-radius: 16px;
+  max-width: 400px;
+  width: 100%;
+  border: 1px solid #333;
+  /* Borda sutil */
+}
+
+.modal-ofensiva .modal-header {
+  position: relative;
+  border: none;
+  padding: 15px 15px 0 15px;
+  background: #1E1E2F;
+}
+
+.modal-body-ofensiva {
+  padding: 20px 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modal-body-ofensiva .ofensiva-header {
+  margin-top: 20px;
+  /* Espaço do avatar */
+  margin-bottom: 5px;
+}
+
+.modal-body-ofensiva .ofensiva-dias {
+  font-size: 4rem;
+  color: var(--yellow);
+}
+
+.modal-body-ofensiva .ofensiva-raio {
+  width: 40px;
+  height: 40px;
+}
+
+.modal-body-ofensiva .dias-semana-ofensiva {
+  width: 100%;
+  margin-top: 15px;
+}
+
+.modal-body-ofensiva .ofensiva-footer-text {
+  margin-top: 20px;
+  color: #FFF;
+  opacity: 0.9;
+}
+
+.modal-footer-ofensiva {
+  padding: 20px 30px 30px 30px;
+  border: none;
+}
+
+.modal-footer-ofensiva .btn-save.btn-verde {
+  background-color: #28a745;
+  /* Verde */
+  color: #FFFFFF;
+  width: 100%;
+  padding: 15px;
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.modal-footer-ofensiva .btn-save.btn-verde img {
+  width: 16px;
+  filter: none;
+  /* Remove filtros do */
+  transform: none;
+  /* Remove rotação do */
+}
+
 .modal-body-comecar {
   display: flex;
   flex-direction: column;
@@ -339,10 +600,12 @@
   flex-direction: column;
   justify-content: center;
   max-width: 326px;
+
   h2 {
     color: var(--text-color);
     font-size: 24px;
   }
+
   p {
     color: var(--text-color);
     font-size: 16px;
@@ -383,6 +646,7 @@
   .container-row {
     grid-template-columns: repeat(2, 1fr);
   }
+
   .card {
     width: 100%;
   }
@@ -399,18 +663,22 @@
     grid-template-columns: repeat(1, 1fr);
     padding: 0;
   }
+
   .card {
     width: 100%;
   }
+
   .container-logo {
     padding-top: 40px;
   }
+
   .container-logo img {
     width: 100%;
   }
 }
 
 @media (max-width: 570px) {
+
   /* .estatisticas {
     flex-direction: column;
     align-items: center;
@@ -421,9 +689,10 @@
 }
 
 @media (max-width: 480px) {
-  .welcome-message{
+  .welcome-message {
     font-size: 22px;
   }
+
   .estatisticas {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -432,14 +701,17 @@
   .card-estatistica {
     width: 100%;
   }
+
   .header {
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
   }
+
   .filtro-select {
     width: 100%;
   }
+
   .banner-trilha {
     height: 250px;
     padding: 10px;

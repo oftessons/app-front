@@ -3,6 +3,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { ThemeService } from 'src/app/services/theme.service';
 import { Router } from '@angular/router';
 import { TemaDescricoes } from '../page-questoes/enums/tema-descricao';
+import { OfensivaDados, OfensivaService } from 'src/app/services/ofensiva.service';
 @Component({
   selector: 'app-inicio',
   templateUrl: './inicio.component.html',
@@ -17,6 +18,10 @@ export class InicioComponent implements OnInit {
 
   opcoesFiltro: string[] = ['Diário', 'Semanal', 'Mensal', 'Anual'];
   filtroSelecionado: string = 'Semanal';
+
+  dadosOfensiva: OfensivaDados | null = null;
+  isLoadingOfensiva = true;
+  mostrarModalOfensiva = false;
 
   respostasCertas: number = 0;
   respostasErradas: number = 0;
@@ -35,6 +40,7 @@ export class InicioComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private themeService: ThemeService,
+    private ofensivaService: OfensivaService,
     private Router: Router
   ) { }
 
@@ -44,6 +50,7 @@ export class InicioComponent implements OnInit {
       err => console.error('Erro ao buscar a permissão ', err)
     );
     this.obterNomeUsuario();
+    this.carregarDadosOfensiva();
     this.carregarAssuntos();
   }
 
@@ -123,6 +130,30 @@ export class InicioComponent implements OnInit {
     console.log('Assuntos selecionados:', this.assuntosSelecionados);
     this.modalTrilhaAberto = false;
     this.modalConfirmacaoAberto = true;
+  }
+
+  carregarDadosOfensiva(): void {
+    this.isLoadingOfensiva = true;
+    this.ofensivaService.getDadosOfensiva().subscribe({
+      next: (dados) => {
+        console.log(dados);
+        this.dadosOfensiva = dados;
+        this.isLoadingOfensiva = false;
+        
+        if (dados.ofensivaAtualizadaHoje) {
+           this.mostrarModalOfensiva = true;
+        }
+      },
+      error: (err) => {
+        console.error("Erro ao carregar dados da ofensiva:", err);
+        this.isLoadingOfensiva = false;
+      }
+    });
+  }
+
+  // --- Métodos do Modal de Ofensiva ---
+  fecharModalOfensiva(): void {
+    this.mostrarModalOfensiva = false;
   }
 
   iniciarTrilhaAgora(): void {

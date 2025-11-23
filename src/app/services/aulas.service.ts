@@ -89,13 +89,17 @@ export class AulasService {
   }
 
   listarAulasPorCategoria(categoria: string): Observable<Aula[]> {
-    const url = `${this.apiURL}/${categoria}`;
+    const url = `${this.apiURL}/categoria/${categoria}`;
     console.log('URL da solicitação:', url);
-    return this.http.get<Aula[]>(`${this.apiURL}/categoria/${categoria}`).pipe(
-      tap((response) => {
-        console.log('Resposta das aulas por categoria:', response);
+    return this.http.get<Aula[]>(url, { observe: 'response' }).pipe(
+      map((response) => {
+        if (response.status === 204) {
+          console.log('Nenhuma aula encontrada para a categoria:', categoria);
+          return [];
+        }
+        console.log('Resposta das aulas por categoria:', response.body);
+        return response.body || [];
       }),
-
       catchError((error) => {
         let errorMessage = '';
         if (error.error instanceof ErrorEvent) {
@@ -104,11 +108,10 @@ export class AulasService {
           errorMessage = `Erro no servidor: ${error.status}, ${error.message}`;
         }
         console.error(errorMessage);
-        return throwError(errorMessage);
+        return throwError(() => new Error(errorMessage));
       })
     );
   }
-
 
   listarTodasAulas(): Observable<Aula[]> {
     return this.http.get<Aula[]>(this.apiURL).pipe(

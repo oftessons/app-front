@@ -5,20 +5,20 @@
             <h1 class="mt-4"><span> | </span>Módulo de {{ descricao }} </h1>
         </div>
 
+        <button type="button" class="btn-voltar me-2" (click)="voltarPagina()">
+            <i class="fa fa-arrow-left"></i>
+            voltar
+        </button>
+
         <div class="grid-container">
             <div class="principal-info">
 
                 <ng-container *ngIf="aulas.length > 0; else noDataTemplate">
                     <div class="video-container">
-
-                        <div class="loading-overlay" *ngIf="isLoadingVideo" aria-live="polite">
-                            <span>Carregando vídeo...</span>
-                        </div>
-
                         <video #videoPlayer id="catarata-player"
-                            class="video-js vjs-default-skin vjs-big-play-centered video-player" controls playsinline
-                            disablePictureInPicture controlsList="nodownload" (contextmenu)="$event.preventDefault()"
-                            (ended)="onVideoEnded()">
+                            class="video-js vjs-default-skin vjs-big-play-centered video-player" playsinline
+                            controlsList="nodownload" (contextmenu)="$event.preventDefault()"
+                            crossorigin="use-credentials">
 
                             <p class="vjs-no-js">
                                 Para ver este vídeo, por favor ative o JavaScript e considere
@@ -34,9 +34,35 @@
                 </ng-container>
 
                 <div class="info-aula">
-                    <div *ngIf="aulas.length > 0 && videoAtual">
-                        <h3>{{ videoAtual?.titulo }}</h3>
-                        <p>{{ videoAtual?.descricao }}</p>
+                    <div class="aula-header" *ngIf="aulas.length > 0 && videoAtual">
+                        <div class="title-rating-row">
+                            <h3>{{ videoAtual?.titulo }}</h3>
+                            <div class="estrelas-aula">
+                                <div class="stars">
+                                    <img 
+                                        *ngFor="let star of estrelas" 
+                                        [src]="getStarIcon(star)"
+                                        [alt]="'Estrela ' + star"
+                                        class="star-icon"
+                                        [class.star-filled]="isStarFilled(star)"
+                                        [class.star-hover]="star <= hoverStar"
+                                        (click)="avaliarAula(star)"
+                                        (mouseenter)="onStarHover(star)"
+                                        (mouseleave)="onStarLeave()"
+                                        [attr.aria-label]="'Avaliar com ' + star + ' estrela' + (star > 1 ? 's' : '')"
+                                        role="button"
+                                        tabindex="0">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="description-rating-row">
+                            <p>{{ videoAtual?.descricao }}</p>
+                            <div class="average-rating" *ngIf="totalAvaliacoes > 0">
+                                <span class="rating-value">{{ mediaAvaliacoes | number:'1.1-1' }}</span>
+                                <img [src]="getAverageStarIcon()" alt="Estrela" class="average-star-icon">
+                                <span class="rating-count">({{ totalAvaliacoes }} {{ totalAvaliacoes === 1 ? 'avaliação' : 'avaliações' }})</span>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="arquivos-aula">

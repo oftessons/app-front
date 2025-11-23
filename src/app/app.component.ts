@@ -17,6 +17,9 @@ export class AppComponent {
   @ViewChild('modalTrilhaOutlet', { read: ViewContainerRef })
   modalTrilhaOutlet!: ViewContainerRef;
 
+  @ViewChild('modalSimuladoOutlet', { read: ViewContainerRef })
+  modalSimuladoOutlet!: ViewContainerRef;
+
   constructor(
     private modalDeleteService: ModalDeleteService,
     private modalTrilhaService: ModalTrilhaService,

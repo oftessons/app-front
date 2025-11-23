@@ -1,7 +1,7 @@
 <div class="container pt-5">
   <div class="container mt-4">
     <div class="header">
-      <h1 class="welcome-message">👋 Seja Bem-vindo(a), {{ nomeUsuario }} </h1>
+      <h1 class="welcome-message">👋 Seja Bem-vindo(a), {{ nomeUsuario }}</h1>
       <div class="filtro-select">
         <app-select-padrao
           [options]="opcoesFiltro"
@@ -12,118 +12,247 @@
         ></app-select-padrao>
       </div>
     </div>
-    <div class="estatisticas">
-      <div class="card-estatistica">
-        <img [src]="isDarkMode() ? 'assets/Icons/dark/v-dark.svg' : 'assets/Icons/v.svg'" alt="Ícone de Respostas Certas">
-        <div class="card-text-estatistica">
-          <h3>{{ respostasCertas }}</h3>
-          <p>Respostas Certas</p>
+    <div class="container-principal">
+      <div class="container-esquerda">
+        <div class="banner-trilha">
+          <div class="banner-text">
+            <h2>Revise seus estudos e aprenda como nunca antes!</h2>
+            <p>Crie sua programação de estudos e conquiste novos resultados.</p>
+          </div>
+          <button
+            class="banner-button"
+            (click)="abrirModalConfiguracaoTrilha()"
+          >
+            Criar minha trilha de revisões
+            <img src="assets/Icons/arrow-updown.svg" alt="seta" />
+          </button>
         </div>
-      </div>
-      <div class="card-estatistica">
-        <img [src]="isDarkMode() ? 'assets/Icons/dark/x-dark.svg' : 'assets/Icons/x.svg'" alt="Ícone de Respostas Erradas">
-        <div class="card-text-estatistica">
-          <h3>{{ respostasErradas }}</h3>
-          <p>Respostas Erradas</p>
-        </div>
-      </div>
-      <div class="card-estatistica">
-        <img [src]="isDarkMode() ? 'assets/Icons/dark/au-ofi-dark.svg' : 'assets/Icons/au-ofi.svg'" alt="Ícone de Aulas">
-        <div class="card-text-estatistica">
-          <h3>{{ aulasAssistidas }}</h3>
-          <p>Aulas Assistidas</p>
-        </div>
-      </div>
-      <div class="card-estatistica">
-        <img [src]="isDarkMode() ? 'assets/Icons/dark/flashcards-dark.svg' : 'assets/Icons/flashcards.svg'" alt="Ícone de Flashcards">
-        <div class="card-text-estatistica">
-          <h3>{{ flashcardsEstudados }}</h3>
-          <p>Flashcards Estudados</p>
-        </div>
-      </div>
-    </div>
-    <div class="banner-trilha">
-      <div class="banner-text">
-        <h2>Revise seus estudos e aprenda como nunca antes!</h2>
-        <p>Crie sua programação de estudos e conquiste novos resultados.</p>
-      </div>
-      <button
-        class="banner-button"
-        (click)="abrirModalConfiguracaoTrilha()"
-        >
-        Criar minha trilha de revisões
-        <img src="assets/Icons/arrow-updown.svg" alt="seta">
-      </button>
-    </div>
-    <div class="section">
-      <h2>Principais recursos para você</h2>
-      <div class="container-row">
-        <div class="mb-4" *ngIf="possuiPermissao">
-          <div class="card">
-            <div class="card-body text-center">
-              <h5 class="card-title">Questões</h5>
-              <div class="card-icon">
-                <img src="assets/Icons/dark/caderno-dark.svg" alt="Ícone de Questões" class="icon"/>
-              </div>
-              <a routerLink="/usuario/questoes" class="btn btn-primary">
-                Acessar >
-              </a>
+        <div class="estatisticas">
+          <div class="card-estatistica">
+            <img
+              [src]="
+                isDarkMode()
+                  ? 'assets/Icons/dark/v-dark.svg'
+                  : 'assets/Icons/v.svg'
+              "
+              alt="Ícone de Respostas Certas"
+            />
+            <div class="card-text-estatistica">
+              <h3>{{ respostasCertas }}</h3>
+              <p>Respostas Certas</p>
+            </div>
+          </div>
+          <div class="card-estatistica">
+            <img
+              [src]="
+                isDarkMode()
+                  ? 'assets/Icons/dark/x-dark.svg'
+                  : 'assets/Icons/x.svg'
+              "
+              alt="Ícone de Respostas Erradas"
+            />
+            <div class="card-text-estatistica">
+              <h3>{{ respostasErradas }}</h3>
+              <p>Respostas Erradas</p>
+            </div>
+          </div>
+          <div class="card-estatistica">
+            <img
+              [src]="
+                isDarkMode()
+                  ? 'assets/Icons/dark/au-ofi-dark.svg'
+                  : 'assets/Icons/au-ofi.svg'
+              "
+              alt="Ícone de Aulas"
+            />
+            <div class="card-text-estatistica">
+              <h3>{{ aulasAssistidas }}</h3>
+              <p>Aulas Assistidas</p>
+            </div>
+          </div>
+          <div class="card-estatistica">
+            <img
+              [src]="
+                isDarkMode()
+                  ? 'assets/Icons/dark/flashcards-dark.svg'
+                  : 'assets/Icons/flashcards.svg'
+              "
+              alt="Ícone de Flashcards"
+            />
+            <div class="card-text-estatistica">
+              <h3>{{ flashcardsEstudados }}</h3>
+              <p>Flashcards Estudados</p>
             </div>
           </div>
         </div>
-
-        <div class="mb-4" *ngIf="possuiPermissao">
-          <div class="card">
-            <div class="card-body text-center">
-              <h5 class="card-title">Simulados</h5>
-              <div class="card-icon">
-                <img src="assets/Icons/dark/simu-dark.svg" alt="Ícone de Simulados" class="icon"/>
+      </div>
+      <div class="container-direita">
+        <div class="card-ofensiva">
+          <div *ngIf="isLoadingOfensiva; else ofensivaContent">
+            <app-loading-simple></app-loading-simple>
+          </div>
+          <ng-template #ofensivaContent>
+            <div *ngIf="dadosOfensiva">
+              <div class="ofensiva-header">
+                <span class="ofensiva-dias">{{
+                  dadosOfensiva.ofensivaAtual
+                }}</span>
+                <img
+                  src="assets/Icons/raio.svg"
+                  alt="Ofensiva"
+                  class="ofensiva-raio"
+                />
+                <p class="ofensiva-titulo">dia(s) de ofensiva</p>
               </div>
-              <a routerLink="/usuario/simulados" class="btn btn-primary">
-                Acessar >
-              </a>
+
+              <div class="dias-semana-ofensiva">
+                <div
+                  class="dia-circulo"
+                  [class.active]="dadosOfensiva.diasDaSemana.includes('SEG')"
+                >
+                  Seg
+                </div>
+                <div
+                  class="dia-circulo"
+                  [class.active]="dadosOfensiva.diasDaSemana.includes('TER')"
+                >
+                  Ter
+                </div>
+                <div
+                  class="dia-circulo"
+                  [class.active]="dadosOfensiva.diasDaSemana.includes('QUA')"
+                >
+                  Qua
+                </div>
+                <div
+                  class="dia-circulo"
+                  [class.active]="dadosOfensiva.diasDaSemana.includes('QUI')"
+                >
+                  Qui
+                </div>
+                <div
+                  class="dia-circulo"
+                  [class.active]="dadosOfensiva.diasDaSemana.includes('SEX')"
+                >
+                  Sex
+                </div>
+                <div
+                  class="dia-circulo"
+                  [class.active]="dadosOfensiva.diasDaSemana.includes('SAB')"
+                >
+                  Sáb
+                </div>
+                <div
+                  class="dia-circulo"
+                  [class.active]="dadosOfensiva.diasDaSemana.includes('DOM')"
+                >
+                  Dom
+                </div>
+              </div>
+
+              <p class="ofensiva-footer-text">
+                Continue acessando o Oftlessons diariamente para manter sua
+                ofensiva!
+              </p>
+
+              <div class="foto-robo">
+                <img
+                  src="..//../..//assets/imagens/robo-ofensiva.png"
+                  alt="Robo Ofensiva"
+                />
+              </div>
             </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="section">
+    <h2>Principais recursos para você</h2>
+    <div class="container-row">
+      <div class="mb-4" *ngIf="possuiPermissao">
+        <div class="card">
+          <div class="card-body text-center">
+            <h5 class="card-title">Questões</h5>
+            <div class="card-icon">
+              <img
+                src="assets/Icons/dark/caderno-dark.svg"
+                alt="Ícone de Questões"
+                class="icon"
+              />
+            </div>
+            <a routerLink="/usuario/questoes" class="btn btn-primary">
+              Acessar >
+            </a>
           </div>
         </div>
+      </div>
 
-        <div class="mb-4">
-          <div class="card">
-            <div class="card-body text-center">
-              <h5 class="card-title">Flashcards</h5>
-              <div class="card-icon">
-                <img src="assets/Icons/dark/flashcards-dark.svg" alt="Ícone de Flashcard" class="icon"/>
-              </div>
-              <button (click)="redirecionarFlashcard()" class="btn btn-primary">
-                Acessar >
-              </button>
-              <!--
+      <div class="mb-4" *ngIf="possuiPermissao">
+        <div class="card">
+          <div class="card-body text-center">
+            <h5 class="card-title">Simulados</h5>
+            <div class="card-icon">
+              <img
+                src="assets/Icons/dark/simu-dark.svg"
+                alt="Ícone de Simulados"
+                class="icon"
+              />
+            </div>
+            <a routerLink="/usuario/simulados" class="btn btn-primary">
+              Acessar >
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <div class="card">
+          <div class="card-body text-center">
+            <h5 class="card-title">Flashcards</h5>
+            <div class="card-icon">
+              <img
+                src="assets/Icons/dark/flashcards-dark.svg"
+                alt="Ícone de Flashcard"
+                class="icon"
+              />
+            </div>
+            <button (click)="redirecionarFlashcard()" class="btn btn-primary">
+              Acessar >
+            </button>
+            <!--
               <div *ngIf="mostrarMensagemFlashcard" class="mensagem">
                 Em breve novas funcionalidades disponíveis para você 😃.
               </div>
                 -->
-            </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="section">
-      <h2>Pesquisa de Satisfação</h2>
-      <div class="container-row">
-        <div class="mb-4">
-          <div class="card satisfacao">
-            <div class="card-body text-center">
-              <h5 class="card-title">Pesquisa de Satisfação</h5>
-               <div class="card-icon">
-                <img src="assets/Icons/pes.svg" alt="Ícone de Pesquisa" class="icon" style="width: 50px; height: 50px;">
-              </div>
-              <a
-                href="https://forms.gle/owp46GkkmZDNq4sq9"
-                class="btn btn-primary btn-pesquisa"
-                target="_blank"
-                rel="noopener noreferrer">
-                Acessar >
-              </a>
+  </div>
+  <div class="section">
+    <h2>Pesquisa de Satisfação</h2>
+    <div class="container-row">
+      <div class="mb-4">
+        <div class="card satisfacao">
+          <div class="card-body text-center">
+            <h5 class="card-title">Pesquisa de Satisfação</h5>
+            <div class="card-icon">
+              <img
+                src="assets/Icons/pes.svg"
+                alt="Ícone de Pesquisa"
+                class="icon"
+                style="width: 50px; height: 50px"
+              />
             </div>
+            <a
+              href="https://forms.gle/owp46GkkmZDNq4sq9"
+              class="btn btn-primary btn-pesquisa"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Acessar >
+            </a>
           </div>
         </div>
       </div>
@@ -131,11 +260,16 @@
   </div>
 </div>
 
-<div class="modal-overlay" *ngIf="modalTrilhaAberto || modalConfirmacaoAberto">
+<div
+  class="modal-overlay"
+  *ngIf="modalTrilhaAberto || modalConfirmacaoAberto || mostrarModalOfensiva"
+>
   <div class="modal-trilha" *ngIf="modalTrilhaAberto">
     <div class="modal-header">
       <h2>Configurar minha programação de revisões</h2>
-      <button class="btn-close" (click)="modalTrilhaAberto = false">&times;</button>
+      <button class="btn-close" (click)="modalTrilhaAberto = false">
+        &times;
+      </button>
     </div>
 
     <div class="modal-body">
@@ -144,74 +278,197 @@
         <div class="dias-semana">
           <button
             class="btn-dia"
-            [ngClass]="{'selected': verificarDiaSelecionado('Segunda')}"
-            (click)="toggleDiaSelecionado('Segunda')">Segunda</button>
+            [ngClass]="{ selected: verificarDiaSelecionado('Segunda') }"
+            (click)="toggleDiaSelecionado('Segunda')"
+          >
+            Segunda
+          </button>
           <button
             class="btn-dia"
-            [ngClass]="{'selected': verificarDiaSelecionado('Terça')}"
-            (click)="toggleDiaSelecionado('Terça')">Terça</button>
+            [ngClass]="{ selected: verificarDiaSelecionado('Terça') }"
+            (click)="toggleDiaSelecionado('Terça')"
+          >
+            Terça
+          </button>
           <button
             class="btn-dia"
-            [ngClass]="{'selected': verificarDiaSelecionado('Quarta')}"
-            (click)="toggleDiaSelecionado('Quarta')">Quarta</button>
+            [ngClass]="{ selected: verificarDiaSelecionado('Quarta') }"
+            (click)="toggleDiaSelecionado('Quarta')"
+          >
+            Quarta
+          </button>
           <button
             class="btn-dia"
-            [ngClass]="{'selected': verificarDiaSelecionado('Quinta')}"
-            (click)="toggleDiaSelecionado('Quinta')">Quinta</button>
+            [ngClass]="{ selected: verificarDiaSelecionado('Quinta') }"
+            (click)="toggleDiaSelecionado('Quinta')"
+          >
+            Quinta
+          </button>
           <button
             class="btn-dia"
-            [ngClass]="{'selected': verificarDiaSelecionado('Sexta')}"
-            (click)="toggleDiaSelecionado('Sexta')">Sexta</button>
+            [ngClass]="{ selected: verificarDiaSelecionado('Sexta') }"
+            (click)="toggleDiaSelecionado('Sexta')"
+          >
+            Sexta
+          </button>
           <button
             class="btn-dia"
-            [ngClass]="{'selected': verificarDiaSelecionado('Sábado')}"
-            (click)="toggleDiaSelecionado('Sábado')">Sábado</button>
+            [ngClass]="{ selected: verificarDiaSelecionado('Sábado') }"
+            (click)="toggleDiaSelecionado('Sábado')"
+          >
+            Sábado
+          </button>
           <button
             class="btn-dia"
-            [ngClass]="{'selected': verificarDiaSelecionado('Domingo')}"
-            (click)="toggleDiaSelecionado('Domingo')">Domingo</button>
+            [ngClass]="{ selected: verificarDiaSelecionado('Domingo') }"
+            (click)="toggleDiaSelecionado('Domingo')"
+          >
+            Domingo
+          </button>
         </div>
       </div>
 
       <div class="form-group">
-        <label>Defina quanto tempo você quer dedicar à revisão nesses dias? *</label>
+        <label
+          >Defina quanto tempo você quer dedicar à revisão nesses dias? *</label
+        >
         <div class="tempo-container">
           <div class="tempo-input">
             <label>Horas</label>
-            <input type="number" min="0" [(ngModel)]="horasDedicadas" placeholder="0 h">
+            <input
+              type="number"
+              min="0"
+              [(ngModel)]="horasDedicadas"
+              placeholder="0 h"
+            />
           </div>
           <div class="tempo-input">
             <label>Minutos</label>
-            <input type="number" min="0" max="59" [(ngModel)]="minutosDedicados" placeholder="0 min">
+            <input
+              type="number"
+              min="0"
+              max="59"
+              [(ngModel)]="minutosDedicados"
+              placeholder="0 min"
+            />
           </div>
         </div>
       </div>
 
       <div class="form-group">
         <label>Data da término</label>
-        <input type="date" [(ngModel)]="dataTermino" class="data-input">
+        <input type="date" [(ngModel)]="dataTermino" class="data-input" />
       </div>
 
       <div class="form-group">
         <label>Assunto(s) que você deseja revisar</label>
         <app-multiplo-select
-        [options]="assuntosDisponiveis"
-        [selectedValue]="assuntosSelecionados"
-        label="Assuntos"
-        [multiple]="true"
-        placeholder="Selecione os assuntos"
+          [options]="assuntosDisponiveis"
+          [selectedValue]="assuntosSelecionados"
+          label="Assuntos"
+          [multiple]="true"
+          placeholder="Selecione os assuntos"
         ></app-multiplo-select>
       </div>
     </div>
 
     <div class="modal-footer">
-      <button class="btn btn-cancel"
-        (click)="fecharModalConfiguracaoTrilha()">
+      <button class="btn btn-cancel" (click)="fecharModalConfiguracaoTrilha()">
         Cancelar
       </button>
-      <button class="btn btn-save"
-        (click)="salvarConfiguracoesTrilha()">
+      <button class="btn btn-save" (click)="salvarConfiguracoesTrilha()">
         Salvar
+      </button>
+    </div>
+  </div>
+
+  <div
+    class="modal-trilha modal-ofensiva"
+    *ngIf="mostrarModalOfensiva && dadosOfensiva"
+  >
+    <div class="modal-header">
+      <h2></h2>
+      <button class="btn-close" (click)="fecharModalOfensiva()">&times;</button>
+    </div>
+
+    <div class="modal-body-ofensiva">
+      <div class="ofensiva-header">
+        <span class="ofensiva-dias">{{ dadosOfensiva!.ofensivaAtual }}</span>
+        <img
+          src="..//..//..//assets/videos/raio-ofensiva.gif"
+          alt="Ofensiva"
+          class="ofensiva-raio"
+        />
+      </div>
+      <p class="ofensiva-titulo">dia(s) de ofensiva</p>
+
+      <div class="dias-semana-ofensiva">
+        <div class="dia-item">
+          <div
+            class="dia-circulo"
+            [class.active]="dadosOfensiva!.diasDaSemana.includes('SEG')"
+          ></div>
+          <span class="dia-nome">Seg</span>
+        </div>
+
+        <div class="dia-item">
+          <div
+            class="dia-circulo"
+            [class.active]="dadosOfensiva!.diasDaSemana.includes('TER')"
+          ></div>
+          <span class="dia-nome">Ter</span>
+        </div>
+
+        <div class="dia-item">
+          <div
+            class="dia-circulo"
+            [class.active]="dadosOfensiva!.diasDaSemana.includes('QUA')"
+          ></div>
+          <span class="dia-nome">Qua</span>
+        </div>
+
+        <div class="dia-item">
+          <div
+            class="dia-circulo"
+            [class.active]="dadosOfensiva!.diasDaSemana.includes('QUI')"
+          ></div>
+          <span class="dia-nome">Qui</span>
+        </div>
+
+        <div class="dia-item">
+          <div
+            class="dia-circulo"
+            [class.active]="dadosOfensiva!.diasDaSemana.includes('SEX')"
+          ></div>
+          <span class="dia-nome">Sex</span>
+        </div>
+
+        <div class="dia-item">
+          <div
+            class="dia-circulo"
+            [class.active]="dadosOfensiva!.diasDaSemana.includes('SAB')"
+          ></div>
+          <span class="dia-nome">Sáb</span>
+        </div>
+
+        <div class="dia-item">
+          <div
+            class="dia-circulo"
+            [class.active]="dadosOfensiva!.diasDaSemana.includes('DOM')"
+          ></div>
+          <span class="dia-nome">Dom</span>
+        </div>
+      </div>
+
+      <p class="ofensiva-footer-text">
+        Continue acessando o Oftlessons diariamente para manter sua ofensiva!
+      </p>
+    </div>
+
+    <div class="modal-footer-ofensiva">
+      <button class="btn btn-save btn-verde" (click)="fecharModalOfensiva()">
+        Vou com tudo
+        <img src="../../../assets/Icons/setaDireta.svg" alt="seta" />
       </button>
     </div>
   </div>
@@ -221,18 +478,19 @@
       <div class="animation"></div>
       <div class="modal-text-comecar">
         <h2>O começo de uma trilha feita para você!</h2>
-        <p>Dê os primeiros passos e prepare o caminho para sua trilha de revisões personalizadas.</p>
+        <p>
+          Dê os primeiros passos e prepare o caminho para sua trilha de revisões
+          personalizadas.
+        </p>
       </div>
     </div>
     <div class="modal-footer-comecar">
-      <button class="btn btn-cancel"
-        (click)="fecharModalConfirmacao()">
+      <button class="btn btn-cancel" (click)="fecharModalConfirmacao()">
         Iniciar mais tarde
       </button>
-      <button class="btn btn-comecar"
-        (click)="iniciarTrilhaAgora()">
+      <button class="btn btn-comecar" (click)="iniciarTrilhaAgora()">
         Começar agora
-        <img src="assets/Icons/arrow-updown.svg" alt="seta">
+        <img src="assets/Icons/arrow-updown.svg" alt="seta" />
       </button>
     </div>
   </div>

@@ -203,7 +203,7 @@ export class CadastroDeAulasComponent implements OnInit {
 
             this.uploadProgress = 100;
             this.currentUploadState = 'Concluído!';
-            this.successMessage = 'Aula salva e vídeo enviado com sucesso!';
+            this.successMessage = 'Aula salva e vídeo enviado com sucesso! Estamos processando o vídeo, isso pode levar alguns minutos.';
             this.isLoading = false;
             this.resetForm();
           }

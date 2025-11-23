@@ -511,14 +511,6 @@ button:disabled .chatbot-logo {
   overflow: visible;
 }
 
-.message:has(table) {
-  max-width: 95%;
-}
-
-.bot-message:has(table) {
-  max-width: 95%;
-}
-
 .message-header {
   display: flex;
   align-items: center;
