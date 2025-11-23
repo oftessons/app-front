@@ -11,7 +11,7 @@ import {
   Flashcard,
   FlashcardService,
   SessaoEstudoDTO,
-  ReqAvaliarFlashcardDTO
+  ReqAvaliarFlashcardDTO,
 } from 'src/app/services/flashcards.service';
 import { TemaDescricoes } from 'src/app/sistema/page-questoes/enums/tema-descricao';
 import { Tema } from 'src/app/sistema/page-questoes/enums/tema';
@@ -56,7 +56,8 @@ export class FlashcardModalComponent implements OnChanges {
     if (!token) return false;
     try {
       const decodedToken = this.authService.jwtHelper.decodeToken(token);
-      const userRoles: string[] = decodedToken?.authorities || decodedToken?.roles || [];
+      const userRoles: string[] =
+        decodedToken?.authorities || decodedToken?.roles || [];
       if (userRoles.length === 0) {
         const singleRole = decodedToken?.role;
         if (!singleRole) return false;
@@ -94,9 +95,6 @@ export class FlashcardModalComponent implements OnChanges {
       this.cardsVistos.add(this.currentCard.id);
       this.cardStartTime = Date.now();
       this.estado_atual = 'question';
-      console.log(`[DEBUG - MODAL] Sessão iniciada. Card ID: ${this.currentCard.id}`);
-      console.log(`[DEBUG - MODAL] Foto Pergunta (Exibindo): ${this.currentCard.fotoUrlResposta}`);
-      console.log(`[DEBUG - MODAL] Foto Resposta (Exibindo): ${this.currentCard.fotoUrlPergunta}`);
     } else {
       this.onCloseClick();
     }
@@ -115,7 +113,6 @@ export class FlashcardModalComponent implements OnChanges {
 
   showAnswer(): void {
     this.estado_atual = 'answer';
-    console.log(`[DEBUG - MODAL] Mudando para estado: answer. Foto Resposta (Exibindo): ${this.currentCard?.fotoUrlPergunta}`);
   }
 
   rateAnswer(rating: number): void {
@@ -123,26 +120,20 @@ export class FlashcardModalComponent implements OnChanges {
 
     this.isLoadingNextCard = true;
     const cardId = this.currentCard.id;
-    
     const tempoGasto = Date.now() - this.cardStartTime;
 
     const avaliacaoDTO: ReqAvaliarFlashcardDTO = {
       id: cardId,
       nota: rating,
-      tempoAtivoMilisegundo: tempoGasto
+      tempoAtivoMilisegundo: tempoGasto,
     };
 
-    this.flashcardService.avaliarFlashcard(avaliacaoDTO).subscribe({
-        next: () => {},
-        error: (err) => console.error('Erro ao avaliar flashcard', err)
-    });
+    this.flashcardService.avaliarFlashcard(avaliacaoDTO).subscribe();
 
     this.stats.push({ cardId: cardId, rating: rating });
     this.totalCardsEstudados = this.stats.length;
 
     const idealDificuldade = this.mapearRatingParaDificuldade(rating);
-    console.log(`[DEBUG - MODAL] Avaliação enviada. Buscando próximo card com dificuldade ideal: ${idealDificuldade}`);
-
 
     const handleResponse = (response: SessaoEstudoDTO) => {
       const list = response.listaFlashcards || [];
@@ -154,26 +145,24 @@ export class FlashcardModalComponent implements OnChanges {
         this.cardStartTime = Date.now();
         this.estado_atual = 'question';
         this.isLoadingNextCard = false;
-        console.log(`[DEBUG - MODAL] Próximo card carregado. ID: ${this.currentCard.id}`);
-        console.log(`[DEBUG - MODAL] Foto Pergunta (Exibindo): ${this.currentCard.fotoUrlResposta}`);
-        console.log(`[DEBUG - MODAL] Foto Resposta (Exibindo): ${this.currentCard.fotoUrlPergunta}`);
       } else {
-        console.log('[DEBUG - MODAL] Nenhum novo card encontrado. Mostrando sumário.');
         this.mostrarSumario();
       }
     };
 
     const handleError = () => {
-      console.error('[DEBUG - MODAL] Erro ao buscar próximo card (fallback também falhou). Mostrando sumário.');
       this.mostrarSumario();
     };
 
     this.flashcardService
-      .getFlashcardsParaEstudar(this.temaEstudo, this.subtemaEstudo, idealDificuldade)
+      .getFlashcardsParaEstudar(
+        this.temaEstudo,
+        this.subtemaEstudo,
+        idealDificuldade
+      )
       .subscribe({
         next: (res) => handleResponse(res),
-        error: (err) => {
-            console.warn(`[DEBUG - MODAL] Erro ao buscar com dificuldade (${idealDificuldade}). Tentando fallback...`, err);
+        error: () => {
           this.flashcardService
             .getFlashcardsParaEstudar(this.temaEstudo, this.subtemaEstudo)
             .subscribe({
@@ -205,10 +194,13 @@ export class FlashcardModalComponent implements OnChanges {
 
   private mostrarSumario(): void {
     const endTime = Date.now();
-    const durationInSeconds = Math.floor((endTime - this.sessaoStartTime) / 1000);
+    const durationInSeconds = Math.floor(
+      (endTime - this.sessaoStartTime) / 1000
+    );
     this.tempoDecorrido = this.formatarTempo(durationInSeconds);
     const somaNotas = this.stats.reduce((acc, stat) => acc + stat.rating, 0);
-    const mediaNotas = this.stats.length > 0 ? somaNotas / this.stats.length : 0;
+    const mediaNotas =
+      this.stats.length > 0 ? somaNotas / this.stats.length : 0;
     this.porcentagemAcerto = (mediaNotas / 5) * 100;
     this.estado_atual = 'summary';
     this.isLoadingNextCard = false;
@@ -231,7 +223,6 @@ export class FlashcardModalComponent implements OnChanges {
 
   editarFlashcard(): void {
     if (!this.currentCard) return;
-    console.log(`[DEBUG - MODAL] Navegando para edição do Flashcard ID: ${this.currentCard.id}`);
     this.router.navigate(['/usuario/cadastro-flashcard', this.currentCard.id], {
       state: { flashcard: this.currentCard },
     });

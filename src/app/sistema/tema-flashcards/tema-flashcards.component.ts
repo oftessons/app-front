@@ -6,7 +6,11 @@ import { SubtemaDescricoes } from '../page-questoes/enums/subtema-descricao';
 import { temasESubtemas } from '../page-questoes/enums/map-tema-subtema';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
-import { FlashcardService, SubtemaStatsDTO, Flashcard } from 'src/app/services/flashcards.service'; 
+import {
+  FlashcardService,
+  SubtemaStatsDTO,
+  Flashcard,
+} from 'src/app/services/flashcards.service';
 
 @Component({
   selector: 'app-tema-flashcards',
@@ -20,11 +24,11 @@ export class TemaFlashcardsComponent implements OnInit {
 
   listaDeSubtemas: Subtema[] = [];
   subtemaDescricoes = SubtemaDescricoes;
-  
+
   private statsMap = new Map<string, SubtemaStatsDTO>();
 
   public isFlashcardModalVisible = false;
-  
+
   public temaEstudo: string = '';
   public subtemaEstudo?: Subtema;
   public flashcardsIniciais: Flashcard[] = [];
@@ -32,7 +36,7 @@ export class TemaFlashcardsComponent implements OnInit {
   public indiceInicial: number = 0;
 
   private temaIdUrl: string = '';
-  private temaEnumKey: string = ''; 
+  public temaEnumKey: string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -43,21 +47,24 @@ export class TemaFlashcardsComponent implements OnInit {
 
   ngOnInit(): void {
     const idUrl = this.route.snapshot.paramMap.get('temaId');
+
     if (!idUrl) {
       this.tema = 'Tema não encontrado';
       return;
     }
-    
+
     this.temaIdUrl = idUrl;
-    
+
     const foundKey = Object.keys(Tema).find(
-      (key) => (Tema[key as keyof typeof Tema]).toLowerCase() === this.temaIdUrl.toLowerCase()
+      (key) =>
+        (Tema[key as keyof typeof Tema] as string).toLowerCase() ===
+        this.temaIdUrl.toLowerCase()
     );
 
     if (foundKey) {
       this.temaEnumKey = foundKey;
       const temaEnum = Tema[foundKey as keyof typeof Tema];
-      this.tema = TemaDescricoes[temaEnum];
+      this.tema = TemaDescricoes[temaEnum] || (temaEnum as string);
       this.listaDeSubtemas = temasESubtemas[temaEnum] || [];
     } else {
       this.tema = 'Tema não encontrado';
@@ -68,66 +75,99 @@ export class TemaFlashcardsComponent implements OnInit {
 
   private normalizarChave(texto: string): string {
     if (!texto) return '';
-    return texto.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase().trim();
+    return texto
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toUpperCase()
+      .replace(/[\s_]+/g, '')
+      .trim();
   }
 
   carregarDados(): void {
-    if (!this.temaEnumKey) return;
+    if (!this.temaEnumKey) {
+      return;
+    }
 
-    this.flashcardService.getFlashcardsContador().subscribe({
-      next: (lista) => {
-        const info = lista.find(t => this.normalizarChave(t.tema) === this.normalizarChave(this.temaEnumKey));
-        if (info) {
-          this.cards_totais = info.total || 0;
-          this.cards_estudados = info.qtdFlashcards || 0;
-        }
-        this.cdr.detectChanges();
-      },
-      error: (e) => console.error(e)
+    this.flashcardService.getFlashcardsContador().subscribe((lista) => {
+      const info = lista.find(
+        (t) =>
+          this.normalizarChave(t.tema) ===
+          this.normalizarChave(this.temaEnumKey)
+      );
+
+      if (info) {
+        this.cards_totais = info.total || 0;
+        this.cards_estudados = info.qtdFlashcards || 0;
+      }
+      this.cdr.detectChanges();
     });
 
-    this.flashcardService.getStatsPorTema(this.temaIdUrl).subscribe({
-      next: (statsList) => {
+    this.flashcardService
+      .getStatsPorTema(this.temaEnumKey)
+      .subscribe((statsList: any[]) => {
         this.statsMap.clear();
         for (const stat of statsList) {
           const chave = this.normalizarChave(stat.subtema);
           this.statsMap.set(chave, stat);
         }
         this.cdr.detectChanges();
-      },
-      error: (e) => console.error(e)
-    });
+      });
   }
 
-  public getStatsDoSubtema(subtemaKey: any): { total: number, estudados: number, porcentagem: number } {
+  public getStatsDoSubtema(subtemaKey: any): {
+    total: number;
+    estudados: number;
+    porcentagem: number;
+  } {
     const chaveBusca = this.normalizarChave(String(subtemaKey));
-    const stats = this.statsMap.get(chaveBusca);
-    
+    const stats: any = this.statsMap.get(chaveBusca);
+
     if (!stats) {
       return { total: 0, estudados: 0, porcentagem: 0 };
     }
 
-    const dados = stats as any;
-    const total = dados.total || dados.totalFlashcards || 0;
-    const estudados = dados.estudados || dados.flashcardsEstudados || 0;
-    const porcentagem = (total > 0) ? (estudados / total * 100) : 0;
-    
+    const total = stats.total ?? stats.totalFlashcards ?? 0;
+    const estudados = stats.estudados ?? stats.flashcardsEstudados ?? 0;
+    const porcentagem = total > 0 ? (estudados / total) * 100 : 0;
+
     return { total, estudados, porcentagem };
   }
-  
+
   iniciarEstudoTemaTodo(): void {
-    this.flashcardService.getFlashcardsParaEstudar(this.temaIdUrl).subscribe(dto => {
-      this.iniciarSessao(dto.listaFlashcards, this.temaIdUrl, dto.idFlaschardContinuar, dto.idSessao, undefined);
-    });
+    this.flashcardService
+      .getFlashcardsParaEstudar(this.temaIdUrl)
+      .subscribe((dto) => {
+        this.iniciarSessao(
+          dto.listaFlashcards,
+          this.temaIdUrl,
+          dto.idFlaschardContinuar,
+          dto.idSessao,
+          undefined
+        );
+      });
   }
 
   iniciarEstudoSubtema(subtemaKey: Subtema): void {
-    this.flashcardService.getFlashcardsParaEstudar(this.temaIdUrl, subtemaKey).subscribe(dto => {
-      this.iniciarSessao(dto.listaFlashcards, this.temaIdUrl, dto.idFlaschardContinuar, dto.idSessao, subtemaKey);
-    });
+    this.flashcardService
+      .getFlashcardsParaEstudar(this.temaIdUrl, subtemaKey)
+      .subscribe((dto) => {
+        this.iniciarSessao(
+          dto.listaFlashcards,
+          this.temaIdUrl,
+          dto.idFlaschardContinuar,
+          dto.idSessao,
+          subtemaKey
+        );
+      });
   }
 
-  private iniciarSessao(cards: Flashcard[], tema: string, indice: number, sessaoId: number, subtema?: Subtema): void {
+  private iniciarSessao(
+    cards: Flashcard[],
+    tema: string,
+    indice: number,
+    sessaoId: number,
+    subtema?: Subtema
+  ): void {
     if (cards && cards.length > 0) {
       this.flashcardsIniciais = cards;
       this.temaEstudo = tema;
@@ -142,7 +182,7 @@ export class TemaFlashcardsComponent implements OnInit {
     this.isFlashcardModalVisible = false;
     this.flashcardsIniciais = [];
     setTimeout(() => {
-        this.carregarDados();
+      this.carregarDados();
     }, 200);
   }
 

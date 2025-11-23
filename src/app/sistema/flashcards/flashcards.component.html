@@ -3,9 +3,6 @@
     <div class="header">
       <h1 class="mt-4"><span>|</span> Flashcards</h1>
       <div class="buttons-container">
-        <button class="button" (click)="openModal()">
-          Importar Flashcards
-        </button>
         <button class="button" (click)="navigateToCadastro()">
           Criar Flashcards
         </button>
@@ -21,40 +18,5 @@
       </app-flashcards-temas-cards>
     </div>
   </div>
-
-  <div class="modal" [ngClass]="{ 'modal-open': isModalOpen }" (click)="closeModal()">
-    <div class="modal-content" (click)="$event.stopPropagation()">
-      <h2>Importar Flashcards</h2>
-      <mat-form-field appearance="fill" class="modal-select-field">
-        <mat-label>Selecione um tema</mat-label>
-        <mat-select [(value)]="temaSelecionado" panelClass="custom-dropdown" [disableOptionCentering]="true">
-          <mat-option *ngFor="let tema of listaDeTemas" [value]="tema.chave">
-            {{ tema.titulo }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <div class="csv-upload-container">
-        <label class="csv-upload-label" for="csvInput">
-          Importar arquivo CSV
-        </label>
-
-        <div class="csv-upload-row">
-          <input
-            type="file"
-            id="csvInput"
-            accept=".csv"
-            (change)="onCsvFileSelected($event)"
-          />
-        </div>
-      </div>
-      <button
-        class="button"
-        (click)="importarFlashcards()"
-        [disabled]="!temaSelecionado || !arquivoCsv || isImportando"
-      >
-        Confirmar Importação
-      </button>
-    </div>
-  </div>
+  
 </div>

@@ -12,15 +12,17 @@
           Cards estudados: <span>{{ cards_estudados }}/{{ cards_totais }}</span>
         </p>
       </div>
-      <a class="card-button" (click)="iniciarEstudoTemaTodo()"
-        >Estudar cards<img src="../../../assets//Icons/Right-icon.svg"
-      /></a>
+      <a class="card-button" (click)="iniciarEstudoTemaTodo()">
+        Estudar cards<img src="../../../assets//Icons/Right-icon.svg" />
+      </a>
     </div>
 
     <div class="subtemas-flashcards">
       <app-flashcards-subtemas
         *ngFor="let subtemaKey of listaDeSubtemas"
         [subtema]="subtemaDescricoes[subtemaKey] || subtemaKey"
+        [chave]="temaEnumKey"
+        [chaveSubtema]="subtemaKey"
         [cards_total]="getStatsDoSubtema(subtemaKey).total"
         [cards_estudados]="getStatsDoSubtema(subtemaKey).estudados"
         [porcentagem]="getStatsDoSubtema(subtemaKey).porcentagem"
