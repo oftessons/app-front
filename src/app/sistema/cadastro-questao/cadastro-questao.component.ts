@@ -679,6 +679,7 @@ export class CadastroQuestaoComponent implements OnInit, AfterViewInit {
     }
 
     this.clearImageState();
+    this.successMessage = "";
 
     this.router.navigate(['/usuario/cadastro-questao', proximoId]);
   }
