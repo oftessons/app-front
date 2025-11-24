@@ -23,6 +23,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { FlashcardModalComponent } from './flashcard-modal/flashcard-modal.component';
 import { DeletarFlashcardModalComponent } from './deletar-flashcard-modal/deletar-flashcard-modal.component';
 import { ModalTrilhaComponent } from './modal-trilha/modal-trilha.component';
+import { ModalEditarSemanaTrilhaComponent } from './modal-editar-semana-trilha/modal-editar-semana-trilha.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { ModalTrilhaComponent } from './modal-trilha/modal-trilha.component';
     FlashcardsSubtemasComponent,
     DeletarFlashcardModalComponent,
     ModalTrilhaComponent,
+    ModalEditarSemanaTrilhaComponent,
     HappyMessagePopupComponent
   ],
   imports: [
