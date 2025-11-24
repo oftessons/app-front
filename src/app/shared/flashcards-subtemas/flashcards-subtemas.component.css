@@ -51,12 +51,15 @@
 
 .button {
     background-color: #3B5FA0;
-    padding: 8px;
+    padding: 12px;
     border-radius: 8px;
     margin-right: 8px;
     cursor: pointer;
     user-select: none;
     text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .button:hover {

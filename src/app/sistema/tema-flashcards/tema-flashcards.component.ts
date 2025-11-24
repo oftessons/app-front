@@ -97,7 +97,6 @@ export class TemaFlashcardsComponent implements OnInit {
 
       if (info) {
         this.cards_totais = info.total || 0;
-        this.cards_estudados = info.qtdFlashcards || 0;
       }
       this.cdr.detectChanges();
     });
@@ -106,10 +105,19 @@ export class TemaFlashcardsComponent implements OnInit {
       .getStatsPorTema(this.temaEnumKey)
       .subscribe((statsList: any[]) => {
         this.statsMap.clear();
+
+        let somaEstudados = 0;
+
         for (const stat of statsList) {
           const chave = this.normalizarChave(stat.subtema);
           this.statsMap.set(chave, stat);
+
+          const estudadosSubtema =
+            stat.estudados ?? stat.flashcardsEstudados ?? 0;
+          somaEstudados += estudadosSubtema;
         }
+
+        this.cards_estudados = somaEstudados;
         this.cdr.detectChanges();
       });
   }
