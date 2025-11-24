@@ -279,6 +279,19 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
     this.chatBotStateService.addMessage(welcomeMsg);
   }
 
+  iniciarNovaConversa(): void {
+    this.messages = [];
+    this.chatHistory = [];
+    
+    this.chatBotStateService.clearMessages();
+    
+    this.isCitarQuestao = false;
+    this.citarQuestao = new Questao();
+    this.userMessage = '';
+    
+    this.sendWelcomeMessage();
+  }
+
   togglePromptSuggestions(): void {
     this.showPromptSuggestions = !this.showPromptSuggestions;
   }
