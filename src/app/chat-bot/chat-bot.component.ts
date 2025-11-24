@@ -448,7 +448,7 @@ ${ultimasMensagens}
 *ESCREVA SUA MENSAGEM ABAIXO*
 `;
 
-      const numeroWhatsapp = '5511920909632';
+      const numeroWhatsapp = '551152418213';
       const whatsappUrl = `https://wa.me/${numeroWhatsapp}?text=${encodeURIComponent(mensagemCompleta)}`;
       
       // setTimeout(() => {
