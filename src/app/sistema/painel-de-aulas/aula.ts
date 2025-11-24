@@ -16,6 +16,7 @@ export class Aula {
   keyVideo!: string;
   contentTypeVideo!: string;
   videoContentLength!: number;
+  poster!: string;
 
   documentos?: { id: number; url: string; key: string }[];
 
@@ -34,6 +35,10 @@ export class Aula {
       urlArquivo: this.urlArquivo,
       keyArquivo: this.keyArquivo,
       documentos: this.documentos,
+      keyVideo: this.keyVideo,
+      contentTypeVideo: this.contentTypeVideo,
+      videoContentLength: this.videoContentLength,
+      poster: this.poster,
     });
   }
   toJsonUpdate(): string {
