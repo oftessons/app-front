@@ -140,22 +140,23 @@
 </div>
 
 <ng-template #pageLoadingTemplate>
-    <div class="loading-fullpage">
-        <p>Carregando módulo...</p>
+    <div class="d-flex justify-content-center align-items-center vh-100 flex-column">
+        <div class="spinner-border text-primary mb-3" role="status"></div>
+        <p class="text-muted">Carregando conteúdo...</p>
     </div>
 </ng-template>
 
 <ng-template #noDataTemplate>
-    <div class="no-data">
-        <img src="assets/imagens/not-data-aulas.png" alt="Sem aulas cadastradas">
-        <p>Não há nenhuma aula cadastrada para este módulo.</p>
+    <div class="no-data text-center mt-5">
+        <img src="assets/imagens/not-data-aulas.png" alt="Sem aulas" width="200">
+        <h4 class="mt-3 text-muted">Nenhuma aula encontrada</h4>
     </div>
 </ng-template>
 
 <ng-template #errorTemplate>
-    <div class="error-container">
-        <h2>Erro</h2>
-        <p>{{ erro }}</p>
-        <button (click)="goBack()">Voltar</button>
+    <div class="text-center m-5">
+        <h3 class="something-wrong">Algo deu errado</h3>
+        <p class="something-wrong">{{ erro }}</p>
+        <button class="btn btn-outline-danger mt-2" (click)="goBack()">Voltar</button>
     </div>
 </ng-template>
