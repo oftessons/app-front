@@ -17,20 +17,42 @@
                     <div class="video-container">
 
                         <div class="no-video-selected" *ngIf="!videoAtual">
-                            <div class="placeholder-content">
-                                <i class="fas fa-play-circle"></i>
-                                <h3>Nenhum vídeo selecionado</h3>
-                                <p>Escolha uma aula na lista ao lado para começar a assistir.</p>
+
+                            <div class="continue-watching-card" *ngIf="aulaParaContinuar; else emptyState">
+                                <div class="bg-decoration"></div>
+                                <div class="continue-content">
+                                    <span class="badge-continue">
+                                        <i class="fas fa-history"></i> Continue de onde parou
+                                    </span>
+
+                                    <h2 class="next-lesson-title">
+                                        {{ aulaParaContinuar.titulo }}
+                                    </h2>
+
+                                    <button class="btn-play-hero" (click)="continuarDeOndeParou()">
+                                        <div class="play-icon-bg">
+                                            <i class="fas fa-play"></i>
+                                        </div>
+                                        <span>Assistir Agora</span>
+                                    </button>
+                                </div>
                             </div>
+
+                            <ng-template #emptyState>
+                                <div class="placeholder-content">
+                                    <i class="fas fa-play-circle"></i>
+                                    <h3>Nenhum vídeo selecionado</h3>
+                                    <p>Escolha uma aula na lista ao lado para começar a assistir.</p>
+                                </div>
+                            </ng-template>
                         </div>
 
                         <div *ngIf="videoAtual && vdoCipherUrl" style="width: 100%; height: 100%; position: relative;">
-                            <iframe [src]="vdoCipherUrl" style="width:100%; height:100%; border:0;"
+                            <iframe #vdoIframe [src]="vdoCipherUrl" style="width:100%; height:100%; border:0;"
                                 allow="encrypted-media; fullscreen; picture-in-picture" allowfullscreen="true">
                             </iframe>
                         </div>
 
-                        
                         <div *ngIf="videoAtual && !vdoCipherUrl && isLoadingVideo" class="loading-overlay">
                             <span>Carregando player...</span>
                         </div>
@@ -40,20 +62,34 @@
 
                 <div class="info-aula">
                     <div class="aula-header" *ngIf="aulas.length > 0 && videoAtual">
+
                         <div class="title-rating-row">
                             <h3>{{ videoAtual?.titulo }}</h3>
-                            <div class="estrelas-aula">
-                                <div class="stars">
-                                    <img *ngFor="let star of estrelas" [src]="getStarIcon(star)"
-                                        [alt]="'Estrela ' + star" class="star-icon"
-                                        [class.star-filled]="isStarFilled(star)" [class.star-hover]="star <= hoverStar"
-                                        (click)="avaliarAula(star)" (mouseenter)="onStarHover(star)"
-                                        (mouseleave)="onStarLeave()"
-                                        [attr.aria-label]="'Avaliar com ' + star + ' estrela' + (star > 1 ? 's' : '')"
-                                        role="button" tabindex="0">
+
+                            <div class="actions-right">
+                                <div class="estrelas-aula">
+                                    <div class="stars">
+                                        <img *ngFor="let star of estrelas" [src]="getStarIcon(star)"
+                                            [alt]="'Estrela ' + star" class="star-icon"
+                                            [class.star-filled]="isStarFilled(star)"
+                                            [class.star-hover]="star <= hoverStar" (click)="avaliarAula(star)"
+                                            (mouseenter)="onStarHover(star)" (mouseleave)="onStarLeave()"
+                                            [attr.aria-label]="'Avaliar com ' + star + ' estrela' + (star > 1 ? 's' : '')"
+                                            role="button" tabindex="0">
+                                    </div>
                                 </div>
+
+                                <button type="button" class="btn-concluir"
+                                    [class.concluido]="videosAssistidos[videoAtualIndex]"
+                                    (click)="toggleConclusaoAula()">
+                                    <i class="fas" [class.fa-check-circle]="videosAssistidos[videoAtualIndex]"
+                                        [class.fa-circle]="!videosAssistidos[videoAtualIndex]"></i>
+                                    <span>{{ videosAssistidos[videoAtualIndex] ? 'Concluída' : 'Marcar como concluída'
+                                        }}</span>
+                                </button>
                             </div>
                         </div>
+
                         <div class="description-rating-row">
                             <p>{{ videoAtual?.descricao }}</p>
                             <div class="average-rating" *ngIf="totalAvaliacoes > 0">
@@ -65,10 +101,9 @@
                         </div>
                     </div>
 
-                    <!-- Placeholder info quando não há vídeo -->
                     <div *ngIf="aulas.length > 0 && !videoAtual" class="info-placeholder">
                         <h3>Bem-vindo ao Módulo</h3>
-                        <p>Selecione uma aula na lista para ver o conteúdo.</p>
+                        <p>Selecione uma aula na lista ou clique em "Assistir Agora" para continuar.</p>
                     </div>
 
                     <div class="arquivos-aula" *ngIf="videoAtual">
@@ -88,7 +123,7 @@
                             </div>
                         </div>
                         <ng-template #noMaterialTemplate>
-                            <span>Nenhum material adicionado</span>
+                            <span class="no-material">Nenhum material adicionado</span>
                         </ng-template>
                     </div>
                 </div>

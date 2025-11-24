@@ -1,4 +1,4 @@
-import { HttpClient, HttpEvent, HttpEventType, HttpRequest, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpEventType, HttpParams, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment.prod';
 import { catchError, map, tap } from 'rxjs/operators';
@@ -6,6 +6,7 @@ import { Observable, throwError } from 'rxjs';
 import { Aula } from '../sistema/painel-de-aulas/aula';
 import { CadastroAulaResponse } from '../sistema/cadastro-de-aulas/cadastro-aulas-response';
 import { VdoCipherPlaybackResponse } from '../sistema/modulo-de-aulas/video-cipher-playblack-response';
+import { ProgressoAulasDtoResponse } from '../sistema/painel-de-aulas/progresso-aulas-dto-response';
 
 @Injectable({
 
@@ -32,14 +33,13 @@ export class AulasService {
 
 
   uploadVideoVdoCipher(
-    clientPayload: CadastroAulaResponse['clientPayload'],
+    clientPayload: any,
     videoFile: File
   ): Observable<HttpEvent<any>> {
 
     return new Observable(subscriber => {
       const xhr = new XMLHttpRequest();
 
-      // uploadLink vem do clientPayload
       xhr.open('POST', clientPayload.uploadLink, true);
 
       xhr.upload.onprogress = (event: ProgressEvent) => {
@@ -134,7 +134,6 @@ export class AulasService {
   }
 
 
-
   buscarAulaPorId(id: number): Observable<Aula> {
     const url = `${this.apiURL}/${id}`;
     console.log('URL da solicitação:', url);
@@ -178,21 +177,13 @@ export class AulasService {
 
 
 
-  atualizar(id: number, formData: FormData): Observable<any> {
+  atualizar(id: number, formData: FormData, trocarVideo: boolean): Observable<HttpEvent<any>> {
+    const params = new HttpParams().set('trocarVideo', trocarVideo.toString());
+
     return this.http.put(`${this.apiURL}/${id}`, formData, {
-      responseType: 'text'
-    }).pipe(
-      map((response) => ({ message: response })),
-      catchError((error) => {
-        let errorMessage = 'Erro ao atualizar a aula.';
-        if (error.error instanceof ErrorEvent) {
-          errorMessage = `Erro: ${error.error.message}`;
-        } else if (error.status) {
-          errorMessage = `Erro no servidor: ${error.status} - ${error.message}`;
-        }
-        console.error(errorMessage);
-        return throwError(() => new Error(errorMessage));
-      })
-    );
+      params: params,
+      reportProgress: true,
+      observe: 'events'
+    });
   }
 }

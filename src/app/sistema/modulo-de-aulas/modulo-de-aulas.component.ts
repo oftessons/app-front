@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { AulasService } from 'src/app/services/aulas.service';
@@ -9,9 +9,13 @@ import { Categoria } from '../painel-de-aulas/enums/categoria';
 import { CategoriaDescricoes } from '../painel-de-aulas/enums/categoria-descricao';
 import { AvaliacaoAula } from './avaliacao-aula';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { catchError, takeUntil } from 'rxjs/operators';
+import { Subject, forkJoin, of } from 'rxjs';
 import { VdoCipherPlaybackResponse } from './video-cipher-playblack-response';
+import { EstatisticasAulasService } from 'src/app/services/estatisticas-aulas.service';
+import { MetricasAulasResponse } from './metricas-aulas-response';
+
+declare var VdoPlayer: any;
 
 @Component({
   selector: 'app-modulo-de-aulas',
@@ -20,11 +24,19 @@ import { VdoCipherPlaybackResponse } from './video-cipher-playblack-response';
 })
 export class ModuloDeAulasComponent implements OnInit, OnDestroy {
 
+  @ViewChild('vdoIframe') vdoIframe: any;
+
   vdoCipherUrl: SafeResourceUrl | null = null;
+
+
+  private tempoInterval: any = null;
 
   aulas: Aula[] = [];
   categoria: Categoria | undefined;
   descricao: string = '';
+  metricasAulas: MetricasAulasResponse[] = [];
+  tempoAssistidoAtual: number = 0;
+  aulaParaContinuar: Aula | null = null;
 
   private _videoAtual: Aula | null = null;
 
@@ -33,9 +45,8 @@ export class ModuloDeAulasComponent implements OnInit, OnDestroy {
   }
 
   set videoAtual(aula: Aula | null) {
-    if (this._videoAtual?.id === aula?.id) {
-      return;
-    }
+    if (this._videoAtual?.id === aula?.id) return;
+
     this._videoAtual = aula;
 
     if (aula) {
@@ -71,7 +82,8 @@ export class ModuloDeAulasComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private location: Location,
     private router: Router,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private estatistiacasAulasService: EstatisticasAulasService
   ) { }
 
   ngOnInit(): void {
@@ -84,10 +96,7 @@ export class ModuloDeAulasComponent implements OnInit, OnDestroy {
     }
 
     const categoriaEncontrada = Object.keys(Categoria).find(
-      (key) =>
-        this.generateSlug(
-          CategoriaDescricoes[Categoria[key as keyof typeof Categoria]]
-        ) === this.moduloSlug
+      key => this.generateSlug(CategoriaDescricoes[Categoria[key as keyof typeof Categoria]]) === this.moduloSlug
     );
 
     if (categoriaEncontrada) {
@@ -104,10 +113,14 @@ export class ModuloDeAulasComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+
+    if (this.tempoInterval) {
+      clearInterval(this.tempoInterval);
+      this.tempoInterval = null;
+    }
   }
 
   generateSlug(text: string): string {
-    if (!text) return '';
     return text
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '')
@@ -134,59 +147,75 @@ export class ModuloDeAulasComponent implements OnInit, OnDestroy {
     this.erro = null;
     this.hasLoadedAulas = false;
     this.vdoCipherUrl = null;
+    this.tempoAssistidoAtual = 0;
   }
 
   listarAulasPorCategoria(categoria: Categoria): void {
     this.isLoadingPage = true;
-    this.aulasService.listarAulasPorCategoria(categoria).subscribe({
-      next: (response: Aula[]) => {
-        this.aulas = response || [];
-        this.videosAssistidos = new Array(this.aulas.length).fill(false);
-        this.isLoadingPage = false;
-        this.hasLoadedAulas = true;
 
-        if (this.aulas.length > 0) {
-          this.ouvirMudancasDeAulaNaUrl();
-        } else {
-          this.isLoadingVideo = false;
+    forkJoin({
+      aulas: this.aulasService.listarAulasPorCategoria(categoria),
+      metricas: this.estatistiacasAulasService.obterMetricasAulasPorCategoria(categoria),
+      ultimaAulaId: this.estatistiacasAulasService.obterUltimaAulaAssistida(this.descricao).pipe(
+        catchError(() => of(null))
+      )
+    })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: ({ aulas, metricas, ultimaAulaId }) => {
+
+          this.aulas = Array.isArray(aulas) ? aulas : [];
+          this.metricasAulas = Array.isArray(metricas?.result) ? metricas.result : [];
+
+          this.videosAssistidos = this.aulas.map(aula => {
+            const m = this.metricasAulas.find(x => x.aulaId === aula.id);
+            return m ? m.concluida : false;
+          });
+
+          if (ultimaAulaId) {
+            this.aulaParaContinuar = this.aulas.find(a => a.id === ultimaAulaId) || null;
+          } else if (this.aulas.length > 0) {
+            this.aulaParaContinuar = this.aulas[0];
+          }
+
+          this.isLoadingPage = false;
+          this.hasLoadedAulas = true;
+
+          if (this.aulas.length > 0) {
+            this.ouvirMudancasDeAulaNaUrl();
+          }
+        },
+        error: () => {
+          this.erro = 'Erro ao carregar módulo. Tente novamente mais tarde.';
+          this.isLoadingPage = false;
         }
-      },
-      error: (error) => {
-        console.error(`Erro ao listar aulas para ${categoria}:`, error);
-        this.erro = 'Erro ao carregar as aulas. Tente novamente mais tarde.';
-        this.isLoadingPage = false;
-        this.isLoadingVideo = false;
-      }
-    });
+      });
+  }
+
+  continuarDeOndeParou(): void {
+    if (this.aulaParaContinuar) {
+      this.selecionarVideo(this.aulaParaContinuar);
+    }
   }
 
   private ouvirMudancasDeAulaNaUrl(): void {
     this.route.paramMap
       .pipe(takeUntil(this.destroy$))
-      .subscribe((params) => {
+      .subscribe(params => {
         if (!this.hasLoadedAulas) return;
 
         const aulaSlug = params.get('aulaSlug');
-
-        if (aulaSlug) {
-          const aulaEncontrada = this.aulas.find(
-            a => this.generateSlug(a.titulo) === aulaSlug
-          );
-
-          if (aulaEncontrada) {
-            this.videoAtual = aulaEncontrada;
-          } else {
-            console.warn(`Aula slug "${aulaSlug}" não encontrada.`);
-            this.videoAtual = null; // Mostra placeholder
-          }
-        } else {
-          // Se não há slug, mostra placeholder
+        if (!aulaSlug) {
           this.videoAtual = null;
+          return;
         }
+
+        const aula = this.aulas.find(a => this.generateSlug(a.titulo) === aulaSlug);
+        this.videoAtual = aula || null;
       });
   }
 
-  public selecionarVideo(aula: Aula): void {
+  selecionarVideo(aula: Aula): void {
     if (!this.moduloSlug) return;
 
     const aulaSlug = this.generateSlug(aula.titulo);
@@ -196,55 +225,155 @@ export class ModuloDeAulasComponent implements OnInit, OnDestroy {
     });
   }
 
-  // --- LÓGICA VDOCIPHER AQUI ---
   private carregarVideo(aula: Aula): void {
-    if (!aula || !aula.id) return;
+    if (!aula.id) return;
+
+    console.log('Carregando vídeo para aula ID:', aula.id);
 
     this.isLoadingVideo = true;
     this.vdoCipherUrl = null;
 
-    this.aulasService.obterUrlDeVideo(aula.id).subscribe({
-      next: (res: VdoCipherPlaybackResponse) => {
-        this.isLoadingVideo = false;
+    this.estatistiacasAulasService.obterTempoAssistidoAula(aula.id)
+      .pipe(
+        takeUntil(this.destroy$),
+        catchError(() => {
+          this.tempoAssistidoAtual = 0;
+          return of(0);
+        })
+      )
+      .subscribe({
+        next: (tempo) => {
+          this.tempoAssistidoAtual = tempo ?? 0;
 
-        const rawUrl = `https://player.vdocipher.com/v2/?otp=${res.otp}&playbackInfo=${res.playbackInfo}`;
+          this.aulasService.obterUrlDeVideo(aula.id).subscribe({
+            next: (res: VdoCipherPlaybackResponse) => {
+              this.isLoadingVideo = false;
 
-        this.vdoCipherUrl = this.sanitizer.bypassSecurityTrustResourceUrl(rawUrl);
-      },
-      error: (err) => {
-        console.error("Erro ao obter credenciais VdoCipher", err);
-        this.erro = 'Não foi possível carregar o vídeo.';
-        this.isLoadingVideo = false;
+              const rawUrl = `https://player.vdocipher.com/v2/?otp=${res.otp}&playbackInfo=${res.playbackInfo}`;
+              this.vdoCipherUrl = this.sanitizer.bypassSecurityTrustResourceUrl(rawUrl);
+
+              this.inicializarVdoCipherPlayer();
+            },
+            error: () => {
+              this.erro = 'Não foi possível carregar o vídeo.';
+              this.isLoadingVideo = false;
+            }
+          });
+
+        }
+      });
+  }
+
+  private inicializarVdoCipherPlayer(): void {
+    setTimeout(() => {
+      if (!this.vdoIframe) return;
+
+      const iframeEl = this.vdoIframe.nativeElement;
+      if (!iframeEl) return;
+
+      try {
+        const player = VdoPlayer.getInstance(iframeEl);
+        if (!player?.video) return;
+
+        player.video.addEventListener('loadedmetadata', () => {
+          if (this.tempoAssistidoAtual && this.tempoAssistidoAtual > 0) {
+            player.video.currentTime = this.tempoAssistidoAtual;
+          }
+        });
+
+
+        player.video.addEventListener('play', () => {
+          if (this.tempoInterval) clearInterval(this.tempoInterval);
+
+          this.tempoInterval = setInterval(() => {
+            if (this.videoAtual?.id && player.video && !player.video.paused) {
+              const tempoAtual = Math.floor(player.video.currentTime);
+
+              this.estatistiacasAulasService.salvarTempoAssistido(this.videoAtual.id, tempoAtual)
+                .pipe(takeUntil(this.destroy$))
+                .subscribe({ error: (err) => console.error(err) });
+            }
+          }, 10000);
+        });
+
+        let ultimoTempoRegistrado = 0;
+        player.video.addEventListener('timeupdate', () => {
+          const tempoAtual = Math.floor(player.video.currentTime);
+          if (Math.abs(tempoAtual - ultimoTempoRegistrado) > 3) {
+            console.log("Usuário mudou a minutagem para:", tempoAtual);
+          }
+          ultimoTempoRegistrado = tempoAtual;
+        });
+
+        player.video.addEventListener('pause', () => {
+          if (this.tempoInterval) {
+            clearInterval(this.tempoInterval);
+            this.tempoInterval = null;
+          }
+        });
+
+        player.video.addEventListener('ended', () => {
+          if (this.tempoInterval) {
+            clearInterval(this.tempoInterval);
+            this.tempoInterval = null;
+          }
+          this.marcarComoAssistido(this.videoAtualIndex);
+        });
+
+      } catch (error) {
+        console.error("Erro ao inicializar player:", error);
       }
-    });
+    }, 800);
   }
 
   marcarComoAssistido(index: number): void {
     this.videosAssistidos[index] = true;
-    console.log(`Marcou aula ${index} como assistida.`);
+
+    this.estatistiacasAulasService.concluirAula(this.aulas[index].id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => console.log(`Aula ${this.aulas[index].titulo} marcada como assistida.`),
+        error: () => console.error('Erro ao marcar aula como assistida.')
+      });
   }
 
+  toggleConclusaoAula(): void {
+    if (!this.videoAtual?.id) return;
 
-  formatFileName(fileName: string): string {
-    if (!fileName) return '';
-    return fileName.replace(/^\d+_/, '').replace(/_/g, ' ');
+    const index = this.videoAtualIndex;
+    const estaConcluida = this.videosAssistidos[index];
+
+    if (estaConcluida) {
+      this.estatistiacasAulasService.removerStatusConclusaoAula(this.videoAtual.id)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: () => {
+            this.videosAssistidos[index] = false;
+            console.log('Conclusão removida com sucesso');
+          },
+          error: (err) => console.error('Erro ao remover conclusão', err)
+        });
+    } else {
+      this.estatistiacasAulasService.concluirAula(this.videoAtual.id)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: () => {
+            this.videosAssistidos[index] = true;
+            console.log('Aula marcada como concluída');
+          },
+          error: (err) => console.error('Erro ao concluir aula', err)
+        });
+    }
   }
 
-  viewPdf(url: string): void {
-    window.open(url, '_blank');
-  }
 
 
   carregarAvaliacaoAula(idAula: number): void {
     this.avaliacaoService.obterAvaliacaoUsuario(idAula)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (avaliacao) => {
-          this.avaliacaoAtual = avaliacao?.nota || 0;
-        },
-        error: (error) => {
-          this.avaliacaoAtual = 0;
-        }
+        next: (avaliacao) => this.avaliacaoAtual = avaliacao?.nota || 0,
+        error: () => this.avaliacaoAtual = 0
       });
 
     this.avaliacaoService.obterMediaAvaliacoes(idAula)
@@ -254,7 +383,7 @@ export class ModuloDeAulasComponent implements OnInit, OnDestroy {
           this.mediaAvaliacoes = media.media || 0;
           this.totalAvaliacoes = media.total || 0;
         },
-        error: (error) => {
+        error: () => {
           this.mediaAvaliacoes = 0;
           this.totalAvaliacoes = 0;
         }
@@ -273,14 +402,7 @@ export class ModuloDeAulasComponent implements OnInit, OnDestroy {
 
     this.avaliacaoService.avaliarAula(avaliacao)
       .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: () => {
-          this.carregarAvaliacaoAula(this.videoAtual!.id);
-        },
-        error: (error) => {
-          console.error('Erro ao avaliar aula:', error);
-        }
-      });
+      .subscribe({ next: () => this.carregarAvaliacaoAula(this.videoAtual!.id) });
   }
 
   onStarHover(star: number): void { this.hoverStar = star; }
@@ -296,17 +418,22 @@ export class ModuloDeAulasComponent implements OnInit, OnDestroy {
     const isDark = this.themeService.isDarkMode();
     const basePath = 'assets/Icons';
 
-    if (isDark) {
-      return isFilled ? `${basePath}/dark/estrela-preenchida-dark.svg` : `${basePath}/dark/estrela-vazia-dark.svg`;
-    } else {
-      return isFilled ? `${basePath}/estrela-preenchida.svg` : `${basePath}/estrela-vazia.svg`;
-    }
+    return isDark
+      ? (isFilled ? `${basePath}/dark/estrela-preenchida-dark.svg` : `${basePath}/dark/estrela-vazia-dark.svg`)
+      : (isFilled ? `${basePath}/estrela-preenchida.svg` : `${basePath}/estrela-vazia.svg`);
   }
 
   getAverageStarIcon(): string {
-    const isDark = this.themeService.isDarkMode();
-    return isDark
+    return this.themeService.isDarkMode()
       ? 'assets/Icons/dark/estrela-preenchida-dark.svg'
       : 'assets/Icons/estrela-preenchida.svg';
+  }
+
+  formatFileName(fileName: string): string {
+    return fileName ? fileName.replace(/^\d+_/, '').replace(/_/g, ' ') : '';
+  }
+
+  viewPdf(url: string): void {
+    window.open(url, '_blank');
   }
 }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Categoria } from './enums/categoria';
 import { CategoriaDescricoes } from './enums/categoria-descricao';
+import { EstatisticasAulasService } from 'src/app/services/estatisticas-aulas.service';
 
 @Component({
   selector: 'app-painel-de-aulas',
@@ -34,38 +35,37 @@ export class PainelDeAulasComponent implements OnInit {
       description: this.getDescriptionText(categoria),
       imageUrl: this.categoriaImagens[categoria],
       slug: this.generateSlug(descricao),
-      progresso: 0 // <-- ADICIONADO: Inicializa o progresso como 0
+      progresso: 0
     };
   });
 
   constructor(
-    private router: Router
+    private router: Router,
+    private estatisticasAulasService: EstatisticasAulasService
   ) { }
 
   ngOnInit(): void {
-    console.log('PainelDeAulasComponent carregado.');
-    // 4. Chame a função para carregar o progresso
-    // this.carregarProgressoModulos();
+    this.carregarProgressoModulos();
   }
 
-  // private carregarProgressoModulos(): void {
-  //   this.progressoService.obterProgressoModulos().subscribe({
-  //     next: (progressoMap) => {
-  //       // 'progressoMap' vem do serviço (ex: Map<Categoria, number>)
-  //       this.aulas.forEach(aula => {
-  //         const progresso = progressoMap.get(aula.categoria);
-  //         if (progresso) {
-  //           aula.progresso = progresso;
-  //         }
-  //       });
-  //       console.log('Progresso do usuário carregado e mesclado:', this.aulas);
-  //     },
-  //     error: (err) => {
-  //       console.error('Erro ao carregar progresso do usuário:', err);
-  //       // O painel ainda funciona, mas mostrará 0% para tudo
-  //     }
-  //   });
-  // }
+  private carregarProgressoModulos(): void {
+    this.estatisticasAulasService.obterProgressoAulas().subscribe({
+      next: (progressoMap) => {
+        this.aulas.forEach(aula => {
+          const progresso = progressoMap.get(this.traduzirCategoria(aula.categoria));
+
+          if (progresso) {
+            aula.progresso = progresso;
+          }
+        });
+        console.log('Progresso do usuário carregado e mesclado:', this.aulas);
+      },
+      error: (err) => {
+        console.error('Erro ao carregar progresso do usuário:', err);
+
+      }
+    });
+  }
 
   generateSlug(text: string): string {
     return text
@@ -91,6 +91,10 @@ export class PainelDeAulasComponent implements OnInit {
       [Categoria.UVEITE_E_ONCOLOGIA_OCULAR]: 'Explore uveítes e oncologia ocular.',
     };
     return descriptions[categoria] || 'Descrição não disponível';
+  }
+
+  private traduzirCategoria(categoria: Categoria): string {
+    return CategoriaDescricoes[categoria] || categoria;
   }
 
   navegarParaAula(slug: string): void {
