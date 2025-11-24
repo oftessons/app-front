@@ -20,9 +20,9 @@
             <div class="header-content">
               <h2 class="tema-title">{{ getTemaNome() }}</h2>
               <div class="buttons-container" *ngIf="PermissaoFlashcards">
-                <a (click)="editarFlashcard()" class="editar-button"
-                  ><img src="../../../assets/Icons/lapis.svg"
-                /></a>
+                <a (click)="editarFlashcard()" class="editar-button">
+                  <img src="../../../assets/Icons/lapis.svg" />
+                </a>
                 <button
                   type="button"
                   class="deletar-button"
@@ -36,16 +36,18 @@
               </div>
             </div>
 
-            <div *ngIf="currentCard?.fotoUrl" class="image-display-wrapper">
+            <div
+              *ngIf="currentCard?.fotoUrlPergunta"
+              class="image-display-wrapper"
+            >
               <img
-                [src]="currentCard?.fotoUrl"
+                [src]="currentCard?.fotoUrlPergunta"
                 alt="Imagem da Pergunta"
                 class="question-image-modal"
               />
             </div>
-
+            <h2 class="resposta-title">Pergunta</h2>
             <div [innerHTML]="currentCard?.pergunta" class="text"></div>
-
             <a class="button-resposta" (click)="showAnswer()"
               >Mostrar Resposta</a
             >
@@ -59,14 +61,37 @@
               <h2 class="resposta-title">Resposta</h2>
               <div class="text" [innerHTML]="currentCard?.resposta"></div>
             </div>
-
-            <div class="next-button-section">
-              <a
-                class="button-resposta button-next"
-                (click)="proximoFlashcard()"
-              >
-                Próximo Flashcard
-              </a>
+            <div
+              *ngIf="currentCard?.fotoUrlResposta"
+              class="image-display-wrapper"
+            >
+              <img
+                [src]="currentCard?.fotoUrlResposta"
+                alt="Imagem da Resposta"
+                class="question-image-modal"
+              />
+            </div>
+            <div class="rating-section">
+              <p class="rating-text">O quanto você sabia dessa questão?</p>
+              <div class="rating-buttons">
+                <span class="rating-values-text">Nada</span>
+                <button class="rating-btn rating-1" (click)="rateAnswer(1)">
+                  1
+                </button>
+                <button class="rating-btn rating-2" (click)="rateAnswer(2)">
+                  2
+                </button>
+                <button class="rating-btn rating-3" (click)="rateAnswer(3)">
+                  3
+                </button>
+                <button class="rating-btn rating-4" (click)="rateAnswer(4)">
+                  4
+                </button>
+                <button class="rating-btn rating-5" (click)="rateAnswer(5)">
+                  5
+                </button>
+                <span class="rating-values-text">Muito</span>
+              </div>
             </div>
           </ng-container>
 

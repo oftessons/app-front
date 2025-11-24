@@ -97,20 +97,22 @@
 .texto-container {
   display: flex;
   flex-direction: column;
-  gap: 16px;
   width: 100%;
 }
 
 .espaco-texto {
   width: 100%;
+  margin-bottom: 20px;
 }
 
 .label {
   font-size: 16px;
-  color: #f6f8fe;
+  color: var(--text-color);
   margin-bottom: 8px;
+  font-weight: 600;
 }
 
+/* Regras originais do CSS de destino para a imagem (mantidas) */
 .imagem-container {
   width: 100%;
   display: flex;
@@ -124,7 +126,7 @@
 }
 
 .input-file {
-  display: none; 
+  display: none;
 }
 
 .file-label {
@@ -142,15 +144,101 @@
   background-color: #234178;
 }
 
-.preview-container {
+/* NOVO: Estilos para o bloco de upload (extraídos do bloco maior) */
+.cont-imgs {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 15px;
-  margin-top: 10px;
+  width: 100%;
 }
 
+.form-group {
+  width: 100%;
+}
+
+.image-upload {
+  border: 2px dashed var(--border-color);
+  border-radius: 5px;
+  position: relative;
+  width: 100%;
+  text-align: center;
+  padding: 20px;
+}
+
+/* Esconde o input file */
+.image-upload input[type="file"] {
+  opacity: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  cursor: pointer;
+}
+
+.foto-preview {
+  max-width: 100%;
+  width: 300px;
+  height: auto;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  padding: 16px;
+  cursor: pointer;
+  border: 1px solid var(--border-color);
+  background: var(--bg-input);
+}
+
+.foto-preview img,
+.foto-preview video {
+  max-width: 100%;
+  height: auto;
+  border-radius: 5px;
+}
+
+/* ATUALIZADO: Sobrescreve o preview-container para o novo uso */
+.preview-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.btn-remove-image {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: rgba(255, 0, 0, 0.7);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-remove-image:hover {
+  background-color: rgba(200, 0, 0, 0.9);
+}
+
+.upload-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.upload-icon {
+  width: 50px;
+  margin-bottom: 10px;
+}
+
+/* FIM dos Estilos de Upload */
+
+
+/* Outros estilos originais */
 .preview-img {
   max-width: 200px;
   max-height: 200px;
@@ -202,4 +290,16 @@
 
 .button:hover {
   background-color: #234178;
+}
+
+.div-section {
+  color: var(--text-color);
+  font-size: 15px;
+}
+
+/* Layout Responsivo para o upload */
+@media screen and (max-width: 768px) {
+  .cont-imgs {
+    flex-direction: column;
+  }
 }

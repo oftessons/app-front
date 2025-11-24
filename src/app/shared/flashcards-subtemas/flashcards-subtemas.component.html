@@ -1,15 +1,56 @@
 <div class="container">
-    <div class="icon">
-        <img src="../../../assets/Icons/Flashcards-temas.svg"/>
+  <div class="icon">
+    <img src="../../../assets/Icons/Flashcards-temas.svg" />
+  </div>
+  <div class="content-wrapper">
+    <div class="content">
+      <span class="title">{{ subtema }}</span>
+      <div class="cards-estudados-container">
+        <mat-progress-bar
+          class="progress-bar"
+          mode="determinate"
+          [value]="porcentagem"
+        ></mat-progress-bar>
+        <span class="cards-estudados">
+          {{ cards_estudados }}/{{ cards_total }} Cards Estudados
+        </span>
+      </div>
     </div>
-    <div class="content-wrapper">
-        <div class="content">
-            <span class="title">{{subtema}}</span>
-            <div class="cards-estudados-container">
-                <mat-progress-bar class="progress-bar" mode="determinate" [value]="porcentagem"></mat-progress-bar>
-                <span class="cards-estudados">{{cards_estudados}}/{{cards_total}} Cards Estudados</span>
-            </div>
-        </div>
-        <a class="button-right" (click)="onStudyClick()"><img src="../../../assets/Icons/Right-icon.svg" alt=""></a>
+    <div class="buttons-container">
+      <button class="button-importar" (click)="openModal()">
+        Importar Flashcards
+      </button>
+      <a class="button" (click)="onStudyClick()">
+        <img src="../../../assets/Icons/Right-icon.svg" alt="" />
+      </a>
     </div>
+  </div>
+</div>
+
+<div class="modal" [class.modal-open]="isModalOpen" (click)="closeModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h2>Importar para {{ subtema }}</h2>
+
+    <div class="csv-upload-container">
+      <label class="csv-upload-label" for="csvInputSubtema">
+        Importar arquivo CSV
+      </label>
+
+      <div class="csv-upload-row">
+        <input
+          type="file"
+          id="csvInputSubtema"
+          accept=".csv"
+          (change)="onCsvFileSelected($event)"
+        />
+      </div>
+    </div>
+    <button
+      class="button-importar"
+      (click)="importarFlashcards()"
+      [disabled]="!arquivoCsv || isImportando"
+    >
+      {{ isImportando ? "Importando..." : "Confirmar Importação" }}
+    </button>
+  </div>
 </div>

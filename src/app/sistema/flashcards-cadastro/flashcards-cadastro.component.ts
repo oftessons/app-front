@@ -54,8 +54,9 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
   perguntaHtml = '';
   respostaHtml = '';
 
-  fotoSelecionada: File | null = null;
-  fotoPreview: string | ArrayBuffer | null = null;
+  fotoPerguntaFile: File | null = null;
+  fotoRespostaFile: File | null = null;
+  fotoPreviews: { [key: string]: string | ArrayBuffer | null } = {};
 
   flashcardParaEditar: Flashcard | null = null;
   modoEdicao = false;
@@ -107,8 +108,11 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
       this.perguntaHtml = card.pergunta;
       this.respostaHtml = card.resposta;
 
-      if (card.fotoUrl) {
-        this.fotoPreview = card.fotoUrl;
+      if (card.fotoUrlPergunta) {
+        this.fotoPreviews['fotoPergunta'] = card.fotoUrlPergunta;
+      }
+      if (card.fotoUrlResposta) {
+        this.fotoPreviews['fotoResposta'] = card.fotoUrlResposta;
       }
 
       setTimeout(() => {
@@ -130,25 +134,69 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
     }
   }
 
-  onFileSelected(event: any): void {
-    const file: File = event.target.files[0];
-    if (file) {
-      this.fotoSelecionada = file;
+  onFileSelected(event: any, fieldKey: string): void {
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      const file: File = files[0];
+
+      if (fieldKey === 'fotoPergunta') {
+        this.fotoPerguntaFile = file;
+      } else if (fieldKey === 'fotoResposta') {
+        this.fotoRespostaFile = file;
+      }
+
       const reader = new FileReader();
       reader.onload = (e) => {
-        this.fotoPreview = e.target?.result ?? null;
+        this.fotoPreviews[fieldKey] = e.target?.result ?? null;
+        this.cdRef.detectChanges();
       };
       reader.readAsDataURL(file);
     }
   }
 
-  removerImagem(): void {
-    this.fotoSelecionada = null;
-    this.fotoPreview = null;
-    const fileInput = document.getElementById('fileInput') as HTMLInputElement;
+  onDrop(event: DragEvent, fieldKey: string): void {
+    event.preventDefault();
+    const files = event.dataTransfer?.files;
+    if (files && files.length > 0) {
+      const mockEvent = { target: { files: files } };
+      this.onFileSelected(mockEvent, fieldKey);
+    }
+  }
+
+  onDragOver(event: DragEvent): void {
+    event.preventDefault();
+  }
+
+  removeFile(fieldKey: string, event: Event): void {
+    event.stopPropagation();
+
+    if (fieldKey === 'fotoPergunta') {
+      this.fotoPerguntaFile = null;
+    } else if (fieldKey === 'fotoResposta') {
+      this.fotoRespostaFile = null;
+    }
+
+    this.fotoPreviews[fieldKey] = null;
+
+    const fileInput = document.getElementById(fieldKey) as HTMLInputElement;
     if (fileInput) {
       fileInput.value = '';
     }
+    this.cdRef.detectChanges();
+  }
+
+  isPreviewImage(preview: string | ArrayBuffer | null): boolean {
+    if (typeof preview !== 'string') return false;
+    return preview.toLowerCase().startsWith('data:image/');
+  }
+
+  isPreviewVideo(preview: string | ArrayBuffer | null): boolean {
+    if (typeof preview !== 'string') return false;
+    return preview.toLowerCase().startsWith('data:video/');
+  }
+
+  isDarkMode(): boolean {
+    return false;
   }
 
   voltar() {
@@ -157,23 +205,18 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
 
   salvar(): void {
     if (!this.assuntoSelecionado || !this.perguntaHtml || !this.respostaHtml) {
-      alert('Por favor, preencha todos os campos obrigatórios.');
       return;
     }
 
     this.authService.obterUsuarioAutenticadoDoBackend().subscribe({
       next: (usuarioDoBackend) => {
         if (!usuarioDoBackend || !usuarioDoBackend.id) {
-          alert(
-            'Erro crítico: Não foi possível obter os dados do usuário logado. Faça o login novamente.'
-          );
           this.router.navigate(['/login']);
           return;
         }
 
         const userIdNumerico = parseInt(String(usuarioDoBackend.id), 10);
         if (isNaN(userIdNumerico)) {
-          alert('Erro crítico: O ID do usuário retornado é inválido.');
           return;
         }
 
@@ -181,9 +224,6 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
           this.assuntoSelecionado!
         );
         if (!temaSelecionado) {
-          alert(
-            'Erro: não foi possível determinar o tema a partir do assunto selecionado.'
-          );
           return;
         }
 
@@ -211,21 +251,15 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
           };
 
           this.flashcardService
-            .atualizarFlashcard(this.flashcardParaEditar.id, dto, this.fotoSelecionada || undefined)
+            .atualizarFlashcard(
+              this.flashcardParaEditar.id,
+              dto,
+              this.fotoPerguntaFile || undefined,
+              this.fotoRespostaFile || undefined
+            )
             .subscribe({
               next: () => {
-                alert('Flashcard atualizado com sucesso!');
                 this.voltar();
-              },
-              error: (erro) => {
-                console.error('Erro ao atualizar flashcard:', erro);
-                alert(
-                  `Erro ao atualizar: ${
-                    (erro as any)?.error ||
-                    (erro as any)?.message ||
-                    'Erro desconhecido'
-                  }`
-                );
               },
             });
         } else {
@@ -239,31 +273,20 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
             createdBy: userIdNumerico,
           };
 
-          this.flashcardService.salvarFlashcard(dto, this.fotoSelecionada || undefined).subscribe({
-            next: () => {
-              alert('Flashcard salvo com sucesso!');
-              this.voltar();
-            },
-            error: (erro) => {
-              console.error('Erro ao salvar flashcard:', erro);
-
-              const mensagem =
-                typeof erro === 'string'
-                  ? erro
-                  : (erro as any)?.error
-                  ? (erro as any).error
-                  : (erro as any)?.message
-                  ? (erro as any).message
-                  : 'Erro desconhecido ao salvar o flashcard.';
-
-              alert(`Erro ao salvar: ${mensagem}`);
-            },
-          });
+          this.flashcardService
+            .salvarFlashcard(
+              dto,
+              this.fotoPerguntaFile || undefined,
+              this.fotoRespostaFile || undefined
+            )
+            .subscribe({
+              next: () => {
+                this.voltar();
+              },
+            });
         }
       },
-      error: (err) => {
-        console.error('Erro ao buscar perfil do usuário:', err);
-        alert('Erro ao buscar dados do usuário. Sua sessão pode ter expirado.');
+      error: () => {
         this.router.navigate(['/login']);
       },
     });

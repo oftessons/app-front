@@ -29,7 +29,8 @@ export interface Flashcard {
   resposta: string;
   dificuldade: string | null;
   relevancia: number | null;
-  fotoUrl?: string;
+  fotoUrlPergunta?: string;
+  fotoUrlResposta?: string;
 }
 
 export interface ReqSalvarFlashcardDTO {
@@ -63,7 +64,7 @@ export interface ReqAvaliarFlashcardDTO {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class FlashcardService {
   private apiUrl = `${environment.apiURLBase}/api/flashcard`;
@@ -71,11 +72,16 @@ export class FlashcardService {
   constructor(private http: HttpClient) {}
 
   getFlashcardsContador(): Observable<ContadorFlashcardsTemaDTO[]> {
-    return this.http.get<ContadorFlashcardsTemaDTO[]>(`${this.apiUrl}/contar-por-tema-e-geral`);
+    return this.http.get<ContadorFlashcardsTemaDTO[]>(
+      `${this.apiUrl}/contar-por-tema-e-geral`
+    );
   }
 
   getStatsPorTema(tema: string): Observable<SubtemaStatsDTO[]> {
-    return this.http.get<SubtemaStatsDTO[]>(`${this.apiUrl}/${tema.toUpperCase()}/subtemas-e-estudados`);
+    const temaUpper = tema?.toUpperCase();
+    return this.http.get<SubtemaStatsDTO[]>(
+      `${this.apiUrl}/${temaUpper}/subtemas-e-estudados`
+    );
   }
 
   getFlashcardsParaEstudar(
@@ -83,9 +89,7 @@ export class FlashcardService {
     subtema?: string,
     dificuldade?: string
   ): Observable<SessaoEstudoDTO> {
-    let params = new HttpParams();
-
-    params = params.set('tema', tema.toUpperCase());
+    let params = new HttpParams().set('tema', tema.toUpperCase());
 
     if (subtema) {
       params = params.set('subtema', subtema.toUpperCase());
@@ -95,20 +99,29 @@ export class FlashcardService {
       params = params.set('dificuldade', dificuldade);
     }
 
-    return this.http.get<SessaoEstudoDTO>(`${this.apiUrl}/buscar-flashcards-filtro`, { params });
+    return this.http.get<SessaoEstudoDTO>(
+      `${this.apiUrl}/buscar-flashcards-filtro`,
+      { params }
+    );
   }
 
   deleteFlashcard(id: number): Observable<string> {
-    return this.http.delete(`${this.apiUrl}/${id}`, { responseType: 'text' });
+    return this.http.delete(`${this.apiUrl}/${id}`, {
+      responseType: 'text',
+    });
   }
 
-  salvarFlashcard(dto: ReqSalvarFlashcardDTO, foto?: File): Observable<string> {
+  salvarFlashcard(
+    dto: ReqSalvarFlashcardDTO,
+    fotoPergunta?: File,
+    fotoResposta?: File
+  ): Observable<string> {
     const formData = new FormData();
 
     formData.append('pergunta', dto.pergunta);
     formData.append('resposta', dto.resposta);
     formData.append('tema', dto.tema);
-    
+
     if (dto.subtema) {
       formData.append('subtema', dto.subtema);
     }
@@ -117,7 +130,7 @@ export class FlashcardService {
       formData.append('dificuldade', dto.dificuldade);
     }
 
-    if (dto.relevancia) {
+    if (dto.relevancia !== undefined && dto.relevancia !== null) {
       formData.append('relevancia', String(dto.relevancia));
     }
 
@@ -125,40 +138,56 @@ export class FlashcardService {
       formData.append('createdBy', String(dto.createdBy));
     }
 
-    if (foto) {
-      formData.append('foto', foto);
+    if (fotoPergunta) {
+      formData.append('fotoPergunta', fotoPergunta);
+    }
+
+    if (fotoResposta) {
+      formData.append('fotoResposta', fotoResposta);
     }
 
     return this.http.post(`${this.apiUrl}/cadastrar`, formData, {
-      responseType: 'text'
+      responseType: 'text',
     });
   }
 
-  atualizarFlashcard(id: number, dto: ReqAtualizarFlashcardDTO, foto?: File): Observable<string> {
+  atualizarFlashcard(
+    id: number,
+    dto: ReqAtualizarFlashcardDTO,
+    fotoPergunta?: File,
+    fotoResposta?: File,
+    removerFotoPergunta: boolean = false,
+    removerFotoResposta: boolean = false
+  ): Observable<string> {
     const formData = new FormData();
 
     formData.append('pergunta', dto.pergunta);
     formData.append('resposta', dto.resposta);
     formData.append('tema', dto.tema);
-    
+
     if (dto.subtema) {
-        formData.append('subtema', dto.subtema);
+      formData.append('subtema', dto.subtema);
     }
 
     if (dto.dificuldade) {
       formData.append('dificuldade', dto.dificuldade);
     }
 
-    if (dto.relevancia) {
-      formData.append('relevancia', String(dto.relevancia));
+    formData.append('relevancia', String(dto.relevancia));
+
+    if (fotoPergunta) {
+      formData.append('fotoPergunta', fotoPergunta);
     }
 
-    if (foto) {
-      formData.append('foto', foto);
+    if (fotoResposta) {
+      formData.append('fotoResposta', fotoResposta);
     }
+
+    formData.append('removerFotoPergunta', String(removerFotoPergunta));
+    formData.append('removerFotoResposta', String(removerFotoResposta));
 
     return this.http.post(`${this.apiUrl}/atualizarFlashcard/${id}`, formData, {
-      responseType: 'text'
+      responseType: 'text',
     });
   }
 
@@ -174,6 +203,7 @@ export class FlashcardService {
     pergunta?: string
   ): Observable<SessaoEstudoDTO> {
     let params = new HttpParams();
+
     if (tema) {
       params = params.set('tema', tema.toUpperCase());
     }
@@ -189,25 +219,46 @@ export class FlashcardService {
     if (pergunta) {
       params = params.set('pergunta', pergunta);
     }
-    return this.http.get<SessaoEstudoDTO>(`${this.apiUrl}/buscar-flashcards-filtro`, { params });
+
+    return this.http.get<SessaoEstudoDTO>(
+      `${this.apiUrl}/buscar-flashcards-filtro`,
+      { params }
+    );
   }
 
-  importarFlashcardsCsv(tema: string, csv: File): Observable<any> {
+  importarFlashcardsCsv(
+    tema: string,
+    subtema: string,
+    csv: File
+  ): Observable<any> {
+    const temaEnum = tema?.toString().toUpperCase();
+    const subTemaEnum = subtema?.toString().toUpperCase();
+
     const formData = new FormData();
-    formData.append('tema', tema.toUpperCase());
+    formData.append('tema', temaEnum);
+
+    if (subTemaEnum) {
+      formData.append('subTema', subTemaEnum);
+    }
+
     formData.append('csv', csv, csv.name);
+
     return this.http.post(`${this.apiUrl}/cadastrar-csv`, formData);
   }
 
   avaliarFlashcard(dto: ReqAvaliarFlashcardDTO): Observable<string> {
     return this.http.post(`${this.apiUrl}/avaliar`, dto, {
-      responseType: 'text'
+      responseType: 'text',
     });
   }
-  
+
   finalizarSessao(sessaoId: number): Observable<string> {
-    return this.http.post(`${this.apiUrl}/finalizar-sessao/${sessaoId}`, {}, {
-      responseType: 'text'
-    });
+    return this.http.post(
+      `${this.apiUrl}/finalizar-sessao/${sessaoId}`,
+      {},
+      {
+        responseType: 'text',
+      }
+    );
   }
 }
