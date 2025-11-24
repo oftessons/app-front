@@ -24,16 +24,6 @@
             placeholder="Ex: Catarata Básica"
             class="form-input">
         </div>
-        
-        <div class="form-group">
-          <label for="descricao">Descrição (opcional)</label>
-          <textarea 
-            id="descricao" 
-            [(ngModel)]="descricao" 
-            placeholder="Adicione uma descrição para esta semana..."
-            class="form-textarea"
-            rows="3"></textarea>
-        </div>
       </div>
 
       <!-- Abas de conteúdo -->
@@ -83,13 +73,29 @@
               </button>
             </div>
 
+            <div class="filter-select number">
+              <div class="form-group">
+                <label for="quantidadePre">Quantidade de Questões</label>
+                <input 
+                  type="number" 
+                  id="quantidadePre" 
+                  [(ngModel)]="quantidadeQuestoesPre"
+                  placeholder="Ex: 10"
+                  min="1"
+                  max="1000"
+                  step="1"
+                  class="form-input">
+              </div>
+            </div>
             <div class="filters-grid">
+
               <div class="filter-select">
                 <app-multiplo-select 
-                  label="Temas" 
-                  [options]="temasDescricoes"
-                  [(selectedValue)]="multSelectTemasPre" 
-                  [multiple]="true">
+                  label="Assunto" 
+                  [options]="subtemasAgrupadosPorTema"
+                  [(selectedValue)]="multSelectAssuntoPre" 
+                  [multiple]="true"
+                  [searchable]="true">
                 </app-multiplo-select>
               </div>
 
@@ -119,6 +125,40 @@
                   [multiple]="true">
                 </app-multiplo-select>
               </div>
+
+              <div class="filter-select">
+                <app-multiplo-select 
+                  label="Questões" 
+                  [options]="questoesCertasErradas"
+                  [(selectedValue)]="multSelectQuestoesPre" 
+                  [multiple]="true">
+                </app-multiplo-select>
+              </div>
+
+              <div class="filter-select">
+                <app-multiplo-select 
+                  label="Respostas" 
+                  [options]="respSimuladoDescricoes"
+                  [(selectedValue)]="multSelectRespostasPre" 
+                  [multiple]="true">
+                </app-multiplo-select>
+              </div>
+
+              <div class="filter-select">
+                <app-multiplo-select 
+                  label="Comentários" 
+                  [options]="questoesComentadas"
+                  [(selectedValue)]="multSelectComentariosPre" 
+                  [multiple]="true">
+                </app-multiplo-select>
+              </div>
+
+              <div class="filter-select">
+                <app-input-padrao 
+                  label="Palavra-chave" 
+                  [(value)]="palavraChavePre">
+                </app-input-padrao>
+              </div>
             </div>
           </div>
 
@@ -143,14 +183,29 @@
                 Limpar todos os filtros
               </button>
             </div>
+            <div class="filter-select number">
+              <div class="form-group">
+                <label for="quantidadePos">Quantidade de Questões</label>
+                <input 
+                  type="number" 
+                  id="quantidadePos" 
+                  [(ngModel)]="quantidadeQuestoesPos"
+                  placeholder="Ex: 10"
+                  min="1"
+                  max="1000"
+                  step="1"
+                  class="form-input">
+              </div>
+            </div>
 
             <div class="filters-grid">
               <div class="filter-select">
                 <app-multiplo-select 
-                  label="Temas" 
-                  [options]="temasDescricoes"
-                  [(selectedValue)]="multSelectTemasPos" 
-                  [multiple]="true">
+                  label="Assunto" 
+                  [options]="subtemasAgrupadosPorTema"
+                  [(selectedValue)]="multSelectAssuntoPos" 
+                  [multiple]="true"
+                  [searchable]="true">
                 </app-multiplo-select>
               </div>
 
@@ -179,6 +234,40 @@
                   [(selectedValue)]="multSelectDificuldadesPos" 
                   [multiple]="true">
                 </app-multiplo-select>
+              </div>
+
+              <div class="filter-select">
+                <app-multiplo-select 
+                  label="Questões" 
+                  [options]="questoesCertasErradas"
+                  [(selectedValue)]="multSelectQuestoesPos" 
+                  [multiple]="true">
+                </app-multiplo-select>
+              </div>
+
+              <div class="filter-select">
+                <app-multiplo-select 
+                  label="Respostas" 
+                  [options]="respSimuladoDescricoes"
+                  [(selectedValue)]="multSelectRespostasPos" 
+                  [multiple]="true">
+                </app-multiplo-select>
+              </div>
+
+              <div class="filter-select">
+                <app-multiplo-select 
+                  label="Comentários" 
+                  [options]="questoesComentadas"
+                  [(selectedValue)]="multSelectComentariosPos" 
+                  [multiple]="true">
+                </app-multiplo-select>
+              </div>
+
+              <div class="filter-select">
+                <app-input-padrao 
+                  label="Escolha a Palavra-chave" 
+                  [(value)]="palavraChavePos">
+                </app-input-padrao>
               </div>
             </div>
           </div>

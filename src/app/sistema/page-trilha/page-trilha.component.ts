@@ -412,7 +412,6 @@ export class PageTrilhaComponent implements OnInit {
       data: {
         semanaNumero: this.selectedWeekInfo.numero,
         titulo: card.titulo,
-        descricao: card.descricao || '',
         filtrosQuestoesPre: card.filtrosQuestoesPre || {},
         filtrosQuestoesPos: card.filtrosQuestoesPos || {}
       } as ConteudoSemana
@@ -426,7 +425,6 @@ export class PageTrilhaComponent implements OnInit {
         
         // Por enquanto, apenas atualizar o card localmente
         card.titulo = resultado.titulo;
-        card.descricao = resultado.descricao;
         card.filtrosQuestoesPre = resultado.filtrosQuestoesPre;
         card.filtrosQuestoesPos = resultado.filtrosQuestoesPos;
       }

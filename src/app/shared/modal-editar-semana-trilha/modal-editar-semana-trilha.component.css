@@ -258,6 +258,56 @@
   width: 100%;
 }
 
+.filter-select.number {
+  margin-bottom: 1.5rem;
+}
+
+.filter-select .form-group {
+  margin-bottom: 0;
+}
+
+.filter-select .form-group label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 0.5rem;
+}
+
+.filter-select .form-group input[type="number"] {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-color);
+  font-size: 0.95rem;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.filter-select .form-group input[type="number"]:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.filter-select .form-group input[type="number"]::placeholder {
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
+.filter-select .form-group input[type="number"]::-webkit-outer-spin-button,
+.filter-select .form-group input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.filter-select .form-group input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
 /* ==================== PLACEHOLDER CONTENT ==================== */
 .placeholder-content {
   display: flex;

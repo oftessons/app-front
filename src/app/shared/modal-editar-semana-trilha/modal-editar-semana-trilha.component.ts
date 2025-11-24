@@ -1,19 +1,35 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ThemeService } from 'src/app/services/theme.service';
+import { CertasErradas } from 'src/app/sistema/page-questoes/enums/certas-erradas';
+import { RespostasSimulado } from 'src/app/sistema/page-questoes/enums/resp-simu';
+import { Comentada } from 'src/app/sistema/page-questoes/enums/comentadas';
+import { Tema } from 'src/app/sistema/page-questoes/enums/tema';
+import { Subtema } from 'src/app/sistema/page-questoes/enums/subtema';
+import { temasESubtemas } from 'src/app/sistema/page-questoes/enums/map-tema-subtema';
+import { 
+  getDescricaoCertoErrado, 
+  getDescricaoRespostasSimulado, 
+  getDescricaoQuestaoComentadas,
+  getDescricaoTema,
+  getDescricaoSubtema
+} from 'src/app/sistema/page-questoes/enums/enum-utils';
 
 export interface FiltroQuestoes {
-  tema?: string[];
-  subtema?: string[];
+  assunto?: (Subtema | string)[];
   ano?: string[];
   tipoDeProva?: string[];
   dificuldade?: string[];
+  certasErradas?: string[];
+  respostasSimulado?: string[];
+  comentada?: string[];
+  palavraChave?: string;
+  quantidadeQuestoes?: number;
 }
 
 export interface ConteudoSemana {
   semanaNumero: number;
   titulo: string;
-  descricao?: string;
   filtrosQuestoesPre: FiltroQuestoes;
   filtrosQuestoesPos: FiltroQuestoes;
   aulasIds?: number[];
@@ -28,33 +44,36 @@ export interface ConteudoSemana {
 export class ModalEditarSemanaTrilhaComponent implements OnInit {
   semanaNumero: number;
   titulo: string = '';
-  descricao: string = '';
   
   abaAtiva: 'questoes-pre' | 'aulas' | 'questoes-pos' | 'flashcards' = 'questoes-pre';
   
-  multSelectTemasPre: string[] = [];
-  multSelectSubtemasPre: string[] = [];
+  // Filtros Pré-Teste
+  multSelectAssuntoPre: (Subtema | string)[] = [];
   multSelectAnosPre: string[] = [];
   multSelectTiposProvaPre: string[] = [];
   multSelectDificuldadesPre: string[] = [];
+  multSelectQuestoesPre: string[] = [];
+  multSelectRespostasPre: string[] = [];
+  multSelectComentariosPre: string[] = [];
+  palavraChavePre: string = '';
+  quantidadeQuestoesPre: string = '';
   
-  multSelectTemasPos: string[] = [];
-  multSelectSubtemasPos: string[] = [];
+  // Filtros Pós-Teste
+  multSelectAssuntoPos: (Subtema | string)[] = [];
   multSelectAnosPos: string[] = [];
   multSelectTiposProvaPos: string[] = [];
   multSelectDificuldadesPos: string[] = [];
+  multSelectQuestoesPos: string[] = [];
+  multSelectRespostasPos: string[] = [];
+  multSelectComentariosPos: string[] = [];
+  palavraChavePos: string = '';
+  quantidadeQuestoesPos: string = '';
   
-  temasDescricoes: any[] = [
-    { label: 'Catarata', value: 'Catarata' },
-    { label: 'Glaucoma', value: 'Glaucoma' },
-    { label: 'Retina', value: 'Retina' },
-    { label: 'Córnea', value: 'Córnea' },
-    { label: 'Refrativa', value: 'Refrativa' },
-    { label: 'Estrabismo', value: 'Estrabismo' },
-    { label: 'Plástica Ocular', value: 'Plástica Ocular' },
-    { label: 'Órbita', value: 'Órbita' },
-    { label: 'Vias Lacrimais', value: 'Vias Lacrimais' }
-  ];
+  subtemasAgrupadosPorTema: {
+    label: string;
+    value: string;
+    options: { label: string; value: Subtema }[];
+  }[] = [];
   
   anosDescricoes: any[] = [
     { label: '2024', value: '2024' },
@@ -78,6 +97,10 @@ export class ModalEditarSemanaTrilhaComponent implements OnInit {
     { label: 'Difícil', value: 'Difícil' }
   ];
 
+  questoesCertasErradas: any[] = [];
+  respSimuladoDescricoes: any[] = [];
+  questoesComentadas: any[] = [];
+
   constructor(
     public dialogRef: MatDialogRef<ModalEditarSemanaTrilhaComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ConteudoSemana,
@@ -85,22 +108,71 @@ export class ModalEditarSemanaTrilhaComponent implements OnInit {
   ) {
     this.semanaNumero = data.semanaNumero;
     this.titulo = data.titulo || '';
-    this.descricao = data.descricao || '';
     
-    this.multSelectTemasPre = data.filtrosQuestoesPre?.tema || [];
-    this.multSelectSubtemasPre = data.filtrosQuestoesPre?.subtema || [];
+    // Pré-Teste
+    this.multSelectAssuntoPre = data.filtrosQuestoesPre?.assunto || [];
     this.multSelectAnosPre = data.filtrosQuestoesPre?.ano || [];
     this.multSelectTiposProvaPre = data.filtrosQuestoesPre?.tipoDeProva || [];
     this.multSelectDificuldadesPre = data.filtrosQuestoesPre?.dificuldade || [];
+    this.multSelectQuestoesPre = data.filtrosQuestoesPre?.certasErradas || [];
+    this.multSelectRespostasPre = data.filtrosQuestoesPre?.respostasSimulado || [];
+    this.multSelectComentariosPre = data.filtrosQuestoesPre?.comentada || [];
+    this.palavraChavePre = data.filtrosQuestoesPre?.palavraChave || '';
+    this.quantidadeQuestoesPre = data.filtrosQuestoesPre?.quantidadeQuestoes ? String(data.filtrosQuestoesPre.quantidadeQuestoes) : '';
     
-    this.multSelectTemasPos = data.filtrosQuestoesPos?.tema || [];
-    this.multSelectSubtemasPos = data.filtrosQuestoesPos?.subtema || [];
+    // Pós-Teste
+    this.multSelectAssuntoPos = data.filtrosQuestoesPos?.assunto || [];
     this.multSelectAnosPos = data.filtrosQuestoesPos?.ano || [];
     this.multSelectTiposProvaPos = data.filtrosQuestoesPos?.tipoDeProva || [];
     this.multSelectDificuldadesPos = data.filtrosQuestoesPos?.dificuldade || [];
+    this.multSelectQuestoesPos = data.filtrosQuestoesPos?.certasErradas || [];
+    this.multSelectRespostasPos = data.filtrosQuestoesPos?.respostasSimulado || [];
+    this.multSelectComentariosPos = data.filtrosQuestoesPos?.comentada || [];
+    this.palavraChavePos = data.filtrosQuestoesPos?.palavraChave || '';
+    this.quantidadeQuestoesPos = data.filtrosQuestoesPos?.quantidadeQuestoes ? String(data.filtrosQuestoesPos.quantidadeQuestoes) : '';
+    
+    // Inicializar opções dos filtros
+    this.inicializarOpcoesFiltros();
   }
 
   ngOnInit(): void {
+  }
+
+  inicializarOpcoesFiltros(): void {
+    // Assuntos (Temas e Subtemas agrupados)
+    this.subtemasAgrupadosPorTema = Object.entries(temasESubtemas)
+      .map(([temaKey, subtemas]) => {
+        const temaEnum = temaKey as Tema;
+        return {
+          label: getDescricaoTema(temaEnum),
+          value: `TEMA_${temaEnum}`,
+          options: subtemas.map(subtema => ({
+            label: getDescricaoSubtema(subtema),
+            value: subtema
+          }))
+        };
+      });
+
+    // Questões Certas/Erradas
+    const certoErrado = Object.values(CertasErradas);
+    this.questoesCertasErradas = certoErrado.map((valor) => ({
+      label: getDescricaoCertoErrado(valor),
+      value: getDescricaoCertoErrado(valor)
+    }));
+
+    // Respostas Simulado
+    const respSimulado = Object.values(RespostasSimulado);
+    this.respSimuladoDescricoes = respSimulado.map((valor) => ({
+      label: getDescricaoRespostasSimulado(valor),
+      value: getDescricaoRespostasSimulado(valor)
+    }));
+
+    // Questões Comentadas
+    const comentadas = Object.values(Comentada);
+    this.questoesComentadas = comentadas.map((valor) => ({
+      label: getDescricaoQuestaoComentadas(valor),
+      value: getDescricaoQuestaoComentadas(valor)
+    }));
   }
 
   trocarAba(aba: 'questoes-pre' | 'aulas' | 'questoes-pos' | 'flashcards'): void {
@@ -115,17 +187,25 @@ export class ModalEditarSemanaTrilhaComponent implements OnInit {
     let count = 0;
     
     if (tipo === 'pre') {
-      count += this.multSelectTemasPre.length;
-      count += this.multSelectSubtemasPre.length;
+      count += this.multSelectAssuntoPre.length;
       count += this.multSelectAnosPre.length;
       count += this.multSelectTiposProvaPre.length;
       count += this.multSelectDificuldadesPre.length;
+      count += this.multSelectQuestoesPre.length;
+      count += this.multSelectRespostasPre.length;
+      count += this.multSelectComentariosPre.length;
+      if (this.palavraChavePre) count++;
+      if (this.quantidadeQuestoesPre) count++;
     } else {
-      count += this.multSelectTemasPos.length;
-      count += this.multSelectSubtemasPos.length;
+      count += this.multSelectAssuntoPos.length;
       count += this.multSelectAnosPos.length;
       count += this.multSelectTiposProvaPos.length;
       count += this.multSelectDificuldadesPos.length;
+      count += this.multSelectQuestoesPos.length;
+      count += this.multSelectRespostasPos.length;
+      count += this.multSelectComentariosPos.length;
+      if (this.palavraChavePos) count++;
+      if (this.quantidadeQuestoesPos) count++;
     }
     
     return count > 0 ? `${count} filtro(s) aplicado(s)` : 'Nenhum filtro aplicado';
@@ -133,17 +213,25 @@ export class ModalEditarSemanaTrilhaComponent implements OnInit {
 
   limparFiltros(tipo: 'pre' | 'pos'): void {
     if (tipo === 'pre') {
-      this.multSelectTemasPre = [];
-      this.multSelectSubtemasPre = [];
+      this.multSelectAssuntoPre = [];
       this.multSelectAnosPre = [];
       this.multSelectTiposProvaPre = [];
       this.multSelectDificuldadesPre = [];
+      this.multSelectQuestoesPre = [];
+      this.multSelectRespostasPre = [];
+      this.multSelectComentariosPre = [];
+      this.palavraChavePre = '';
+      this.quantidadeQuestoesPre = '';
     } else {
-      this.multSelectTemasPos = [];
-      this.multSelectSubtemasPos = [];
+      this.multSelectAssuntoPos = [];
       this.multSelectAnosPos = [];
       this.multSelectTiposProvaPos = [];
       this.multSelectDificuldadesPos = [];
+      this.multSelectQuestoesPos = [];
+      this.multSelectRespostasPos = [];
+      this.multSelectComentariosPos = [];
+      this.palavraChavePos = '';
+      this.quantidadeQuestoesPos = '';
     }
   }
 
@@ -151,20 +239,27 @@ export class ModalEditarSemanaTrilhaComponent implements OnInit {
     const resultado: ConteudoSemana = {
       semanaNumero: this.semanaNumero,
       titulo: this.titulo,
-      descricao: this.descricao,
       filtrosQuestoesPre: {
-        tema: this.multSelectTemasPre,
-        subtema: this.multSelectSubtemasPre,
+        assunto: this.multSelectAssuntoPre,
         ano: this.multSelectAnosPre,
         tipoDeProva: this.multSelectTiposProvaPre,
-        dificuldade: this.multSelectDificuldadesPre
+        dificuldade: this.multSelectDificuldadesPre,
+        certasErradas: this.multSelectQuestoesPre,
+        respostasSimulado: this.multSelectRespostasPre,
+        comentada: this.multSelectComentariosPre,
+        palavraChave: this.palavraChavePre || undefined,
+        quantidadeQuestoes: this.quantidadeQuestoesPre ? parseInt(this.quantidadeQuestoesPre, 10) : undefined
       },
       filtrosQuestoesPos: {
-        tema: this.multSelectTemasPos,
-        subtema: this.multSelectSubtemasPos,
+        assunto: this.multSelectAssuntoPos,
         ano: this.multSelectAnosPos,
         tipoDeProva: this.multSelectTiposProvaPos,
-        dificuldade: this.multSelectDificuldadesPos
+        dificuldade: this.multSelectDificuldadesPos,
+        certasErradas: this.multSelectQuestoesPos,
+        respostasSimulado: this.multSelectRespostasPos,
+        comentada: this.multSelectComentariosPos,
+        palavraChave: this.palavraChavePos || undefined,
+        quantidadeQuestoes: this.quantidadeQuestoesPos ? parseInt(this.quantidadeQuestoesPos, 10) : undefined
       }
     };
     
