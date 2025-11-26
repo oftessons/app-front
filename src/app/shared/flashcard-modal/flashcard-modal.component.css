@@ -73,7 +73,6 @@ p {
   color: #ffffff;
 }
 
-
 .rating-buttons {
   display: flex;
   gap: 4px;
@@ -125,6 +124,7 @@ p {
 .parabens {
   font-size: 24px;
   font-weight: bold;
+  color: #e3e3e3 !important;
 }
 
 .summary-text {
@@ -162,7 +162,7 @@ p {
 
 .stat-label {
   font-size: 12px;
-  color: var(--text-color);
+  color: #e3e3e3 !important;
 }
 
 .summary-active {
@@ -213,7 +213,7 @@ p {
 
 .button-next {
   background-color: #3b5fa0;
-  margin-top: 20px; 
+  margin-top: 20px;
 }
 
 .button-next:hover {
@@ -221,9 +221,9 @@ p {
 }
 
 .next-button-section {
-    width: 100%;
-    display: flex;
-    justify-content: center;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 .button-fechar {
@@ -272,7 +272,7 @@ p {
   justify-content: center;
 }
 
-.editar-button{
+.editar-button {
   cursor: pointer;
 }
 
@@ -292,20 +292,21 @@ p {
 }
 
 .image-display-wrapper {
-    width: 100%;
-    max-height: 250px;
-    margin: 15px 0 10px 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    border-radius: 8px;
+  width: 100%;
+  max-height: 250px;
+  margin: 15px 0 10px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  border-radius: 8px;
 }
 
-.question-image-modal, .answer-image-modal {
-    max-width: 90%;
-    max-height: 250px;
-    object-fit: contain;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+.question-image-modal,
+.answer-image-modal {
+  max-width: 90%;
+  max-height: 250px;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
