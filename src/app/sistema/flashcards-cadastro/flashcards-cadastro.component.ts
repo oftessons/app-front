@@ -1,8 +1,4 @@
-import {
-  Component,
-  OnInit,
-  ChangeDetectorRef,
-} from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Tema } from '../page-questoes/enums/tema';
 import { Subtema } from '../page-questoes/enums/subtema';
 import { temasESubtemas } from '../page-questoes/enums/map-tema-subtema';
@@ -64,6 +60,7 @@ export class FlashcardsCadastroComponent implements OnInit {
 
   flashcardParaEditar: Flashcard | null = null;
   modoEdicao = false;
+  salvando = false;
 
   exibirModalStatus = false;
   statusModal: 'success' | 'error' | 'validation' = 'success';
@@ -96,7 +93,7 @@ export class FlashcardsCadastroComponent implements OnInit {
               ? (Subtema as any)[subtema]
               : (subtema as any);
           const subtemaLabel = SubtemaDescricoes[subtema] || subtemaKey;
-          return { label: subtemaLabel, value: subtemaKey };
+          return { label: subtemaLabel, value: `${temaKey}::${subtemaKey}` };
         });
 
         return {
@@ -132,10 +129,8 @@ export class FlashcardsCadastroComponent implements OnInit {
         card.dificuldade ?? null
       );
 
-      if (card.subtema && !this.isSubtemaFallbackDoTema(card)) {
-        this.assuntoSelecionado = this.findMatchingSubtema(card.subtema);
-      } else if (card.tema) {
-        this.assuntoSelecionado = this.findMatchingTema(card.tema);
+      if (card.tema && card.subtema) {
+        this.assuntoSelecionado = `${card.tema}::${card.subtema}`;
       } else {
         this.assuntoSelecionado = null;
       }
@@ -208,6 +203,8 @@ export class FlashcardsCadastroComponent implements OnInit {
   }
 
   salvar(): void {
+    if (this.salvando) return;
+
     this.camposFaltando = [];
     if (!this.assuntoSelecionado) {
       this.camposFaltando.push('Assunto');
@@ -225,27 +222,28 @@ export class FlashcardsCadastroComponent implements OnInit {
       return;
     }
 
+    this.salvando = true;
+
     this.authService.obterUsuarioAutenticadoDoBackend().subscribe({
       next: (usuarioDoBackend) => {
         if (!usuarioDoBackend || !usuarioDoBackend.id) {
+          this.salvando = false;
           this.router.navigate(['/login']);
           return;
         }
 
         const userIdNumerico = parseInt(String(usuarioDoBackend.id), 10);
 
-        const temaSelecionado = this.encontrarTemaAPartirDoAssunto(
-          this.assuntoSelecionado!
-        );
-
-        if (!temaSelecionado) {
+        if (!this.assuntoSelecionado) {
+          this.salvando = false;
           return;
         }
 
-        const subtemaParaEnvio = this.resolveSubtemaParaEnvio(
-          this.assuntoSelecionado!,
-          temaSelecionado
-        );
+        const [temaExtraido, subtemaExtraido] =
+          this.assuntoSelecionado.split('::');
+
+        const temaSelecionado = temaExtraido;
+        const subtemaParaEnvio = subtemaExtraido;
 
         const dificuldadeFinal = this.dificuldadeSelecionada
           ? this.dificuldadeSelecionada
@@ -275,10 +273,12 @@ export class FlashcardsCadastroComponent implements OnInit {
             )
             .subscribe({
               next: () => {
+                this.salvando = false;
                 this.statusModal = 'success';
                 this.exibirModalStatus = true;
               },
               error: (err) => {
+                this.salvando = false;
                 console.error(err);
                 this.statusModal = 'error';
                 this.exibirModalStatus = true;
@@ -303,10 +303,12 @@ export class FlashcardsCadastroComponent implements OnInit {
             )
             .subscribe({
               next: () => {
+                this.salvando = false;
                 this.statusModal = 'success';
                 this.exibirModalStatus = true;
               },
               error: (err) => {
+                this.salvando = false;
                 console.error(err);
                 this.statusModal = 'error';
                 this.exibirModalStatus = true;
@@ -315,6 +317,7 @@ export class FlashcardsCadastroComponent implements OnInit {
         }
       },
       error: () => {
+        this.salvando = false;
         this.router.navigate(['/login']);
       },
     });
@@ -333,44 +336,6 @@ export class FlashcardsCadastroComponent implements OnInit {
     this.exibirModalStatus = false;
   }
 
-  private encontrarTemaAPartirDoAssunto(chaveAssunto: string): string | null {
-    if (!chaveAssunto) return null;
-
-    const grupoTemaDireto = this.subtemasAgrupadosPorTema.find(
-      (g) => g.temaKey === chaveAssunto
-    );
-    if (grupoTemaDireto) {
-      return grupoTemaDireto.temaKey;
-    }
-
-    for (const grupo of this.subtemasAgrupadosPorTema) {
-      const found = grupo.options.find((opt) => opt.value === chaveAssunto);
-      if (found) return grupo.temaKey;
-    }
-
-    return null;
-  }
-
-  private resolveSubtemaParaEnvio(
-    assunto: string,
-    temaSelecionado: string
-  ): string {
-    const ehTema = this.subtemasAgrupadosPorTema.some(
-      (g) => g.temaKey === assunto
-    );
-
-    if (ehTema) {
-      return this.canon(temaSelecionado);
-    }
-
-    return assunto;
-  }
-
-  private isSubtemaFallbackDoTema(card: Flashcard): boolean {
-    if (!card.tema || !card.subtema) return false;
-    return this.canon(card.subtema) === this.canon(card.tema);
-  }
-
   private canon(s: string): string {
     return s
       .normalize('NFD')
@@ -387,27 +352,5 @@ export class FlashcardsCadastroComponent implements OnInit {
     if (x === 'FACIL' || x === 'EASY') return 'FACIL';
     if (x === 'DIFICIL' || x === 'HARD') return 'DIFICIL';
     return ['FACIL', 'MEDIO', 'DIFICIL'].includes(x) ? x : null;
-  }
-
-  private findMatchingSubtema(v?: string | null): string | null {
-    if (!v) return null;
-    const wanted = this.canon(v);
-    for (const g of this.subtemasAgrupadosPorTema) {
-      for (const opt of g.options) {
-        const key = this.canon(String(opt.value));
-        if (key === wanted) return opt.value;
-      }
-    }
-    return null;
-  }
-
-  private findMatchingTema(v?: string | null): string | null {
-    if (!v) return null;
-    const wanted = this.canon(v);
-    for (const g of this.subtemasAgrupadosPorTema) {
-      const key = this.canon(g.temaKey);
-      if (key === wanted) return g.temaKey;
-    }
-    return null;
   }
 }

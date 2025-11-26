@@ -351,6 +351,13 @@
   background-color: #234178;
 }
 
+.button:disabled {
+  background-color: var(--light-blue);
+  opacity: 0.7;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 .div-section {
   color: var(--text-color);
   font-size: 15px;

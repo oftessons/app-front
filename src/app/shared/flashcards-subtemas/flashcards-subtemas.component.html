@@ -17,7 +17,10 @@
       </div>
     </div>
     <div class="buttons-container">
-      <button class="button-importar" (click)="openModal()">
+      <button 
+        class="button-importar" 
+        (click)="openModal()"
+        *ngIf="podeImportar">
         Importar Flashcards
       </button>
       <a class="button" (click)="onStudyClick()">

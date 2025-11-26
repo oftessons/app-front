@@ -20,10 +20,44 @@ export class FlashcardsSubtemasComponent implements OnInit {
   arquivoCsv: File | null = null;
   isImportando: boolean = false;
   isDragging: boolean = false;
+  podeImportar: boolean = false;
 
   constructor(private flashcardService: FlashcardService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    let permissaoEncontrada = '';
+
+    const usuarioJson =
+      localStorage.getItem('usuario') ||
+      localStorage.getItem('user') ||
+      localStorage.getItem('currentUser');
+
+    if (usuarioJson) {
+      try {
+        const usuarioObj = JSON.parse(usuarioJson);
+
+        if (usuarioObj && usuarioObj.permissao) {
+          permissaoEncontrada = usuarioObj.permissao;
+        }
+      } catch (e) {
+        console.error('Erro ao ler JSON do usuário:', e);
+      }
+    }
+
+    if (!permissaoEncontrada) {
+      permissaoEncontrada =
+        localStorage.getItem('permissao') || localStorage.getItem('role') || '';
+    }
+
+    console.log('Permissão final processada:', permissaoEncontrada);
+
+    if (permissaoEncontrada) {
+      const p = permissaoEncontrada.toUpperCase();
+      this.podeImportar = p.includes('ADMIN') || p.includes('PROFESSOR');
+    } else {
+      this.podeImportar = false;
+    }
+  }
 
   onStudyClick(): void {
     this.study.emit();
@@ -41,7 +75,9 @@ export class FlashcardsSubtemasComponent implements OnInit {
 
   removerArquivo(): void {
     this.arquivoCsv = null;
-    const fileInput = document.getElementById('csvInputSubtema') as HTMLInputElement;
+    const fileInput = document.getElementById(
+      'csvInputSubtema'
+    ) as HTMLInputElement;
     if (fileInput) {
       fileInput.value = '';
     }
