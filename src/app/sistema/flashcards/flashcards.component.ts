@@ -29,7 +29,15 @@ export class FlashcardsComponent implements OnInit {
     this.isLoading = true;
     this.flashcardService.getFlashcardsContador().subscribe({
       next: (dados) => {
-        this.listaDeTemas = Object.values(Tema).map((tema) => {
+
+        const temasExcluidos = [
+          Tema.NAO_CLASSIFICADA,
+          Tema.OUTROS,
+          Tema.ICO_PART_1,
+          Tema.SBRV
+        ]
+
+        this.listaDeTemas = Object.values(Tema).filter(tema => !temasExcluidos.includes(tema)).map((tema) => {
           const temaInfo = dados.find((info) => info.tema === tema);
           const qtdFlashcards = temaInfo ? temaInfo.total || 0 : 0;
           const titulo = TemaDescricoes[tema] || 'Tema não encontrado';
