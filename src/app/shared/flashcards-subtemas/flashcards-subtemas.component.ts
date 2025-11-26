@@ -83,6 +83,13 @@ export class FlashcardsSubtemasComponent implements OnInit {
     }
   }
 
+  baixarPlanilhaModelo(): void {
+    const link = document.createElement('a');
+    link.href = '../../../assets/docs/Planilha Modelo - Flashcards.csv';
+    link.download = 'Planilha Modelo - Flashcards.csv';
+    link.click();
+  }
+
   onDragOver(event: DragEvent): void {
     event.preventDefault();
     event.stopPropagation();
