@@ -1,12 +1,13 @@
 .container {
   padding: 12px;
   border-radius: 16px;
-  background-color: #1e1e1e;
+  background-color: var(--bg-sidebar);
   display: flex;
   gap: 16px;
   align-items: center;
   width: 100%;
   box-sizing: border-box;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .icon {
@@ -14,7 +15,7 @@
   padding: 12px;
   border-radius: 8px;
   flex-shrink: 0;
-  border: 1px solid #3b5fa0;
+  border: 1px solid var(--light-blue);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -39,14 +40,14 @@
 
 .title {
   font-size: 18px;
-  color: #ffffff;
+  color: var(--text-color);
   font-weight: 600;
   margin-bottom: 4px;
   word-break: break-word;
 }
 
 .cards-estudados {
-  color: var(--text-color, #ccc);
+  color: var(--text-color-secondary);
   font-size: 14px;
   white-space: nowrap;
 }
@@ -63,12 +64,12 @@
   border-radius: 8px;
   flex-shrink: 0;
   width: 100%;
-  background-color: #696d79;
+  background-color: var(--secondary);
   max-width: 200px;
 }
 
 .button {
-  background-color: #3b5fa0;
+  background-color: var(--light-blue);
   padding: 12px;
   border-radius: 8px;
   margin-right: 8px;
@@ -96,8 +97,8 @@
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  color: #ffffff;
-  background-color: #3b5fa0;
+  color: var(--white);
+  background-color: #0c3272;
   transition: background-color 0.3s ease;
   white-space: nowrap;
   font-size: 14px;
@@ -135,10 +136,12 @@
   border-radius: 8px;
   max-width: 25%;
   text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .modal-title {
   margin: 0;
+  color: var(--text-color);
 }
 
 .close-button {
@@ -146,7 +149,7 @@
   border: none;
   padding: 0;
   cursor: pointer;
-  color: white;
+  color: var(--text-color);
   font-size: 20px;
   font-weight: bold;
 }
@@ -187,8 +190,8 @@
   justify-content: space-between;
   width: 100%;
   padding: 8px 16px;
-  background-color: #15171e;
-  border: 1px dashed #424b5a;
+  background-color: var(--bg-input);
+  border: 1px dashed var(--border-color);
   border-radius: 8px;
   box-sizing: border-box;
   transition: border-color 0.3s ease;
@@ -197,7 +200,7 @@
 }
 
 .upload-container:hover {
-  border-color: #3b5fa0;
+  border-color: var(--light-blue);
 }
 
 .icon-cloud {
@@ -215,20 +218,20 @@
 }
 
 .main-text {
-  color: #e1e1e6;
+  color: var(--text-color);
   font-size: 12px;
   font-weight: 500;
   margin-bottom: 4px;
 }
 
 .sub-text {
-  color: #7b7e86;
+  color: var(--text-color-secondary);
   font-size: 10px;
 }
 
 .fake-button {
-  background-color: #3b5fa0;
-  color: white;
+  background-color: var(--light-blue);
+  color: var(--white);
   padding: 6px 8px;
   border-radius: 6px;
   font-size: 10px;
@@ -256,7 +259,7 @@
 }
 
 .file-list-title {
-  color: #e1e1e6;
+  color: var(--text-color);
   font-size: 14px;
   margin-bottom: 12px;
 }
@@ -264,7 +267,7 @@
 .file-card {
   display: flex;
   align-items: center;
-  background-color: #15171e;
+  background-color: var(--bg-input);
   border-radius: 8px;
   padding: 12px;
   gap: 12px;
@@ -282,7 +285,7 @@
   display: flex;
   align-items: center;
   font-size: 12px;
-  color: #aab4be;
+  color: var(--text-color-secondary);
   white-space: nowrap;
 }
 
@@ -306,14 +309,14 @@
 .progress-bar-container {
   width: 100%;
   height: 4px;
-  background-color: #2a2d3a;
+  background-color: var(--border-color);
   border-radius: 2px;
   overflow: hidden;
 }
 
 .progress-bar-fill {
   height: 100%;
-  background-color: #3b5fa0;
+  background-color: var(--light-blue);
   border-radius: 2px;
 }
 
@@ -340,7 +343,7 @@
   width: 50%;
   background-color: var(--green);
   border: none;
-  color: var(--text-color);
+  color: var(--white);
   padding: 12px 16px;
   border-radius: 8px;
   cursor: pointer;
@@ -365,6 +368,19 @@
   width: 100%;
 }
 
+.icon img,
+.icon-cloud img,
+.file-card img { 
+    filter: invert(1) brightness(0.2);
+    transition: filter 0.3s ease;
+}
+
+:host-context(body.dark-mode) .icon img,
+:host-context(body.dark-mode) .icon-cloud img,
+:host-context(body.dark-mode) .file-card img {
+    filter: none;
+}
+
 @media (max-width: 768px) {
   .container {
     flex-direction: row;
@@ -372,7 +388,6 @@
     padding: 12px;
     gap: 12px;
   }
-
   .icon {
     margin-bottom: 0;
     width: 42px;
@@ -381,12 +396,10 @@
     box-sizing: border-box;
     flex-shrink: 0;
   }
-
   .icon img {
     width: 100%;
     height: 100%;
   }
-
   .content-wrapper {
     flex-direction: row;
     align-items: center;
@@ -395,13 +408,11 @@
     gap: 8px;
     min-width: 0;
   }
-
   .content {
     width: auto;
     flex: 1;
     min-width: 0;
   }
-
   .title {
     font-size: 14px;
     white-space: nowrap;
@@ -409,20 +420,16 @@
     text-overflow: ellipsis;
     margin-bottom: 4px;
   }
-
   .progress-bar {
     max-width: 100%;
   }
-
   .buttons-container {
     width: auto;
     flex-shrink: 0;
   }
-
   .button-importar {
     display: none;
   }
-
   .button {
     margin-right: 0;
     padding: 10px;
