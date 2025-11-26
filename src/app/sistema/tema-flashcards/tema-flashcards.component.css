@@ -1,83 +1,132 @@
 .container {
-    max-width: 1300px;
-    padding: 10px;
-    font-family: 'Nunito Sans', sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+  max-width: 1300px;
+  padding: 10px;
+  font-family: "Nunito Sans", sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  color: var(--text-color);
 }
 
 .button-voltar {
-    color: #F6F8FE;
-    display: flex;
-    font-size: 16px;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    user-select: none;
-    text-decoration: none;
-    margin-bottom: 32px;
+  color: var(--text-color);
+  display: flex;
+  font-size: 16px;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  text-decoration: none;
+  margin-bottom: 32px;
+  transition: color 0.3s ease;
 }
 
 .button-voltar:hover {
-    color: #F6F8FE;
+  color: var(--light-blue);
 }
 
 .header {
-    width: 100%;
-    padding: 20px 32px;
-    background: linear-gradient(360deg, rgba(37, 60, 102, 0.5), #253C66);
-    border-radius: 16px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  width: 100%;
+  padding: 20px 32px;
+  background: linear-gradient(180deg, #ffffff 0%, #e6efff 100%);
+  border-radius: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  transition: background 0.3s ease;
+}
+
+:host-context(.dark-mode) .header {
+  background: linear-gradient(360deg, rgba(37, 60, 102, 0.5), #253c66);
+  box-shadow: none;
 }
 
 .info {
-    color: #F6F8FE;
+  color: var(--text-color);
 }
 
-.info h1{
-    font-size: 28px;
+.info h1 {
+  font-size: 28px;
+  margin: 0;
 }
 
 .info p {
-    font-size: 14px;
+  font-size: 14px;
+  margin: 4px 0;
 }
 
 .info span {
-    font-size: 16px;
-    font-weight: bold;
+  font-size: 16px;
+  font-weight: bold;
 }
 
 .card-button {
-    color: #F6F8FE;
-    background-color: #3B5FA0;
-    padding: 16px 12px;
-    border-radius: 8px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    user-select: none;
-    text-decoration: none;
-    transition: background-color 0.2s ease;
-    font-size: 16px;
-    font-weight: bold;
+  color: var(--white);
+  background-color: var(--light-blue);
+  padding: 16px 12px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
 }
 
 .card-button:hover {
-    color: #F6F8FE;
-    background-color: #254170; 
+  color: var(--white);
+  background-color: #254170;
 }
 
 .subtemas-flashcards {
-    display: flex;
-    flex-direction: column;
-    background-color: var(--bg-sidebar);
-    padding: 20px;
-    border-radius: 16px;
-    margin-top: 16px;
-    width: 100%;
-    gap: 16px;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-container);
+  padding: 20px;
+  border-radius: 16px;
+  margin-top: 16px;
+  width: 100%;
+  gap: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+
+.toast-container {
+  position: fixed;
+  top: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  pointer-events: none;
+  animation: slideDownFade 0.4s ease-out forwards;
+}
+
+.toast-message {
+  background-color: #323232;
+  color: #ffffff;
+  padding: 12px 24px;
+  border-radius: 50px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+@keyframes slideDownFade {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -20px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
 }

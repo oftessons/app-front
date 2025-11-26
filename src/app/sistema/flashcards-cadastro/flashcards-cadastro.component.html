@@ -1,214 +1,276 @@
 <div class="container pt-5">
- <div class="container mt-4">
-  <a class="mt-4 button-voltar" (click)="voltar()">
-   <img src="../../../assets/Icons/Left-icon.svg" alt="" />
-   Voltar
-  </a>
+  <div class="container mt-4">
+    <a class="mt-4 button-voltar" (click)="voltar()">
+      <img src="../../../assets/Icons/Left-icon.svg" alt="" />
+      Voltar
+    </a>
 
-  <div class="container-cadastro">
-   <div class="header">
-    <h1>{{ modoEdicao ? "Editar Flashcard" : "Cadastrar Flashcard" }}</h1>
-    <button class="button" (click)="salvar()">
-     {{ modoEdicao ? "Atualizar Flashcard" : "Salvar Flashcard" }}
-    </button>
-   </div>
-
-   <div class="cadastro">
-    <div class="espaco-select">
-     <app-multiplo-select
-      label="Assunto *"
-      [options]="subtemasAgrupadosPorTema"
-      [(selectedValue)]="assuntoSelecionado"
-      [multiple]="false"
-      [searchable]="true"
-      class="dropdown"
-     >
-     </app-multiplo-select>
-    </div>
-
-    <div class="linha-dropdowns-simples">
-     <div class="espaco-select-simple">
-      <app-multiplo-select
-       label="Relevância"
-       [options]="optionsRelevancia"
-       [(selectedValue)]="relevanciaSelecionada"
-       [searchable]="false"
-       class="dropdown"
-      >
-      </app-multiplo-select>
-     </div>
-
-     <div class="espaco-select-simple">
-      <app-multiplo-select
-       label="Dificuldade"
-       [options]="optionsDificuldade"
-       [(selectedValue)]="dificuldadeSelecionada"
-       [searchable]="false"
-       class="dropdown"
-      >
-      </app-multiplo-select>
-     </div>
-    </div>
-
-    <div class="texto-container">
-      <div>
-       <hr class="line" />
-       <span class="div-section">
-        Digite todas as informacões do enunciado da questão:
-       </span>
-       <hr class="line" />
+    <div class="container-cadastro">
+      <div class="header">
+        <h1>{{ modoEdicao ? "Editar Flashcard" : "Cadastrar Flashcard" }}</h1>
+        <button class="button" (click)="salvar()" [disabled]="salvando">
+          {{ salvando ? "Salvando..." : (modoEdicao ? "Atualizar Flashcard" : "Salvar Flashcard") }}
+        </button>
       </div>
-      <div class="espaco-texto">
-       <label class="label">Enunciado do flashcard:</label>
-       <quill-editor
-        [(ngModel)]="perguntaHtml"
-        [placeholder]="'Digite a pergunta aqui'"
-       ></quill-editor>
-      </div>
-      <div>
-       <hr class="line" />
-       <span class="div-section">
-        Imagem para o enunciado do flashcard:
-       </span>
-       <hr class="line" />
-      </div>
-      <div class="cont-imgs">
-       <div class="form-group">
-        <div
-         class="image-upload"
-         (drop)="onDrop($event, 'fotoPergunta')"
-         (dragover)="onDragOver($event)"
-        >
-         <input
-          type="file"
-          id="fotoPergunta"
-          name="fotoPergunta"
-          (change)="onFileSelected($event, 'fotoPergunta')"
-          accept="image/*,video/*"
-          style="display: none"
-         />
-         <label for="fotoPergunta">
-          <div class="foto-preview" id="fotoPreviewPergunta">
-           <ng-container *ngIf="fotoPreviews['fotoPergunta']">
-            <div class="preview-container">
-             <img
-              *ngIf="isPreviewImage(fotoPreviews['fotoPergunta'])"
-              [src]="fotoPreviews['fotoPergunta']"
-              alt="Image Preview"
-             />
-             <video
-              *ngIf="isPreviewVideo(fotoPreviews['fotoPergunta'])"
-              [src]="fotoPreviews['fotoPergunta']"
-              controls
-             ></video>
-             <button
-              type="button"
-              class="btn-remove-image"
-              (click)="removeFile('fotoPergunta', $event)"
-             >
-              <i class="fas fa-times"></i>
-             </button>
-            </div>
-           </ng-container>
-           <span
-            *ngIf="!fotoPreviews['fotoPergunta']"
-            class="upload-placeholder"
-           >
-            <img
-             [src]="
-              !isDarkMode()
-               ? 'assets/imagens/img-foto.svg'
-               : 'assets/Icons/dark/img-foto-dark.svg'
-            "
-             style="width: 50px"
-             class="upload-icon"
-            />
-            Clique para fazer upload da imagem ou vídeo
-           </span>
-          </div>
-         </label>
+
+      <div class="cadastro">
+        <div class="espaco-select">
+          <app-multiplo-select
+            label="Assunto *"
+            [options]="subtemasAgrupadosPorTema"
+            [(selectedValue)]="assuntoSelecionado"
+            [multiple]="false"
+            [searchable]="true"
+            class="dropdown"
+          >
+          </app-multiplo-select>
         </div>
-       </div>
-      </div>
 
-      <div class="espaco-texto">
-       <label class="label">Resposta do flashcard:</label>
-       <quill-editor
-        [(ngModel)]="respostaHtml"
-        [placeholder]="'Digite a resposta aqui'"
-       ></quill-editor>
-      </div>
-      <div>
-       <hr class="line" />
-       <span class="div-section">
-        Imagem para a resposta do flashcard:
-       </span>
-       <hr class="line" />
-      </div>
-      <div class="cont-imgs">
-       <div class="form-group">
-        <div
-         class="image-upload"
-         (drop)="onDrop($event, 'fotoResposta')"
-         (dragover)="onDragOver($event)"
-        >
-         <input
-          type="file"
-          id="fotoResposta"
-          name="fotoResposta"
-          (change)="onFileSelected($event, 'fotoResposta')"
-          accept="image/*,video/*"
-          style="display: none"
-         />
-         <label for="fotoResposta">
-          <div class="foto-preview" id="fotoPreviewResposta">
-           <ng-container *ngIf="fotoPreviews['fotoResposta']">
-            <div class="preview-container">
-             <img
-              *ngIf="isPreviewImage(fotoPreviews['fotoResposta'])"
-              [src]="fotoPreviews['fotoResposta']"
-              alt="Image Preview"
-             />
-             <video
-              *ngIf="isPreviewVideo(fotoPreviews['fotoResposta'])"
-              [src]="fotoPreviews['fotoResposta']"
-              controls
-             ></video>
-             <button
-              type="button"
-              class="btn-remove-image"
-              (click)="removeFile('fotoResposta', $event)"
-             >
-              <i class="fas fa-times"></i>
-             </button>
-            </div>
-           </ng-container>
-           <span
-            *ngIf="!fotoPreviews['fotoResposta']"
-            class="upload-placeholder"
-           >
-            <img
-             [src]="
-              !isDarkMode()
-               ? 'assets/imagens/img-foto.svg'
-               : 'assets/Icons/dark/img-foto-dark.svg'
-            "
-             style="width: 50px"
-             class="upload-icon"
-            />
-            Clique para fazer upload da imagem ou vídeo
-           </span>
+        <div class="linha-dropdowns-simples">
+          <div class="espaco-select-simple">
+            <app-multiplo-select
+              label="Relevância"
+              [options]="optionsRelevancia"
+              [(selectedValue)]="relevanciaSelecionada"
+              [searchable]="false"
+              class="dropdown"
+            >
+            </app-multiplo-select>
           </div>
-         </label>
+
+          <div class="espaco-select-simple">
+            <app-multiplo-select
+              label="Dificuldade"
+              [options]="optionsDificuldade"
+              [(selectedValue)]="dificuldadeSelecionada"
+              [searchable]="false"
+              class="dropdown"
+            >
+            </app-multiplo-select>
+          </div>
         </div>
-       </div>
+
+        <div class="texto-container">
+          <div>
+            <hr class="line" />
+            <span class="div-section">
+              Digite todas as informacões do enunciado da questão:
+            </span>
+            <hr class="line" />
+          </div>
+          <div class="espaco-texto">
+            <label class="label">Enunciado do flashcard:</label>
+            <quill-editor
+              [(ngModel)]="perguntaHtml"
+              [placeholder]="'Digite a pergunta aqui'"
+            ></quill-editor>
+          </div>
+          <div>
+            <hr class="line" />
+            <span class="div-section">
+              Imagem para o enunciado do flashcard:
+            </span>
+            <hr class="line" />
+          </div>
+          <div class="cont-imgs">
+            <div class="form-group">
+              <div
+                class="image-upload"
+                (drop)="onDrop($event, 'fotoPergunta')"
+                (dragover)="onDragOver($event)"
+              >
+                <input
+                  type="file"
+                  id="fotoPergunta"
+                  name="fotoPergunta"
+                  (change)="onFileSelected($event, 'fotoPergunta')"
+                  accept="image/*,video/*"
+                  style="display: none"
+                />
+                <label for="fotoPergunta">
+                  <div class="foto-preview" id="fotoPreviewPergunta">
+                    <ng-container *ngIf="fotoPreviews['fotoPergunta']">
+                      <div class="preview-container">
+                        <img
+                          *ngIf="isPreviewImage(fotoPreviews['fotoPergunta'])"
+                          [src]="fotoPreviews['fotoPergunta']"
+                          alt="Image Preview"
+                        />
+                        <video
+                          *ngIf="isPreviewVideo(fotoPreviews['fotoPergunta'])"
+                          [src]="fotoPreviews['fotoPergunta']"
+                          controls
+                        ></video>
+                        <button
+                          type="button"
+                          class="btn-remove-image"
+                          (click)="removeFile('fotoPergunta', $event)"
+                        >
+                          <i class="fas fa-times"></i>
+                        </button>
+                      </div>
+                    </ng-container>
+                    <span
+                      *ngIf="!fotoPreviews['fotoPergunta']"
+                      class="upload-placeholder"
+                    >
+                      <img
+                        src="assets/Icons/dark/img-foto-dark.svg"
+                        style="width: 50px"
+                        class="upload-icon"
+                      />
+                      Clique para fazer upload da imagem ou vídeo
+                    </span>
+                  </div>
+                </label>
+              </div>
+            </div>
+          </div>
+
+        <div class="espaco-texto">
+          <label class="label">Resposta do flashcard:</label>
+          <quill-editor
+            [(ngModel)]="respostaHtml"
+            [placeholder]="'Digite a resposta aqui'"
+          ></quill-editor>
+        </div>
+        <div>
+          <hr class="line" />
+          <span class="div-section">
+            Imagem para a resposta do flashcard:
+          </span>
+          <hr class="line" />
+        </div>
+        <div class="cont-imgs">
+          <div class="form-group">
+            <div
+              class="image-upload"
+              (drop)="onDrop($event, 'fotoResposta')"
+              (dragover)="onDragOver($event)"
+            >
+              <input
+                type="file"
+                id="fotoResposta"
+                name="fotoResposta"
+                (change)="onFileSelected($event, 'fotoResposta')"
+                accept="image/*,video/*"
+                style="display: none"
+              />
+              <label for="fotoResposta">
+                <div class="foto-preview" id="fotoPreviewResposta">
+                  <ng-container *ngIf="fotoPreviews['fotoResposta']">
+                    <div class="preview-container">
+                      <img
+                        *ngIf="isPreviewImage(fotoPreviews['fotoResposta'])"
+                        [src]="fotoPreviews['fotoResposta']"
+                        alt="Image Preview"
+                      />
+                      <video
+                        *ngIf="isPreviewVideo(fotoPreviews['fotoResposta'])"
+                        [src]="fotoPreviews['fotoResposta']"
+                        controls
+                      ></video>
+                      <button
+                        type="button"
+                        class="btn-remove-image"
+                        (click)="removeFile('fotoResposta', $event)"
+                      >
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </div>
+                  </ng-container>
+                  <span
+                    *ngIf="!fotoPreviews['fotoResposta']"
+                    class="upload-placeholder"
+                  >
+                    <img
+                      src="assets/Icons/dark/img-foto-dark.svg"
+                      style="width: 50px"
+                      class="upload-icon"
+                    />
+                    Clique para fazer upload da imagem ou vídeo
+                  </span>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="button-salvar-container">
+          <button class="button" (click)="salvar()" [disabled]="salvando">
+            {{ salvando ? "Salvando..." : (modoEdicao ? "Atualizar Flashcard" : "Salvar Flashcard") }}
+          </button>
+        </div>
       </div>
     </div>
-
-    <button class="button" (click)="salvar()">
-     {{ modoEdicao ? "Atualizar Flashcard" : "Salvar Flashcard" }}
-    </button>
-   </div>
   </div>
- </div>
+</div>
+
+<div class="modal-backdrop" *ngIf="exibirModalStatus">
+  <div
+    class="modal-card"
+    (click)="$event.stopPropagation()"
+    [ngSwitch]="statusModal"
+  >
+    <ng-container *ngSwitchCase="'success'">
+      <img src="assets/Icons/check.svg" alt="Sucesso" class="modal-icon" />
+      <h2 class="modal-title">Sucesso!</h2>
+      <p class="modal-description">
+        {{
+          modoEdicao
+            ? "O flashcard foi atualizado com sucesso."
+            : "O flashcard foi cadastrado com sucesso."
+        }}
+      </p>
+      <div class="modal-actions">
+        <button
+          type="button"
+          class="btn-modal btn-success"
+          (click)="fecharModalSucesso()"
+        >
+          Concluir
+        </button>
+      </div>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'error'">
+      <img src="assets/Icons/Error.png" alt="Erro" class="modal-icon" />
+      <h2 class="modal-title">Ocorreu um erro</h2>
+      <p class="modal-description">
+        Não foi possível salvar o flashcard. Verifique sua conexão e tente
+        novamente.
+      </p>
+      <div class="modal-actions">
+        <button
+          type="button"
+          class="btn-modal btn-cancel"
+          (click)="fecharModalErro()"
+        >
+          Fechar
+        </button>
+        <button type="button" class="btn-modal btn-retry" (click)="salvar()">
+          Tentar Novamente
+        </button>
+      </div>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'validation'">
+      <img src="assets/Icons/Error.png" alt="Atenção" class="modal-icon" />
+      <h2 class="modal-title">Atenção</h2>
+      <div class="modal-description">
+        <p>Os seguintes campos são obrigatórios e não foram preenchidos:</p>
+        <ul class="lista-erros">
+          <li *ngFor="let campo of camposFaltando">• {{ campo }}</li>
+        </ul>
+      </div>
+      <div class="modal-actions">
+        <button
+          type="button"
+          class="btn-modal btn-warning-action"
+          (click)="fecharModalValidacao()"
+        >
+          Entendi
+        </button>
+      </div>
+    </ng-container>
+  </div>
 </div>

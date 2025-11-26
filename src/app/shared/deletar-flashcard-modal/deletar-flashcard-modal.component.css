@@ -9,11 +9,12 @@
   align-items: center;
   justify-content: center;
   z-index: 1050;
+  backdrop-filter: blur(2px);
 }
 
 .modal-card {
-  background-color: #010015;
-  color: #ffffff;
+  background-color: var(--bg-sidebar);
+  color: var(--text-color);
   padding: 32px;
   border-radius: 16px;
   width: 90%;
@@ -33,11 +34,13 @@
   font-size: 24px;
   font-weight: 700;
   margin: 0 0 8px 0;
+  color: var(--text-color);
 }
 
 .modal-description {
   font-size: 1rem;
-  color: #e0e0e0;
+  color: var(--text-color);
+  opacity: 0.8;
   margin: 0 0 24px 0;
 }
 
@@ -62,12 +65,12 @@
 .btn-cancel {
   background-color: transparent;
   border-radius: 8px;
-  border: #253c66 solid 1px;
-  color: #ffffff;
+  border: 1px solid var(--text-color);
+  color: var(--text-color);
 }
 
 .btn-cancel:hover {
-  background-color: #03012f;
+  background-color: var(--bg-input);
 }
 
 .btn-confirm {
@@ -81,12 +84,12 @@
 
 .btn-single {
   background-color: transparent;
-  color: #ffffff;
-  border: #253c66 1px solid;
+  color: var(--text-color);
+  border: 1px solid var(--text-color);
   border-radius: 8px;
   flex: unset;
 }
 
 .btn-single:hover {
-  background-color: #03012f;
+  background-color: var(--bg-input);
 }

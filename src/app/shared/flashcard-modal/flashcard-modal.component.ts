@@ -29,11 +29,8 @@ export class FlashcardModalComponent implements OnChanges {
   @Input() temaEstudo: string = '';
   @Input() subtemaEstudo?: Subtema;
   @Input() flashcards: Flashcard[] = [];
-
   @Input() startingIndex: number = 0;
-
   @Input() sessaoId?: number;
-
   @Output() close = new EventEmitter<void>();
 
   estado_atual: FlashcardsState = 'question';
@@ -50,6 +47,9 @@ export class FlashcardModalComponent implements OnChanges {
   private sessaoStartTime: number = 0;
   private cardStartTime: number = 0;
   public tempoDecorrido: string = '00 min 00 seg';
+
+  isLoadingQuestionImage: boolean = true;
+  isLoadingAnswerImage: boolean = true;
 
   constructor(
     private flashcardService: FlashcardService,
@@ -105,6 +105,9 @@ export class FlashcardModalComponent implements OnChanges {
 
   private carregarCardAtual(): void {
     if (this.currentIndex < this.flashcards.length) {
+      this.isLoadingQuestionImage = true;
+      this.isLoadingAnswerImage = true;
+      
       this.currentCard = this.flashcards[this.currentIndex];
       this.cardStartTime = Date.now();
       this.estado_atual = 'question';
@@ -113,11 +116,21 @@ export class FlashcardModalComponent implements OnChanges {
     }
   }
 
+  onImageLoad(type: 'question' | 'answer'): void {
+    if (type === 'question') {
+      this.isLoadingQuestionImage = false;
+    } else {
+      this.isLoadingAnswerImage = false;
+    }
+  }
+
   private resetarModal(): void {
     this.estado_atual = 'question';
     this.currentCard = null;
     this.currentIndex = 0;
     this.isDeleteModalVisible = false;
+    this.isLoadingQuestionImage = true;
+    this.isLoadingAnswerImage = true;
   }
 
   onCloseClick(): void {
@@ -181,9 +194,8 @@ export class FlashcardModalComponent implements OnChanges {
 
   onDeleteConfirm(): void {
     if (this.currentCard) {
-      this.flashcards.splice(this.currentIndex, 1);
       this.isDeleteModalVisible = false;
-      this.carregarCardAtual();
+      this.onCloseClick();
     }
   }
 
