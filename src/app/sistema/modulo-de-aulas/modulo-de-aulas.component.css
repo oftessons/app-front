@@ -94,9 +94,11 @@
 .continue-watching-card {
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg,
-      var(--bg-container) 0%,
-      rgba(0, 0, 0, 0.02) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--bg-container) 0%,
+    rgba(0, 0, 0, 0.02) 100%
+  );
   position: relative;
   z-index: 2;
   text-align: center;
@@ -118,9 +120,11 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at 50% 120%,
-      rgba(59, 130, 246, 0.08) 0%,
-      transparent 60%);
+  background: radial-gradient(
+    circle at 50% 120%,
+    rgba(59, 130, 246, 0.08) 0%,
+    transparent 60%
+  );
   z-index: -1;
   pointer-events: none;
 }
@@ -526,7 +530,11 @@ hr {
   width: 100%;
   height: 100%;
   /* Gradiente sutil usando a cor do seu container */
-  background: linear-gradient(135deg, var(--bg-container) 30%, rgba(59, 130, 246, 0.08) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--bg-container) 30%,
+    rgba(59, 130, 246, 0.08) 100%
+  );
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -638,4 +646,29 @@ hr {
 
 .something-wrong {
   color: var(--text-color);
+}
+
+.video-wrapper {
+  position: relative; /* Importante para segurar os filhos absolutos */
+  display: inline-block;
+  width: 100%;
+}
+
+.btn-transcricao {
+  position: absolute;
+  top: 10px; /* Distância do topo */
+  right: 10px; /* Distância da direita */
+  z-index: 10; /* Garante que fique acima do iframe */
+
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-transcricao:hover {
+  background: rgba(0, 0, 0, 0.9);
 }
