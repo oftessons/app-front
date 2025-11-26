@@ -377,14 +377,10 @@
 }
 
 
+
 .modal-icon {
   width: 32px;
   height: 32px;
-  filter: invert(1) brightness(0.2);
-}
-
-:host-context(body.dark-mode) .modal-icon {
-  filter: none;
 }
 
 .modal-title {

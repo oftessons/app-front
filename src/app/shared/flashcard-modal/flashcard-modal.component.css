@@ -54,7 +54,7 @@
 .tema-title {
   font-size: 16px;
   font-weight: 600;
-  color: #e3e3e3;
+  color: #e3e3e3 !important;
   margin: 0;
 }
 
@@ -73,7 +73,6 @@ p {
   color: #ffffff;
 }
 
-/* Removido rating-buttons e rating-text */
 
 .rating-buttons {
   display: flex;
