@@ -386,7 +386,7 @@ export class ModuloDeAulasComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (result) => {
-          this.totalAvaliacoes = result.avaliacoes?.length;
+          this.totalAvaliacoes = result.avaliacoes;
 
         },
         error: () => {
