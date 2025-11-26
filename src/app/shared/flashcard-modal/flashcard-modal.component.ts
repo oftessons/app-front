@@ -181,9 +181,8 @@ export class FlashcardModalComponent implements OnChanges {
 
   onDeleteConfirm(): void {
     if (this.currentCard) {
-      this.flashcards.splice(this.currentIndex, 1);
       this.isDeleteModalVisible = false;
-      this.carregarCardAtual();
+      this.onCloseClick();
     }
   }
 

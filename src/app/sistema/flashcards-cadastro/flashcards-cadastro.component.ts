@@ -2,7 +2,6 @@ import {
   Component,
   OnInit,
   ChangeDetectorRef,
-  AfterViewInit,
 } from '@angular/core';
 import { Tema } from '../page-questoes/enums/tema';
 import { Subtema } from '../page-questoes/enums/subtema';
@@ -24,7 +23,7 @@ import { AuthService } from 'src/app/services/auth.service';
   templateUrl: './flashcards-cadastro.component.html',
   styleUrls: ['./flashcards-cadastro.component.css'],
 })
-export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
+export class FlashcardsCadastroComponent implements OnInit {
   subtemasAgrupadosPorTema: {
     label: string;
     temaKey: string;
@@ -34,20 +33,20 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
   }[] = [];
 
   assuntoSelecionado: string | null = null;
-  relevanciaSelecionada: number | null = null;
+  relevanciaSelecionada: string | null = null;
   dificuldadeSelecionada: string | null = null;
 
   optionsRelevancia = [
-    { label: '1', value: 1 },
-    { label: '2', value: 2 },
-    { label: '3', value: 3 },
-    { label: '4', value: 4 },
-    { label: '5', value: 5 },
-    { label: '6', value: 6 },
-    { label: '7', value: 7 },
-    { label: '8', value: 8 },
-    { label: '9', value: 9 },
-    { label: '10', value: 10 },
+    { label: '1', value: '1' },
+    { label: '2', value: '2' },
+    { label: '3', value: '3' },
+    { label: '4', value: '4' },
+    { label: '5', value: '5' },
+    { label: '6', value: '6' },
+    { label: '7', value: '7' },
+    { label: '8', value: '8' },
+    { label: '9', value: '9' },
+    { label: '10', value: '10' },
   ];
 
   optionsDificuldade = [
@@ -104,12 +103,12 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
         };
       }
     );
-  }
 
-  ngAfterViewInit(): void {
+
     if (this.flashcardParaEditar) {
       this.modoEdicao = true;
       const card = this.flashcardParaEditar;
+      
       this.perguntaHtml = card.pergunta;
       this.respostaHtml = card.resposta;
 
@@ -120,22 +119,25 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
         this.fotoPreviews['fotoResposta'] = card.fotoUrlResposta;
       }
 
-      setTimeout(() => {
-        this.relevanciaSelecionada = card.relevancia ?? null;
-        this.dificuldadeSelecionada = this.normalizarDificuldade(
-          card.dificuldade ?? null
-        );
 
-        if (card.subtema && !this.isSubtemaFallbackDoTema(card)) {
-          this.assuntoSelecionado = this.findMatchingSubtema(card.subtema);
-        } else if (card.tema) {
-          this.assuntoSelecionado = this.findMatchingTema(card.tema);
-        } else {
-          this.assuntoSelecionado = null;
-        }
+      if (card.relevancia !== undefined && card.relevancia !== null) {
+        this.relevanciaSelecionada = String(card.relevancia);
+      } else {
+        this.relevanciaSelecionada = null;
+      }
 
-        this.cdRef.detectChanges();
-      }, 0);
+      this.dificuldadeSelecionada = this.normalizarDificuldade(
+        card.dificuldade ?? null
+      );
+
+
+      if (card.subtema && !this.isSubtemaFallbackDoTema(card)) {
+        this.assuntoSelecionado = this.findMatchingSubtema(card.subtema);
+      } else if (card.tema) {
+        this.assuntoSelecionado = this.findMatchingTema(card.tema);
+      } else {
+        this.assuntoSelecionado = null;
+      }
     }
   }
 
@@ -221,13 +223,11 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
         }
 
         const userIdNumerico = parseInt(String(usuarioDoBackend.id), 10);
-        if (isNaN(userIdNumerico)) {
-          return;
-        }
-
+        
         const temaSelecionado = this.encontrarTemaAPartirDoAssunto(
           this.assuntoSelecionado!
         );
+        
         if (!temaSelecionado) {
           return;
         }
@@ -241,9 +241,10 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
           ? this.dificuldadeSelecionada
           : (null as any);
 
-        const relevanciaFinal = this.relevanciaSelecionada
-          ? this.relevanciaSelecionada
-          : (null as any);
+        let relevanciaFinal = null;
+        if (this.relevanciaSelecionada) {
+            relevanciaFinal = parseInt(this.relevanciaSelecionada, 10);
+        }
 
         if (this.modoEdicao && this.flashcardParaEditar) {
           const dto: ReqAtualizarFlashcardDTO = {
@@ -252,9 +253,9 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
             tema: temaSelecionado,
             subtema: subtemaParaEnvio,
             dificuldade: dificuldadeFinal,
-            relevancia: relevanciaFinal,
+            relevancia: relevanciaFinal as any,
           };
-
+          
           this.flashcardService
             .atualizarFlashcard(
               this.flashcardParaEditar.id,
@@ -266,6 +267,7 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
               next: () => {
                 this.voltar();
               },
+              error: (err) => console.error(err)
             });
         } else {
           const dto: ReqSalvarFlashcardDTO = {
@@ -274,7 +276,7 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
             tema: temaSelecionado,
             subtema: subtemaParaEnvio,
             dificuldade: dificuldadeFinal,
-            relevancia: relevanciaFinal,
+            relevancia: relevanciaFinal as any,
             createdBy: userIdNumerico,
           };
 
@@ -288,6 +290,7 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
               next: () => {
                 this.voltar();
               },
+              error: (err) => console.error(err)
             });
         }
       },
