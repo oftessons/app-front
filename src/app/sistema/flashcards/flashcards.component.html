@@ -8,7 +8,12 @@
         </button>
       </div>
     </div>
-    <div class="cards-grid">
+
+    <div class="loading-container" *ngIf="isLoading">
+      <div class="spinner"></div>
+    </div>
+
+    <div class="cards-grid" *ngIf="!isLoading">
       <app-flashcards-temas-cards
         *ngFor="let info of listaDeTemas"
         [tema]="info.titulo"
@@ -18,5 +23,4 @@
       </app-flashcards-temas-cards>
     </div>
   </div>
-  
 </div>

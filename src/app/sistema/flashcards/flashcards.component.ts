@@ -14,10 +14,11 @@ export interface TemaInfo {
 @Component({
   selector: 'app-flashcards',
   templateUrl: './flashcards.component.html',
-  styleUrls: ['./flashcards.component.css']
+  styleUrls: ['./flashcards.component.css'],
 })
 export class FlashcardsComponent implements OnInit {
   listaDeTemas: TemaInfo[] = [];
+  isLoading: boolean = true;
 
   constructor(
     private flashcardService: FlashcardService,
@@ -25,20 +26,28 @@ export class FlashcardsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.flashcardService.getFlashcardsContador().subscribe(dados => {
-      this.listaDeTemas = Object.values(Tema).map(tema => {
-        const temaInfo = dados.find(info => info.tema === tema);
-        const qtdFlashcards = temaInfo ? (temaInfo.total || 0) : 0;
-        const titulo = TemaDescricoes[tema] || 'Tema não encontrado';
-        const rotaFormatada = (tema as string).toLowerCase();
+    this.isLoading = true;
+    this.flashcardService.getFlashcardsContador().subscribe({
+      next: (dados) => {
+        this.listaDeTemas = Object.values(Tema).map((tema) => {
+          const temaInfo = dados.find((info) => info.tema === tema);
+          const qtdFlashcards = temaInfo ? temaInfo.total || 0 : 0;
+          const titulo = TemaDescricoes[tema] || 'Tema não encontrado';
+          const rotaFormatada = (tema as string).toLowerCase();
 
-        return {
-          chave: tema as string,
-          titulo,
-          qtdFlashcards,
-          rota: `/usuario/flashcards/${rotaFormatada}`
-        };
-      });
+          return {
+            chave: tema as string,
+            titulo,
+            qtdFlashcards,
+            rota: `/usuario/flashcards/${rotaFormatada}`,
+          };
+        });
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error(err);
+        this.isLoading = false;
+      },
     });
   }
 

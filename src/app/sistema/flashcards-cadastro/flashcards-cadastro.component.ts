@@ -65,6 +65,10 @@ export class FlashcardsCadastroComponent implements OnInit {
   flashcardParaEditar: Flashcard | null = null;
   modoEdicao = false;
 
+  exibirModalStatus = false;
+  statusModal: 'success' | 'error' | 'validation' = 'success';
+  camposFaltando: string[] = [];
+
   constructor(
     private location: Location,
     private flashcardService: FlashcardService,
@@ -104,11 +108,10 @@ export class FlashcardsCadastroComponent implements OnInit {
       }
     );
 
-
     if (this.flashcardParaEditar) {
       this.modoEdicao = true;
       const card = this.flashcardParaEditar;
-      
+
       this.perguntaHtml = card.pergunta;
       this.respostaHtml = card.resposta;
 
@@ -119,7 +122,6 @@ export class FlashcardsCadastroComponent implements OnInit {
         this.fotoPreviews['fotoResposta'] = card.fotoUrlResposta;
       }
 
-
       if (card.relevancia !== undefined && card.relevancia !== null) {
         this.relevanciaSelecionada = String(card.relevancia);
       } else {
@@ -129,7 +131,6 @@ export class FlashcardsCadastroComponent implements OnInit {
       this.dificuldadeSelecionada = this.normalizarDificuldade(
         card.dificuldade ?? null
       );
-
 
       if (card.subtema && !this.isSubtemaFallbackDoTema(card)) {
         this.assuntoSelecionado = this.findMatchingSubtema(card.subtema);
@@ -202,16 +203,25 @@ export class FlashcardsCadastroComponent implements OnInit {
     return preview.toLowerCase().startsWith('data:video/');
   }
 
-  isDarkMode(): boolean {
-    return false;
-  }
-
   voltar() {
     this.location.back();
   }
 
   salvar(): void {
-    if (!this.assuntoSelecionado || !this.perguntaHtml || !this.respostaHtml) {
+    this.camposFaltando = [];
+    if (!this.assuntoSelecionado) {
+      this.camposFaltando.push('Assunto');
+    }
+    if (!this.perguntaHtml || this.perguntaHtml.trim() === '') {
+      this.camposFaltando.push('Enunciado (Pergunta)');
+    }
+    if (!this.respostaHtml || this.respostaHtml.trim() === '') {
+      this.camposFaltando.push('Resposta');
+    }
+
+    if (this.camposFaltando.length > 0) {
+      this.statusModal = 'validation';
+      this.exibirModalStatus = true;
       return;
     }
 
@@ -223,11 +233,11 @@ export class FlashcardsCadastroComponent implements OnInit {
         }
 
         const userIdNumerico = parseInt(String(usuarioDoBackend.id), 10);
-        
+
         const temaSelecionado = this.encontrarTemaAPartirDoAssunto(
           this.assuntoSelecionado!
         );
-        
+
         if (!temaSelecionado) {
           return;
         }
@@ -243,7 +253,7 @@ export class FlashcardsCadastroComponent implements OnInit {
 
         let relevanciaFinal = null;
         if (this.relevanciaSelecionada) {
-            relevanciaFinal = parseInt(this.relevanciaSelecionada, 10);
+          relevanciaFinal = parseInt(this.relevanciaSelecionada, 10);
         }
 
         if (this.modoEdicao && this.flashcardParaEditar) {
@@ -255,7 +265,7 @@ export class FlashcardsCadastroComponent implements OnInit {
             dificuldade: dificuldadeFinal,
             relevancia: relevanciaFinal as any,
           };
-          
+
           this.flashcardService
             .atualizarFlashcard(
               this.flashcardParaEditar.id,
@@ -265,9 +275,14 @@ export class FlashcardsCadastroComponent implements OnInit {
             )
             .subscribe({
               next: () => {
-                this.voltar();
+                this.statusModal = 'success';
+                this.exibirModalStatus = true;
               },
-              error: (err) => console.error(err)
+              error: (err) => {
+                console.error(err);
+                this.statusModal = 'error';
+                this.exibirModalStatus = true;
+              },
             });
         } else {
           const dto: ReqSalvarFlashcardDTO = {
@@ -288,9 +303,14 @@ export class FlashcardsCadastroComponent implements OnInit {
             )
             .subscribe({
               next: () => {
-                this.voltar();
+                this.statusModal = 'success';
+                this.exibirModalStatus = true;
               },
-              error: (err) => console.error(err)
+              error: (err) => {
+                console.error(err);
+                this.statusModal = 'error';
+                this.exibirModalStatus = true;
+              },
             });
         }
       },
@@ -298,6 +318,19 @@ export class FlashcardsCadastroComponent implements OnInit {
         this.router.navigate(['/login']);
       },
     });
+  }
+
+  fecharModalSucesso() {
+    this.exibirModalStatus = false;
+    this.voltar();
+  }
+
+  fecharModalErro() {
+    this.exibirModalStatus = false;
+  }
+
+  fecharModalValidacao() {
+    this.exibirModalStatus = false;
   }
 
   private encontrarTemaAPartirDoAssunto(chaveAssunto: string): string | null {
