@@ -1,51 +1,62 @@
 .card-container {
-    background-color: var(--bg-sidebar);
-    border-radius: 16px;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
+  background-color: var(--bg-container);
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .icon-container {
-    background-color: rgba(59, 95, 160, 40%);
-    width: 48px;
-    height: 48px;
-    padding: 12;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 1px solid #3B5FA0;
-    border-radius: 8px;
+  background-color: rgba(59, 95, 160, 0.4);
+  width: 48px;
+  height: 48px;
+  padding: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid var(--light-blue);
+  border-radius: 8px;
+  color: var(--light-blue);
 }
 
 .tema-title {
-    font-size: 18px;
-    font-weight: 500;
-    margin-top: 16px;
-    margin-bottom: 4px;
+  font-size: 18px;
+  font-weight: 500;
+  margin-top: 16px;
+  margin-bottom: 4px;
+  color: var(--text-color);
 }
 
 .flashcards-numbers {
-    color: #E3E3E3;
-    font-size: 14px;
-    margin-bottom: 38px;
+  color: var(--text-color-secondary);
+  font-size: 14px;
+  margin-bottom: 38px;
 }
 
 .card-button {
-    color: #F6F8FE;
-    background-color: #3B5FA0;
-    padding: 12px 8px;
-    border-radius: 8px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    user-select: none;
-    text-decoration: none;
-    transition: background-color 0.2s ease;
+  color: var(--white);
+  background-color: var(--light-blue);
+  padding: 12px 8px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
 }
 
 .card-button:hover {
-    color: #F6F8FE;
-    background-color: #254170; 
+  color: var(--white);
+  background-color: #254170;
+}
+
+.icon-container img {
+  filter: invert(1) brightness(0);
+}
+
+:host-context(body.dark-mode) .icon-container img {
+  filter: none;
 }
