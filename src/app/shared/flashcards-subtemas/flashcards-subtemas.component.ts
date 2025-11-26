@@ -19,6 +19,7 @@ export class FlashcardsSubtemasComponent implements OnInit {
   isModalOpen: boolean = false;
   arquivoCsv: File | null = null;
   isImportando: boolean = false;
+  isDragging: boolean = false;
 
   constructor(private flashcardService: FlashcardService) {}
 
@@ -35,13 +36,52 @@ export class FlashcardsSubtemasComponent implements OnInit {
   closeModal(): void {
     this.isModalOpen = false;
     this.arquivoCsv = null;
+    this.isDragging = false;
+  }
+
+  removerArquivo(): void {
+    this.arquivoCsv = null;
+    const fileInput = document.getElementById('csvInputSubtema') as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = '';
+    }
+  }
+
+  onDragOver(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragging = true;
+  }
+
+  onDragLeave(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragging = false;
+  }
+
+  onDrop(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragging = false;
+
+    if (event.dataTransfer && event.dataTransfer.files.length > 0) {
+      const file = event.dataTransfer.files[0];
+      this.validarArquivo(file);
+    }
   }
 
   onCsvFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
-      this.arquivoCsv = input.files[0];
+      this.validarArquivo(input.files[0]);
+    }
+  }
+
+  validarArquivo(file: File): void {
+    if (file.type === 'text/csv' || file.name.endsWith('.csv')) {
+      this.arquivoCsv = file;
     } else {
+      alert('Por favor, selecione apenas arquivos CSV.');
       this.arquivoCsv = null;
     }
   }

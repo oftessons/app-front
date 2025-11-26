@@ -29,29 +29,81 @@
 
 <div class="modal" [class.modal-open]="isModalOpen" (click)="closeModal()">
   <div class="modal-content" (click)="$event.stopPropagation()">
-    <h2>Importar para {{ subtema }}</h2>
+    <div class="header">
+      <div class="importar-close">
+        <h2 class="modal-title">Importar</h2>
+        <button class="close-button" (click)="closeModal()">X</button>
+      </div>
 
-    <div class="csv-upload-container">
-      <label class="csv-upload-label" for="csvInputSubtema">
-        Importar arquivo CSV
-      </label>
+      <p class="descricao-importar">
+        Import de flashcards no baralho
+        <span class="subtema-span">"{{ subtema }}"</span>
+      </p>
+    </div>
+    <div
+      class="upload-container"
+      [class.dragging]="isDragging"
+      (dragover)="onDragOver($event)"
+      (dragleave)="onDragLeave($event)"
+      (drop)="onDrop($event)"
+      (click)="fileInput.click()"
+    >
+      <div class="icon-cloud">
+        <img src="../../../assets/Icons/CloudArrowUp.svg" />
+      </div>
 
-      <div class="csv-upload-row">
-        <input
-          type="file"
-          id="csvInputSubtema"
-          accept=".csv"
-          (change)="onCsvFileSelected($event)"
-        />
+      <div class="text-content">
+        <span class="main-text">Selecione um arquivo ou arraste</span>
+        <span class="sub-text">CSV, tamanho suportado 10MB</span>
+      </div>
+
+      <input
+        #fileInput
+        type="file"
+        style="display: none"
+        id="csvInputSubtema"
+        accept=".csv"
+        (change)="onCsvFileSelected($event)"
+      />
+    </div>
+
+    <div class="file-list-container" *ngIf="arquivoCsv">
+      <p class="file-list-title">Arquivo adicionado</p>
+
+      <div class="file-card">
+        <div>
+          <img src="../../../assets/Icons/file-paper.svg" alt="" />
+        </div>
+
+        <div class="file-details-column">
+          <div class="file-info-row">
+            <span class="file-name" title="{{ arquivoCsv.name }}">{{
+              arquivoCsv.name
+            }}</span>
+            <span class="file-preview-text">• Preview</span>
+            <span class="file-size ml-auto"
+              >{{ (arquivoCsv.size / 1024).toFixed(1) }} KB</span
+            >
+          </div>
+          <div class="progress-bar-container">
+            <div class="progress-bar-fill" style="width: 100%"></div>
+          </div>
+        </div>
+
+        <button class="delete-file-button" (click)="removerArquivo()">
+          <img src="../../../assets/Icons/lixeira-flashcards.svg" />
+        </button>
       </div>
     </div>
-    <button
-      class="button-importar"
-      (click)="importarFlashcards()"
-      [disabled]="!arquivoCsv || isImportando"
-    >
-      {{ isImportando ? "Importando..." : "Confirmar Importação" }}
-    </button>
+    <div class="buttons">
+      <button class="planilha-button">Planilha modelo</button>
+      <button
+        class="button-importar button-importar-form"
+        (click)="importarFlashcards()"
+        [disabled]="!arquivoCsv || isImportando"
+      >
+        {{ isImportando ? "Cadastrando..." : "Cadastrar" }}
+      </button>
+    </div>
   </div>
-  <button class="button-close" onclick="closeModal()">X</button>
 </div>
