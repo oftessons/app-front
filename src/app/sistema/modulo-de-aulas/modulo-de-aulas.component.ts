@@ -53,6 +53,7 @@ export class ModuloDeAulasComponent implements OnInit, OnDestroy {
       this.videoAtualIndex = this.aulas.findIndex(a => a.id === aula.id);
       this.carregarVideo(aula);
       this.carregarAvaliacaoAula(aula.id);
+      this.obterQuantidadeAvaliacaoDoUsuarioLogado(aula.id);
     } else {
       this.vdoCipherUrl = null;
     }
@@ -366,44 +367,59 @@ export class ModuloDeAulasComponent implements OnInit, OnDestroy {
     }
   }
 
-
-
-  carregarAvaliacaoAula(idAula: number): void {
-    this.avaliacaoService.obterAvaliacaoUsuario(idAula)
+  obterQuantidadeAvaliacaoDoUsuarioLogado(idAula: number): void {
+    this.estatistiacasAulasService.obterQuantidadeAvaliacaoDoUsuarioLogado(idAula)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (avaliacao) => this.avaliacaoAtual = avaliacao?.nota || 0,
-        error: () => this.avaliacaoAtual = 0
-      });
-
-    this.avaliacaoService.obterMediaAvaliacoes(idAula)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (media) => {
-          this.mediaAvaliacoes = media.media || 0;
-          this.totalAvaliacoes = media.total || 0;
+        next: (quantidadeAvaliacao) => {
+          this.avaliacaoAtual = quantidadeAvaliacao;
         },
         error: () => {
-          this.mediaAvaliacoes = 0;
-          this.totalAvaliacoes = 0;
+          this.avaliacaoAtual = 0;
         }
       });
   }
+
+
+  carregarAvaliacaoAula(idAula: number): void {
+    this.estatistiacasAulasService.obterQuantidadeAvaliacoes(idAula)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (result) => {
+          this.totalAvaliacoes = result.avaliacoes;
+
+        },
+        error: () => {
+          this.totalAvaliacoes = 0;
+          this.avaliacaoAtual = 0;
+        }
+      });
+
+    this.estatistiacasAulasService.obterMediaAvaliacoes(idAula)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (media) => {
+          this.mediaAvaliacoes = media || 0;
+        },
+        error: () => {
+          this.mediaAvaliacoes = 0;
+        }
+      });
+  }
+
 
   avaliarAula(nota: number): void {
     if (!this.videoAtual?.id) return;
 
     this.avaliacaoAtual = nota;
 
-    const avaliacao: AvaliacaoAula = {
-      idAula: this.videoAtual.id,
-      nota: nota
-    };
-
-    this.avaliacaoService.avaliarAula(avaliacao)
+    this.estatistiacasAulasService.avaliarAula(this.videoAtual.id, nota)
       .pipe(takeUntil(this.destroy$))
-      .subscribe({ next: () => this.carregarAvaliacaoAula(this.videoAtual!.id) });
+      .subscribe({
+        next: () => this.carregarAvaliacaoAula(this.videoAtual!.id)
+      });
   }
+
 
   onStarHover(star: number): void { this.hoverStar = star; }
   onStarLeave(): void { this.hoverStar = 0; }

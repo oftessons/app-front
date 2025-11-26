@@ -82,4 +82,42 @@ export class EstatisticasAulasService {
             catchError(error => this.handleError(error))
         );
     }
+
+    avaliarAula(id: number, estrelas: number): Observable<any> {
+        const url = `${this.apiURL}/${id}/avaliacao`;
+        return this.http.post(url, { estrelas }).pipe(
+            catchError(error => this.handleError(error))
+        );
+    }
+
+    obterQuantidadeAvaliacoes(id: number): Observable<any> {
+        const url = `${this.apiURL}/${id}/avaliacoes`;
+        return this.http.get<{ result: any }>(url).pipe(
+            map(response => response.result),
+            catchError(error => this.handleError(error))
+        );
+    }
+
+    obterMediaAvaliacoes(id: number): Observable<number> {
+        const url = `${this.apiURL}/obter-media-avaliacoes/${id}`;
+        return this.http.get<{ mediaAvaliacoes: number }>(url).pipe(
+            map(response => response.mediaAvaliacoes),
+            catchError(error => this.handleError(error))
+        );
+    }
+
+    removerAvaliacao(id: number): Observable<void> {
+        const url = `${this.apiURL}/${id}/avaliacao`;
+        return this.http.delete<void>(url).pipe(
+            catchError(error => this.handleError(error))
+        );
+    }
+
+    obterQuantidadeAvaliacaoDoUsuarioLogado(id: number): Observable<number> {
+        const url = `${this.apiURL}/obter-quantidade-avaliacao/${id}`;
+        return this.http.get<{ quantidadeAvaliacao: number }>(url).pipe(
+            map(response => response.quantidadeAvaliacao),
+            catchError(error => this.handleError(error))
+        );
+    }
 }
