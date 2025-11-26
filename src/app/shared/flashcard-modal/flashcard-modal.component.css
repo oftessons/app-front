@@ -92,6 +92,7 @@ p {
   border: 0px;
   font-size: 16px;
   font-weight: bold;
+  cursor: pointer;
 }
 
 .rating-1 {
@@ -114,6 +115,17 @@ p {
   background-color: #005914;
 }
 
+.summary-active {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--bg-sidebar) !important;
+  border: 1px solid var(--border-color);
+  max-width: 500px;
+  width: 100%;
+}
+
 .porcentagem-section {
   display: flex;
   flex-direction: column;
@@ -121,10 +133,10 @@ p {
   align-items: center;
 }
 
-.parabens {
+.summary-active .parabens {
   font-size: 24px;
   font-weight: bold;
-  color: #e3e3e3 !important;
+  color: var(--text-color) !important;
 }
 
 .summary-text {
@@ -145,7 +157,8 @@ p {
   display: flex;
   flex-direction: column;
   padding: 16px;
-  background-color: #12151e;
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-color);
   width: 160px;
   height: 117px;
   justify-content: center;
@@ -157,22 +170,16 @@ p {
 .stat-value {
   font-size: 14px;
   font-weight: 600;
-  color: #ffffff;
+  color: var(--text-color);
 }
 
 .stat-label {
   font-size: 12px;
-  color: #e3e3e3 !important;
+  color: var(--text-color-secondary) !important;
 }
 
-.summary-active {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  background: #010015;
-  max-width: 500px;
-  width: 100%;
+.stat-card img {
+  filter: invert(1) brightness(0.2);
 }
 
 .summary-btn {
@@ -180,15 +187,48 @@ p {
   padding: 6px 8px;
   border-radius: 8px;
   font-size: 16px;
-  color: #f6f8fe;
-  border: 1px solid #253c66;
-  background-color: transparent;
+  color: #e3e3e3;
+  border: 1px solid var(--border-color);
+  background-color: #3b5fa0;
   user-select: none;
   text-decoration: none;
   transition: background-color 0.2s ease;
+  cursor: pointer;
 }
 
 .summary-btn:hover {
+  background-color: #234481;
+}
+
+:host-context(body.dark-mode) .summary-active {
+  background: #010015 !important;
+  border: 1px solid #3a487a;
+}
+
+:host-context(body.dark-mode) .stat-card {
+  background-color: #12151e;
+  border: none;
+}
+
+:host-context(body.dark-mode) .summary-active .parabens,
+:host-context(body.dark-mode) .stat-value {
+  color: #e3e3e3 !important;
+}
+
+:host-context(body.dark-mode) .stat-label {
+  color: #e3e3e3 !important;
+}
+
+:host-context(body.dark-mode) .stat-card img {
+  filter: none;
+}
+
+:host-context(body.dark-mode) .summary-btn {
+  color: #f6f8fe;
+  border: 1px solid #253c66;
+}
+
+:host-context(body.dark-mode) .summary-btn:hover {
   background-color: #040322;
 }
 

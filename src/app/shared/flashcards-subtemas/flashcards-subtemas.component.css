@@ -98,7 +98,7 @@
   border-radius: 8px;
   cursor: pointer;
   color: var(--white);
-  background-color: #0c3272;
+  background-color: var(--light-blue);
   transition: background-color 0.3s ease;
   white-space: nowrap;
   font-size: 14px;
@@ -327,7 +327,7 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background-color: rgba(255, 107, 107, 0.1);
+  background-color: #ff3b3b;
   border: none;
   cursor: pointer;
   flex-shrink: 0;
@@ -336,7 +336,11 @@
 }
 
 .delete-file-button:hover {
-  background-color: rgba(255, 107, 107, 0.2);
+  background-color: #e00000;
+}
+
+.delete-file-button img {
+  filter: invert(1) brightness(0) !important;
 }
 
 .planilha-button {
@@ -370,15 +374,15 @@
 
 .icon img,
 .icon-cloud img,
-.file-card img { 
-    filter: invert(1) brightness(0.2);
-    transition: filter 0.3s ease;
+.file-card img:not(.delete-file-button img) { 
+  filter: invert(1) brightness(0.2);
+  transition: filter 0.3s ease;
 }
 
 :host-context(body.dark-mode) .icon img,
 :host-context(body.dark-mode) .icon-cloud img,
-:host-context(body.dark-mode) .file-card img {
-    filter: none;
+:host-context(body.dark-mode) .file-card img:not(.delete-file-button img) {
+  filter: none;
 }
 
 @media (max-width: 768px) {
