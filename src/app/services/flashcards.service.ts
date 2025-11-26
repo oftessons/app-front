@@ -87,7 +87,8 @@ export class FlashcardService {
   getFlashcardsParaEstudar(
     tema: string,
     subtema?: string,
-    dificuldade?: string
+    dificuldade?: string,
+    incluirConcluidos: boolean = false
   ): Observable<SessaoEstudoDTO> {
     let params = new HttpParams().set('tema', tema.toUpperCase());
 
@@ -98,6 +99,8 @@ export class FlashcardService {
     if (dificuldade) {
       params = params.set('dificuldade', dificuldade);
     }
+
+    params = params.set('incluirConcluidos', String(incluirConcluidos));
 
     return this.http.get<SessaoEstudoDTO>(
       `${this.apiUrl}/buscar-flashcards-filtro`,
@@ -200,7 +203,8 @@ export class FlashcardService {
     subtema?: string,
     dificuldade?: string,
     relevancia?: number,
-    pergunta?: string
+    pergunta?: string,
+    incluirConcluidos: boolean = false
   ): Observable<SessaoEstudoDTO> {
     let params = new HttpParams();
 
@@ -219,6 +223,8 @@ export class FlashcardService {
     if (pergunta) {
       params = params.set('pergunta', pergunta);
     }
+
+    params = params.set('incluirConcluidos', String(incluirConcluidos));
 
     return this.http.get<SessaoEstudoDTO>(
       `${this.apiUrl}/buscar-flashcards-filtro`,

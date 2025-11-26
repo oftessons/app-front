@@ -11,6 +11,7 @@ import {
   SubtemaStatsDTO,
   Flashcard,
 } from 'src/app/services/flashcards.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-tema-flashcards',
@@ -28,6 +29,7 @@ export class TemaFlashcardsComponent implements OnInit {
   private statsMap = new Map<string, SubtemaStatsDTO>();
 
   public isFlashcardModalVisible = false;
+  public showConcluidoMessage: boolean = false;
 
   public temaEstudo: string = '';
   public subtemaEstudo?: Subtema;
@@ -42,7 +44,8 @@ export class TemaFlashcardsComponent implements OnInit {
     private route: ActivatedRoute,
     private location: Location,
     private flashcardService: FlashcardService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -141,9 +144,36 @@ export class TemaFlashcardsComponent implements OnInit {
     return { total, estudados, porcentagem };
   }
 
+  private get isUserAdminOrProfessor(): boolean {
+    const token = this.authService.obterToken();
+    if (!token) return false;
+    try {
+      const decodedToken = this.authService.jwtHelper.decodeToken(token);
+      const userRoles: string[] =
+        decodedToken?.authorities || decodedToken?.roles || [];
+      
+      if (userRoles.length === 0) {
+        const singleRole = decodedToken?.role;
+        if (!singleRole) return false;
+        return singleRole === 'ADMIN' || singleRole === 'PROFESSOR';
+      }
+
+      return (
+        userRoles.includes('ADMIN') ||
+        userRoles.includes('PROFESSOR') ||
+        userRoles.includes('ROLE_ADMIN') ||
+        userRoles.includes('ROLE_PROFESSOR')
+      );
+    } catch {
+      return false;
+    }
+  }
+
   iniciarEstudoTemaTodo(): void {
+    const incluirConcluidos = this.isUserAdminOrProfessor;
+
     this.flashcardService
-      .getFlashcardsParaEstudar(this.temaIdUrl)
+      .getFlashcardsParaEstudar(this.temaIdUrl, undefined, undefined, incluirConcluidos)
       .subscribe((dto) => {
         this.iniciarSessao(
           dto.listaFlashcards,
@@ -156,8 +186,10 @@ export class TemaFlashcardsComponent implements OnInit {
   }
 
   iniciarEstudoSubtema(subtemaKey: Subtema): void {
+    const incluirConcluidos = this.isUserAdminOrProfessor;
+
     this.flashcardService
-      .getFlashcardsParaEstudar(this.temaIdUrl, subtemaKey)
+      .getFlashcardsParaEstudar(this.temaIdUrl, subtemaKey, undefined, incluirConcluidos)
       .subscribe((dto) => {
         this.iniciarSessao(
           dto.listaFlashcards,
@@ -176,6 +208,11 @@ export class TemaFlashcardsComponent implements OnInit {
     sessaoId: number,
     subtema?: Subtema
   ): void {
+    if (!cards || cards.length === 0) {
+      this.exibirMensagemConcluido();
+      return;
+    }
+
     if (cards && cards.length > 0) {
       this.flashcardsIniciais = cards;
       this.temaEstudo = tema;
@@ -184,6 +221,13 @@ export class TemaFlashcardsComponent implements OnInit {
       this.sessaoIdAtual = sessaoId;
       this.isFlashcardModalVisible = true;
     }
+  }
+
+  exibirMensagemConcluido(): void {
+    this.showConcluidoMessage = true;
+    setTimeout(() => {
+      this.showConcluidoMessage = false;
+    }, 3000);
   }
 
   closeFlashcard(): void {
