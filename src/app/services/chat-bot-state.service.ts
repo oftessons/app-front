@@ -43,6 +43,12 @@ export class ChatBotStateService {
     this.conversationId = null;
   }
 
+  clearMessages(): void {
+    this.messageHistory = [];
+    this.historicoDaConversa = [];
+    this.conversationId = null;
+  }
+
   // sendMessageToBot(message: string, topic?: string): Observable<any> {
   //   this.authService.obterUsuarioAutenticadoDoBackend().subscribe(
   //     (data) => {

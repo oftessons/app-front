@@ -16,7 +16,10 @@ export class ValidacaoAcessoComponent {
   errors: string[] = [];
   mensagemSucesso: string | null = null;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService, 
+    private router: Router
+  ) {}
 
   onSubmit() {
     const rawData = sessionStorage.getItem('pending_login_data');
@@ -88,6 +91,7 @@ export class ValidacaoAcessoComponent {
           usuario.permissao === 'ROLE_PROFESSOR' ||
           usuario.permissao === 'ROLE_BOLSISTA'
         ) {
+          this.verificarCompletarCadastro(usuario);
           this.router.navigate(['/usuario/inicio']);
         } else {
           this.router.navigate(['/forbidden']);
@@ -101,5 +105,20 @@ export class ValidacaoAcessoComponent {
         }
       }
     );
+  }
+
+  private verificarCompletarCadastro(usuario: Usuario): void {
+    const cadastroCompleto = localStorage.getItem('cadastro_completo');
+    if (cadastroCompleto === 'true') {
+      return;
+    }
+
+    const dadosCompletos = usuario.telefone && usuario.cidade && usuario.estado && usuario.dataNascimento;
+    if (dadosCompletos) {
+      localStorage.setItem('cadastro_completo', 'true');
+      return;
+    }
+
+    localStorage.setItem('precisa_completar_cadastro', 'true');
   }
 }

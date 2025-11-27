@@ -114,6 +114,16 @@ export class AuthService {
       );
   }
 
+  atualizarDadosParciais(userId: string, dados: Partial<Usuario>): Observable<Usuario> {
+    return this.http.patch<Usuario>(`${this.apiURL}/update-parcial/${userId}`, dados)
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          console.error('Erro ao atualizar dados parciais:', error);
+          return throwError("Erro ao atualizar dados. Por favor, tente novamente.");
+        })
+      );
+  }
+
   removerUsuario(id: string): Observable<any> {
     return this.http.delete<any>(`${this.apiURL}/delete/${id}`);
   }

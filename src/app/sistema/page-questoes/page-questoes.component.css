@@ -393,7 +393,6 @@
 }
 
 .right-buttons button {
-  flex: 1; /* Faz os botões se adaptarem ao espaço disponível */
   min-width: 100px;
 }
 

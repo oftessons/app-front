@@ -76,10 +76,24 @@ export class PageMeuPerfilComponent implements OnInit {
     if (!this.editMode) {
       
       this.usuario.tipoDeEstudante = tipoDeEstudanteOriginal;
+      
+      if (this.usuario.dataNascimento && typeof this.usuario.dataNascimento === 'string') {
+        this.usuario.dataNascimento = new Date(this.usuario.dataNascimento);
+      }
+      
       this.authService
         .atualizarUsuario(this.usuario, this.selectedFile)
         .subscribe(
           (data) => {
+            this.usuario = data;
+            this.usuario.tipoDeEstudante = this.obterDescricaoTipoUsuario(data.tipoDeEstudante as TipoUsuario);
+            
+            localStorage.setItem('usuario', JSON.stringify(data));
+            
+            if (data.telefone && data.cidade && data.estado && data.dataNascimento) {
+              localStorage.setItem('cadastro_completo', 'true');
+              localStorage.removeItem('precisa_completar_cadastro');
+            }
           //  console.log('Perfil atualizado com sucesso:', data);
           },
           (error) => {

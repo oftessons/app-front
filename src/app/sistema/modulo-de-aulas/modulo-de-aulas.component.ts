@@ -131,11 +131,11 @@ export class ModuloDeAulasComponent implements OnInit, OnDestroy {
   }
 
   goBack() {
-    this.location.back();
+    this.router.navigate(['/usuario/painel-de-aulas/']);
   }
 
   voltarPagina(): void {
-    this.location.back();
+    this.router.navigate(['/usuario/painel-de-aulas/']);
   }
 
   resetState(): void {

@@ -7,6 +7,7 @@ import { LottieModule } from 'ngx-lottie';
 
 // material imports
 import { MatIconModule } from '@angular/material/icon';
+import { MatDialogModule } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
 import { ModuloAulasComponent } from './modulo-aulas/modulo-aulas.component';
 import { PlaylistModeComponent } from './playlist-mode/playlist-mode.component';
@@ -47,6 +48,7 @@ import { ModalEditarSemanaTrilhaComponent } from './modal-editar-semana-trilha/m
   imports: [
     CommonModule,
     MatIconModule,
+    MatDialogModule,
     ImageResizeModule,
     FormsModule,
     AppRoutingModule,
