@@ -51,15 +51,10 @@ export class PermissaoAdminComponent implements OnInit {
     id: new FormControl(0,),
     username: new FormControl('', { validators: [Validators.required] }),
     password: new FormControl('', { validators: [Validators.required] }),
-    confirmPassword: new FormControl('', { validators: [Validators.required] }),
     nome: new FormControl('', [Validators.required]),
     email: new FormControl('', { validators: [Validators.required] }),
-    telefone: new FormControl('', { validators: [Validators.required] }),
-    estado: new FormControl('',),
-    cidade: new FormControl('',),
     tipoUsuario: new FormControl('', { validators: [Validators.required] }),
     bolsa: new FormControl(false),
-    dataNascimento: new FormControl(null, [Validators.required]),
     quantidadeDiasBolsa: new FormControl([null, [Validators.required, Validators.min(1)]])
   });
 
@@ -102,16 +97,11 @@ export class PermissaoAdminComponent implements OnInit {
       id: null,
       username: [''],
       password: [''],
-      confirmPassword: [''],
       nome: [''],
       email: [''],
-      telefone: [''],
-      cidade: [''],
-      estado: [''],
       tipoUsuario: [''],
       bolsa: [''],
-      quantidadeDiasBolsa: [''],
-      dataNascimento: [''],
+      quantidadeDiasBolsa: ['']
     });
 
     this.usuarioFormUpdate = this.formBuilder.group({
@@ -175,13 +165,8 @@ export class PermissaoAdminComponent implements OnInit {
 
     const usuario = new Usuario();
     usuario.password = userData.password;
-    usuario.confirmPassword = userData.confirmPassword;
-    usuario.dataNascimento = userData.dataNascimento;
     usuario.nome = userData.nome;
     usuario.email = userData.email;
-    usuario.telefone = userData.telefone;
-    usuario.cidade = userData.cidade;
-    usuario.estado = userData.estado;
     usuario.tipoUsuario = userData.tipoUsuario;
     usuario.bolsaAssinatura = userData.bolsa;
     usuario.diasDeTeste = userData.quantidadeDiasBolsa;
@@ -340,14 +325,9 @@ export class PermissaoAdminComponent implements OnInit {
       id: '',
       username: '',
       password: '',
-      confirmPassword: '',
       nome: '',
       email: '',
-      telefone: '',
-      estado: '',
-      cidade: '',
-      tipoUsuario: '',
-      dataNascimento: '',
+      tipoUsuario: ''
     });
 
   }
@@ -388,10 +368,7 @@ export class PermissaoAdminComponent implements OnInit {
       return;
     }
 
-    if (userData.password !== userData.confirmPassword && this.cadastrando) {
-      this.modalErrors.push("As senhas não coincidem.");
-      return;
-    }
+
 
   }
 

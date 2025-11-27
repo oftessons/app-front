@@ -56,8 +56,9 @@
             <span *ngIf="!editMode"> {{ usuario.estado }}</span>
             <input *ngIf="editMode" [(ngModel)]="usuario.estado" class="form-control" />
           </p>
-          <p><strong *ngIf="!editMode">DataNascimento: </strong>
+          <p><strong>DataNascimento: </strong>
             <span *ngIf="!editMode"> {{ usuario.dataNascimento }}</span>
+            <input *ngIf="editMode" type="date" [(ngModel)]="usuario.dataNascimento" class="form-control" />
           </p>
         </div>
       </div>

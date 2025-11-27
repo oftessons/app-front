@@ -4,6 +4,113 @@
   font-family: "Nunito Sans", sans-serif;
 }
 
+/* Aviso de Cadastro Incompleto */
+.aviso-cadastro {
+  background: var(--bg-container);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 24px;
+  border: 2px solid var(--yellow);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  animation: slideDown 0.4s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.aviso-content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+}
+
+.aviso-icon {
+  color: var(--yellow);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 193, 7, 0.1);
+  border-radius: 50%;
+}
+
+.aviso-text {
+  flex: 1;
+  color: var(--text-color);
+}
+
+.aviso-text strong {
+  display: block;
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: var(--text-color);
+}
+
+.aviso-text p {
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.8;
+  color: var(--text-color);
+}
+
+.btn-completar {
+  background: var(--yellow);
+  color: #0F1934;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-completar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
+}
+
+.btn-completar svg {
+  width: 16px;
+  height: 16px;
+}
+
+.btn-fechar {
+  background: transparent;
+  border: none;
+  color: var(--text-color);
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+
+.btn-fechar:hover {
+  background: rgba(0, 0, 0, 0.05);
+  opacity: 1;
+}
+
 .header {
   display: flex;
   justify-content: space-between;
@@ -674,6 +781,28 @@ app-loading-simple {
 
   .container-logo img {
     width: 100%;
+  }
+
+  /* Aviso responsivo */
+  .aviso-content {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .aviso-text {
+    flex-basis: calc(100% - 60px);
+  }
+
+  .btn-completar {
+    width: 100%;
+    order: 3;
+    justify-content: center;
+  }
+
+  .btn-fechar {
+    position: absolute;
+    top: 10px;
+    right: 10px;
   }
 }
 

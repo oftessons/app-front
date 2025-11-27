@@ -15,6 +15,7 @@ export class InicioComponent implements OnInit {
   mostrarMensagemFlashcard: boolean = false;
   linkFlashcard: string = 'www.google.com';
   possuiPermissao: boolean = true;
+  mostrarAvisoCadastro: boolean = false;
 
   opcoesFiltro: string[] = ['Diário', 'Semanal', 'Mensal', 'Anual'];
   filtroSelecionado: string = 'Semanal';
@@ -52,6 +53,7 @@ export class InicioComponent implements OnInit {
     this.obterNomeUsuario();
     this.carregarDadosOfensiva();
     this.carregarAssuntos();
+    this.verificarCadastroIncompleto();
   }
 
   obterNomeUsuario(): void {
@@ -181,5 +183,22 @@ export class InicioComponent implements OnInit {
 
   isDarkMode(): boolean {
     return this.themeService.isDarkMode();
+  }
+
+  verificarCadastroIncompleto(): void {
+    const precisaCompletar = localStorage.getItem('precisa_completar_cadastro');
+    const cadastroCompleto = localStorage.getItem('cadastro_completo');
+    
+    if (precisaCompletar === 'true' && cadastroCompleto !== 'true') {
+      this.mostrarAvisoCadastro = true;
+    }
+  }
+
+  irParaPerfil(): void {
+    this.Router.navigate(['/usuario/minha-conta']);
+  }
+
+  fecharAvisoCadastro(): void {
+    this.mostrarAvisoCadastro = false;
   }
 }
