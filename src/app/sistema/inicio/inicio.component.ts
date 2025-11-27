@@ -96,7 +96,7 @@ export class InicioComponent implements OnInit {
 
   carregarAssuntos() {
     this.assuntosDisponiveis = Object.values(TemaDescricoes);
-    console.log('Assuntos disponíveis:', this.assuntosDisponiveis);
+    // console.log('Assuntos disponíveis:', this.assuntosDisponiveis);
   }
 
   onAssuntosSelecionados(event: any): void {
@@ -192,7 +192,7 @@ export class InicioComponent implements OnInit {
 
     if (cadastroCompleto !== 'true') {
       this.mostrarAvisoCadastro = true;
-      console.log('Usuário precisa completar o cadastro.');
+      // console.log('Usuário precisa completar o cadastro.');
     }
   }
 

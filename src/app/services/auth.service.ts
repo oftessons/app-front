@@ -63,10 +63,10 @@ export class AuthService {
     return this.http.get<Usuario>(`${this.apiURL}/perfil`).pipe(
       map(usuario => {
         // Presumindo que o backend retorne o role do usuário
-        console.log('Dados do usuário obtidos do backend:', usuario);
+        // console.log('Dados do usuário obtidos do backend:', usuario);
         usuario.permissao = this.jwtHelper.decodeToken(JSON.stringify(this.obterToken())).role;
         localStorage.setItem('cadastro_completo', usuario.perfilCompleto ? 'true' : 'false');
-        console.log('Dados do usuário obtidos do backend:', usuario);
+        // console.log('Dados do usuário obtidos do backend:', usuario);
         return usuario;
       })
     );
