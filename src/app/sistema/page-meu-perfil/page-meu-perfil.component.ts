@@ -11,7 +11,7 @@ import { PeriodoAssinaturaDescricao } from './enums/periodo-assinatura-descricao
 import { TipoUsuario } from 'src/app/login/enums/tipo-usuario';
 import { TipoUsuarioDescricao } from 'src/app/login/enums/tipo-usuario-descricao';
 import { VendasService } from 'src/app/services/vendas.service';
-import { PlatformModule } from '@angular/cdk/platform';
+import { Permissao } from 'src/app/login/Permissao';
 
 @Component({
   selector: 'app-page-meu-perfil',
@@ -26,12 +26,18 @@ export class PageMeuPerfilComponent implements OnInit {
   selectedFile!: File;
   planInformation!: Plano;
   possuiPermissao!: boolean;
-  
 
-  
+  tiposUsuario = Object.keys(TipoUsuario).map(key => ({
+    key,
+    value: TipoUsuario[key as keyof typeof TipoUsuario],
+    description: TipoUsuarioDescricao[TipoUsuario[key as keyof typeof TipoUsuario]]
+  }));
+
+
+
   constructor(private router: Router, private authService: AuthService, private stripeService: StripeService,
     private vendasService: VendasService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.obterPerfilUsuario();
@@ -39,7 +45,7 @@ export class PageMeuPerfilComponent implements OnInit {
 
   }
 
-  
+
   mostrarConteudo(conteudo: string) {
     this.conteudoAtual = conteudo;
   }
@@ -47,17 +53,18 @@ export class PageMeuPerfilComponent implements OnInit {
   obterPerfilUsuario() {
     this.authService.obterUsuarioAutenticadoDoBackend().subscribe(
       (data) => {
-        data.tipoDeEstudante = this.obterDescricaoTipoUsuario(data.tipoDeEstudante as TipoUsuario);
+        // data.tipoDeEstudante = this.obterDescricaoTipoUsuario(data.tipoDeEstudante as TipoUsuario);
+        console.log(data);
         this.usuario = data;
       },
       (error) => {
-       console.error('Erro ao obter perfil do usuário:', error);
+        console.error('Erro ao obter perfil do usuário:', error);
       }
     );
   }
 
   obterDescricaoTipoUsuario(tipoUsuario: TipoUsuario) {
-    return TipoUsuarioDescricao [tipoUsuario] || 'Descrição não disponível';
+    return TipoUsuarioDescricao[tipoUsuario] || 'Tipo de usuario não informado';
   }
 
   obterTipoUsuarioPorDescricao(descricao: string): TipoUsuario | string {
@@ -66,38 +73,37 @@ export class PageMeuPerfilComponent implements OnInit {
         return key as TipoUsuario;
       }
     }
-      return ''; 
+    return '';
   }
 
 
   editarPerfil() {
     this.editMode = !this.editMode;
-    const tipoDeEstudanteOriginal = this.obterTipoUsuarioPorDescricao(this.usuario.tipoDeEstudante);
+  
     if (!this.editMode) {
-      
-      this.usuario.tipoDeEstudante = tipoDeEstudanteOriginal;
-      
       if (this.usuario.dataNascimento && typeof this.usuario.dataNascimento === 'string') {
         this.usuario.dataNascimento = new Date(this.usuario.dataNascimento);
       }
-      
+    
+      console.log('Dados do usuário para atualização:', this.usuario);
+    
       this.authService
         .atualizarUsuario(this.usuario, this.selectedFile)
         .subscribe(
           (data) => {
             this.usuario = data;
-            this.usuario.tipoDeEstudante = this.obterDescricaoTipoUsuario(data.tipoDeEstudante as TipoUsuario);
-            
-            localStorage.setItem('usuario', JSON.stringify(data));
-            
+           // this.usuario.tipoDeEstudante = this.obterDescricaoTipoUsuario(data.tipoDeEstudante as TipoUsuario);
+
+            // localStorage.setItem('usuario', JSON.stringify(data));
+
             if (data.telefone && data.cidade && data.estado && data.dataNascimento) {
               localStorage.setItem('cadastro_completo', 'true');
               localStorage.removeItem('precisa_completar_cadastro');
             }
-          //  console.log('Perfil atualizado com sucesso:', data);
+            //  console.log('Perfil atualizado com sucesso:', data);
           },
           (error) => {
-           console.error('Erro ao atualizar perfil do usuário:', error);
+            console.error('Erro ao atualizar perfil do usuário:', error);
           }
         );
     }
@@ -116,8 +122,8 @@ export class PageMeuPerfilComponent implements OnInit {
         this.planInformation = plano;
       },
       (error) => {
-      console.error('Erro ao obter informações do plano:', error);
-    })
+        console.error('Erro ao obter informações do plano:', error);
+      })
   }
 
   exibirPortalAssinatura() {
@@ -132,7 +138,7 @@ export class PageMeuPerfilComponent implements OnInit {
     );
   }
 
-  converterDateTime(data: Date) : string {
+  converterDateTime(data: Date): string {
     let dataHoraFormatada = new Date(data).toLocaleDateString();
     let dataFormatada = dataHoraFormatada.split(',')[0];
     return dataFormatada;
@@ -147,7 +153,7 @@ export class PageMeuPerfilComponent implements OnInit {
     return PeriodoAssinaturaDescricao[status];
   }
 
-  
+
   onFileSelected(event: any) {
     const file: File = event.target.files[0];
     if (file) {
@@ -165,7 +171,7 @@ export class PageMeuPerfilComponent implements OnInit {
   }
 
   traduzirTipoEstudanteUsuario(tipoUsuario: string): string {
-    return TipoUsuarioDescricao[tipoUsuario as TipoUsuario] || 'Descrição não disponível';
+    return TipoUsuarioDescricao[tipoUsuario as TipoUsuario] || 'Tipo de usuario não informado';
   }
 
 }

@@ -4,13 +4,16 @@
       <h1>Minha conta</h1>
       <ul>
         <li>
-          <button [ngClass]="{'active': conteudoAtual === 'perfil'}" (click)="mostrarConteudo('perfil')">Meu Perfil</button>
+          <button [ngClass]="{'active': conteudoAtual === 'perfil'}" (click)="mostrarConteudo('perfil')">Meu
+            Perfil</button>
         </li>
         <li>
-          <button [ngClass]="{'active': conteudoAtual === 'assinaturas'}" (click)="mostrarConteudo('assinaturas')">Assinatura</button>
+          <button [ngClass]="{'active': conteudoAtual === 'assinaturas'}"
+            (click)="mostrarConteudo('assinaturas')">Assinatura</button>
         </li>
         <li>
-          <button [ngClass]="{'active': conteudoAtual === 'preferencias'}" (click)="mostrarConteudo('preferencias')">Preferência</button>
+          <button [ngClass]="{'active': conteudoAtual === 'preferencias'}"
+            (click)="mostrarConteudo('preferencias')">Preferência</button>
         </li>
       </ul>
     </div>
@@ -37,8 +40,21 @@
             <input *ngIf="editMode" [(ngModel)]="usuario.nome" class="form-control" />
           </p>
           <p><strong>Tipo de estudante: </strong>
-            <span *ngIf="!editMode"> {{ traduzirTipoEstudanteUsuario(usuario.tipoDeEstudante) }}</span>
-            <input *ngIf="editMode" [(ngModel)]="usuario.tipoDeEstudante" class="form-control" />
+            <span *ngIf="!editMode">
+              {{ traduzirTipoEstudanteUsuario(usuario.tipoDeEstudante) }}
+            </span>
+
+            <ng-container *ngIf="editMode">
+              <div class="form-group mb-0">
+                <select name="tipoEstudante" [(ngModel)]="usuario.tipoDeEstudante" class="form-select py-2" required>
+                  <option value="" disabled>Selecione o tipo de usuário</option>
+
+                  <option *ngFor="let tipo of tiposUsuario" [value]="tipo.key">
+                    {{ tipo.description }}
+                  </option>
+                </select>
+              </div>
+            </ng-container>
           </p>
           <p><strong>E-mail: </strong>
             <span *ngIf="!editMode"> {{ usuario.email }}</span>
@@ -56,7 +72,7 @@
             <span *ngIf="!editMode"> {{ usuario.estado }}</span>
             <input *ngIf="editMode" [(ngModel)]="usuario.estado" class="form-control" />
           </p>
-          <p><strong>DataNascimento: </strong>
+          <p><strong>Data Nascimento: </strong>
             <span *ngIf="!editMode"> {{ usuario.dataNascimento }}</span>
             <input *ngIf="editMode" type="date" [(ngModel)]="usuario.dataNascimento" class="form-control" />
           </p>
@@ -73,7 +89,7 @@
     <div *ngIf="conteudoAtual === 'assinaturas'">
       <!-- Conteúdo das assinaturas -->
       <h1 class="mt-4"><span> | </span>Assinatura</h1>
-       <div class="cont-assinatura">
+      <div class="cont-assinatura">
         <div class="line-dados">
           <h3>Plano</h3>
           <span>{{ planInformation.name }}</span>
@@ -108,7 +124,7 @@
             </div>
             <div class="toggle-container">
               <label class="switch">
-                <input name="darkModeToggle" type="checkbox" >
+                <input name="darkModeToggle" type="checkbox">
                 <span class="slider"></span>
               </label>
             </div>
@@ -118,13 +134,13 @@
             <div>
               <h2>Efeitos sonoros ativados</h2>
             </div>
-              <div class="toggle-container">
-                <label class="switch">
-                  <input name="darkModeToggle" type="checkbox">
-                  <span class="slider"></span>
-                </label>
-              </div>
+            <div class="toggle-container">
+              <label class="switch">
+                <input name="darkModeToggle" type="checkbox">
+                <span class="slider"></span>
+              </label>
             </div>
+          </div>
         </div>
       </div>
     </div>

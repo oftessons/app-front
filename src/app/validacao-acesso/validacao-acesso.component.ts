@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { Usuario } from '../login/usuario';
@@ -17,9 +17,10 @@ export class ValidacaoAcessoComponent {
   mensagemSucesso: string | null = null;
 
   constructor(
-    private authService: AuthService, 
+    private authService: AuthService,
     private router: Router
-  ) {}
+  ) { }
+
 
   onSubmit() {
     const rawData = sessionStorage.getItem('pending_login_data');
@@ -75,10 +76,11 @@ export class ValidacaoAcessoComponent {
           confirmPassword: '',
           tipoUsuario: '',
           bolsaAssinatura: response.bolsa || false,
-          dataNascimento : response.dataNascimento ? new Date(response.dataNascimento) : new Date(),
+          dataNascimento: response.dataNascimento ? new Date(response.dataNascimento) : new Date(),
           diasDeTeste: response.quantidadeDiasBolsa || 0,
           permissao: response.authorities.length > 0 ? response.authorities[0] : null,
           tipoDeEstudante: response.tipoDeEstudante || '',
+          perfilCompleto: response.perfilCompleto || false
         };
 
         localStorage.setItem('usuario', JSON.stringify(usuario));
@@ -91,7 +93,9 @@ export class ValidacaoAcessoComponent {
           usuario.permissao === 'ROLE_PROFESSOR' ||
           usuario.permissao === 'ROLE_BOLSISTA'
         ) {
-          this.verificarCompletarCadastro(usuario);
+
+          console.log("Usuário logado com permissão:", usuario);
+
           this.router.navigate(['/usuario/inicio']);
         } else {
           this.router.navigate(['/forbidden']);
@@ -107,18 +111,5 @@ export class ValidacaoAcessoComponent {
     );
   }
 
-  private verificarCompletarCadastro(usuario: Usuario): void {
-    const cadastroCompleto = localStorage.getItem('cadastro_completo');
-    if (cadastroCompleto === 'true') {
-      return;
-    }
 
-    const dadosCompletos = usuario.telefone && usuario.cidade && usuario.estado && usuario.dataNascimento;
-    if (dadosCompletos) {
-      localStorage.setItem('cadastro_completo', 'true');
-      return;
-    }
-
-    localStorage.setItem('precisa_completar_cadastro', 'true');
-  }
 }

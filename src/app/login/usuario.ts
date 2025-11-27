@@ -19,4 +19,5 @@ export class Usuario {
   dataInicioBolsa?: Date;
   dataNascimento?: Date | null;
   tipoDeEstudante!: string;
+  perfilCompleto!: boolean;
 }

@@ -208,7 +208,7 @@ export class PaginaInicialComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    localStorage.removeItem('access_token');
+    //localStorage.removeItem('access_token');
     this.checkActiveSection();
     this.registerForm = this.formBuilder.group({
       nome: ['', [Validators.required, Validators.minLength(3)]],
