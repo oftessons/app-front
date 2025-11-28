@@ -1719,6 +1719,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
           this.loadQuestao();
         }
         this.carregando = false;
+        this.mostrarFiltroCacheado = true;
       },
       (error) => {
         console.error('Erro ao restaurar filtros:', error);
