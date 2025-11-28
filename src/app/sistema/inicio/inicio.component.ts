@@ -190,6 +190,8 @@ export class InicioComponent implements OnInit {
     //onst precisaCompletar = localStorage.getItem('precisa_completar_cadastro');
     const cadastroCompleto = localStorage.getItem('cadastro_completo');
 
+
+
     if (cadastroCompleto !== 'true') {
       this.mostrarAvisoCadastro = true;
       // console.log('Usuário precisa completar o cadastro.');
@@ -210,11 +212,15 @@ export class InicioComponent implements OnInit {
     //   return;
     // }
     this.authService.verificarCadastroCompleto().subscribe(isCompleto => {
-      if (isCompleto) {
-        localStorage.setItem('cadastro_completo', isCompleto.cadastroCompleto.toString());
+      localStorage.setItem('cadastro_completo', isCompleto.cadastroCompleto.toString());
+
+      if (!isCompleto.cadastroCompleto) {
+        this.mostrarAvisoCadastro = true;
         return;
       }
-      localStorage.setItem('precisa_completar_cadastro', 'true');
+
+      this.mostrarAvisoCadastro = false;
+
     });
   }
 }
