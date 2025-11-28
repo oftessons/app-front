@@ -82,6 +82,13 @@ export class NavbarComponent {
       }
     });
 
+    const dadosAtuais = this.ofensivaService.getValorAtual();
+    if (!dadosAtuais) {
+      this.ofensivaService.getDadosOfensiva().subscribe({
+        error: (err) => console.error('Erro ao carregar ofensiva na navbar:', err)
+      });
+    }
+
     this.routerSubscription = this.router.events
       .pipe(
         filter(event => event instanceof NavigationEnd),
