@@ -115,7 +115,7 @@ estiloMensagemAniversario = {
       nome => this.nomeUsuario = nome,
       err => console.error('Erro ao buscar nome do usuário', err)
     );
-    console.log('Nome do usuário obtido:', this.nomeUsuario);
+    // console.log('Nome do usuário obtido:', this.nomeUsuario);
   }
 
   closePopup(): void {

@@ -111,36 +111,8 @@
             </div>
 
             <div class="form-group">
-              <label class="small mb-1" style="font-size: 1.2em;">Confirme sua senha *</label>
-              <div class="input-group">
-                <input type="password" name="confirmPassword" formControlName="confirmPassword" autocomplete="off" class="form-control py-2 responsive-input" placeholder="Confirme sua senha" required />
-                <div class="input-group-append">
-                    <div class="btn btn-outline-secondary" type="button" (click)="togglePasswordVisibility('confirmPassword')">
-                    <img *ngIf="!passwordVisible.confirmPassword" src="assets/imagens/view.svg" alt="Mostrar senha" width="16" height="16">
-                    <img *ngIf="passwordVisible.confirmPassword" src="assets/imagens/view-off.svg" alt="Ocultar senha" width="16" height="16">
-                    </div>
-                </div>
-            </div>
-            </div>
-
-            <div class="form-group">
                 <label class="small mb-1" style="font-size: 1.2em;">Nome *</label>
                 <input type="text" name="nome" formControlName="nome" class="form-control py-2 responsive-input" placeholder="Digite o seu nome"  />
-            </div>
-
-            <div class="form-group">
-                <label class="small mb-1" style="font-size: 1.2em;">Celular</label>
-                <input type="text" name="telefone" formControlName="telefone" class="form-control py-2 responsive-input" placeholder="Digite o Celular (XX) XXXX-XXX" required />
-            </div>
-
-            <div class="form-group">
-                <label class="small mb-1" style="font-size: 1.2em;">Cidade</label>
-                <input type="text" name="cidade" formControlName="cidade" class="form-control py-2 responsive-input" placeholder="Digite sua cidade" required />
-            </div>
-
-            <div class="form-group">
-                <label class="small mb-1" style="font-size: 1.2em;">Estado</label>
-                <input type="text" name="estado" formControlName="estado" class="form-control py-2 responsive-input" placeholder="Digite seu Estado" required />
             </div>
 
             <div>

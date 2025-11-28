@@ -27,7 +27,7 @@
     </div>
 
 
-    <div *ngIf="!revisandoFiltroSalvo"
+    <div *ngIf="mostrarFiltroCacheado && !revisandoFiltroSalvo" [style.display]="mostrarFiltroCacheado ? 'block' : 'none'"
       [ngClass]="{'filtros-container': true, 'filtros-container-open': mostrarFiltros}">
       <div class="container">
         <div class="filters-container">
@@ -180,7 +180,7 @@
         <div class="balloon-container" *ngIf="mostrarBalloon">
           <div class="balloon-box" [@slideIn]>
             <button class="close-btn" (click)="fecharBalloon()">×</button>
-            <h3 class="balloon-title"> &nbsp; 
+            <h3 class="balloon-title"> &nbsp;
               <img src="assets/Icons/lampada.svg" alt="Ícone de Curiosidades">
               Curiosidades do Subtema
             </h3>
@@ -221,12 +221,8 @@
         <h3>Tema: {{ questaoAtual.tema }}</h3>
         <h3 *ngIf="questaoAtual.ano">Ano: {{ questaoAtual.ano }}</h3>
         <h3>Tipo de Prova: {{ questaoAtual.tipoDeProva }}</h3>
-        <button 
-          *ngIf="curiosidades.length > 0 && !isTrialUser" 
-          type="button" 
-          class="btn-balloon" 
-          (click)="toggleBalloon()"
-          title="Ver curiosidades do subtema">
+        <button *ngIf="curiosidades.length > 0 && !isTrialUser" type="button" class="btn-balloon"
+          (click)="toggleBalloon()" title="Ver curiosidades do subtema">
           <img src="assets/Icons/dark/lampada-dark.svg" alt="Ícone de Curiosidades">
         </button>
         <button type="button" class="btn-editar" (click)="editQuestao()" *ngIf="isAdmin() || isProf()">Editar

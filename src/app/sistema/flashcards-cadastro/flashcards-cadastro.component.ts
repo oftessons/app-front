@@ -1,9 +1,4 @@
-import {
-  Component,
-  OnInit,
-  ChangeDetectorRef,
-  AfterViewInit,
-} from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Tema } from '../page-questoes/enums/tema';
 import { Subtema } from '../page-questoes/enums/subtema';
 import { temasESubtemas } from '../page-questoes/enums/map-tema-subtema';
@@ -24,7 +19,7 @@ import { AuthService } from 'src/app/services/auth.service';
   templateUrl: './flashcards-cadastro.component.html',
   styleUrls: ['./flashcards-cadastro.component.css'],
 })
-export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
+export class FlashcardsCadastroComponent implements OnInit {
   subtemasAgrupadosPorTema: {
     label: string;
     temaKey: string;
@@ -34,15 +29,20 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
   }[] = [];
 
   assuntoSelecionado: string | null = null;
-  relevanciaSelecionada: number | null = null;
+  relevanciaSelecionada: string | null = null;
   dificuldadeSelecionada: string | null = null;
 
   optionsRelevancia = [
-    { label: '1', value: 1 },
-    { label: '2', value: 2 },
-    { label: '3', value: 3 },
-    { label: '4', value: 4 },
-    { label: '5', value: 5 },
+    { label: '1', value: '1' },
+    { label: '2', value: '2' },
+    { label: '3', value: '3' },
+    { label: '4', value: '4' },
+    { label: '5', value: '5' },
+    { label: '6', value: '6' },
+    { label: '7', value: '7' },
+    { label: '8', value: '8' },
+    { label: '9', value: '9' },
+    { label: '10', value: '10' },
   ];
 
   optionsDificuldade = [
@@ -54,11 +54,17 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
   perguntaHtml = '';
   respostaHtml = '';
 
-  fotoSelecionada: File | null = null;
-  fotoPreview: string | ArrayBuffer | null = null;
+  fotoPerguntaFile: File | null = null;
+  fotoRespostaFile: File | null = null;
+  fotoPreviews: { [key: string]: string | ArrayBuffer | null } = {};
 
   flashcardParaEditar: Flashcard | null = null;
   modoEdicao = false;
+  salvando = false;
+
+  exibirModalStatus = false;
+  statusModal: 'success' | 'error' | 'validation' = 'success';
+  camposFaltando: string[] = [];
 
   constructor(
     private location: Location,
@@ -87,7 +93,7 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
               ? (Subtema as any)[subtema]
               : (subtema as any);
           const subtemaLabel = SubtemaDescricoes[subtema] || subtemaKey;
-          return { label: subtemaLabel, value: subtemaKey };
+          return { label: subtemaLabel, value: `${temaKey}::${subtemaKey}` };
         });
 
         return {
@@ -98,57 +104,98 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
         };
       }
     );
-  }
 
-  ngAfterViewInit(): void {
     if (this.flashcardParaEditar) {
       this.modoEdicao = true;
       const card = this.flashcardParaEditar;
+
       this.perguntaHtml = card.pergunta;
       this.respostaHtml = card.resposta;
 
-      if (card.fotoUrl) {
-        this.fotoPreview = card.fotoUrl;
+      if (card.fotoUrlPergunta) {
+        this.fotoPreviews['fotoPergunta'] = card.fotoUrlPergunta;
+      }
+      if (card.fotoUrlResposta) {
+        this.fotoPreviews['fotoResposta'] = card.fotoUrlResposta;
       }
 
-      setTimeout(() => {
-        this.relevanciaSelecionada = card.relevancia ?? null;
-        this.dificuldadeSelecionada = this.normalizarDificuldade(
-          card.dificuldade ?? null
-        );
+      if (card.relevancia !== undefined && card.relevancia !== null) {
+        this.relevanciaSelecionada = String(card.relevancia);
+      } else {
+        this.relevanciaSelecionada = null;
+      }
 
-        if (card.subtema && !this.isSubtemaFallbackDoTema(card)) {
-          this.assuntoSelecionado = this.findMatchingSubtema(card.subtema);
-        } else if (card.tema) {
-          this.assuntoSelecionado = this.findMatchingTema(card.tema);
-        } else {
-          this.assuntoSelecionado = null;
-        }
+      this.dificuldadeSelecionada = this.normalizarDificuldade(
+        card.dificuldade ?? null
+      );
 
-        this.cdRef.detectChanges();
-      }, 0);
+      if (card.tema && card.subtema) {
+        this.assuntoSelecionado = `${card.tema}::${card.subtema}`;
+      } else {
+        this.assuntoSelecionado = null;
+      }
     }
   }
 
-  onFileSelected(event: any): void {
-    const file: File = event.target.files[0];
-    if (file) {
-      this.fotoSelecionada = file;
+  onFileSelected(event: any, fieldKey: string): void {
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      const file: File = files[0];
+
+      if (fieldKey === 'fotoPergunta') {
+        this.fotoPerguntaFile = file;
+      } else if (fieldKey === 'fotoResposta') {
+        this.fotoRespostaFile = file;
+      }
+
       const reader = new FileReader();
       reader.onload = (e) => {
-        this.fotoPreview = e.target?.result ?? null;
+        this.fotoPreviews[fieldKey] = e.target?.result ?? null;
+        this.cdRef.detectChanges();
       };
       reader.readAsDataURL(file);
     }
   }
 
-  removerImagem(): void {
-    this.fotoSelecionada = null;
-    this.fotoPreview = null;
-    const fileInput = document.getElementById('fileInput') as HTMLInputElement;
+  onDrop(event: DragEvent, fieldKey: string): void {
+    event.preventDefault();
+    const files = event.dataTransfer?.files;
+    if (files && files.length > 0) {
+      const mockEvent = { target: { files: files } };
+      this.onFileSelected(mockEvent, fieldKey);
+    }
+  }
+
+  onDragOver(event: DragEvent): void {
+    event.preventDefault();
+  }
+
+  removeFile(fieldKey: string, event: Event): void {
+    event.stopPropagation();
+
+    if (fieldKey === 'fotoPergunta') {
+      this.fotoPerguntaFile = null;
+    } else if (fieldKey === 'fotoResposta') {
+      this.fotoRespostaFile = null;
+    }
+
+    this.fotoPreviews[fieldKey] = null;
+
+    const fileInput = document.getElementById(fieldKey) as HTMLInputElement;
     if (fileInput) {
       fileInput.value = '';
     }
+    this.cdRef.detectChanges();
+  }
+
+  isPreviewImage(preview: string | ArrayBuffer | null): boolean {
+    if (typeof preview !== 'string') return false;
+    return preview.toLowerCase().startsWith('data:image/');
+  }
+
+  isPreviewVideo(preview: string | ArrayBuffer | null): boolean {
+    if (typeof preview !== 'string') return false;
+    return preview.toLowerCase().startsWith('data:video/');
   }
 
   voltar() {
@@ -156,49 +203,56 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
   }
 
   salvar(): void {
-    if (!this.assuntoSelecionado || !this.perguntaHtml || !this.respostaHtml) {
-      alert('Por favor, preencha todos os campos obrigatórios.');
+    if (this.salvando) return;
+
+    this.camposFaltando = [];
+    if (!this.assuntoSelecionado) {
+      this.camposFaltando.push('Assunto');
+    }
+    if (!this.perguntaHtml || this.perguntaHtml.trim() === '') {
+      this.camposFaltando.push('Enunciado (Pergunta)');
+    }
+    if (!this.respostaHtml || this.respostaHtml.trim() === '') {
+      this.camposFaltando.push('Resposta');
+    }
+
+    if (this.camposFaltando.length > 0) {
+      this.statusModal = 'validation';
+      this.exibirModalStatus = true;
       return;
     }
+
+    this.salvando = true;
 
     this.authService.obterUsuarioAutenticadoDoBackend().subscribe({
       next: (usuarioDoBackend) => {
         if (!usuarioDoBackend || !usuarioDoBackend.id) {
-          alert(
-            'Erro crítico: Não foi possível obter os dados do usuário logado. Faça o login novamente.'
-          );
+          this.salvando = false;
           this.router.navigate(['/login']);
           return;
         }
 
         const userIdNumerico = parseInt(String(usuarioDoBackend.id), 10);
-        if (isNaN(userIdNumerico)) {
-          alert('Erro crítico: O ID do usuário retornado é inválido.');
+
+        if (!this.assuntoSelecionado) {
+          this.salvando = false;
           return;
         }
 
-        const temaSelecionado = this.encontrarTemaAPartirDoAssunto(
-          this.assuntoSelecionado!
-        );
-        if (!temaSelecionado) {
-          alert(
-            'Erro: não foi possível determinar o tema a partir do assunto selecionado.'
-          );
-          return;
-        }
+        const [temaExtraido, subtemaExtraido] =
+          this.assuntoSelecionado.split('::');
 
-        const subtemaParaEnvio = this.resolveSubtemaParaEnvio(
-          this.assuntoSelecionado!,
-          temaSelecionado
-        );
+        const temaSelecionado = temaExtraido;
+        const subtemaParaEnvio = subtemaExtraido;
 
         const dificuldadeFinal = this.dificuldadeSelecionada
           ? this.dificuldadeSelecionada
           : (null as any);
 
-        const relevanciaFinal = this.relevanciaSelecionada
-          ? this.relevanciaSelecionada
-          : (null as any);
+        let relevanciaFinal = null;
+        if (this.relevanciaSelecionada) {
+          relevanciaFinal = parseInt(this.relevanciaSelecionada, 10);
+        }
 
         if (this.modoEdicao && this.flashcardParaEditar) {
           const dto: ReqAtualizarFlashcardDTO = {
@@ -207,25 +261,27 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
             tema: temaSelecionado,
             subtema: subtemaParaEnvio,
             dificuldade: dificuldadeFinal,
-            relevancia: relevanciaFinal,
+            relevancia: relevanciaFinal as any,
           };
 
           this.flashcardService
-            .atualizarFlashcard(this.flashcardParaEditar.id, dto, this.fotoSelecionada || undefined)
+            .atualizarFlashcard(
+              this.flashcardParaEditar.id,
+              dto,
+              this.fotoPerguntaFile || undefined,
+              this.fotoRespostaFile || undefined
+            )
             .subscribe({
               next: () => {
-                alert('Flashcard atualizado com sucesso!');
-                this.voltar();
+                this.salvando = false;
+                this.statusModal = 'success';
+                this.exibirModalStatus = true;
               },
-              error: (erro) => {
-                console.error('Erro ao atualizar flashcard:', erro);
-                alert(
-                  `Erro ao atualizar: ${
-                    (erro as any)?.error ||
-                    (erro as any)?.message ||
-                    'Erro desconhecido'
-                  }`
-                );
+              error: (err) => {
+                this.salvando = false;
+                console.error(err);
+                this.statusModal = 'error';
+                this.exibirModalStatus = true;
               },
             });
         } else {
@@ -235,76 +291,49 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
             tema: temaSelecionado,
             subtema: subtemaParaEnvio,
             dificuldade: dificuldadeFinal,
-            relevancia: relevanciaFinal,
+            relevancia: relevanciaFinal as any,
             createdBy: userIdNumerico,
           };
 
-          this.flashcardService.salvarFlashcard(dto, this.fotoSelecionada || undefined).subscribe({
-            next: () => {
-              alert('Flashcard salvo com sucesso!');
-              this.voltar();
-            },
-            error: (erro) => {
-              console.error('Erro ao salvar flashcard:', erro);
-
-              const mensagem =
-                typeof erro === 'string'
-                  ? erro
-                  : (erro as any)?.error
-                  ? (erro as any).error
-                  : (erro as any)?.message
-                  ? (erro as any).message
-                  : 'Erro desconhecido ao salvar o flashcard.';
-
-              alert(`Erro ao salvar: ${mensagem}`);
-            },
-          });
+          this.flashcardService
+            .salvarFlashcard(
+              dto,
+              this.fotoPerguntaFile || undefined,
+              this.fotoRespostaFile || undefined
+            )
+            .subscribe({
+              next: () => {
+                this.salvando = false;
+                this.statusModal = 'success';
+                this.exibirModalStatus = true;
+              },
+              error: (err) => {
+                this.salvando = false;
+                console.error(err);
+                this.statusModal = 'error';
+                this.exibirModalStatus = true;
+              },
+            });
         }
       },
-      error: (err) => {
-        console.error('Erro ao buscar perfil do usuário:', err);
-        alert('Erro ao buscar dados do usuário. Sua sessão pode ter expirado.');
+      error: () => {
+        this.salvando = false;
         this.router.navigate(['/login']);
       },
     });
   }
 
-  private encontrarTemaAPartirDoAssunto(chaveAssunto: string): string | null {
-    if (!chaveAssunto) return null;
-
-    const grupoTemaDireto = this.subtemasAgrupadosPorTema.find(
-      (g) => g.temaKey === chaveAssunto
-    );
-    if (grupoTemaDireto) {
-      return grupoTemaDireto.temaKey;
-    }
-
-    for (const grupo of this.subtemasAgrupadosPorTema) {
-      const found = grupo.options.find((opt) => opt.value === chaveAssunto);
-      if (found) return grupo.temaKey;
-    }
-
-    return null;
+  fecharModalSucesso() {
+    this.exibirModalStatus = false;
+    this.voltar();
   }
 
-  private resolveSubtemaParaEnvio(
-    assunto: string,
-    temaSelecionado: string
-  ): string {
-    const ehTema = this.subtemasAgrupadosPorTema.some(
-      (g) => g.temaKey === assunto
-    );
-
-    if (ehTema) {
-      return this.canon(temaSelecionado);
-    }
-
-    return assunto;
+  fecharModalErro() {
+    this.exibirModalStatus = false;
   }
 
-  private isSubtemaFallbackDoTema(card: Flashcard): boolean {
-    if (!card.tema || !card.subtema) return false;
-    return this.canon(card.subtema) === this.canon(card.tema);
+  fecharModalValidacao() {
+    this.exibirModalStatus = false;
   }
 
   private canon(s: string): string {
@@ -323,27 +352,5 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
     if (x === 'FACIL' || x === 'EASY') return 'FACIL';
     if (x === 'DIFICIL' || x === 'HARD') return 'DIFICIL';
     return ['FACIL', 'MEDIO', 'DIFICIL'].includes(x) ? x : null;
-  }
-
-  private findMatchingSubtema(v?: string | null): string | null {
-    if (!v) return null;
-    const wanted = this.canon(v);
-    for (const g of this.subtemasAgrupadosPorTema) {
-      for (const opt of g.options) {
-        const key = this.canon(String(opt.value));
-        if (key === wanted) return opt.value;
-      }
-    }
-    return null;
-  }
-
-  private findMatchingTema(v?: string | null): string | null {
-    if (!v) return null;
-    const wanted = this.canon(v);
-    for (const g of this.subtemasAgrupadosPorTema) {
-      const key = this.canon(g.temaKey);
-      if (key === wanted) return g.temaKey;
-    }
-    return null;
   }
 }

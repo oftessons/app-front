@@ -279,6 +279,19 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
     this.chatBotStateService.addMessage(welcomeMsg);
   }
 
+  iniciarNovaConversa(): void {
+    this.messages = [];
+    this.chatHistory = [];
+    
+    this.chatBotStateService.clearMessages();
+    
+    this.isCitarQuestao = false;
+    this.citarQuestao = new Questao();
+    this.userMessage = '';
+    
+    this.sendWelcomeMessage();
+  }
+
   togglePromptSuggestions(): void {
     this.showPromptSuggestions = !this.showPromptSuggestions;
   }
@@ -448,7 +461,7 @@ ${ultimasMensagens}
 *ESCREVA SUA MENSAGEM ABAIXO*
 `;
 
-      const numeroWhatsapp = '5511920909632';
+      const numeroWhatsapp = '551152418213';
       const whatsappUrl = `https://wa.me/${numeroWhatsapp}?text=${encodeURIComponent(mensagemCompleta)}`;
       
       // setTimeout(() => {

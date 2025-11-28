@@ -1,9 +1,20 @@
 <div class="card-container">
-    <div class="icon-container">
-        <img src="../../../assets/Icons/Flashcards-temas.svg" alt="">
-    </div>
-    <h1 class="tema-title">{{tema}}</h1>
-    <p class="flashcards-numbers">{{numeroFlashcards}} Flashcards</p>
+  <div class="icon-container">
+    <img src="../../../assets/Icons/Flashcards-temas.svg" alt="" />
+  </div>
+  <h1 class="tema-title">{{ tema }}</h1>
+  <p class="flashcards-numbers">{{ numeroFlashcards }} Flashcards</p>
 
-    <a class="card-button" [routerLink]="caminho">Estudar<img src="../../../assets//Icons/Right-icon.svg"></a>
+  <a *ngIf="caminho" class="card-button" [routerLink]="caminho">
+    Estudar<img src="../../../assets//Icons/Right-icon.svg" />
+  </a>
+
+  <div
+    *ngIf="!caminho"
+    class="card-button"
+    style="cursor: pointer"
+    (click)="acaoEstudar.emit()"
+  >
+    Estudar<img src="../../../assets//Icons/Right-icon.svg" />
+  </div>
 </div>

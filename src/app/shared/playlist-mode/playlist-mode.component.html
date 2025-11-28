@@ -5,14 +5,17 @@
             <span>Aulas {{ videoAtualIndex + 1 }}/{{ aulas.length }}</span>
         </div>
         <button class="toggle-button">
-            <img src="assets/Icons/arrow-updown.svg" [ngClass]="{'arrow-up': playlistAberta, 'arrow-down': !playlistAberta}">
+            <img src="assets/Icons/arrow-updown.svg"
+                [ngClass]="{'arrow-up': playlistAberta, 'arrow-down': !playlistAberta}">
         </button>
     </div>
 
     <div class="modal-content">
         <div class="modal-body">
-            <div class="lesson" *ngFor="let aula of aulas; let i = index" (click)="selecionarAula(aula, i)" [ngClass]="{'current-video': i === videoAtualIndex}">
-                <video class="video-preview" [src]="aula.urlVideo" muted></video>
+            <div class="lesson" *ngFor="let aula of aulas; let i = index" (click)="selecionarAula(aula, i)"
+                [ngClass]="{'current-video': i === videoAtualIndex}">
+                <!--<video class="video-preview" [src]="aula.urlVideo" muted></video>-->
+                <img class="video-preview" alt="Pré-visualização do vídeo" [src]="aula.poster || 'assets/Icons/video-placeholder.png'">
                 <span class="lesson-title">{{ aula.titulo }}</span>
                 <img src="assets/Icons/confirmar-vazio.svg" class="check-icon" *ngIf="!videosAssistidos[i]">
                 <img src="assets/Icons/confirmar-verde.svg" class="check-icon" *ngIf="videosAssistidos[i]">

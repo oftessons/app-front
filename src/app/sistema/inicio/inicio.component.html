@@ -1,5 +1,31 @@
 <div class="container pt-5">
   <div class="container mt-4">
+    <!-- Aviso de Cadastro Incompleto -->
+    <div *ngIf="mostrarAvisoCadastro" class="aviso-cadastro">
+      <div class="aviso-content">
+        <div class="aviso-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" fill="currentColor"/>
+          </svg>
+        </div>
+        <div class="aviso-text">
+          <strong>Complete seu cadastro!</strong>
+          <p>Para uma melhor experiência, complete as informações do seu perfil.</p>
+        </div>
+        <button class="btn-completar" (click)="irParaPerfil()">
+          Completar Agora
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <button class="btn-fechar" (click)="fecharAvisoCadastro()" aria-label="Fechar aviso">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15 5L5 15M5 5l10 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
     <div class="header">
       <h1 class="welcome-message">👋 Seja Bem-vindo(a), {{ nomeUsuario }}</h1>
       <div class="filtro-select">

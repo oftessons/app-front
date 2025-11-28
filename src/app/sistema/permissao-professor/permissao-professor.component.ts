@@ -46,12 +46,8 @@ export class PermissaoProfessorComponent implements OnInit {
       id: null,
       username: new FormControl('', {validators: [Validators.required]}),
       password: new FormControl('', {validators: [Validators.required]}),
-      confirmPassword: new FormControl('', {validators: [Validators.required]}),
       nome: new FormControl('', {validators: [Validators.required]}),
       email: new FormControl('', {validators: [Validators.required]}),
-      telefone: new FormControl('', {validators: [Validators.required]}),
-      cidade: new FormControl('', ),
-      estado: new FormControl('', ),
       bolsa: new FormControl(false),
       quantidadeDiasBolsa: new FormControl([null, [Validators.required, Validators.min(1)]])
     });
@@ -60,12 +56,8 @@ export class PermissaoProfessorComponent implements OnInit {
       id: null,
       username: new FormControl('', {validators: [Validators.required]}),
       password: new FormControl('', {validators: [Validators.required]}),
-      confirmPassword: new FormControl('', {validators: [Validators.required]}),
       nome: new FormControl('', {validators: [Validators.required]}),
-      email: new FormControl('', {validators: [Validators.required]}),
-      telefone: new FormControl('', {validators: [Validators.required]}),
-      cidade: new FormControl('', ),
-      estado: new FormControl('', ),
+      email: new FormControl('', {validators: [Validators.required]})
     });
 
 
@@ -76,12 +68,8 @@ export class PermissaoProfessorComponent implements OnInit {
         id: [null],
         username: [''],
         password: [''],
-        confirmPassword: [''],
         nome: [''],
         email: [''],
-        telefone: [''],
-        cidade: [''],
-        estado: [''],
         bolsa: [''],
         quantidadeDiasBolsa: ['']
       })
@@ -90,12 +78,8 @@ export class PermissaoProfessorComponent implements OnInit {
         id: [null],
         username: [''],
         password: [''],
-        confirmPassword: [''],
         nome: [''],
-        email: [''],
-        telefone: [''],
-        cidade: [''],
-        estado: [''],
+        email: ['']
       })
     }
 
@@ -118,12 +102,8 @@ export class PermissaoProfessorComponent implements OnInit {
     
     let usuario: Usuario = new Usuario();
     usuario.password = userData.password;
-    usuario.confirmPassword = userData.confirmPassword;
     usuario.nome = userData.nome;
     usuario.email = userData.email;
-    usuario.telefone = userData.telefone;
-    usuario.cidade = userData.cidade;
-    usuario.estado = userData.estado;
     usuario.bolsaAssinatura = userData.bolsa;
     usuario.diasDeTeste = userData.quantidadeDiasBolsa;
     
@@ -150,11 +130,7 @@ export class PermissaoProfessorComponent implements OnInit {
         id: id,
         nome: data.nome,
         email: data.email,
-        password: data.password,
-        confirmPassword: data.confirmPassword,  
-        telefone: data.telefone,
-        cidade:  data.cidade,
-        estado: data.estado    
+        password: data.password
       });
 
       this.cdRef.markForCheck();
@@ -240,12 +216,8 @@ export class PermissaoProfessorComponent implements OnInit {
       id: '',
       username: '',
       password: '',
-      confirmPassword: '',
       nome: '',
-      email: '',
-      telefone: '',
-      cidade: '',
-      estado: '',
+      email: ''
     });
   }
 
@@ -280,12 +252,6 @@ export class PermissaoProfessorComponent implements OnInit {
       this.modalErrors = passwordValidationErrors;
       return; 
     }
-  
-    if (userData.password !== userData.confirmPassword && this.cadastrando) {
-        this.modalErrors.push("As senhas não coincidem.");
-        return; 
-    }
-
   }
 
 

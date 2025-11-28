@@ -1,30 +1,55 @@
-<div class="container pt-5">
-  <div class="container mt-4">
-    <div class="header">
-      <h1 class="mt-4"><span> | </span> Aulas</h1>
+<div class="aulas-container">
+  <div class="aulas-header">
+    <div class="header-content">
+      <h1 class="page-title"><span class="title-accent">|</span> Aulas</h1>
+      <p class="page-subtitle">Explore nossos módulos de aprendizado</p>
     </div>
   </div>
-  <section class="containerCards">
-    <div *ngFor="let aula of aulas" (click)="navegarParaAula(aula.slug)" style="cursor: pointer;"
-      class="card-wrapper-clicavel">
-      <div class="card">
-        <img [src]="aula.imageUrl" [alt]="aula.title" class="card-img">
-        <div class="card-body">
+
+  <section class="aulas-grid">
+    <div *ngFor="let aula of aulas" class="aula-card-wrapper" (click)="navegarParaAula(aula.slug)">
+      <div class="aula-card">
+        <!-- Imagem com overlay de progresso -->
+        <div class="card-image-wrapper">
+          <img [src]="aula.imageUrl" [alt]="aula.title" class="card-image">
+          <div class="image-overlay">
+            <div class="play-button">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8 5V19L19 12L8 5Z" fill="currentColor"/>
+              </svg>
+            </div>
+          </div>
+          <!-- Badge de status -->
+          <div class="status-badge" [class.completed]="aula.progresso === 100" [class.in-progress]="aula.progresso > 0 && aula.progresso < 100" [class.not-started]="!aula.progresso || aula.progresso === 0">
+            <span *ngIf="aula.progresso === 100">✓ Concluído</span>
+            <span *ngIf="aula.progresso > 0 && aula.progresso < 100">Em andamento</span>
+            <span *ngIf="!aula.progresso || aula.progresso === 0">Novo</span>
+          </div>
+        </div>
+
+        <!-- Corpo do card -->
+        <div class="card-content">
           <h3 class="card-title">{{ aula.title }}</h3>
           <p class="card-description">{{ aula.description }}</p>
 
-          <div class="progress-section">
-            <div class="progress-info" *ngIf="aula.progresso > 0">
-              <span>{{ aula.progresso | number:'1.0-0' }}% Concluído</span>
+          <!-- Barra de progresso aprimorada -->
+          <div class="progress-wrapper">
+            <div class="progress-header">
+              <span class="progress-label">Progresso</span>
+              <span class="progress-percentage">{{ aula.progresso || 0 | number:'1.0-0' }}%</span>
             </div>
-            <div class="progress-info" *ngIf="!aula.progresso || aula.progresso === 0">
-              <span>Não iniciado</span>
-            </div>
-            <div class="progress-bar-container">
-              <div class="progress-bar-fill" [style.width]="aula.progresso + '%'"></div>
+            <div class="progress-bar">
+              <div class="progress-fill" [style.width]="(aula.progresso || 0) + '%'" [class.full]="aula.progresso === 100"></div>
             </div>
           </div>
-          <button (click)="navegarParaAula(aula.slug)" class="btn btn-primary">Acessar conteúdo</button>
+
+          <!-- Botão de ação -->
+          <button class="btn-action" (click)="navegarParaAula(aula.slug); $event.stopPropagation()">
+            <span>{{ aula.progresso > 0 ? 'Continuar' : 'Começar' }}</span>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
         </div>
       </div>
     </div>

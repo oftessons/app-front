@@ -1,11 +1,12 @@
-import { HttpClient, HttpEvent, HttpEventType, HttpRequest, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpEventType, HttpParams, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment.prod';
 import { catchError, map, tap } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
 import { Aula } from '../sistema/painel-de-aulas/aula';
 import { CadastroAulaResponse } from '../sistema/cadastro-de-aulas/cadastro-aulas-response';
-import { VideoUrlResponse } from '../sistema/modulo-de-aulas/video-url-response';
+import { VdoCipherPlaybackResponse } from '../sistema/modulo-de-aulas/video-cipher-playblack-response';
+import { ProgressoAulasDtoResponse } from '../sistema/painel-de-aulas/progresso-aulas-dto-response';
 
 @Injectable({
 
@@ -31,19 +32,15 @@ export class AulasService {
   }
 
 
-  uploadVideoS3(
-    presignedUrl: string,
-    videoFile: File,
-    contentType: string
+  uploadVideoVdoCipher(
+    clientPayload: any,
+    videoFile: File
   ): Observable<HttpEvent<any>> {
 
     return new Observable(subscriber => {
-
       const xhr = new XMLHttpRequest();
 
-      xhr.open('PUT', presignedUrl, true);
-
-      xhr.setRequestHeader('Content-Type', contentType);
+      xhr.open('POST', clientPayload.uploadLink, true);
 
       xhr.upload.onprogress = (event: ProgressEvent) => {
         if (event.lengthComputable) {
@@ -54,6 +51,7 @@ export class AulasService {
           });
         }
       };
+
       xhr.onload = () => {
         if (xhr.status >= 200 && xhr.status < 300) {
           subscriber.next(new HttpResponse({
@@ -62,30 +60,37 @@ export class AulasService {
           }));
           subscriber.complete();
         } else {
-          subscriber.error(new Error(`Falha no upload S3: ${xhr.statusText}`));
+          subscriber.error(new Error(`Falha no upload VdoCipher: ${xhr.status} - ${xhr.statusText}`));
         }
       };
 
       xhr.onerror = () => {
-        subscriber.error(new Error('Falha de rede no upload para o S3.'));
+        subscriber.error(new Error('Falha de rede no upload para VdoCipher.'));
       };
-      xhr.onabort = () => {
-        subscriber.complete();
-      };
-      xhr.send(videoFile);
-      return () => {
-        xhr.abort();
-      };
+
+      xhr.onabort = () => subscriber.complete();
+
+      const formData = new FormData();
+      formData.append('policy', clientPayload.policy);
+      formData.append('key', clientPayload.key);
+      formData.append('x-amz-signature', clientPayload['x-amz-signature']);
+      formData.append('x-amz-algorithm', clientPayload['x-amz-algorithm']);
+      formData.append('x-amz-date', clientPayload['x-amz-date']);
+      formData.append('x-amz-credential', clientPayload['x-amz-credential']);
+      formData.append('success_action_status', '201');
+      formData.append('success_action_redirect', '');
+      formData.append('file', videoFile);
+
+      xhr.send(formData);
+
+      return () => xhr.abort();
     });
   }
 
 
-  obterUrlDeVideo(aulaId: number): Observable<VideoUrlResponse> {
+  obterUrlDeVideo(aulaId: number): Observable<VdoCipherPlaybackResponse> {
     const url = `${this.apiURL}/${aulaId}/play`;
-    
-    return this.http.get<VideoUrlResponse>(url, {
-      withCredentials: true
-    });
+    return this.http.get<VdoCipherPlaybackResponse>(url);
   }
 
   listarAulasPorCategoria(categoria: string): Observable<Aula[]> {
@@ -127,7 +132,6 @@ export class AulasService {
       })
     );
   }
-
 
 
   buscarAulaPorId(id: number): Observable<Aula> {
@@ -173,21 +177,13 @@ export class AulasService {
 
 
 
-  atualizar(id: number, formData: FormData): Observable<any> {
+  atualizar(id: number, formData: FormData, trocarVideo: boolean): Observable<HttpEvent<any>> {
+    const params = new HttpParams().set('trocarVideo', trocarVideo.toString());
+
     return this.http.put(`${this.apiURL}/${id}`, formData, {
-      responseType: 'text'
-    }).pipe(
-      map((response) => ({ message: response })),
-      catchError((error) => {
-        let errorMessage = 'Erro ao atualizar a aula.';
-        if (error.error instanceof ErrorEvent) {
-          errorMessage = `Erro: ${error.error.message}`;
-        } else if (error.status) {
-          errorMessage = `Erro no servidor: ${error.status} - ${error.message}`;
-        }
-        console.error(errorMessage);
-        return throwError(() => new Error(errorMessage));
-      })
-    );
+      params: params,
+      reportProgress: true,
+      observe: 'events'
+    });
   }
 }

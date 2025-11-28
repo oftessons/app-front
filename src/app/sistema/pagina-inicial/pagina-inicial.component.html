@@ -147,7 +147,7 @@
                     <div class="input-group">
                       <input type="password" name="password" [(ngModel)]="password"
                         class="form-control py-2"
-                        [ngClass]="{'input-error': camposComErro.includes('password') || camposComErro.includes('confirmPassword')}"
+                        [ngClass]="{'input-error': camposComErro.includes('password')}"
                         placeholder="Digite sua senha" required
                         (input)="validatePassword()"
                         (focus)="showTooltip = true"
@@ -172,78 +172,6 @@
                   </div>
                   <small class="text-danger" *ngIf="camposComErro.includes('password')">
                     {{ obterMensagemErro('password') }}
-                  </small>
-                  <small class="text-danger" *ngIf="camposComErro.includes('confirmPassword')">
-                    {{ obterMensagemErro('confirmPassword') }}
-                  </small>
-                </div>
-
-                <div class="form-group">
-                  <label class="small mb-1">Confirmar Senha *</label>
-                  <div class="input-group">
-                    <input type="password" name="confirmPassword"
-                    [(ngModel)]="confirmPassword"
-                    [ngClass]="{'input-error': camposComErro.includes('confirmPassword')}"
-                    class="form-control py-2"
-                    placeholder="Confirme sua senha"
-                    required />
-                    <div class="input-group-append">
-                      <div class="btn" type="button" (click)="togglePasswordVisibility('confirmPassword')">
-                        <img *ngIf="!passwordVisible.confirmPassword" src="assets/imagens/view.svg" alt="Mostrar senha" width="16" height="16">
-                        <img *ngIf="passwordVisible.confirmPassword" src="assets/imagens/view-off.svg" alt="Ocultar senha" width="16" height="16">
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <label class="small mb-1">Telefone *</label>
-                  <input type="text" name="telefone"
-                  [(ngModel)]="telefone"
-                  [ngClass]="{'input-error': camposComErro.includes('telefone')}"
-                  class="form-control py-2"
-                  placeholder="Digite seu telefone"
-                  required />
-                  <small class="text-danger" *ngIf="camposComErro.includes('telefone')">
-                    {{ obterMensagemErro('telefone') }}
-                  </small>
-                </div>
-
-                <div class="form-group">
-                  <label class="small mb-1">Cidade *</label>
-                  <input type="text" name="cidade"
-                  [(ngModel)]="cidade"
-                  [ngClass]="{'input-error': camposComErro.includes('cidade')}"
-                  class="form-control py-2"
-                  placeholder="Digite sua cidade"
-                  required />
-                  <small class="text-danger" *ngIf="camposComErro.includes('cidade')">
-                    {{ obterMensagemErro('cidade') }}
-                  </small>
-                </div>
-
-                <div class="form-group">
-                  <label class="small mb-1">Estado *</label>
-                  <input type="text" name="estado"
-                  [(ngModel)]="estado"
-                  [ngClass]="{'input-error': camposComErro.includes('estado')}"
-                  class="form-control py-2"
-                  placeholder="Digite seu Estado"
-                  required />
-                  <small class="text-danger" *ngIf="camposComErro.includes('estado')">
-                    {{ obterMensagemErro('estado') }}
-                  </small>
-                </div>
-
-                <div class="form-group">
-                  <label class="small mb-1">Data de Nascimento *</label>
-                  <input type="date" name="dataNascimento" [(ngModel)]="dataNascimento"
-                         [ngClass]="{'input-error': camposComErro.includes('dataNascimento')}"
-                         class="form-control py-2"
-                         placeholder="Selecione sua data de nascimento"
-                         required />
-                  <small class="text-danger" *ngIf="camposComErro.includes('dataNascimento')">
-                    {{ obterMensagemErro('dataNascimento') }}
                   </small>
                 </div>
 

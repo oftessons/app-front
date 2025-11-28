@@ -16,6 +16,7 @@ import { TemaDescricoes } from 'src/app/sistema/page-questoes/enums/tema-descric
 import { Tema } from 'src/app/sistema/page-questoes/enums/tema';
 import { Subtema } from 'src/app/sistema/page-questoes/enums/subtema';
 import { AuthService } from 'src/app/services/auth.service';
+import { AnimationOptions } from 'ngx-lottie';
 
 type FlashcardsState = 'question' | 'answer' | 'summary';
 
@@ -29,27 +30,33 @@ export class FlashcardModalComponent implements OnChanges {
   @Input() temaEstudo: string = '';
   @Input() subtemaEstudo?: Subtema;
   @Input() flashcards: Flashcard[] = [];
-  @Input() sessaoId?: number;
   @Input() startingIndex: number = 0;
+  @Input() sessaoId?: number;
   @Output() close = new EventEmitter<void>();
 
   estado_atual: FlashcardsState = 'question';
   public isDeleteModalVisible = false;
-  public currentCard: Flashcard | null = null;
 
-  private filaDeEstudo: Flashcard[] = [];
+  public currentCard: Flashcard | null = null;
+  private currentIndex: number = 0;
 
   public totalCardsEstudados: number = 0;
   public porcentagemAcerto: number = 0;
   private stats: { cardId: number; rating: number }[] = [];
 
+  private temaDescricoes = TemaDescricoes;
   private sessaoStartTime: number = 0;
   private cardStartTime: number = 0;
   public tempoDecorrido: string = '00 min 00 seg';
 
-  private currentSessaoId: number | undefined;
-  private temaDescricoes = TemaDescricoes;
-  private isLoadingNextCard = false;
+  isLoadingQuestionImage: boolean = true;
+  isLoadingAnswerImage: boolean = true;
+
+  animacaoTargetOptions: AnimationOptions = {
+    path: 'assets/animations/Target.json',
+    loop: false,
+    autoplay: true,
+  };
 
   constructor(
     private flashcardService: FlashcardService,
@@ -84,11 +91,9 @@ export class FlashcardModalComponent implements OnChanges {
     if (changes['isVisible'] && changes['isVisible'].currentValue === true) {
       this.iniciarSessao();
     }
+
     if (changes['isVisible'] && !changes['isVisible'].currentValue) {
       this.resetarModal();
-    }
-    if (changes['sessaoId']) {
-      this.currentSessaoId = changes['sessaoId'].currentValue;
     }
   }
 
@@ -96,38 +101,43 @@ export class FlashcardModalComponent implements OnChanges {
     if (this.flashcards && this.flashcards.length > 0) {
       this.stats = [];
       this.totalCardsEstudados = 0;
-      this.isLoadingNextCard = false;
-
-      const agora = Date.now();
-      this.sessaoStartTime = agora;
-      this.cardStartTime = agora;
+      this.sessaoStartTime = Date.now();
       this.tempoDecorrido = '00 min 00 seg';
-      this.currentSessaoId = this.sessaoId;
-
-      const start =
-        this.startingIndex && this.startingIndex < this.flashcards.length
-          ? this.startingIndex
-          : 0;
-
-      this.filaDeEstudo = this.flashcards.slice(start);
-
-      if (this.filaDeEstudo.length === 0) {
-        this.mostrarSumario();
-        return;
-      }
-
-      this.escolherCardDaFila(this.filaDeEstudo[0]);
+      this.currentIndex = this.startingIndex || 0;
+      this.carregarCardAtual();
     } else {
       this.onCloseClick();
+    }
+  }
+
+  private carregarCardAtual(): void {
+    if (this.currentIndex < this.flashcards.length) {
+      this.isLoadingQuestionImage = true;
+      this.isLoadingAnswerImage = true;
+
+      this.currentCard = this.flashcards[this.currentIndex];
+      this.cardStartTime = Date.now();
+      this.estado_atual = 'question';
+    } else {
+      this.mostrarSumario();
+    }
+  }
+
+  onImageLoad(type: 'question' | 'answer'): void {
+    if (type === 'question') {
+      this.isLoadingQuestionImage = false;
+    } else {
+      this.isLoadingAnswerImage = false;
     }
   }
 
   private resetarModal(): void {
     this.estado_atual = 'question';
     this.currentCard = null;
-    this.filaDeEstudo = [];
-    this.flashcards = [];
+    this.currentIndex = 0;
     this.isDeleteModalVisible = false;
+    this.isLoadingQuestionImage = true;
+    this.isLoadingAnswerImage = true;
   }
 
   onCloseClick(): void {
@@ -138,88 +148,47 @@ export class FlashcardModalComponent implements OnChanges {
     this.estado_atual = 'answer';
   }
 
-  proximoFlashcard(): void {
-    if (!this.currentCard || this.isLoadingNextCard) return;
+  rateAnswer(rating: number): void {
+    if (!this.currentCard) return;
 
-    this.isLoadingNextCard = true;
-
-    const tempoFim = Date.now();
-    const milissegundosGastos = tempoFim - this.cardStartTime;
-    const segundosGastos = milissegundosGastos / 1000;
-    const notaPadrao = 4;
+    const cardId = this.currentCard.id;
+    const tempoGasto = Date.now() - this.cardStartTime;
 
     const avaliacaoDTO: ReqAvaliarFlashcardDTO = {
-      id: this.currentCard.id,
-      nota: notaPadrao,
-      sessaoId: this.currentSessaoId,
-      tempoAtivoMilisegundo: milissegundosGastos,
+      id: cardId,
+      nota: rating,
+      sessaoId: this.sessaoId,
+      tempoAtivoMilisegundo: tempoGasto,
     };
 
     this.flashcardService.avaliarFlashcard(avaliacaoDTO).subscribe({
-      next: () => {},
-      error: (err: any) => console.error(err),
+      next: (res) => {},
+      error: (err) => {
+        console.error('Erro ao salvar avaliação', err);
+      },
     });
 
-    this.stats.push({ cardId: this.currentCard.id, rating: notaPadrao });
+    this.stats.push({ cardId: cardId, rating: rating });
     this.totalCardsEstudados = this.stats.length;
 
-    this.removerCardDaFila(this.currentCard.id);
-
-    if (this.filaDeEstudo.length === 0) {
-      this.mostrarSumario();
-      return;
-    }
-
-    const sequenciaPrioridade = this.gerarSequenciaPrioridade(segundosGastos);
-
-    this.buscarProximoNaListaLocal(sequenciaPrioridade);
+    this.currentIndex++;
+    this.carregarCardAtual();
   }
 
-  private gerarSequenciaPrioridade(segundos: number): (string | undefined)[] {
-    if (segundos < 30) {
-      return ['DIFICIL', 'MEDIO', 'FACIL', undefined];
-    } else if (segundos < 60) {
-      return ['MEDIO', 'DIFICIL', 'FACIL', undefined];
-    } else {
-      return ['FACIL', 'MEDIO', 'DIFICIL', undefined];
-    }
-  }
+  private mostrarSumario(): void {
+    const endTime = Date.now();
+    const durationInSeconds = Math.floor(
+      (endTime - this.sessaoStartTime) / 1000
+    );
+    this.tempoDecorrido = this.formatarTempo(durationInSeconds);
 
-  private buscarProximoNaListaLocal(prioridades: (string | undefined)[]): void {
-    let proximoCard: Flashcard | undefined;
+    const somaNotas = this.stats.reduce((acc, stat) => acc + stat.rating, 0);
+    const mediaNotas =
+      this.stats.length > 0 ? somaNotas / this.stats.length : 0;
+    this.porcentagemAcerto = (mediaNotas / 5) * 100;
 
-    for (const prioridade of prioridades) {
-      if (prioridade === undefined) {
-        proximoCard = this.filaDeEstudo[0];
-      } else {
-        proximoCard = this.filaDeEstudo.find(
-          (c) => c.dificuldade?.toUpperCase() === prioridade
-        );
-      }
-
-      if (proximoCard) break;
-    }
-
-    if (!proximoCard && this.filaDeEstudo.length > 0) {
-      proximoCard = this.filaDeEstudo[0];
-    }
-
-    if (proximoCard) {
-      this.escolherCardDaFila(proximoCard);
-    } else {
-      this.mostrarSumario();
-    }
-  }
-
-  private escolherCardDaFila(card: Flashcard): void {
-    this.currentCard = card;
-    this.estado_atual = 'question';
-    this.isLoadingNextCard = false;
-    this.cardStartTime = Date.now();
-  }
-
-  private removerCardDaFila(id: number): void {
-    this.filaDeEstudo = this.filaDeEstudo.filter((c) => c.id !== id);
+    this.estado_atual = 'summary';
+    this.currentCard = null;
   }
 
   openDeleteModal(): void {
@@ -231,29 +200,10 @@ export class FlashcardModalComponent implements OnChanges {
   }
 
   onDeleteConfirm(): void {
-    this.isDeleteModalVisible = false;
-    this.onCloseClick();
-  }
-
-  private mostrarSumario(): void {
-    const endTime = Date.now();
-    const durationInSeconds = Math.floor(
-      (endTime - this.sessaoStartTime) / 1000
-    );
-    this.tempoDecorrido = this.formatarTempo(durationInSeconds);
-
-    if (this.currentSessaoId) {
-      this.flashcardService.finalizarSessao(this.currentSessaoId).subscribe({
-        next: () => console.log('Sessão finalizada.'),
-        error: (err: any) => {
-          if (err.status !== 404) console.error(err);
-        },
-      });
+    if (this.currentCard) {
+      this.isDeleteModalVisible = false;
+      this.onCloseClick();
     }
-
-    this.porcentagemAcerto = 100;
-    this.estado_atual = 'summary';
-    this.isLoadingNextCard = false;
   }
 
   private formatarTempo(totalSegundos: number): string {
@@ -261,10 +211,8 @@ export class FlashcardModalComponent implements OnChanges {
     const segundosRestantes = totalSegundos % 3600;
     const minutos = Math.floor(segundosRestantes / 60);
     const segundos = segundosRestantes % 60;
-
     const minString = minutos.toString().padStart(2, '0');
     const segString = segundos.toString().padStart(2, '0');
-
     if (horas > 0) {
       const horaString = horas.toString().padStart(2, '0');
       return `${horaString} h ${minString} min ${segString} seg`;

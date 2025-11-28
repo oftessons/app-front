@@ -170,6 +170,33 @@
   cursor: grabbing;
 }
 
+.new-conversation-btn {
+  position: absolute;
+  top: 10px;
+  left: 15px;
+  background: #ffffffab;
+  border: none;
+  border-radius: 8px;
+  color: #000000;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  height: 32px;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 60;
+}
+
+.new-conversation-btn:hover {
+  background: #ffffffd1;
+  transform: scale(1.05);
+}
+
+.new-conversation-btn:active {
+  transform: scale(0.95);
+}
+
 .close-btn {
   position: absolute;
   top: 5px;
@@ -509,14 +536,6 @@ button:disabled .chatbot-logo {
   border-radius: 15px;
   word-wrap: break-word;
   overflow: visible;
-}
-
-.message:has(table) {
-  max-width: 95%;
-}
-
-.bot-message:has(table) {
-  max-width: 95%;
 }
 
 .message-header {

@@ -11,10 +11,18 @@
           </h2>
         </div>
 
-        <button *ngIf="questaoDTO.id" type="button" class="btn btn-secondary" (click)="irParaProximaQuestao()"
-          [disabled]="limiteQuestoes">
-          Próxima questão
-        </button>
+        <div class="btn-container">
+          <button type="button" class="btn btn-secondary" *ngIf="questaoDTO.id" (click)="voltarQuestao()"
+                  [disabled]="loading">
+                  <i class="fa fa-arrow-left"></i>
+                  Voltar questão
+          </button>
+          <button *ngIf="questaoDTO.id" type="button" class="btn btn-secondary" (click)="irParaProximaQuestao()"
+            [disabled]="limiteQuestoes">
+            Próxima questão
+            <i class="fa fa-arrow-right"></i>
+          </button>
+        </div>
       </div>
       <form class="form-cad" #questaoForm="ngForm" (ngSubmit)="onSubmit()">
         <div class="row" *ngIf="questaoDTO.id">
@@ -889,10 +897,21 @@
 
           <div class="d-flex justify-content-between">
             <div class="d-flex justify-content-between">
-              <button type="button" class="btn btn-secondary" *ngIf="questaoDTO.id" (click)="voltarQuestao()"
-                [disabled]="loading">
-                Voltar questão
-              </button>
+              <div class="btn-container">
+                <button type="button" class="btn btn-secondary" *ngIf="questaoDTO.id" (click)="voltarQuestao()"
+                        [disabled]="loading">
+                        <i class="fa fa-arrow-left"></i>
+                        Voltar questão
+                </button>
+                <div class="id-questao">
+                  <span>ID da questão: {{ questaoDTO.id }}</span>
+                </div>
+                <button *ngIf="questaoDTO.id" type="button" class="btn btn-secondary" (click)="irParaProximaQuestao()"
+                  [disabled]="limiteQuestoes">
+                  Próxima questão
+                  <i class="fa fa-arrow-right"></i>
+                </button>
+              </div>
               <button type="submit" class="btn btn-primary" *ngIf="questaoDTO.id" [disabled]="loading">
                 <span *ngIf="loading" class="spinner-border spinner-border-sm"></span>
                 Atualizar

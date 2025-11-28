@@ -54,7 +54,7 @@
 .tema-title {
   font-size: 16px;
   font-weight: 600;
-  color: #e3e3e3;
+  color: #e3e3e3 !important;
   margin: 0;
 }
 
@@ -72,8 +72,6 @@ p {
   font-size: 14px;
   color: #ffffff;
 }
-
-/* Removido rating-buttons e rating-text */
 
 .rating-buttons {
   display: flex;
@@ -94,6 +92,7 @@ p {
   border: 0px;
   font-size: 16px;
   font-weight: bold;
+  cursor: pointer;
 }
 
 .rating-1 {
@@ -116,6 +115,17 @@ p {
   background-color: #005914;
 }
 
+.summary-active {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--bg-sidebar) !important;
+  border: 1px solid var(--border-color);
+  max-width: 500px;
+  width: 100%;
+}
+
 .porcentagem-section {
   display: flex;
   flex-direction: column;
@@ -123,9 +133,10 @@ p {
   align-items: center;
 }
 
-.parabens {
+.summary-active .parabens {
   font-size: 24px;
   font-weight: bold;
+  color: var(--text-color) !important;
 }
 
 .summary-text {
@@ -146,7 +157,8 @@ p {
   display: flex;
   flex-direction: column;
   padding: 16px;
-  background-color: #12151e;
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-color);
   width: 160px;
   height: 117px;
   justify-content: center;
@@ -158,22 +170,16 @@ p {
 .stat-value {
   font-size: 14px;
   font-weight: 600;
-  color: #ffffff;
+  color: var(--text-color);
 }
 
 .stat-label {
   font-size: 12px;
-  color: var(--text-color);
+  color: var(--text-color-secondary) !important;
 }
 
-.summary-active {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  background: #010015;
-  max-width: 500px;
-  width: 100%;
+.stat-card img {
+  filter: invert(1) brightness(0.2);
 }
 
 .summary-btn {
@@ -181,15 +187,48 @@ p {
   padding: 6px 8px;
   border-radius: 8px;
   font-size: 16px;
-  color: #f6f8fe;
-  border: 1px solid #253c66;
-  background-color: transparent;
+  color: #e3e3e3;
+  border: 1px solid var(--border-color);
+  background-color: #3b5fa0;
   user-select: none;
   text-decoration: none;
   transition: background-color 0.2s ease;
+  cursor: pointer;
 }
 
 .summary-btn:hover {
+  background-color: #234481;
+}
+
+:host-context(body.dark-mode) .summary-active {
+  background: #010015 !important;
+  border: 1px solid #3a487a;
+}
+
+:host-context(body.dark-mode) .stat-card {
+  background-color: #12151e;
+  border: none;
+}
+
+:host-context(body.dark-mode) .summary-active .parabens,
+:host-context(body.dark-mode) .stat-value {
+  color: #e3e3e3 !important;
+}
+
+:host-context(body.dark-mode) .stat-label {
+  color: #e3e3e3 !important;
+}
+
+:host-context(body.dark-mode) .stat-card img {
+  filter: none;
+}
+
+:host-context(body.dark-mode) .summary-btn {
+  color: #f6f8fe;
+  border: 1px solid #253c66;
+}
+
+:host-context(body.dark-mode) .summary-btn:hover {
   background-color: #040322;
 }
 
@@ -214,7 +253,7 @@ p {
 
 .button-next {
   background-color: #3b5fa0;
-  margin-top: 20px; 
+  margin-top: 20px;
 }
 
 .button-next:hover {
@@ -222,9 +261,9 @@ p {
 }
 
 .next-button-section {
-    width: 100%;
-    display: flex;
-    justify-content: center;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 .button-fechar {
@@ -273,7 +312,7 @@ p {
   justify-content: center;
 }
 
-.editar-button{
+.editar-button {
   cursor: pointer;
 }
 
@@ -292,22 +331,41 @@ p {
   padding: 8px;
 }
 
-/* NOVOS ESTILOS DE IMAGEM */
 .image-display-wrapper {
-    width: 100%;
-    max-height: 250px;
-    margin: 15px 0 10px 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    border-radius: 8px;
+  width: 100%;
+  max-height: 250px;
+  margin: 15px 0 10px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  border-radius: 8px;
+  min-height: 150px;
 }
 
-.question-image-modal, .answer-image-modal {
-    max-width: 90%;
-    max-height: 250px;
-    object-fit: contain;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+.question-image-modal,
+.answer-image-modal {
+  max-width: 90%;
+  max-height: 250px;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.descricao {
+  color: var(--text-color);
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-left-color: #3b5fa0;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
