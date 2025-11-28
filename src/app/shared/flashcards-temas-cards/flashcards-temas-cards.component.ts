@@ -1,5 +1,4 @@
-import { Component, Input } from '@angular/core';
-
+import { Component, Input, Output, EventEmitter } from '@angular/core'; // Adicione Output e EventEmitter
 
 @Component({
   selector: 'app-flashcards-temas-cards',
@@ -9,11 +8,9 @@ import { Component, Input } from '@angular/core';
 export class FlashcardsTemasCardsComponent {
   @Input() tema: string = 'Tema';
   @Input() numeroFlashcards: number = 0;
-  @Input() caminho: string = '#';
- 
+  @Input() caminho?: string | null;
+
+  @Output() acaoEstudar = new EventEmitter<void>(); 
+
   constructor() { }
-
-  ngOnInit(): void {
-  }
-
 }

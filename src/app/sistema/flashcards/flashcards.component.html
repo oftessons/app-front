@@ -15,6 +15,14 @@
 
     <div class="cards-grid" *ngIf="!isLoading">
       <app-flashcards-temas-cards
+        [tema]="'Geral'"
+        [numeroFlashcards]="totalGeral"
+        [caminho]="null"
+        (acaoEstudar)="estudarGeral()"
+      >
+      </app-flashcards-temas-cards>
+
+      <app-flashcards-temas-cards
         *ngFor="let info of listaDeTemas"
         [tema]="info.titulo"
         [numeroFlashcards]="info.qtdFlashcards"
@@ -23,4 +31,14 @@
       </app-flashcards-temas-cards>
     </div>
   </div>
+
+  <app-flashcard-modal
+    [isVisible]="isModalVisible"
+    [flashcards]="flashcardsEstudo"
+    [temaEstudo]="'Geral - Todos os Temas'"
+    [sessaoId]="sessaoId"
+    [startingIndex]="0"
+    (close)="fecharModal()"
+  >
+  </app-flashcard-modal>
 </div>
