@@ -15,13 +15,8 @@ import { CardPlanoComponent } from '../../shared/card-plano/card-plano.component
 })
 export class PaginaInicialComponent implements OnInit {
   password: string = '';
-  confirmPassword: string = '';
   nome: string = '';
   email: string = '';
-  telefone: string = '';
-  cidade: string = '';
-  estado: string = '';
-  dataNascimento:Date | null = null;
   tipoDeEstudante: string = '';
   consentimento: boolean = false;
 
@@ -42,8 +37,7 @@ export class PaginaInicialComponent implements OnInit {
   };
 
   passwordVisible: { [key: string]: boolean } = {
-    password: false,
-    confirmPassword: false
+    password: false
   };
 
   registerForm!: FormGroup;
@@ -214,20 +208,13 @@ export class PaginaInicialComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    localStorage.removeItem('access_token');
+    //localStorage.removeItem('access_token');
     this.checkActiveSection();
     this.registerForm = this.formBuilder.group({
       nome: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
-      telefone: ['', Validators.required],
-      cidade: ['', Validators.required],
-      dataNascimento: [null, Validators.required],
-      estado: ['', Validators.required],
       tipoDeEstudante: ['RESIDENTE', Validators.required],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', Validators.required]
-    }, {
-      validator: this.passwordMatchValidator
+      password: ['', [Validators.required, Validators.minLength(6)]]
     });
 
     this.checkScreenSize();
@@ -245,17 +232,7 @@ export class PaginaInicialComponent implements OnInit {
     this.stopAutoPlay();
   }
 
-  passwordMatchValidator(form: FormGroup) {
-    const password = form.get('password')?.value;
-    const confirmPassword = form.get('confirmPassword')?.value;
 
-    if (password !== confirmPassword) {
-      form.get('confirmPassword')?.setErrors({ passwordMismatch: true });
-      return { passwordMismatch: true };
-    }
-
-    return null;
-  }
 
   cadastrar() {
     this.errors = [];
@@ -264,10 +241,6 @@ export class PaginaInicialComponent implements OnInit {
 
     this.validarCampoObrigatorio('nome', 'O campo nome é obrigatório');
     this.validarCampoObrigatorio('email', 'O campo e-mail é obrigatório');
-    this.validarCampoObrigatorio('telefone', 'O campo telefone é obrigatório');
-    this.validarCampoObrigatorio('dataNascimento', 'O campo data de nascimento é obrigatório');
-    this.validarCampoObrigatorio('cidade', 'O campo cidade é obrigatório');
-    this.validarCampoObrigatorio('estado', 'O campo estado é obrigatório');
 
     if (!this.tipoDeEstudante) {
       this.adicionarErro('tipoDeEstudante', 'Selecione o tipo de usuário');
@@ -285,10 +258,6 @@ export class PaginaInicialComponent implements OnInit {
       this.adicionarErro('password', 'A senha deve conter pelo menos um caractere especial');
     }
 
-    if (this.password !== this.confirmPassword) {
-      this.adicionarErro('confirmPassword', 'As senhas não coincidem');
-    }
-
     if (this.camposComErro.length > 0) {
       return;
     }
@@ -297,11 +266,6 @@ export class PaginaInicialComponent implements OnInit {
     usuario.password = this.password;
     usuario.email = this.email;
     usuario.nome = this.nome;
-    usuario.confirmPassword = this.confirmPassword;
-    usuario.telefone = this.telefone;
-    usuario.dataNascimento = this.dataNascimento;
-    usuario.cidade = this.cidade;
-    usuario.estado = this.estado;
     usuario.tipoDeEstudante = this.tipoDeEstudante;
 
     this.authService
@@ -312,11 +276,7 @@ export class PaginaInicialComponent implements OnInit {
           this.password = '';
           this.email = '';
           this.nome = '';
-          this.confirmPassword = '';
-          this.dataNascimento = null;
-          this.telefone = '';
-          this.cidade = '';
-          this.estado = '';
+          this.tipoDeEstudante = '';
           this.errors = [];
 
           setTimeout(() => {

@@ -15,6 +15,7 @@ export class InicioComponent implements OnInit {
   mostrarMensagemFlashcard: boolean = false;
   linkFlashcard: string = 'www.google.com';
   possuiPermissao: boolean = true;
+  mostrarAvisoCadastro: boolean = false;
 
   opcoesFiltro: string[] = ['Diário', 'Semanal', 'Mensal', 'Anual'];
   filtroSelecionado: string = 'Semanal';
@@ -36,7 +37,7 @@ export class InicioComponent implements OnInit {
   dataTermino: string = '';
   assuntosSelecionados: string[] = [];
   assuntosDisponiveis: string[] = [];
-  
+
   constructor(
     private authService: AuthService,
     private themeService: ThemeService,
@@ -52,6 +53,8 @@ export class InicioComponent implements OnInit {
     this.obterNomeUsuario();
     this.carregarDadosOfensiva();
     this.carregarAssuntos();
+    this.verificarCadastroIncompleto();
+    this.verificarCompletarCadastro();
   }
 
   obterNomeUsuario(): void {
@@ -93,7 +96,7 @@ export class InicioComponent implements OnInit {
 
   carregarAssuntos() {
     this.assuntosDisponiveis = Object.values(TemaDescricoes);
-    console.log('Assuntos disponíveis:', this.assuntosDisponiveis);
+    // console.log('Assuntos disponíveis:', this.assuntosDisponiveis);
   }
 
   onAssuntosSelecionados(event: any): void {
@@ -139,9 +142,9 @@ export class InicioComponent implements OnInit {
         console.log(dados);
         this.dadosOfensiva = dados;
         this.isLoadingOfensiva = false;
-        
+
         if (dados.ofensivaAtualizadaHoje) {
-           this.mostrarModalOfensiva = true;
+          this.mostrarModalOfensiva = true;
         }
       },
       error: (err) => {
@@ -164,7 +167,7 @@ export class InicioComponent implements OnInit {
   redirecionarFlashcard() {
     // this.Router.navigate(['/usuario/flashcards']);
   }
-  
+
   exibirMensagem(tipo: string): void {
     if (tipo === 'aulas') {
       this.mostrarMensagemAulas = true;
@@ -181,5 +184,43 @@ export class InicioComponent implements OnInit {
 
   isDarkMode(): boolean {
     return this.themeService.isDarkMode();
+  }
+
+  verificarCadastroIncompleto(): void {
+    //onst precisaCompletar = localStorage.getItem('precisa_completar_cadastro');
+    const cadastroCompleto = localStorage.getItem('cadastro_completo');
+
+
+
+    if (cadastroCompleto !== 'true') {
+      this.mostrarAvisoCadastro = true;
+      // console.log('Usuário precisa completar o cadastro.');
+    }
+  }
+
+  irParaPerfil(): void {
+    this.Router.navigate(['/usuario/minha-conta']);
+  }
+
+  fecharAvisoCadastro(): void {
+    this.mostrarAvisoCadastro = false;
+  }
+
+  private verificarCompletarCadastro(): void {
+    // const cadastroCompleto = localStorage.getItem('cadastro_completo');
+    // if (cadastroCompleto === 'true') {
+    //   return;
+    // }
+    this.authService.verificarCadastroCompleto().subscribe(isCompleto => {
+      localStorage.setItem('cadastro_completo', isCompleto.cadastroCompleto.toString());
+
+      if (!isCompleto.cadastroCompleto) {
+        this.mostrarAvisoCadastro = true;
+        return;
+      }
+
+      this.mostrarAvisoCadastro = false;
+
+    });
   }
 }

@@ -5,11 +5,11 @@ export class Usuario {
   fotoUrl!: any;
   password!: string;
   email!: string;
-  telefone!: string;
-  cidade!: string;
+  telefone?: string;
+  cidade?: string;
   planoId!: any;
   stripeCustomerId!: any;
-  estado!: string;
+  estado?: string;
   nome!: string;
   confirmPassword!: string;
   tipoUsuario!: string;
@@ -17,6 +17,7 @@ export class Usuario {
   bolsaAssinatura!: boolean;
   diasDeTeste!: number;
   dataInicioBolsa?: Date;
-  dataNascimento!: Date | null;
+  dataNascimento?: Date | null;
   tipoDeEstudante!: string;
+  perfilCompleto!: boolean;
 }
