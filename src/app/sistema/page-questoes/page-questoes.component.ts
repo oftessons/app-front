@@ -113,6 +113,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   anosComPremium: any[] = [];
   tiposDeProvaComPremium: any[] = [];
   listaDeIds: number[] = [];
+  mostrarFiltroCacheado: boolean = true;
   private questaoCache = new Map<number, Questao>();
 
   jaRespondeu: boolean = false;
@@ -252,6 +253,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   }
 
   ngOnInit(): void {
+
     if (localStorage.getItem('respostasSalvas')) {
       this.recuperarRespostasSalvasLocalStorage();
     }
@@ -265,7 +267,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     const navigationState = history.state;
     const filtroStateJson = localStorage.getItem('questoesFiltroState');
 
-    if (navigationState && navigationState.filtroId && navigationState.revisandoFiltro) {
+    if (navigationState?.filtroId && navigationState.revisandoFiltro) {
       this.revisandoFiltroSalvo = true;
       this.mostrarFiltros = false;
       this.carregarFiltroSalvo(navigationState.filtroId);
@@ -303,6 +305,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   }
 
   private restaurarEstadoDoLocalStorage(filtroStateJson: string): void {
+    this.mostrarFiltroCacheado = false;
     const filtroState = JSON.parse(filtroStateJson);
     localStorage.removeItem('questoesFiltroState');
 
@@ -375,7 +378,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       this.questoesService.buscarQuestaoPorId(this.usuarioId, idDaQuestao).subscribe({
         next: (questaoCarregada) => {
           if (questaoCarregada) {
-            this.questaoCache.set(idDaQuestao, questaoCarregada); 
+            this.questaoCache.set(idDaQuestao, questaoCarregada);
             this.processarQuestaoCarregada(questaoCarregada);
           } else {
             this.message = 'Questão não encontrada.';
@@ -383,7 +386,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
           }
         },
         error: (err) => {
-          // ... seu tratamento de erro
           this.carregando = false;
         }
       });
@@ -1025,13 +1027,10 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
           if (todasRespondidas) {
             proximaPaginaNaoRespondida = this.listaDeIds.length > 0 ? this.listaDeIds.length - 1 : 0; // <-- MUDANÇA
           }
-          // --- FIM DA LÓGICA CORRIGIDA ---
 
           this.paginaAtual = proximaPaginaNaoRespondida;
 
-          // Agora, carregue a questão da página que encontramos
           this.carregarQuestaoDaPagina();
-          // O 'this.carregando = false' será feito dentro de carregarQuestaoDaPagina
         },
         error: (error) => {
           console.error('Erro ao carregar progresso do filtro:', error);
@@ -1555,6 +1554,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
         palavraChave: this.palavraChave,
         questaoId: this.questaoAtual.id,
         paginaAtual: this.paginaAtual,
+        multiSelectQuestoesComentadas: this.multiSelectQuestoesComentadas,
       };
 
       localStorage.setItem('questoesFiltroState', JSON.stringify(filtroState));
@@ -1694,6 +1694,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       (questoes: Questao[]) => {
         if (questoes.length > 0) {
           this.toggleFiltros();
+          this.mostrarFiltroCacheado = false;
           this.questoes = questoes;
           this.numeroDeQuestoes = questoes.length;
 
@@ -1855,7 +1856,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   }
 
   toggleBalloon() {
-    if(this.mostrarBalloon == true){
+    if (this.mostrarBalloon) {
       this.mostrarBalloon = false;
     } else {
       this.mostrarBalloon = true;
