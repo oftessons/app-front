@@ -1,10 +1,21 @@
 <div class="modal" *ngIf="isVisible">
   <ng-container *ngIf="!isDeleteModalVisible">
     <div class="modal-content-wrapper">
-      <div class="main-container" [ngClass]="{ 'summary-active': estado_atual === 'summary' }">
-        <img *ngIf="estado_atual !== 'summary'" class="modal-background-image" src="../../../assets/imagens/modal-background.png" alt="Fundo do modal" />
-        <div class="modal-conteudo" [ngSwitch]="estado_atual" [ngClass]="{ 'summary-active': estado_atual === 'summary' }">
-          
+      <div
+        class="main-container"
+        [ngClass]="{ 'summary-active': estado_atual === 'summary' }"
+      >
+        <img
+          *ngIf="estado_atual !== 'summary'"
+          class="modal-background-image"
+          src="../../../assets/imagens/modal-background.png"
+          alt="Fundo do modal"
+        />
+        <div
+          class="modal-conteudo"
+          [ngSwitch]="estado_atual"
+          [ngClass]="{ 'summary-active': estado_atual === 'summary' }"
+        >
           <ng-container *ngSwitchCase="'question'">
             <div class="header-content">
               <h2 class="tema-title">{{ getTemaNome() }}</h2>
@@ -12,22 +23,40 @@
                 <a (click)="editarFlashcard()" class="editar-button">
                   <img src="../../../assets/Icons/lapis.svg" />
                 </a>
-                <button type="button" class="deletar-button" (click)="openDeleteModal()">
-                  <img src="../../../assets/Icons/lixeira-flashcards.svg" alt="Excluir Flashcard" />
+                <button
+                  type="button"
+                  class="deletar-button"
+                  (click)="openDeleteModal()"
+                >
+                  <img
+                    src="../../../assets/Icons/lixeira-flashcards.svg"
+                    alt="Excluir Flashcard"
+                  />
                 </button>
               </div>
             </div>
 
-            <div *ngIf="currentCard?.fotoUrlPergunta" class="image-display-wrapper">
+            <div
+              *ngIf="currentCard?.fotoUrlPergunta"
+              class="image-display-wrapper"
+            >
               <div *ngIf="isLoadingQuestionImage" class="loading-spinner"></div>
-              <img [src]="currentCard?.fotoUrlPergunta" alt="Imagem da Pergunta" class="question-image-modal" (load)="onImageLoad('question')" [hidden]="isLoadingQuestionImage" />
+              <img
+                [src]="currentCard?.fotoUrlPergunta"
+                alt="Imagem da Pergunta"
+                class="question-image-modal"
+                (load)="onImageLoad('question')"
+                [hidden]="isLoadingQuestionImage"
+              />
             </div>
 
             <div>
               <h2 class="resposta-title">Pergunta</h2>
               <div [innerHTML]="currentCard?.pergunta" class="text"></div>
             </div>
-            <a class="button-resposta" (click)="showAnswer()">Mostrar Resposta</a>
+            <a class="button-resposta" (click)="showAnswer()"
+              >Mostrar Resposta</a
+            >
           </ng-container>
 
           <ng-container *ngSwitchCase="'answer'">
@@ -35,9 +64,18 @@
               <h2 class="tema-title">{{ getTemaNome() }}</h2>
             </div>
             <div class="answer-section">
-              <div *ngIf="currentCard?.fotoUrlResposta" class="image-display-wrapper">
+              <div
+                *ngIf="currentCard?.fotoUrlResposta"
+                class="image-display-wrapper"
+              >
                 <div *ngIf="isLoadingAnswerImage" class="loading-spinner"></div>
-                <img [src]="currentCard?.fotoUrlResposta" alt="Imagem da Resposta" class="question-image-modal" (load)="onImageLoad('answer')" [hidden]="isLoadingAnswerImage" />
+                <img
+                  [src]="currentCard?.fotoUrlResposta"
+                  alt="Imagem da Resposta"
+                  class="question-image-modal"
+                  (load)="onImageLoad('answer')"
+                  [hidden]="isLoadingAnswerImage"
+                />
               </div>
               <h2 class="resposta-title">Resposta</h2>
               <div class="text" [innerHTML]="currentCard?.resposta"></div>
@@ -46,11 +84,21 @@
               <p class="rating-text">O quanto você sabia dessa questão?</p>
               <div class="rating-buttons">
                 <span class="rating-values-text">Nada</span>
-                <button class="rating-btn rating-1" (click)="rateAnswer(1)">1</button>
-                <button class="rating-btn rating-2" (click)="rateAnswer(2)">2</button>
-                <button class="rating-btn rating-3" (click)="rateAnswer(3)">3</button>
-                <button class="rating-btn rating-4" (click)="rateAnswer(4)">4</button>
-                <button class="rating-btn rating-5" (click)="rateAnswer(5)">5</button>
+                <button class="rating-btn rating-1" (click)="rateAnswer(1)">
+                  1
+                </button>
+                <button class="rating-btn rating-2" (click)="rateAnswer(2)">
+                  2
+                </button>
+                <button class="rating-btn rating-3" (click)="rateAnswer(3)">
+                  3
+                </button>
+                <button class="rating-btn rating-4" (click)="rateAnswer(4)">
+                  4
+                </button>
+                <button class="rating-btn rating-5" (click)="rateAnswer(5)">
+                  5
+                </button>
                 <span class="rating-values-text">Muito</span>
               </div>
             </div>
@@ -58,6 +106,11 @@
 
           <ng-container *ngSwitchCase="'summary'" class="summary">
             <div class="porcentagem-section">
+              <ng-lottie
+                [options]="animacaoTargetOptions"
+                [width]="'100px'"
+              >
+              </ng-lottie>
               <h2 class="parabens">Parabéns!</h2>
               <p class="descricao">Você concluiu todos os Flashcards!</p>
             </div>
@@ -68,14 +121,18 @@
                 <span class="stat-label">Tempo</span>
               </div>
               <div class="stat-card">
-                <img src="../../../assets/Icons/flashcards-summary.svg" alt="" />
+                <img
+                  src="../../../assets/Icons/flashcards-summary.svg"
+                  alt=""
+                />
                 <span class="stat-value">{{ totalCardsEstudados }}</span>
                 <span class="stat-label">Cards Estudados</span>
               </div>
             </div>
-            <button class="summary-btn" (click)="onCloseClick()">Voltar para o início</button>
+            <button class="summary-btn" (click)="onCloseClick()">
+              Voltar para o início
+            </button>
           </ng-container>
-
         </div>
       </div>
       <div class="button-fechar" *ngIf="estado_atual !== 'summary'">
@@ -84,6 +141,11 @@
     </div>
   </ng-container>
 
-  <app-deletar-flashcard-modal *ngIf="isDeleteModalVisible" [cardId]="currentCard!.id" (close)="onDeleteModalClose()" (finalClose)="onDeleteConfirm()">
+  <app-deletar-flashcard-modal
+    *ngIf="isDeleteModalVisible"
+    [cardId]="currentCard!.id"
+    (close)="onDeleteModalClose()"
+    (finalClose)="onDeleteConfirm()"
+  >
   </app-deletar-flashcard-modal>
 </div>

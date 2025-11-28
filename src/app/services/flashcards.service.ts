@@ -85,12 +85,16 @@ export class FlashcardService {
   }
 
   getFlashcardsParaEstudar(
-    tema: string,
+    tema?: string,
     subtema?: string,
     dificuldade?: string,
     incluirConcluidos: boolean = false
   ): Observable<SessaoEstudoDTO> {
-    let params = new HttpParams().set('tema', tema.toUpperCase());
+    let params = new HttpParams();
+
+    if (tema) {
+      params = params.set('tema', tema.toUpperCase());
+    }
 
     if (subtema) {
       params = params.set('subtema', subtema.toUpperCase());

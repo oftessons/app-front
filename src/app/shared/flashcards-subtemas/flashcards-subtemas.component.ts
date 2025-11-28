@@ -49,8 +49,6 @@ export class FlashcardsSubtemasComponent implements OnInit {
         localStorage.getItem('permissao') || localStorage.getItem('role') || '';
     }
 
-    console.log('Permissão final processada:', permissaoEncontrada);
-
     if (permissaoEncontrada) {
       const p = permissaoEncontrada.toUpperCase();
       this.podeImportar = p.includes('ADMIN') || p.includes('PROFESSOR');

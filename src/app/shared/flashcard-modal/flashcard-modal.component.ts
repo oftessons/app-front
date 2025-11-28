@@ -16,6 +16,7 @@ import { TemaDescricoes } from 'src/app/sistema/page-questoes/enums/tema-descric
 import { Tema } from 'src/app/sistema/page-questoes/enums/tema';
 import { Subtema } from 'src/app/sistema/page-questoes/enums/subtema';
 import { AuthService } from 'src/app/services/auth.service';
+import { AnimationOptions } from 'ngx-lottie';
 
 type FlashcardsState = 'question' | 'answer' | 'summary';
 
@@ -50,6 +51,12 @@ export class FlashcardModalComponent implements OnChanges {
 
   isLoadingQuestionImage: boolean = true;
   isLoadingAnswerImage: boolean = true;
+
+  animacaoTargetOptions: AnimationOptions = {
+    path: 'assets/animations/Target.json',
+    loop: false,
+    autoplay: true,
+  };
 
   constructor(
     private flashcardService: FlashcardService,
@@ -107,7 +114,7 @@ export class FlashcardModalComponent implements OnChanges {
     if (this.currentIndex < this.flashcards.length) {
       this.isLoadingQuestionImage = true;
       this.isLoadingAnswerImage = true;
-      
+
       this.currentCard = this.flashcards[this.currentIndex];
       this.cardStartTime = Date.now();
       this.estado_atual = 'question';
