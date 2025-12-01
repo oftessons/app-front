@@ -67,6 +67,9 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
   modoEdicao = false;
   salvando = false;
 
+  removerFotoPergunta = false;
+  removerFotoResposta = false;
+
   exibirModalStatus = false;
   statusModal: 'success' | 'error' | 'validation' = 'success';
   camposFaltando: string[] = [];
@@ -141,7 +144,7 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
         card.dificuldade
       );
 
-if (card.tema) {
+      if (card.tema) {
         const t = this.canon(card.tema);
         if (card.subtema) {
           const s = this.canon(card.subtema);
@@ -152,6 +155,9 @@ if (card.tema) {
       } else {
         this.assuntoSelecionado = null;
       }
+
+      this.removerFotoPergunta = false;
+      this.removerFotoResposta = false;
     }
   }
 
@@ -204,8 +210,10 @@ if (card.tema) {
 
       if (fieldKey === 'fotoPergunta') {
         this.fotoPerguntaFile = file;
+        this.removerFotoPergunta = false;
       } else if (fieldKey === 'fotoResposta') {
         this.fotoRespostaFile = file;
+        this.removerFotoResposta = false;
       }
 
       const reader = new FileReader();
@@ -234,8 +242,10 @@ if (card.tema) {
     event.stopPropagation();
     if (fieldKey === 'fotoPergunta') {
       this.fotoPerguntaFile = null;
+      this.removerFotoPergunta = true;
     } else if (fieldKey === 'fotoResposta') {
       this.fotoRespostaFile = null;
+      this.removerFotoResposta = true;
     }
     this.fotoPreviews[fieldKey] = null;
     const fileInput = document.getElementById(fieldKey) as HTMLInputElement;
@@ -341,7 +351,9 @@ if (card.tema) {
               this.flashcardParaEditar.id,
               dto,
               this.fotoPerguntaFile || undefined,
-              this.fotoRespostaFile || undefined
+              this.fotoRespostaFile || undefined,
+              this.removerFotoPergunta,
+              this.removerFotoResposta
             )
             .subscribe({
               next: () => {
