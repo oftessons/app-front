@@ -1,4 +1,9 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectorRef,
+  AfterViewInit,
+} from '@angular/core';
 import { Tema } from '../page-questoes/enums/tema';
 import { Subtema } from '../page-questoes/enums/subtema';
 import { temasESubtemas } from '../page-questoes/enums/map-tema-subtema';
@@ -19,7 +24,7 @@ import { AuthService } from 'src/app/services/auth.service';
   templateUrl: './flashcards-cadastro.component.html',
   styleUrls: ['./flashcards-cadastro.component.css'],
 })
-export class FlashcardsCadastroComponent implements OnInit {
+export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
   subtemasAgrupadosPorTema: {
     label: string;
     temaKey: string;
@@ -62,6 +67,9 @@ export class FlashcardsCadastroComponent implements OnInit {
   modoEdicao = false;
   salvando = false;
 
+  removerFotoPergunta = false;
+  removerFotoResposta = false;
+
   exibirModalStatus = false;
   statusModal: 'success' | 'error' | 'validation' = 'success';
   camposFaltando: string[] = [];
@@ -82,24 +90,35 @@ export class FlashcardsCadastroComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log('[FlashcardsCadastro] ngOnInit');
+
     this.subtemasAgrupadosPorTema = Object.entries(temasESubtemas).map(
       ([temaKey, subtemas]) => {
-        const temaEnum = temaKey as Tema;
-        const temaLabel = TemaDescricoes[temaEnum] || temaKey;
+        const temaUpper = String(temaKey).toUpperCase();
+        const temaLabel = TemaDescricoes[temaKey as Tema] || temaKey;
 
         const subtemaOptions = subtemas.map((subtema) => {
-          const subtemaKey =
+          const rawSubtemaKey =
             typeof subtema === 'number'
               ? (Subtema as any)[subtema]
               : (subtema as any);
-          const subtemaLabel = SubtemaDescricoes[subtema] || subtemaKey;
-          return { label: subtemaLabel, value: `${temaKey}::${subtemaKey}` };
+
+          const subtemaLabel = SubtemaDescricoes[subtema] || rawSubtemaKey;
+
+          const valuePadronizado = `${temaUpper}::${String(
+            rawSubtemaKey
+          ).toUpperCase()}`;
+
+          return {
+            label: subtemaLabel,
+            value: valuePadronizado,
+          };
         });
 
         return {
           label: temaLabel,
-          temaKey: temaKey,
-          value: temaKey,
+          temaKey: temaUpper,
+          value: temaUpper,
           options: subtemaOptions,
         };
       }
@@ -112,29 +131,76 @@ export class FlashcardsCadastroComponent implements OnInit {
       this.perguntaHtml = card.pergunta;
       this.respostaHtml = card.resposta;
 
-      if (card.fotoUrlPergunta) {
+      if (card.fotoUrlPergunta)
         this.fotoPreviews['fotoPergunta'] = card.fotoUrlPergunta;
-      }
-      if (card.fotoUrlResposta) {
+      if (card.fotoUrlResposta)
         this.fotoPreviews['fotoResposta'] = card.fotoUrlResposta;
-      }
 
-      if (card.relevancia !== undefined && card.relevancia !== null) {
-        this.relevanciaSelecionada = String(card.relevancia);
-      } else {
-        this.relevanciaSelecionada = null;
-      }
+      this.relevanciaSelecionada = card.relevancia
+        ? String(card.relevancia)
+        : null;
 
       this.dificuldadeSelecionada = this.normalizarDificuldade(
-        card.dificuldade ?? null
+        card.dificuldade
       );
 
-      if (card.tema && card.subtema) {
-        this.assuntoSelecionado = `${card.tema}::${card.subtema}`;
+      if (card.tema) {
+        const t = this.canon(card.tema);
+        if (card.subtema) {
+          const s = this.canon(card.subtema);
+          this.assuntoSelecionado = `${t}::${s}`;
+        } else {
+          this.assuntoSelecionado = t;
+        }
       } else {
         this.assuntoSelecionado = null;
       }
+
+      this.removerFotoPergunta = false;
+      this.removerFotoResposta = false;
     }
+  }
+
+  ngAfterViewInit(): void {
+    console.log('[FlashcardsCadastro] ngAfterViewInit');
+    this.scrollToTopGeneric();
+  }
+
+  private scrollToTopGeneric(): void {
+    if (typeof window !== 'undefined') {
+      window.scrollTo(0, 0);
+    }
+
+    const docEl = document.documentElement as HTMLElement | null;
+    if (docEl) {
+      docEl.scrollTop = 0;
+    }
+
+    const body = document.body as HTMLElement | null;
+    if (body) {
+      body.scrollTop = 0;
+    }
+
+    setTimeout(() => {
+      const allElements = Array.from(
+        document.querySelectorAll<HTMLElement>('*')
+      );
+
+      const scrollers: HTMLElement[] = allElements.filter((el: HTMLElement) => {
+        const hasVerticalScroll = el.scrollHeight - el.clientHeight > 20;
+        return hasVerticalScroll;
+      });
+
+      console.log(
+        '[FlashcardsCadastro] scrollToTopGeneric -> scrollers encontrados:',
+        scrollers
+      );
+
+      scrollers.forEach((el: HTMLElement) => {
+        el.scrollTop = 0;
+        el.scrollLeft = 0;
+      });
+    }, 1);
   }
 
   onFileSelected(event: any, fieldKey: string): void {
@@ -144,8 +210,10 @@ export class FlashcardsCadastroComponent implements OnInit {
 
       if (fieldKey === 'fotoPergunta') {
         this.fotoPerguntaFile = file;
+        this.removerFotoPergunta = false;
       } else if (fieldKey === 'fotoResposta') {
         this.fotoRespostaFile = file;
+        this.removerFotoResposta = false;
       }
 
       const reader = new FileReader();
@@ -172,15 +240,14 @@ export class FlashcardsCadastroComponent implements OnInit {
 
   removeFile(fieldKey: string, event: Event): void {
     event.stopPropagation();
-
     if (fieldKey === 'fotoPergunta') {
       this.fotoPerguntaFile = null;
+      this.removerFotoPergunta = true;
     } else if (fieldKey === 'fotoResposta') {
       this.fotoRespostaFile = null;
+      this.removerFotoResposta = true;
     }
-
     this.fotoPreviews[fieldKey] = null;
-
     const fileInput = document.getElementById(fieldKey) as HTMLInputElement;
     if (fileInput) {
       fileInput.value = '';
@@ -189,13 +256,28 @@ export class FlashcardsCadastroComponent implements OnInit {
   }
 
   isPreviewImage(preview: string | ArrayBuffer | null): boolean {
-    if (typeof preview !== 'string') return false;
-    return preview.toLowerCase().startsWith('data:image/');
+    if (!preview || typeof preview !== 'string') return false;
+    const p = preview.toLowerCase();
+    if (p.startsWith('data:image/')) return true;
+    if (p.startsWith('http') || p.startsWith('assets/')) {
+      return !this.isVideoExtension(p);
+    }
+    return false;
   }
 
   isPreviewVideo(preview: string | ArrayBuffer | null): boolean {
-    if (typeof preview !== 'string') return false;
-    return preview.toLowerCase().startsWith('data:video/');
+    if (!preview || typeof preview !== 'string') return false;
+    const p = preview.toLowerCase();
+    if (p.startsWith('data:video/')) return true;
+    if (p.startsWith('http') || p.startsWith('assets/')) {
+      return this.isVideoExtension(p);
+    }
+    return false;
+  }
+
+  private isVideoExtension(url: string): boolean {
+    const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov', '.avi'];
+    return videoExtensions.some((ext) => url.includes(ext));
   }
 
   voltar() {
@@ -269,7 +351,9 @@ export class FlashcardsCadastroComponent implements OnInit {
               this.flashcardParaEditar.id,
               dto,
               this.fotoPerguntaFile || undefined,
-              this.fotoRespostaFile || undefined
+              this.fotoRespostaFile || undefined,
+              this.removerFotoPergunta,
+              this.removerFotoResposta
             )
             .subscribe({
               next: () => {
