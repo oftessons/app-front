@@ -1,10 +1,18 @@
 <div *ngIf="usuario && (usuario.permissao === Permissao.ADMIN || usuario.permissao === Permissao.PROFESSOR)">
   <div class="container pt-5">
     <div class="container mt-4 container-geral">
-      <div class="header-container">
+
+      <div class="header-container" *ngIf="!aulaDTO.id; else editTitle">
         <h2>Cadastro de aulas</h2>
       </div>
+      <ng-template #editTitle>
+        <div class="header-container">
+          <h2>Editar aula</h2>
+        </div>
+      </ng-template>
+
       <form class="form-cad" #aulaForm="ngForm" (ngSubmit)="onSubmit()">
+
         <div class="row" *ngIf="aulaDTO.id">
           <div class="col-md-6">
             <div class="form-group">
@@ -36,6 +44,7 @@
           </span>
           <hr class="line">
         </div>
+
         <div class="cont-imgs">
           <div class="form-group">
             <div class="image-upload" (drop)="onDrop($event, 'video')" (dragover)="onDragOver($event)">
@@ -56,18 +65,15 @@
                   </ng-container>
 
                   <span *ngIf="!fotoPreviews['video']" class="upload-placeholder">
-
                     <ng-container *ngIf="isVideoLoading">
                       <div class="loading-spinner-small"></div>
                       <span style="margin-top: 10px;">Anexando vídeo...</span>
                     </ng-container>
-
                     <ng-container *ngIf="!isVideoLoading">
                       <img [src]="!isDarkMode() ? 'assets/imagens/filme.svg' : 'assets/Icons/dark/filme-dark.svg'"
                         style="width: 50px;" class="upload-icon">
                       Clique para fazer upload do vídeo
                     </ng-container>
-
                   </span>
                 </div>
               </label>
@@ -87,26 +93,42 @@
         </div>
 
         <div class="form-group">
-          <label for="arquivos">Upload de PDF:</label>
+          <label for="arquivos">Adicionar PDFs:</label>
           <input type="file" id="arquivo" name="arquivo" class="form-control" accept="application/pdf"
             (change)="onPdfSelected($event)">
           <small class="form-text text-muted">Você pode enviar até 3 arquivos PDF.</small>
         </div>
 
-        <div class="form-group" *ngIf="arquivos.length > 0">
-          <label>Arquivos PDF para envio:</label>
+        <div class="form-group" *ngIf="documentosExistentes && documentosExistentes.length > 0">
+          <label style="font-weight: bold; color: #28a745;">Arquivos já cadastrados:</label>
           <ul class="list-group">
-            <li class="list-group-item" *ngFor="let arquivo of arquivos; let i = index">
-              {{ arquivo.name }}
-              <button type="button" class="btn btn-danger btn-sm float-right" (click)="removePdf(i)">Remover</button>
+            <li class="list-group-item d-flex justify-content-between align-items-center"
+              *ngFor="let doc of documentosExistentes; let i = index">
+              <span><i class="fas fa-file-pdf me-2"></i> {{ doc.key }}</span>
+              <button type="button" class="btn btn-danger btn-sm" (click)="removeDocumentoExistente(i)">
+                Remover
+              </button>
             </li>
           </ul>
         </div>
 
-        <div *ngIf="isLoading" class="loading-overlay">
-          <p>Enviando aula, aguarde...</p>
+        <div class="form-group" *ngIf="arquivos.length > 0">
+          <label style="font-weight: bold; color: #007bff;">Novos arquivos para envio:</label>
+          <ul class="list-group">
+            <li class="list-group-item d-flex justify-content-between align-items-center"
+              *ngFor="let arquivo of arquivos; let i = index">
+              <span><i class="fas fa-file-upload me-2"></i> {{ arquivo.name }}</span>
+              <button type="button" class="btn btn-danger btn-sm" (click)="removePdf(i)">
+                Remover
+              </button>
+            </li>
+          </ul>
+        </div>
 
-          <div class="progress" style="width: 70%; height: 25px; margin-top: 15px;">
+        <div *ngIf="isLoading && uploadProgress" class="loading-overlay">
+          <p>{{ currentUploadState || 'Enviando aula, aguarde...' }}</p>
+
+          <div *ngIf="uploadProgress" class="progress" style="width: 70%; height: 25px; margin-top: 15px;">
             <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
               [style.width.%]="uploadProgress" [attr.aria-valuenow]="uploadProgress" aria-valuemin="0"
               aria-valuemax="100">
@@ -114,32 +136,32 @@
             </div>
           </div>
 
-          <button *ngIf="uploadProgress > 0" type="button" class="btn btn-danger btn-cancelar"
-            (click)="cancelUpload()">
+          <button *ngIf="uploadProgress > 0" type="button" class="btn btn-danger btn-cancelar" (click)="cancelUpload()">
             <i class="fas fa-times"></i> Cancelar Upload
           </button>
-
         </div>
 
-        <div *ngIf="successMessage" class="alert alert-success">
+        <div *ngIf="successMessage" class="alert alert-success mt-3">
           {{ successMessage }}
         </div>
-        <div *ngIf="errorMessage" class="alert alert-danger">
+        <div *ngIf="errorMessage" class="alert alert-danger mt-3">
           {{ errorMessage }}
         </div>
-
 
         <div class="container mt-4 container-btn">
           <button type="button" class="btn btn-secondary" routerLink="/usuario/dashboard" *ngIf="!aulaDTO.id">
             Voltar
           </button>
+
           <button type="submit" class="btn btn-primary" *ngIf="!aulaDTO.id" [disabled]="isLoading">
             Salvar
           </button>
+
           <button type="submit" class="btn btn-primary" *ngIf="aulaDTO.id" [disabled]="isLoading">
             Atualizar
           </button>
         </div>
+
       </form>
     </div>
   </div>

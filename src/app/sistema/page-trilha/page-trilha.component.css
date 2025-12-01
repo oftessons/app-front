@@ -426,6 +426,37 @@
   margin-bottom: 15px;
 }
 
+.card-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-editar-card {
+  padding: 6px 10px;
+  background-color: #f6a568;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(246, 165, 104, 0.3);
+}
+
+.btn-editar-card:hover {
+  background-color: #ff9a4d;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(246, 165, 104, 0.4);
+}
+
+.btn-editar-card img {
+  width: 16px;
+  height: 16px;
+  filter: brightness(0) saturate(100%) invert(0%);
+}
+
 .card-title {
   display: flex;
   align-items: center;

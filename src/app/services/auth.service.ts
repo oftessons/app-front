@@ -53,12 +53,20 @@ export class AuthService {
     });
   }
 
+  verificarCadastroCompleto(): Observable<{ cadastroCompleto: boolean }> {
+    return this.http.post<{ cadastroCompleto: boolean }>(`${this.apiURL}/verificar-cadastro-completo`, {}).pipe(
+      map(response => ({ cadastroCompleto: response.cadastroCompleto }))
+    );
+  }
 
   obterUsuarioAutenticadoDoBackend(): Observable<Usuario> {
     return this.http.get<Usuario>(`${this.apiURL}/perfil`).pipe(
       map(usuario => {
         // Presumindo que o backend retorne o role do usuário
+        // console.log('Dados do usuário obtidos do backend:', usuario);
         usuario.permissao = this.jwtHelper.decodeToken(JSON.stringify(this.obterToken())).role;
+        localStorage.setItem('cadastro_completo', usuario.perfilCompleto ? 'true' : 'false');
+        // console.log('Dados do usuário obtidos do backend:', usuario);
         return usuario;
       })
     );
@@ -110,6 +118,16 @@ export class AuthService {
             return throwError('Já existe um usuário com este username na nossa base de dados. Tente outro');
           }
           return throwError("O servidor não está funcionando corretamente.");
+        })
+      );
+  }
+
+  atualizarDadosParciais(userId: string, dados: Partial<Usuario>): Observable<Usuario> {
+    return this.http.patch<Usuario>(`${this.apiURL}/update-parcial/${userId}`, dados)
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          console.error('Erro ao atualizar dados parciais:', error);
+          return throwError("Erro ao atualizar dados. Por favor, tente novamente.");
         })
       );
   }

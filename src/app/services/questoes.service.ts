@@ -224,6 +224,8 @@ export class QuestoesService {
 
     const cacheKey = `${url}?${params.toString()}`;
 
+    console.log('Cache Key:', cacheKey);
+
     if (this.requestsCache.has(cacheKey)) {
       return this.requestsCache.get(cacheKey)!;
     }

@@ -71,7 +71,7 @@ export class ChatBotWhatsappComponent implements OnInit, AfterViewInit, OnDestro
   }
 
   sendMessage(): void {
-    const phoneNumber = '5511920909632';
+    const phoneNumber = '551152418213';
     const message = 'Olá! Preciso de suporte para a Oftlessons.';
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(this.userMessage || message)}`;
     this.userMessage = '';

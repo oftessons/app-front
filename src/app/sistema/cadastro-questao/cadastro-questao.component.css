@@ -149,16 +149,30 @@ textarea {
   font-family: "Nunito Sans", sans-serif;
 }
 
+.id-questao {
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 8px;
+  margin-right: 16px;
+  border-radius: 5px;
+}
+
+.id-questao span {
+  color: var(--text-color);
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
 /* Botões de Ação */
 .btn-container {
   display: flex;
-  flex-direction: row;
-  align-items: start;
-  gap: 16px;
 }
 
 .btn-primary {
-  margin-top: 12px;
   padding: 10px 20px;
   width: 150px;
   background-color: #041e4e;
@@ -169,9 +183,7 @@ textarea {
 }
 
 .btn-secondary {
-  margin-top: 12px;
   padding: 10px 20px;
-  width: 150px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -179,7 +191,6 @@ textarea {
 }
 
 .btn-nova-questao {
-  margin-top: 12px;
   padding: 10px 20px;
   width: 150px;
   background-color: #3b5fa0;

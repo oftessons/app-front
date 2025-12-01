@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { Usuario } from '../login/usuario';
@@ -16,7 +16,11 @@ export class ValidacaoAcessoComponent {
   errors: string[] = [];
   mensagemSucesso: string | null = null;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) { }
+
 
   onSubmit() {
     const rawData = sessionStorage.getItem('pending_login_data');
@@ -72,10 +76,11 @@ export class ValidacaoAcessoComponent {
           confirmPassword: '',
           tipoUsuario: '',
           bolsaAssinatura: response.bolsa || false,
-          dataNascimento : response.dataNascimento ? new Date(response.dataNascimento) : new Date(),
+          dataNascimento: response.dataNascimento ? new Date(response.dataNascimento) : new Date(),
           diasDeTeste: response.quantidadeDiasBolsa || 0,
           permissao: response.authorities.length > 0 ? response.authorities[0] : null,
           tipoDeEstudante: response.tipoDeEstudante || '',
+          perfilCompleto: response.perfilCompleto || false
         };
 
         localStorage.setItem('usuario', JSON.stringify(usuario));
@@ -88,6 +93,9 @@ export class ValidacaoAcessoComponent {
           usuario.permissao === 'ROLE_PROFESSOR' ||
           usuario.permissao === 'ROLE_BOLSISTA'
         ) {
+
+          console.log("Usuário logado com permissão:", usuario);
+
           this.router.navigate(['/usuario/inicio']);
         } else {
           this.router.navigate(['/forbidden']);
@@ -102,4 +110,6 @@ export class ValidacaoAcessoComponent {
       }
     );
   }
+
+
 }

@@ -135,27 +135,8 @@ export class LoginComponent implements OnInit {
     passwordValidationErrors.push("O campo de nome é obrigatório.");
   }
 
-  if(!this.cidade) {
-    passwordValidationErrors.push("O campo de cidade é obrigatório.");
-
-  }
-
-  if(!this.estado) {
-    passwordValidationErrors.push("O campo de estado é obrigatório.");
-
-  }
-
-  if(!this.telefone) {
-    passwordValidationErrors.push("O campo de telefone é obrigatório.");
-
-  }
-
   if(!this.tipoDeEstudante) {
     passwordValidationErrors.push("Selecione o tipo de usuário.");
-  }
-
-  if (!this.dataNascimento){
-    passwordValidationErrors.push("O campo de data de nascimento é obrigatório.");
   }
 
   // Se houver erros de validação, armazene-os em this.errors e não prossiga
@@ -164,21 +145,10 @@ export class LoginComponent implements OnInit {
     return; // Interrompe a execução do método
   }
 
-  // Validação de confirmação de senha
-  if (this.password !== this.confirmPassword) {
-      this.errors.push("As senhas não coincidem.");
-      return; // Interrompe a execução do método
-  }
-
     const usuario: Usuario = new Usuario();
     usuario.password = this.password;
     usuario.email = this.email;
     usuario.nome = this.nome;
-    usuario.confirmPassword = this.confirmPassword;
-    usuario.telefone = this.telefone;
-    usuario.cidade = this.cidade;
-    usuario.dataNascimento = this.dataNascimento!;
-    usuario.estado = this.estado;
     usuario.tipoDeEstudante = this.tipoDeEstudante;
 
     this.authService
@@ -190,11 +160,7 @@ export class LoginComponent implements OnInit {
           this.password = '';
           this.email = '';
           this.nome = '';
-          this.confirmPassword = '';
-          this.dataNascimento = null;
-          this.telefone = '';
-          this.cidade = '';
-          this.estado = '';
+          this.tipoDeEstudante = '';
           this.errors = [];
         },  errorResponse => {
           if (errorResponse.status === 401) {
