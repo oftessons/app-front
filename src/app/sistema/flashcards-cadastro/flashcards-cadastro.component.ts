@@ -1,4 +1,9 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectorRef,
+  AfterViewInit,
+} from '@angular/core';
 import { Tema } from '../page-questoes/enums/tema';
 import { Subtema } from '../page-questoes/enums/subtema';
 import { temasESubtemas } from '../page-questoes/enums/map-tema-subtema';
@@ -19,7 +24,7 @@ import { AuthService } from 'src/app/services/auth.service';
   templateUrl: './flashcards-cadastro.component.html',
   styleUrls: ['./flashcards-cadastro.component.css'],
 })
-export class FlashcardsCadastroComponent implements OnInit {
+export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
   subtemasAgrupadosPorTema: {
     label: string;
     temaKey: string;
@@ -82,6 +87,8 @@ export class FlashcardsCadastroComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log('[FlashcardsCadastro] ngOnInit');
+
     this.subtemasAgrupadosPorTema = Object.entries(temasESubtemas).map(
       ([temaKey, subtemas]) => {
         const temaUpper = String(temaKey).toUpperCase();
@@ -142,6 +149,48 @@ export class FlashcardsCadastroComponent implements OnInit {
         this.assuntoSelecionado = null;
       }
     }
+  }
+
+  ngAfterViewInit(): void {
+    console.log('[FlashcardsCadastro] ngAfterViewInit');
+    this.scrollToTopGeneric();
+  }
+
+  private scrollToTopGeneric(): void {
+    if (typeof window !== 'undefined') {
+      window.scrollTo(0, 0);
+    }
+
+    const docEl = document.documentElement as HTMLElement | null;
+    if (docEl) {
+      docEl.scrollTop = 0;
+    }
+
+    const body = document.body as HTMLElement | null;
+    if (body) {
+      body.scrollTop = 0;
+    }
+
+    setTimeout(() => {
+      const allElements = Array.from(
+        document.querySelectorAll<HTMLElement>('*')
+      );
+
+      const scrollers: HTMLElement[] = allElements.filter((el: HTMLElement) => {
+        const hasVerticalScroll = el.scrollHeight - el.clientHeight > 20;
+        return hasVerticalScroll;
+      });
+
+      console.log(
+        '[FlashcardsCadastro] scrollToTopGeneric -> scrollers encontrados:',
+        scrollers
+      );
+
+      scrollers.forEach((el: HTMLElement) => {
+        el.scrollTop = 0;
+        el.scrollLeft = 0;
+      });
+    }, 1);
   }
 
   onFileSelected(event: any, fieldKey: string): void {
