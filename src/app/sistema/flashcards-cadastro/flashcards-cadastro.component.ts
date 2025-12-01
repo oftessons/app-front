@@ -67,6 +67,9 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
   modoEdicao = false;
   salvando = false;
 
+  removerFotoPergunta = false;
+  removerFotoResposta = false;
+
   exibirModalStatus = false;
   statusModal: 'success' | 'error' | 'validation' = 'success';
   camposFaltando: string[] = [];
@@ -141,13 +144,20 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
         card.dificuldade
       );
 
-      if (card.tema && card.subtema) {
+      if (card.tema) {
         const t = this.canon(card.tema);
-        const s = this.canon(card.subtema);
-        this.assuntoSelecionado = `${t}::${s}`;
+        if (card.subtema) {
+          const s = this.canon(card.subtema);
+          this.assuntoSelecionado = `${t}::${s}`;
+        } else {
+          this.assuntoSelecionado = t;
+        }
       } else {
         this.assuntoSelecionado = null;
       }
+
+      this.removerFotoPergunta = false;
+      this.removerFotoResposta = false;
     }
   }
 
@@ -200,8 +210,10 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
 
       if (fieldKey === 'fotoPergunta') {
         this.fotoPerguntaFile = file;
+        this.removerFotoPergunta = false;
       } else if (fieldKey === 'fotoResposta') {
         this.fotoRespostaFile = file;
+        this.removerFotoResposta = false;
       }
 
       const reader = new FileReader();
@@ -230,8 +242,10 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
     event.stopPropagation();
     if (fieldKey === 'fotoPergunta') {
       this.fotoPerguntaFile = null;
+      this.removerFotoPergunta = true;
     } else if (fieldKey === 'fotoResposta') {
       this.fotoRespostaFile = null;
+      this.removerFotoResposta = true;
     }
     this.fotoPreviews[fieldKey] = null;
     const fileInput = document.getElementById(fieldKey) as HTMLInputElement;
@@ -337,7 +351,9 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
               this.flashcardParaEditar.id,
               dto,
               this.fotoPerguntaFile || undefined,
-              this.fotoRespostaFile || undefined
+              this.fotoRespostaFile || undefined,
+              this.removerFotoPergunta,
+              this.removerFotoResposta
             )
             .subscribe({
               next: () => {
