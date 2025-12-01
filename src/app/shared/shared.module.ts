@@ -25,6 +25,7 @@ import { FlashcardModalComponent } from './flashcard-modal/flashcard-modal.compo
 import { DeletarFlashcardModalComponent } from './deletar-flashcard-modal/deletar-flashcard-modal.component';
 import { ModalTrilhaComponent } from './modal-trilha/modal-trilha.component';
 import { ModalEditarSemanaTrilhaComponent } from './modal-editar-semana-trilha/modal-editar-semana-trilha.component';
+import { GlobalSearchComponent } from './global-search/global-search.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { ModalEditarSemanaTrilhaComponent } from './modal-editar-semana-trilha/m
     DeletarFlashcardModalComponent,
     ModalTrilhaComponent,
     ModalEditarSemanaTrilhaComponent,
-    HappyMessagePopupComponent
+    HappyMessagePopupComponent,
+    GlobalSearchComponent
   ],
   imports: [
     CommonModule,
@@ -71,7 +73,8 @@ import { ModalEditarSemanaTrilhaComponent } from './modal-editar-semana-trilha/m
     FlashcardsSubtemasComponent,
     FlashcardModalComponent,
     ModalTrilhaComponent,
+    GlobalSearchComponent
   ],
   entryComponents: [ModalTrilhaComponent],
 })
-export class SharedModule {}
+export class SharedModule { }

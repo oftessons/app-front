@@ -78,10 +78,8 @@ export class ModuloDeAulasComponent implements OnInit, OnDestroy {
 
   constructor(
     private aulasService: AulasService,
-    private avaliacaoService: AvaliacaoAulaService,
     public themeService: ThemeService,
     private route: ActivatedRoute,
-    private location: Location,
     private router: Router,
     private sanitizer: DomSanitizer,
     private estatistiacasAulasService: EstatisticasAulasService
