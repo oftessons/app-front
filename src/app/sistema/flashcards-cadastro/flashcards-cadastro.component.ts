@@ -84,22 +84,31 @@ export class FlashcardsCadastroComponent implements OnInit {
   ngOnInit(): void {
     this.subtemasAgrupadosPorTema = Object.entries(temasESubtemas).map(
       ([temaKey, subtemas]) => {
-        const temaEnum = temaKey as Tema;
-        const temaLabel = TemaDescricoes[temaEnum] || temaKey;
+        const temaUpper = String(temaKey).toUpperCase();
+        const temaLabel = TemaDescricoes[temaKey as Tema] || temaKey;
 
         const subtemaOptions = subtemas.map((subtema) => {
-          const subtemaKey =
+          const rawSubtemaKey =
             typeof subtema === 'number'
               ? (Subtema as any)[subtema]
               : (subtema as any);
-          const subtemaLabel = SubtemaDescricoes[subtema] || subtemaKey;
-          return { label: subtemaLabel, value: `${temaKey}::${subtemaKey}` };
+
+          const subtemaLabel = SubtemaDescricoes[subtema] || rawSubtemaKey;
+
+          const valuePadronizado = `${temaUpper}::${String(
+            rawSubtemaKey
+          ).toUpperCase()}`;
+
+          return {
+            label: subtemaLabel,
+            value: valuePadronizado,
+          };
         });
 
         return {
           label: temaLabel,
-          temaKey: temaKey,
-          value: temaKey,
+          temaKey: temaUpper,
+          value: temaUpper,
           options: subtemaOptions,
         };
       }
@@ -112,25 +121,23 @@ export class FlashcardsCadastroComponent implements OnInit {
       this.perguntaHtml = card.pergunta;
       this.respostaHtml = card.resposta;
 
-      if (card.fotoUrlPergunta) {
+      if (card.fotoUrlPergunta)
         this.fotoPreviews['fotoPergunta'] = card.fotoUrlPergunta;
-      }
-      if (card.fotoUrlResposta) {
+      if (card.fotoUrlResposta)
         this.fotoPreviews['fotoResposta'] = card.fotoUrlResposta;
-      }
 
-      if (card.relevancia !== undefined && card.relevancia !== null) {
-        this.relevanciaSelecionada = String(card.relevancia);
-      } else {
-        this.relevanciaSelecionada = null;
-      }
+      this.relevanciaSelecionada = card.relevancia
+        ? String(card.relevancia)
+        : null;
 
       this.dificuldadeSelecionada = this.normalizarDificuldade(
-        card.dificuldade ?? null
+        card.dificuldade
       );
 
       if (card.tema && card.subtema) {
-        this.assuntoSelecionado = `${card.tema}::${card.subtema}`;
+        const t = this.canon(card.tema);
+        const s = this.canon(card.subtema);
+        this.assuntoSelecionado = `${t}::${s}`;
       } else {
         this.assuntoSelecionado = null;
       }
@@ -172,15 +179,12 @@ export class FlashcardsCadastroComponent implements OnInit {
 
   removeFile(fieldKey: string, event: Event): void {
     event.stopPropagation();
-
     if (fieldKey === 'fotoPergunta') {
       this.fotoPerguntaFile = null;
     } else if (fieldKey === 'fotoResposta') {
       this.fotoRespostaFile = null;
     }
-
     this.fotoPreviews[fieldKey] = null;
-
     const fileInput = document.getElementById(fieldKey) as HTMLInputElement;
     if (fileInput) {
       fileInput.value = '';
@@ -189,13 +193,28 @@ export class FlashcardsCadastroComponent implements OnInit {
   }
 
   isPreviewImage(preview: string | ArrayBuffer | null): boolean {
-    if (typeof preview !== 'string') return false;
-    return preview.toLowerCase().startsWith('data:image/');
+    if (!preview || typeof preview !== 'string') return false;
+    const p = preview.toLowerCase();
+    if (p.startsWith('data:image/')) return true;
+    if (p.startsWith('http') || p.startsWith('assets/')) {
+      return !this.isVideoExtension(p);
+    }
+    return false;
   }
 
   isPreviewVideo(preview: string | ArrayBuffer | null): boolean {
-    if (typeof preview !== 'string') return false;
-    return preview.toLowerCase().startsWith('data:video/');
+    if (!preview || typeof preview !== 'string') return false;
+    const p = preview.toLowerCase();
+    if (p.startsWith('data:video/')) return true;
+    if (p.startsWith('http') || p.startsWith('assets/')) {
+      return this.isVideoExtension(p);
+    }
+    return false;
+  }
+
+  private isVideoExtension(url: string): boolean {
+    const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov', '.avi'];
+    return videoExtensions.some((ext) => url.includes(ext));
   }
 
   voltar() {
