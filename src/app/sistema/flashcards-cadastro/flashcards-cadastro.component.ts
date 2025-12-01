@@ -141,10 +141,14 @@ export class FlashcardsCadastroComponent implements OnInit, AfterViewInit {
         card.dificuldade
       );
 
-      if (card.tema && card.subtema) {
+if (card.tema) {
         const t = this.canon(card.tema);
-        const s = this.canon(card.subtema);
-        this.assuntoSelecionado = `${t}::${s}`;
+        if (card.subtema) {
+          const s = this.canon(card.subtema);
+          this.assuntoSelecionado = `${t}::${s}`;
+        } else {
+          this.assuntoSelecionado = t;
+        }
       } else {
         this.assuntoSelecionado = null;
       }
