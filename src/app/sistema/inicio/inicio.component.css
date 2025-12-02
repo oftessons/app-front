@@ -286,10 +286,6 @@
   border-color: transparent;
 }
 
-.btn:hover {
-  color: #a2cdff;
-}
-
 .mensagem {
   margin-top: 10px;
   padding: 10px;
@@ -428,6 +424,46 @@
 .animation {
   width: 150px;
   height: 150px;
+}
+
+/* Conteúdo do modal de trilha (usado via ng-template) */
+.modal-trilha-content {
+  text-align: left;
+}
+
+.modal-trilha-content .form-group {
+  margin-bottom: 20px;
+}
+
+.modal-trilha-content .form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  font-size: 16px;
+  color: var(--text-color, #333);
+}
+
+/* Conteúdo do modal de confirmação (segundo passo) */
+.modal-confirmacao-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modal-confirmacao-content .modal-body-comecar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  text-align: center;
+}
+
+.modal-confirmacao-content .modal-footer-comecar {
+  display: flex;
+  justify-content: center;
+  padding: 0 32px 20px 32px;
+  gap: 20px;
+  width: 100%;
 }
 
 .container-principal{
