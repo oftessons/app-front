@@ -11,7 +11,7 @@
         </span>
 
         <input #searchInput type="text" placeholder="Pesquisar..." (input)="buscar(searchInput.value)"
-            (focus)="onFocus(searchInput.value)" (blur)="onBlur()" autocomplete="off">
+            (focus)="onFocus(searchInput.value)" autocomplete="off">
 
         <span class="icon-close" *ngIf="isExpanded" (click)="toggleSearch(); $event.stopPropagation()">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
