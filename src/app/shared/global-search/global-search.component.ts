@@ -2,7 +2,7 @@ import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular
 import { Router } from '@angular/router';
 import { SearchResultResponseDto } from 'src/app/sistema/painel-de-aulas/response/search-result-response-dto';
 import { Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, finalize, switchMap, tap } from 'rxjs/operators';
 import { AulasService } from 'src/app/services/aulas.service';
 
 @Component({
@@ -15,24 +15,34 @@ export class GlobalSearchComponent implements OnInit {
   resultados: SearchResultResponseDto[] = [];
   mostrarResultados = false;
   isExpanded = false;
+  isLoading = false;
   private searchTerms = new Subject<string>();
+  skeletonItems = new Array(4);
 
   @ViewChild('searchInput') searchInput!: ElementRef;
-  elementRef: any;
+
 
   constructor(
-    private router: Router,
-    private readonly aulaService: AulasService
+    private readonly router: Router,
+    private readonly aulaService: AulasService,
+    private readonly elementRef: ElementRef,
   ) { }
 
   ngOnInit(): void {
     this.searchTerms.pipe(
       debounceTime(300),
       distinctUntilChanged(),
-      switchMap((term: string) => this.aulaService.pesquisarAulasPorTitulo(term)),
+      tap(() => {
+        this.isLoading = true;
+        this.mostrarResultados = true;
+        this.resultados = [];
+      }),
+      switchMap((term: string) => this.aulaService.pesquisarAulasPorTitulo(term).pipe(
+        finalize(() => this.isLoading = false)
+      )),
     ).subscribe(results => {
+      this.isLoading = false;
       this.resultados = results;
-      this.mostrarResultados = results.length > 0;
     });
   }
 
@@ -98,7 +108,7 @@ export class GlobalSearchComponent implements OnInit {
       this.isExpanded = false;
       this.resultados = [];
       this.mostrarResultados = false;
-    }, 100);
+    }, 250);
   }
 
   onFocus(valor: string) {

@@ -182,3 +182,56 @@
   margin-top: 4px;
   letter-spacing: 0.05em;
 }
+
+.skeleton-wrapper {
+  pointer-events: none;
+  cursor: default;
+}
+
+/* Animação base para todos os elementos cinzas */
+.skeleton-box {
+  background: #1f2937; /* Cor base (Cinza escuro) */
+  /* O gradiente cria o efeito de brilho passando */
+  background: linear-gradient(
+    90deg,
+    #1f2937 25%,
+    #374151 50%,
+    /* Cor do brilho (Cinza mais claro) */ #1f2937 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+  border-radius: 4px;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.result-item .thumb.skeleton-box {
+  background-color: #1f2937;
+  border: none;
+}
+
+.skeleton-text-lg {
+  height: 14px;
+  width: 80%;
+  margin-bottom: 6px;
+}
+
+.skeleton-text-sm {
+  height: 10px;
+  width: 50%;
+}
+
+.no-results {
+  padding: 15px;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 0.9rem;
+  pointer-events: none;
+}
