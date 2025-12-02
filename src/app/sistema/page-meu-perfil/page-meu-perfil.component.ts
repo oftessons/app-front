@@ -12,6 +12,7 @@ import { TipoUsuario } from 'src/app/login/enums/tipo-usuario';
 import { TipoUsuarioDescricao } from 'src/app/login/enums/tipo-usuario-descricao';
 import { VendasService } from 'src/app/services/vendas.service';
 import { Permissao } from 'src/app/login/Permissao';
+import { ThemeService } from 'src/app/services/theme.service';
 
 @Component({
   selector: 'app-page-meu-perfil',
@@ -36,7 +37,8 @@ export class PageMeuPerfilComponent implements OnInit {
 
 
   constructor(private router: Router, private authService: AuthService, private stripeService: StripeService,
-    private vendasService: VendasService
+    private vendasService: VendasService,
+    private themeService: ThemeService
   ) { }
 
   ngOnInit(): void {
@@ -172,6 +174,14 @@ export class PageMeuPerfilComponent implements OnInit {
 
   traduzirTipoEstudanteUsuario(tipoUsuario: string): string {
     return TipoUsuarioDescricao[tipoUsuario as TipoUsuario] || 'Tipo de usuario não informado';
+  }
+
+  toggleDarkMode(): void {
+    this.themeService.toggleDarkMode();
+  }
+
+  isDarkMode(): boolean {
+    return this.themeService.isDarkMode();
   }
 
 }

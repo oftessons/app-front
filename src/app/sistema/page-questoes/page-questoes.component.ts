@@ -130,6 +130,9 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   message: string = '';
   resposta: string = '';
 
+  private audioCorreto: HTMLAudioElement;
+  private audioErrado: HTMLAudioElement;
+
   respondidasAgora: Set<number> = new Set();
 
   respostasSessao: RespostasFiltroSessaoDTO | null = {
@@ -250,6 +253,9 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
         this.questoesService.clearRequestsCache();
       }
     });
+
+    this.audioCorreto = new Audio('assets/audios/sucesso.mp3');
+    this.audioErrado = new Audio('assets/audios/erro.mp3');
   }
 
   ngOnInit(): void {
@@ -1130,9 +1136,11 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     this.isRespostaCorreta = resposta.correct;
 
     if (resposta.correct) {
+      this.tocarSomCorreto();
       this.respostaCorreta = this.selectedOption;
       this.respostaErrada = '';
     } else {
+      this.tocarSomErrado();
       this.respostaErrada = this.selectedOption;
       this.respostaCorreta = resposta.opcaoCorreta;
     }
@@ -1862,5 +1870,15 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     } else {
       this.mostrarBalloon = true;
     }
+  }
+
+  private tocarSomCorreto() {
+    this.audioCorreto.currentTime = 0;
+    this.audioCorreto.play().catch(e => console.warn("Erro ao tocar som de sucesso.", e));
+  }
+
+  private tocarSomErrado() {
+    this.audioErrado.currentTime = 0;
+    this.audioErrado.play().catch(e => console.warn("Erro ao tocar som de erro.", e));
   }
 }
