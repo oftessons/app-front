@@ -4,6 +4,7 @@ import { ThemeService } from 'src/app/services/theme.service';
 import { Router } from '@angular/router';
 import { TemaDescricoes } from '../page-questoes/enums/tema-descricao';
 import { OfensivaDados, OfensivaService } from 'src/app/services/ofensiva.service';
+import { PageMeuPerfilComponent } from '../page-meu-perfil/page-meu-perfil.component';
 @Component({
   selector: 'app-inicio',
   templateUrl: './inicio.component.html',
@@ -38,6 +39,8 @@ export class InicioComponent implements OnInit {
   assuntosSelecionados: string[] = [];
   assuntosDisponiveis: string[] = [];
 
+  public animacoesAtivadas: boolean = true;
+
   constructor(
     private authService: AuthService,
     private themeService: ThemeService,
@@ -50,6 +53,7 @@ export class InicioComponent implements OnInit {
       response => this.possuiPermissao = response.accessGranted,
       err => console.error('Erro ao buscar a permissão ', err)
     );
+    this.animacoesAtivadas = PageMeuPerfilComponent.getAnimacoesStatus();
     this.obterNomeUsuario();
     this.carregarDadosOfensiva();
     this.carregarAssuntos();

@@ -34,6 +34,12 @@ export class PageMeuPerfilComponent implements OnInit {
     description: TipoUsuarioDescricao[TipoUsuario[key as keyof typeof TipoUsuario]]
   }));
 
+  public animacoesAtivadas: boolean = true;
+  public efeitosSonorosAtivados: boolean = true;
+
+  private readonly ANIMACAO_KEY = 'preferencia_animacao';
+  private readonly SOM_KEY = 'preferencia_som';
+
 
 
   constructor(private router: Router, private authService: AuthService, private stripeService: StripeService,
@@ -44,12 +50,42 @@ export class PageMeuPerfilComponent implements OnInit {
   ngOnInit(): void {
     this.obterPerfilUsuario();
     this.exibirInformacaoPlano();
-
+    this.carregarPreferencias();
   }
 
 
   mostrarConteudo(conteudo: string) {
     this.conteudoAtual = conteudo;
+  }
+
+  private carregarPreferencias(): void {
+    const animacaoSalva = localStorage.getItem(this.ANIMACAO_KEY);
+    const somSalvo = localStorage.getItem(this.SOM_KEY);
+
+    this.animacoesAtivadas = animacaoSalva !== null ? JSON.parse(animacaoSalva) : true;
+    this.efeitosSonorosAtivados = somSalvo !== null ? JSON.parse(somSalvo) : true;
+  }
+
+  public salvarPreferenciaAnimacao(): void {
+    localStorage.setItem(this.ANIMACAO_KEY, JSON.stringify(this.animacoesAtivadas));
+    console.log(`Animações salvas como: ${this.animacoesAtivadas}`);
+  }
+
+  public salvarPreferenciaSom(): void {
+    localStorage.setItem(this.SOM_KEY, JSON.stringify(this.efeitosSonorosAtivados));
+    console.log(`Efeitos Sonoros salvos como: ${this.efeitosSonorosAtivados}`);
+  }
+
+  public static getEfeitosSonorosStatus(): boolean {
+    const somSalvo = localStorage.getItem('preferencia_som');
+    // Retorna true se não houver nada salvo (comportamento padrão)
+    return somSalvo !== null ? JSON.parse(somSalvo) : true; 
+  }
+
+  public static getAnimacoesStatus(): boolean {
+    const animacaoSalva = localStorage.getItem('preferencia_animacao');
+    // Retorna true se não houver nada salvo (comportamento padrão)
+    return animacaoSalva !== null ? JSON.parse(animacaoSalva) : true; 
   }
 
   obterPerfilUsuario() {
