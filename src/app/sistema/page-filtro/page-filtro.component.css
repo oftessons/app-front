@@ -14,7 +14,7 @@
 }
 
 h5 {
-  color: #7E1313;
+  color: var(--text-color) !important;
 }
 
 p.card-text {
