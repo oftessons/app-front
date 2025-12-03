@@ -4,15 +4,20 @@
   color: var(--text-color);
   background-color: var(--bg-container);
   border-radius: 15px;
-  padding: 20px; /* Adicionei padding para espaçamento interno */
+  padding: 20px;
+  /* Adicionei padding para espaçamento interno */
   margin-bottom: 10px;
   font-size: 16px;
 }
+
 .conteudo-questao p {
-  padding: 10px; /* Espaçamento para o parágrafo */
-  margin: 0; /* Remover margens padrão */
+  padding: 10px;
+  /* Espaçamento para o parágrafo */
+  margin: 0;
+  /* Remover margens padrão */
   font-size: 16px;
 }
+
 .questao-foto {
   max-width: 350px;
   height: auto;
@@ -36,8 +41,10 @@
   border-radius: 15px;
   padding: 2px;
   margin-bottom: 10px;
-  align-items: center; /* Alinha os itens verticalmente no centro */
+  align-items: center;
+  /* Alinha os itens verticalmente no centro */
 }
+
 .identificadores-questao h3 {
   font-size: 16px;
   margin: 0 14px 0 22px;
@@ -45,12 +52,15 @@
 
 .identificadores-questao-resul {
   display: flex;
-  justify-content: space-between; /* Faz com que os itens fiquem nas extremidades */
-  align-items: center; /* Alinha os itens verticalmente no centro */
+  justify-content: space-between;
+  /* Faz com que os itens fiquem nas extremidades */
+  align-items: center;
+  /* Alinha os itens verticalmente no centro */
   color: #101010;
   background-color: var(--bg-container);
   border-radius: 15px;
-  padding: 2px 10px; /* Adicionado espaço interno horizontal */
+  padding: 2px 10px;
+  /* Adicionado espaço interno horizontal */
   margin-bottom: 10px;
 }
 
@@ -221,6 +231,7 @@
     opacity: 0;
     transform: translateY(-20px) scale(0.95);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -231,6 +242,7 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -249,6 +261,7 @@
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
@@ -287,16 +300,20 @@
   background: linear-gradient(90deg, #f0b90b, #d9a31d);
   transform: scale(0.95);
 }
+
 .upgrade-message .fas.fa-crown {
   color: #ffc107;
   font-size: 1.1rem;
 }
 
 .questoes-icone {
-  display: inline-block; /* Garante que o ícone seja tratado como um bloco inline */
-  width: 20px; /* Ajuste o tamanho conforme necessário */
+  display: inline-block;
+  /* Garante que o ícone seja tratado como um bloco inline */
+  width: 20px;
+  /* Ajuste o tamanho conforme necessário */
   height: 20px;
-  margin-right: 8px; /* Espaço entre o ícone e o texto */
+  margin-right: 8px;
+  /* Espaço entre o ícone e o texto */
 }
 
 .example-radio-group {
@@ -304,20 +321,24 @@
   flex-direction: column;
   margin: 15px 0;
 }
+
 .example-radio-button {
   margin: 5px;
 }
+
 /* Restante do seu CSS */
 .container {
   max-width: 1300px;
   padding: 10px;
   font-family: "Nunito Sans", sans-serif;
 }
+
 .text-p {
   font-size: 20px;
   margin-top: 10px;
   font-family: "Nunito Sans", sans-serif;
 }
+
 .header {
   display: flex;
   justify-content: space-between;
@@ -325,6 +346,7 @@
   align-items: center;
   gap: 12px;
 }
+
 .header h1 {
   display: flex;
   flex-wrap: nowrap;
@@ -357,14 +379,17 @@
   display: flex;
   flex-direction: row;
 }
+
 .col {
   flex: 1;
   margin-right: 10px;
   width: 100%;
 }
+
 .col:last-child {
   margin-right: 0;
 }
+
 .form-select {
   width: 100%;
   padding: 10px;
@@ -380,16 +405,19 @@
 
 .button-row {
   display: flex;
-  justify-content: space-between; /* Distribui as áreas à esquerda e à direita */
+  justify-content: space-between;
+  /* Distribui as áreas à esquerda e à direita */
   align-items: center;
   margin-top: 20px;
-  gap: 10px; /* Espaço entre as seções */
+  gap: 10px;
+  /* Espaço entre as seções */
 }
 
 .left-buttons,
 .right-buttons {
   display: flex;
-  gap: 10px; /* Espaçamento entre botões */
+  gap: 10px;
+  /* Espaçamento entre botões */
 }
 
 .right-buttons button {
@@ -401,7 +429,8 @@
   display: flex;
   flex-direction: column;
   margin-top: 10px;
-  width: 40%; /* Ajuste a largura do contêiner geral */
+  width: 40%;
+  /* Ajuste a largura do contêiner geral */
 }
 
 .progress-bar {
@@ -469,17 +498,21 @@
 /* Ajuste para telas menores */
 @media (max-width: 768px) {
   .button-row {
-    flex-direction: column; /* Empilha os botões */
-    align-items: stretch; /* Faz os botões preencherem toda a largura */
+    flex-direction: column;
+    /* Empilha os botões */
+    align-items: stretch;
+    /* Faz os botões preencherem toda a largura */
   }
 
   .left-buttons,
   .right-buttons {
-    justify-content: center; /* Centraliza os botões */
+    justify-content: center;
+    /* Centraliza os botões */
   }
 
   .right-buttons button {
-    width: 100%; /* Faz os botões ocuparem a largura total */
+    width: 100%;
+    /* Faz os botões ocuparem a largura total */
   }
 
   .conteudo-questao {
@@ -489,14 +522,17 @@
 
 @media (max-width: 768px) {
   .button-row-filtro {
-    flex-direction: column; /* Empilha os botões verticalmente */
+    flex-direction: column;
+    /* Empilha os botões verticalmente */
   }
 
   .btn-filtrar,
   .btn-salvar,
   .btn-filtrar-geral {
-    width: 100%; /* Botões ocupam 100% da largura */
-    margin-bottom: 10px; /* Espaçamento entre botões */
+    width: 100%;
+    /* Botões ocupam 100% da largura */
+    margin-bottom: 10px;
+    /* Espaçamento entre botões */
   }
 
   .img-container {
@@ -504,11 +540,13 @@
   }
 
   .questao-foto {
-    max-width: 90%; /* Reduz a imagem um pouco em telas pequenas */
+    max-width: 90%;
+    /* Reduz a imagem um pouco em telas pequenas */
   }
 
   .progress-container {
-    width: 100%; /* Ajuste a largura do contêiner geral */
+    width: 100%;
+    /* Ajuste a largura do contêiner geral */
   }
 }
 
@@ -516,18 +554,26 @@
   margin-right: 10px;
   width: 20px;
 }
+
 .btn-secondary {
-  background-color: #6c757d; /* Cor de fundo do botão Cancelar */
-  color: #fff; /* Cor do texto do botão Cancelar */
+  background-color: #6c757d;
+  /* Cor de fundo do botão Cancelar */
+  color: #fff;
+  /* Cor do texto do botão Cancelar */
 }
 
 .btn-success {
-  background-color: #28a745; /* Cor de fundo do botão Confirmar */
-  color: #fff; /* Cor do texto do botão Confirmar */
+  background-color: #28a745;
+  /* Cor de fundo do botão Confirmar */
+  color: #fff;
+  /* Cor do texto do botão Confirmar */
 }
+
 .btn-success:hover {
-  background-color: #218838; /* Cor de fundo do botão Confirmar no hover */
+  background-color: #218838;
+  /* Cor de fundo do botão Confirmar no hover */
 }
+
 .btn-filtros {
   margin-top: 12px;
   margin-right: 10px;
@@ -539,6 +585,7 @@
   border-radius: 5px;
   cursor: pointer;
 }
+
 .btn-filtrar {
   margin-top: 12px;
   margin-right: 10px;
@@ -550,6 +597,7 @@
   border-radius: 5px;
   cursor: pointer;
 }
+
 .btn-filtrar-geral {
   margin-top: 12px;
   padding: 10px 20px;
@@ -561,6 +609,7 @@
   border-radius: 5px;
   cursor: pointer;
 }
+
 .btn-salvar {
   margin-top: 12px;
   padding: 10px 20px;
@@ -608,21 +657,25 @@
   cursor: pointer;
   margin-right: 10px;
 }
+
 .btn:last-child {
   margin-right: 0;
 }
+
 .btn:hover {
   background-color: #0056b3;
 }
+
 .mat-form-field-appearance-fill .mat-form-field-flex {
   border-radius: 4px 4px 0 0;
   width: 280px;
 }
-.mat-form-field-type-mat-select:not(.mat-form-field-disabled)
-  .mat-form-field-flex {
+
+.mat-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-form-field-flex {
   cursor: pointer;
   background: aliceblue;
 }
+
 .form-control-input {
   display: block;
   width: 100%;
@@ -639,9 +692,11 @@
   border-radius: var(--bs-border-radius);
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
+
 ::ng-deep .mat-form-field-underline {
   display: none;
 }
+
 .palavra-chave {
   width: 100%;
   height: 48px;
@@ -649,8 +704,10 @@
 }
 
 p {
-  word-wrap: break-word; /* Quebra a linha em palavras longas */
-  overflow-wrap: anywhere; /* Adapta texto longo em qualquer ponto */
+  word-wrap: break-word;
+  /* Quebra a linha em palavras longas */
+  overflow-wrap: anywhere;
+  /* Adapta texto longo em qualquer ponto */
   margin: 10px 0;
 }
 
@@ -659,9 +716,7 @@ p {
 }
 
 @media (max-width: 768px) {
-  ::ng-deep
-    .mat-form-field-type-mat-select:not(.mat-form-field-disabled)
-    .mat-form-field-flex {
+  ::ng-deep .mat-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-form-field-flex {
     width: 100%;
   }
 
@@ -674,34 +729,42 @@ p {
     flex-direction: column;
   }
 }
+
 /* Estilos para o card de confirmação */
 .card-confirmacao {
   max-width: 400px;
   margin: 20px auto;
 }
+
 .card-confirmacao .card-body {
   padding: 20px;
 }
+
 .card-confirmacao .card-title {
   font-size: 1.25rem;
   font-weight: bold;
 }
+
 .card-confirmacao .card-text {
   margin-bottom: 20px;
 }
+
 .card-confirmacao .btn {
   margin-right: 10px;
 }
+
 .alert {
   padding: 14px;
   margin: 10px 0;
   border: 1px solid #f4a261;
   border-radius: 5px;
+
   &.alert-info {
     background-color: #f0f8ff;
     color: #000000;
     font-size: 14px;
   }
+
   &.alert-custom {
     background-color: #f4a261;
     color: #000000;
@@ -719,7 +782,8 @@ p {
 
 .button-row {
   display: flex;
-  justify-content: space-between; /* Espaça os botões entre as extremidades */
+  justify-content: space-between;
+  /* Espaça os botões entre as extremidades */
   align-items: center;
   margin-top: 20px;
 }
@@ -728,17 +792,23 @@ p {
   display: flex;
   justify-content: flex-start;
 }
+
 .right-buttons {
   display: flex;
   justify-content: flex-end;
-  gap: 10px; /* Espaço entre os botões da direita */
+  gap: 10px;
+  /* Espaço entre os botões da direita */
 }
+
 .btn-gabarito {
   padding: 6px 20px;
-  border: 2px solid #f4a261; /* Borda da cor especificada */
+  border: 2px solid #f4a261;
+  /* Borda da cor especificada */
   border-radius: 5px;
-  background-color: #f4a261; /* Background transparente */
-  color: #000; /* Cor do texto preto */
+  background-color: #f4a261;
+  /* Background transparente */
+  color: #000;
+  /* Cor do texto preto */
   cursor: pointer;
   font-size: 16px;
   font-weight: bold;
@@ -761,25 +831,31 @@ p {
   font-size: 16px;
   color: #fff;
 }
+
 .btn-anterior {
   background-color: #2a4d7b;
 }
+
 .btn-proxima {
   background-color: #3b5fa0;
 }
+
 .btn-responder {
   background-color: #28a745;
 }
+
 .btn-anterior:disabled {
   background-color: #9a9a9a;
   cursor: not-allowed;
 }
+
 .alert-success {
   background-color: #399918;
   color: #020202;
   font-size: 16px;
   border-color: #399918;
 }
+
 .alert-danger {
   background-color: #f5004f;
   color: #ffffff;
@@ -790,10 +866,12 @@ p {
 .alternativa {
   display: flex;
   align-items: center;
-  border-radius: 5px; /* Border radius for rounded corners */
+  border-radius: 5px;
+  /* Border radius for rounded corners */
   padding: 5px;
   color: var(--text-color);
-  transition: background-color 0.3s, border-color 0.3s; /* Smooth transitions for background and border color */
+  transition: background-color 0.3s, border-color 0.3s;
+  /* Smooth transitions for background and border color */
 }
 
 .bar-carregando {
@@ -880,18 +958,24 @@ p {
 /* Responsividade para tablets */
 @media (min-width: 768px) and (max-width: 1024px) {
   .button-row-filtro {
-    flex-wrap: nowrap; /* Mantém os botões em uma única linha */
+    flex-wrap: nowrap;
+    /* Mantém os botões em uma única linha */
     justify-content: center;
-    gap: 10px; /* Espaçamento entre os botões */
+    gap: 10px;
+    /* Espaçamento entre os botões */
   }
 
   .btn-filtrar,
   .btn-salvar,
   .btn-filtrar-geral {
-    flex: 1 1 30%; /* Cada botão ocupa 30% da linha */
-    margin-bottom: 0; /* Remove o espaçamento vertical */
-    max-width: 30%; /* Limita a largura para não exceder 30% */
+    flex: 1 1 30%;
+    /* Cada botão ocupa 30% da linha */
+    margin-bottom: 0;
+    /* Remove o espaçamento vertical */
+    max-width: 30%;
+    /* Limita a largura para não exceder 30% */
   }
+
   .conteudo-questao {
     font-size: 16px;
   }
@@ -917,6 +1001,7 @@ p {
     width: 100%;
     padding: 8px;
   }
+
   .conteudo-questao {
     font-size: 16px;
   }
@@ -1019,8 +1104,10 @@ p {
 }
 
 .img-comentario {
-  white-space: pre-wrap; /* Preserva quebras de linha e espaços */
-  word-break: break-word; /* Quebra palavras longas */
+  white-space: pre-wrap;
+  /* Preserva quebras de linha e espaços */
+  word-break: break-word;
+  /* Quebra palavras longas */
 }
 
 .letra-parenteses {
@@ -1031,7 +1118,8 @@ p {
 }
 
 .filtros-container {
-  max-height: 1000px; /* Defina um valor grande o suficiente para conter o conteúdo */
+  max-height: 1000px;
+  /* Defina um valor grande o suficiente para conter o conteúdo */
   overflow: hidden;
   transition: max-height 0.8s ease-in-out, padding 0.8s ease-in-out;
 }
@@ -1057,4 +1145,887 @@ p {
 
 .close-popup-button:hover {
   color: var(--text-color) !important;
+}
+
+
+/* Container geral da área de estatísticas */
+.stats-section {
+  background: var(--bg-container);
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.stats-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.chart-container {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  height: 200px;
+  gap: 15px;
+  padding-bottom: 5px;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.chart-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 1;
+  max-width: 60px;
+  height: 100%;
+  position: relative;
+  group: hover;
+}
+
+.chart-value {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-color);
+  margin-bottom: 6px;
+  opacity: 0;
+  animation: fadeIn 0.5s forwards;
+}
+
+.chart-bar {
+  width: 100%;
+  background: linear-gradient(180deg, #4facfe 0%, #00f2fe 100%);
+  border-radius: 6px 6px 0 0;
+  transition: height 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  min-height: 2%;
+  /* Para garantir que 0% ainda mostre um tracinho, se quiser */
+}
+
+/* A letra da alternativa (A, B, C...) abaixo da barra */
+.chart-label {
+  margin-top: 10px;
+  font-weight: 600;
+  color: var(--text-color);
+  font-size: 1rem;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Animação simples para o texto */
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+/* (Opcional) Cor diferente para a resposta correta se você tiver essa info no loop */
+.chart-bar.correct {
+  background: linear-gradient(180deg, #43e97b 0%, #38f9d7 100%);
+}
+
+/* --- Layout Geral --- */
+.stats-section {
+  background: var(--bg-container);
+  /* Fundo cinza claro para a seção */
+  border-top: 1px solid #e0e0e0;
+  margin-top: 30px;
+}
+
+.analytics-row {
+  display: flex;
+  gap: 20px;
+  /* Espaço entre os dois cards */
+  align-items: stretch;
+  /* Faz os cards terem a mesma altura */
+  flex-wrap: wrap;
+  /* Permite quebrar linha em telas pequenas */
+}
+
+/* Os cartões brancos que seguram os gráficos */
+.analytics-card {
+  flex: 1;
+  /* Ocupam espaço igual */
+  min-width: 300px;
+  /* Largura mínima antes de quebrar linha */
+  background: var(--bg-container);
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+}
+
+.card-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #444;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+/* --- GRÁFICO 1: Barras (Ajustado) --- */
+.bar-chart-container {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  /* Altura REDUZIDA conforme pedido (era 200px) */
+  height: 160px;
+  gap: 12px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #f0f0f0;
+  margin-top: auto;
+  /* Empurra para o fundo do card */
+}
+
+.chart-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 1;
+  height: 100%;
+}
+
+.chart-value {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.chart-bar {
+  width: 100%;
+  max-width: 40px;
+  /* Barras um pouco mais finas */
+  /* Gradiente azul padrão */
+  background: linear-gradient(180deg, #4facfe 0%, #00f2fe 100%);
+  border-radius: 8px 8px 0 0;
+  transition: height 0.5s ease-out;
+  min-height: 4px;
+}
+
+.chart-label {
+  margin-top: 8px;
+  font-weight: 700;
+  color: var(--text-color);
+  font-size: 0.9rem;
+  background: var(--bg-container);
+  border-radius: 6px;
+  padding: 4px 12px;
+}
+
+/* --- GRÁFICO 2: Donut (Mockado com CSS) --- */
+.donut-chart-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  height: 100%;
+  /* Ocupa toda altura disponível do card */
+}
+
+/* O círculo externo colorido */
+.donut-chart {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  /* O background é definido via style inline no HTML usando conic-gradient */
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* O buraco branco no meio */
+.donut-hole {
+  width: 100px;
+  height: 100px;
+  background: var(--bg-container);
+  border-radius: 50%;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.donut-number {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--text-color);
+  line-height: 1;
+}
+
+.donut-label {
+  font-size: 0.75rem;
+  color: var(--text-color);
+  font-weight: 600;
+}
+
+/* Legenda lateral */
+.chart-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  font-size: 0.85rem;
+  color: var(--text-color);
+  font-weight: 500;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 8px;
+  display: inline-block;
+}
+
+.dot.green {
+  background: #43e97b;
+}
+
+.dot.red {
+  background: #ff6b6b;
+}
+
+.dot.grey {
+  background: #e0e0e0;
+}
+
+/* Container para alinhar os botões */
+.buttons-container {
+  display: flex;
+  gap: 12px;
+  /* Espaço entre os botões */
+  align-items: center;
+  justify-content: flex-end;
+  /* Alinha à direita (ajuste se quiser center) */
+  flex-wrap: wrap;
+  /* Para telas pequenas */
+  margin-top: 20px;
+}
+
+/* Estilo Base para todos os botões */
+.btn-custom {
+  border: none;
+  padding: 10px 24px;
+  /* Tamanho confortável */
+  border-radius: 50px;
+  /* Formato de pílula moderno */
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  /* Espaço entre ícone e texto */
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Efeito Hover Geral (Levantar e Sombra) */
+.btn-custom:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 7px 14px rgba(0, 0, 0, 0.18);
+}
+
+.btn-custom:active {
+  transform: translateY(0);
+}
+
+/* --- Cores Específicas --- */
+
+/* 1. Botão RESPONDER (Verde Moderno) */
+.btn-responder {
+  background: linear-gradient(135deg, #2af598 0%, #009efd 100%);
+}
+
+.btn-responder:hover {
+  box-shadow: 0 7px 14px rgba(0, 158, 253, 0.4);
+  /* Sombra azulada */
+}
+
+/* 2. Botão GABARITO / COMENTÁRIO (Laranja/Gold) */
+.btn-gabarito {
+  background: linear-gradient(135deg, #f09819 0%, #edde5d 100%);
+  color: #fff;
+  /* ou #444 se ficar muito claro */
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.btn-gabarito:hover {
+  box-shadow: 0 7px 14px rgba(240, 152, 25, 0.4);
+  /* Sombra alaranjada */
+}
+
+/* 3. Botão ESTATÍSTICA (Roxo/Indigo) */
+.btn-stats {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.btn-stats:hover {
+  box-shadow: 0 7px 14px rgba(118, 75, 162, 0.4);
+  /* Sombra roxa */
+}
+
+/* 4. Botão FÓRUM (Ciano/Teal) */
+.btn-forum {
+  background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+  color: #1a5c48;
+  /* Texto escuro para contraste no ciano */
+}
+
+.btn-forum:hover {
+  box-shadow: 0 7px 14px rgba(67, 233, 123, 0.4);
+  /* Sombra esverdeada */
+  color: #0f3d30;
+}
+
+/* Ícones dentro dos botões (ajuste fino) */
+.btn-custom i {
+  font-size: 1.1em;
+}
+
+/* Responsividade: Botões full-width no celular */
+@media (max-width: 576px) {
+  .buttons-container {
+    flex-direction: column;
+    width: 100%;
+    gap: 15px;
+  }
+
+  .btn-custom {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Ajuste do container principal do cabeçalho */
+.identificadores-questao {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+  background-color: #1e1e1e;
+  /* Cor de fundo escura para destacar o header */
+  padding: 12px 20px;
+  border-radius: 8px;
+  border: 1px solid #333;
+  /* Borda sutil */
+}
+
+/* Agrupamento dos botões à direita */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  /* Espaço entre os botões */
+  margin-left: auto;
+  /* Isso empurra os botões para a extrema direita */
+}
+
+/* --- ESTILO PADRÃO DOS BOTÕES (Clean) --- */
+.btn-std {
+  border: none;
+  height: 38px;
+  /* Altura fixa para alinhar com o botão Editar */
+  padding: 0 16px;
+  border-radius: 4px;
+  /* Borda levemente arredondada (padrão web clássico) */
+  font-family: 'Roboto', sans-serif;
+  /* Ou a fonte do seu projeto */
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  /* Espaço entre ícone e texto */
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+/* Efeito Hover sutil */
+.btn-std:hover {
+  filter: brightness(110%);
+  /* Clareia levemente ao passar o mouse */
+  transform: translateY(-1px);
+}
+
+.btn-std:active {
+  transform: translateY(0);
+}
+
+/* --- CORES SÓLIDAS (Foscas) --- */
+
+/* Responder (Verde padrão) */
+.btn-verde {
+  background-color: #27ae60;
+}
+
+/* Comentário (Amarelo Ouro - Texto escuro para leitura) */
+.btn-amarelo {
+  background-color: #f1c40f;
+  color: #2c3e50;
+}
+
+/* Estatística (Roxo Discreto) */
+.btn-roxo {
+  background-color: #8e44ad;
+}
+
+/* Fórum (Azul Padrão) */
+.btn-azul {
+  background-color: #2980b9;
+}
+
+/* Ajuste para o botão de Editar existente se integrar */
+.btn-editar {
+  height: 38px;
+  border-radius: 4px;
+  padding: 0 16px;
+  display: inline-flex;
+  align-items: center;
+  margin-left: 0;
+  /* Remove margens antigas se houver */
+  border: none;
+  background-color: #e67e22;
+  /* Laranja padrão do editar */
+  color: white;
+  font-weight: 500;
+}
+
+/* Opcional: Ajuste do botão da lâmpada para ficar na mesma altura */
+.btn-balloon {
+  height: 38px;
+  width: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  background-color: #34495e;
+  border: none;
+  padding: 0;
+}
+
+/* Responsividade: Em celulares, quebra a linha e empilha */
+@media (max-width: 992px) {
+  .identificadores-questao {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .header-actions {
+    margin-left: 0;
+    margin-top: 15px;
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .btn-std,
+  .btn-editar {
+    flex-grow: 1;
+    /* Botões ocupam largura total disponível */
+  }
+}
+
+/* --- CABEÇALHO FLEXÍVEL --- */
+.identificadores-questao-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* Alinha verticalmente */
+  flex-wrap: wrap;
+  background-color: #1e1e1e;
+  padding: 12px 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  gap: 15px;
+}
+
+/* Lado Esquerdo (Texto + Novos Botões) */
+.identificadores-left {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  /* Espaço entre o bloco de texto e os botões */
+  flex: 1;
+}
+
+.info-texts {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.info-texts h3 {
+  margin: 0;
+  font-size: 1rem;
+  color: #fff;
+}
+
+/* Novos botões alinhados à esquerda junto com o texto */
+.header-actions-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Estilo Flat para os novos botões (Statistics, Forum, Comment) */
+.btn-std {
+  border: none;
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: transform 0.1s;
+}
+
+.btn-std:hover {
+  transform: translateY(-1px);
+  filter: brightness(110%);
+}
+
+.btn-roxo {
+  background-color: #8e44ad;
+}
+
+.btn-amarelo {
+  background-color: #f1c40f;
+  color: #333;
+}
+
+.btn-azul {
+  background-color: #2980b9;
+}
+
+.btn-balloon {
+  background: #34495e;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Lado Direito (Botão Editar Original) */
+.identificadores-right {
+  margin-left: auto;
+}
+
+.btn-editar-original {
+  background-color: #FFB74D;
+  /* Laranja original */
+  color: #333;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 20px;
+  /* Borda redonda original */
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-editar-original:hover {
+  background-color: #FFA726;
+}
+
+/* --- RODAPÉ CENTRALIZADO --- */
+.navigation-fixed {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #333;
+  display: flex;
+  justify-content: center;
+  /* Centraliza tudo */
+}
+
+.nav-content-centered {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  /* Espaço entre Anterior - Responder - Próxima */
+}
+
+.btn-responder-central {
+  background-color: #27ae60;
+  /* Verde */
+  color: white;
+  border: none;
+  padding: 10px 40px;
+  /* Botão largo */
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btn-responder-central:hover {
+  background-color: #2ecc71;
+}
+
+.btn-responder-central:disabled {
+  background-color: #555;
+  cursor: default;
+}
+
+.btn-anterior,
+.btn-proxima {
+  background-color: #34495e;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-anterior:hover,
+.btn-proxima:hover {
+  background-color: #2c3e50;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .identificadores-questao-wrapper {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .identificadores-left {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .header-actions-left {
+    width: 100%;
+    justify-content: space-between;
+    margin-top: 10px;
+  }
+
+  .nav-content-centered {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .btn-responder-central {
+    padding: 10px 20px;
+  }
+}
+
+/* --- WRAPPER DO CABEÇALHO --- */
+.identificadores-questao-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  background-color: var(--bg-container);
+  /* Usa a variável do seu tema */
+  padding: 5px 10px;
+  /* Padding reduzido para ficar igual ao print */
+  border-radius: 15px;
+  /* Bordas arredondadas do container */
+  margin-bottom: 10px;
+  gap: 15px;
+}
+
+/* Lado Esquerdo: Texto + Botões Pequenos */
+.identificadores-left {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  flex: 1;
+}
+
+/* Textos (ID, Tema, etc) */
+.info-texts {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.info-texts h3 {
+  margin: 0;
+  font-size: 16px;
+  color: var(--text-color);
+  white-space: nowrap;
+}
+
+/* Grupo de botões (Lâmpada, Estatística...) */
+.header-actions-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 10px;
+  /* Separa um pouco do texto */
+}
+
+/* Lado Direito: Botão Editar Original */
+.identificadores-right {
+  margin-left: auto;
+}
+
+/* --- BOTÃO EDITAR (ORIGINAL) --- */
+/* Copiado do seu CSS original */
+.btn-editar {
+  padding: 9px 8px;
+  width: 200px;
+  background-color: #f6a568;
+  color: #000000;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  margin-left: auto;
+  font-weight: 600;
+  display: block;
+  /* Garante comportamento de bloco/caixa */
+}
+
+.btn-editar:hover {
+  filter: brightness(105%);
+}
+
+/* --- NOVOS BOTÕES FLAT (Estatística, Fórum...) --- */
+.btn-std {
+  border: none;
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: transform 0.1s;
+}
+
+.btn-std:hover {
+  transform: translateY(-1px);
+  filter: brightness(110%);
+}
+
+.btn-roxo {
+  background-color: #8e44ad;
+}
+
+.btn-amarelo {
+  background-color: #f1c40f;
+  color: #333;
+}
+
+.btn-azul {
+  background-color: #2980b9;
+}
+
+/* Botão Lâmpada */
+.btn-balloon {
+  background: #041e4e;
+  /* Azul escuro do tema */
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  /* Levemente arredondado */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.btn-balloon:hover {
+  background-color: #0a2e70;
+}
+
+/* --- RODAPÉ CENTRALIZADO --- */
+.navigation-fixed {
+  /* Seus estilos existentes de posicionamento fixo */
+  display: flex;
+  justify-content: center;
+  /* Centraliza o conteúdo */
+  align-items: center;
+}
+
+.nav-content-centered {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.btn-responder-central {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 40px;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.btn-responder-central:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+/* Responsividade Básica */
+@media (max-width: 900px) {
+  .identificadores-questao-wrapper {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .header-actions-left {
+    margin-left: 0;
+    margin-top: 10px;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .identificadores-right {
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .btn-editar {
+    width: 100%;
+    /* Botão editar full width no mobile */
+  }
 }

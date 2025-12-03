@@ -1148,6 +1148,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     }
 
     this.mostrarGabarito = !this.mostrarGabarito;
+    this.mostrarEstatisticasQuestao = false;
 
     const imagens = [
       this.questaoAtual.fotoDaRespostaUmUrl,
@@ -1168,6 +1169,11 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
   exibirEstatisticas(): void {
     this.mostrarEstatisticasQuestao = !this.mostrarEstatisticasQuestao;
+    this.mostrarGabarito = false;
+  }
+
+  navegarParaForum(): void {
+
   }
 
 
