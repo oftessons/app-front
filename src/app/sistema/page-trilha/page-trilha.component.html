@@ -39,14 +39,14 @@
                   [width]="obterLarguraAnimacao(semana.status === 'locked' ? 'bloqueado' : (semana.status === 'completed' ? 'concluido' : 'ativo'))"
                 ></ng-lottie>
 
-                <img 
+                <!-- <img 
                   *ngIf="!animacoesAtivadas" 
                   [src]="obterIconeEstaticoParaStatus(semana.status)" 
                   alt="Status da Semana"
                   [width]="obterLarguraAnimacao(semana.status === 'locked' ? 'bloqueado' : 'ativo')" 
                   class="icone-estatico" 
                 />
-              </div>
+              </div> -->
             </div>
             
             <!-- Balão "Começar" para semana ativa -->

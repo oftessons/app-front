@@ -161,8 +161,9 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   public streakAtual: number = 0;
   public streakDezAtivada: boolean = false;
   public robozinhoVisivel: boolean = false;
-  public readonly STREAK_DEZ: number = 10;
+  public readonly STREAK_DEZ: number = 1;
   public carregandoRespostaSalva: boolean = false;
+  public animacoesAtivadas: boolean = true;
 
   respondidasAgora: Set<number> = new Set();
 
@@ -296,6 +297,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     if (localStorage.getItem('respostasSalvas')) {
       this.recuperarRespostasSalvasLocalStorage();
     }
+    this.animacoesAtivadas = PageMeuPerfilComponent.getAnimacoesStatus();
 
     this.carregandoEstadoInicial = true;
 
@@ -1239,7 +1241,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
       // 2. LÓGICA DO PULO DO ROBOZINHO
       this.robozinhoVisivel = this.streakAtual >= this.STREAK_DEZ;
-      if (this.streakAtual === this.STREAK_DEZ) {
+      if (this.streakAtual === this.STREAK_DEZ && this.animacoesAtivadas) {
         this.streakDezAtivada = true;
       }
     } else {
