@@ -1,0 +1,72 @@
+<div
+  class="modal-padrao"
+  role="dialog"
+  [attr.aria-labelledby]="title"
+  aria-modal="true"
+>
+  <div class="modal-backdrop" (click)="onBackdropClick()"></div>
+  
+  <div class="modal-wrapper">
+    <div class="modal-container">
+      <div class="modal-box" [ngClass]="size">
+        
+        <!-- Botão de fechar -->
+        <button 
+          *ngIf="showCloseButton" 
+          class="modal-close-btn" 
+          (click)="onClose()" 
+          aria-label="Fechar"
+        >
+          ×
+        </button>
+        
+        <div class="modal-content">
+          <!-- Ícone -->
+          <div class="modal-icon" *ngIf="showIcon && iconSrc">
+            <img [src]="iconSrc" [alt]="iconAlt" />
+          </div>
+          
+          <!-- Título -->
+          <h2 *ngIf="title" class="modal-title">{{ title }}</h2>
+          
+          <!-- Divisor -->
+          <hr *ngIf="title || description" class="modal-divider" />
+          
+          <!-- Descrição -->
+          <p *ngIf="description" class="modal-description" [innerHTML]="description"></p>
+          
+          <!-- Conteúdo customizado via ng-content -->
+          <div class="modal-custom-content">
+            <ng-content></ng-content>
+          </div>
+          
+          <!-- Conteúdo via template -->
+          <div class="modal-template-content" *ngIf="contentTemplate">
+            <ng-container *ngTemplateOutlet="contentTemplate"></ng-container>
+          </div>
+          
+          <!-- Botões de ação -->
+          <div class="modal-actions" *ngIf="showConfirmButton || showCancelButton">
+            <button 
+            *ngIf="showCancelButton" 
+            class="btn-action btn-cancel" 
+            (click)="onCancel()"
+            >
+            {{ cancelButtonText }}
+            </button>
+
+            <button 
+              *ngIf="showConfirmButton" 
+              class="btn-action" 
+              [ngClass]="getButtonClass()"
+              (click)="onConfirm()"
+            >
+              {{ confirmButtonText }}
+            </button>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>

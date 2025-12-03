@@ -7,6 +7,7 @@ import { Aula } from '../sistema/painel-de-aulas/aula';
 import { CadastroAulaResponse } from '../sistema/cadastro-de-aulas/cadastro-aulas-response';
 import { VdoCipherPlaybackResponse } from '../sistema/modulo-de-aulas/video-cipher-playblack-response';
 import { ProgressoAulasDtoResponse } from '../sistema/painel-de-aulas/progresso-aulas-dto-response';
+import { SearchResultResponseDto } from '../sistema/painel-de-aulas/response/search-result-response-dto';
 
 @Injectable({
 
@@ -133,6 +134,31 @@ export class AulasService {
     );
   }
 
+  pesquisarAulasPorTitulo(titulo: string): Observable<SearchResultResponseDto[]> {
+    const url = `${this.apiURL}/search`;
+    const params = new HttpParams().set('titulo', titulo);
+
+    return this.http.get<SearchResultResponseDto[]>(url, { params, observe: 'response' }).pipe(
+      map((response) => {
+        if (response.status === 204) {
+          console.log('Nenhuma aula encontrada com o título:', titulo);
+          return [];
+        }
+        console.log('Resposta da pesquisa por título:', response.body);
+        return response.body || [];
+      }),
+      catchError((error) => {
+        let errorMessage = '';
+        if (error.error instanceof ErrorEvent) {
+          errorMessage = `Erro: ${error.error.message}`;
+        } else {
+          errorMessage = `Erro no servidor: ${error.status}, ${error.message}`;
+        }
+        console.error(errorMessage);
+        return throwError(() => new Error(errorMessage));
+      })
+    );
+  }
 
   buscarAulaPorId(id: number): Observable<Aula> {
     const url = `${this.apiURL}/${id}`;
