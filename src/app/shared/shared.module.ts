@@ -46,7 +46,7 @@ import { ModalPadraoComponent } from './modal-padrao/modal-padrao.component';
     ModalTrilhaComponent,
     ModalEditarSemanaTrilhaComponent,
     HappyMessagePopupComponent,
-    GlobalSearchComponent
+    GlobalSearchComponent,
     ModalPadraoComponent
   ],
   imports: [
@@ -75,7 +75,7 @@ import { ModalPadraoComponent } from './modal-padrao/modal-padrao.component';
     FlashcardsSubtemasComponent,
     FlashcardModalComponent,
     ModalTrilhaComponent,
-    GlobalSearchComponent
+    GlobalSearchComponent,
     ModalPadraoComponent,
   ],
   entryComponents: [ModalTrilhaComponent, ModalPadraoComponent],
