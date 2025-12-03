@@ -25,6 +25,7 @@ import { FlashcardModalComponent } from './flashcard-modal/flashcard-modal.compo
 import { DeletarFlashcardModalComponent } from './deletar-flashcard-modal/deletar-flashcard-modal.component';
 import { ModalTrilhaComponent } from './modal-trilha/modal-trilha.component';
 import { ModalEditarSemanaTrilhaComponent } from './modal-editar-semana-trilha/modal-editar-semana-trilha.component';
+import { GlobalSearchComponent } from './global-search/global-search.component';
 import { ModalPadraoComponent } from './modal-padrao/modal-padrao.component';
 
 @NgModule({
@@ -45,6 +46,7 @@ import { ModalPadraoComponent } from './modal-padrao/modal-padrao.component';
     ModalTrilhaComponent,
     ModalEditarSemanaTrilhaComponent,
     HappyMessagePopupComponent,
+    GlobalSearchComponent,
     ModalPadraoComponent
   ],
   imports: [
@@ -73,8 +75,9 @@ import { ModalPadraoComponent } from './modal-padrao/modal-padrao.component';
     FlashcardsSubtemasComponent,
     FlashcardModalComponent,
     ModalTrilhaComponent,
+    GlobalSearchComponent,
     ModalPadraoComponent,
   ],
   entryComponents: [ModalTrilhaComponent, ModalPadraoComponent],
 })
-export class SharedModule {}
+export class SharedModule { }
