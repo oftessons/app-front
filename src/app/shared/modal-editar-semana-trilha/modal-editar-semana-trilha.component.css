@@ -355,7 +355,6 @@
   padding: 0.75rem 1.5rem;
   border-radius: 8px;
   font-size: 0.95rem;
-  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
   display: flex;
@@ -375,7 +374,7 @@
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  background: var(--light-blue);
   color: white;
 }
 
