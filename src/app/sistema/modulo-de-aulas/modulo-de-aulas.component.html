@@ -136,6 +136,12 @@
                             <span class="no-material">Nenhum material adicionado</span>
                         </ng-template>
                     </div>
+
+                    <!-- Seção de Comentários -->
+                    <app-comentarios-aula 
+                        *ngIf="videoAtual" 
+                        [aulaId]="videoAtual.id">
+                    </app-comentarios-aula>
                 </div>
             </div>
 

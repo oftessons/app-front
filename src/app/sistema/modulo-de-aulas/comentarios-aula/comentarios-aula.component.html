@@ -1,0 +1,177 @@
+<div class="comentarios-container">
+  <h4 class="comentarios-title">
+    <i class="fas fa-comments"></i>
+    Comentários
+  </h4>
+
+  <!-- Formulário para novo comentário -->
+  <div class="novo-comentario-form">
+    <div class="avatar-user">
+      <img *ngIf="fotoUsuarioLogado" [src]="fotoUsuarioLogado" alt="Avatar" class="avatar-img">
+      <span *ngIf="!fotoUsuarioLogado">{{ getInitials(nomeUsuarioLogado) }}</span>
+    </div>
+    <div class="input-wrapper">
+      <textarea
+        [(ngModel)]="novoComentario"
+        placeholder="Adicione um comentário..."
+        rows="2"
+        class="comentario-input"
+        [disabled]="isEnviando"
+      ></textarea>
+      <button
+        class="btn-enviar"
+        (click)="enviarComentario()"
+        [disabled]="!novoComentario.trim() || isEnviando"
+      >
+        <i class="fas fa-paper-plane" [style.display]="isEnviando ? 'none' : 'inline-block'"></i>
+        <i class="fas fa-spinner fa-spin" [style.display]="isEnviando ? 'inline-block' : 'none'"></i>
+        <span>{{ isEnviando ? 'Enviando...' : 'Comentar' }}</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Lista de comentários -->
+  <div class="comentarios-list" *ngIf="comentarios.length > 0">
+    <div class="comentario-item" *ngFor="let comentario of comentarios">
+      <div class="comentario-header">
+        <div class="avatar">
+          <span>{{ getInitials(comentario.nomeAutor) }}</span>
+        </div>
+        <div class="comentario-info">
+          <div class="autor-row">
+            <span class="autor-nome">{{ comentario.nomeAutor }}</span>
+            <span class="badge" [ngClass]="getPermissaoClass(comentario.permissaoAutor)">
+              {{ getPermissaoLabel(comentario.permissaoAutor) }}
+            </span>
+          </div>
+          <span class="data-comentario">{{ comentario.dataComentario }}</span>
+        </div>
+        
+        <!-- Menu de ações -->
+        <div class="comentario-actions" *ngIf="podeEditar(comentario.nomeAutor)">
+          <button class="btn-action" (click)="iniciarEdicaoComentario(comentario)" title="Editar">
+            <i class="fas fa-edit"></i>
+          </button>
+          <button class="btn-action btn-delete" (click)="deletarComentario(comentario)" title="Excluir">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Texto do comentário (modo visualização) -->
+      <div class="comentario-texto" *ngIf="!comentario.editando">
+        <p>{{ comentario.texto }}</p>
+      </div>
+
+      <!-- Texto do comentário (modo edição) -->
+      <div class="comentario-edicao" *ngIf="comentario.editando">
+        <textarea
+          [(ngModel)]="textoEdicao"
+          rows="3"
+          class="comentario-input"
+        ></textarea>
+        <div class="edicao-actions">
+          <button class="btn-cancelar" (click)="cancelarEdicaoComentario(comentario)">
+            Cancelar
+          </button>
+          <button class="btn-salvar" (click)="salvarEdicaoComentario(comentario)" [disabled]="!textoEdicao.trim()">
+            Salvar
+          </button>
+        </div>
+      </div>
+
+      <!-- Ações do comentário -->
+      <div class="comentario-footer">
+        <button class="btn-responder" (click)="toggleFormResposta(comentario)">
+          <i class="fas fa-reply"></i>
+          Responder
+        </button>
+        <button class="btn-ver-respostas" (click)="toggleRespostas(comentario)" *ngIf="comentario.respostas && comentario.respostas.length > 0">
+          <i class="fas" [ngClass]="comentario.mostrarRespostas ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+          {{ comentario.mostrarRespostas ? 'Ocultar respostas' : 'Ver respostas' }}
+        </button>
+      </div>
+
+      <!-- Formulário de resposta -->
+      <div class="resposta-form" *ngIf="comentario.mostrarFormResposta">
+        <div class="avatar-small">
+          <img *ngIf="fotoUsuarioLogado" [src]="fotoUsuarioLogado" alt="Avatar" class="avatar-img">
+          <span *ngIf="!fotoUsuarioLogado">{{ getInitials(nomeUsuarioLogado) }}</span>
+        </div>
+        <div class="input-wrapper">
+          <textarea
+            [(ngModel)]="comentario.textoResposta"
+            placeholder="Escreva uma resposta..."
+            rows="2"
+            class="comentario-input resposta-input"
+          ></textarea>
+          <div class="resposta-actions">
+            <button class="btn-cancelar-sm" (click)="toggleFormResposta(comentario)">
+              Cancelar
+            </button>
+            <button class="btn-enviar-sm" (click)="enviarResposta(comentario)" [disabled]="!comentario.textoResposta?.trim()">
+              Responder
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lista de respostas -->
+      <div class="respostas-list" *ngIf="comentario.mostrarRespostas">
+        <div class="loading-respostas" *ngIf="comentario.carregandoRespostas">
+          <i class="fas fa-spinner fa-spin"></i>
+          Carregando respostas...
+        </div>
+
+        <div class="resposta-item" *ngFor="let resposta of comentario.respostas">
+          <div class="resposta-header">
+            <div class="avatar-small">
+              <span>{{ getInitials(resposta.nomeAutor || '') }}</span>
+            </div>
+            <div class="resposta-info">
+              <span class="autor-nome" *ngIf="resposta.nomeAutor">{{ resposta.nomeAutor }}</span>
+              <span class="badge" [ngClass]="getPermissaoClass(resposta.permissaoAutor)">
+                {{ getPermissaoLabel(resposta.permissaoAutor) }}
+              </span>
+            </div>
+            <button 
+              class="btn-action btn-delete-sm" 
+              (click)="deletarResposta(comentario, resposta)" 
+              title="Excluir resposta"
+            >
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+          <div class="resposta-texto">
+            <p>{{ resposta.comentario }}</p>
+          </div>
+        </div>
+
+        <div class="sem-respostas" *ngIf="!comentario.carregandoRespostas && (!comentario.respostas || comentario.respostas.length === 0)">
+          <p>Nenhuma resposta ainda. Seja o primeiro a responder!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Estado vazio -->
+  <div class="sem-comentarios" *ngIf="!isLoading && comentarios.length === 0">
+    <i class="fas fa-comment-slash"></i>
+    <p>Nenhum comentário ainda.</p>
+    <span>Seja o primeiro a comentar nesta aula!</span>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading-comentarios" *ngIf="isLoading">
+    <i class="fas fa-spinner fa-spin"></i>
+    <span>Carregando comentários...</span>
+  </div>
+
+  <!-- Botão carregar mais -->
+  <div class="carregar-mais" *ngIf="hasMore && !isLoading">
+    <button class="btn-carregar-mais" (click)="carregarMais()">
+      <i class="fas fa-plus"></i>
+      Carregar mais comentários
+    </button>
+  </div>
+</div>
