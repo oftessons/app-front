@@ -4,7 +4,6 @@ import { SearchResultResponseDto } from 'src/app/sistema/painel-de-aulas/respons
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, finalize, switchMap, tap } from 'rxjs/operators';
 import { AulasService } from 'src/app/services/aulas.service';
-import { SearchService } from 'src/app/services/search-mock.service';
 
 @Component({
   selector: 'app-global-search',
@@ -26,7 +25,6 @@ export class GlobalSearchComponent implements OnInit {
     private readonly router: Router,
     private readonly aulaService: AulasService,
     private readonly elementRef: ElementRef,
-    private readonly searchService: SearchService
   ) { }
 
   ngOnInit(): void {
