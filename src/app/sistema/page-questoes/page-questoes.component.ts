@@ -53,7 +53,7 @@ import { TemaDescricoes } from './enums/tema-descricao';
 import { CertasErradas } from './enums/certas-erradas';
 import { CertasErradasDescricao } from './enums/certas-erradas-descricao';
 import { RespostasSimuladosDescricao } from './enums/resp-simu-descricao';
-import { catchError, filter, map, switchMap, tap } from 'rxjs/operators';
+import { catchError, filter, map, retry, switchMap, tap } from 'rxjs/operators';
 import { NavigateService } from 'src/app/services/navigate.service';
 import {
   trigger,
@@ -185,6 +185,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     respSimulado: null,
     comentadas: null,
     palavraChave: null,
+    qntdQuestoes: null
   };
 
   mostrarCardConfirmacao = false;
@@ -213,6 +214,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
   descricaoFiltro: string = '';
   palavraChave: string = '';
+  qntdQuestoesInput: string = '';
   multSelectAno: Ano[] = [];
   multSelecDificuldade: Dificuldade[] = [];
   multSelectTipoDeProva: TipoDeProva[] = [];
@@ -841,6 +843,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     this.multiSelectRespSimu = [];
     this.multiSelectTemasSubtemasSelecionados = [];
     this.multiSelectQuestoesComentadas = [];
+    this.qntdQuestoesInput = '';
 
     this.palavraChave = '';
     this.filtrosBloqueados = false;
@@ -1010,6 +1013,27 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     if (this.palavraChave && this.palavraChave.trim() !== '') {
       filtros.palavraChave = this.palavraChave.trim();
     }
+
+    if (this.qntdQuestoesInput && this.qntdQuestoesInput.trim() !== '') {
+      const numero = parseInt(this.qntdQuestoesInput, 10);
+
+      if (isNaN(numero)) {
+        this.message = 'Quantidade de questões aceita apenas números.';
+        return; 
+      }
+
+      if (numero <= 0) {
+        this.message = 'A quantidade de questoes deve ser maior que 0.';
+        return; 
+      }
+
+      if (numero > 1000000) { 
+        this.message = 'A quantidade máxima de questões permitida é 1.000.000.';
+        return; 
+      }
+      filtros.qntdQuestoes = numero;
+    }
+    
 
     if (Object.keys(filtros).length === 0) {
       this.message = 'Por favor, selecione pelo menos um filtro.';
@@ -2067,5 +2091,26 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     this.audioErrado
       .play()
       .catch((e) => console.warn('Erro ao tocar som de erro.', e));
+  }
+
+  get questionAmountString(): string {
+    return this.qntdQuestoesInput;
+  }
+
+  set questionAmountString(valor: string) {
+    this.validarEAtualizarFiltro(valor);
+  } 
+
+validarEAtualizarFiltro(valor: string): void {
+    this.qntdQuestoesInput = valor; 
+    this.message = '';      
+    
+    const numero = parseInt(valor, 10);
+
+    if (!isNaN(numero) && numero > 0) {
+      this.filtros.qntdQuestoes = numero;
+    } else {
+      this.filtros.qntdQuestoes = null;
+    }
   }
 }

@@ -324,128 +324,142 @@
   </div>
 </div>
 
-<div
-  class="modal-overlay"
-  *ngIf="modalTrilhaAberto || modalConfirmacaoAberto || mostrarModalOfensiva"
->
-  <div class="modal-trilha" *ngIf="modalTrilhaAberto">
-    <div class="modal-header">
-      <h2>Configurar minha programação de revisões</h2>
-      <button class="btn-close" (click)="modalTrilhaAberto = false">
-        &times;
-      </button>
-    </div>
-
-    <div class="modal-body">
-      <div class="form-group">
-        <label>Quais dias você quer revisar? *</label>
-        <div class="dias-semana">
-          <button
-            class="btn-dia"
-            [ngClass]="{ selected: verificarDiaSelecionado('Segunda') }"
-            (click)="toggleDiaSelecionado('Segunda')"
-          >
-            Segunda
-          </button>
-          <button
-            class="btn-dia"
-            [ngClass]="{ selected: verificarDiaSelecionado('Terça') }"
-            (click)="toggleDiaSelecionado('Terça')"
-          >
-            Terça
-          </button>
-          <button
-            class="btn-dia"
-            [ngClass]="{ selected: verificarDiaSelecionado('Quarta') }"
-            (click)="toggleDiaSelecionado('Quarta')"
-          >
-            Quarta
-          </button>
-          <button
-            class="btn-dia"
-            [ngClass]="{ selected: verificarDiaSelecionado('Quinta') }"
-            (click)="toggleDiaSelecionado('Quinta')"
-          >
-            Quinta
-          </button>
-          <button
-            class="btn-dia"
-            [ngClass]="{ selected: verificarDiaSelecionado('Sexta') }"
-            (click)="toggleDiaSelecionado('Sexta')"
-          >
-            Sexta
-          </button>
-          <button
-            class="btn-dia"
-            [ngClass]="{ selected: verificarDiaSelecionado('Sábado') }"
-            (click)="toggleDiaSelecionado('Sábado')"
-          >
-            Sábado
-          </button>
-          <button
-            class="btn-dia"
-            [ngClass]="{ selected: verificarDiaSelecionado('Domingo') }"
-            (click)="toggleDiaSelecionado('Domingo')"
-          >
-            Domingo
-          </button>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label
-          >Defina quanto tempo você quer dedicar à revisão nesses dias? *</label
+<!-- Template do conteúdo do modal de configuração de trilha -->
+<ng-template #modalTrilhaContent>
+  <div class="modal-trilha-content">
+    <div class="form-group">
+      <label>Quais dias você quer revisar? *</label>
+      <div class="dias-semana">
+        <button
+          class="btn-dia"
+          [ngClass]="{ selected: verificarDiaSelecionado('Segunda') }"
+          (click)="toggleDiaSelecionado('Segunda')"
         >
-        <div class="tempo-container">
-          <div class="tempo-input">
-            <label>Horas</label>
-            <input
-              type="number"
-              min="0"
-              [(ngModel)]="horasDedicadas"
-              placeholder="0 h"
-            />
-          </div>
-          <div class="tempo-input">
-            <label>Minutos</label>
-            <input
-              type="number"
-              min="0"
-              max="59"
-              [(ngModel)]="minutosDedicados"
-              placeholder="0 min"
-            />
-          </div>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label>Data da término</label>
-        <input type="date" [(ngModel)]="dataTermino" class="data-input" />
-      </div>
-
-      <div class="form-group">
-        <label>Assunto(s) que você deseja revisar</label>
-        <app-multiplo-select
-          [options]="assuntosDisponiveis"
-          [selectedValue]="assuntosSelecionados"
-          label="Assuntos"
-          [multiple]="true"
-          placeholder="Selecione os assuntos"
-        ></app-multiplo-select>
+          Segunda
+        </button>
+        <button
+          class="btn-dia"
+          [ngClass]="{ selected: verificarDiaSelecionado('Terça') }"
+          (click)="toggleDiaSelecionado('Terça')"
+        >
+          Terça
+        </button>
+        <button
+          class="btn-dia"
+          [ngClass]="{ selected: verificarDiaSelecionado('Quarta') }"
+          (click)="toggleDiaSelecionado('Quarta')"
+        >
+          Quarta
+        </button>
+        <button
+          class="btn-dia"
+          [ngClass]="{ selected: verificarDiaSelecionado('Quinta') }"
+          (click)="toggleDiaSelecionado('Quinta')"
+        >
+          Quinta
+        </button>
+        <button
+          class="btn-dia"
+          [ngClass]="{ selected: verificarDiaSelecionado('Sexta') }"
+          (click)="toggleDiaSelecionado('Sexta')"
+        >
+          Sexta
+        </button>
+        <button
+          class="btn-dia"
+          [ngClass]="{ selected: verificarDiaSelecionado('Sábado') }"
+          (click)="toggleDiaSelecionado('Sábado')"
+        >
+          Sábado
+        </button>
+        <button
+          class="btn-dia"
+          [ngClass]="{ selected: verificarDiaSelecionado('Domingo') }"
+          (click)="toggleDiaSelecionado('Domingo')"
+        >
+          Domingo
+        </button>
       </div>
     </div>
 
-    <div class="modal-footer">
-      <button class="btn btn-cancel" (click)="fecharModalConfiguracaoTrilha()">
-        Cancelar
+    <div class="form-group">
+      <label>Defina quanto tempo você quer dedicar à revisão nesses dias? *</label>
+      <div class="tempo-container">
+        <div class="tempo-input">
+          <label>Horas</label>
+          <input
+            type="number"
+            min="0"
+            [(ngModel)]="horasDedicadas"
+            placeholder="0 h"
+          />
+        </div>
+        <div class="tempo-input">
+          <label>Minutos</label>
+          <input
+            type="number"
+            min="0"
+            max="59"
+            [(ngModel)]="minutosDedicados"
+            placeholder="0 min"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Data da término</label>
+      <input type="date" [(ngModel)]="dataTermino" class="data-input" />
+    </div>
+
+    <div class="form-group">
+      <label>Assunto(s) que você deseja revisar</label>
+      <app-multiplo-select
+        [options]="assuntosDisponiveis"
+        [selectedValue]="assuntosSelecionados"
+        label="Assuntos"
+        [multiple]="true"
+        placeholder="Selecione os assuntos"
+      ></app-multiplo-select>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Template do conteúdo do modal de confirmação (segundo passo) -->
+<ng-template #modalConfirmacaoContent>
+  <div class="modal-confirmacao-content">
+    <div class="modal-body-comecar">
+      <div class="animation">
+        <ng-lottie 
+          [options]="targetAnimationOptions" 
+          width="150px"
+          height="150px"
+        ></ng-lottie>
+      </div>
+      <div class="modal-text-comecar">
+        <h2>O começo de uma trilha feita para você!</h2>
+        <p>
+          Dê os primeiros passos e prepare o caminho para sua trilha de revisões
+          personalizadas.
+        </p>
+      </div>
+    </div>
+    <div class="modal-footer-comecar">
+      <button class="btn btn-cancel" (click)="fecharModalConfirmacao()">
+        Iniciar mais tarde
       </button>
-      <button class="btn btn-save" (click)="salvarConfiguracoesTrilha()">
-        Salvar
+      <button class="btn btn-comecar" (click)="iniciarTrilhaAgora()">
+        Começar agora
+        <img src="assets/Icons/arrow-updown.svg" alt="seta" />
       </button>
     </div>
   </div>
+</ng-template>
 
+<div
+  class="modal-overlay"
+  *ngIf="mostrarModalOfensiva"
+>
   <div
     class="modal-trilha modal-ofensiva"
     *ngIf="mostrarModalOfensiva && dadosOfensiva"
@@ -541,28 +555,6 @@
       <button class="btn btn-save btn-verde" (click)="fecharModalOfensiva()">
         Vou com tudo
         <img src="../../../assets/Icons/setaDireta.svg" alt="seta" />
-      </button>
-    </div>
-  </div>
-
-  <div class="modal-trilha" *ngIf="modalConfirmacaoAberto">
-    <div class="modal-body-comecar">
-      <div class="animation"></div>
-      <div class="modal-text-comecar">
-        <h2>O começo de uma trilha feita para você!</h2>
-        <p>
-          Dê os primeiros passos e prepare o caminho para sua trilha de revisões
-          personalizadas.
-        </p>
-      </div>
-    </div>
-    <div class="modal-footer-comecar">
-      <button class="btn btn-cancel" (click)="fecharModalConfirmacao()">
-        Iniciar mais tarde
-      </button>
-      <button class="btn btn-comecar" (click)="iniciarTrilhaAgora()">
-        Começar agora
-        <img src="assets/Icons/arrow-updown.svg" alt="seta" />
       </button>
     </div>
   </div>

@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { ThemeService } from 'src/app/services/theme.service';
 import { Router } from '@angular/router';
 import { TemaDescricoes } from '../page-questoes/enums/tema-descricao';
 import { OfensivaDados, OfensivaService } from 'src/app/services/ofensiva.service';
 import { PageMeuPerfilComponent } from '../page-meu-perfil/page-meu-perfil.component';
+import { AnimationOptions } from 'ngx-lottie';
+import { ModalPadraoService } from 'src/app/services/modal-padrao.service';
 @Component({
   selector: 'app-inicio',
   templateUrl: './inicio.component.html',
@@ -40,12 +42,21 @@ export class InicioComponent implements OnInit {
   assuntosDisponiveis: string[] = [];
 
   public animacoesAtivadas: boolean = true;
+  targetAnimationOptions: AnimationOptions = {
+    path: 'assets/animations/Target.json',
+    loop: false,
+    autoplay: true
+  };
+
+  @ViewChild('modalTrilhaContent') modalTrilhaContent!: TemplateRef<any>;
+  @ViewChild('modalConfirmacaoContent') modalConfirmacaoContent!: TemplateRef<any>;
 
   constructor(
     private authService: AuthService,
     private themeService: ThemeService,
     private ofensivaService: OfensivaService,
-    private Router: Router
+    private Router: Router,
+    private modalPadraoService: ModalPadraoService
   ) { }
 
   ngOnInit(): void {
@@ -74,15 +85,24 @@ export class InicioComponent implements OnInit {
   }
 
   abrirModalConfiguracaoTrilha(): void {
-    // this.modalTrilhaAberto = true;
+    // this.modalPadraoService.openModal(
+    //   {
+    //     title: 'Configurar minha programação de revisões',
+    //     size: 'lg',
+    //     showConfirmButton: true,
+    //     showCancelButton: true,
+    //     confirmButtonText: 'Salvar',
+    //     cancelButtonText: 'Cancelar',
+    //     confirmButtonClass: 'primary',
+    //     contentTemplate: this.modalTrilhaContent
+    //   },
+    //   () => this.salvarConfiguracoesTrilha(),
+    //   () => this.fecharModalConfiguracaoTrilha()
+    // );
   }
 
   fecharModalConfiguracaoTrilha(): void {
-    this.modalTrilhaAberto = false;
-  }
-
-  fecharModalConfirmacao(): void {
-    this.modalConfirmacaoAberto = false;
+    this.modalPadraoService.closeModal();
   }
 
   toggleDiaSelecionado(dia: string): void {
@@ -135,8 +155,31 @@ export class InicioComponent implements OnInit {
     console.log('Tempo dedicado:', this.horasDedicadas, 'horas e', this.minutosDedicados, 'minutos');
     console.log('Data de término:', this.dataTermino);
     console.log('Assuntos selecionados:', this.assuntosSelecionados);
-    this.modalTrilhaAberto = false;
-    this.modalConfirmacaoAberto = true;
+    
+    // Abre o modal de confirmação (segundo passo)
+    this.abrirModalConfirmacao();
+  }
+
+  abrirModalConfirmacao(): void {
+    this.modalPadraoService.openModal(
+      {
+        size: 'md',
+        showConfirmButton: false,
+        showCancelButton: false,
+        showCloseButton: false,
+        closeOnBackdropClick: false,
+        contentTemplate: this.modalConfirmacaoContent
+      }
+    );
+  }
+
+  fecharModalConfirmacao(): void {
+    this.modalPadraoService.closeModal();
+  }
+
+  iniciarTrilhaAgora(): void {
+    this.modalPadraoService.closeModal();
+    this.Router.navigate(['/usuario/trilha']);
   }
 
   carregarDadosOfensiva(): void {
@@ -161,11 +204,6 @@ export class InicioComponent implements OnInit {
   // --- Métodos do Modal de Ofensiva ---
   fecharModalOfensiva(): void {
     this.mostrarModalOfensiva = false;
-  }
-
-  iniciarTrilhaAgora(): void {
-    this.modalConfirmacaoAberto = false;
-    this.Router.navigate(['/usuario/trilha']);
   }
 
   redirecionarFlashcard() {
