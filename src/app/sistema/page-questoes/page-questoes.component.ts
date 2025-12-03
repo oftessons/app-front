@@ -156,6 +156,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   filtroASalvar!: FiltroDTO;
 
   mostrarGabarito: boolean = false;
+  mostrarEstatisticasQuestao: boolean = false;
   @ViewChild('confirmacaoModalRef', { static: false })
   confirmacaoModal!: ElementRef;
 
@@ -1146,7 +1147,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       return;
     }
 
-    this.mostrarGabarito = true;
+    this.mostrarGabarito = !this.mostrarGabarito;
 
     const imagens = [
       this.questaoAtual.fotoDaRespostaUmUrl,
@@ -1163,6 +1164,10 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
         console.warn(`Imagem ${index + 1} não disponível.`);
       }
     });
+  }
+
+  exibirEstatisticas(): void {
+    this.mostrarEstatisticasQuestao = !this.mostrarEstatisticasQuestao;
   }
 
 

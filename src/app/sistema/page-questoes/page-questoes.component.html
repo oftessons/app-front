@@ -27,7 +27,8 @@
     </div>
 
 
-    <div *ngIf="mostrarFiltroCacheado && !revisandoFiltroSalvo" [style.display]="mostrarFiltroCacheado ? 'block' : 'none'"
+    <div *ngIf="mostrarFiltroCacheado && !revisandoFiltroSalvo"
+      [style.display]="mostrarFiltroCacheado ? 'block' : 'none'"
       [ngClass]="{'filtros-container': true, 'filtros-container-open': mostrarFiltros}">
       <div class="container">
         <div class="filters-container">
@@ -266,7 +267,7 @@
               </div>
 
               <!-- Adicione a exibição das porcentagens -->
-              <div class="progress-container" *ngIf="mostrarPorcentagem && porcentagens">
+              <div class="progress-container" *ngIf="mostrarEstatisticasQuestao && mostrarPorcentagem && porcentagens">
                 <h3>Porcentagens de Respostas:</h3>
                 <div class="itens-progresso" *ngFor="let key of porcentagens.keys()">
                   <div class="progress-label">
@@ -348,6 +349,9 @@
                 <div class="right-buttons">
                   <button class="btn-anterior" (click)="anteriorQuestao()" [disabled]="paginaAtual === 0">
                     Anterior
+                  </button>
+                  <button *ngIf="jaRespondeu" class="btn-responder" (click)="exibirEstatisticas()">
+                    Estatística
                   </button>
                   <button [ngClass]="jaRespondeu ? 'btn-gabarito' : 'btn-responder'"
                     (click)="jaRespondeu ? exibirGabarito() : (questaoAtual && responderQuestao(questaoAtual))">
