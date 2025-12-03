@@ -672,3 +672,41 @@ hr {
 .btn-transcricao:hover {
   background: rgba(0, 0, 0, 0.9);
 }
+
+.toolbar-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
+  padding-right: 15px;
+  position: relative;
+}
+
+.btn-voltar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.search-container {
+  display: flex;
+  justify-content: flex-end;
+  min-width: 40px;
+}
+
+@media (max-width: 768px) {
+  .toolbar-actions {
+    flex-direction: column-reverse;
+    gap: 15px;
+    align-items: flex-start;
+  }
+
+  .search-container {
+    width: 100%;
+  }
+
+  .search-container ::ng-deep app-global-search {
+    width: 100%;
+  }
+}

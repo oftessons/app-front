@@ -28,7 +28,6 @@ export class ModuloDeAulasComponent implements OnInit, OnDestroy {
 
   vdoCipherUrl: SafeResourceUrl | null = null;
 
-
   private tempoInterval: any = null;
 
   aulas: Aula[] = [];
@@ -78,37 +77,28 @@ export class ModuloDeAulasComponent implements OnInit, OnDestroy {
 
   constructor(
     private aulasService: AulasService,
-    private avaliacaoService: AvaliacaoAulaService,
     public themeService: ThemeService,
     private route: ActivatedRoute,
-    private location: Location,
     private router: Router,
     private sanitizer: DomSanitizer,
     private estatistiacasAulasService: EstatisticasAulasService
   ) { }
 
   ngOnInit(): void {
-    this.moduloSlug = this.route.snapshot.paramMap.get('modulo');
+    this.route.paramMap
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(params => {
+        const novoModuloSlug = params.get('modulo');
+        const novaAulaSlug = params.get('aulaSlug');
 
-    if (!this.moduloSlug) {
-      this.erro = 'Categoria não encontrada.';
-      this.isLoadingPage = false;
-      return;
-    }
-
-    const categoriaEncontrada = Object.keys(Categoria).find(
-      key => this.generateSlug(CategoriaDescricoes[Categoria[key as keyof typeof Categoria]]) === this.moduloSlug
-    );
-
-    if (categoriaEncontrada) {
-      this.categoria = Categoria[categoriaEncontrada as keyof typeof Categoria];
-      this.descricao = CategoriaDescricoes[this.categoria];
-      this.resetState();
-      this.listarAulasPorCategoria(this.descricao as Categoria);
-    } else {
-      this.erro = `A categoria "${this.moduloSlug}" não foi encontrada.`;
-      this.isLoadingPage = false;
-    }
+        if (novoModuloSlug && novoModuloSlug !== this.moduloSlug) {
+          this.moduloSlug = novoModuloSlug;
+          this.carregarModulo(novoModuloSlug, novaAulaSlug);
+        }
+        else if (this.hasLoadedAulas && novaAulaSlug) {
+          this.definirVideoPeloSlug(novaAulaSlug);
+        }
+      });
   }
 
   ngOnDestroy(): void {
@@ -151,7 +141,26 @@ export class ModuloDeAulasComponent implements OnInit, OnDestroy {
     this.tempoAssistidoAtual = 0;
   }
 
-  listarAulasPorCategoria(categoria: Categoria): void {
+  carregarModulo(slug: string, aulaSlugInicial: string | null): void {
+    const categoriaEncontrada = Object.keys(Categoria).find(
+      key => this.generateSlug(CategoriaDescricoes[Categoria[key as keyof typeof Categoria]]) === slug
+    );
+
+    if (categoriaEncontrada) {
+      this.categoria = Categoria[categoriaEncontrada as keyof typeof Categoria];
+      this.descricao = CategoriaDescricoes[this.categoria];
+
+      // Reseta o estado antes de carregar o novo módulo
+      this.resetState();
+
+      this.listarAulasPorCategoria(this.descricao as Categoria, aulaSlugInicial);
+    } else {
+      this.erro = `A categoria "${slug}" não foi encontrada.`;
+      this.isLoadingPage = false;
+    }
+  }
+
+  listarAulasPorCategoria(categoria: Categoria, aulaSlugInicial: string | null = null): void {
     this.isLoadingPage = true;
 
     forkJoin({
@@ -173,17 +182,20 @@ export class ModuloDeAulasComponent implements OnInit, OnDestroy {
             return m ? m.concluida : false;
           });
 
-          if (ultimaAulaId) {
-            this.aulaParaContinuar = this.aulas.find(a => a.id === ultimaAulaId) || null;
-          } else if (this.aulas.length > 0) {
-            this.aulaParaContinuar = this.aulas[0];
-          }
-
           this.isLoadingPage = false;
           this.hasLoadedAulas = true;
 
-          if (this.aulas.length > 0) {
-            this.ouvirMudancasDeAulaNaUrl();
+          // Lógica de seleção do vídeo inicial
+          if (aulaSlugInicial) {
+            // Se veio da URL (busca ou link direto)
+            this.definirVideoPeloSlug(aulaSlugInicial);
+          } else {
+            // Lógica padrão (continuar de onde parou ou primeiro vídeo)
+            if (ultimaAulaId) {
+              this.aulaParaContinuar = this.aulas.find(a => a.id === ultimaAulaId) || null;
+            } else if (this.aulas.length > 0) {
+              this.aulaParaContinuar = this.aulas[0];
+            }
           }
         },
         error: () => {
@@ -199,21 +211,18 @@ export class ModuloDeAulasComponent implements OnInit, OnDestroy {
     }
   }
 
-  private ouvirMudancasDeAulaNaUrl(): void {
-    this.route.paramMap
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(params => {
-        if (!this.hasLoadedAulas) return;
+  // Método auxiliar para setar o vídeo baseado no slug
+  definirVideoPeloSlug(slug: string): void {
+    if (!this.aulas.length) return;
 
-        const aulaSlug = params.get('aulaSlug');
-        if (!aulaSlug) {
-          this.videoAtual = null;
-          return;
-        }
-
-        const aula = this.aulas.find(a => this.generateSlug(a.titulo) === aulaSlug);
-        this.videoAtual = aula || null;
-      });
+    const aula = this.aulas.find(a => this.generateSlug(a.titulo) === slug);
+    if (aula) {
+      this.videoAtual = aula;
+    } else {
+      console.warn('Aula não encontrada para o slug:', slug);
+      // Opcional: Redirecionar para o primeiro vídeo se o slug estiver errado
+      // if (this.aulas.length > 0) this.videoAtual = this.aulas[0];
+    }
   }
 
   selecionarVideo(aula: Aula): void {
@@ -221,6 +230,7 @@ export class ModuloDeAulasComponent implements OnInit, OnDestroy {
 
     const aulaSlug = this.generateSlug(aula.titulo);
 
+    // Navega atualizando a URL. O subscribe no ngOnInit pegará a mudança se necessário.
     this.router.navigate(['usuario', 'painel-de-aulas', this.moduloSlug, aulaSlug], {
       replaceUrl: false
     });

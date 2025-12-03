@@ -1,0 +1,58 @@
+<div class="search-wrapper" [class.expanded]="isExpanded">
+
+    <div class="input-group" (click)="!isExpanded ? toggleSearch() : null">
+
+        <span class="icon-search">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+        </span>
+
+        <input #searchInput type="text" placeholder="Pesquisar..." (input)="buscar(searchInput.value)"
+            (focus)="onFocus(searchInput.value)" autocomplete="off">
+
+        <span class="icon-close" *ngIf="isExpanded" (click)="toggleSearch(); $event.stopPropagation()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </span>
+    </div>
+
+    <div class="search-dropdown" *ngIf="(mostrarResultados || isLoading) && isExpanded">
+        <ul>
+
+            <ng-container *ngIf="isLoading">
+                <li *ngFor="let _ of skeletonItems" class="skeleton-wrapper">
+                    <div class="result-item">
+                        <div class="thumb skeleton-box"></div>
+                        <div class="info">
+                            <div class="title skeleton-box skeleton-text-lg"></div>
+                            <div class="subtitle skeleton-box skeleton-text-sm"></div>
+                        </div>
+                    </div>
+                </li>
+            </ng-container>
+
+            <ng-container *ngIf="!isLoading">
+                <li *ngFor="let item of resultados" (mousedown)="navegar(item.tipo, item.titulo)">
+                    <div class="result-item">
+                        <div class="thumb"><img [src]="item.thumbnailUrl"></div>
+                        <div class="info">
+                            <span class="title">{{item.titulo}}</span>
+                            <span class="subtitle">{{limitarSubtitulo(item.subtitulo)}}</span>
+                            <span class="type-tag">{{item.tipo}}</span>
+                        </div>
+                    </div>
+                </li>
+            </ng-container>
+
+            <li *ngIf="!isLoading && resultados.length === 0" class="no-results">
+                <span>Nenhuma aula encontrada.</span>
+            </li>
+        </ul>
+    </div>
+</div>

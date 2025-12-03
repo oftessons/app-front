@@ -18,7 +18,7 @@
         >
           <ng-container *ngSwitchCase="'question'">
             <div class="header-content">
-              <h2 class="tema-title">{{ getTemaNome() }}</h2>
+              <h2 class="tema-title">{{ getTemaSubtemaNome() }}</h2>
               <div class="buttons-container" *ngIf="PermissaoFlashcards">
                 <a (click)="editarFlashcard()" class="editar-button">
                   <img src="../../../assets/Icons/lapis.svg" />
@@ -35,7 +35,10 @@
                 </button>
               </div>
             </div>
-
+            <div>
+              <h2 class="resposta-title">Pergunta</h2>
+              <div [innerHTML]="currentCard?.pergunta" class="text"></div>
+            </div>
             <div
               *ngIf="currentCard?.fotoUrlPergunta"
               class="image-display-wrapper"
@@ -50,10 +53,6 @@
               />
             </div>
 
-            <div>
-              <h2 class="resposta-title">Pergunta</h2>
-              <div [innerHTML]="currentCard?.pergunta" class="text"></div>
-            </div>
             <a class="button-resposta" (click)="showAnswer()"
               >Mostrar Resposta</a
             >
@@ -61,9 +60,11 @@
 
           <ng-container *ngSwitchCase="'answer'">
             <div class="tema-resposta">
-              <h2 class="tema-title">{{ getTemaNome() }}</h2>
+              <h2 class="tema-title-resposta">{{ getTemaSubtemaNome() }}</h2>
             </div>
             <div class="answer-section">
+              <h2 class="resposta-title">Resposta</h2>
+              <div class="text" [innerHTML]="currentCard?.resposta"></div>
               <div
                 *ngIf="currentCard?.fotoUrlResposta"
                 class="image-display-wrapper"
@@ -77,8 +78,6 @@
                   [hidden]="isLoadingAnswerImage"
                 />
               </div>
-              <h2 class="resposta-title">Resposta</h2>
-              <div class="text" [innerHTML]="currentCard?.resposta"></div>
             </div>
             <div class="rating-section">
               <p class="rating-text">O quanto você sabia dessa questão?</p>
@@ -106,10 +105,7 @@
 
           <ng-container *ngSwitchCase="'summary'" class="summary">
             <div class="porcentagem-section">
-              <ng-lottie
-                [options]="animacaoTargetOptions"
-                [width]="'100px'"
-              >
+              <ng-lottie [options]="animacaoTargetOptions" [width]="'100px'">
               </ng-lottie>
               <h2 class="parabens">Parabéns!</h2>
               <p class="descricao">Você concluiu todos os Flashcards!</p>

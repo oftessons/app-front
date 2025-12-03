@@ -5,10 +5,18 @@
             <h1 class="mt-4"><span> | </span>Módulo de {{ descricao }} </h1>
         </div>
 
-        <button type="button" class="btn-voltar me-2" (click)="voltarPagina()">
-            <i class="fa fa-arrow-left"></i>
-            Voltar
-        </button>
+        <div class="toolbar-actions">
+
+            <button type="button" class="btn-voltar" (click)="voltarPagina()">
+                <i class="fa fa-arrow-left"></i>
+                Voltar
+            </button>
+
+            <div class="search-container">
+                <app-global-search></app-global-search>
+            </div>
+
+        </div>
 
         <div class="grid-container">
             <div class="principal-info">
@@ -52,7 +60,7 @@
                                 allow="encrypted-media; fullscreen; picture-in-picture" allowfullscreen="true">
                             </iframe>
 
-                            
+
                         </div>
 
                         <div *ngIf="videoAtual && !vdoCipherUrl && isLoadingVideo" class="loading-overlay">

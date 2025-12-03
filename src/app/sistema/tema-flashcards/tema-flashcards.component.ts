@@ -1,4 +1,10 @@
-import { Component, Input, OnInit, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  ChangeDetectorRef,
+  AfterViewInit,
+} from '@angular/core';
 import { Tema } from '../page-questoes/enums/tema';
 import { Subtema } from '../page-questoes/enums/subtema';
 import { TemaDescricoes } from '../page-questoes/enums/tema-descricao';
@@ -18,7 +24,7 @@ import { AuthService } from 'src/app/services/auth.service';
   templateUrl: './tema-flashcards.component.html',
   styleUrls: ['./tema-flashcards.component.css'],
 })
-export class TemaFlashcardsComponent implements OnInit {
+export class TemaFlashcardsComponent implements OnInit, AfterViewInit {
   @Input() tema: string = 'Tema';
   @Input() cards_estudados: number = 0;
   @Input() cards_totais: number = 0;
@@ -74,6 +80,44 @@ export class TemaFlashcardsComponent implements OnInit {
     }
 
     this.carregarDados();
+  }
+
+  ngAfterViewInit(): void {
+    this.scrollToTopGeneric();
+  }
+
+  private scrollToTopGeneric(): void {
+    if (typeof window !== 'undefined') {
+      window.scrollTo(0, 0);
+    }
+    const docEl = document.documentElement as HTMLElement | null;
+    if (docEl) {
+      docEl.scrollTop = 0;
+    }
+    const body = document.body as HTMLElement | null;
+    if (body) {
+      body.scrollTop = 0;
+    }
+
+    setTimeout(() => {
+      const allElements: HTMLElement[] = Array.from(
+        document.querySelectorAll<HTMLElement>('*')
+      );
+      const scrollers: HTMLElement[] = allElements.filter((el: HTMLElement) => {
+        const hasVerticalScroll = el.scrollHeight - el.clientHeight > 20;
+        return hasVerticalScroll;
+      });
+
+      console.log(
+        '[TemaFlashcards] scrollToTopGeneric -> scrollers encontrados:',
+        scrollers
+      );
+
+      scrollers.forEach((el: HTMLElement) => {
+        el.scrollTop = 0;
+        el.scrollLeft = 0;
+      });
+    }, 1);
   }
 
   private normalizarChave(texto: string): string {
@@ -151,7 +195,7 @@ export class TemaFlashcardsComponent implements OnInit {
       const decodedToken = this.authService.jwtHelper.decodeToken(token);
       const userRoles: string[] =
         decodedToken?.authorities || decodedToken?.roles || [];
-      
+
       if (userRoles.length === 0) {
         const singleRole = decodedToken?.role;
         if (!singleRole) return false;
@@ -173,7 +217,12 @@ export class TemaFlashcardsComponent implements OnInit {
     const incluirConcluidos = this.isUserAdminOrProfessor;
 
     this.flashcardService
-      .getFlashcardsParaEstudar(this.temaIdUrl, undefined, undefined, incluirConcluidos)
+      .getFlashcardsParaEstudar(
+        this.temaIdUrl,
+        undefined,
+        undefined,
+        incluirConcluidos
+      )
       .subscribe((dto) => {
         this.iniciarSessao(
           dto.listaFlashcards,
@@ -189,7 +238,12 @@ export class TemaFlashcardsComponent implements OnInit {
     const incluirConcluidos = this.isUserAdminOrProfessor;
 
     this.flashcardService
-      .getFlashcardsParaEstudar(this.temaIdUrl, subtemaKey, undefined, incluirConcluidos)
+      .getFlashcardsParaEstudar(
+        this.temaIdUrl,
+        subtemaKey,
+        undefined,
+        incluirConcluidos
+      )
       .subscribe((dto) => {
         this.iniciarSessao(
           dto.listaFlashcards,

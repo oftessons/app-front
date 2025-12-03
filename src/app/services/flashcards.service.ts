@@ -180,7 +180,9 @@ export class FlashcardService {
       formData.append('dificuldade', dto.dificuldade);
     }
 
-    formData.append('relevancia', String(dto.relevancia));
+    if (dto.relevancia !== undefined && dto.relevancia !== null) {
+      formData.append('relevancia', String(dto.relevancia));
+    }
 
     if (fotoPergunta) {
       formData.append('fotoPergunta', fotoPergunta);
