@@ -52,10 +52,26 @@
 }
 
 .tema-title {
-  font-size: 16px;
+  font-size: 12px;
   font-weight: 600;
   color: #e3e3e3 !important;
   margin: 0;
+  width: 70%;
+  text-align: start;
+  line-height: 1.5;
+}
+
+.tema-title-resposta {
+  font-size: 12px;
+  font-weight: 600;
+  color: #e3e3e3 !important;
+  margin: 0;
+  justify-self: flex-start;
+  width: 70%;
+  text-align: start;
+  line-height: 1.5;
+  margin-top: 8px;
+  margin-left: 8px;
 }
 
 p {
@@ -327,8 +343,7 @@ p {
 .tema-resposta {
   display: flex;
   justify-content: flex-start;
-  width: 100%;
-  padding: 8px;
+  width: 100% !important;
 }
 
 .image-display-wrapper {
@@ -366,6 +381,10 @@ p {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

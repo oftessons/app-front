@@ -15,6 +15,7 @@ import {
 import { TemaDescricoes } from 'src/app/sistema/page-questoes/enums/tema-descricao';
 import { Tema } from 'src/app/sistema/page-questoes/enums/tema';
 import { Subtema } from 'src/app/sistema/page-questoes/enums/subtema';
+import { SubtemaDescricoes } from 'src/app/sistema/page-questoes/enums/subtema-descricao';
 import { AuthService } from 'src/app/services/auth.service';
 import { AnimationOptions } from 'ngx-lottie';
 
@@ -45,6 +46,7 @@ export class FlashcardModalComponent implements OnChanges {
   private stats: { cardId: number; rating: number }[] = [];
 
   private temaDescricoes = TemaDescricoes;
+  private subtemaDescricoes = SubtemaDescricoes;
   private sessaoStartTime: number = 0;
   private cardStartTime: number = 0;
   public tempoDecorrido: string = '00 min 00 seg';
@@ -233,5 +235,17 @@ export class FlashcardModalComponent implements OnChanges {
     if (!this.currentCard) return '';
     const temaKey = this.currentCard.tema.toUpperCase() as Tema;
     return this.temaDescricoes[temaKey] || this.currentCard.tema;
+  }
+
+  getSubtemaNome(): string {
+    if (!this.currentCard) return '';
+    const subtemaKey = this.currentCard.subtema.toUpperCase() as Subtema;
+    return this.subtemaDescricoes[subtemaKey] || this.currentCard.subtema;
+  }
+
+  getTemaSubtemaNome(): string {
+    if (!this.currentCard) return '';
+    if (this.currentCard.subtema) return this.getSubtemaNome();
+    return this.getTemaNome();
   }
 }
