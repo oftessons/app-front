@@ -100,8 +100,8 @@
 ::ng-deep .group-label {
   opacity: 0.8;
   font-weight: bold;
-  cursor: pointer;
-  pointer-events: auto;
+  cursor: default;
+  pointer-events: none;
 }
 
 ::ng-deep .espaco-select-simple .selected-list {
