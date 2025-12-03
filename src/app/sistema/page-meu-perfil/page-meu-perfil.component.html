@@ -124,7 +124,11 @@
             </div>
             <div class="toggle-container">
               <label class="switch">
-                <input name="darkModeToggle" type="checkbox">
+                <input name="animacoesToggle" 
+                type="checkbox"
+                [(ngModel)]="animacoesAtivadas"
+                (change)="salvarPreferenciaAnimacao()"
+                >
                 <span class="slider"></span>
               </label>
             </div>
@@ -136,10 +140,30 @@
             </div>
             <div class="toggle-container">
               <label class="switch">
-                <input name="darkModeToggle" type="checkbox">
+                <input name="efeitosSonorosToggle" 
+                type="checkbox"
+                [(ngModel)]="efeitosSonorosAtivados"
+                (change)="salvarPreferenciaSom()"
+                >
                 <span class="slider"></span>
               </label>
             </div>
+          </div>
+
+          <div class="preferencia-card">
+            <div>
+              <h2>Modo Escuro</h2>
+            </div>
+              <div class="toggle-container">
+                <label class="switch">
+                  <input name="darkModeToggle"
+                  type="checkbox" 
+                  [checked]="isDarkMode()" 
+                  (change)="toggleDarkMode()" 
+                  />
+                  <span class="slider"></span>
+                </label>
+              </div>
           </div>
         </div>
       </div>

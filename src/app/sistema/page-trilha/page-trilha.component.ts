@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ModalEditarSemanaTrilhaComponent, ConteudoSemana } from 'src/app/shared/modal-editar-semana-trilha/modal-editar-semana-trilha.component';
 import { AuthService } from 'src/app/services/auth.service';
 import { Usuario } from 'src/app/login/usuario';
+import { PageMeuPerfilComponent } from '../page-meu-perfil/page-meu-perfil.component';
 
 @Component({
   selector: 'app-page-trilha',
@@ -17,6 +18,8 @@ export class PageTrilhaComponent implements OnInit {
   expandedNodeIndex: number | null = null;
   selectedNodeIndex: number | null = null;
   usuarioLogado: Usuario | null = null;
+
+  public animacoesAtivadas: boolean = true; 
 
   temas: string[] = [
     'Todos os temas',
@@ -157,6 +160,7 @@ export class PageTrilhaComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.animacoesAtivadas = PageMeuPerfilComponent.getAnimacoesStatus();
     const initialWeekIndex = this.semanas.findIndex(s => s.status === 'active');
     if (initialWeekIndex !== -1) {
       this.selectedNodeIndex = initialWeekIndex;
@@ -226,6 +230,18 @@ export class PageTrilhaComponent implements OnInit {
   getStatusBadgeClass(status: string): string {
     return status;
   }
+
+  obterIconeEstaticoParaStatus(status: string): string {
+    switch (status) {
+        case 'locked':
+            return 'assets/Icons/olho.svg';
+        case 'completed':
+            return 'assets/Icons/olho.svg';
+        case 'active':
+        default:
+            return 'assets/Icons/olho.svg';
+    }
+}
 
   get selectedWeekCards() {
     if (this.selectedNodeIndex === null) {
