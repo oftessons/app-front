@@ -161,7 +161,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   public streakAtual: number = 0;
   public streakDezAtivada: boolean = false;
   public robozinhoVisivel: boolean = false;
-  public readonly STREAK_DEZ: number = 1;
+  public readonly STREAK_DEZ: number = 10;
   public carregandoRespostaSalva: boolean = false;
   public animacoesAtivadas: boolean = true;
 
