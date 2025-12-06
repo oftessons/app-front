@@ -13,6 +13,7 @@ export interface RespostaComentarioRequest {
 }
 
 export interface ComentarioAulaResponse {
+  id: number;
   texto: string;
   nomeAutor: string;
   dataComentario: string;
@@ -21,10 +22,9 @@ export interface ComentarioAulaResponse {
 
 export interface RespostaComentarioResponse {
   id: number;
-  comentario: string;
-  aulaId: number;
-  autorId: number;
-  nomeAutor?: string; // Campo opcional - precisa ser adicionado no backend
+  texto: string;
+  nomeAutor: string;
+  dataComentario: string;
   permissaoAutor: 'ADMIN' | 'ALUNO' | 'PROFESSOR';
 }
 
@@ -97,8 +97,14 @@ export class ComentariosAulasService {
   /**
    * Obtém as respostas de um comentário
    */
-  obterRespostas(aulaId: number, comentarioId: number): Observable<RespostaComentarioResponse[]> {
-    return this.http.get<RespostaComentarioResponse[]>(`${this.apiURL}/${aulaId}/${comentarioId}/respostas`).pipe(
+  obterRespostas(aulaId: number, comentarioId: number, cursor?: string, limit: number = 5): Observable<RespostaComentarioResponse[]> {
+    let params = new HttpParams().set('limit', limit.toString());
+
+    if (cursor) {
+      params = params.set('cursor', cursor);
+    }
+
+    return this.http.get<RespostaComentarioResponse[]>(`${this.apiURL}/${aulaId}/${comentarioId}/respostas`, { params }).pipe(
       catchError(this.handleError)
     );
   }

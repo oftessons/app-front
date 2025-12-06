@@ -9,16 +9,25 @@ import {
 } from 'src/app/services/comentarios-aulas.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { ModalDeleteService } from 'src/app/services/modal-delete.service';
+import { Permissao } from 'src/app/login/Permissao';
 
+interface RespostaUI extends RespostaComentarioResponse {
+  editando?: boolean;
+  textoEdicao?: string;
+  textoOriginal?: string;
+  isSalvando?: boolean;
+}
 interface ComentarioComRespostas extends ComentarioAulaResponse {
-  id?: number;
-  respostas?: RespostaComentarioResponse[];
+  respostas?: RespostaUI[];
   mostrarRespostas?: boolean;
   carregandoRespostas?: boolean;
   mostrarFormResposta?: boolean;
   editando?: boolean;
   textoOriginal?: string;
   textoResposta?: string;
+  nextCursor?: string | null;
+  hasMoreRespostas?: boolean;
+  totalRespostas?: number;
 }
 
 @Component({
@@ -38,6 +47,7 @@ export class ComentariosAulaComponent implements OnInit, OnDestroy, OnChanges {
   isEnviando: boolean = false;
   hasMore: boolean = false;
   nextCursor: string | null = null;
+  permissaoUsuarioLogado: string = '';
 
   comentarioEditandoId: number | null = null;
   respostaEditandoId: number | null = null;
@@ -51,7 +61,7 @@ export class ComentariosAulaComponent implements OnInit, OnDestroy, OnChanges {
     private comentariosService: ComentariosAulasService,
     private authService: AuthService,
     private modalDeleteService: ModalDeleteService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.carregarUsuarioLogado();
@@ -74,19 +84,25 @@ export class ComentariosAulaComponent implements OnInit, OnDestroy, OnChanges {
 
   private carregarUsuarioLogado(): void {
     const usuarioLocal = this.authService.getUsuarioAutenticado();
+    this.permissaoUsuarioLogado = usuarioLocal?.permissao || '';
     if (usuarioLocal?.nome) {
       this.nomeUsuarioLogado = usuarioLocal.nome;
       this.fotoUsuarioLogado = usuarioLocal.fotoUrl || null;
+
+
     } else {
       this.authService.obterNomeUsuario().subscribe({
         next: (nome) => {
           this.nomeUsuarioLogado = nome;
+
         },
         error: () => {
           this.nomeUsuarioLogado = '';
         }
       });
     }
+
+    console.log('Permissão do usuário logado:', this.permissaoUsuarioLogado);
   }
 
   ngOnDestroy(): void {
@@ -105,7 +121,7 @@ export class ComentariosAulaComponent implements OnInit, OnDestroy, OnChanges {
         next: (response: CursorPageResponse<ComentarioAulaResponse>) => {
           const novosComentarios = response.items.map((c, index) => ({
             ...c,
-            id: index + (this.comentarios.length),
+            id: c.id || index,
             respostas: [],
             mostrarRespostas: false,
             carregandoRespostas: false,
@@ -165,23 +181,52 @@ export class ComentariosAulaComponent implements OnInit, OnDestroy, OnChanges {
     comentario.mostrarRespostas = !comentario.mostrarRespostas;
   }
 
-  carregarRespostas(comentario: ComentarioComRespostas): void {
+  carregarRespostas(comentario: ComentarioComRespostas, cursor?: string): void {
     if (comentario.carregandoRespostas || !comentario.id) return;
 
     comentario.carregandoRespostas = true;
 
-    this.comentariosService.obterRespostas(this.aulaId, comentario.id)
+    this.comentariosService.obterRespostas(this.aulaId, comentario.id, cursor)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (respostas) => {
-          comentario.respostas = respostas;
+        next: (response: any) => {
+          // console.log('Debug Respostas API:', response);
+
+          let novasRespostas: RespostaComentarioResponse[] = [];
+          let hasNext = false;
+          let nextCursor = null;
+
+          if (response && Array.isArray(response.items)) {
+            novasRespostas = response.items;
+            hasNext = response.hasNext;
+            nextCursor = response.nextCursor;
+          } else if (Array.isArray(response)) {
+            novasRespostas = response;
+          }
+
+          if (cursor) {
+            comentario.respostas = [...(comentario.respostas || []), ...novasRespostas];
+          } else {
+            comentario.respostas = novasRespostas;
+          }
+
+          comentario.hasMoreRespostas = hasNext;
+          comentario.nextCursor = nextCursor;
+
           comentario.carregandoRespostas = false;
         },
         error: (err) => {
           console.error('Erro ao carregar respostas:', err);
           comentario.carregandoRespostas = false;
+          if (!cursor) comentario.respostas = [];
         }
       });
+  }
+
+  carregarMaisRespostas(comentario: ComentarioComRespostas): void {
+    if (comentario.nextCursor) {
+      this.carregarRespostas(comentario, comentario.nextCursor);
+    }
   }
 
   toggleFormResposta(comentario: ComentarioComRespostas): void {
@@ -192,6 +237,7 @@ export class ComentariosAulaComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   enviarResposta(comentario: ComentarioComRespostas): void {
+
     if (!comentario.textoResposta?.trim() || !comentario.id) return;
 
     this.comentariosService.responderComentario(this.aulaId, comentario.id, {
@@ -226,6 +272,42 @@ export class ComentariosAulaComponent implements OnInit, OnDestroy, OnChanges {
     this.textoEdicao = '';
     this.comentarioEditandoId = null;
   }
+
+  iniciarEdicaoResposta(resposta: RespostaUI): void {
+    resposta.editando = true;
+    resposta.textoOriginal = resposta.texto;
+    resposta.textoEdicao = resposta.texto;
+  }
+
+  cancelarEdicaoResposta(resposta: RespostaUI): void {
+    resposta.editando = false;
+    resposta.texto = resposta.textoOriginal || resposta.texto;
+    resposta.textoEdicao = '';
+  }
+
+  salvarEdicaoResposta(comentario: ComentarioComRespostas, resposta: RespostaUI): void {
+    if (!resposta.textoEdicao?.trim() || !comentario.id || !resposta.id) return;
+
+    resposta.isSalvando = true;
+
+    this.comentariosService.editarResposta(this.aulaId, comentario.id, resposta.id, {
+      respostaComentario: resposta.textoEdicao.trim()
+    })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          resposta.texto = resposta.textoEdicao?.trim() || resposta.texto;
+          resposta.editando = false;
+          resposta.isSalvando = false;
+          resposta.textoEdicao = '';
+        },
+        error: (err) => {
+          console.error('Erro ao editar resposta:', err);
+          resposta.isSalvando = false;
+        }
+      });
+  }
+
 
   salvarEdicaoComentario(comentario: ComentarioComRespostas): void {
     if (!this.textoEdicao.trim() || !comentario.id) return;
@@ -283,7 +365,7 @@ export class ComentariosAulaComponent implements OnInit, OnDestroy, OnChanges {
         size: 'sm'
       },
       () => {
-        this.comentariosService.deletarResposta(this.aulaId, comentario.id!, resposta.id)
+        this.comentariosService.deletarResposta(this.aulaId, comentario.id, resposta.id)
           .pipe(takeUntil(this.destroy$))
           .subscribe({
             next: () => {
@@ -297,6 +379,13 @@ export class ComentariosAulaComponent implements OnInit, OnDestroy, OnChanges {
           });
       }
     );
+  }
+
+  podeDeletar(nomeAutor: string): boolean {
+    const souDono = this.nomeUsuarioLogado === nomeAutor;
+    const souAdmin = this.permissaoUsuarioLogado === Permissao.ADMIN;
+
+    return souDono || souAdmin;
   }
 
   podeEditar(nomeAutor: string): boolean {
