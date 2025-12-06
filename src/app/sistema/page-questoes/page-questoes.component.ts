@@ -562,6 +562,32 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     }
   }
 
+  getPorcentagemPorIndice(index: number): string {
+    if (!this.porcentagens) return '0%';
+    const letras = ['A', 'B', 'C', 'D', 'E'];
+    const key = letras[index];
+    return this.porcentagens.get(key) || '0%';
+  }
+
+  getLetra(index: number): string {
+    const letras = ['A', 'B', 'C', 'D', 'E'];
+    return letras[index] || '';
+  }
+
+  getTextoLimpo(texto: string, index: number): string {
+    if (!texto) return '';
+
+    const letras = ['A', 'B', 'C', 'D', 'E'];
+    const letraDaAlternativa = letras[index];
+
+    if (texto.toUpperCase().startsWith(letraDaAlternativa)) {
+      return texto.substring(1).replace(/^[\.\)\-\s]+/, '');
+    }
+
+    return texto;
+  }
+
+
   private aplicarLimitacoesTrial(): void {
     this.anosDescricoes = this.anos.map((ano) => this.getDescricaoAno(ano));
   }
@@ -1019,21 +1045,21 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
       if (isNaN(numero)) {
         this.message = 'Quantidade de questões aceita apenas números.';
-        return; 
+        return;
       }
 
       if (numero <= 0) {
         this.message = 'A quantidade de questoes deve ser maior que 0.';
-        return; 
+        return;
       }
 
-      if (numero > 1000000) { 
+      if (numero > 1000000) {
         this.message = 'A quantidade máxima de questões permitida é 1.000.000.';
-        return; 
+        return;
       }
       filtros.qntdQuestoes = numero;
     }
-    
+
 
     if (Object.keys(filtros).length === 0) {
       this.message = 'Por favor, selecione pelo menos um filtro.';
@@ -1449,7 +1475,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
                         error
                       );
                     }
-                );
+                  );
                 this.processarNovaResposta(resposta);
               },
               (error) => {
@@ -2099,12 +2125,12 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
   set questionAmountString(valor: string) {
     this.validarEAtualizarFiltro(valor);
-  } 
+  }
 
-validarEAtualizarFiltro(valor: string): void {
-    this.qntdQuestoesInput = valor; 
-    this.message = '';      
-    
+  validarEAtualizarFiltro(valor: string): void {
+    this.qntdQuestoesInput = valor;
+    this.message = '';
+
     const numero = parseInt(valor, 10);
 
     if (!isNaN(numero) && numero > 0) {

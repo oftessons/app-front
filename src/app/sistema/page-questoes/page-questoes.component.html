@@ -27,7 +27,8 @@
     </div>
 
 
-    <div *ngIf="mostrarFiltroCacheado && !revisandoFiltroSalvo" [style.display]="mostrarFiltroCacheado ? 'block' : 'none'"
+    <div *ngIf="mostrarFiltroCacheado && !revisandoFiltroSalvo"
+      [style.display]="mostrarFiltroCacheado ? 'block' : 'none'"
       [ngClass]="{'filtros-container': true, 'filtros-container-open': mostrarFiltros}">
       <div class="container">
         <div class="filters-container">
@@ -65,8 +66,9 @@
                     [(selectedValue)]="multSelecDificuldade" [multiple]="true">
                   </app-multiplo-select>
                 </div>
-                  <div class="espaco-select">
-                    <app-input-padrao label="Quantidade de questões" [(value)]="questionAmountString" class="palavra-chave"> 
+                <div class="espaco-select">
+                  <app-input-padrao label="Quantidade de questões" [(value)]="questionAmountString"
+                    class="palavra-chave">
                   </app-input-padrao>
                 </div>
               </div>
@@ -234,15 +236,15 @@
       </div>
       <div class="conteudo-questao">
         <!-- Quero se se eu tiver cadastrado o video apareca aqui no enunciado-->
-         <div class="robot-streak-container" *ngIf="robozinhoVisivel">
-            <div class="robot-element" [class.pular-robo]="streakDezAtivada">
-              <img src="assets/imagens/robo-streak.png" alt="Mascote Streak" class="robo-image" />
-              
-              <div class="streak-badge">
-                <span *ngIf="streakAtual >= STREAK_DEZ"> 🎯 Streak de {{ streakAtual }}!</span>
-              </div>
+        <div class="robot-streak-container" *ngIf="robozinhoVisivel">
+          <div class="robot-element" [class.pular-robo]="streakDezAtivada">
+            <img src="assets/imagens/robo-streak.png" alt="Mascote Streak" class="robo-image" />
+
+            <div class="streak-badge">
+              <span *ngIf="streakAtual >= STREAK_DEZ"> 🎯 Streak de {{ streakAtual }}!</span>
             </div>
           </div>
+        </div>
         <div class="img-comentario" [innerHTML]="questaoAtual.enunciadoDaQuestao | safeHtml"></div>
 
         <ng-container *ngIf="questaoAtual?.fotoDaQuestaoUrl">
@@ -258,40 +260,56 @@
           <div class="col-md-12">
             <div class="form-group content-with-fixed-buttons">
               <!-- <label class="selecione-text">Selecione a Alternativa:</label> -->
-              <div *ngFor="let alternativa of questaoAtual.alternativas; let i = index" class="alternativa" [ngClass]="{
+              <div *ngFor="let alternativa of questaoAtual.alternativas; let i = index" class="alternativa-container"
+                [ngClass]="{
                 'alternativa-certa': respostaVerificada && alternativa.texto === respostaCorreta,
-                'alternativa-errada': respostaVerificada && alternativa.texto === respostaErrada
+                'alternativa-errada': respostaVerificada && alternativa.texto === respostaErrada,
+                'alternativa-expandida': respostaVerificada
               }">
-                <div class="alternativa-input-group">
-                  <input type="radio" name="alternativa" [id]="'alternativa-' + i" [value]="alternativa.texto"
-                    [(ngModel)]="selectedOption" (change)="onOptionChange(alternativa.texto)"
-                    [checked]="alternativa.texto === selectedOption">
+
+                <div class="d-flex w-100 align-items-start">
+                  <div style="margin-right: 12px; margin-top: 2px;">
+                    <input type="radio" name="alternativa" [id]="'alternativa-' + i" [value]="alternativa.texto"
+                      [(ngModel)]="selectedOption" (change)="onOptionChange(alternativa.texto)"
+                      [checked]="alternativa.texto === selectedOption" style="cursor: pointer; transform: scale(1.2);">
+                  </div>
+
                   <label [for]="'alternativa-' + i" class="alternativa-label">
-                    <span class="letra-parenteses">{{ alternativa.texto }}</span>
-                    <span *ngIf="alternativa.imagemUrl; else comentarioTexto" class="img-alternativas">
-                      <img [src]="alternativa.imagemUrl" alt="Imagem da Alternativa" class="alternativa-foto">
+
+                    <span class="fw-bold me-2">{{ getLetra(i) }}</span>
+
+                    <span *ngIf="alternativa.imagemUrl; else textoSimples">
+                      <img [src]="alternativa.imagemUrl" alt="Imagem da Alternativa" class="img-fluid rounded my-2"
+                        style="max-height: 200px;">
                     </span>
-                    <ng-template #comentarioTexto>
-                      <span class="alternativa-comentario">{{ alternativa.comentario }}</span>
+
+                    <ng-template #textoSimples>
+                      <span>{{ getTextoLimpo(alternativa.texto, i) }}</span>
+
+                      <span *ngIf="alternativa.comentario" class="alternativa-comentario">
+                        {{ alternativa.comentario }}
+                      </span>
                     </ng-template>
                   </label>
                 </div>
-              </div>
+                <div *ngIf="mostrarPorcentagem && porcentagens" class="w-100 mt-2" style="padding-left: 30px;">
 
-              <!-- Adicione a exibição das porcentagens -->
-              <div class="progress-container" *ngIf="mostrarPorcentagem && porcentagens">
-                <h3>Porcentagens de Respostas:</h3>
-                <div class="itens-progresso" *ngFor="let key of porcentagens.keys()">
-                  <div class="progress-label">
-                    {{ key }}
+                  <div class="d-flex justify-content-between align-items-end mb-1">
+                    <span style="font-size: 12px; color: #adb5bd;">Escolha dos alunos</span>
+                    <span style="font-size: 12px; font-weight: bold; color: #fff;">{{ getPorcentagemPorIndice(i)
+                      }}</span>
                   </div>
-                  <div class="progress">
-                    <div class="progress-inner" [ngStyle]="{'width.%': porcentagens.get(key) | slice:0:-1}">
-                      <span>{{ porcentagens.get(key) }}</span>
+
+                  <div class="progress" style="height: 6px; border-radius: 4px;" [class.progress-dark-bg]="true">
+                    <div class="progress-bar" role="progressbar" [style.width]="getPorcentagemPorIndice(i)"
+                      [style.backgroundColor]="getPorcentagemPorIndice(i) !== '0%' ? '#3b82f6' : 'transparent'"
+                      aria-valuemin="0" aria-valuemax="100">
                     </div>
                   </div>
                 </div>
+
               </div>
+
 
               <div *ngIf="isPreviewVideo(fotoPreviews['videoDaQuestao'])" class="video-preview-container">
                 <h4>Vídeo da Questão:</h4>

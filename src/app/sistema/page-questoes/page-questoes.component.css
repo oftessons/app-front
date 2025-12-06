@@ -1060,51 +1060,171 @@ p {
   color: var(--text-color) !important;
 }
 
-
 .robot-streak-container {
-    position: absolute;
-    top: 50px;
-    right: 20px;
-    z-index: 10;
+  position: absolute;
+  top: 50px;
+  right: 20px;
+  z-index: 10;
 }
 
 .robot-element {
-    width: 240px; 
-    height: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
+  width: 240px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
 }
 
 .robo-image {
-    width: 100%;
+  width: 100%;
 }
 
 .streak-badge {
-    position: absolute;
-    top: -15px;
-    background-color: #3B5FA0;
-    color: #000;
-    padding: 4px 8px;
-    border-radius: 12px;
-    font-size: 14px;
-    font-weight: bold;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  position: absolute;
+  top: -15px;
+  background-color: #3b5fa0;
+  color: #000;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 @keyframes pular {
-    0%, 20%, 50%, 80%, 100% {
-        transform: translateY(0);
-    }
-    40% {
-        transform: translateY(-20px); 
-    }
-    60% {
-        transform: translateY(-10px); 
-    }
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-20px);
+  }
+  60% {
+    transform: translateY(-10px);
+  }
 }
 
 .pular-robo {
-    animation: pular 1.2s ease-in-out infinite; 
+  animation: pular 1.2s ease-in-out infinite;
+}
+
+.alternativa-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  padding: 10px 15px;
+  margin-bottom: 8px;
+
+  border-radius: 8px;
+  color: var(--text-color);
+  font-family: "Nunito Sans", sans-serif;
+  font-size: 18px;
+  line-height: 1.4;
+
+  background-color: transparent;
+  border: 1px solid transparent;
+
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  cursor: pointer;
+}
+
+.alternativa-expandida {
+  padding: 18px 20px;
+  margin-bottom: 20px;
+  line-height: 1.6;
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+.alternativa-container:hover {
+  background-color: rgba(128, 128, 128, 0.1);
+}
+
+.alternativa-top-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  transition: align-items 0.3s ease;
+}
+
+.alternativa-expandida .alternativa-top-row {
+  align-items: flex-start;
+}
+
+.radio-container {
+  min-width: 35px;
+  margin-top: 0;
+  display: flex;
+  justify-content: flex-start;
+  transition: margin-top 0.3s ease;
+}
+
+.alternativa-expandida .radio-container {
+  margin-top: 4px;
+}
+
+.radio-container input[type="radio"] {
+  transform: scale(1.5);
+  cursor: pointer;
+  margin: 0;
+}
+
+.texto-alternativa {
+  flex: 1;
+  margin: 0;
+  cursor: pointer;
+  font-weight: 400;
+  display: flex;
+  flex-direction: column;
+}
+
+.letra-badge {
+  font-weight: 800;
+  font-size: 19px;
+  margin-right: 8px;
+  display: inline-block;
+  float: left;
+}
+
+.texto-alternativa img {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  max-width: 100%;
+  border-radius: 5px;
+}
+
+.progresso-row {
+  width: 100%;
+  margin-top: 15px;
+  padding-left: 35px;
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.5s ease-out;
+}
+
+.alternativa-expandida .progresso-row {
+  opacity: 1;
+  max-height: 100px;
+}
+
+.progresso-row small {
+  font-size: 14px;
+  opacity: 0.8;
+  color: var(--text-color);
+}
+
+.alternativa-certa {
+  background-color: rgba(40, 167, 69, 0.2) !important;
+  border: 1px solid #28a745 !important;
+}
+
+.alternativa-errada {
+  background-color: rgba(220, 53, 69, 0.2) !important;
+  border: 1px solid #dc3545 !important;
 }
