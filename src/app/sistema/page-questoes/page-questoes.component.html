@@ -374,19 +374,33 @@
                 <p *ngIf="questaoAtual?.referenciaBi">Referência: {{ questaoAtual.referenciaBi }}</p>
                 <p *ngIf="questaoAtual?.comentadorDaQuestao">Comentado por: {{ questaoAtual.comentadorDaQuestao }}</p>
               </div>
+
               <div class="error-message" *ngIf="mensagemErro">{{ mensagemErro }}</div>
               <div class="navigation-fixed">
                 <div class="right-buttons">
+
+                  <button class="btn-forum" (click)="abrirForum()">
+                    <i class="fas fa-users" style="margin-right: 8px;"></i> Fórum
+                  </button>
+
                   <button class="btn-anterior" (click)="anteriorQuestao()" [disabled]="paginaAtual === 0">
                     Anterior
                   </button>
-                  <button [ngClass]="jaRespondeu ? 'btn-gabarito' : 'btn-responder'"
-                    (click)="jaRespondeu ? exibirGabarito() : (questaoAtual && responderQuestao(questaoAtual))">
-                    {{ jaRespondeu ? 'Comentário da Questão' : 'Responder' }}
+
+                  <button *ngIf="!jaRespondeu" class="btn-responder"
+                    (click)="questaoAtual && responderQuestao(questaoAtual)">
+                    Responder
                   </button>
+
+                  <button *ngIf="jaRespondeu" class="btn-gabarito" (click)="exibirGabarito()">
+                    <i class="fas fa-comment-dots" style="margin-right: 8px; font-size: 18px;"></i>
+                    Comentário
+                  </button>
+
                   <button class="btn-proxima" (click)="proximaQuestao()">
                     Próxima
                   </button>
+
                 </div>
               </div>
             </div>

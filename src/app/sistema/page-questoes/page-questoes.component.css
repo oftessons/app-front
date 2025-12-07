@@ -1112,119 +1112,295 @@ p {
   animation: pular 1.2s ease-in-out infinite;
 }
 
+/* ==========================================================================
+   ESTILO CARD (Igual à imagem de referência)
+   ========================================================================== */
+
+/* Container Principal (O Card) */
 .alternativa-container {
   display: flex;
   flex-direction: column;
   width: 100%;
+  position: relative; /* Para posicionar elementos se precisar */
 
-  padding: 10px 15px;
-  margin-bottom: 8px;
+  /* Espaçamento e Bordas */
+  padding: 16px;
+  margin-bottom: 15px; /* Espaço entre os cards */
+  border-radius: 12px; /* Cantos arredondados como na imagem */
+  border: 1px solid rgba(255, 255, 255, 0.1); /* Borda sutil padrão */
 
-  border-radius: 8px;
+  /* Fonte e Cores */
+  background-color: transparent; /* Fundo transparente inicialmente */
   color: var(--text-color);
   font-family: "Nunito Sans", sans-serif;
-  font-size: 18px;
-  line-height: 1.4;
+  font-size: 16px;
+  line-height: 1.5;
 
-  background-color: transparent;
-  border: 1px solid transparent;
-
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: all 0.2s ease-in-out;
   cursor: pointer;
 }
 
-.alternativa-expandida {
-  padding: 18px 20px;
-  margin-bottom: 20px;
-  line-height: 1.6;
-  background-color: rgba(128, 128, 128, 0.05);
-}
-
 .alternativa-container:hover {
-  background-color: rgba(128, 128, 128, 0.1);
+  background-color: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
+.alternativa-certa {
+  border: 2px solid #28a745 !important;
+  background-color: rgba(40, 167, 69, 0.05) !important;
+}
+
+.alternativa-errada {
+  border: 2px solid #dc3545 !important;
+  background-color: rgba(220, 53, 69, 0.05) !important;
+}
+
+/* --- LINHA 1: RADIO + TEXTO --- */
+/* --- LINHA 1: RADIO + TEXTO --- */
+/* --- LINHA 1: RADIO + TEXTO --- */
 .alternativa-top-row {
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: flex-start; /* Alinha tudo no topo */
   width: 100%;
-  transition: align-items 0.3s ease;
-}
-
-.alternativa-expandida .alternativa-top-row {
-  align-items: flex-start;
+  margin-bottom: 8px;
 }
 
 .radio-container {
-  min-width: 35px;
-  margin-top: 0;
-  display: flex;
-  justify-content: flex-start;
-  transition: margin-top 0.3s ease;
-}
+  /* Removemos alturas fixas e alinhamentos automáticos */
+  display: block;
+  margin-right: 12px;
+  min-width: 24px;
 
-.alternativa-expandida .radio-container {
+  /* AQUI ESTÁ O CONTROLE MANUAL: */
+  /* Ajuste esse margin-top se ainda achar que está alto ou baixo */
+  /* 4px costuma ser o "número mágico" para fonte 16px com line-height 1.5 */
   margin-top: 4px;
 }
 
 .radio-container input[type="radio"] {
-  transform: scale(1.5);
-  cursor: pointer;
+  /* Aumenta a bolinha */
+  transform: scale(1.4);
+
+  /* Remove margens padrão do navegador */
   margin: 0;
+  padding: 0;
+  display: block;
+  cursor: pointer;
 }
 
 .texto-alternativa {
   flex: 1;
   margin: 0;
   cursor: pointer;
-  font-weight: 400;
-  display: flex;
-  flex-direction: column;
+
+  /* Definições de Texto */
+  font-family: "Nunito Sans", sans-serif;
+  font-size: 16px;
+  line-height: 1.5; /* Altura da linha = 24px */
+  color: var(--text-color);
 }
 
 .letra-badge {
   font-weight: 800;
-  font-size: 19px;
-  margin-right: 8px;
+  margin-right: 6px;
+  font-size: 17px;
   display: inline-block;
-  float: left;
+
+  /* Garante que a letra não quebre o alinhamento da linha */
+  vertical-align: top;
 }
 
-.texto-alternativa img {
-  margin-top: 10px;
-  margin-bottom: 10px;
-  max-width: 100%;
-  border-radius: 5px;
+/* --- LINHA 2: INFO DO PROGRESSO (Label + %) --- */
+.info-progresso {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #aaa;
+  margin-bottom: 4px;
+  margin-top: 5px;
 }
 
-.progresso-row {
+.barra-progresso-container {
   width: 100%;
-  margin-top: 15px;
-  padding-left: 35px;
-  opacity: 0;
-  max-height: 0;
+  background-color: rgba(255, 255, 255, 0.1);
+  height: 6px;
+  border-radius: 10px;
   overflow: hidden;
-  transition: all 0.5s ease-out;
+  margin-bottom: 8px;
 }
 
-.alternativa-expandida .progresso-row {
-  opacity: 1;
-  max-height: 100px;
+.barra-progresso-fill {
+  height: 100%;
+  background-color: #3b82f6;
+  border-radius: 10px;
+  transition: width 0.6s ease;
 }
 
-.progresso-row small {
-  font-size: 14px;
-  opacity: 0.8;
-  color: var(--text-color);
+.icone-feedback-container {
+  display: flex;
+  align-items: center;
+  margin-top: 5px;
+  height: 24px;
 }
 
-.alternativa-certa {
-  background-color: rgba(40, 167, 69, 0.2) !important;
-  border: 1px solid #28a745 !important;
+.icone-check {
+  color: #28a745;
+  font-size: 20px;
+  background: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.alternativa-errada {
-  background-color: rgba(220, 53, 69, 0.2) !important;
-  border: 1px solid #dc3545 !important;
+.icone-times {
+  color: #dc3545;
+  font-size: 20px;
+  background: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-forum {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 6px 20px;
+  min-width: 110px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  background-color: #5b4f96;
+  margin-right: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-forum:hover {
+  background-color: #483d7a;
+}
+
+.btn-gabarito {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Estilo base para os botões da direita */
+.right-buttons button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 42px;
+  padding: 0 15px;
+  border: none;
+  border-radius: 6px;
+  font-family: "Nunito Sans", sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: white; /* Texto branco por padrão */
+}
+
+/* Cores Específicas */
+.btn-forum {
+  background-color: #5b4f96;
+  min-width: 100px;
+}
+.btn-anterior {
+  background-color: #2a4d7b;
+  min-width: 100px;
+}
+.btn-proxima {
+  background-color: #3b5fa0;
+  min-width: 100px;
+}
+
+/* Botão RESPONDER (Verde) */
+.btn-responder {
+  background-color: #28a745;
+  min-width: 110px;
+}
+
+/* Botão COMENTÁRIO (Laranja) */
+.btn-gabarito {
+  background-color: #f4a261;
+  color: #000; /* Texto preto para contraste no laranja */
+  min-width: 140px; /* Um pouco maior para caber o texto */
+}
+
+/* --- ESTILO DE BOTÃO BLOQUEADO (DISABLED) --- */
+/* Isso faz o botão ficar cinza quando [disabled] for true */
+.right-buttons button:disabled {
+  background-color: #cccccc !important;
+  color: #666666 !important;
+  cursor: not-allowed;
+  transform: none !important; /* Remove efeito de clique */
+  border: 1px solid #bbbbbb;
+}
+
+@media (max-width: 768px) {
+  /* 1. Ajuste o Container fixo do rodapé para crescer a altura */
+  .navigation-fixed {
+    height: auto !important; /* Deixa crescer pra caber os botões empilhados */
+    padding: 10px;
+    flex-direction: column; /* Garante organização */
+  }
+
+  /* 2. Transforma a lista de botões em um Grid (Grade) */
+  .right-buttons {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr; /* Duas colunas iguais */
+    gap: 8px; /* Espaço entre os botões */
+    width: 100%;
+    margin-top: 5px;
+  }
+
+  /* 3. Reorganiza a ordem visual dos botões para ficar ergonômico */
+  /* Queremos: [Anterior] [Próxima] na primeira linha */
+  .btn-anterior {
+    order: 1;
+    min-width: 0 !important; /* Destrava a largura mínima */
+    width: 100% !important;
+  }
+
+  .btn-proxima {
+    order: 2;
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+
+  /* Queremos: [Responder/Comentário] ocupando a linha inteira abaixo */
+  .btn-responder,
+  .btn-gabarito {
+    order: 3;
+    grid-column: 1 / -1; /* Faz ocupar as 2 colunas (largura total) */
+    width: 100% !important;
+    margin: 0 !important;
+    min-width: 0 !important;
+  }
+
+  /* Queremos: [Fórum] por último, também largura total */
+  .btn-forum {
+    order: 4;
+    grid-column: 1 / -1;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  /* Ajuste geral para caber texto */
+  .right-buttons button {
+    font-size: 14px; /* Fonte um pouco menor no celular */
+    padding: 0 10px;
+    height: 40px; /* Altura confortável para o dedo */
+  }
 }

@@ -102,4 +102,4 @@ export function playerFactory() {
     CUSTOM_ELEMENTS_SCHEMA, // Permite o uso de elementos personalizados
   ],
 })
-export class SistemaModule {}
+export class SistemaModule { }

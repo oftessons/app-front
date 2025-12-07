@@ -154,6 +154,8 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   isRespostaCorreta: boolean = false;
   message: string = '';
   resposta: string = '';
+  isComentario: boolean = false;
+  mostrarForumOverlay: boolean = false;
 
   private audioCorreto: HTMLAudioElement;
   private audioErrado: HTMLAudioElement;
@@ -586,7 +588,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
     return texto;
   }
-
 
   private aplicarLimitacoesTrial(): void {
     this.anosDescricoes = this.anos.map((ano) => this.getDescricaoAno(ano));
@@ -1313,7 +1314,8 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       return;
     }
 
-    this.mostrarGabarito = true;
+    this.isComentario = true;
+    this.mostrarGabarito = !this.mostrarGabarito;
 
     const imagens = [
       this.questaoAtual.fotoDaRespostaUmUrl,
@@ -1330,6 +1332,16 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
         console.warn(`Imagem ${index + 1} não disponível.`);
       }
     });
+  }
+
+  abrirForum() {
+    console.log('Abrir Fórum');
+    this.mostrarForumOverlay = !this.mostrarForumOverlay;
+  }
+
+  fecharForum() {
+    console.log('Fechar Fórum');
+    this.mostrarForumOverlay = false;
   }
 
   anteriorQuestao() {
@@ -1359,6 +1371,11 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     }
   }
 
+
+  limparEstadoDaQuestao() {
+    this.isComentario = false;
+  }
+
   proximaQuestao() {
     if (this.paginaAtual < this.numeroDeQuestoes - 1) {
       const selectElements = document.querySelector(
@@ -1372,6 +1389,11 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
       this.paginaAtual++;
       this.questaoAtual = this.questoes[this.paginaAtual];
+
+      this.jaRespondeu = false;
+      this.respostaVerificada = false;
+      this.selectedOption = '';
+
       this.carregarQuestaoDaPagina();
 
       this.resetarOcorrenciasDeQuestao();
@@ -1422,6 +1444,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
           this.respostasSessao.questoesIds.push(questao.id);
           this.respostasSessao.idUsuario = idUser;
           this.respostasSessao.respostas.push(respostaDTO);
+          this.isComentario = true;
 
           // Chamamos o serviço para verificar a resposta
           this.questoesService
