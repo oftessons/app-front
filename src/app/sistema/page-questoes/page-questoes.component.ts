@@ -1316,6 +1316,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
     this.isComentario = true;
     this.mostrarGabarito = !this.mostrarGabarito;
+    this.mostrarForumOverlay = false;
 
     const imagens = [
       this.questaoAtual.fotoDaRespostaUmUrl,
@@ -1335,12 +1336,10 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   }
 
   abrirForum() {
-    console.log('Abrir Fórum');
     this.mostrarForumOverlay = !this.mostrarForumOverlay;
   }
 
   fecharForum() {
-    console.log('Fechar Fórum');
     this.mostrarForumOverlay = false;
   }
 

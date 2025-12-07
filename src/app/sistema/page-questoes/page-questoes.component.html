@@ -310,7 +310,6 @@
 
               </div>
 
-
               <div *ngIf="isPreviewVideo(fotoPreviews['videoDaQuestao'])" class="video-preview-container">
                 <h4>Vídeo da Questão:</h4>
                 <video [src]="fotoPreviews['videoDaQuestao']" controls></video>
@@ -375,6 +374,9 @@
                 <p *ngIf="questaoAtual?.comentadorDaQuestao">Comentado por: {{ questaoAtual.comentadorDaQuestao }}</p>
               </div>
 
+              <app-comentarios-aula *ngIf="mostrarForumOverlay" [referenciaId]="questaoAtual.id" [tipo]="'QUESTAO'">
+              </app-comentarios-aula>
+
               <div class="error-message" *ngIf="mensagemErro">{{ mensagemErro }}</div>
               <div class="navigation-fixed">
                 <div class="right-buttons">
@@ -400,7 +402,6 @@
                   <button class="btn-proxima" (click)="proximaQuestao()">
                     Próxima
                   </button>
-
                 </div>
               </div>
             </div>
