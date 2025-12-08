@@ -30,9 +30,10 @@ export class ThemeService {
       this.darkModeSubject.next(isDarkMode);
       this.applyTheme(isDarkMode);
     } else {
-      const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      this.darkModeSubject.next(prefersDarkMode);
-      this.applyTheme(prefersDarkMode);
+      const defaultToDarkMode = true;
+      this.darkModeSubject.next(defaultToDarkMode);
+      this.applyTheme(defaultToDarkMode);
+      localStorage.setItem('darkMode', JSON.stringify(defaultToDarkMode));
     }
   }
 

@@ -234,7 +234,7 @@
       </div>
       <div class="conteudo-questao">
         <!-- Quero se se eu tiver cadastrado o video apareca aqui no enunciado-->
-         <div class="robot-streak-container" *ngIf="robozinhoVisivel">
+         <div class="robot-streak-container" *ngIf="robozinhoVisivel && animacoesAtivadas">
             <div class="robot-element" [class.pular-robo]="streakDezAtivada">
               <img src="assets/imagens/robo-streak.png" alt="Mascote Streak" class="robo-image" />
               

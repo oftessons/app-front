@@ -161,7 +161,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   public streakAtual: number = 0;
   public streakDezAtivada: boolean = false;
   public robozinhoVisivel: boolean = false;
-  public readonly STREAK_DEZ: number = 10;
+  public readonly STREAK_DEZ: number = 2;
   public carregandoRespostaSalva: boolean = false;
   public animacoesAtivadas: boolean = true;
 
@@ -1265,8 +1265,15 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
       // 2. LÓGICA DO PULO DO ROBOZINHO
       this.robozinhoVisivel = this.streakAtual >= this.STREAK_DEZ;
-      if (this.streakAtual === this.STREAK_DEZ && this.animacoesAtivadas) {
+      if (this.streakAtual > 0 && this.streakAtual % this.STREAK_DEZ === 0 && this.animacoesAtivadas) {
         this.streakDezAtivada = true;
+
+        setTimeout(() => {
+                if (this.streakDezAtivada) {
+                    this.streakDezAtivada = false;
+                    this.cdr.detectChanges(); 
+                }
+            }, 3000);
       }
     } else {
       if (sonsAtivados) {
@@ -1328,6 +1335,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
       this.buscarRespostaSalva(this.questaoAtual.id);
       this.buscarCuriosidadesSeNecessario();
+      this.robozinhoVisivel = false;
     } else {
       this.exibirMensagem('Você já está na primeira questão.', 'erro');
     }
@@ -1355,6 +1363,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
       this.buscarRespostaSalva(this.questaoAtual.id);
       this.buscarCuriosidadesSeNecessario();
+      this.robozinhoVisivel = false;
     } else {
       this.exibirMensagem('Não há mais questões neste filtro.', 'erro');
     }
@@ -1948,6 +1957,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     if (this.questaoAtual) {
       this.buscarRespostaSalva(this.questaoAtual.id);
     }
+    this.robozinhoVisivel = false;
   }
 
   isDarkMode(): boolean {

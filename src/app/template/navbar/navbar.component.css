@@ -256,6 +256,35 @@
   font-weight: 400;
 }
 
+.btn-notificacao {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  border: none;
+  background: transparent;
+  padding: 5px;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.btn-notificacao:hover {
+  background-color: rgba(0, 0, 0, 0.05); /* Efeito hover sutil */
+}
+
+/* Wrapper para posicionar o badge sobre o ícone */
+.icon-wrapper {
+  position: relative;
+  display: inline-block;
+  line-height: 0; /* Remove espaço extra abaixo da imagem */
+}
+
+.icon-sino {
+  width: 24px; /* Ajuste o tamanho conforme seus outros ícones */
+  height: 24px;
+}
+
 ::ng-deep .mat-drawer.mat-drawer-side {
   z-index: 1000 !important;
 }
@@ -353,6 +382,44 @@ input:checked + .slider:before {
     letter-spacing: 1px;
 }
 
+
+.notificacao-btn {
+    position: relative;
+    /* Ajuste de margem para afastar do botão de ofensiva e sair */
+    margin-left: 10px; 
+    margin-right: 10px;
+}
+
+/* Badge (o círculo vermelho com o número) */
+.notificacao-badge-contador {
+    position: absolute;
+    top: 5px; /* Posição vertical */
+    right: 5px; /* Posição horizontal */
+    padding: 2px 6px;
+    border-radius: 50%;
+    background-color: #dc3545; /* Vermelho padrão do Bootstrap/Material */
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    line-height: 1;
+    z-index: 10;
+}
+
+/* Opcional: Efeito visual para o sino (ex: ponto amarelo) */
+.notificacao-ativa {
+    /* Adiciona um efeito de cor ou jitter se houver notificações */
+    color: #ffc107 !important; 
+}
+
+/* Estilo para o contador dentro do menu lateral (sidenav) */
+.mat-drawer-sidenav .nav-badge-contador {
+    margin-left: auto; /* Empurra para a direita */
+    padding: 2px 8px;
+    border-radius: 12px;
+    background-color: #dc3545;
+    color: white;
+    font-size: 12px;
+}
 
 
 /* Estilo para dispositivos móveis e tablets */
