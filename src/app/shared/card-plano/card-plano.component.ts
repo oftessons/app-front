@@ -27,6 +27,7 @@ export class CardPlanoComponent implements OnInit {
   @Input() usarServicoPagamento: boolean = false;
   @Input() planoSelecionado: string = '';
   @Input() planoHotmart: string = '';
+  @Input() apenasEmitir: boolean = false;
 
   constructor(
     private router: Router,
@@ -42,6 +43,12 @@ export class CardPlanoComponent implements OnInit {
   }
 
   navegarParaPlano(): void {
+    // Se apenasEmitir estiver true, apenas emite o evento e não executa a lógica de pagamento
+    if (this.apenasEmitir) {
+      this.botaoClicado.emit();
+      return;
+    }
+
     const planosPermitidos: String[] = [
       Plano.FLASHCARDS,
       Plano.SEMESTRAL_PARCELADO,

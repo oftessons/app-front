@@ -45,17 +45,17 @@
           </button>
           <button 
             class="tab-btn" 
-            [class.active]="abaAtiva === 'questoes-pos'"
-            (click)="trocarAba('questoes-pos')">
-            <img [src]="!isDarkMode() ? 'assets/imagens/caderno.svg' : 'assets/Icons/dark/caderno-dark.svg'" alt="Questões">
-            Questões Pós-Teste
-          </button>
-          <button 
-            class="tab-btn" 
             [class.active]="abaAtiva === 'flashcards'"
             (click)="trocarAba('flashcards')">
             <img [src]="!isDarkMode() ? 'assets/Icons/flashcards.svg' : 'assets/Icons/dark/flashcards-dark.svg'" alt="Flashcards">
             Flashcards
+          </button>
+          <button 
+            class="tab-btn" 
+            [class.active]="abaAtiva === 'questoes-pos'"
+            (click)="trocarAba('questoes-pos')">
+            <img [src]="!isDarkMode() ? 'assets/imagens/caderno.svg' : 'assets/Icons/dark/caderno-dark.svg'" alt="Questões">
+            Questões Pós-Teste
           </button>
         </div>
 
@@ -171,6 +171,15 @@
             </div>
           </div>
 
+          <!-- Conteúdo: Flashcards -->
+          <div class="tab-panel" *ngIf="abaAtiva === 'flashcards'">
+            <div class="placeholder-content">
+              <img src="assets/Icons/flashcards.svg" alt="Flashcards" class="placeholder-icon">
+              <h3>Seleção de Flashcards</h3>
+              <p>Funcionalidade em desenvolvimento. Em breve você poderá selecionar os flashcards para esta semana.</p>
+            </div>
+          </div>
+
           <!-- Conteúdo: Questões Pós-Teste -->
           <div class="tab-panel" *ngIf="abaAtiva === 'questoes-pos'">
             <div class="filter-info">
@@ -269,15 +278,6 @@
                   [(value)]="palavraChavePos">
                 </app-input-padrao>
               </div>
-            </div>
-          </div>
-
-          <!-- Conteúdo: Flashcards -->
-          <div class="tab-panel" *ngIf="abaAtiva === 'flashcards'">
-            <div class="placeholder-content">
-              <img src="assets/Icons/flashcards.svg" alt="Flashcards" class="placeholder-icon">
-              <h3>Seleção de Flashcards</h3>
-              <p>Funcionalidade em desenvolvimento. Em breve você poderá selecionar os flashcards para esta semana.</p>
             </div>
           </div>
         </div>

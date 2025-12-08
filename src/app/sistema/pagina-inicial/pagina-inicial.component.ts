@@ -107,12 +107,6 @@ export class PaginaInicialComponent implements OnInit {
       experiencia: 'Oftalmologista pelo CLIHON - BA. Fellowship em Retina Clínica, Oncologia e Uveítes pela Unifesp - SP.'
     },
     {
-      nome: 'Raianne Lima',
-      foto: 'assets/imagens/professores/raianne-lima.png',
-      especialidade: 'Oculoplástica', 
-      experiencia: 'Oftalmologista pelo HCOE - BA. Fellowship em Plástica, Órbita e Vias Lacrimais pela FAV.'
-    },
-    {
       nome: 'Marcela Raposo',
       foto: 'assets/imagens/professores/marcela-raposo.png',
       especialidade: 'Córnea, Cirurgia Refrativa e Transplante', 
@@ -321,6 +315,10 @@ export class PaginaInicialComponent implements OnInit {
     this.router.navigate(['/login']);
   }
 
+  onPlanoSelecionado(plano: string) {
+    this.scrollToSection('hero');
+  }
+
   scrollToSection(sectionId: string) {
     const section = document.getElementById(sectionId);
     if (section) {
@@ -344,7 +342,7 @@ export class PaginaInicialComponent implements OnInit {
     }
   }
 
-  @HostListener('window:scroll', ['$event'])
+  @HostListener('window:scroll')
   checkActiveSection() {
     const sections = document.querySelectorAll('section[id]');
     const scrollPosition = window.scrollY + window.innerHeight / 3;
