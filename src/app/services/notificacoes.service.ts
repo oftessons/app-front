@@ -80,6 +80,13 @@ export class NotificacaoService {
     return this.http.get<Page<Notificacao>>(`${this.apiUrl}/listar/${userId}`, { params });
   }
 
+  atualizarNotificacoes(): void {
+    const userId = this.getAuthenticatedUserId();
+    if (userId) {
+      this.fetchUnreadCount(userId).subscribe();
+    }
+  }
+
   /**
    * Inicia o polling para verificar novas notificações a cada 60 segundos.
    */

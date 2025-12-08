@@ -241,7 +241,7 @@
               <img src="assets/imagens/robo-streak.png" alt="Mascote Streak" class="robo-image" />
               
               <div class="streak-badge">
-                <span *ngIf="streakAtual >= STREAK_DEZ"> 🎯 Streak de {{ streakAtual }}!</span>
+                <span *ngIf="streakAtual % STREAK_DEZ == 0"> 🎯 Streak de {{ streakAtual }}!</span>
               </div>
             </div>
           </div>

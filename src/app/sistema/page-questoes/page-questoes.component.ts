@@ -161,7 +161,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   public streakAtual: number = 0;
   public streakDezAtivada: boolean = false;
   public robozinhoVisivel: boolean = false;
-  public readonly STREAK_DEZ: number = 2;
+  public readonly STREAK_DEZ: number = 10;
   public carregandoRespostaSalva: boolean = false;
   public animacoesAtivadas: boolean = true;
 
@@ -1242,8 +1242,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     this.selectedOption = resposta.opcaoSelecionada;
     this.isRespostaCorreta = resposta.correct;
 
-    this.robozinhoVisivel = this.streakAtual >= this.STREAK_DEZ;
-
     if (resposta.correct) {
       this.respostaCorreta = this.selectedOption;
       this.respostaErrada = '';
@@ -1263,9 +1261,8 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       }
       this.streakAtual++; // AUMENTA A STREAK
 
-      // 2. LÓGICA DO PULO DO ROBOZINHO
-      this.robozinhoVisivel = this.streakAtual >= this.STREAK_DEZ;
       if (this.streakAtual > 0 && this.streakAtual % this.STREAK_DEZ === 0 && this.animacoesAtivadas) {
+        this.robozinhoVisivel = true;
         this.streakDezAtivada = true;
 
         setTimeout(() => {
