@@ -65,7 +65,7 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     const loginData: LoginDTO = {
-      username: this.email,
+      username: this.email.toLowerCase(),
       password: this.password
     };
 
