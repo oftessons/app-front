@@ -46,8 +46,8 @@ export class ComentariosAulasService {
   /**
    * Cria um novo comentário em uma aula
    */
-  comentar(aulaId: number, request: ComentarioAulaRequest): Observable<void> {
-    return this.http.post<void>(`${this.apiURL}/${aulaId}`, request).pipe(
+  comentar(aulaId: number, request: ComentarioAulaRequest): Observable<ComentarioAulaResponse> {
+    return this.http.post<ComentarioAulaResponse>(`${this.apiURL}/${aulaId}`, request).pipe(
       catchError(this.handleError)
     );
   }
@@ -88,8 +88,8 @@ export class ComentariosAulasService {
   /**
    * Responde a um comentário
    */
-  responderComentario(aulaId: number, comentarioId: number, request: RespostaComentarioRequest): Observable<void> {
-    return this.http.post<void>(`${this.apiURL}/${aulaId}/${comentarioId}/respostas`, request).pipe(
+  responderComentario(aulaId: number, comentarioId: number, request: RespostaComentarioRequest): Observable<RespostaComentarioResponse> {
+    return this.http.post<RespostaComentarioResponse>(`${this.apiURL}/${aulaId}/${comentarioId}/respostas`, request).pipe(
       catchError(this.handleError)
     );
   }

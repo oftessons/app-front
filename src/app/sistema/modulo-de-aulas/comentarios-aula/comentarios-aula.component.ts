@@ -237,7 +237,6 @@ export class ComentariosAulaComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   enviarResposta(comentario: ComentarioComRespostas): void {
-
     if (!comentario.textoResposta?.trim() || !comentario.id) return;
 
     this.comentariosService.responderComentario(this.aulaId, comentario.id, {
@@ -245,10 +244,13 @@ export class ComentariosAulaComponent implements OnInit, OnDestroy, OnChanges {
     })
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: () => {
+        next: (novaResposta: RespostaComentarioResponse) => {
+          if (!comentario.respostas) {
+            comentario.respostas = [];
+          }
+          comentario.respostas.unshift(novaResposta);
           comentario.textoResposta = '';
           comentario.mostrarFormResposta = false;
-          this.carregarRespostas(comentario);
           if (!comentario.mostrarRespostas) {
             comentario.mostrarRespostas = true;
           }
