@@ -1242,8 +1242,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     this.selectedOption = resposta.opcaoSelecionada;
     this.isRespostaCorreta = resposta.correct;
 
-    this.robozinhoVisivel = this.streakAtual >= this.STREAK_DEZ;
-
     if (resposta.correct) {
       this.respostaCorreta = this.selectedOption;
       this.respostaErrada = '';
@@ -1263,10 +1261,16 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       }
       this.streakAtual++; // AUMENTA A STREAK
 
-      // 2. LÓGICA DO PULO DO ROBOZINHO
-      this.robozinhoVisivel = this.streakAtual >= this.STREAK_DEZ;
-      if (this.streakAtual === this.STREAK_DEZ && this.animacoesAtivadas) {
+      if (this.streakAtual > 0 && this.streakAtual % this.STREAK_DEZ === 0 && this.animacoesAtivadas) {
+        this.robozinhoVisivel = true;
         this.streakDezAtivada = true;
+
+        setTimeout(() => {
+                if (this.streakDezAtivada) {
+                    this.streakDezAtivada = false;
+                    this.cdr.detectChanges(); 
+                }
+            }, 3000);
       }
     } else {
       if (sonsAtivados) {
@@ -1328,6 +1332,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
       this.buscarRespostaSalva(this.questaoAtual.id);
       this.buscarCuriosidadesSeNecessario();
+      this.robozinhoVisivel = false;
     } else {
       this.exibirMensagem('Você já está na primeira questão.', 'erro');
     }
@@ -1355,6 +1360,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
       this.buscarRespostaSalva(this.questaoAtual.id);
       this.buscarCuriosidadesSeNecessario();
+      this.robozinhoVisivel = false;
     } else {
       this.exibirMensagem('Não há mais questões neste filtro.', 'erro');
     }
@@ -1948,6 +1954,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     if (this.questaoAtual) {
       this.buscarRespostaSalva(this.questaoAtual.id);
     }
+    this.robozinhoVisivel = false;
   }
 
   isDarkMode(): boolean {

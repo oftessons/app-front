@@ -43,6 +43,7 @@ import { TemaFlashcardsComponent } from './tema-flashcards/tema-flashcards.compo
 import { FlashcardsCadastroComponent } from './flashcards-cadastro/flashcards-cadastro.component';
 import { QuillModule } from 'ngx-quill';
 import { ModuloDeAulasComponent } from './modulo-de-aulas/modulo-de-aulas.component';
+import { NotificacoesComponent } from './notificacoes/notificacoes.component';
 import { ComentariosAulaComponent } from './modulo-de-aulas/comentarios-aula/comentarios-aula.component';
 
 // Função necessária para o ngx-lottie
@@ -78,6 +79,7 @@ export function playerFactory() {
     TemaFlashcardsComponent,
     FlashcardsCadastroComponent,
     ModuloDeAulasComponent,
+    NotificacoesComponent,
     ComentariosAulaComponent,
   ],
   imports: [

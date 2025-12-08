@@ -27,6 +27,7 @@ import { TemaFlashcardsComponent } from './tema-flashcards/tema-flashcards.compo
 import { FlashcardsCadastroComponent } from './flashcards-cadastro/flashcards-cadastro.component';
 import { CanDeactivateSimuladoGuard } from '../services/CanDeactivateSimulado.Guard';
 import { ModuloDeAulasComponent } from './modulo-de-aulas/modulo-de-aulas.component';
+import { NotificacoesComponent } from './notificacoes/notificacoes.component';
 
 
 const routes: Routes = [
@@ -36,6 +37,7 @@ const routes: Routes = [
     canActivate: [AuthGuard, BolsaGuardService],
     children: [
       { path: 'inicio', component: InicioComponent },
+      { path: 'notificacoes', component: NotificacoesComponent },
       { path: 'trilha', component: PageTrilhaComponent },
       { path: 'revisao', component: PageRevisaoComponent },
       { path: 'dashboard', component: DashboardComponent },

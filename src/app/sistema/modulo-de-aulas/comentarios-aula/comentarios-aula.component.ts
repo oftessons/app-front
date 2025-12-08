@@ -10,6 +10,7 @@ import {
 import { AuthService } from 'src/app/services/auth.service';
 import { ModalDeleteService } from 'src/app/services/modal-delete.service';
 import { Permissao } from 'src/app/login/Permissao';
+import { NotificacaoService } from 'src/app/services/notificacoes.service';
 
 interface RespostaUI extends RespostaComentarioResponse {
   editando?: boolean;
@@ -59,6 +60,7 @@ export class ComentariosAulaComponent implements OnInit, OnDestroy, OnChanges {
 
   constructor(
     private comentariosService: ComentariosAulasService,
+    private notificacaoService: NotificacaoService,
     private authService: AuthService,
     private modalDeleteService: ModalDeleteService
   ) { }
@@ -166,6 +168,7 @@ export class ComentariosAulaComponent implements OnInit, OnDestroy, OnChanges {
           this.isEnviando = false;
           // Recarrega os comentários para mostrar o novo
           this.carregarComentarios();
+          this.notificacaoService.atualizarNotificacoes();
         },
         error: (err) => {
           console.error('Erro ao enviar comentário:', err);

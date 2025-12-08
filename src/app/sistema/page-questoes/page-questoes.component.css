@@ -1157,12 +1157,12 @@ p {
 }
 
 .robot-element {
-  width: 240px;
-  height: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
+    width: 120px; 
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
 }
 
 .robo-image {
