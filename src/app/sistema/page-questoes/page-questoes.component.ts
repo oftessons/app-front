@@ -192,7 +192,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   filtroASalvar!: FiltroDTO;
 
   mostrarGabarito: boolean = false;
-  mostrarEstatisticasQuestao: boolean = false;
   @ViewChild('confirmacaoModalRef', { static: false })
   confirmacaoModal!: ElementRef;
 
@@ -1020,21 +1019,21 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
       if (isNaN(numero)) {
         this.message = 'Quantidade de questões aceita apenas números.';
-        return; 
+        return;
       }
 
       if (numero <= 0) {
         this.message = 'A quantidade de questoes deve ser maior que 0.';
-        return; 
+        return;
       }
 
-      if (numero > 1000000) { 
+      if (numero > 1000000) {
         this.message = 'A quantidade máxima de questões permitida é 1.000.000.';
-        return; 
+        return;
       }
       filtros.qntdQuestoes = numero;
     }
-    
+
 
     if (Object.keys(filtros).length === 0) {
       this.message = 'Por favor, selecione pelo menos um filtro.';
@@ -1288,8 +1287,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       return;
     }
 
-    this.mostrarGabarito = !this.mostrarGabarito;
-    this.mostrarEstatisticasQuestao = false;
+    this.mostrarGabarito = true;
 
     const imagens = [
       this.questaoAtual.fotoDaRespostaUmUrl,
@@ -1451,7 +1449,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
                         error
                       );
                     }
-                );
+                  );
                 this.processarNovaResposta(resposta);
               },
               (error) => {
@@ -2101,12 +2099,12 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
   set questionAmountString(valor: string) {
     this.validarEAtualizarFiltro(valor);
-  } 
+  }
 
-validarEAtualizarFiltro(valor: string): void {
-    this.qntdQuestoesInput = valor; 
-    this.message = '';      
-    
+  validarEAtualizarFiltro(valor: string): void {
+    this.qntdQuestoesInput = valor;
+    this.message = '';
+
     const numero = parseInt(valor, 10);
 
     if (!isNaN(numero) && numero > 0) {

@@ -19,7 +19,6 @@
           </ng-container>
         </h1>
         <ng-template #questoesTitulo>Questões</ng-template>
-
         <button *ngIf="!revisandoFiltroSalvo" class="btn-filtros" (click)="toggleFiltros()">
           <img src="assets/imagens/q-f.svg" alt="Ícone do Filtro" class="icon">
           Filtro
@@ -48,6 +47,14 @@
                     [disabled]="isFiltroBloqueado()">
                   </app-multiplo-select>
                 </div>
+                <!--<div class="espaco-select">
+              <app-multiplo-select
+                label="Tema"
+                [options]="temasDescricoes"
+                [(selectedValue)]="multSelectTema"
+                [multiple]="true">
+              </app-multiplo-select>
+            </div>-->
                 <div class="espaco-select">
                   <app-multiplo-select label="Assunto" [options]="subtemasAgrupadosPorTema"
                     [(selectedValue)]="multiSelectTemasSubtemasSelecionados" [multiple]="true"
@@ -59,8 +66,9 @@
                     [(selectedValue)]="multSelecDificuldade" [multiple]="true">
                   </app-multiplo-select>
                 </div>
-                  <div class="espaco-select">
-                    <app-input-padrao label="Quantidade de questões" [(value)]="questionAmountString" class="palavra-chave"> 
+                <div class="espaco-select">
+                  <app-input-padrao label="Quantidade de questões" [(value)]="questionAmountString"
+                    class="palavra-chave">
                   </app-input-padrao>
                 </div>
               </div>
@@ -80,6 +88,14 @@
                     [(selectedValue)]="multiSelectQuestoesComentadas" [multiple]="true">
                   </app-multiplo-select>
                 </div>
+                <!-- <div class="espaco-select">
+              <app-multiplo-select
+                label="Subtema"
+                [options]="subtemasDescricoes"
+                [(selectedValue)]="multSelectSubtema"
+                [multiple]="true">
+              </app-multiplo-select>
+            </div> -->
                 <div class="espaco-select">
                   <app-input-padrao label="Pesquisar por palavra-chave" [(value)]="palavraChave" class="palavra-chave">
                   </app-input-padrao>
@@ -108,9 +124,11 @@
               {{ mensagem.texto }}
             </div>
 
+
             <div class="button-row-filtro">
               <button type="submit" class="btn-filtrar">Filtrar e salvar</button>
               <button type="button" class="btn-filtrar-geral" (click)="LimparFiltro()">Limpar Filtro</button>
+              <!--<button type="button" class="btn-salvar" (click)="abrirModal()">Salvar Filtro</button>-->
             </div>
           </form>
           <mat-progress-bar class="progress-bar-spacing" *ngIf="carregando" mode="indeterminate"></mat-progress-bar>
@@ -119,6 +137,7 @@
     </div>
   </div>
 
+  <!-- Modal de confirmação -->
   <div>
     <div class="modal fade" id="confirmacaoModal" #confirmacaoModalRef tabindex="-1"
       aria-labelledby="confirmacaoModalLabel" aria-hidden="true">
@@ -156,15 +175,14 @@
     </div>
   </div>
 
+  <!-- Exibição dos Resultados -->
   <div *ngIf="questaoAtual">
     <h2 class="h2-resul">Resultado da Filtragem</h2>
-
     <div class="identificadores-questao-resul">
       <h2 class="h2">
         {{ numeroDeQuestoes }} Questões Encontradas
         <img [src]="!isDarkMode() ? 'assets/Icons/setaDireta.svg' : 'assets/Icons/dark/setaDireta-dark.svg'"
           alt="Ícone de Questões" class="questoes-icone">
-
         <div class="balloon-container" *ngIf="mostrarBalloon">
           <div class="balloon-box" [@slideIn]>
             <button class="close-btn" (click)="fecharBalloon()">×</button>
@@ -194,66 +212,39 @@
           </div>
         </div>
       </h2>
-
       <select class="question-dropdown" aria-label="Selecione a questão" [(ngModel)]="paginaAtual"
         (ngModelChange)="selecionarQuestaoPeloIndice($event)">
+
         <option *ngFor="let item of navegacaoPorQuestao; let i = index" [value]="i">
           Questão {{ i + 1 }} de {{ numeroDeQuestoes }}
         </option>
+
       </select>
     </div>
-
     <div class="questao">
-      <div class="identificadores-questao-wrapper">
-
-        <div class="identificadores-left">
-          <div class="info-texts">
-            <h3>ID: {{ questaoAtual.id }}</h3>
-            <h3>Tema: {{ questaoAtual.tema }}</h3>
-            <h3 *ngIf="questaoAtual.ano">Ano: {{ questaoAtual.ano }}</h3>
-            <h3>Tipo de Prova: {{ questaoAtual.tipoDeProva }}</h3>
-          </div>
-
-          <div class="header-actions-left">
-            <button *ngIf="curiosidades.length > 0 && !isTrialUser" type="button" class="btn-balloon"
-              (click)="toggleBalloon()" title="Ver curiosidades">
-              <img src="assets/Icons/dark/lampada-dark.svg" alt="Ícone de Curiosidades">
-            </button>
-
-            <ng-container *ngIf="jaRespondeu">
-              <button class="btn-std btn-roxo" (click)="exibirEstatisticas()">
-                <i class="fas fa-chart-bar"></i> Estatística
-              </button>
-
-              <button class="btn-std btn-amarelo" (click)="exibirGabarito()">
-                <i class="fas fa-book-open"></i> Comentário
-              </button>
-
-              <button class="btn-std btn-azul" (click)="navegarParaForum()">
-                <i class="fas fa-comments"></i> Fórum
-              </button>
-            </ng-container>
-          </div>
-        </div>
-
-        <div class="identificadores-right">
-          <button type="button" class="btn-editar" (click)="editQuestao()" *ngIf="isAdmin() || isProf()">
-            Editar Questão
-          </button>
-        </div>
-
+      <div class="identificadores-questao">
+        <h3>ID: {{ questaoAtual.id }}</h3>
+        <h3>Tema: {{ questaoAtual.tema }}</h3>
+        <h3 *ngIf="questaoAtual.ano">Ano: {{ questaoAtual.ano }}</h3>
+        <h3>Tipo de Prova: {{ questaoAtual.tipoDeProva }}</h3>
+        <button *ngIf="curiosidades.length > 0 && !isTrialUser" type="button" class="btn-balloon"
+          (click)="toggleBalloon()" title="Ver curiosidades do subtema">
+          <img src="assets/Icons/dark/lampada-dark.svg" alt="Ícone de Curiosidades">
+        </button>
+        <button type="button" class="btn-editar" (click)="editQuestao()" *ngIf="isAdmin() || isProf()">Editar
+          Questão</button>
       </div>
       <div class="conteudo-questao">
         <!-- Quero se se eu tiver cadastrado o video apareca aqui no enunciado-->
-         <div class="robot-streak-container" *ngIf="robozinhoVisivel">
-            <div class="robot-element" [class.pular-robo]="streakDezAtivada">
-              <img src="assets/imagens/robo-streak.png" alt="Mascote Streak" class="robo-image" />
-              
-              <div class="streak-badge">
-                <span *ngIf="streakAtual >= STREAK_DEZ"> 🎯 Streak de {{ streakAtual }}!</span>
-              </div>
+        <div class="robot-streak-container" *ngIf="robozinhoVisivel">
+          <div class="robot-element" [class.pular-robo]="streakDezAtivada">
+            <img src="assets/imagens/robo-streak.png" alt="Mascote Streak" class="robo-image" />
+
+            <div class="streak-badge">
+              <span *ngIf="streakAtual >= STREAK_DEZ"> 🎯 Streak de {{ streakAtual }}!</span>
             </div>
           </div>
+        </div>
         <div class="img-comentario" [innerHTML]="questaoAtual.enunciadoDaQuestao | safeHtml"></div>
 
         <ng-container *ngIf="questaoAtual?.fotoDaQuestaoUrl">
@@ -264,10 +255,11 @@
           </video>
         </ng-container>
 
+        <!-- <img *ngIf="questaoAtual?.fotoDaQuestaoUrl" [src]="questaoAtual?.fotoDaQuestaoUrl" alt="Foto da questão" class="questao-foto"> -->
         <div class="row">
           <div class="col-md-12">
-
             <div class="form-group content-with-fixed-buttons">
+              <!-- <label class="selecione-text">Selecione a Alternativa:</label> -->
               <div *ngFor="let alternativa of questaoAtual.alternativas; let i = index" class="alternativa" [ngClass]="{
                 'alternativa-certa': respostaVerificada && alternativa.texto === respostaCorreta,
                 'alternativa-errada': respostaVerificada && alternativa.texto === respostaErrada
@@ -288,133 +280,100 @@
                 </div>
               </div>
 
-              <div class="stats-section pt-4 pb-4"
-                *ngIf="mostrarEstatisticasQuestao && mostrarPorcentagem && porcentagens">
-                <div class="container">
-                  <div class="analytics-row">
-
-                    <div class="analytics-card">
-                      <h3 class="card-title">Distribuição de Respostas</h3>
-                      <div class="bar-chart-container">
-                        <div class="chart-column" *ngFor="let item of porcentagens | keyvalue">
-                          <span class="chart-value">{{ item.value }}</span>
-                          <div class="chart-bar" [style.height]="item.value"
-                            [title]="'Alternativa ' + item.key + ': ' + item.value">
-                          </div>
-                          <div class="chart-label">{{ item.key }}</div>
-                        </div>
-                      </div>
+              <!-- Adicione a exibição das porcentagens -->
+              <div class="progress-container" *ngIf="mostrarPorcentagem && porcentagens">
+                <h3>Porcentagens de Respostas:</h3>
+                <div class="itens-progresso" *ngFor="let key of porcentagens.keys()">
+                  <div class="progress-label">
+                    {{ key }}
+                  </div>
+                  <div class="progress">
+                    <div class="progress-inner" [ngStyle]="{'width.%': porcentagens.get(key) | slice:0:-1}">
+                      <span>{{ porcentagens.get(key) }}</span>
                     </div>
-
-                    <div class="analytics-card">
-                      <h3 class="card-title">Desempenho Geral (Mock)</h3>
-                      <div class="donut-chart-wrapper">
-                        <div class="donut-chart" style="background: conic-gradient(
-                            #43e97b 0% 65%,   /* Verde (Acertos) até 65% */
-                            #ff6b6b 65% 90%,  /* Vermelho (Erros) de 65% até 90% */
-                            #e0e0e0 90% 100%  /* Cinza (Sem resposta) o resto */
-                        );">
-                          <div class="donut-hole">
-                            <span class="donut-number">65%</span>
-                            <span class="donut-label">Acerto Médio</span>
-                          </div>
-                        </div>
-
-                        <div class="chart-legend">
-                          <div class="legend-item"><span class="dot green"></span>Acertos da Turma</div>
-                          <div class="legend-item"><span class="dot red"></span>Erros Comuns</div>
-                          <div class="legend-item"><span class="dot grey"></span>Não Responderam</div>
-                        </div>
-                      </div>
-                    </div>
-
                   </div>
                 </div>
               </div>
-            </div>
 
-            <div *ngIf="isPreviewVideo(fotoPreviews['videoDaQuestao'])" class="video-preview-container">
-              <h4>Vídeo da Questão:</h4>
-              <video [src]="fotoPreviews['videoDaQuestao']" controls></video>
-            </div>
+              <div *ngIf="isPreviewVideo(fotoPreviews['videoDaQuestao'])" class="video-preview-container">
+                <h4>Vídeo da Questão:</h4>
+                <video [src]="fotoPreviews['videoDaQuestao']" controls></video>
+              </div>
 
-            <div *ngIf="message" class="alert alert-info mt-3 alert-custom" role="alert">
-              {{ message }}
-            </div>
+              <div *ngIf="message" class="alert alert-info mt-3 alert-custom" role="alert">
+                {{ message }}
+              </div>
 
-            <div *ngIf="mostrarGabarito && questaoAtual">
-              <h2 style="margin-top: 10px;">Comentário da Questão</h2>
-
-              <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestao | safeHtml"></div>
-              <ng-container *ngIf="questaoAtual?.fotoDaRespostaUmUrl">
-                <img *ngIf="isImage(questaoAtual.fotoDaRespostaUmUrl)" [src]="questaoAtual.fotoDaRespostaUmUrl"
-                  alt="Foto da questão" class="questao-foto">
-                <video *ngIf="isVideo(questaoAtual.fotoDaRespostaUmUrl)" [src]="questaoAtual.fotoDaRespostaUmUrl"
-                  controls controlsList="nodownload" class="questao-video">
-                </video>
-              </ng-container>
-              <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestaoDois | safeHtml"></div>
-              <ng-container *ngIf="questaoAtual?.fotoDaRespostaDoisUrl">
-                <img *ngIf="isImage(questaoAtual.fotoDaRespostaDoisUrl)" [src]="questaoAtual.fotoDaRespostaDoisUrl"
-                  alt="Foto da questão" class="questao-foto">
-                <video *ngIf="isVideo(questaoAtual.fotoDaRespostaDoisUrl)" [src]="questaoAtual.fotoDaRespostaDoisUrl"
-                  controls controlsList="nodownload" class="questao-video">
-                </video>
-              </ng-container>
-              <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestaoTres | safeHtml"></div>
-              <ng-container *ngIf="questaoAtual?.fotoDaRespostaTresUrl">
-                <img *ngIf="isImage(questaoAtual.fotoDaRespostaTresUrl)" [src]="questaoAtual.fotoDaRespostaTresUrl"
-                  alt="Foto da questão" class="questao-foto">
-                <video *ngIf="isVideo(questaoAtual.fotoDaRespostaTresUrl)" [src]="questaoAtual.fotoDaRespostaTresUrl"
-                  controls controlsList="nodownload" class="questao-video">
-                </video>
-              </ng-container>
-              <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestaoQuatro | safeHtml"></div>
-              <ng-container *ngIf="questaoAtual?.fotoDaRespostaQuatroUrl">
-                <img *ngIf="isImage(questaoAtual.fotoDaRespostaQuatroUrl)" [src]="questaoAtual.fotoDaRespostaQuatroUrl"
-                  alt="Foto da questão" class="questao-foto">
-                <video *ngIf="isVideo(questaoAtual.fotoDaRespostaQuatroUrl)"
-                  [src]="questaoAtual.fotoDaRespostaQuatroUrl" controls controlsList="nodownload" class="questao-video">
-                </video>
-              </ng-container>
-              <div *ngIf="questaoAtual?.comentarioDaQuestaoCinco" class="img-comentario"
-                [innerHTML]="questaoAtual.comentarioDaQuestaoCinco | safeHtml"></div>
-              <ng-container *ngIf="questaoAtual?.fotoDaRespostaCincoUrl">
-                <img *ngIf="isImage(questaoAtual.fotoDaRespostaCincoUrl)" [src]="questaoAtual.fotoDaRespostaCincoUrl"
-                  alt="Foto da questão" class="questao-foto">
-                <video *ngIf="isVideo(questaoAtual.fotoDaRespostaCincoUrl)" [src]="questaoAtual.fotoDaRespostaCincoUrl"
-                  controls controlsList="nodownload" class="questao-video">
-                </video>
-              </ng-container>
-              <div *ngIf="questaoAtual?.comentarioDaQuestaoSeis" class="img-comentario"
-                [innerHTML]="questaoAtual.comentarioDaQuestaoSeis | safeHtml"></div>
-
-              <p *ngIf="questaoAtual?.referenciaBi">Referência: {{ questaoAtual.referenciaBi }}</p>
-              <p *ngIf="questaoAtual?.comentadorDaQuestao">Comentado por: {{ questaoAtual.comentadorDaQuestao }}</p>
-            </div>
-
-            <div class="error-message" *ngIf="mensagemErro">{{ mensagemErro }}</div>
-
-            <div class="navigation-fixed">
-              <div class="nav-content-centered">
-
-                <button class="btn-anterior" (click)="anteriorQuestao()" [disabled]="paginaAtual === 0">
-                  Anterior
-                </button>
-
-                <button class="btn-responder-central"
-                  (click)="jaRespondeu ? null : (questaoAtual && responderQuestao(questaoAtual))"
-                  [disabled]="jaRespondeu">
-                  {{ jaRespondeu ? 'Respondida' : 'Responder' }}
-                </button>
-
-                <button class="btn-proxima" (click)="proximaQuestao()">
-                  Próxima
-                </button>
-
+              <div *ngIf="mostrarGabarito && questaoAtual">
+                <h2 style="margin-top: 10px;">Comentário da Questão</h2>
+                <!-- Exibe o comentário da Questão com HTML Sanitizado -->
+                <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestao | safeHtml"></div>
+                <ng-container *ngIf="questaoAtual?.fotoDaRespostaUmUrl">
+                  <img *ngIf="isImage(questaoAtual.fotoDaRespostaUmUrl)" [src]="questaoAtual.fotoDaRespostaUmUrl"
+                    alt="Foto da questão" class="questao-foto">
+                  <video *ngIf="isVideo(questaoAtual.fotoDaRespostaUmUrl)" [src]="questaoAtual.fotoDaRespostaUmUrl"
+                    controls controlsList="nodownload" class="questao-video">
+                  </video>
+                </ng-container>
+                <!-- Exibe o comentário da Questão com HTML Sanitizado -->
+                <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestaoDois | safeHtml"></div>
+                <ng-container *ngIf="questaoAtual?.fotoDaRespostaDoisUrl">
+                  <img *ngIf="isImage(questaoAtual.fotoDaRespostaDoisUrl)" [src]="questaoAtual.fotoDaRespostaDoisUrl"
+                    alt="Foto da questão" class="questao-foto">
+                  <video *ngIf="isVideo(questaoAtual.fotoDaRespostaDoisUrl)" [src]="questaoAtual.fotoDaRespostaDoisUrl"
+                    controls controlsList="nodownload" class="questao-video">
+                  </video>
+                </ng-container>
+                <!-- Exibe o comentário da Questão com HTML Sanitizado -->
+                <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestaoTres | safeHtml"></div>
+                <ng-container *ngIf="questaoAtual?.fotoDaRespostaTresUrl">
+                  <img *ngIf="isImage(questaoAtual.fotoDaRespostaTresUrl)" [src]="questaoAtual.fotoDaRespostaTresUrl"
+                    alt="Foto da questão" class="questao-foto">
+                  <video *ngIf="isVideo(questaoAtual.fotoDaRespostaTresUrl)" [src]="questaoAtual.fotoDaRespostaTresUrl"
+                    controls controlsList="nodownload" class="questao-video">
+                  </video>
+                </ng-container>
+                <!-- Exibe o comentário da Questão com HTML Sanitizado -->
+                <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestaoQuatro | safeHtml"></div>
+                <ng-container *ngIf="questaoAtual?.fotoDaRespostaQuatroUrl">
+                  <img *ngIf="isImage(questaoAtual.fotoDaRespostaQuatroUrl)"
+                    [src]="questaoAtual.fotoDaRespostaQuatroUrl" alt="Foto da questão" class="questao-foto">
+                  <video *ngIf="isVideo(questaoAtual.fotoDaRespostaQuatroUrl)"
+                    [src]="questaoAtual.fotoDaRespostaQuatroUrl" controls controlsList="nodownload"
+                    class="questao-video">
+                  </video>
+                </ng-container>
+                <div *ngIf="questaoAtual?.comentarioDaQuestaoCinco" class="img-comentario"
+                  [innerHTML]="questaoAtual.comentarioDaQuestaoCinco | safeHtml"></div>
+                <ng-container *ngIf="questaoAtual?.fotoDaRespostaCincoUrl">
+                  <img *ngIf="isImage(questaoAtual.fotoDaRespostaCincoUrl)" [src]="questaoAtual.fotoDaRespostaCincoUrl"
+                    alt="Foto da questão" class="questao-foto">
+                  <video *ngIf="isVideo(questaoAtual.fotoDaRespostaCincoUrl)"
+                    [src]="questaoAtual.fotoDaRespostaCincoUrl" controls controlsList="nodownload"
+                    class="questao-video">
+                  </video>
+                </ng-container>
+                <div *ngIf="questaoAtual?.comentarioDaQuestaoSeis" class="img-comentario"
+                  [innerHTML]="questaoAtual.comentarioDaQuestaoSeis | safeHtml"></div>
+                <p *ngIf="questaoAtual?.referenciaBi">Referência: {{ questaoAtual.referenciaBi }}</p>
+                <p *ngIf="questaoAtual?.comentadorDaQuestao">Comentado por: {{ questaoAtual.comentadorDaQuestao }}</p>
+              </div>
+              <div class="error-message" *ngIf="mensagemErro">{{ mensagemErro }}</div>
+              <div class="navigation-fixed">
+                <div class="right-buttons">
+                  <button class="btn-anterior" (click)="anteriorQuestao()" [disabled]="paginaAtual === 0">
+                    Anterior
+                  </button>
+                  <button [ngClass]="jaRespondeu ? 'btn-gabarito' : 'btn-responder'"
+                    (click)="jaRespondeu ? exibirGabarito() : (questaoAtual && responderQuestao(questaoAtual))">
+                    {{ jaRespondeu ? 'Comentário da Questão' : 'Responder' }}
+                  </button>
+                  <button class="btn-proxima" (click)="proximaQuestao()">
+                    Próxima
+                  </button>
+                </div>
               </div>
             </div>
-
           </div>
         </div>
       </div>
