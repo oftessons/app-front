@@ -10,7 +10,7 @@ import {
 import { TrilhaData } from 'src/app/services/modal-trilha.service';
 import { AnimationOptions } from 'ngx-lottie';
 
-type TipoConteudo = 'questoes-pre' | 'aulas' | 'questoes-pos' | 'flashcards';
+type TipoConteudo = 'questoes-pre' | 'aulas' | 'flashcards' | 'questoes-pos';
 type ModoVisualizacao = 'selecao' | 'executando' | 'resumo';
 
 @Component({
@@ -100,7 +100,7 @@ export class ModalTrilhaComponent implements OnInit {
   }
 
   etapaBloqueada(tipo: TipoConteudo): boolean {
-    const ordem: TipoConteudo[] = ['questoes-pre', 'aulas', 'questoes-pos', 'flashcards'];
+    const ordem: TipoConteudo[] = ['questoes-pre', 'aulas', 'flashcards', 'questoes-pos'];
     const indexAtual = ordem.indexOf(tipo);
     
     if (indexAtual === 0) return false;
@@ -110,7 +110,7 @@ export class ModalTrilhaComponent implements OnInit {
   }
 
   proximaEtapaDesbloqueada(): TipoConteudo | null {
-    const ordem: TipoConteudo[] = ['questoes-pre', 'aulas', 'questoes-pos', 'flashcards'];
+    const ordem: TipoConteudo[] = ['questoes-pre', 'aulas', 'flashcards', 'questoes-pos'];
     
     for (const etapa of ordem) {
       if (!this.etapasCompletas.has(etapa)) {
@@ -288,10 +288,10 @@ export class ModalTrilhaComponent implements OnInit {
         return 'Iniciar questões';
       case 'aulas':
         return 'Assistir agora';
-      case 'questoes-pos':
-        return 'Fazer pós-teste';
       case 'flashcards':
         return 'Revisar flashcards';
+      case 'questoes-pos':
+        return 'Fazer pós-teste';
       default:
         return 'Continuar';
     }
@@ -302,10 +302,10 @@ export class ModalTrilhaComponent implements OnInit {
     switch (proximaEtapa) {
       case 'aulas':
         return 'Dê continuidade e assista a aula para fixar o conteúdo.';
-      case 'questoes-pos':
-        return 'Complete o pós-teste para avaliar seu aprendizado.';
       case 'flashcards':
         return 'Revise os flashcards para memorizar o conteúdo.';
+      case 'questoes-pos':
+        return 'Complete o pós-teste para avaliar seu aprendizado.';
       default:
         return 'Continue sua jornada de aprendizado.';
     }

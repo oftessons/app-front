@@ -27,7 +27,8 @@
     </div>
 
 
-    <div *ngIf="mostrarFiltroCacheado && !revisandoFiltroSalvo" [style.display]="mostrarFiltroCacheado ? 'block' : 'none'"
+    <div *ngIf="mostrarFiltroCacheado && !revisandoFiltroSalvo"
+      [style.display]="mostrarFiltroCacheado ? 'block' : 'none'"
       [ngClass]="{'filtros-container': true, 'filtros-container-open': mostrarFiltros}">
       <div class="container">
         <div class="filters-container">
@@ -65,8 +66,9 @@
                     [(selectedValue)]="multSelecDificuldade" [multiple]="true">
                   </app-multiplo-select>
                 </div>
-                  <div class="espaco-select">
-                    <app-input-padrao label="Quantidade de questões" [(value)]="questionAmountString" class="palavra-chave"> 
+                <div class="espaco-select">
+                  <app-input-padrao label="Quantidade de questões" [(value)]="questionAmountString"
+                    class="palavra-chave">
                   </app-input-padrao>
                 </div>
               </div>
