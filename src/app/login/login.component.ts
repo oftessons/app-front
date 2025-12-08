@@ -147,9 +147,11 @@ export class LoginComponent implements OnInit {
 
     const usuario: Usuario = new Usuario();
     usuario.password = this.password;
-    usuario.email = this.email;
+    usuario.email = this.email.toLowerCase();
     usuario.nome = this.nome;
     usuario.tipoDeEstudante = this.tipoDeEstudante;
+
+    console.log(usuario);
 
     this.authService
         .salvar(usuario, this.permissaoUsuario)
