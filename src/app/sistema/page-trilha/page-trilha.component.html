@@ -92,17 +92,17 @@
                       {{ card.aulas }} aulas
                     </span>
                     <span class="stat">
-                      <img [src]="!isDarkMode() ? 'assets/imagens/caderno.svg' : 'assets/Icons/dark/caderno-dark.svg'" alt="Ícone de questões"> 
-                      {{ card.questoes }} questões
-                    </span>
-                    <span class="stat">
                       <img [src]="!isDarkMode() ? 'assets/Icons/flashcards.svg' : 'assets/Icons/dark/flashcards-dark.svg'" alt="Ícone de flashcards"> 
                       {{ card.flashcards }} flashcards
                     </span>
                     <span class="stat">
+                      <img [src]="!isDarkMode() ? 'assets/imagens/caderno.svg' : 'assets/Icons/dark/caderno-dark.svg'" alt="Ícone de questões"> 
+                      {{ card.questoes }} questões
+                    </span>
+                    <!-- <span class="stat">
                       <img [src]="!isDarkMode() ? 'assets/Icons/relogio.svg' : 'assets/Icons/dark/relogio-dark.svg'" alt="Ícone de tempo"> 
                       {{ card.tempo }}
-                    </span>
+                    </span> -->
                   </div>
                   
                   <div class="progress-container">
@@ -124,74 +124,72 @@
             </div>
           </div>
         </div>
+      </div>  
+    </div>
+    <div class="trilha-progress">
+      <div *ngFor="let card of selectedWeekCards" 
+           class="progress-card" 
+           [class.completed]="card.status === 'concluido'">
+        <div class="card-header">
+          <div class="card-title">
+            <div class="card-info">
+              <h3>{{ card.titulo }}</h3>
+              <p>{{ card.semana }}</p>
+            </div>
+          </div>
+          <div class="card-header-actions">
+            <button 
+              *ngIf="canEditContent()" 
+              class="btn-editar-card"
+              (click)="abrirModalEdicao(card, $event)"
+              title="Editar conteúdo da semana">
+              <img src="assets/Icons/lapis.svg" alt="Editar">
+            </button>
+            <div class="status-badge" [class]="getStatusBadgeClass(card.status)">
+              <span>{{ getStatusBadgeText(card.status) }}</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card-stats">
+          <span class="stat">
+            <img [src]="!isDarkMode() ? 'assets/Icons/aula.svg' : 'assets/Icons/dark/aula-dark.svg'" alt="Ícone de aulas"> 
+            {{ card.aulas }} aulas
+          </span>
+          <span class="stat">
+            <img [src]="!isDarkMode() ? 'assets/Icons/flashcards.svg' : 'assets/Icons/dark/flashcards-dark.svg'" alt="Ícone de flashcards"> 
+            {{ card.flashcards }} flashcards
+          </span>
+          <span class="stat">
+            <img [src]="!isDarkMode() ? 'assets/imagens/caderno.svg' : 'assets/Icons/dark/caderno-dark.svg'" alt="Ícone de questões"> 
+            {{ card.questoes }} questões
+          </span>
+          <!-- <span class="stat">
+            <img [src]="!isDarkMode() ? 'assets/Icons/relogio.svg' : 'assets/Icons/dark/relogio-dark.svg'" alt="Ícone de tempo"> 
+            {{ card.tempo }}
+          </span> -->
+        </div>
+        
+        <div class="progress-container">
+          <div class="progress-bar">
+            <div class="progress-fill" [style.width.%]="card.progresso"></div>
+          </div>
+          <span class="progress-text">{{ card.progresso }}%</span>
+        </div>
+        
+        <button class="action-btn" 
+                [class.refazer]="card.status === 'concluido'" 
+                [class.iniciar]="card.status !== 'concluido'"
+                (click)="abrirModalTrilha(card)">
+          {{ card.status === 'concluido' ? 'Refazer trilha' : (card.status === 'andamento' ? 'Continuar' : 'Iniciar trilha') }}
+          <img src="assets/Icons/arrow-updown.svg" alt="setaDireta">
+        </button>
       </div>
 
-      
-      <div class="trilha-progress">
-        <div *ngFor="let card of selectedWeekCards" 
-             class="progress-card" 
-             [class.completed]="card.status === 'concluido'">
-          <div class="card-header">
-            <div class="card-title">
-              <div class="card-info">
-                <h3>{{ card.titulo }}</h3>
-                <p>{{ card.semana }}</p>
-              </div>
-            </div>
-            <div class="card-header-actions">
-              <button 
-                *ngIf="canEditContent()" 
-                class="btn-editar-card"
-                (click)="abrirModalEdicao(card, $event)"
-                title="Editar conteúdo da semana">
-                <img src="assets/Icons/lapis.svg" alt="Editar">
-              </button>
-              <div class="status-badge" [class]="getStatusBadgeClass(card.status)">
-                <span>{{ getStatusBadgeText(card.status) }}</span>
-              </div>
-            </div>
-          </div>
-          
-          <div class="card-stats">
-            <span class="stat">
-              <img [src]="!isDarkMode() ? 'assets/Icons/aula.svg' : 'assets/Icons/dark/aula-dark.svg'" alt="Ícone de aulas"> 
-              {{ card.aulas }} aulas
-            </span>
-            <span class="stat">
-              <img [src]="!isDarkMode() ? 'assets/imagens/caderno.svg' : 'assets/Icons/dark/caderno-dark.svg'" alt="Ícone de questões"> 
-              {{ card.questoes }} questões
-            </span>
-            <span class="stat">
-              <img [src]="!isDarkMode() ? 'assets/Icons/flashcards.svg' : 'assets/Icons/dark/flashcards-dark.svg'" alt="Ícone de flashcards"> 
-              {{ card.flashcards }} flashcards
-            </span>
-            <span class="stat">
-              <img [src]="!isDarkMode() ? 'assets/Icons/relogio.svg' : 'assets/Icons/dark/relogio-dark.svg'" alt="Ícone de tempo"> 
-              {{ card.tempo }}
-            </span>
-          </div>
-          
-          <div class="progress-container">
-            <div class="progress-bar">
-              <div class="progress-fill" [style.width.%]="card.progresso"></div>
-            </div>
-            <span class="progress-text">{{ card.progresso }}%</span>
-          </div>
-          
-          <button class="action-btn" 
-                  [class.refazer]="card.status === 'concluido'" 
-                  [class.iniciar]="card.status !== 'concluido'"
-                  (click)="abrirModalTrilha(card)">
-            {{ card.status === 'concluido' ? 'Refazer trilha' : (card.status === 'andamento' ? 'Continuar' : 'Iniciar trilha') }}
-            <img src="assets/Icons/arrow-updown.svg" alt="setaDireta">
-          </button>
-        </div>
-
-        <div *ngIf="selectedWeekCards.length === 0" class="no-cards-message">
-          <h4>Semana {{ selectedWeekInfo.numero }}</h4>
-          <p>Esta semana ainda não possui conteúdo disponível.</p>
-          <span class="unlock-hint"></span>
-        </div>
+      <div *ngIf="selectedWeekCards.length === 0" class="no-cards-message">
+        <h4>Semana {{ selectedWeekInfo.numero }}</h4>
+        <p>Esta semana ainda não possui conteúdo disponível.</p>
+        <span class="unlock-hint"></span>
       </div>
     </div>
 
