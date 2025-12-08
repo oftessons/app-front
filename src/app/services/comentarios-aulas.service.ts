@@ -86,8 +86,8 @@ export class ComentariosAulasService {
   /**
    * Responde a um comentário
    */
-  responderComentario(aulaId: number, comentarioId: number, request: RespostaComentarioRequest): Observable<void> {
-    return this.http.post<void>(`${this.apiURL}/${aulaId}/${comentarioId}/respostas`, request).pipe(
+  responderComentario(aulaId: number, comentarioId: number, request: RespostaComentarioRequest): Observable<RespostaComentarioResponse> {
+    return this.http.post<RespostaComentarioResponse>(`${this.apiURL}/${aulaId}/${comentarioId}/respostas`, request).pipe(
       catchError(this.handleError)
     );
   }
