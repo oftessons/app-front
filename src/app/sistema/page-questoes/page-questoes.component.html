@@ -258,46 +258,47 @@
         <!-- <img *ngIf="questaoAtual?.fotoDaQuestaoUrl" [src]="questaoAtual?.fotoDaQuestaoUrl" alt="Foto da questão" class="questao-foto"> -->
         <div class="row">
           <div class="col-md-12">
+
             <div class="form-group content-with-fixed-buttons">
-              <!-- <label class="selecione-text">Selecione a Alternativa:</label> -->
-              <div *ngFor="let alternativa of questaoAtual.alternativas; let i = index" class="alternativa" [ngClass]="{
-                'alternativa-certa': respostaVerificada && alternativa.texto === respostaCorreta,
-                'alternativa-errada': respostaVerificada && alternativa.texto === respostaErrada
-              }">
-                <div class="alternativa-input-group">
+
+              <div *ngFor="let alternativa of questaoAtual.alternativas; let i = index" class="alternativa-wrapper"
+                [ngClass]="{
+                    'status-correto': respostaVerificada && alternativa.texto === respostaCorreta,
+                    'status-errado': respostaVerificada && (alternativa.texto === respostaErrada || (alternativa.texto !== respostaCorreta && alternativa.texto !== respostaErrada)) 
+                  }">
+                <label [for]="'alternativa-' + i" class="alternativa-container">
+
                   <input type="radio" name="alternativa" [id]="'alternativa-' + i" [value]="alternativa.texto"
-                    [(ngModel)]="selectedOption" (change)="onOptionChange(alternativa.texto)"
-                    [checked]="alternativa.texto === selectedOption">
-                  <label [for]="'alternativa-' + i" class="alternativa-label">
-                    <span class="letra-parenteses">{{ alternativa.texto }}</span>
-                    <span *ngIf="alternativa.imagemUrl; else comentarioTexto" class="img-alternativas">
-                      <img [src]="alternativa.imagemUrl" alt="Imagem da Alternativa" class="alternativa-foto">
-                    </span>
-                    <ng-template #comentarioTexto>
-                      <span class="alternativa-comentario">{{ alternativa.comentario }}</span>
-                    </ng-template>
-                  </label>
-                </div>
-              </div>
+                    [(ngModel)]="selectedOption" (change)="onOptionChange(alternativa.texto)" class="radio-oculto">
 
-              <!-- Adicione a exibição das porcentagens -->
-              <div class="progress-container" *ngIf="mostrarPorcentagem && porcentagens">
-                <h3>Porcentagens de Respostas:</h3>
-                <div class="itens-progresso" *ngFor="let key of porcentagens.keys()">
-                  <div class="progress-label">
-                    {{ key }}
+                  <div class="indicador-letra">
+                    {{ alternativa.texto }}
                   </div>
-                  <div class="progress">
-                    <div class="progress-inner" [ngStyle]="{'width.%': porcentagens.get(key) | slice:0:-1}">
-                      <span>{{ porcentagens.get(key) }}</span>
+
+                  <div class="conteudo-texto">
+
+                    <div class="texto-opcao">
+                      <span *ngIf="alternativa.imagemUrl; else comentarioTexto" class="img-alternativas">
+                        <img [src]="alternativa.imagemUrl" alt="Imagem da Alternativa" class="alternativa-foto">
+                      </span>
+                      <ng-template #comentarioTexto>
+                        <span>{{ alternativa.comentario }}</span>
+                      </ng-template>
                     </div>
-                  </div>
-                </div>
-              </div>
 
-              <div *ngIf="isPreviewVideo(fotoPreviews['videoDaQuestao'])" class="video-preview-container">
-                <h4>Vídeo da Questão:</h4>
-                <video [src]="fotoPreviews['videoDaQuestao']" controls></video>
+                    <div class="stats-bar-container" *ngIf="mostrarPorcentagem && porcentagens">
+                      <div class="progress-track">
+                        <div class="progress-fill"
+                          [style.width.%]="porcentagens.get(alternativa.texto) ? (porcentagens.get(alternativa.texto) | slice:0:-1) : 0">
+                        </div>
+                      </div>
+                      <span class="percent-number">
+                        {{ porcentagens.get(alternativa.texto) || '0%' }}
+                      </span>
+                    </div>
+
+                  </div>
+                </label>
               </div>
 
               <div *ngIf="message" class="alert alert-info mt-3 alert-custom" role="alert">
