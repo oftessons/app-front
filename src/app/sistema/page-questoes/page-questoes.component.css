@@ -5,15 +5,20 @@
   color: var(--text-color);
   background-color: var(--bg-container);
   border-radius: 15px;
-  padding: 20px; /* Adicionei padding para espaçamento interno */
+  padding: 20px;
+  /* Adicionei padding para espaçamento interno */
   margin-bottom: 10px;
   font-size: 16px;
 }
+
 .conteudo-questao p {
-  padding: 10px; /* Espaçamento para o parágrafo */
-  margin: 0; /* Remover margens padrão */
+  padding: 10px;
+  /* Espaçamento para o parágrafo */
+  margin: 0;
+  /* Remover margens padrão */
   font-size: 16px;
 }
+
 .questao-foto {
   max-width: 350px;
   height: auto;
@@ -37,8 +42,10 @@
   border-radius: 15px;
   padding: 2px;
   margin-bottom: 10px;
-  align-items: center; /* Alinha os itens verticalmente no centro */
+  align-items: center;
+  /* Alinha os itens verticalmente no centro */
 }
+
 .identificadores-questao h3 {
   font-size: 16px;
   margin: 0 14px 0 22px;
@@ -46,12 +53,15 @@
 
 .identificadores-questao-resul {
   display: flex;
-  justify-content: space-between; /* Faz com que os itens fiquem nas extremidades */
-  align-items: center; /* Alinha os itens verticalmente no centro */
+  justify-content: space-between;
+  /* Faz com que os itens fiquem nas extremidades */
+  align-items: center;
+  /* Alinha os itens verticalmente no centro */
   color: #101010;
   background-color: var(--bg-container);
   border-radius: 15px;
-  padding: 2px 10px; /* Adicionado espaço interno horizontal */
+  padding: 2px 10px;
+  /* Adicionado espaço interno horizontal */
   margin-bottom: 10px;
 }
 
@@ -222,6 +232,7 @@
     opacity: 0;
     transform: translateY(-20px) scale(0.95);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -232,6 +243,7 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -250,6 +262,7 @@
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
@@ -288,16 +301,20 @@
   background: linear-gradient(90deg, #f0b90b, #d9a31d);
   transform: scale(0.95);
 }
+
 .upgrade-message .fas.fa-crown {
   color: #ffc107;
   font-size: 1.1rem;
 }
 
 .questoes-icone {
-  display: inline-block; /* Garante que o ícone seja tratado como um bloco inline */
-  width: 20px; /* Ajuste o tamanho conforme necessário */
+  display: inline-block;
+  /* Garante que o ícone seja tratado como um bloco inline */
+  width: 20px;
+  /* Ajuste o tamanho conforme necessário */
   height: 20px;
-  margin-right: 8px; /* Espaço entre o ícone e o texto */
+  margin-right: 8px;
+  /* Espaço entre o ícone e o texto */
 }
 
 .example-radio-group {
@@ -305,20 +322,24 @@
   flex-direction: column;
   margin: 15px 0;
 }
+
 .example-radio-button {
   margin: 5px;
 }
+
 /* Restante do seu CSS */
 .container {
   max-width: 1300px;
   padding: 10px;
   font-family: "Nunito Sans", sans-serif;
 }
+
 .text-p {
   font-size: 20px;
   margin-top: 10px;
   font-family: "Nunito Sans", sans-serif;
 }
+
 .header {
   display: flex;
   justify-content: space-between;
@@ -326,6 +347,7 @@
   align-items: center;
   gap: 12px;
 }
+
 .header h1 {
   display: flex;
   flex-wrap: nowrap;
@@ -358,14 +380,17 @@
   display: flex;
   flex-direction: row;
 }
+
 .col {
   flex: 1;
   margin-right: 10px;
   width: 100%;
 }
+
 .col:last-child {
   margin-right: 0;
 }
+
 .form-select {
   width: 100%;
   padding: 10px;
@@ -381,16 +406,19 @@
 
 .button-row {
   display: flex;
-  justify-content: space-between; /* Distribui as áreas à esquerda e à direita */
+  justify-content: space-between;
+  /* Distribui as áreas à esquerda e à direita */
   align-items: center;
   margin-top: 20px;
-  gap: 10px; /* Espaço entre as seções */
+  gap: 10px;
+  /* Espaço entre as seções */
 }
 
 .left-buttons,
 .right-buttons {
   display: flex;
-  gap: 10px; /* Espaçamento entre botões */
+  gap: 10px;
+  /* Espaçamento entre botões */
 }
 
 .right-buttons button {
@@ -402,7 +430,8 @@
   display: flex;
   flex-direction: column;
   margin-top: 10px;
-  width: 40%; /* Ajuste a largura do contêiner geral */
+  width: 40%;
+  /* Ajuste a largura do contêiner geral */
 }
 
 .progress-bar {
@@ -470,17 +499,21 @@
 /* Ajuste para telas menores */
 @media (max-width: 768px) {
   .button-row {
-    flex-direction: column; /* Empilha os botões */
-    align-items: stretch; /* Faz os botões preencherem toda a largura */
+    flex-direction: column;
+    /* Empilha os botões */
+    align-items: stretch;
+    /* Faz os botões preencherem toda a largura */
   }
 
   .left-buttons,
   .right-buttons {
-    justify-content: center; /* Centraliza os botões */
+    justify-content: center;
+    /* Centraliza os botões */
   }
 
   .right-buttons button {
-    width: 100%; /* Faz os botões ocuparem a largura total */
+    width: 100%;
+    /* Faz os botões ocuparem a largura total */
   }
 
   .conteudo-questao {
@@ -490,14 +523,17 @@
 
 @media (max-width: 768px) {
   .button-row-filtro {
-    flex-direction: column; /* Empilha os botões verticalmente */
+    flex-direction: column;
+    /* Empilha os botões verticalmente */
   }
 
   .btn-filtrar,
   .btn-salvar,
   .btn-filtrar-geral {
-    width: 100%; /* Botões ocupam 100% da largura */
-    margin-bottom: 10px; /* Espaçamento entre botões */
+    width: 100%;
+    /* Botões ocupam 100% da largura */
+    margin-bottom: 10px;
+    /* Espaçamento entre botões */
   }
 
   .img-container {
@@ -505,11 +541,13 @@
   }
 
   .questao-foto {
-    max-width: 90%; /* Reduz a imagem um pouco em telas pequenas */
+    max-width: 90%;
+    /* Reduz a imagem um pouco em telas pequenas */
   }
 
   .progress-container {
-    width: 100%; /* Ajuste a largura do contêiner geral */
+    width: 100%;
+    /* Ajuste a largura do contêiner geral */
   }
 }
 
@@ -517,18 +555,26 @@
   margin-right: 10px;
   width: 20px;
 }
+
 .btn-secondary {
-  background-color: #6c757d; /* Cor de fundo do botão Cancelar */
-  color: #fff; /* Cor do texto do botão Cancelar */
+  background-color: #6c757d;
+  /* Cor de fundo do botão Cancelar */
+  color: #fff;
+  /* Cor do texto do botão Cancelar */
 }
 
 .btn-success {
-  background-color: #28a745; /* Cor de fundo do botão Confirmar */
-  color: #fff; /* Cor do texto do botão Confirmar */
+  background-color: #28a745;
+  /* Cor de fundo do botão Confirmar */
+  color: #fff;
+  /* Cor do texto do botão Confirmar */
 }
+
 .btn-success:hover {
-  background-color: #218838; /* Cor de fundo do botão Confirmar no hover */
+  background-color: #218838;
+  /* Cor de fundo do botão Confirmar no hover */
 }
+
 .btn-filtros {
   margin-top: 12px;
   margin-right: 10px;
@@ -540,6 +586,7 @@
   border-radius: 5px;
   cursor: pointer;
 }
+
 .btn-filtrar {
   margin-top: 12px;
   margin-right: 10px;
@@ -551,6 +598,7 @@
   border-radius: 5px;
   cursor: pointer;
 }
+
 .btn-filtrar-geral {
   margin-top: 12px;
   padding: 10px 20px;
@@ -562,6 +610,7 @@
   border-radius: 5px;
   cursor: pointer;
 }
+
 .btn-salvar {
   margin-top: 12px;
   padding: 10px 20px;
@@ -609,21 +658,25 @@
   cursor: pointer;
   margin-right: 10px;
 }
+
 .btn:last-child {
   margin-right: 0;
 }
+
 .btn:hover {
   background-color: #0056b3;
 }
+
 .mat-form-field-appearance-fill .mat-form-field-flex {
   border-radius: 4px 4px 0 0;
   width: 280px;
 }
-.mat-form-field-type-mat-select:not(.mat-form-field-disabled)
-  .mat-form-field-flex {
+
+.mat-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-form-field-flex {
   cursor: pointer;
   background: aliceblue;
 }
+
 .form-control-input {
   display: block;
   width: 100%;
@@ -640,9 +693,11 @@
   border-radius: var(--bs-border-radius);
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
+
 ::ng-deep .mat-form-field-underline {
   display: none;
 }
+
 .palavra-chave {
   width: 100%;
   height: 48px;
@@ -650,8 +705,10 @@
 }
 
 p {
-  word-wrap: break-word; /* Quebra a linha em palavras longas */
-  overflow-wrap: anywhere; /* Adapta texto longo em qualquer ponto */
+  word-wrap: break-word;
+  /* Quebra a linha em palavras longas */
+  overflow-wrap: anywhere;
+  /* Adapta texto longo em qualquer ponto */
   margin: 10px 0;
 }
 
@@ -660,9 +717,7 @@ p {
 }
 
 @media (max-width: 768px) {
-  ::ng-deep
-    .mat-form-field-type-mat-select:not(.mat-form-field-disabled)
-    .mat-form-field-flex {
+  ::ng-deep .mat-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-form-field-flex {
     width: 100%;
   }
 
@@ -675,34 +730,42 @@ p {
     flex-direction: column;
   }
 }
+
 /* Estilos para o card de confirmação */
 .card-confirmacao {
   max-width: 400px;
   margin: 20px auto;
 }
+
 .card-confirmacao .card-body {
   padding: 20px;
 }
+
 .card-confirmacao .card-title {
   font-size: 1.25rem;
   font-weight: bold;
 }
+
 .card-confirmacao .card-text {
   margin-bottom: 20px;
 }
+
 .card-confirmacao .btn {
   margin-right: 10px;
 }
+
 .alert {
   padding: 14px;
   margin: 10px 0;
   border: 1px solid #f4a261;
   border-radius: 5px;
+
   &.alert-info {
     background-color: #f0f8ff;
     color: #000000;
     font-size: 14px;
   }
+
   &.alert-custom {
     background-color: #f4a261;
     color: #000000;
@@ -720,7 +783,8 @@ p {
 
 .button-row {
   display: flex;
-  justify-content: space-between; /* Espaça os botões entre as extremidades */
+  justify-content: space-between;
+  /* Espaça os botões entre as extremidades */
   align-items: center;
   margin-top: 20px;
 }
@@ -729,17 +793,23 @@ p {
   display: flex;
   justify-content: flex-start;
 }
+
 .right-buttons {
   display: flex;
   justify-content: flex-end;
-  gap: 10px; /* Espaço entre os botões da direita */
+  gap: 10px;
+  /* Espaço entre os botões da direita */
 }
+
 .btn-gabarito {
   padding: 6px 20px;
-  border: 2px solid #f4a261; /* Borda da cor especificada */
+  border: 2px solid #f4a261;
+  /* Borda da cor especificada */
   border-radius: 5px;
-  background-color: #f4a261; /* Background transparente */
-  color: #000; /* Cor do texto preto */
+  background-color: #f4a261;
+  /* Background transparente */
+  color: #000;
+  /* Cor do texto preto */
   cursor: pointer;
   font-size: 16px;
   font-weight: bold;
@@ -762,25 +832,31 @@ p {
   font-size: 16px;
   color: #fff;
 }
+
 .btn-anterior {
   background-color: #2a4d7b;
 }
+
 .btn-proxima {
   background-color: #3b5fa0;
 }
+
 .btn-responder {
   background-color: #28a745;
 }
+
 .btn-anterior:disabled {
   background-color: #9a9a9a;
   cursor: not-allowed;
 }
+
 .alert-success {
   background-color: #399918;
   color: #020202;
   font-size: 16px;
   border-color: #399918;
 }
+
 .alert-danger {
   background-color: #f5004f;
   color: #ffffff;
@@ -791,10 +867,12 @@ p {
 .alternativa {
   display: flex;
   align-items: center;
-  border-radius: 5px; /* Border radius for rounded corners */
+  border-radius: 5px;
+  /* Border radius for rounded corners */
   padding: 5px;
   color: var(--text-color);
-  transition: background-color 0.3s, border-color 0.3s; /* Smooth transitions for background and border color */
+  transition: background-color 0.3s, border-color 0.3s;
+  /* Smooth transitions for background and border color */
 }
 
 .bar-carregando {
@@ -881,18 +959,24 @@ p {
 /* Responsividade para tablets */
 @media (min-width: 768px) and (max-width: 1024px) {
   .button-row-filtro {
-    flex-wrap: nowrap; /* Mantém os botões em uma única linha */
+    flex-wrap: nowrap;
+    /* Mantém os botões em uma única linha */
     justify-content: center;
-    gap: 10px; /* Espaçamento entre os botões */
+    gap: 10px;
+    /* Espaçamento entre os botões */
   }
 
   .btn-filtrar,
   .btn-salvar,
   .btn-filtrar-geral {
-    flex: 1 1 30%; /* Cada botão ocupa 30% da linha */
-    margin-bottom: 0; /* Remove o espaçamento vertical */
-    max-width: 30%; /* Limita a largura para não exceder 30% */
+    flex: 1 1 30%;
+    /* Cada botão ocupa 30% da linha */
+    margin-bottom: 0;
+    /* Remove o espaçamento vertical */
+    max-width: 30%;
+    /* Limita a largura para não exceder 30% */
   }
+
   .conteudo-questao {
     font-size: 16px;
   }
@@ -918,6 +1002,7 @@ p {
     width: 100%;
     padding: 8px;
   }
+
   .conteudo-questao {
     font-size: 16px;
   }
@@ -1020,8 +1105,10 @@ p {
 }
 
 .img-comentario {
-  white-space: pre-wrap; /* Preserva quebras de linha e espaços */
-  word-break: break-word; /* Quebra palavras longas */
+  white-space: pre-wrap;
+  /* Preserva quebras de linha e espaços */
+  word-break: break-word;
+  /* Quebra palavras longas */
 }
 
 .letra-parenteses {
@@ -1032,7 +1119,8 @@ p {
 }
 
 .filtros-container {
-  max-height: 1000px; /* Defina um valor grande o suficiente para conter o conteúdo */
+  max-height: 1000px;
+  /* Defina um valor grande o suficiente para conter o conteúdo */
   overflow: hidden;
   transition: max-height 0.8s ease-in-out, padding 0.8s ease-in-out;
 }
@@ -1068,12 +1156,12 @@ p {
 }
 
 .robot-element {
-  width: 240px;
-  height: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
+    width: 120px; 
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
 }
 
 .robo-image {
@@ -1083,7 +1171,7 @@ p {
 .streak-badge {
   position: absolute;
   top: -15px;
-  background-color: #3b5fa0;
+  background-color: #3B5FA0;
   color: #000;
   padding: 4px 8px;
   border-radius: 12px;
@@ -1100,9 +1188,11 @@ p {
   100% {
     transform: translateY(0);
   }
+
   40% {
     transform: translateY(-20px);
   }
+
   60% {
     transform: translateY(-10px);
   }

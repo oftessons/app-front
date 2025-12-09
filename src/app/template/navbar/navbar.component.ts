@@ -10,6 +10,7 @@ import { ThemeService } from 'src/app/services/theme.service';
 import { Usuario } from 'src/app/login/usuario';
 import { Permissao } from 'src/app/login/Permissao';
 import { OfensivaService } from 'src/app/services/ofensiva.service';
+import { NotificacaoService } from 'src/app/services/notificacoes.service';
 
 @Component({
   selector: 'app-navbar',
@@ -36,12 +37,15 @@ export class NavbarComponent {
   ofensivaAtual: string = '000';
   private ofensivaSub: Subscription | null = null;
 
+  unreadCount: number = 0;
+
   constructor(
     private breakpointObserver: BreakpointObserver,
     private ofensivaService: OfensivaService,
     private authService: AuthService,
     private router: Router,
     private stripeService: StripeService,
+    private notificacaoService: NotificacaoService,
     private ngZone: NgZone,
     private themeService: ThemeService
   ) { }
@@ -80,6 +84,10 @@ export class NavbarComponent {
       if (dados) {
         this.ofensivaAtual = dados.ofensivaAtual.toString().padStart(3, '0');
       }
+    });
+
+    this.notificacaoService.unreadCount$.subscribe(count => {
+      this.unreadCount = count;
     });
 
     const dadosAtuais = this.ofensivaService.getValorAtual();

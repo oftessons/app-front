@@ -73,8 +73,8 @@ export class ChatBotComponent implements OnInit, AfterViewChecked, AfterViewInit
 
   isResizing: boolean = false;
   resizeStartPos = { x: 0, y: 0 };
-  initialSize = { width: 350, height: 470 };
-  currentSize = { width: 350, height: 470 };
+  initialSize = { width: 400, height: 470 };
+  currentSize = { width: 400, height: 470 };
   minSize = { width: 300, height: 500 };
   maxSize = { width: 900, height: 900 };
 

@@ -36,7 +36,25 @@
             <span class="badge-numero">{{ofensivaAtual}}</span>
         </div>
     </div>
-</div>
+  </div>
+
+  <a class="btn-notificacao mr-3" routerLink="/usuario/notificacoes">
+        <div class="icon-wrapper">
+            <!-- Alterna ícone baseado no tema (assumindo que você tem/terá o ícone dark, senão use o mesmo) -->
+            <img 
+              [src]="'assets/Icons/dark/sino-dark.svg'" 
+              alt="Notificações" 
+              class="icon-sino"
+              onerror="this.src='assets/Icons/sino.svg'" 
+            />
+            
+            <!-- Badge de Contagem -->
+            <span *ngIf="unreadCount > 0" class="badge-contador">
+                {{ unreadCount > 99 ? '99+' : unreadCount }}
+            </span>
+        </div>
+  </a>
+
 
   <a
     class="nav-link collapsed"
