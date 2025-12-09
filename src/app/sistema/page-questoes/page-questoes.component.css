@@ -672,8 +672,7 @@
   width: 280px;
 }
 
-.mat-form-field-type-mat-select:not(.mat-form-field-disabled)
-  .mat-form-field-flex {
+.mat-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-form-field-flex {
   cursor: pointer;
   background: aliceblue;
 }
@@ -718,9 +717,7 @@ p {
 }
 
 @media (max-width: 768px) {
-  ::ng-deep
-    .mat-form-field-type-mat-select:not(.mat-form-field-disabled)
-    .mat-form-field-flex {
+  ::ng-deep .mat-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-form-field-flex {
     width: 100%;
   }
 
@@ -1151,6 +1148,7 @@ p {
   color: var(--text-color) !important;
 }
 
+
 .robot-streak-container {
   position: absolute;
   top: 50px;
@@ -1159,12 +1157,12 @@ p {
 }
 
 .robot-element {
-    width: 120px; 
-    height: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
+  width: 120px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
 }
 
 .robo-image {
@@ -1174,8 +1172,7 @@ p {
 .streak-badge {
   position: absolute;
   top: -15px;
-  background-color: #3b5fa0;
-  background-color: #3b5fa0;
+  background-color: #3B5FA0;
   color: #000;
   padding: 4px 8px;
   border-radius: 12px;
@@ -1185,15 +1182,13 @@ p {
 }
 
 @keyframes pular {
+
   0%,
   20%,
   50%,
   80%,
   100% {
     transform: translateY(0);
-  }
-  40% {
-    transform: translateY(-20px);
   }
 
   40% {
@@ -1209,282 +1204,28 @@ p {
   animation: pular 1.2s ease-in-out infinite;
 }
 
-/* ==========================================================================
-   ESTILO CARD (Igual à imagem de referência)
-   ========================================================================== */
-
-/* Container Principal (O Card) */
-.alternativa-container {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  position: relative; /* Para posicionar elementos se precisar */
-
-  /* Espaçamento e Bordas */
-  padding: 16px;
-  margin-bottom: 15px; /* Espaço entre os cards */
-  border-radius: 12px; /* Cantos arredondados como na imagem */
-  border: 1px solid rgba(255, 255, 255, 0.1); /* Borda sutil padrão */
-
-  /* Fonte e Cores */
-  background-color: transparent; /* Fundo transparente inicialmente */
-  color: var(--text-color);
-  font-family: "Nunito Sans", sans-serif;
-  font-size: 16px;
-  line-height: 1.5;
-
-  transition: all 0.2s ease-in-out;
-  cursor: pointer;
-}
-
-.alternativa-container:hover {
-  background-color: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.3);
-}
-
-.alternativa-certa {
-  border: 2px solid #28a745 !important;
-  background-color: rgba(40, 167, 69, 0.05) !important;
-}
-
-.alternativa-errada {
-  border: 2px solid #dc3545 !important;
-  background-color: rgba(220, 53, 69, 0.05) !important;
-}
-
-/* --- LINHA 1: RADIO + TEXTO --- */
-/* --- LINHA 1: RADIO + TEXTO --- */
-/* --- LINHA 1: RADIO + TEXTO --- */
-.alternativa-top-row {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start; /* Alinha tudo no topo */
-  width: 100%;
-  margin-bottom: 8px;
-}
-
-.radio-container {
-  /* Removemos alturas fixas e alinhamentos automáticos */
-  display: block;
-  margin-right: 12px;
-  min-width: 24px;
-
-  /* AQUI ESTÁ O CONTROLE MANUAL: */
-  /* Ajuste esse margin-top se ainda achar que está alto ou baixo */
-  /* 4px costuma ser o "número mágico" para fonte 16px com line-height 1.5 */
-  margin-top: 4px;
-}
-
-.radio-container input[type="radio"] {
-  /* Aumenta a bolinha */
-  transform: scale(1.4);
-
-  /* Remove margens padrão do navegador */
-  margin: 0;
-  padding: 0;
-  display: block;
-  cursor: pointer;
-}
-
-.texto-alternativa {
-  flex: 1;
-  margin: 0;
-  cursor: pointer;
-
-  /* Definições de Texto */
-  font-family: "Nunito Sans", sans-serif;
-  font-size: 16px;
-  line-height: 1.5; /* Altura da linha = 24px */
-  color: var(--text-color);
-}
-
-.letra-badge {
-  font-weight: 800;
-  margin-right: 6px;
-  font-size: 17px;
-  display: inline-block;
-
-  /* Garante que a letra não quebre o alinhamento da linha */
-  vertical-align: top;
-}
-
-/* --- LINHA 2: INFO DO PROGRESSO (Label + %) --- */
-.info-progresso {
-  display: flex;
-  justify-content: space-between;
-  font-size: 12px;
-  color: #aaa;
-  margin-bottom: 4px;
-  margin-top: 5px;
-}
-
-.barra-progresso-container {
-  width: 100%;
-  background-color: rgba(255, 255, 255, 0.1);
-  height: 6px;
-  border-radius: 10px;
-  overflow: hidden;
-  margin-bottom: 8px;
-}
-
-.barra-progresso-fill {
-  height: 100%;
-  background-color: #3b82f6;
-  border-radius: 10px;
-  transition: width 0.6s ease;
-}
-
-.icone-feedback-container {
-  display: flex;
-  align-items: center;
-  margin-top: 5px;
-  height: 24px;
-}
-
-.icone-check {
-  color: #28a745;
-  font-size: 20px;
-  background: white;
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.icone-times {
-  color: #dc3545;
-  font-size: 20px;
-  background: white;
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .btn-forum {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 6px 20px;
-  min-width: 110px;
+  background-color: #665cac;
+  color: #ffffff;
   border: none;
-  border-radius: 5px;
+  border-radius: 6px;
+  padding: 8px 20px;
+  min-width: 110px;
+  font-size: 15px;
+  font-weight: 500;
   cursor: pointer;
-  font-size: 16px;
-  font-weight: 600;
-  color: #fff;
-  background-color: #5b4f96;
+  transition: background-color 0.2s ease;
   margin-right: 10px;
-  transition: background-color 0.3s ease;
 }
 
 .btn-forum:hover {
-  background-color: #483d7a;
+  background-color: #544a91;
 }
 
-.btn-gabarito {
-  display: flex !important;
-  align-items: center;
-  justify-content: center;
-}
-
-.right-buttons button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 42px;
-  padding: 0 15px;
-  border: none;
-  border-radius: 6px;
-  font-family: "Nunito Sans", sans-serif;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  color: white;
-}
-
-.btn-forum {
-  background-color: #5b4f96;
-  min-width: 100px;
-}
-.btn-anterior {
-  background-color: #2a4d7b;
-  min-width: 100px;
-}
-.btn-proxima {
-  background-color: #3b5fa0;
-  min-width: 100px;
-}
-
-.btn-responder {
-  background-color: #28a745;
-  min-width: 110px;
-}
-
-.btn-gabarito {
-  background-color: #f4a261;
-  color: #000;
-  min-width: 140px;
-}
-
-.right-buttons button:disabled {
-  background-color: #cccccc !important;
-  color: #666666 !important;
-  cursor: not-allowed;
-  transform: none !important;
-  border: 1px solid #bbbbbb;
-}
-
-@media (max-width: 768px) {
-  .navigation-fixed {
-    height: auto !important;
-    padding: 10px;
-    flex-direction: column;
-  }
-
-  .right-buttons {
-    display: grid !important;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    width: 100%;
-    margin-top: 5px;
-  }
-
-  .btn-anterior {
-    order: 1;
-    min-width: 0 !important;
-    width: 100% !important;
-  }
-
-  .btn-proxima {
-    order: 2;
-    min-width: 0 !important;
-    width: 100% !important;
-  }
-
-  .btn-responder,
-  .btn-gabarito {
-    order: 3;
-    grid-column: 1 / -1;
-    width: 100% !important;
-    margin: 0 !important;
-    min-width: 0 !important;
-  }
-
-  .btn-forum {
-    order: 4;
-    grid-column: 1 / -1;
-    width: 100% !important;
-    min-width: 0 !important;
-  }
-
-  .right-buttons button {
-    font-size: 14px;
-    padding: 0 10px;
-    height: 40px;
-  }
+.btn-forum i {
+  margin-right: 8px;
+  font-size: 16px;
 }

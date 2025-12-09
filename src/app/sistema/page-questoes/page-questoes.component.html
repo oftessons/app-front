@@ -245,162 +245,151 @@
             </div>
           </div>
         </div>
-      </div>
-      <div class="img-comentario" [innerHTML]="questaoAtual.enunciadoDaQuestao | safeHtml"></div>
+        <div class="img-comentario" [innerHTML]="questaoAtual.enunciadoDaQuestao | safeHtml"></div>
 
-      <ng-container *ngIf="questaoAtual?.fotoDaQuestaoUrl">
-        <img *ngIf="isImage(questaoAtual.fotoDaQuestaoUrl)" [src]="questaoAtual.fotoDaQuestaoUrl" alt="Foto da questão"
-          class="questao-foto">
-        <video *ngIf="isVideo(questaoAtual.fotoDaQuestaoUrl)" [src]="questaoAtual.fotoDaQuestaoUrl" controls
-          controlsList="nodownload" class="questao-video">
-        </video>
-      </ng-container>
+        <ng-container *ngIf="questaoAtual?.fotoDaQuestaoUrl">
+          <img *ngIf="isImage(questaoAtual.fotoDaQuestaoUrl)" [src]="questaoAtual.fotoDaQuestaoUrl"
+            alt="Foto da questão" class="questao-foto">
+          <video *ngIf="isVideo(questaoAtual.fotoDaQuestaoUrl)" [src]="questaoAtual.fotoDaQuestaoUrl" controls
+            controlsList="nodownload" class="questao-video">
+          </video>
+        </ng-container>
 
-      <!-- <img *ngIf="questaoAtual?.fotoDaQuestaoUrl" [src]="questaoAtual?.fotoDaQuestaoUrl" alt="Foto da questão" class="questao-foto"> -->
-      <div class="row">
-        <div class="col-md-12">
-          <div class="form-group content-with-fixed-buttons">
-            <!-- <label class="selecione-text">Selecione a Alternativa:</label> -->
-            <div *ngFor="let alternativa of questaoAtual.alternativas; let i = index" class="alternativa-container"
-              [ngClass]="{
+        <!-- <img *ngIf="questaoAtual?.fotoDaQuestaoUrl" [src]="questaoAtual?.fotoDaQuestaoUrl" alt="Foto da questão" class="questao-foto"> -->
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group content-with-fixed-buttons">
+              <!-- <label class="selecione-text">Selecione a Alternativa:</label> -->
+              <div *ngFor="let alternativa of questaoAtual.alternativas; let i = index" class="alternativa" [ngClass]="{
                 'alternativa-certa': respostaVerificada && alternativa.texto === respostaCorreta,
-                'alternativa-errada': respostaVerificada && alternativa.texto === respostaErrada,
-                'alternativa-expandida': respostaVerificada
+                'alternativa-errada': respostaVerificada && alternativa.texto === respostaErrada
               }">
-
-              <div class="d-flex w-100 align-items-start">
-                <div style="margin-right: 12px; margin-top: 2px;">
+                <div class="alternativa-input-group">
                   <input type="radio" name="alternativa" [id]="'alternativa-' + i" [value]="alternativa.texto"
                     [(ngModel)]="selectedOption" (change)="onOptionChange(alternativa.texto)"
-                    [checked]="alternativa.texto === selectedOption" style="cursor: pointer; transform: scale(1.2);">
-                </div>
-
-                <label [for]="'alternativa-' + i" class="alternativa-label">
-
-                  <span class="fw-bold me-2">{{ getLetra(i) }}</span>
-
-                  <span *ngIf="alternativa.imagemUrl; else textoSimples">
-                    <img [src]="alternativa.imagemUrl" alt="Imagem da Alternativa" class="img-fluid rounded my-2"
-                      style="max-height: 200px;">
-                  </span>
-
-                  <ng-template #textoSimples>
-                    <span>{{ getTextoLimpo(alternativa.texto, i) }}</span>
-
-                    <span *ngIf="alternativa.comentario" class="alternativa-comentario">
-                      {{ alternativa.comentario }}
+                    [checked]="alternativa.texto === selectedOption">
+                  <label [for]="'alternativa-' + i" class="alternativa-label">
+                    <span class="letra-parenteses">{{ alternativa.texto }}</span>
+                    <span *ngIf="alternativa.imagemUrl; else comentarioTexto" class="img-alternativas">
+                      <img [src]="alternativa.imagemUrl" alt="Imagem da Alternativa" class="alternativa-foto">
                     </span>
-                  </ng-template>
-                </label>
-              </div>
-              <div *ngIf="mostrarPorcentagem && porcentagens" class="w-100 mt-2" style="padding-left: 30px;">
-
-                <div class="d-flex justify-content-between align-items-end mb-1">
-                  <span style="font-size: 12px; color: #adb5bd;">Escolha dos alunos</span>
-                  <span style="font-size: 12px; font-weight: bold; color: #fff;">{{ getPorcentagemPorIndice(i)
-                    }}</span>
+                    <ng-template #comentarioTexto>
+                      <span class="alternativa-comentario">{{ alternativa.comentario }}</span>
+                    </ng-template>
+                  </label>
                 </div>
+              </div>
 
-                <div class="progress" style="height: 6px; border-radius: 4px;" [class.progress-dark-bg]="true">
-                  <div class="progress-bar" role="progressbar" [style.width]="getPorcentagemPorIndice(i)"
-                    [style.backgroundColor]="getPorcentagemPorIndice(i) !== '0%' ? '#3b82f6' : 'transparent'"
-                    aria-valuemin="0" aria-valuemax="100">
+              <!-- Adicione a exibição das porcentagens -->
+              <div class="progress-container" *ngIf="mostrarPorcentagem && porcentagens">
+                <h3>Porcentagens de Respostas:</h3>
+                <div class="itens-progresso" *ngFor="let key of porcentagens.keys()">
+                  <div class="progress-label">
+                    {{ key }}
+                  </div>
+                  <div class="progress">
+                    <div class="progress-inner" [ngStyle]="{'width.%': porcentagens.get(key) | slice:0:-1}">
+                      <span>{{ porcentagens.get(key) }}</span>
+                    </div>
                   </div>
                 </div>
               </div>
 
-            </div>
+              <div *ngIf="isPreviewVideo(fotoPreviews['videoDaQuestao'])" class="video-preview-container">
+                <h4>Vídeo da Questão:</h4>
+                <video [src]="fotoPreviews['videoDaQuestao']" controls></video>
+              </div>
 
-            <div *ngIf="isPreviewVideo(fotoPreviews['videoDaQuestao'])" class="video-preview-container">
-              <h4>Vídeo da Questão:</h4>
-              <video [src]="fotoPreviews['videoDaQuestao']" controls></video>
-            </div>
+              <div *ngIf="message" class="alert alert-info mt-3 alert-custom" role="alert">
+                {{ message }}
+              </div>
 
-            <div *ngIf="message" class="alert alert-info mt-3 alert-custom" role="alert">
-              {{ message }}
-            </div>
+              <div *ngIf="mostrarGabarito && questaoAtual">
+                <h2 style="margin-top: 10px;">Comentário da Questão</h2>
+                <!-- Exibe o comentário da Questão com HTML Sanitizado -->
+                <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestao | safeHtml"></div>
+                <ng-container *ngIf="questaoAtual?.fotoDaRespostaUmUrl">
+                  <img *ngIf="isImage(questaoAtual.fotoDaRespostaUmUrl)" [src]="questaoAtual.fotoDaRespostaUmUrl"
+                    alt="Foto da questão" class="questao-foto">
+                  <video *ngIf="isVideo(questaoAtual.fotoDaRespostaUmUrl)" [src]="questaoAtual.fotoDaRespostaUmUrl"
+                    controls controlsList="nodownload" class="questao-video">
+                  </video>
+                </ng-container>
+                <!-- Exibe o comentário da Questão com HTML Sanitizado -->
+                <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestaoDois | safeHtml"></div>
+                <ng-container *ngIf="questaoAtual?.fotoDaRespostaDoisUrl">
+                  <img *ngIf="isImage(questaoAtual.fotoDaRespostaDoisUrl)" [src]="questaoAtual.fotoDaRespostaDoisUrl"
+                    alt="Foto da questão" class="questao-foto">
+                  <video *ngIf="isVideo(questaoAtual.fotoDaRespostaDoisUrl)" [src]="questaoAtual.fotoDaRespostaDoisUrl"
+                    controls controlsList="nodownload" class="questao-video">
+                  </video>
+                </ng-container>
+                <!-- Exibe o comentário da Questão com HTML Sanitizado -->
+                <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestaoTres | safeHtml"></div>
+                <ng-container *ngIf="questaoAtual?.fotoDaRespostaTresUrl">
+                  <img *ngIf="isImage(questaoAtual.fotoDaRespostaTresUrl)" [src]="questaoAtual.fotoDaRespostaTresUrl"
+                    alt="Foto da questão" class="questao-foto">
+                  <video *ngIf="isVideo(questaoAtual.fotoDaRespostaTresUrl)" [src]="questaoAtual.fotoDaRespostaTresUrl"
+                    controls controlsList="nodownload" class="questao-video">
+                  </video>
+                </ng-container>
+                <!-- Exibe o comentário da Questão com HTML Sanitizado -->
+                <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestaoQuatro | safeHtml"></div>
+                <ng-container *ngIf="questaoAtual?.fotoDaRespostaQuatroUrl">
+                  <img *ngIf="isImage(questaoAtual.fotoDaRespostaQuatroUrl)"
+                    [src]="questaoAtual.fotoDaRespostaQuatroUrl" alt="Foto da questão" class="questao-foto">
+                  <video *ngIf="isVideo(questaoAtual.fotoDaRespostaQuatroUrl)"
+                    [src]="questaoAtual.fotoDaRespostaQuatroUrl" controls controlsList="nodownload"
+                    class="questao-video">
+                  </video>
+                </ng-container>
+                <div *ngIf="questaoAtual?.comentarioDaQuestaoCinco" class="img-comentario"
+                  [innerHTML]="questaoAtual.comentarioDaQuestaoCinco | safeHtml"></div>
+                <ng-container *ngIf="questaoAtual?.fotoDaRespostaCincoUrl">
+                  <img *ngIf="isImage(questaoAtual.fotoDaRespostaCincoUrl)" [src]="questaoAtual.fotoDaRespostaCincoUrl"
+                    alt="Foto da questão" class="questao-foto">
+                  <video *ngIf="isVideo(questaoAtual.fotoDaRespostaCincoUrl)"
+                    [src]="questaoAtual.fotoDaRespostaCincoUrl" controls controlsList="nodownload"
+                    class="questao-video">
+                  </video>
+                </ng-container>
+                <div *ngIf="questaoAtual?.comentarioDaQuestaoSeis" class="img-comentario"
+                  [innerHTML]="questaoAtual.comentarioDaQuestaoSeis | safeHtml"></div>
+                <p *ngIf="questaoAtual?.referenciaBi">Referência: {{ questaoAtual.referenciaBi }}</p>
+                <p *ngIf="questaoAtual?.comentadorDaQuestao">Comentado por: {{ questaoAtual.comentadorDaQuestao }}</p>
+              </div>
 
-            <div *ngIf="mostrarGabarito && questaoAtual">
-              <h2 style="margin-top: 10px;">Comentário da Questão</h2>
-              <!-- Exibe o comentário da Questão com HTML Sanitizado -->
-              <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestao | safeHtml"></div>
-              <ng-container *ngIf="questaoAtual?.fotoDaRespostaUmUrl">
-                <img *ngIf="isImage(questaoAtual.fotoDaRespostaUmUrl)" [src]="questaoAtual.fotoDaRespostaUmUrl"
-                  alt="Foto da questão" class="questao-foto">
-                <video *ngIf="isVideo(questaoAtual.fotoDaRespostaUmUrl)" [src]="questaoAtual.fotoDaRespostaUmUrl"
-                  controls controlsList="nodownload" class="questao-video">
-                </video>
-              </ng-container>
-              <!-- Exibe o comentário da Questão com HTML Sanitizado -->
-              <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestaoDois | safeHtml"></div>
-              <ng-container *ngIf="questaoAtual?.fotoDaRespostaDoisUrl">
-                <img *ngIf="isImage(questaoAtual.fotoDaRespostaDoisUrl)" [src]="questaoAtual.fotoDaRespostaDoisUrl"
-                  alt="Foto da questão" class="questao-foto">
-                <video *ngIf="isVideo(questaoAtual.fotoDaRespostaDoisUrl)" [src]="questaoAtual.fotoDaRespostaDoisUrl"
-                  controls controlsList="nodownload" class="questao-video">
-                </video>
-              </ng-container>
-              <!-- Exibe o comentário da Questão com HTML Sanitizado -->
-              <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestaoTres | safeHtml"></div>
-              <ng-container *ngIf="questaoAtual?.fotoDaRespostaTresUrl">
-                <img *ngIf="isImage(questaoAtual.fotoDaRespostaTresUrl)" [src]="questaoAtual.fotoDaRespostaTresUrl"
-                  alt="Foto da questão" class="questao-foto">
-                <video *ngIf="isVideo(questaoAtual.fotoDaRespostaTresUrl)" [src]="questaoAtual.fotoDaRespostaTresUrl"
-                  controls controlsList="nodownload" class="questao-video">
-                </video>
-              </ng-container>
-              <!-- Exibe o comentário da Questão com HTML Sanitizado -->
-              <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestaoQuatro | safeHtml"></div>
-              <ng-container *ngIf="questaoAtual?.fotoDaRespostaQuatroUrl">
-                <img *ngIf="isImage(questaoAtual.fotoDaRespostaQuatroUrl)" [src]="questaoAtual.fotoDaRespostaQuatroUrl"
-                  alt="Foto da questão" class="questao-foto">
-                <video *ngIf="isVideo(questaoAtual.fotoDaRespostaQuatroUrl)"
-                  [src]="questaoAtual.fotoDaRespostaQuatroUrl" controls controlsList="nodownload" class="questao-video">
-                </video>
-              </ng-container>
-              <div *ngIf="questaoAtual?.comentarioDaQuestaoCinco" class="img-comentario"
-                [innerHTML]="questaoAtual.comentarioDaQuestaoCinco | safeHtml"></div>
-              <ng-container *ngIf="questaoAtual?.fotoDaRespostaCincoUrl">
-                <img *ngIf="isImage(questaoAtual.fotoDaRespostaCincoUrl)" [src]="questaoAtual.fotoDaRespostaCincoUrl"
-                  alt="Foto da questão" class="questao-foto">
-                <video *ngIf="isVideo(questaoAtual.fotoDaRespostaCincoUrl)" [src]="questaoAtual.fotoDaRespostaCincoUrl"
-                  controls controlsList="nodownload" class="questao-video">
-                </video>
-              </ng-container>
-              <div *ngIf="questaoAtual?.comentarioDaQuestaoSeis" class="img-comentario"
-                [innerHTML]="questaoAtual.comentarioDaQuestaoSeis | safeHtml"></div>
-              <p *ngIf="questaoAtual?.referenciaBi">Referência: {{ questaoAtual.referenciaBi }}</p>
-              <p *ngIf="questaoAtual?.comentadorDaQuestao">Comentado por: {{ questaoAtual.comentadorDaQuestao }}</p>
-            </div>
 
-            <app-comentarios-aula *ngIf="mostrarForumOverlay" [referenciaId]="questaoAtual.id" [tipo]="'QUESTAO'">
-            </app-comentarios-aula>
+              <app-comentarios-aula *ngIf="mostrarForumOverlay" [referenciaId]="questaoAtual.id" [tipo]="'QUESTAO'">
+              </app-comentarios-aula>
 
-            <div class="error-message" *ngIf="mensagemErro">{{ mensagemErro }}</div>
-            <div class="navigation-fixed">
-              <div class="right-buttons">
 
-                <button class="btn-forum" (click)="abrirForum()">
-                  <i class="fas fa-users" style="margin-right: 8px;"></i> Fórum
-                </button>
+              <div class="error-message" *ngIf="mensagemErro">{{ mensagemErro }}</div>
+              <div class="navigation-fixed">
+                <div class="right-buttons">
 
-                <button class="btn-anterior" (click)="anteriorQuestao()" [disabled]="paginaAtual === 0">
-                  Anterior
-                </button>
+                  <button class="btn-forum" (click)="abrirForum()">
+                    <i class="fas fa-users" style="margin-right: 8px;"></i> Fórum
+                  </button>
 
-                <button *ngIf="!jaRespondeu" class="btn-responder"
-                  (click)="questaoAtual && responderQuestao(questaoAtual)">
-                  Responder
-                </button>
+                  <button class="btn-anterior" (click)="anteriorQuestao()" [disabled]="paginaAtual === 0">
+                    Anterior
+                  </button>
 
-                <button *ngIf="jaRespondeu" class="btn-gabarito" (click)="exibirGabarito()">
-                  <i class="fas fa-comment-dots" style="margin-right: 8px; font-size: 18px;"></i>
-                  Comentário
-                </button>
+                  <button *ngIf="!jaRespondeu" class="btn-responder"
+                    (click)="questaoAtual && responderQuestao(questaoAtual)">
+                    Responder
+                  </button>
 
-                <button class="btn-proxima" (click)="proximaQuestao()">
-                  Próxima
-                </button>
+                  <button *ngIf="jaRespondeu" class="btn-gabarito" (click)="exibirGabarito()">
+                    <i class="fas fa-comment-dots" style="margin-right: 8px; font-size: 18px;"></i>
+                    Comentário
+                  </button>
+
+                  <button class="btn-proxima" (click)="proximaQuestao()">
+                    Próxima
+                  </button>
+                </div>
               </div>
             </div>
           </div>
