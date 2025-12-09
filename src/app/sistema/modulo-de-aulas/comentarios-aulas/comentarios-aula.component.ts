@@ -326,12 +326,9 @@ export class ComentariosAulaComponent implements OnInit, OnDestroy, OnChanges {
     this.modalDeleteService.openModal(
       { title: 'Excluir', description: 'Excluir resposta?', deletarTextoBotao: 'Excluir', size: 'sm' },
       () => {
-        // ATENÇÃO: Falta implementar 'deletarRespostaQuestao' no service, 
-        // ou usar 'deletarResposta' normal se a URL for a mesma no back (improvável)
-        // Vou assumir que você criará o método deletarRespostaQuestao no service
         const request$ = this.tipo === 'AULA'
           ? this.comentariosService.deletarResposta(this.referenciaId, c.id!, r.id!)
-          : this.comentariosService.deletarResposta(this.referenciaId, c.id!, r.id!); // PROVISÓRIO: Ajuste no service!
+          : this.comentariosQuestoesService.deletarRespostaQuestao(this.referenciaId, c.id!, r.id!);
 
         request$.pipe(takeUntil(this.destroy$)).subscribe({
           next: () => { if (c.respostas) c.respostas = c.respostas.filter(item => item.id !== r.id); },

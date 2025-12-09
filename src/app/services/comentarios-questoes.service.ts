@@ -35,7 +35,7 @@ export interface CursorPageResponse<T> {
 }
 
 @Injectable({
-    providedIn: 'root' 
+    providedIn: 'root'
 })
 export class ComentariosQuestoesService {
 
@@ -87,6 +87,12 @@ export class ComentariosQuestoesService {
         );
     }
 
+
+    deletarRespostaQuestao(questaoId: number, comentarioId: number, respostaId: number): Observable<void> {
+        return this.http.delete<void>(`${this.apiURL}/${questaoId}/${comentarioId}/respostas/${respostaId}`).pipe(
+            catchError(this.handleError)
+        );
+    }
 
     deletarComentarioQuestao(aulaId: number, comentarioId: number): Observable<void> {
         return this.http.delete<void>(`${this.apiURL}/${aulaId}/${comentarioId}`).pipe(
