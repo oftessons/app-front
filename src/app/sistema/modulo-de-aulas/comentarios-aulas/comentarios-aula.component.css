@@ -143,9 +143,6 @@
 
 .comentario-item {
   padding: 16px;
-  background-color: var(--bg-input);
-  border-radius: 8px;
-  border: 1px solid var(--border-color);
 }
 
 .comentario-header {
@@ -343,8 +340,7 @@
   margin-top: 16px;
   padding: 16px;
   background-color: var(--bg-container);
-  border-radius: 8px;
-  border: 1px solid var(--border-color);
+  border: none;
 }
 
 .resposta-input {
@@ -368,7 +364,7 @@
   margin-left: 52px;
   margin-top: 16px;
   padding-left: 16px;
-  border-left: 2px solid var(--border-color);
+  border-left: none;
 }
 
 .resposta-item {
@@ -376,7 +372,7 @@
   margin-bottom: 12px;
   background-color: var(--bg-container);
   border-radius: 6px;
-  border: 1px solid var(--border-color);
+  border: none;
 }
 
 .resposta-item:last-child {

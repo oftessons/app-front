@@ -1189,6 +1189,16 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       this.verificarRespostaUsuario(respostaParaVerificar);
       this.jaRespondeu = true;
       this.mostrarPorcentagem = true;
+
+      this.selectedOption = respostaSalva.opcaoSelecionada;
+
+      setTimeout(() => {
+        const radioButtons = document.querySelectorAll('input[name="alternativa"]') as NodeListOf<HTMLInputElement>;
+        radioButtons.forEach((radio) => {
+          radio.disabled = true;
+        });
+      }, 0);
+
     } else {
       // Se não encontrou no Map, reseta o estado da questão atual
       this.jaRespondeu = false;
@@ -1294,11 +1304,11 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
         this.streakDezAtivada = true;
 
         setTimeout(() => {
-                if (this.streakDezAtivada) {
-                    this.streakDezAtivada = false;
-                    this.cdr.detectChanges(); 
-                }
-            }, 3000);
+          if (this.streakDezAtivada) {
+            this.streakDezAtivada = false;
+            this.cdr.detectChanges();
+          }
+        }, 3000);
       }
     } else {
       if (sonsAtivados) {
@@ -1451,6 +1461,11 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
           this.respostasSessao.idUsuario = idUser;
           this.respostasSessao.respostas.push(respostaDTO);
           this.isComentario = true;
+
+          const radioButtons = document.querySelectorAll('input[name="alternativa"]') as NodeListOf<HTMLInputElement>;
+          radioButtons.forEach((radio) => {
+            radio.disabled = true;
+          });
 
           // Chamamos o serviço para verificar a resposta
           this.questoesService
