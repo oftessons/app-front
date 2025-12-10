@@ -170,28 +170,37 @@
             <div class="row">
               <div class="col-md-12">
                 <div class="form-group">
-                  <div *ngFor="let alternativa of questaoAtual.alternativas; let i = index" class="alternativa"
-                    [ngClass]="{ 
-                      'alternativa-certa': respostaVerificada && alternativa.texto === respostaCorreta,
-                      'alternativa-errada': respostaVerificada && alternativa.texto === respostaErrada
-                    }">
-                    <div class="alternativa-input-group">
+                  <div *ngFor="let alternativa of questaoAtual.alternativas; let i = index" class="alternativa-wrapper"
+                    [ngClass]="{
+                    'status-correto': respostaVerificada && alternativa.texto === respostaCorreta,
+                    'status-errado': respostaVerificada && alternativa.texto === respostaErrada && alternativa.texto === selectedOption,
+                    'status-selecionado': !respostaVerificada && alternativa.texto === selectedOption
+                  }">
+
+                    <label [for]="'alternativa' + i" class="alternativa-container">
+
                       <input type="radio" name="alternativa" [id]="'alternativa' + i" [value]="alternativa.texto"
                         [(ngModel)]="selectedOption" (change)="onOptionChange(alternativa.texto)"
-                        [checked]="alternativa.texto === selectedOption" [disabled]="radioDisabled">
+                        [disabled]="radioDisabled" class="radio-oculto">
 
-                      <label [for]="'alternativa' + i" class="alternativa-label">
-                        <span class="alternativa-texto">{{ alternativa.texto }} </span>
-                        <span *ngIf="alternativa.imagemUrl; else comentarioTexto" class="img-alternativas">
-                          <img [src]="alternativa.imagemUrl" alt="Imagem da Alternativa" class="alternativa-foto">
-                        </span>
-                        <ng-template #comentarioTexto>
-                          <span class="alternativa-comentario">{{ alternativa.comentario }}</span>
-                        </ng-template>
-                      </label>
-                    </div>
+                      <div class="indicador-letra">
+                        {{ alternativa.texto }}
+                      </div>
+
+                      <div class="conteudo-texto">
+                        <div class="texto-opcao">
+                          <span *ngIf="alternativa.imagemUrl; else comentarioTexto" class="img-alternativas">
+                            <img [src]="alternativa.imagemUrl" alt="Imagem da Alternativa" class="alternativa-foto">
+                          </span>
+                          <ng-template #comentarioTexto>
+                            <span class="alternativa-comentario">{{ alternativa.comentario }}</span>
+                          </ng-template>
+                        </div>
+                      </div>
+                    </label>
                   </div>
                 </div>
+
                 <div *ngIf="mensagemDeAviso" class="alert alert-info mt-2">
                   {{ mensagemDeAviso }}
                 </div>

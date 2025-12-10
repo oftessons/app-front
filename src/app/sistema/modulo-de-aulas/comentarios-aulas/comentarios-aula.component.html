@@ -1,8 +1,8 @@
-<div class="comentarios-container">
-  <h4 class="comentarios-title">
+<div class="comentarios-container" [class.modo-forum]="tipo === 'QUESTAO'">
+  <h2 class="comentarios-title">
     <i class="fas fa-comments"></i>
-    Comentários
-  </h4>
+    {{ tipo === 'AULA' ? 'Comentários' : 'Fórum' }}
+  </h2>
 
   <div class="novo-comentario-form">
     <div class="avatar-user">
@@ -173,7 +173,8 @@
 
   <div class="sem-comentarios" *ngIf="!isLoading && comentarios.length === 0">
     <p>Nenhum comentário ainda.</p>
-    <span>Seja o primeiro a comentar nesta aula!</span>
+    <span>{{ tipo === 'AULA' ? 'Seja o primeiro a comentar nesta aula!' : 'Seja o primeiro a comentar nesta questão!'
+      }}</span>
   </div>
 
   <div class="loading-comentarios" *ngIf="isLoading">

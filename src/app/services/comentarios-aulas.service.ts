@@ -52,9 +52,7 @@ export class ComentariosAulasService {
     );
   }
 
-  /**
-   * Obtém os comentários de uma aula com paginação por cursor
-   */
+ 
   obterComentarios(aulaId: number, cursor?: string, limit: number = 10): Observable<CursorPageResponse<ComentarioAulaResponse>> {
     let params = new HttpParams().set('limit', limit.toString());
 

@@ -1,13 +1,10 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Location } from '@angular/common';
 import { AulasService } from 'src/app/services/aulas.service';
-import { AvaliacaoAulaService } from 'src/app/services/avaliacao-aula.service';
 import { ThemeService } from 'src/app/services/theme.service';
 import { Aula } from 'src/app/sistema/painel-de-aulas/aula';
 import { Categoria } from '../painel-de-aulas/enums/categoria';
 import { CategoriaDescricoes } from '../painel-de-aulas/enums/categoria-descricao';
-import { AvaliacaoAula } from './avaliacao-aula';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { catchError, takeUntil } from 'rxjs/operators';
 import { Subject, forkJoin, of } from 'rxjs';

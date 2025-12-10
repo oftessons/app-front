@@ -137,10 +137,7 @@
                         </ng-template>
                     </div>
 
-                    <!-- Seção de Comentários -->
-                    <app-comentarios-aula 
-                        *ngIf="videoAtual" 
-                        [aulaId]="videoAtual.id">
+                    <app-comentarios-aula *ngIf="videoAtual" [referenciaId]="videoAtual.id" [tipo]="'AULA'">
                     </app-comentarios-aula>
                 </div>
             </div>

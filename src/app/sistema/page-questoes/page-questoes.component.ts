@@ -154,6 +154,8 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   isRespostaCorreta: boolean = false;
   message: string = '';
   resposta: string = '';
+  isComentario: boolean = false;
+  mostrarForumOverlay: boolean = false;
 
   private audioCorreto: HTMLAudioElement;
   private audioErrado: HTMLAudioElement;
@@ -560,6 +562,31 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       // Se não há usuário logado, preparar arrays
       this.prepararArraysComPremium();
     }
+  }
+
+  getPorcentagemPorIndice(index: number): string {
+    if (!this.porcentagens) return '0%';
+    const letras = ['A', 'B', 'C', 'D', 'E'];
+    const key = letras[index];
+    return this.porcentagens.get(key) || '0%';
+  }
+
+  getLetra(index: number): string {
+    const letras = ['A', 'B', 'C', 'D', 'E'];
+    return letras[index] || '';
+  }
+
+  getTextoLimpo(texto: string, index: number): string {
+    if (!texto) return '';
+
+    const letras = ['A', 'B', 'C', 'D', 'E'];
+    const letraDaAlternativa = letras[index];
+
+    if (texto.toUpperCase().startsWith(letraDaAlternativa)) {
+      return texto.substring(1).replace(/^[\.\)\-\s]+/, '');
+    }
+
+    return texto;
   }
 
   private aplicarLimitacoesTrial(): void {
@@ -1061,6 +1088,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
               index: index,
             }));
 
+            this.respostaVerificada = false;
             this.buscarCuriosidadesSeNecessario();
             this.abrirModal();
             this.toggleFiltros();
@@ -1161,6 +1189,16 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       this.verificarRespostaUsuario(respostaParaVerificar);
       this.jaRespondeu = true;
       this.mostrarPorcentagem = true;
+
+      this.selectedOption = respostaSalva.opcaoSelecionada;
+
+      setTimeout(() => {
+        const radioButtons = document.querySelectorAll('input[name="alternativa"]') as NodeListOf<HTMLInputElement>;
+        radioButtons.forEach((radio) => {
+          radio.disabled = true;
+        });
+      }, 0);
+
     } else {
       // Se não encontrou no Map, reseta o estado da questão atual
       this.jaRespondeu = false;
@@ -1266,11 +1304,11 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
         this.streakDezAtivada = true;
 
         setTimeout(() => {
-                if (this.streakDezAtivada) {
-                    this.streakDezAtivada = false;
-                    this.cdr.detectChanges(); 
-                }
-            }, 3000);
+          if (this.streakDezAtivada) {
+            this.streakDezAtivada = false;
+            this.cdr.detectChanges();
+          }
+        }, 3000);
       }
     } else {
       if (sonsAtivados) {
@@ -1291,7 +1329,9 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       return;
     }
 
-    this.mostrarGabarito = true;
+    this.isComentario = true;
+    this.mostrarGabarito = !this.mostrarGabarito;
+    this.mostrarForumOverlay = false;
 
     const imagens = [
       this.questaoAtual.fotoDaRespostaUmUrl,
@@ -1308,6 +1348,14 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
         console.warn(`Imagem ${index + 1} não disponível.`);
       }
     });
+  }
+
+  abrirForum() {
+    this.mostrarForumOverlay = !this.mostrarForumOverlay;
+  }
+
+  fecharForum() {
+    this.mostrarForumOverlay = false;
   }
 
   anteriorQuestao() {
@@ -1338,6 +1386,11 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     }
   }
 
+
+  limparEstadoDaQuestao() {
+    this.isComentario = false;
+  }
+
   proximaQuestao() {
     if (this.paginaAtual < this.numeroDeQuestoes - 1) {
       const selectElements = document.querySelector(
@@ -1351,6 +1404,11 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
       this.paginaAtual++;
       this.questaoAtual = this.questoes[this.paginaAtual];
+
+      this.jaRespondeu = false;
+      this.respostaVerificada = false;
+      this.selectedOption = '';
+
       this.carregarQuestaoDaPagina();
 
       this.resetarOcorrenciasDeQuestao();
@@ -1402,6 +1460,12 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
           this.respostasSessao.questoesIds.push(questao.id);
           this.respostasSessao.idUsuario = idUser;
           this.respostasSessao.respostas.push(respostaDTO);
+          this.isComentario = true;
+
+          const radioButtons = document.querySelectorAll('input[name="alternativa"]') as NodeListOf<HTMLInputElement>;
+          radioButtons.forEach((radio) => {
+            radio.disabled = true;
+          });
 
           // Chamamos o serviço para verificar a resposta
           this.questoesService
