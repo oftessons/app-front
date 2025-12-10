@@ -264,8 +264,9 @@
               <div *ngFor="let alternativa of questaoAtual.alternativas; let i = index" class="alternativa-wrapper"
                 [ngClass]="{
                     'status-correto': respostaVerificada && alternativa.texto === respostaCorreta,
-                    'status-errado': respostaVerificada && (alternativa.texto === respostaErrada || (alternativa.texto !== respostaCorreta && alternativa.texto !== respostaErrada)) 
-                  }">
+                    'status-errado': respostaVerificada && alternativa.texto === selectedOption && alternativa.texto !== respostaCorreta,
+                    'status-selecionado': !respostaVerificada && alternativa.texto === selectedOption
+                }">
                 <label [for]="'alternativa-' + i" class="alternativa-container">
 
                   <input type="radio" name="alternativa" [id]="'alternativa-' + i" [value]="alternativa.texto"
