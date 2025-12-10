@@ -296,7 +296,7 @@ export class ComentariosAulaComponent implements OnInit, OnDestroy, OnChanges {
     // Assumindo método editarRespostaQuestao no service
     const request$ = this.tipo === 'AULA'
       ? this.comentariosService.editarResposta(this.referenciaId, c.id, r.id, body)
-      : this.comentariosService.editarResposta(this.referenciaId, c.id, r.id, body); // PROVISÓRIO
+      : this.comentariosQuestoesService.editarResposta(this.referenciaId, c.id, r.id, body);
 
     request$.pipe(takeUntil(this.destroy$)).subscribe({
       next: () => { r.texto = r.textoEdicao!; r.editando = false; r.isSalvando = false; },

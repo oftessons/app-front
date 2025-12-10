@@ -88,6 +88,12 @@ export class ComentariosQuestoesService {
     }
 
 
+    editarResposta(questaoId: number, comentarioId: number, respostaId: number, request: RespostaComentarioRequest): Observable<void> {
+        return this.http.put<void>(`${this.apiURL}/${questaoId}/${comentarioId}/respostas/${respostaId}`, request).pipe(
+            catchError(this.handleError)
+        );
+    }
+
     deletarRespostaQuestao(questaoId: number, comentarioId: number, respostaId: number): Observable<void> {
         return this.http.delete<void>(`${this.apiURL}/${questaoId}/${comentarioId}/respostas/${respostaId}`).pipe(
             catchError(this.handleError)
