@@ -1088,6 +1088,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
               index: index,
             }));
 
+            this.respostaVerificada = false;
             this.buscarCuriosidadesSeNecessario();
             this.abrirModal();
             this.toggleFiltros();
