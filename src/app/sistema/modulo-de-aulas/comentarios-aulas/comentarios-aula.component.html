@@ -1,8 +1,8 @@
-<div class="comentarios-container">
-  <h4 class="comentarios-title">
+<div class="comentarios-container" [class.modo-forum]="tipo === 'QUESTAO'">
+  <h2 class="comentarios-title">
     <i class="fas fa-comments"></i>
     {{ tipo === 'AULA' ? 'Comentários' : 'Fórum' }}
-  </h4>
+  </h2>
 
   <div class="novo-comentario-form">
     <div class="avatar-user">
