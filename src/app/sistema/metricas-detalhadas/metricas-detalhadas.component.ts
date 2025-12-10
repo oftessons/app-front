@@ -18,7 +18,6 @@ interface GrupoSubtemaTemp {
   percentualAcertos: number;
 }
 
-
 @Component({
   selector: 'app-metricas-detalhadas',
   templateUrl: './metricas-detalhadas.component.html',
@@ -26,22 +25,22 @@ interface GrupoSubtemaTemp {
 })
 export class MetricasDetalhadasComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChildren('temaCanvas') temaCanvases!: QueryList<ElementRef>;
-  @ViewChildren('acertosCanvas') acertosCanvases!: QueryList<ElementRef>; 
+  @ViewChildren('acertosCanvas') acertosCanvases!: QueryList<ElementRef>;
 
   carregando = true;
-  dadosTema: MetricaTema[] = []; 
+  dadosTema: MetricaTema[] = [];
   dadosSubtema: MetricaSubtema[] = [];
 
-  dadosTemaFragmentados: MetricaTema[][] = []; 
+  dadosTemaFragmentados: MetricaTema[][] = [];
   dadosAgrupadosPorTema: GrupoSubtema[] = [];
 
   simuladoIdAlunoMentorado!: string | null;
 
-  temaCharts: Chart[] = []; 
+  temaCharts: Chart[] = [];
   acertosCharts: Chart[] = [];
 
   private themeObserver!: MutationObserver;
-  private totalGraficosTema = 0; 
+  private totalGraficosTema = 0;
   private totalGraficosSubtema = 0;
 
   colorPalette = [
@@ -73,12 +72,10 @@ export class MetricasDetalhadasComponent implements OnInit, OnDestroy, AfterView
           this.dadosTema = temas.response || [];
           this.dadosSubtema = subtemas.response || [];
 
-          this.fragmentarTemas(5); 
+          this.fragmentarTemas(5);
           this.agruparESubdividirSubtemas(5);
 
           this.carregando = false;
-
-          
         },
         error: (err) => {
           console.error('ERRO FATAL: A chamada à API falhou!', err);
@@ -139,7 +136,7 @@ export class MetricasDetalhadasComponent implements OnInit, OnDestroy, AfterView
   private fragmentarTemas(limitePorGrafico: number): void {
     if (!this.dadosTema || this.dadosTema.length === 0) return;
 
-    this.dadosTemaFragmentados = []; // Limpa o array final
+    this.dadosTemaFragmentados = [];
     for (let i = 0; i < this.dadosTema.length; i += limitePorGrafico) {
       this.dadosTemaFragmentados.push(this.dadosTema.slice(i, i + limitePorGrafico));
     }
@@ -159,8 +156,8 @@ export class MetricasDetalhadasComponent implements OnInit, OnDestroy, AfterView
       return acc;
     }, new Map<string, GrupoSubtemaTemp>());
 
-    this.dadosAgrupadosPorTema = []; 
-    this.totalGraficosSubtema = 0; 
+    this.dadosAgrupadosPorTema = [];
+    this.totalGraficosSubtema = 0;
 
     gruposMapTemp.forEach(grupoTemp => {
       const totalAcertosGrupo = grupoTemp.subtemas.reduce((sum, s) => sum + s.totalAcertos, 0);
@@ -185,7 +182,6 @@ export class MetricasDetalhadasComponent implements OnInit, OnDestroy, AfterView
     });
   }
 
-
   private getColorForIndex(index: number): string {
     if (index < this.colorPalette.length) {
       return this.colorPalette[index];
@@ -194,6 +190,7 @@ export class MetricasDetalhadasComponent implements OnInit, OnDestroy, AfterView
     return `hsl(${hue}, 70%, 60%)`;
   }
 
+  // --- ALTERAÇÃO AQUI: Lógica de <10% aplicada aos Temas ---
   private renderizarGraficosPorTema(): void {
     if (!this.temaCanvases || this.temaCanvases.length === 0 || this.dadosTemaFragmentados.length === 0) {
       return;
@@ -214,7 +211,14 @@ export class MetricasDetalhadasComponent implements OnInit, OnDestroy, AfterView
       if (!fragmento || !canvasAcertos) return;
 
       const labels = fragmento.map(d => d.tema);
-      const acertosData = fragmento.map(d => parseFloat(((d.totalRespondidas > 0 ? (d.totalAcertos / d.totalRespondidas) * 100 : 0)).toFixed(2)));
+
+      // 1. Array com os valores matemáticos reais
+      const acertosReais = fragmento.map(d =>
+        parseFloat(((d.totalRespondidas > 0 ? (d.totalAcertos / d.totalRespondidas) * 100 : 0)).toFixed(2))
+      );
+
+      // 2. Array Visual: Se for menor que 10, força ser 10 para aparecer no gráfico
+      const acertosVisuais = acertosReais.map(valor => (valor < 10 ? 10 : valor));
 
       const commonOptions: Chart.ChartOptions = {
         responsive: true,
@@ -227,10 +231,15 @@ export class MetricasDetalhadasComponent implements OnInit, OnDestroy, AfterView
             },
             label: (tooltipItem, data) => {
               const index = tooltipItem.index!;
+              // Aqui acessamos o valor REAL, não o visual do gráfico
+              const valorReal = acertosReais[index];
               const datasetLabel = data.datasets![tooltipItem.datasetIndex!].label;
-              if (datasetLabel?.includes('Acertos')) {
-                const acerto = (data.datasets![tooltipItem.datasetIndex!].data![index!] as number);
-                return ` Acertos: ${acerto.toFixed(2)}%`;
+
+              if (datasetLabel?.includes('%')) { // Ajuste para identificar o dataset
+                if (valorReal < 10) {
+                  return ` Acertos: < 10%`; // Mostra indicativo
+                }
+                return ` Acertos: ${valorReal.toFixed(2)}%`;
               }
               return '';
             },
@@ -243,16 +252,15 @@ export class MetricasDetalhadasComponent implements OnInit, OnDestroy, AfterView
         }
       };
 
-      // Criar o gráfico
       const temaChart = new Chart(canvasAcertos, {
         type: 'polarArea',
         data: {
           labels: labels,
           datasets: [{
             label: '% de Acertos',
-            data: acertosData,
-            backgroundColor: acertosData.map((_, i) => this.getColorForIndex(i) + 'B3'),
-            borderColor: acertosData.map((_, i) => this.getColorForIndex(i)),
+            data: acertosVisuais, // Usa o dado visual (min 10)
+            backgroundColor: acertosVisuais.map((_, i) => this.getColorForIndex(i) + 'B3'),
+            borderColor: acertosVisuais.map((_, i) => this.getColorForIndex(i)),
             borderWidth: 1
           }]
         },
@@ -262,6 +270,7 @@ export class MetricasDetalhadasComponent implements OnInit, OnDestroy, AfterView
     });
   }
 
+  // --- ALTERAÇÃO AQUI: Lógica de <10% aplicada aos Subtemas ---
   private renderizarGraficosPorSubtema(): void {
     if (!this.acertosCanvases || this.acertosCanvases.length === 0 || this.dadosAgrupadosPorTema.length === 0) {
       return;
@@ -276,19 +285,26 @@ export class MetricasDetalhadasComponent implements OnInit, OnDestroy, AfterView
     this.acertosCharts = [];
 
     const acertosCanvasesArr = this.acertosCanvases.toArray();
-    let canvasIndex = 0; 
+    let canvasIndex = 0;
 
     this.dadosAgrupadosPorTema.forEach((grupo) => {
 
       grupo.subtemasFragmentados.forEach((fragmento) => {
         const canvasAcertos = acertosCanvasesArr[canvasIndex]?.nativeElement;
         if (!fragmento || !canvasAcertos) {
-          canvasIndex++; 
+          canvasIndex++;
           return;
         }
 
         const labels = fragmento.map(s => s.subtema);
-        const acertosData = fragmento.map(s => parseFloat(((s.totalRespondidas > 0 ? (s.totalAcertos / s.totalRespondidas) * 100 : 0)).toFixed(2)));
+
+        // 1. Array com os valores matemáticos reais
+        const acertosReais = fragmento.map(s =>
+          parseFloat(((s.totalRespondidas > 0 ? (s.totalAcertos / s.totalRespondidas) * 100 : 0)).toFixed(2))
+        );
+
+        // 2. Array Visual: Se for menor que 10, força ser 10
+        const acertosVisuais = acertosReais.map(valor => (valor < 10 ? 10 : valor));
 
         const commonOptions: Chart.ChartOptions = {
           responsive: true,
@@ -300,9 +316,15 @@ export class MetricasDetalhadasComponent implements OnInit, OnDestroy, AfterView
                 return data.labels![tooltipItem[0].index!] as string;
               },
               label: (tooltipItem, data) => {
-                const value = data.datasets![tooltipItem.datasetIndex!].data![tooltipItem.index!] as number;
+                const index = tooltipItem.index!;
+                // Aqui acessamos o valor REAL
+                const valorReal = acertosReais[index];
                 const datasetLabel = data.datasets![tooltipItem.datasetIndex!].label;
-                return ` ${datasetLabel}: ${value.toFixed(2)}%`;
+
+                if (valorReal < 10) {
+                  return ` ${datasetLabel}: < 10%`;
+                }
+                return ` ${datasetLabel}: ${valorReal.toFixed(2)}%`;
               }
             }
           },
@@ -319,9 +341,9 @@ export class MetricasDetalhadasComponent implements OnInit, OnDestroy, AfterView
             labels: labels,
             datasets: [{
               label: '% de Acertos',
-              data: acertosData,
-              backgroundColor: acertosData.map((_, i) => this.getColorForIndex(i) + 'B3'),
-              borderColor: acertosData.map((_, i) => this.getColorForIndex(i)),
+              data: acertosVisuais, // Passamos o visual
+              backgroundColor: acertosVisuais.map((_, i) => this.getColorForIndex(i) + 'B3'),
+              borderColor: acertosVisuais.map((_, i) => this.getColorForIndex(i)),
               borderWidth: 1
             }]
           },
