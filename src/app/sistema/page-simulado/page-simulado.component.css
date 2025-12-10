@@ -319,8 +319,7 @@ body.has-fixed-buttons .chatbot-toggle-button {
   width: 280px;
 }
 
-.mat-form-field-type-mat-select:not(.mat-form-field-disabled)
-  .mat-form-field-flex {
+.mat-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-form-field-flex {
   cursor: pointer;
   background: aliceblue;
 }
@@ -368,9 +367,7 @@ body.has-fixed-buttons .chatbot-toggle-button {
     width: 80%;
   }
 
-  ::ng-deep
-    .mat-form-field-type-mat-select:not(.mat-form-field-disabled)
-    .mat-form-field-flex {
+  ::ng-deep .mat-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-form-field-flex {
     width: 100%;
   }
 
@@ -925,4 +922,80 @@ canvas {
 ::ng-deep .img-comentario em[style*="background-color: transparent"],
 ::ng-deep .img-comentario em[style*="background-color: rgba(0, 0, 0, 0)"] {
   color: var(--text-color) !important;
+}
+
+.alternativa-wrapper {
+  margin-bottom: 15px;
+  transition: all 0.3s ease;
+  border-radius: 15px;
+  background-color: transparent;
+}
+
+.alternativa-container {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  width: 100%;
+  padding: 12px;
+  border-radius: 15px;
+  margin: 0;
+}
+
+.radio-oculto {
+  display: none;
+}
+
+.indicador-letra {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid #52525b;
+  color: var(--text-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 16px;
+  margin-right: 15px;
+  transition: all 0.3s ease;
+}
+
+.conteudo-texto {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+
+.alternativa-container:hover .indicador-letra {
+  border-color: #a1a1aa;
+}
+
+.alternativa-wrapper.status-selecionado .indicador-letra,
+.radio-oculto:checked+.indicador-letra {
+  background-color: #3f3f46;
+  border-color: #fff;
+  color: #fff;
+}
+
+
+.alternativa-wrapper.status-correto {
+  background-color: rgba(45, 206, 137, 0.1);
+}
+
+.alternativa-wrapper.status-correto .indicador-letra {
+  border-color: #2dce89;
+  background-color: #2dce89;
+  color: #fff;
+}
+
+.alternativa-wrapper.status-errado {
+  background-color: rgba(245, 54, 92, 0.1);
+}
+
+.alternativa-wrapper.status-errado .indicador-letra {
+  border-color: #f5365c;
+  background-color: #f5365c;
+  color: #fff;
 }
