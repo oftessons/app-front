@@ -23,7 +23,13 @@
 
                         <ul class="mentored-users-list" *ngIf="!carregandoAlunos && alunosFiltrados.length > 0">
                             <li *ngFor="let usuario of alunosFiltrados">
+
+                                <div class="card-badge-top" *ngIf="isAluno && isPlanoGratuito">
+                                    <p>NEW - Assine agora QBank + Mentoria</p>
+                                </div>
+
                                 <div class="usuario-card">
+                                    
                                     <div class="usuario-foto-container">
                                         <img [src]="usuario.fotoUrl || 'assets/imagens/foto.svg'"
                                             alt="Foto de {{ usuario.nome }}" class="usuario-foto">

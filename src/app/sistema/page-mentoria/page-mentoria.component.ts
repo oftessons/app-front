@@ -12,6 +12,7 @@ import { TipoUsuario } from 'src/app/login/enums/tipo-usuario';
 import { TipoUsuarioDescricao } from 'src/app/login/enums/tipo-usuario-descricao';
 import { PageQuestoesComponent } from '../page-questoes/page-questoes.component';
 import { Permissao } from 'src/app/login/Permissao';
+import { StripeService } from 'src/app/services/stripe.service';
 
 @Component({
   selector: 'app-page-mentoria',
@@ -27,18 +28,18 @@ export class PageMentoriaComponent implements OnInit {
   idsAlunosSelecionados: number[] = [];
   alunosFiltrados: Usuario[] = [];
 
-  // Propriedade para o modal de detalhes do aluno
   alunoSelecionadoParaDetalhes: Usuario | null = null;
   popupDadosAlunoAberto: boolean = false;
   isAluno = false;
+  isPlanoGratuito:boolean = false;
 
   constructor(
     private readonly authService: AuthService,
     private readonly dialog: MatDialog,
+    private stripeService: StripeService
   ) { }
 
   ngOnInit(): void {
-    // this.fetchListaCompletaAlunos();
     this.verificarFormaLoading();
   }
 
@@ -95,6 +96,7 @@ export class PageMentoriaComponent implements OnInit {
         this.carregandoAlunos = false;
       }
     });
+    this.validateIsPlanoGratuito();
   }
 
   fetchListaCompletaAlunos(): void {
@@ -193,4 +195,31 @@ export class PageMentoriaComponent implements OnInit {
   traduzirTipoUsuario(tipoUsuario: string): string {
     return TipoUsuarioDescricao[tipoUsuario as TipoUsuario] || 'Desconhecido';
   }
+
+  validateIsPlanoGratuito() {
+    this.stripeService.getPlanInformation().subscribe(
+      (response) => {
+        let planInformationName = response.data.name;
+        
+        if (planInformationName) {
+          const nomePlanoNormalizado = planInformationName.trim().toUpperCase();
+          const nomeAlvo = "TRIALLING - OFTLESSONS";
+
+          console.log("Analise dos dados: \n nomePlanoNormalizado:  " +nomePlanoNormalizado + "\nnomealvo: " + nomeAlvo )
+          if (nomePlanoNormalizado === nomeAlvo) {
+            this.isPlanoGratuito = true;
+          } 
+
+          console.log(this.isPlanoGratuito);
+          console.log(this.isAluno)
+        }
+      },
+      (error) => {
+        console.error('Erro ao obter informações do plano:', error);
+      }
+    );
+
+  }
+
+  
 }
