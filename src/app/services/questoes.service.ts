@@ -269,6 +269,50 @@ export class QuestoesService {
     return this.http.get<any>(url, { params });
   }
 
+  atribuirComentador(formData: FormData): Observable<{ status: number; message: string }> {
+    const url = `${this.apiURL}/atribuir-comentador`;
+
+    return this.http.post<string>(url, formData, {
+      responseType: 'text' as 'json'
+    }).pipe(
+      map((response: string) => {
+        const message = response || 'Comentador atribuído com sucesso!';
+        return { status: 200, message };
+      }),
+
+      catchError((error: any) => {
+        console.log('Erro bruto recebido do HttpClient:', error);
+
+        let status = 0;
+        let message = 'Erro desconhecido ao atribuir comentador.';
+
+        if (error instanceof HttpErrorResponse) {
+          status = error.status ?? 0;
+
+          if (typeof error.error === 'string' && error.error.trim().length > 0) {
+            message = error.error.trim();
+          }
+          else if (error.error && typeof error.error === 'object' && 'message' in error.error) {
+            message = (error.error as any).message || message;
+          }
+          else if (error.message) {
+            message = error.message;
+          }
+
+          if (status) {
+            message = `(${status}) ${message}`;
+          }
+        }
+        else if (error && typeof error === 'object' && 'message' in error) {
+          message = (error as any).message || message;
+        }
+
+        return throwError(() => ({ status, message }));
+      })
+    );
+  }
+
+
   consultarQuestao(
     filtros: any,
     page: number = 0,

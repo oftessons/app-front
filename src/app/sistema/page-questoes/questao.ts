@@ -61,6 +61,7 @@ export class Questao {
   alternativaImagems?:AlternativaImagen[];
   tipoItemQuestao!:string;
   tipoItemQuestaoImagem!: string;
+  comentadorDaQuestaoFotoUrl?: string | null;
 
   toJson(): string {
     return JSON.stringify({

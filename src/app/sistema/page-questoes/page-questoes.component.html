@@ -357,9 +357,32 @@
                 <div *ngIf="questaoAtual?.comentarioDaQuestaoSeis" class="img-comentario"
                   [innerHTML]="questaoAtual.comentarioDaQuestaoSeis | safeHtml"></div>
                 <p *ngIf="questaoAtual?.referenciaBi">Referência: {{ questaoAtual.referenciaBi }}</p>
-                <p *ngIf="questaoAtual?.comentadorDaQuestao">Comentado por: {{ questaoAtual.comentadorDaQuestao }}</p>
-              </div>
 
+
+                <div class="footer-questao">
+
+                  <p *ngIf="questaoAtual?.referenciaBi" class="referencia-texto">
+                    <strong>Fonte:</strong> {{ questaoAtual.referenciaBi }}
+                  </p>
+
+                  <hr *ngIf="questaoAtual?.comentadorDaQuestao">
+
+                  <div class="comentador-card" *ngIf="questaoAtual?.comentadorDaQuestao">
+
+                    <div class="comentador-avatar">
+                      <img
+                        [src]="questaoAtual.comentadorDaQuestaoFotoUrl ? questaoAtual.comentadorDaQuestaoFotoUrl : 'assets/images/avatar-padrao.png'"
+                        alt="Foto do Professor" class="avatar-img">
+                    </div>
+
+                    <div class="comentador-info">
+                      <span class="label-comentario">Comentário elaborado por:</span>
+                      <h3 class="nome-professor">{{ questaoAtual.comentadorDaQuestao }}</h3>
+                      <span class="cargo-professor">Equipe Oftlessons</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
               <app-comentarios-aula *ngIf="mostrarForumOverlay" [referenciaId]="questaoAtual.id" [tipo]="'QUESTAO'">
               </app-comentarios-aula>

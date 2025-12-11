@@ -113,7 +113,6 @@ export class AulasService {
         } else {
           errorMessage = `Erro no servidor: ${error.status}, ${error.message}`;
         }
-        console.error(errorMessage);
         return throwError(() => new Error(errorMessage));
       })
     );

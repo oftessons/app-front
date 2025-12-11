@@ -23,6 +23,7 @@ import { AulasService } from 'src/app/services/aulas.service';
 import { Categoria } from '../painel-de-aulas/enums/categoria';
 import { CategoriaDescricoes } from '../painel-de-aulas/enums/categoria-descricao';
 import { NavigateService } from 'src/app/services/navigate.service';
+import { TemaDescricoes } from '../page-questoes/enums/tema-descricao';
 
 @Component({
   selector: 'app-lista-questoes',
@@ -31,17 +32,18 @@ import { NavigateService } from 'src/app/services/navigate.service';
 })
 export class ListaQuestoesComponent implements OnInit {
   usuario: Usuario | null = null;
-  Permissao = Permissao; // Adicione esta linha
-  questaoId!: number; // Adiciona a variável questaoId
+  Permissao = Permissao;
+  questaoId!: number;
   filtros: Filtro[] = [];
   tiposDeProva = Object.values(TipoDeProva);
   anos = Object.values(Ano);
   dificuldades = Object.values(Dificuldade);
   subtemas = Object.values(Subtema);
   temas = Object.values(Tema);
+  temasFormatado: string[] = Object.values(Tema).map(tema => TemaDescricoes[tema]);
 
-  aulaId!: number; // Variável para armazenar o ID da aula
-  aulas: any[] = []; // Lista de aulas
+  aulaId!: number;
+  aulas: any[] = [];
   pageAula: number = 1;
   pageSizeAula: number = 5;
   mensagemAula: string = '';
@@ -68,8 +70,18 @@ export class ListaQuestoesComponent implements OnInit {
 
   aulaDTO = new Aula();
   categoria: string[] = Object.values(Categoria);
+  categoriaFormatada: string[] = Object.values(Categoria).map(categoria => CategoriaDescricoes[categoria]);
   categoriaSelecionada: Categoria | null = null;
-  carregando : boolean = false;
+  carregando: boolean = false;
+
+  modoAtribuicao: 'ID' | 'TEMA' = 'ID';
+  atribuicaoId?: number;
+  atribuicaoTema?: string;
+  nomeProfessor: string = '';
+  fotoProfessorFile: File | null = null;
+  carregandoAtribuicao: boolean = false;
+  mensagemSucessoAtribuicao: string = '';
+  mensagemErroAtribuicao: string = '';
 
   constructor(
     private questoesService: QuestoesService,
@@ -78,14 +90,14 @@ export class ListaQuestoesComponent implements OnInit {
     private router: Router,
     private aulasService: AulasService,
     private navigateService: NavigateService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.carregarFiltros();
     this.usuario = this.authService.getUsuarioAutenticado();
   }
 
-  carregarFiltros(): void {}
+  carregarFiltros(): void { }
 
 
   navegarParaEdicao(id: number): void {
@@ -101,7 +113,6 @@ export class ListaQuestoesComponent implements OnInit {
       },
       (error) => {
         alert('Erro ao obter filtro por ID');
-        //console.error('Erro ao obter simulado por ID:', error);
       }
     );
   }
@@ -113,15 +124,14 @@ export class ListaQuestoesComponent implements OnInit {
         this.message = '';
         this.mensagemSucesso = '';
         this.questoes = [];
-        const idUser = parseInt(usuario.id); // Aqui pegamos o ID do usuário
+        const idUser = parseInt(usuario.id);
         if (this.questaoId) {
           this.questoesService
             .buscarQuestaoPorId(idUser, this.questaoId)
             .subscribe(
               (questao: Questao | null) => {
                 if (!questao) {
-                  this.message =
-                    'Nenhuma questão encontrada com o ID informado.';
+                  this.message = 'Nenhuma questão encontrada com o ID informado.';
                   this.questoes = [];
                 } else {
                   this.questoes = [questao];
@@ -131,10 +141,8 @@ export class ListaQuestoesComponent implements OnInit {
                 this.carregando = false;
               },
               (error) => {
-                // console.error('Erro ao buscar questões:', error);
-                this.message =
-                  'Erro ao buscar questão. Por favor, tente novamente.';
-                  this.carregando = false;
+                this.message = 'Erro ao buscar questão. Por favor, tente novamente.';
+                this.carregando = false;
               }
             );
         } else {
@@ -142,14 +150,12 @@ export class ListaQuestoesComponent implements OnInit {
         }
       },
       (error) => {
-        // console.error('Erro ao obter usuário autenticado:', error);
         this.message = 'Erro ao obter usuário autenticado. Por favor, tente novamente.';
         this.carregando = false;
       }
     );
   }
 
-  // Métodos para abrir e fechar o modal
   preparaDelecao(questao: Questao): void {
     this.questaoSelecionada = questao;
     this.modalTitle = 'Confirmação de Exclusão';
@@ -173,7 +179,7 @@ export class ListaQuestoesComponent implements OnInit {
       this.deletarQuestao();
     } else if (this.modalType === 'deleteFiltro') {
       this.deletarFiltro(this.filtroSelecionado.id);
-    } 
+    }
     else if (this.modalType === 'deleteAula') {
       this.deletarAula();
     }
@@ -214,11 +220,10 @@ export class ListaQuestoesComponent implements OnInit {
 
   buscarAulas(): void {
     if (this.categoriaSelecionada) {
-      const categoriaDescricao = CategoriaDescricoes[this.categoriaSelecionada];
-      console.log('Categoria selecionada:', categoriaDescricao);
+      const categoriaDescricao = CategoriaDescricoes[this.getCategoriaFromDescricao(this.categoriaSelecionada)!];
       this.mensagemAula = '';
       this.mensagemSucessoAula = '';
-      
+
       this.aulasService.listarAulasPorCategoria(categoriaDescricao).subscribe(
         (response: Aula[]) => {
           this.aulas = response;
@@ -246,7 +251,7 @@ export class ListaQuestoesComponent implements OnInit {
     this.mensagemAula = '';
   }
 
-  aulaSelecionada: any; // Defina o tipo correto se souber qual é
+  aulaSelecionada: any;
 
   preparaDelecaoAula(aula: any): void {
     this.aulaSelecionada = aula;
@@ -275,4 +280,75 @@ export class ListaQuestoesComponent implements OnInit {
   editarAula(id: number): void {
     this.router.navigate(['/usuario/cadastro-aulas', id]);
   }
+
+  onFileSelected(event: any): void {
+    const file: File = event.target.files[0];
+    if (file) {
+      this.fotoProfessorFile = file;
+    }
+  }
+
+  atribuirComentador(): void {
+    if (this.modoAtribuicao === 'ID' && !this.atribuicaoId) {
+      this.mensagemErroAtribuicao = 'Informe o ID da questão.';
+      return;
+    }
+
+    if (this.modoAtribuicao === 'TEMA' && !this.atribuicaoTema) {
+      this.mensagemErroAtribuicao = 'Selecione um tema.';
+      return;
+    }
+
+    this.carregandoAtribuicao = true;
+    this.mensagemErroAtribuicao = '';
+    this.mensagemSucessoAtribuicao = '';
+
+    const formData = new FormData();
+    formData.append('nomeProfessor', this.nomeProfessor);
+    if (this.fotoProfessorFile) {
+      formData.append('file', this.fotoProfessorFile);
+    }
+
+    if (this.modoAtribuicao === 'ID' && this.atribuicaoId) {
+      formData.append('idQuestao', this.atribuicaoId.toString());
+    } else if (this.modoAtribuicao === 'TEMA' && this.atribuicaoTema) {
+      formData.append('tema', this.getTemaFromDescricao(this.atribuicaoTema) || '');
+    }
+
+    this.questoesService.atribuirComentador(formData).subscribe(
+      (response: any) => {
+        const msg = typeof response === 'string' ? response : (response.message || 'Atualizado com sucesso!');
+        this.mensagemSucessoAtribuicao = msg;
+        this.carregandoAtribuicao = false;
+        this.limparAtribuicao(false);
+      },
+      (error) => {
+        console.log("Error name" + error);
+        this.mensagemErroAtribuicao = error.error?.message || 'Erro ao atribuir comentador.';
+        this.carregandoAtribuicao = false;
+      }
+    );
+  }
+
+  limparAtribuicao(limparMsg: boolean = true): void {
+    this.atribuicaoId = undefined;
+    this.atribuicaoTema = undefined;
+    this.nomeProfessor = '';
+    this.fotoProfessorFile = null;
+    if (limparMsg) {
+      this.mensagemSucessoAtribuicao = '';
+      this.mensagemErroAtribuicao = '';
+    }
+  }
+
+  getTemaFromDescricao(descricao: string): Tema | undefined {
+    const entry = Object.entries(TemaDescricoes).find(([tema, desc]) => desc === descricao);
+    return entry ? (entry[0] as Tema) : undefined;
+  }
+
+  getCategoriaFromDescricao(descricao: string): Categoria | undefined {
+    const entry = Object.entries(CategoriaDescricoes).find(([categoria, desc]) => desc === descricao);
+    return entry ? (entry[0] as Categoria) : undefined;
+  }
+
 }
