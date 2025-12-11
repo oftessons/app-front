@@ -473,8 +473,8 @@ input:checked + .slider:before {
 
 
 .badge-new {
-  background-color: #FFFF00; 
-  color: #000000 ;           
+  background-color: #f0b90b; 
+  color: #000000 !important ;           
   border: 1px solid #000000;
 
   font-size: 10px;          
