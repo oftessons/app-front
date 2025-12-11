@@ -286,12 +286,8 @@ export class NavbarComponent {
       const nomeAlvo = "TRIALLING - OFTLESSONS";
       if (nomePlanoNormalizado === nomeAlvo) {
         this.isPlanoGratuito = true;
-      } else {
-        this.isPlanoGratuito = false;
-      }
-    } else {
-      this.isPlanoGratuito = false;
-    }
+      } 
+    } 
   }
 }
 
