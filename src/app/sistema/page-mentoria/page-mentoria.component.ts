@@ -13,6 +13,7 @@ import { TipoUsuarioDescricao } from 'src/app/login/enums/tipo-usuario-descricao
 import { PageQuestoesComponent } from '../page-questoes/page-questoes.component';
 import { Permissao } from 'src/app/login/Permissao';
 import { StripeService } from 'src/app/services/stripe.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-page-mentoria',
@@ -36,7 +37,8 @@ export class PageMentoriaComponent implements OnInit {
   constructor(
     private readonly authService: AuthService,
     private readonly dialog: MatDialog,
-    private stripeService: StripeService
+    private stripeService: StripeService,
+    private router: Router,
   ) { }
 
   ngOnInit(): void {
@@ -219,6 +221,18 @@ export class PageMentoriaComponent implements OnInit {
       }
     );
 
+  }
+
+  navegarParaPlanos() {
+    this.router.navigate(['/planos']);
+  }
+
+  abrirSugestoesOuUpgrade(usuario: Usuario): void {
+    if (this.isAluno && this.isPlanoGratuito) {
+      this.navegarParaPlanos();
+    } else {
+      this.verSugestoes(usuario);
+    }
   }
 
   
