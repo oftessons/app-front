@@ -407,3 +407,12 @@
 .close-popup-button:hover {
   color: var(--text-color) !important;
 }
+
+.espacamento-aluno{
+  margin-top: 40px;
+}
+
+.espacamento-aluno-button{
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
