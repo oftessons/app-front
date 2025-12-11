@@ -407,3 +407,85 @@
 .close-popup-button:hover {
   color: var(--text-color) !important;
 }
+
+.espacamento-aluno{
+  margin-top: 40px;
+}
+
+.espacamento-aluno-button{
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+
+
+.card-badge-top {
+  position: absolute;
+  top: -45px; 
+  left: -1px; 
+  right: -1px; 
+  background-color: #f0b90b !important;
+  border: 2px solid #000000 !important;
+  color: #000000 !important;
+  text-align: center;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 12px 10px;
+  border-radius: 10px 10px 0 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 3;
+  transform: translateY(0);
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  box-sizing: border-box;
+  opacity: 1 !important;
+  visibility: visible !important; 
+}
+
+.card-badge-top p {
+  margin: 0;
+  color: #000000 !important;
+}
+
+.usuario-card {
+  position: relative;
+  margin-top: 35px; 
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  border-top: none; 
+}
+
+.mentored-users-list li {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  transition: transform 0.3s ease-in-out; 
+  cursor: pointer;
+  min-height: 50px; 
+}
+
+.usuario-card:hover {
+  transform: none !important;
+}
+
+.mentored-users-list li:hover {
+  transform: translateY(-7px);
+}
+
+.mentored-users-list li:hover .usuario-card {
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25);
+}
+
+.mentored-users-list li:hover .card-badge-top {
+  transform: translateY(-7px); 
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.mentored-users-list li:not(:has(.card-badge-top)) .usuario-card {
+  margin-top: 0;
+}
+
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+  .usuario-card {
+    margin-top: 45px; 
+  }
+}

@@ -12,6 +12,8 @@ import { TipoUsuario } from 'src/app/login/enums/tipo-usuario';
 import { TipoUsuarioDescricao } from 'src/app/login/enums/tipo-usuario-descricao';
 import { PageQuestoesComponent } from '../page-questoes/page-questoes.component';
 import { Permissao } from 'src/app/login/Permissao';
+import { StripeService } from 'src/app/services/stripe.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-page-mentoria',
@@ -27,17 +29,76 @@ export class PageMentoriaComponent implements OnInit {
   idsAlunosSelecionados: number[] = [];
   alunosFiltrados: Usuario[] = [];
 
-  // Propriedade para o modal de detalhes do aluno
   alunoSelecionadoParaDetalhes: Usuario | null = null;
   popupDadosAlunoAberto: boolean = false;
+  isAluno = false;
+  isPlanoGratuito:boolean = false;
 
   constructor(
     private readonly authService: AuthService,
     private readonly dialog: MatDialog,
+    private stripeService: StripeService,
+    private router: Router,
   ) { }
 
   ngOnInit(): void {
-    this.fetchListaCompletaAlunos();
+    this.verificarFormaLoading();
+  }
+
+  verificarFormaLoading():void{
+    const usuarioLogado = this.authService.getUsuarioAutenticado();
+
+    if(usuarioLogado){
+      const permissao = usuarioLogado.permissao;
+      this.isAluno =permissao === Permissao.USER || permissao === Permissao.BOLSISTA
+
+      if(this.isAluno){
+        this.filtrarAlunoLogadoNaListaMentoria();
+      }
+      else{
+        this.fetchListaCompletaAlunos();
+      }
+    }
+  }
+
+  filtrarAlunoLogadoNaListaMentoria(): void {
+    this.carregandoAlunos = true;
+
+    this.authService.obterUsuarioAutenticadoDoBackend().subscribe({
+      next: (dadosDoUsuarioLogado: Usuario) => {
+
+        this.authService.visualizarAlunosMentoria().subscribe({
+          
+          next: (listaDaMentoria: Usuario[] | null) => {
+            
+            const listaSegura = listaDaMentoria || [];
+
+            const alunoEncontrado = listaSegura.find(
+              aluno => Number(aluno.id) === Number(dadosDoUsuarioLogado.id)
+            );
+
+            if (alunoEncontrado) {
+              this.listaCompletaAlunos = [alunoEncontrado];
+              this.alunosFiltrados = [alunoEncontrado];
+            } else {
+              console.warn("Aluno logado não encontrado na lista de mentoria.");
+              this.alunosFiltrados = [];
+            }
+            
+            this.carregandoAlunos = false;
+          },
+          error: (erroLista) => {
+            console.error("Erro ao buscar lista de mentoria:", erroLista);
+            this.carregandoAlunos = false;
+          }
+        });
+      },
+      error: (erroUsuario) => {
+        console.error("Erro ao buscar dados do usuário logado:", erroUsuario);
+        this.carregandoAlunos = false;
+      }
+    });
+    this.validateIsPlanoGratuito();
   }
 
   fetchListaCompletaAlunos(): void {
@@ -136,4 +197,43 @@ export class PageMentoriaComponent implements OnInit {
   traduzirTipoUsuario(tipoUsuario: string): string {
     return TipoUsuarioDescricao[tipoUsuario as TipoUsuario] || 'Desconhecido';
   }
+
+  validateIsPlanoGratuito() {
+    this.stripeService.getPlanInformation().subscribe(
+      (response) => {
+        let planInformationName = response.data.name;
+        
+        if (planInformationName) {
+          const nomePlanoNormalizado = planInformationName.trim().toUpperCase();
+          const nomeAlvo = "TRIALLING - OFTLESSONS";
+
+          console.log("Analise dos dados: \n nomePlanoNormalizado:  " +nomePlanoNormalizado + "\nnomealvo: " + nomeAlvo )
+          if (nomePlanoNormalizado === nomeAlvo) {
+            this.isPlanoGratuito = true;
+          } 
+
+          console.log(this.isPlanoGratuito);
+          console.log(this.isAluno)
+        }
+      },
+      (error) => {
+        console.error('Erro ao obter informações do plano:', error);
+      }
+    );
+
+  }
+
+  navegarParaPlanos() {
+    this.router.navigate(['/planos']);
+  }
+
+  abrirSugestoesOuUpgrade(usuario: Usuario): void {
+    if (this.isAluno && this.isPlanoGratuito) {
+      this.navegarParaPlanos();
+    } else {
+      this.verSugestoes(usuario);
+    }
+  }
+
+  
 }

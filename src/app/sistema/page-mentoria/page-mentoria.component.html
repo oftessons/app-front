@@ -8,9 +8,9 @@
         <mat-tab-group animationDuration="0ms" class="mentoria-tabs">
 
             <mat-tab label="Visão por Aluno">
-                <div class="tab-content">
-                    <div class="filtro-container">
-                        <app-multiplo-select label="Selecione o(s) Aluno(s) para visualizar"
+                <div class="tab-content" [class.espacamento-aluno]="isAluno">
+                    <div class="filtro-container" *ngIf="!isAluno">
+                        <app-multiplo-select label="Selecione o(s) Aluno(s) para visualizar "
                             [options]="opcoesAlunosParaFiltro" [(selectedValue)]="idsAlunosSelecionados"
                             [multiple]="true" (selectedValueChange)="onSelecaoDeAlunosChange()" [searchable]="true">
                         </app-multiplo-select>
@@ -23,7 +23,13 @@
 
                         <ul class="mentored-users-list" *ngIf="!carregandoAlunos && alunosFiltrados.length > 0">
                             <li *ngFor="let usuario of alunosFiltrados">
+
+                                <div class="card-badge-top" *ngIf="isAluno && isPlanoGratuito">
+                                    <p>NEW - Assine agora QBank + Mentoria</p>
+                                </div>
+
                                 <div class="usuario-card">
+                                    
                                     <div class="usuario-foto-container">
                                         <img [src]="usuario.fotoUrl || 'assets/imagens/foto.svg'"
                                             alt="Foto de {{ usuario.nome }}" class="usuario-foto">
@@ -36,25 +42,29 @@
                                             informado' }}</p>
                                     </div>
 
-                                    <div class="usuario-card-acoes">
-                                        <button class="btn-card btn-desempenho" (click)="verDetalhesAluno(usuario)">
-                                            Ver Dados
-                                        </button>
-                                        <button class="btn-card btn-desempenho" (click)="verDesempenho(usuario)">
-                                            Ver Desempenho
-                                        </button>
-                                        <button class="btn-card btn-desempenho"
-                                            (click)="verSimuladosRealizados(usuario)">
-                                            Simulados Realizados
-                                        </button>
-                                        <button class="btn-card btn-criar-simulado" (click)="criarSimulado(usuario)">
-                                            Criar Simulado
-                                        </button>
-                                        <button class="btn-card btn-criar-simulado" (click)="criarListaQuestoes(usuario)">
-                                            Criar Lista de Questões
-                                        </button>
-                                        <button class="btn-card btn-criar-simulado btn-sugestoes"
-                                            (click)="verSugestoes(usuario)">
+                                    <div class="usuario-card-acoes" >
+
+                                        <ng-container *ngIf="!isAluno">
+                                            <button class="btn-card btn-desempenho" (click)="verDetalhesAluno(usuario)">
+                                                Ver Dados
+                                            </button>
+                                            <button class="btn-card btn-desempenho" (click)="verDesempenho(usuario)">
+                                                Ver Desempenho
+                                            </button>
+                                            <button class="btn-card btn-desempenho"
+                                                (click)="verSimuladosRealizados(usuario)">
+                                                Simulados Realizados
+                                            </button>
+                                            <button class="btn-card btn-criar-simulado" (click)="criarSimulado(usuario)">
+                                                Criar Simulado
+                                            </button>
+                                            <button class="btn-card btn-criar-simulado" (click)="criarListaQuestoes(usuario)">
+                                                Criar Lista de Questões
+                                            </button>
+                                        </ng-container>    
+
+                                        <button class="btn-card btn-criar-simulado btn-sugestoes" [class.espacamento-aluno-button]="isAluno"
+                                            (click)="abrirSugestoesOuUpgrade(usuario)">
                                             Ver Sugestões (IA)
                                         </button>
                                     </div>

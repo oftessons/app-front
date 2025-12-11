@@ -260,10 +260,15 @@
         />
         <span class="ml-2">Desempenho</span>
       </a>
+
+
+
+
       <a
         mat-list-item
         routerLink="/usuario/sistema-mentoria"
-        *ngIf="possuiPermissao && permissionAllowed()"
+        *ngIf="possuiPermissao"
+
         [ngClass]="{ 'active-link': isActive('/usuario/sistema-mentoria') }"
       >
         <img
@@ -276,7 +281,14 @@
           class="icon"
         />
         <span class="ml-2">Mentoria</span>
+
+        <span class="badge-new" *ngIf="isPlanoGratuito">NEW</span>
       </a>
+
+
+
+
+
       <div class="heading-home">Configurações</div>
       <a
         mat-list-item
