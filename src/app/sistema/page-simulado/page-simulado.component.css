@@ -319,7 +319,8 @@ body.has-fixed-buttons .chatbot-toggle-button {
   width: 280px;
 }
 
-.mat-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-form-field-flex {
+.mat-form-field-type-mat-select:not(.mat-form-field-disabled)
+  .mat-form-field-flex {
   cursor: pointer;
   background: aliceblue;
 }
@@ -367,7 +368,9 @@ body.has-fixed-buttons .chatbot-toggle-button {
     width: 80%;
   }
 
-  ::ng-deep .mat-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-form-field-flex {
+  ::ng-deep
+    .mat-form-field-type-mat-select:not(.mat-form-field-disabled)
+    .mat-form-field-flex {
     width: 100%;
   }
 
@@ -947,8 +950,8 @@ canvas {
 
 .indicador-letra {
   flex-shrink: 0;
-  width: 36px;
-  height: 36px;
+  width: 29px;
+  height: 29px;
   border-radius: 50%;
   border: 2px solid #52525b;
   color: var(--text-color);
@@ -967,18 +970,16 @@ canvas {
   width: 100%;
 }
 
-
 .alternativa-container:hover .indicador-letra {
   border-color: #a1a1aa;
 }
 
 .alternativa-wrapper.status-selecionado .indicador-letra,
-.radio-oculto:checked+.indicador-letra {
-  background-color: #3f3f46;
-  border-color: #fff;
-  color: #fff;
+.radio-oculto:checked + .indicador-letra {
+  background-color: var(--text-color);
+  border-color: var(--text-color);
+  color: var(--bg-container);
 }
-
 
 .alternativa-wrapper.status-correto {
   background-color: rgba(45, 206, 137, 0.1);

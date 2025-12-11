@@ -1250,8 +1250,8 @@ p {
 
 .indicador-letra {
   flex-shrink: 0;
-  width: 36px;
-  height: 36px;
+  width: 29px;
+  height: 29px;
   border-radius: 50%;
   border: 2px solid #52525b;
   color: var(--text-color);
@@ -1269,9 +1269,9 @@ p {
 }
 
 .radio-oculto:checked + .indicador-letra {
-  background-color: #3f3f46;
-  border-color: #fff;
-  color: #fff;
+  background-color: var(--text-color);
+  border-color: var(--text-color);
+  color: var(--bg-container);
 }
 
 .conteudo-texto {
