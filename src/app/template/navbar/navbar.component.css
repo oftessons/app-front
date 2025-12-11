@@ -470,3 +470,21 @@ input:checked + .slider:before {
   -webkit-tap-highlight-color: transparent;
   margin-bottom: 50px;
 }
+
+
+.badge-new {
+  background-color: #FFFF00; 
+  color: #000000 ;           
+  border: 1px solid #000000;
+
+  font-size: 10px;          
+  font-weight: bold;        
+  text-transform: uppercase;
+  
+  padding: 2px 6px;         
+  margin-left: 10px;        
+  border-radius: 4px;       
+
+  vertical-align: middle;
+  line-height: 1;
+}
