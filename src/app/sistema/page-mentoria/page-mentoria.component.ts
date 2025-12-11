@@ -30,6 +30,7 @@ export class PageMentoriaComponent implements OnInit {
   // Propriedade para o modal de detalhes do aluno
   alunoSelecionadoParaDetalhes: Usuario | null = null;
   popupDadosAlunoAberto: boolean = false;
+  isAluno = false;
 
   constructor(
     private readonly authService: AuthService,
@@ -37,7 +38,63 @@ export class PageMentoriaComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.fetchListaCompletaAlunos();
+    // this.fetchListaCompletaAlunos();
+    this.verificarFormaLoading();
+  }
+
+  verificarFormaLoading():void{
+    const usuarioLogado = this.authService.getUsuarioAutenticado();
+
+    if(usuarioLogado){
+      const permissao = usuarioLogado.permissao;
+      this.isAluno =permissao === Permissao.USER || permissao === Permissao.BOLSISTA
+
+      if(this.isAluno){
+        this.filtrarAlunoLogadoNaListaMentoria();
+      }
+      else{
+        this.fetchListaCompletaAlunos();
+      }
+    }
+  }
+
+  filtrarAlunoLogadoNaListaMentoria(): void {
+    this.carregandoAlunos = true;
+
+    this.authService.obterUsuarioAutenticadoDoBackend().subscribe({
+      next: (dadosDoUsuarioLogado: Usuario) => {
+
+        this.authService.visualizarAlunosMentoria().subscribe({
+          
+          next: (listaDaMentoria: Usuario[] | null) => {
+            
+            const listaSegura = listaDaMentoria || [];
+
+            const alunoEncontrado = listaSegura.find(
+              aluno => Number(aluno.id) === Number(dadosDoUsuarioLogado.id)
+            );
+
+            if (alunoEncontrado) {
+              this.listaCompletaAlunos = [alunoEncontrado];
+              this.alunosFiltrados = [alunoEncontrado];
+            } else {
+              console.warn("Aluno logado não encontrado na lista de mentoria.");
+              this.alunosFiltrados = [];
+            }
+            
+            this.carregandoAlunos = false;
+          },
+          error: (erroLista) => {
+            console.error("Erro ao buscar lista de mentoria:", erroLista);
+            this.carregandoAlunos = false;
+          }
+        });
+      },
+      error: (erroUsuario) => {
+        console.error("Erro ao buscar dados do usuário logado:", erroUsuario);
+        this.carregandoAlunos = false;
+      }
+    });
   }
 
   fetchListaCompletaAlunos(): void {
