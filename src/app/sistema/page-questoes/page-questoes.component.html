@@ -212,14 +212,23 @@
           </div>
         </div>
       </h2>
-      <select class="question-dropdown" aria-label="Selecione a questão" [(ngModel)]="paginaAtual"
-        (ngModelChange)="selecionarQuestaoPeloIndice($event)">
+      <ng-container *ngIf="listaDeIds.length === 0">
+        <select class="question-dropdown" (change)="selecionarQuestao($event)">
+          <option *ngFor="let indexGlobal of navegacaoPorQuestao" [value]="indexGlobal"
+            [selected]="indexGlobal === ((offsetPagina * itensPorPagina) + paginaAtual)">
+            Questão {{ indexGlobal + 1 }} de {{ navegacaoPorQuestao.length }}
+          </option>
+        </select>
+      </ng-container>
 
-        <option *ngFor="let item of navegacaoPorQuestao; let i = index" [value]="i">
-          Questão {{ i + 1 }} de {{ numeroDeQuestoes }}
-        </option>
-
-      </select>
+      <ng-container *ngIf="listaDeIds.length > 0">
+        <select class="question-dropdown" aria-label="Selecione a questão" [(ngModel)]="paginaAtual"
+          (ngModelChange)="selecionarQuestaoPeloIndice($event)">
+          <option *ngFor="let item of navegacaoPorQuestao; let i = index" [value]="i">
+            Questão {{ i + 1 }} de {{ numeroDeQuestoes }}
+          </option>
+        </select>
+      </ng-container>
     </div>
     <div class="questao">
       <div class="identificadores-questao">

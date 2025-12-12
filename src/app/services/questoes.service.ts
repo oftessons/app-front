@@ -23,6 +23,7 @@ export class QuestoesService {
   private readonly requestsCache: Map<string, Observable<Questao[]>> = new Map();
   private readonly listaDeIdsFiltrados = new BehaviorSubject<number[]>([]);
   listaDeIdsFiltrados$ = this.listaDeIdsFiltrados.asObservable();
+  private estadoNavegacao: any = null;
 
 
   constructor(private http: HttpClient) { }
@@ -236,6 +237,18 @@ export class QuestoesService {
 
     this.requestsCache.set(cacheKey, request);
     return request;
+  }
+
+  salvarEstadoNavegacao(estado: any): void {
+    this.estadoNavegacao = estado;
+  }
+
+  obterEstadoNavegacao(): any {
+    return this.estadoNavegacao;
+  }
+
+  limparEstadoNavegacao(): void {
+    this.estadoNavegacao = null;
   }
 
   clearRequestsCache(): void {
