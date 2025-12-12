@@ -11,6 +11,8 @@ import { Usuario } from 'src/app/login/usuario';
 import { Permissao } from 'src/app/login/Permissao';
 import { OfensivaService } from 'src/app/services/ofensiva.service';
 import { NotificacaoService } from 'src/app/services/notificacoes.service';
+import { VendasService } from 'src/app/services/vendas.service';
+import { Plano } from 'src/app/sistema/page-meu-perfil/plano';
 
 @Component({
   selector: 'app-navbar',
@@ -22,6 +24,9 @@ export class NavbarComponent {
   nomeUsuario: string = ''; // Variável para armazenar o nome do usuário
   possuiPermissao: boolean = true;
   isAdmin: boolean = false;
+
+  isPlanoGratuito: boolean = false;
+  planInformationName!: string;
 
   usuarioLogado: Usuario | null = null;
   
@@ -47,7 +52,7 @@ export class NavbarComponent {
     private stripeService: StripeService,
     private notificacaoService: NotificacaoService,
     private ngZone: NgZone,
-    private themeService: ThemeService
+    private themeService: ThemeService,
   ) { }
 
   ngOnInit() {
@@ -57,7 +62,7 @@ export class NavbarComponent {
     );
 
     this.usuarioLogado = this.authService.getUsuarioAutenticado();
-    
+
     if (this.usuarioLogado) {
       this.isAdmin = this.usuarioLogado.permissao === Permissao.ADMIN;
     }
@@ -111,6 +116,7 @@ export class NavbarComponent {
     if(this.authService.isAuthenticated()) {
       this.verificarPeriodoTeste();
     }
+
   }
 
   verificarPeriodoTeste() {
@@ -132,8 +138,10 @@ export class NavbarComponent {
     } else {
       this.stripeService.getPlanInformation().subscribe(
         (response) => {
-          //console.log('Informações do plano:', response);
+
+          console.log('Informações do plano:', response);
           const dataFimTeste = response.data.validoAte;
+          this.planInformationName = response.data.name;
           if (new Date(dataFimTeste) > new Date()) {
             this.dataFimTeste = new Date(dataFimTeste);
             this.mostrarContador = true;
@@ -146,6 +154,7 @@ export class NavbarComponent {
             localStorage.removeItem('dataFimTeste');
             this.removerEspacamentoToolbar();
           }
+          this.validateIsPlanoGratuito();
         },
         (error) => {
           console.error('Erro ao obter informações do plano:', error);
@@ -268,4 +277,20 @@ export class NavbarComponent {
   isDarkMode(): boolean {
     return this.themeService.isDarkMode();
   }
+
+
+
+  validateIsPlanoGratuito() {
+    if (this.planInformationName) {
+      const nomePlanoNormalizado = this.planInformationName.trim().toUpperCase();
+      const nomeAlvo = "TRIALLING - OFTLESSONS";
+      if (nomePlanoNormalizado === nomeAlvo) {
+        this.isPlanoGratuito = true;
+      } 
+    } 
+  }
 }
+
+
+
+
