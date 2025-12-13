@@ -178,6 +178,8 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   offsetPagina = 0;
   itensPorPagina: number = 10;
   totalElementos: number = 0;
+  listaIdsCarregados: number[] = [];
+  seedAtual: number | null = null;
 
   filtros: any = {
     ano: null,
@@ -313,12 +315,10 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     const navigationState = history.state;
     const filtroStateJson = localStorage.getItem('questoesFiltroState');
 
-    // VERIFICA SE TEM ESTADO DE NAVEGAÇÃO SALVO NO SERVICE
     const estadoNavegacao = this.questoesService.obterEstadoNavegacao();
 
     if (estadoNavegacao && filtroStateJson) {
-      // Se voltou da edição, restaura tudo
-      this.restaurarEstadoDoLocalStorage(filtroStateJson, true); // Passamos flag true
+      this.restaurarEstadoDoLocalStorage(filtroStateJson, true); 
     }
     else if (navigationState?.filtroId && navigationState.revisandoFiltro) {
       this.revisandoFiltroSalvo = true;
@@ -357,6 +357,8 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   private restaurarEstadoDoLocalStorage(filtroStateJson: string, voltandoDaEdicao: boolean = false): void {
     this.mostrarFiltroCacheado = false;
     const filtroState = JSON.parse(filtroStateJson);
+
+    this.seedAtual = filtroState.seed ?? null; 
 
     if (!voltandoDaEdicao) {
       localStorage.removeItem('questoesFiltroState');
@@ -403,11 +405,11 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     const filtros = this.construirObjetoFiltros();
 
     this.questoesService
-      .filtrarQuestoes(this.usuarioId, filtros, this.paginaAPI, this.itensPorPagina)
+      .filtrarQuestoes(this.usuarioId, filtros, this.paginaAPI, this.itensPorPagina, this.seedAtual ?? undefined)
       .subscribe({
         next: (response: any) => {
-          const novas = response.content || response;
-          const total = response.totalElements ? response.totalElements : novas.length;
+          const novas = response.questoes.content || response.questoes;
+          const total = response.questoes.totalElements ? response.questoes.totalElements : novas.length;
 
           if (!novas || novas.length === 0) {
             this.exibirMensagem('Não foi possível restaurar a questão.', 'erro');
@@ -1121,13 +1123,19 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     this.offsetPagina = 0;
     this.paginaAPI = 0;
     this.listaDeIds = [];
+    this.seedAtual = null;
 
     this.questoesService
-      .filtrarQuestoes(this.usuarioId, filtros, this.paginaAPI, this.itensPorPagina)
+      .filtrarQuestoes(this.usuarioId, filtros, this.paginaAPI, this.itensPorPagina, this.seedAtual ?? undefined)
       .subscribe(
         (response: any) => {
-          const novasQuestoes = response.content ? response.content : response;
-          const total = response.totalElements ? response.totalElements : novasQuestoes.length;
+          const novasQuestoes = response.questoes.content ? response.questoes.content : response;
+          const total = response.questoes.totalElements ? response.questoes.totalElements : novasQuestoes.length;
+          this.listaIdsCarregados = response.todosOsIds;
+
+          if (response.seed) {
+            this.seedAtual = response.seed;
+          }
 
           if (novasQuestoes.length === 0) {
             this.message = this.getMensagemNenhumaQuestaoEncontrada(filtros);
@@ -1178,10 +1186,10 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     this.carregando = true;
     this.paginaAPI++;
     this.questoesService
-      .filtrarQuestoes(this.usuarioId, filtros, this.paginaAPI, this.itensPorPagina)
+      .filtrarQuestoes(this.usuarioId, filtros, this.paginaAPI, this.itensPorPagina, this.seedAtual ?? undefined)
       .subscribe(
         (response: any) => {
-          const novas = response.content || [];
+          const novas = response.questoes.content || [];
 
           if (novas.length > 0) {
             this.questoes = [...this.questoes, ...novas];
@@ -1248,10 +1256,10 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     const paginaAnteriorParaBuscar = this.offsetPagina - 1;
 
     this.questoesService
-      .filtrarQuestoes(this.usuarioId, filtros, paginaAnteriorParaBuscar, this.itensPorPagina)
+      .filtrarQuestoes(this.usuarioId, filtros, paginaAnteriorParaBuscar, this.itensPorPagina, this.seedAtual ?? undefined)
       .subscribe(
         (response: any) => {
-          const novas = response.content || [];
+          const novas = response.questoes.content || [];
 
           if (novas.length > 0) {
             // ACUMULA NO INÍCIO: Adiciona as novas questões antes das atuais
@@ -1315,15 +1323,13 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
           let todasRespondidas = true;
 
           if (respostas.length === 0) {
-            // Não há progresso, apenas carregue a primeira questão (página 0)
             console.log('Estou aqui');
             this.paginaAtual = 0;
             this.carregarQuestaoDaPagina();
             return;
           }
           for (let i = 0; i < this.listaDeIds.length; i++) {
-            // <-- MUDANÇA
-            const questaoId = this.listaDeIds[i]; // <-- MUDANÇA
+            const questaoId = this.listaDeIds[i]; 
             if (!this.respostasSalvas.has(questaoId)) {
               proximaPaginaNaoRespondida = i;
               todasRespondidas = false;
@@ -1333,7 +1339,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
           if (todasRespondidas) {
             proximaPaginaNaoRespondida =
-              this.listaDeIds.length > 0 ? this.listaDeIds.length - 1 : 0; // <-- MUDANÇA
+              this.listaDeIds.length > 0 ? this.listaDeIds.length - 1 : 0; 
           }
 
           this.paginaAtual = proximaPaginaNaoRespondida;
@@ -1346,7 +1352,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
             'Não foi possível carregar seu progresso anterior.',
             'erro'
           );
-          // Fallback: carregar a primeira questão
           this.paginaAtual = 0;
           this.carregarQuestaoDaPagina();
         },
@@ -1355,7 +1360,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
   private buscarRespostaSalva(questaoId: number): void {
     if (!questaoId) {
-      // Evita loop infinito se questaoId for inválido
       return;
     }
 
@@ -1364,7 +1368,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     if (this.respostasSalvas.has(questaoId)) {
       const respostaSalva = this.respostasSalvas.get(questaoId)!;
 
-      // Cria uma instância de Resposta para passar para a função de verificação
       const respostaParaVerificar = new Resposta(
         respostaSalva.correct,
         respostaSalva.opcaoSelecionada,
@@ -1385,7 +1388,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       }, 0);
 
     } else {
-      // Se não encontrou no Map, reseta o estado da questão atual
       this.jaRespondeu = false;
       this.mostrarPorcentagem = false;
       this.respostaVerificada = false;
@@ -1405,25 +1407,19 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     this.resetarOcorrenciasDeQuestao();
     this.robozinhoVisivel = false;
 
-    // Cenário A: Filtro Salvo
     if (this.listaDeIds.length > 0) {
       this.paginaAtual = indiceGlobal;
       this.carregarQuestaoDaPagina();
       return;
     }
 
-    // Cenário B: Busca API
     const paginaDesejadaAPI = Math.floor(indiceGlobal / this.itensPorPagina);
     const indiceNaPagina = indiceGlobal % this.itensPorPagina;
 
-    // Se a página desejada já está carregada no nosso array acumulado
-    // (Verificamos se o indiceGlobal está dentro do range que temos em memória)
-    // O range começa em (offsetPagina * 10) e tem tamanho this.questoes.length
     const inicioRange = this.offsetPagina * this.itensPorPagina;
     const fimRange = inicioRange + this.questoes.length;
 
     if (indiceGlobal >= inicioRange && indiceGlobal < fimRange) {
-      // Apenas movemos localmente
       this.paginaAtual = indiceGlobal - inicioRange;
       this.questaoAtual = this.questoes[this.paginaAtual];
 
@@ -1434,20 +1430,17 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       }
     }
     else {
-      // Se pulou para muito longe (ex: da Q1 para Q500), carregamos apenas aquela página
-      // Isso evita ter que carregar as 49 páginas do meio
       this.carregando = true;
       this.paginaAPI = paginaDesejadaAPI;
-      this.offsetPagina = paginaDesejadaAPI; // <--- IMPORTANTE: Novo ponto de partida
+      this.offsetPagina = paginaDesejadaAPI; 
 
       const filtros = this.construirObjetoFiltros();
 
-      this.questoesService.filtrarQuestoes(this.usuarioId, filtros, this.paginaAPI, this.itensPorPagina)
+      this.questoesService.filtrarQuestoes(this.usuarioId, filtros, this.paginaAPI, this.itensPorPagina, this.seedAtual ?? undefined)
         .subscribe({
           next: (response: any) => {
-            const novas = response.content || response;
+            const novas = response.questoes.content || response;
 
-            // Reseta a lista para começar desta nova página
             this.questoes = novas;
 
             this.paginaAtual = indiceNaPagina;
@@ -1562,7 +1555,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       this.streakDezAtivada = false;
     }
 
-    // 3. ATUALIZA O ESTADO VISUAL DA QUESTÃO
     this.verificarRespostaUsuario(resposta);
   }
 
@@ -1683,7 +1675,6 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     this.paginaAtual++;
     this.questaoAtual = this.questoes[this.paginaAtual];
 
-    // Se for filtro salvo, tem que buscar o objeto
     if (this.listaDeIds.length > 0) {
       this.carregarQuestaoDaPagina();
     }
@@ -1868,6 +1859,9 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
         ComentadasDescricao
       ),
       questaoIds: this.questoes.map((q) => q.id),
+      questoesIdsParaSalvar: this.listaIdsCarregados.length
+        ? this.listaIdsCarregados
+        : this.questoes.map((q) => q.id),
     };
 
     const idUser = this.idAlunoMentorado
@@ -2166,8 +2160,8 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
       .filtrarQuestoes(this.usuarioId, filtros, this.paginaAPI, this.itensPorPagina)
       .subscribe(
         (response: any) => {
-          const questoes = response.content ? response.content : response;
-          const total = response.totalElements ? response.totalElements : questoes.length;
+          const questoes = response.questoes.content ? response.questoes.content : response.questoes;
+          const total = response.questoes.totalElements ? response.questoes.totalElements : questoes.length;
 
           if (questoes.length > 0) {
             this.toggleFiltros();
