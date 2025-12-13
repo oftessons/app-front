@@ -1,113 +1,77 @@
 <div class="container pt-5"></div>
-  <div class="container mt-4">
-    <h1 class="mt-4"><span> | </span>Busca por ID da Questão</h1>
+<div class="container mt-4">
+  <h1 class="mt-4"><span> | </span>Busca por ID da Questão</h1>
+</div>
+
+<div class="container">
+  <div class="container-buscar">
+    <form #consultaForm="ngForm" (submit)="buscarQuestoes()" class="consulta-form">
+      <div class="row align-items-center">
+        <div class="col-md-4">
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>ID da Questão</mat-label>
+            <input class="id-input" matInput name="questaoId" [(ngModel)]="questaoId"
+              placeholder="Digite o ID da questão" />
+          </mat-form-field>
+        </div>
+        <div class="col-md-4 text-center btn-container">
+          <button type="submit" class="btn btn-primary">
+            <i class="fa fa-search"></i> Buscar
+          </button>
+          <button type="button" class="btn btn-secondary" (click)="limparFiltros()">
+            Limpar
+          </button>
+        </div>
+      </div>
+      <div *ngIf="carregando" class="text-center mt-3">
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      </div>
+
+      <div *ngIf="mensagemSucesso" class="alert alert-success mt-3 feedback-message" role="alert">
+        <i class="fa fa-check-circle"></i> {{ mensagemSucesso }}
+      </div>
+      <div *ngIf="message && !questoes.length" class="alert alert-warning mt-3 feedback-message" role="alert">
+        <i class="fa fa-exclamation-triangle"></i> {{ message }}
+      </div>
+
+      <div *ngIf="questoes.length > 0" class="alert alert-info mt-3 feedback-message" role="alert">
+        <i class="fa fa-info-circle"></i> {{ questoes.length }} questão(ões) encontrada(s).
+      </div>
+    </form>
   </div>
 
-  <div class="container">
-    <div class="container-buscar">
-      <form #consultaForm="ngForm" (submit)="buscarQuestoes()" class="consulta-form">
-        <div class="row align-items-center">
-          <div class="col-md-4">
-            <mat-form-field appearance="fill" class="full-width">
-              <mat-label>ID da Questão</mat-label>
-              <input class="id-input" matInput name="questaoId" [(ngModel)]="questaoId" placeholder="Digite o ID da questão" />
-            </mat-form-field>
-          </div>
-          <div class="col-md-4 text-center btn-container">
-            <button type="submit" class="btn btn-primary">
-              <i class="fa fa-search"></i> Buscar
-            </button>
-            <button type="button" class="btn btn-secondary" (click)="limparFiltros()">
-              Limpar
-            </button>
-          </div>
-        </div>
-        <div *ngIf="carregando" class="text-center mt-3">
-          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-        </div>
-    
-        <div *ngIf="mensagemSucesso" class="alert alert-success mt-3 feedback-message" role="alert">
-          <i class="fa fa-check-circle"></i> {{ mensagemSucesso }}
-        </div>
-        <div *ngIf="message && !questoes.length" class="alert alert-warning mt-3 feedback-message" role="alert">
-          <i class="fa fa-exclamation-triangle"></i> {{ message }}
-        </div>
-    
-        <div *ngIf="questoes.length > 0" class="alert alert-info mt-3 feedback-message" role="alert">
-          <i class="fa fa-info-circle"></i> {{ questoes.length }} questão(ões) encontrada(s).
-        </div>
-      </form>
-    </div>
 
-  
-    <div *ngIf="questoes.length > 0" class="crud-container mt-3">
-      <div class="table-responsive">
-        <table class="table table-todas-questoes-do-bd">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Data do Cadastro</th>
-              <th>Comentador da Questão</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let questao of questoes | paginate: { itemsPerPage: pageSize, currentPage: page }">
-              <td>{{ questao.id }}</td>
-              <td>{{ questao.diaDoCadastro }}</td>
-              <td>{{ questao.comentadorDaQuestao }}</td>
-              <td>
-                <button class="btn btn-primary btn-custom-editar" (click)="navegarParaEdicao(questao.id)">
+  <div *ngIf="questoes.length > 0" class="crud-container mt-3">
+    <div class="table-responsive">
+      <table class="table table-todas-questoes-do-bd">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Data do Cadastro</th>
+            <th>Comentador da Questão</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let questao of questoes | paginate: { itemsPerPage: pageSize, currentPage: page }">
+            <td>{{ questao.id }}</td>
+            <td>{{ questao.diaDoCadastro }}</td>
+            <td>{{ questao.comentadorDaQuestao }}</td>
+            <td>
+              <button class="btn btn-primary btn-custom-editar" (click)="navegarParaEdicao(questao.id)">
                 Editar <img src="assets/imagens/pencil.svg" alt="Ícone de Editar" class="icon" />
-                </button>
-                <button class="btn btn-danger btn-custom-deletar" (click)="preparaDelecao(questao)" data-toggle="modal" data-target="#modalDelecaoQuestao">
-                  Deletar <img src="assets/imagens/de.svg" alt="Ícone de Deletar" class="icon" />
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-
-  <div class="overlay" *ngIf="modalAberto"></div>
-</div>
-
- <!-- Modal Container -->
- <div class="modal" [ngClass]="{'open': modalAberto}">
-  <div class="modal-overlay" (click)="fecharModal()"></div>
-  <div class="modal-container">
-    <div class="modal-header">
-      <h2>{{ modalTitle }}</h2>
-      <button type="button" (click)="fecharModal()" class="btn-close btn-close-white"></button>
-    </div>
-    <div class="modal-content">
-      <div class="modal-body">
-        <ng-container [ngSwitch]="modalType">
-          <ng-container *ngSwitchCase="'deleteQuestao'">
-            <ng-container *ngIf="questaoSelecionada">
-              Deseja realmente excluir a questão {{ questaoSelecionada.id }}?
-            </ng-container>
-          </ng-container>
-          <ng-container *ngSwitchCase="'deleteFiltro'">
-            Deseja realmente excluir a questão {{ filtroSelecionado?.id }}?
-          </ng-container>
-          <ng-container *ngSwitchCase="'deleteAula'">
-            <ng-container *ngIf="aulaSelecionada">
-              Deseja realmente excluir a aula {{ aulaSelecionada.id }}?
-            </ng-container>
-          </ng-container>
-        </ng-container>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-cancel" (click)="fecharModal()">Cancelar</button>
-        <button class="btn btn-success" (click)="confirmarAcao()">Confirmar</button>
-      </div>
+              </button>
+              <button class="btn btn-danger btn-custom-deletar" (click)="preparaDelecao(questao)" data-toggle="modal"
+                data-target="#modalDelecaoQuestao">
+                Deletar <img src="assets/imagens/de.svg" alt="Ícone de Deletar" class="icon" />
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>
-
 
 <div class="container pt-5"></div>
 <div class="container mt-4">
@@ -119,11 +83,7 @@
     <form #consultaAulaForm="ngForm" (submit)="buscarAulas()" class="consulta-form">
       <div class="row align-items-center">
         <div class="col-md-4">
-          <app-select-padrao
-                label="Módulo"
-                [options]="categoria"
-                [(selectedValue)]="categoriaSelecionada"
-                >
+          <app-select-padrao label="Módulo" [options]="categoriaFormatada" [(selectedValue)]="categoriaSelecionada">
           </app-select-padrao>
         </div>
         <div class="col-md-4 text-center btn-container">
@@ -163,13 +123,124 @@
               <button class="btn btn-primary btn-custom-editar" (click)="editarAula(aula.id)">
                 Editar <img src="assets/imagens/pencil.svg" alt="Ícone de Editar" class="icon" />
               </button>
-              <button class="btn btn-danger btn-custom-deletar" (click)="preparaDelecaoAula(aula)" data-toggle="modal" data-target="#modalDelecaoAula">
+              <button class="btn btn-danger btn-custom-deletar" (click)="preparaDelecaoAula(aula)" data-toggle="modal"
+                data-target="#modalDelecaoAula">
                 Deletar <img src="assets/imagens/de.svg" alt="Ícone de Deletar" class="icon" />
               </button>
             </td>
           </tr>
         </tbody>
       </table>
+    </div>
+  </div>
+</div>
+
+
+<div class="container pt-5"></div>
+<div class="container mt-4">
+  <h1 class="mt-4"><span> | </span>Atribuição de Comentador</h1>
+</div>
+
+<div class="container">
+  <div class="container-buscar">
+    <form (submit)="atribuirComentador()" class="consulta-form">
+
+      <div class="row mb-3">
+        <div class="col-md-12">
+          <label style="color:var(--text-color); margin-right: 15px; font-weight: bold;">Modo:</label>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="modoAtribuicao" id="radioId" value="ID"
+              [(ngModel)]="modoAtribuicao">
+            <label class="form-check-label" for="radioId" style="color: var(--text-color);">Por ID</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="modoAtribuicao" id="radioTema" value="TEMA"
+              [(ngModel)]="modoAtribuicao">
+            <label class="form-check-label" for="radioTema" style="color: var(--text-color);">Por Tema (Em
+              massa)</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="row align-items-center">
+        <div class="col-md-3">
+          <mat-form-field appearance="fill" class="full-width" *ngIf="modoAtribuicao === 'ID'">
+            <mat-label>ID da Questão</mat-label>
+            <input matInput name="atribuicaoId" [(ngModel)]="atribuicaoId" type="number" placeholder="Ex: 2709" />
+          </mat-form-field>
+
+          <div *ngIf="modoAtribuicao === 'TEMA'" style="margin-bottom: 20px;">
+            <label style="color: #ccc; font-size: 0.75em;">Selecione o Tema</label>
+            <app-select-padrao label="Módulo" [options]="temasFormatado" [(selectedValue)]="atribuicaoTema">
+            </app-select-padrao>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Nome do Professor</mat-label>
+            <input matInput name="nomeProfessor" [(ngModel)]="nomeProfessor" placeholder="Ex: Dr. Silva" />
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-3">
+          <label style="color: var(--text-color); font-size: 0.75em; display:block; margin-bottom: 5px;">Foto do
+            Professor</label>
+            <input type="file" (change)="onFileSelected($event)" accept="image/*" class="form-control-file" style="color: var(--text-color);">
+        </div>
+
+        <div class="col-md-3 text-center btn-container">
+          <button type="submit" class="btn btn-primary" [disabled]="carregandoAtribuicao">
+            <i class="fa fa-upload"></i> {{ carregandoAtribuicao ? 'Enviando...' : 'Atualizar' }}
+          </button>
+          <button type="button" class="btn btn-secondary" (click)="limparAtribuicao()">
+            Limpar
+          </button>
+        </div>
+      </div>
+
+      <div *ngIf="mensagemSucessoAtribuicao" class="alert alert-success mt-3 feedback-message" role="alert">
+        <i class="fa fa-check-circle"></i> {{ mensagemSucessoAtribuicao }}
+      </div>
+      <div *ngIf="mensagemErroAtribuicao" class="alert alert-danger mt-3 feedback-message" role="alert">
+        <i class="fa fa-exclamation-triangle"></i> {{ mensagemErroAtribuicao }}
+      </div>
+    </form>
+  </div>
+</div>
+
+
+<div class="overlay" *ngIf="modalAberto"></div>
+
+<div class="modal" [ngClass]="{'open': modalAberto}">
+  <div class="modal-overlay" (click)="fecharModal()"></div>
+  <div class="modal-container">
+    <div class="modal-header">
+      <h2>{{ modalTitle }}</h2>
+      <button type="button" (click)="fecharModal()" class="btn-close btn-close-white"></button>
+    </div>
+    <div class="modal-content">
+      <div class="modal-body">
+        <ng-container [ngSwitch]="modalType">
+          <ng-container *ngSwitchCase="'deleteQuestao'">
+            <ng-container *ngIf="questaoSelecionada">
+              Deseja realmente excluir a questão {{ questaoSelecionada.id }}?
+            </ng-container>
+          </ng-container>
+          <ng-container *ngSwitchCase="'deleteFiltro'">
+            Deseja realmente excluir a questão {{ filtroSelecionado?.id }}?
+          </ng-container>
+          <ng-container *ngSwitchCase="'deleteAula'">
+            <ng-container *ngIf="aulaSelecionada">
+              Deseja realmente excluir a aula {{ aulaSelecionada.id }}?
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-cancel" (click)="fecharModal()">Cancelar</button>
+        <button class="btn btn-success" (click)="confirmarAcao()">Confirmar</button>
+      </div>
     </div>
   </div>
 </div>

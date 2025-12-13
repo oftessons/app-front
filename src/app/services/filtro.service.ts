@@ -28,7 +28,7 @@ export class FiltroService {
       .post<Questao[]>(`${this.apiURL}/carregar-questoes-salvas`, questoesIds)
       .pipe(catchError(this.handleError<Questao[]>('carregarQuestoesSalvar')));
   }
-  
+
 
   // Método para obter todos os filtros
   getFiltros(userId: number): Observable<FiltroDTO[]> {

@@ -23,6 +23,7 @@ export class QuestoesService {
   private readonly requestsCache: Map<string, Observable<Questao[]>> = new Map();
   private readonly listaDeIdsFiltrados = new BehaviorSubject<number[]>([]);
   listaDeIdsFiltrados$ = this.listaDeIdsFiltrados.asObservable();
+  private estadoNavegacao: any = null;
 
 
   constructor(private http: HttpClient) { }
@@ -201,7 +202,8 @@ export class QuestoesService {
     userId: number,
     filtros: any,
     page: number = 0,
-    size: number = 10
+    size: number = 10,
+    seed?: number
   ): Observable<any[]> {
     const url = `${this.apiURL}/filtro/${userId}`;
     let params = new HttpParams();
@@ -222,6 +224,10 @@ export class QuestoesService {
     params = params.set('page', page.toString());
     params = params.set('size', size.toString());
 
+    if (seed) {
+      params = params.set('seed', seed.toString());
+    }
+
     const cacheKey = `${url}?${params.toString()}`;
 
     console.log('Cache Key:', cacheKey);
@@ -236,6 +242,18 @@ export class QuestoesService {
 
     this.requestsCache.set(cacheKey, request);
     return request;
+  }
+
+  salvarEstadoNavegacao(estado: any): void {
+    this.estadoNavegacao = estado;
+  }
+
+  obterEstadoNavegacao(): any {
+    return this.estadoNavegacao;
+  }
+
+  limparEstadoNavegacao(): void {
+    this.estadoNavegacao = null;
   }
 
   clearRequestsCache(): void {
@@ -268,6 +286,50 @@ export class QuestoesService {
     const url = `${this.apiURL}/obter-ids`;
     return this.http.get<any>(url, { params });
   }
+
+  atribuirComentador(formData: FormData): Observable<{ status: number; message: string }> {
+    const url = `${this.apiURL}/atribuir-comentador`;
+
+    return this.http.post<string>(url, formData, {
+      responseType: 'text' as 'json'
+    }).pipe(
+      map((response: string) => {
+        const message = response || 'Comentador atribuído com sucesso!';
+        return { status: 200, message };
+      }),
+
+      catchError((error: any) => {
+        console.log('Erro bruto recebido do HttpClient:', error);
+
+        let status = 0;
+        let message = 'Erro desconhecido ao atribuir comentador.';
+
+        if (error instanceof HttpErrorResponse) {
+          status = error.status ?? 0;
+
+          if (typeof error.error === 'string' && error.error.trim().length > 0) {
+            message = error.error.trim();
+          }
+          else if (error.error && typeof error.error === 'object' && 'message' in error.error) {
+            message = (error.error as any).message || message;
+          }
+          else if (error.message) {
+            message = error.message;
+          }
+
+          if (status) {
+            message = `(${status}) ${message}`;
+          }
+        }
+        else if (error && typeof error === 'object' && 'message' in error) {
+          message = (error as any).message || message;
+        }
+
+        return throwError(() => ({ status, message }));
+      })
+    );
+  }
+
 
   consultarQuestao(
     filtros: any,
