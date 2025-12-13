@@ -82,8 +82,8 @@ export class LoginComponent implements OnInit {
           this.errors = ['Realize a limpeza dos cookies e tente novamente.'];
         }
       },
-      error: () => {
-        this.errors = ['Erro ao enviar o código de autenticação.'];
+      error: (err) => {
+        this.errors = err ? [err] : ['Erro ao enviar código 2FA.'];
       }
     });
   }
