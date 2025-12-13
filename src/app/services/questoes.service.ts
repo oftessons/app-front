@@ -227,9 +227,6 @@ export class QuestoesService {
     params = params.set('page', page.toString());
     params = params.set('size', size.toString());
 
-    // if (seed) {
-    //   params = params.set('seed', seed.toString());
-    // }
 
     const cacheKey = `${url}?${params.toString()}`;
 

@@ -360,6 +360,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     const filtroState = JSON.parse(filtroStateJson);
 
     this.seedAtual = filtroState.seed ?? null;
+    this.timestampBusca = filtroState.timestampBusca ?? null;
 
     if (!voltandoDaEdicao) {
       localStorage.removeItem('questoesFiltroState');
@@ -2083,25 +2084,22 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
         multiSelectRespSimu: this.multiSelectRespSimu,
         palavraChave: this.palavraChave,
         questaoId: this.questaoAtual.id,
-        paginaAtual: this.paginaAtual, // Mantemos aqui para compatibilidade
+        paginaAtual: this.paginaAtual,
         multiSelectQuestoesComentadas: this.multiSelectQuestoesComentadas,
+        timestampBusca: this.timestampBusca
       };
 
       localStorage.setItem('questoesFiltroState', JSON.stringify(filtroState));
 
-      // --- CORREÇÃO AQUI: CÁLCULO DA PÁGINA REAL ---
 
-      // 1. Descobre em qual página da API a questão atual realmente está
-      // (Offset atual + quantos blocos de 10 andamos na lista local)
       const paginaRealDaQuestao = this.offsetPagina + Math.floor(this.paginaAtual / this.itensPorPagina);
 
-      // 2. Descobre o índice da questão dentro dessa página específica (0 a 9)
       const indiceRelativoNaPagina = this.paginaAtual % this.itensPorPagina;
 
       this.questoesService.salvarEstadoNavegacao({
-        paginaAPI: paginaRealDaQuestao, // Ao voltar, busca essa página específica
-        offsetPagina: paginaRealDaQuestao, // Reseta o offset para essa página
-        paginaAtualLocal: indiceRelativoNaPagina, // Usa o índice curto (0-9)
+        paginaAPI: paginaRealDaQuestao,
+        offsetPagina: paginaRealDaQuestao,
+        paginaAtualLocal: indiceRelativoNaPagina,
         listaDeIds: this.listaDeIds
       });
       // ---------------------------------------------
