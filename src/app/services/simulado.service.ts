@@ -48,16 +48,20 @@ export class SimuladoService {
     return this.http.get<Simulado[]>(`${this.apiURL}/user/${idUser}`);
   }
 
+  obterResumoDesempenho(simuladoId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiURL}/detalhes/${simuladoId}`);
+  }
+
   // Método para obter um simulado por ID
   obterSimuladoPorId(id: number): Observable<Simulado> {
     return this.http.get<Simulado>(`${this.apiURL}/${id}`);
   }
 
-  buscarMetricasAgrupadasPorTema(simuladoId: number): Observable<{ response: MetricaTema[] } > {
+  buscarMetricasAgrupadasPorTema(simuladoId: number): Observable<{ response: MetricaTema[] }> {
     return this.http.get<{ response: MetricaTema[] }>(`${this.apiURL}/obter-metricas-tema/${simuladoId}`);
   }
 
-  buscarMetricasDetalhadas(simuladoId: number): Observable<{ response: MetricaSubtema[] } > {
+  buscarMetricasDetalhadas(simuladoId: number): Observable<{ response: MetricaSubtema[] }> {
     return this.http.get<{ response: MetricaSubtema[] }>(`${this.apiURL}/obter-metricas-subtema/${simuladoId}`);
   }
 

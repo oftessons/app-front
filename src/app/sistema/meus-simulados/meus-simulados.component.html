@@ -46,23 +46,34 @@
               </p>
             </div>
             <div>
-              <button class="btn btn-transparent-primary ms-2" (click)="editarSimulado(simulado.id!)"
-                [disabled]="isBotaoBloqueado(simulado.statusSimulado)">
-                {{ getBotaoSimuladoTexto(simulado.statusSimulado) }}
-                <img [src]="!isDarkMode() ? 'assets/imagens/fil.svg' : 'assets/Icons/dark/fil-dark.svg'"
-                  alt="Ícone de Visualizar" class="icon me-1">
-              </button>
-              <button *ngIf="simulado.statusSimulado === 'FINALIZADO'" class="btn btn-success ms-2"
-                (click)="abrirMetricas(simulado)">
-                Verificar Métricas
-                <img
-                  [src]="!isDarkMode() ? 'assets/imagens/metricas-simulado.svg' : 'assets/Icons/dark/metrica-simulado-dark.svg'"
-                  alt="" class="icon me-1">
-              </button>
-              <button class="btn btn-transparent-danger ms-2" (click)="deletarSimulado(simulado.id!)">
-                Deletar
-                <img src="assets/imagens/excluir.svg" alt="Ícone de Deletar" class="icon me-1">
-              </button>
+              <div class="actions-container">
+
+                <button *ngIf="simulado.statusSimulado === 'FINALIZADO'" class="btn-custom btn-resultado"
+                  (click)="simulado.id && abrirResultadoDialog(simulado.id)" matTooltip="Ver Gráfico de Desempenho">
+                  <i class="fas fa-chart-pie"></i> Resultado
+                </button>
+
+                <button class="btn-custom btn-outline" (click)="editarSimulado(simulado.id!)"
+                  [disabled]="isBotaoBloqueado(simulado.statusSimulado)">
+                  {{ getBotaoSimuladoTexto(simulado.statusSimulado) }}
+                  <img [src]="!isDarkMode() ? 'assets/imagens/fil.svg' : 'assets/Icons/dark/fil-dark.svg'" alt="Ícone"
+                    class="icon-btn">
+                </button>
+
+                <button *ngIf="simulado.statusSimulado === 'FINALIZADO'" class="btn-custom btn-success-custom"
+                  (click)="abrirMetricas(simulado)">
+                  Verificar Métricas
+                  <img
+                    [src]="!isDarkMode() ? 'assets/imagens/metricas-simulado.svg' : 'assets/Icons/dark/metrica-simulado-dark.svg'"
+                    alt="" class="icon-btn">
+                </button>
+
+                <button class="btn-custom btn-danger-custom" (click)="deletarSimulado(simulado.id!)">
+                  <i class="fas fa-trash-alt"></i> Deletar
+                </button>
+
+              </div>
+
             </div>
           </div>
         </div>

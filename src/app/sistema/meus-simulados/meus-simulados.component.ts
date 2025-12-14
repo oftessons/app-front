@@ -10,6 +10,7 @@ import { StatusSimulado } from './status-simulado';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MetricasDetalhadasComponent } from '../metricas-detalhadas/metricas-detalhadas.component';
 import { PageSimuladoComponent } from '../page-simulado/page-simulado.component';
+import { DialogResultadoSimuladoComponent } from 'src/app/shared/dialog-resultado-simulado/dialog-resultado-simulado.component';
 
 @Component({
   selector: 'app-meus-simulados',
@@ -133,6 +134,24 @@ export class MeusSimuladosComponent implements OnInit {
       default:
         return 'Processando...';
     }
+  }
+
+  abrirResultadoDialog(simuladoId: number) {
+    this.simuladoService.obterResumoDesempenho(simuladoId).subscribe(
+      (dados) => {
+
+        this.dialog.open(DialogResultadoSimuladoComponent, {
+          width: '90vw',
+          maxWidth: '850px', 
+          panelClass: 'dark-theme-dialog',
+          data: dados 
+        });
+      },
+      (erro) => {
+        console.error('Erro ao carregar resumo', erro);
+        alert('Não foi possível carregar o resultado.');
+      }
+    );
   }
 
   isBotaoBloqueado(status: StatusSimulado): boolean {

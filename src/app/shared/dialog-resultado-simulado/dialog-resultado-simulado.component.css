@@ -1,0 +1,230 @@
+/* Container Geral */
+.dialog-container {
+  background-color: #1a202c; /* Azul escuro profundo */
+  color: #fff;
+  font-family: 'Nunito Sans', sans-serif;
+  overflow: hidden; /* Impede scroll desnecessário */
+  position: relative;
+  border: 1px solid #2d3748;
+}
+
+/* Cabeçalho */
+.dialog-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 20px 10px;
+  position: relative;
+}
+
+.dialog-header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #edf2f7;
+  letter-spacing: 0.5px;
+}
+
+.close-btn {
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  background: transparent;
+  border: none;
+  color: #718096;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: color 0.2s;
+}
+
+.close-btn:hover { color: #fff; }
+
+/* Layout Principal (Flexbox) */
+.dialog-content {
+  padding: 10px 30px 20px !important; /* Override do padding do material */
+  overflow: hidden !important; /* Remove barra de rolagem interna */
+}
+
+.layout-grid {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px; /* Espaço entre gráfico e cards */
+}
+
+/* --- GRÁFICO --- */
+.chart-section {
+  flex: 0 0 auto;
+}
+
+.chart-wrapper {
+  position: relative;
+  width: 160px;  /* Tamanho FIXO e COMPACTO */
+  height: 160px;
+}
+
+.chart-percentage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
+}
+
+.percent-value {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #fff;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+/* --- CARDS DE MÉTRICAS (Estilo "Barra") --- */
+.metrics-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 280px; /* Largura mínima para os textos não quebrarem */
+}
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  background-color: #252f3f; /* Um tom levemente mais claro que o fundo */
+  border-radius: 10px;
+  padding: 12px 16px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.stat-card:hover {
+  transform: translateX(4px);
+  background-color: #2d3748;
+}
+
+/* Barra lateral colorida decorativa */
+.stat-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+}
+
+/* Ícone Circular */
+.stat-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16px;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+/* Tipografia */
+.stat-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #a0aec0;
+  margin-bottom: 2px;
+  letter-spacing: 1px;
+}
+
+.value {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1;
+}
+
+.value small {
+  font-size: 0.8rem;
+  color: #718096;
+  font-weight: 600;
+  margin-left: 4px;
+}
+
+/* --- CORES ESPECÍFICAS (Baseado na image_60ae7f) --- */
+
+/* Acertos (Verde) */
+.stat-card.success::before { background-color: #2ecc71; }
+.stat-card.success .stat-icon { 
+  background-color: rgba(46, 204, 113, 0.2); 
+  color: #2ecc71; 
+}
+
+/* Erros (Vermelho) */
+.stat-card.danger::before { background-color: #e74c3c; }
+.stat-card.danger .stat-icon { 
+  background-color: rgba(231, 76, 60, 0.2); 
+  color: #e74c3c; 
+}
+
+/* Tempo (Azul) */
+.stat-card.info::before { background-color: #3498db; }
+.stat-card.info .stat-icon { 
+  background-color: rgba(52, 152, 219, 0.2); 
+  color: #3498db; 
+}
+
+/* Rodapé */
+.dialog-footer {
+  padding: 15px 30px 25px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  border-top: 1px solid #2d3748;
+  background-color: #171c26; /* Levemente mais escuro */
+}
+
+.btn-action {
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-action.secondary {
+  background: transparent;
+  border: 1px solid #4a5568;
+  color: #cbd5e0;
+}
+.btn-action.secondary:hover { border-color: #a0aec0; color: #fff; }
+
+.btn-action.primary {
+  background-color: #3182ce;
+  border: none;
+  color: white;
+}
+.btn-action.primary:hover { background-color: #2b6cb0; }
+
+/* Responsividade Mobile */
+@media (max-width: 600px) {
+  .layout-grid {
+    flex-direction: column;
+    gap: 20px;
+  }
+  .chart-wrapper {
+    margin-bottom: 10px;
+  }
+  .dialog-footer {
+    justify-content: center;
+    flex-direction: column;
+  }
+  .btn-action { width: 100%; }
+}
