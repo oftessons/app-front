@@ -20,7 +20,7 @@ export class MeusSimuladosComponent implements OnInit {
   simulados: Simulado[] = [];
   usuario!: Usuario;
   usuarioId!: number;
-  carregando: boolean = true;  
+  carregando: boolean = true;
   mensagemSucesso: string = '';
   ocultarFiltros: boolean = false;
   idAlunoMentorado!: string;
@@ -131,9 +131,12 @@ export class MeusSimuladosComponent implements OnInit {
       case StatusSimulado.FINALIZADO:
         return 'Revisar simulado';
       default:
-        this.bloqueado = true;
         return 'Processando...';
     }
+  }
+
+  isBotaoBloqueado(status: StatusSimulado): boolean {
+    return status !== StatusSimulado.NAO_INICIADO && status !== StatusSimulado.FINALIZADO;
   }
 
   abrirMetricas(simulado: Simulado): void {
