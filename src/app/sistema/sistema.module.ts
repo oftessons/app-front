@@ -45,6 +45,7 @@ import { QuillModule } from 'ngx-quill';
 import { ModuloDeAulasComponent } from './modulo-de-aulas/modulo-de-aulas.component';
 import { ComentariosAulaComponent } from './modulo-de-aulas/comentarios-aulas/comentarios-aula.component';
 import { NotificacoesComponent } from './notificacoes/notificacoes.component';
+import { MetricasComponent } from './metricas/metricas.component';
 
 // Função necessária para o ngx-lottie
 export function playerFactory() {
@@ -81,6 +82,7 @@ export function playerFactory() {
     ModuloDeAulasComponent,
     NotificacoesComponent,
     ComentariosAulaComponent,
+    MetricasComponent,
   ],
   imports: [
     CommonModule,

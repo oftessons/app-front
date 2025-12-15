@@ -1,7 +1,7 @@
 <div class="container-notificacoes pt-5">
   
   <h1 class="titulo-pagina">Notificações</h1>
-
+  
   <!-- Barra de Controles -->
   <div class="toolbar-notificacoes">
     
@@ -48,7 +48,6 @@
       <!-- Meta Info (Direita) -->
       <div class="meta-info">
         <span class="data">{{ item.dataCriacao | date:'dd/MM/yyyy HH:mm' }}</span>
-        <!-- Bolinha amarela (apenas se não lida) -->
         <div *ngIf="!item.lida" class="indicador-container">
            <div class="indicador-nao-lida"></div>
         </div>
