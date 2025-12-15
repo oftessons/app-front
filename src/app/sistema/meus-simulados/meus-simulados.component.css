@@ -153,3 +153,132 @@ p.card-text {
 .close-popup-button:hover {
   color: var(--text-color) !important;
 }
+
+/* --- CONTAINER DOS BOTÕES (CORRIGE ALINHAMENTO) --- */
+.actions-container {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Espaço uniforme entre os botões (substitui o ms-2) */
+  flex-wrap: wrap; /* Permite quebrar linha se faltar espaço */
+}
+
+/* --- CLASSE BASE PARA TODOS OS BOTÕES --- */
+.btn-custom {
+  height: 40px;               /* Altura fixa igual para todos */
+  min-width: 120px;           /* Largura mínima para consistência */
+  padding: 0 16px;            /* Espaçamento interno lateral */
+  border-radius: 6px;         /* Cantos arredondados */
+  font-family: "Nunito Sans", sans-serif;
+  font-size: 14px;
+  font-weight: 700;           /* Negrito para leitura fácil */
+  
+  display: inline-flex;       /* Alinhamento flexível interno */
+  align-items: center;        /* Centraliza verticalmente ícone e texto */
+  justify-content: center;    /* Centraliza horizontalmente */
+  gap: 8px;                   /* Espaço entre ícone e texto */
+  
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent; 
+  white-space: nowrap;        /* Impede texto quebrar em duas linhas */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Efeito Hover Geral (Elevação) */
+.btn-custom:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Estado Desabilitado */
+.btn-custom:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+  filter: grayscale(100%);
+}
+
+.btn-resultado {
+  background-color: #3182ce;
+  color: #fff;
+  border-color: #3182ce;
+}
+.btn-resultado:hover {
+  background-color: #2b6cb0;
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: var(--text-color); 
+  border: 1px solid #4a5568; 
+}
+.btn-outline:hover {
+  background-color: rgba(255, 255, 255, 0.08); 
+  border-color: #a0aec0;
+  color: #fff;
+}
+
+.btn-success-custom {
+  background-color: #10b981; 
+  color: #fff;
+  border-color: #10b981;
+}
+.btn-success-custom:hover {
+  background-color: #059669;
+}
+
+.btn-danger-custom {
+  background-color: #ef4444; 
+  color: #fff;
+  border-color: #ef4444;
+}
+.btn-danger-custom:hover {
+  background-color: #dc2626;
+}
+
+.btn-custom i {
+  font-size: 16px;
+}
+
+.icon-btn {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
+@media (max-width: 992px) {
+  .card-body {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .actions-container {
+    margin-top: 15px;
+    width: 100%;
+    justify-content: flex-start; 
+  }
+
+  .btn-custom {
+    flex: 1; 
+    min-width: 140px; 
+  }
+}
+
+.actions-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.btn-custom i {
+  font-size: 16px;
+  color: inherit; 
+}
+
+.icon-btn {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
