@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import {
@@ -13,6 +14,7 @@ import { ThemeService } from 'src/app/services/theme.service';
   selector: 'app-notificacoes',
   templateUrl: './notificacoes.component.html',
   styleUrls: ['./notificacoes.component.css'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class NotificacoesComponent implements OnInit {
   notificacoes: Notificacao[] = [];
@@ -33,7 +35,7 @@ export class NotificacoesComponent implements OnInit {
     private notificacaoService: NotificacaoService,
     private authService: AuthService,
     private themeService: ThemeService,
-    private router: Router
+    private sanitizer: DomSanitizer,
   ) {
   }
 
@@ -195,6 +197,11 @@ export class NotificacoesComponent implements OnInit {
       this.paginaAtual = numero;
       this.carregarNotificacoes();
     }
+  }
+
+  formatarMensagem(mensagem: string): SafeHtml {
+    // O backend já envia o HTML formatado (strong, em, br), apenas confiamos nele
+    return this.sanitizer.bypassSecurityTrustHtml(mensagem);
   }
 
   isDarkMode(): boolean {
