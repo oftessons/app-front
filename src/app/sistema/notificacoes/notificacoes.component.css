@@ -1,7 +1,10 @@
 /* --- Container Geral --- */
 .container-notificacoes {
   max-width: 1200px;
-  margin: 0 auto;
+  margin-top: 80px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    margin-left: 20px;
   padding: 40px 20px;
   min-height: 100vh;
   
