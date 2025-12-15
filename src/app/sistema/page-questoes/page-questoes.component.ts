@@ -180,6 +180,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
   totalElementos: number = 0;
   listaIdsCarregados: number[] = [];
   seedAtual: number | null = null;
+  timestampBusca: number | null = null;
 
   filtros: any = {
     ano: null,
@@ -318,7 +319,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     const estadoNavegacao = this.questoesService.obterEstadoNavegacao();
 
     if (estadoNavegacao && filtroStateJson) {
-      this.restaurarEstadoDoLocalStorage(filtroStateJson, true); 
+      this.restaurarEstadoDoLocalStorage(filtroStateJson, true);
     }
     else if (navigationState?.filtroId && navigationState.revisandoFiltro) {
       this.revisandoFiltroSalvo = true;
@@ -358,7 +359,8 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     this.mostrarFiltroCacheado = false;
     const filtroState = JSON.parse(filtroStateJson);
 
-    this.seedAtual = filtroState.seed ?? null; 
+    this.seedAtual = filtroState.seed ?? null;
+    this.timestampBusca = filtroState.timestampBusca ?? null;
 
     if (!voltandoDaEdicao) {
       localStorage.removeItem('questoesFiltroState');
@@ -405,7 +407,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     const filtros = this.construirObjetoFiltros();
 
     this.questoesService
-      .filtrarQuestoes(this.usuarioId, filtros, this.paginaAPI, this.itensPorPagina, this.seedAtual ?? undefined)
+      .filtrarQuestoes(this.usuarioId, filtros, this.timestampBusca, this.paginaAPI, this.itensPorPagina)
       .subscribe({
         next: (response: any) => {
           const novas = response.questoes.content || response.questoes;
@@ -1124,9 +1126,10 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     this.paginaAPI = 0;
     this.listaDeIds = [];
     this.seedAtual = null;
+    this.timestampBusca = new Date().getTime();
 
     this.questoesService
-      .filtrarQuestoes(this.usuarioId, filtros, this.paginaAPI, this.itensPorPagina, this.seedAtual ?? undefined)
+      .filtrarQuestoes(this.usuarioId, filtros, this.timestampBusca, this.paginaAPI, this.itensPorPagina)
       .subscribe(
         (response: any) => {
           const novasQuestoes = response.questoes.content ? response.questoes.content : response;
@@ -1186,7 +1189,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     this.carregando = true;
     this.paginaAPI++;
     this.questoesService
-      .filtrarQuestoes(this.usuarioId, filtros, this.paginaAPI, this.itensPorPagina, this.seedAtual ?? undefined)
+      .filtrarQuestoes(this.usuarioId, filtros, this.timestampBusca, this.paginaAPI, this.itensPorPagina)
       .subscribe(
         (response: any) => {
           const novas = response.questoes.content || [];
@@ -1256,7 +1259,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     const paginaAnteriorParaBuscar = this.offsetPagina - 1;
 
     this.questoesService
-      .filtrarQuestoes(this.usuarioId, filtros, paginaAnteriorParaBuscar, this.itensPorPagina, this.seedAtual ?? undefined)
+      .filtrarQuestoes(this.usuarioId, filtros, this.timestampBusca, paginaAnteriorParaBuscar, this.itensPorPagina)
       .subscribe(
         (response: any) => {
           const novas = response.questoes.content || [];
@@ -1329,7 +1332,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
             return;
           }
           for (let i = 0; i < this.listaDeIds.length; i++) {
-            const questaoId = this.listaDeIds[i]; 
+            const questaoId = this.listaDeIds[i];
             if (!this.respostasSalvas.has(questaoId)) {
               proximaPaginaNaoRespondida = i;
               todasRespondidas = false;
@@ -1339,7 +1342,7 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
 
           if (todasRespondidas) {
             proximaPaginaNaoRespondida =
-              this.listaDeIds.length > 0 ? this.listaDeIds.length - 1 : 0; 
+              this.listaDeIds.length > 0 ? this.listaDeIds.length - 1 : 0;
           }
 
           this.paginaAtual = proximaPaginaNaoRespondida;
@@ -1432,11 +1435,11 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
     else {
       this.carregando = true;
       this.paginaAPI = paginaDesejadaAPI;
-      this.offsetPagina = paginaDesejadaAPI; 
+      this.offsetPagina = paginaDesejadaAPI;
 
       const filtros = this.construirObjetoFiltros();
 
-      this.questoesService.filtrarQuestoes(this.usuarioId, filtros, this.paginaAPI, this.itensPorPagina, this.seedAtual ?? undefined)
+      this.questoesService.filtrarQuestoes(this.usuarioId, filtros, this.timestampBusca, this.paginaAPI, this.itensPorPagina)
         .subscribe({
           next: (response: any) => {
             const novas = response.questoes.content || response;
@@ -2081,25 +2084,22 @@ export class PageQuestoesComponent implements OnInit, AfterViewChecked {
         multiSelectRespSimu: this.multiSelectRespSimu,
         palavraChave: this.palavraChave,
         questaoId: this.questaoAtual.id,
-        paginaAtual: this.paginaAtual, // Mantemos aqui para compatibilidade
+        paginaAtual: this.paginaAtual,
         multiSelectQuestoesComentadas: this.multiSelectQuestoesComentadas,
+        timestampBusca: this.timestampBusca
       };
 
       localStorage.setItem('questoesFiltroState', JSON.stringify(filtroState));
 
-      // --- CORREÇÃO AQUI: CÁLCULO DA PÁGINA REAL ---
 
-      // 1. Descobre em qual página da API a questão atual realmente está
-      // (Offset atual + quantos blocos de 10 andamos na lista local)
       const paginaRealDaQuestao = this.offsetPagina + Math.floor(this.paginaAtual / this.itensPorPagina);
 
-      // 2. Descobre o índice da questão dentro dessa página específica (0 a 9)
       const indiceRelativoNaPagina = this.paginaAtual % this.itensPorPagina;
 
       this.questoesService.salvarEstadoNavegacao({
-        paginaAPI: paginaRealDaQuestao, // Ao voltar, busca essa página específica
-        offsetPagina: paginaRealDaQuestao, // Reseta o offset para essa página
-        paginaAtualLocal: indiceRelativoNaPagina, // Usa o índice curto (0-9)
+        paginaAPI: paginaRealDaQuestao,
+        offsetPagina: paginaRealDaQuestao,
+        paginaAtualLocal: indiceRelativoNaPagina,
         listaDeIds: this.listaDeIds
       });
       // ---------------------------------------------

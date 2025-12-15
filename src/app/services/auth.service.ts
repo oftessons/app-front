@@ -303,7 +303,28 @@ export class AuthService {
 
   send2FACode(loginData: LoginDTO): Observable<HttpResponse<any>> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post<any>(`${this.apiURL}/2fa/send-code`, loginData, { headers, observe: 'response' });
+    return this.http.post<any>(`${this.apiURL}/2fa/send-code`, loginData, { headers, observe: 'response' }).pipe(
+      catchError((error: HttpErrorResponse) => {
+        let errorMessage = 'Erro ao enviar código de autenticação';
+        
+        if (error.status === 400) {
+          try {
+            const errorBody = typeof error.error === 'string' ? JSON.parse(error.error) : error.error;
+            errorMessage = errorBody.message || errorMessage;
+          } catch (e) {
+            errorMessage = 'Usuário não encontrado ou senha incorreta';
+          }
+        } else if (error.status === 500) {
+          try {
+            const errorBody = typeof error.error === 'string' ? JSON.parse(error.error) : error.error;
+            errorMessage = errorBody.message || 'Erro ao enviar e-mail';
+          } catch (e) {
+            errorMessage = 'Erro interno do servidor';
+          }
+        }   
+        return throwError(errorMessage);
+      })
+    );
   }
 
   verify2FACode(codeMFA: MFACodigoDTO): Observable<any> {

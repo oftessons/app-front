@@ -695,7 +695,7 @@ canvas {
 }
 
 .results-card {
-  background-color: #2c3e50;
+  background-color: var(--bg-container);
   border-radius: 12px;
   padding: 24px;
   width: 100%;
@@ -709,7 +709,7 @@ canvas {
   text-align: center;
   margin-bottom: 24px;
   font-weight: 600;
-  color: #ffffff !important;
+  color: var(--text-color) !important;
 }
 
 /* Corpo principal com layout flexível */
@@ -734,7 +734,7 @@ canvas {
   transform: translate(-50%, -50%);
   font-size: 2.2rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text-color);
 }
 
 /* Contêiner das métricas de texto */
@@ -746,7 +746,7 @@ canvas {
 
 .metric-item h4 {
   font-size: 0.9rem;
-  color: #95a5a6 !important;
+  color: var(--text-color) !important;
   margin-bottom: 4px;
   text-transform: uppercase;
   font-weight: 500;
@@ -756,7 +756,7 @@ canvas {
   font-size: 1.2rem;
   margin: 0;
   font-weight: 600;
-  color: #ecf0f1;
+  color: var(--text-color);
 }
 
 /* Seção dos botões */
@@ -999,4 +999,182 @@ canvas {
   border-color: #f5365c;
   background-color: #f5365c;
   color: #fff;
+}
+
+/* Container Principal */
+.results-card {
+  background-color: var(--bg-container); /* Dark Mode Fundo */
+  border-radius: 16px;
+  padding: 40px; /* Mais espaço interno */
+  width: 100%;
+  max-width: 800px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.4);
+  border: 1px solid #2d3748;
+  color: var(--text-color);
+  font-family: 'Nunito Sans', sans-serif;
+  margin: 0 auto;
+}
+
+.results-header h2 {
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 3rem; /* Espaço maior abaixo do título */
+  color: #edf2f7;
+  letter-spacing: 0.5px;
+}
+
+/* Layout Flex: Divide em 2 Colunas */
+.results-body {
+  display: flex;
+  align-items: center; /* Centraliza verticalmente */
+  justify-content: center; /* Centraliza horizontalmente */
+  gap: 60px; /* Espaço generoso entre Gráfico e Cards */
+  margin-bottom: 2rem;
+}
+
+/* --- LADO ESQUERDO: GRÁFICO --- */
+.chart-section {
+  flex: 0 0 auto;
+  position: relative;
+}
+
+/* Wrapper que segura o tamanho do gráfico */
+.chart-wrapper {
+  position: relative;
+  width: 200px;  /* Tamanho FIXO para evitar distorção */
+  height: 200px; /* Tamanho FIXO */
+}
+
+/* O número no centro do Donut */
+.chart-percentage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--text-color);
+  z-index: 10; /* Garante que fique acima do canvas */
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+/* --- LADO DIREITO: CARDS --- */
+.metrics-column {
+  flex: 1; /* Ocupa o resto do espaço */
+  display: flex;
+  flex-direction: column;
+  gap: 16px; /* Espaço entre os cards */
+  max-width: 350px; /* Limita a largura para ficarem bonitos */
+}
+
+.metric-card {
+  display: flex;
+  align-items: center;
+  background-color: #2d3748;
+  border-radius: 12px;
+  padding: 16px 24px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border-left: 6px solid transparent; /* A borda colorida */
+}
+
+.metric-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+  background-color: #353f52;
+}
+
+/* Ícones */
+.icon-wrapper {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20px;
+  background-color: rgba(255, 255, 255, 0.1); /* Fundo sutil no ícone */
+  font-size: 1.2rem;
+}
+
+/* Textos */
+.metric-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.metric-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #a0aec0; 
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+
+.metric-value {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1;
+}
+
+.metric-value small {
+  font-size: 0.9rem;
+  color: #718096;
+  margin-left: 4px;
+}
+
+.metric-card.success {
+  border-left-color: #48bb78;
+  background: linear-gradient(90deg, rgba(72, 187, 120, 0.1) 0%, rgba(45, 55, 72, 0.4) 100%);
+}
+.metric-card.success .icon-wrapper { color: #48bb78; background-color: rgba(72, 187, 120, 0.2); }
+
+.metric-card.danger {
+  border-left-color: #f56565;
+  background: linear-gradient(90deg, rgba(245, 101, 101, 0.1) 0%, rgba(45, 55, 72, 0.4) 100%);
+}
+.metric-card.danger .icon-wrapper { color: #f56565; background-color: rgba(245, 101, 101, 0.2); }
+
+.metric-card.info {
+  border-left-color: #4299e1;
+  background: linear-gradient(90deg, rgba(66, 153, 225, 0.1) 0%, rgba(45, 55, 72, 0.4) 100%);
+}
+.metric-card.info .icon-wrapper { color: #4299e1; background-color: rgba(66, 153, 225, 0.2); }
+
+
+.results-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 20px;
+  padding-top: 24px;
+  border-top: 1px solid #2d3748;
+}
+
+@media (max-width: 768px) {
+  .results-body {
+    flex-direction: column; 
+    gap: 30px;
+  }
+  
+  .results-card {
+    padding: 20px;
+  }
+
+  .metrics-column {
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  .results-actions {
+    flex-direction: column;
+  }
+  
+  .btn-primary-action, .btn-secondary-action {
+    width: 100%;
+  }
 }

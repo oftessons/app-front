@@ -34,7 +34,6 @@ import Chart from 'chart.js';
 import { NavigationEnd, Router } from '@angular/router';
 import {
   DomSanitizer,
-  SafeHtml,
   SafeResourceUrl,
 } from '@angular/platform-browser';
 
@@ -59,13 +58,12 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
 
   mensagemDeAviso!: string;
 
-  tempo: number = 0; // Contador de tempo em segundos
-  tempoRestanteQuestaoSimulado: number = 160; // Tempo restante para responder uma questao do simulado
+  tempo: number = 0;
+  tempoRestanteQuestaoSimulado: number = 160;
   radioDisabled: boolean = false;
-  intervalId: any; // Armazena o ID do intervalo para controlar o timer
+  intervalId: any;
   intervalContagemRegressiva: any;
-  isSimuladoIniciado: boolean = false; // Controla se o simulado foi iniciado ou não
-
+  isSimuladoIniciado: boolean = false;
   questao: Questao = new Questao();
   idsQuestoes: number[] = [];
   selectedOption: string = '';
@@ -99,13 +97,13 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
   message: string = '';
   resposta: string = '';
 
-  respostas: any[] = []; // Array que armazena as respostas do usuário
+  respostas: any[] = [];
   respostasList: any[] = [];
   chart: any;
   alertaVisivel = false;
 
   questaoAtual: Questao | null = null;
-  carregandoSimulado: boolean = false; // <-- ADICIONE ESTA LINHA
+  carregandoSimulado: boolean = false;
   paginaAtual: number = 0;
   filtros: any = {
     ano: null,
@@ -213,20 +211,8 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // if (this.isSimuladoIniciado && !this.simuladoFinalizado) {
-    //   this.finalizarSimulado();
-    // }
-
     this.questoesStateService.setQuestaoAtual(null);
 
-    // this.salvarTempoAtual();
-
-    // if (this.intervalId) {
-    //   clearInterval(this.intervalId);
-    // }
-    // if (this.intervalContagemRegressiva) {
-    //   clearInterval(this.intervalContagemRegressiva);
-    // }
   }
 
   salvarTempoAtual(): void {
@@ -263,90 +249,123 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
   }
 
   private prepararSimulado(meuSimulado: any, status: StatusSimulado) {
-    this.isMeuSimulado = true;
-    this.questoes = meuSimulado.questoes;
-    this.totalQuestoes = this.questoes.length;
-
-
-    if (!this.questoes || this.questoes.length === 0) {
+    if (!meuSimulado?.questoes?.length) {
       this.message = "Erro: As questões para este simulado não puderam ser carregadas.";
+      this.carregandoSimulado = false;
       return;
     }
 
+    this.questoes = meuSimulado.questoes;
+    this.totalQuestoes = this.questoes.length;
     this.idsQuestoes = this.questoes.map((q) => q.id);
     this.resposta = '';
 
+    this.isMeuSimulado = (status === StatusSimulado.FINALIZADO);
+
     const tempoSalvo = meuSimulado.tempoDecorrido || 0;
 
-    if (status === StatusSimulado.EM_ANDAMENTO) {
-      this.carregandoSimulado = true;
-      this.realizandoSimulado = true;
-      this.isSimuladoIniciado = true;
-      this.isMeuSimulado = false;
+    switch (status) {
+      case StatusSimulado.EM_ANDAMENTO:
+        this.configurarModoEmAndamento(tempoSalvo);
+        break;
 
-      this.carregarRespostasPreviamente().subscribe(() => {
-        this.visualizando = false;
-        this.jaRespondeu = false;
+      case StatusSimulado.FINALIZADO:
+        this.configurarModoFinalizado(tempoSalvo);
+        break;
 
-        let proximaPagina = 0;
-        let todasRespondidas = true;
-        for (let i = 0; i < this.questoes.length; i++) {
-          if (!this.respostas[i]) {
-            proximaPagina = i;
-            todasRespondidas = false;
-            break;
-          }
+      case StatusSimulado.NAO_INICIADO:
+        this.configurarModoNaoIniciado(meuSimulado.id);
+        break;
+
+      default:
+        console.warn('Status do simulado desconhecido:', status);
+        break;
+    }
+  }
+
+
+  private configurarModoEmAndamento(tempoSalvo: number) {
+    this.carregandoSimulado = true;
+    this.realizandoSimulado = true;
+    this.isSimuladoIniciado = true;
+    this.visualizando = false;
+    this.jaRespondeu = false;
+    this.simuladoFinalizado = false;
+
+    this.carregarRespostasPreviamente().subscribe({
+      next: () => {
+        const primeiraNaoRespondidaIndex = this.respostas.findIndex(r => !r);
+
+        if (primeiraNaoRespondidaIndex !== -1) {
+          this.paginaAtual = primeiraNaoRespondidaIndex;
+        } else {
+          this.paginaAtual = this.questoes.length - 1;
+          this.mensagemDeAviso = "Você já respondeu todas as questões. Clique em Finalizar.";
         }
-        this.numQuestaoAtual = proximaPagina + 1;
-        if (todasRespondidas) { proximaPagina = this.questoes.length - 1; }
 
-        this.paginaAtual = proximaPagina;
+        this.numQuestaoAtual = this.paginaAtual + 1;
         this.questaoAtual = this.questoes[this.paginaAtual];
+
         this.carregarRespostaAnterior();
         this.iniciarSimulado(tempoSalvo);
         this.contagemRegressivaSimuladoQuestao();
-        this.carregandoSimulado = false;
-
         this.atualizarQuestaoAtual();
 
+        this.carregandoSimulado = false;
         this.cdr.detectChanges();
-      });
+      },
+      error: (err) => {
+        console.error('Erro ao recuperar progresso', err);
+        this.carregandoSimulado = false;
+      }
+    });
+  }
 
-    } else if (status === StatusSimulado.FINALIZADO) {
-      this.visualizando = true;
-      this.jaRespondeu = true;
-      this.realizandoSimulado = false;
-      this.paginaAtual = 0;
-      this.questaoAtual = this.questoes[this.paginaAtual];
-      this.visualizarSimulado();
-      this.tempo = tempoSalvo;
-      this.tempoTotal = tempoSalvo;
+  private configurarModoFinalizado(tempoSalvo: number) {
+    this.visualizando = true;
+    this.jaRespondeu = true;
+    this.realizandoSimulado = false;
 
-      this.atualizarQuestaoAtual();
+    this.simuladoFinalizado = false;
 
-      this.cdr.detectChanges();
+    this.simuladoIniciado = true;
 
-      this.carregarRespostasPreviamente().subscribe(() => {
+    this.revisandoSimulado = true;
+
+    this.isSimuladoIniciado = false; 
+
+    this.paginaAtual = 0;
+    this.questaoAtual = this.questoes[0];
+
+    this.tempo = tempoSalvo;
+    this.tempoTotal = tempoSalvo;
+
+    this.atualizarQuestaoAtual();
+    this.cdr.detectChanges();
+
+    this.carregarRespostasPreviamente().subscribe(() => {
+      if (this.questoes[this.paginaAtual]) {
         this.respostaQuestao(this.questoes[this.paginaAtual].id, this.simuladoIdInicial);
-        this.cdr.detectChanges();
-      });
-
-    } else if (status === StatusSimulado.NAO_INICIADO) {
-      this.isMeuSimulado = false;
-      this.simuladoService.iniciarSimulado(meuSimulado.id);
-      this.visualizando = false;
-      this.jaRespondeu = false;
-      this.realizandoSimulado = true;
-      this.paginaAtual = 0;
-      this.questaoAtual = this.questoes[this.paginaAtual];
-      this.iniciarSimulado(0);
-      this.contagemRegressivaSimuladoQuestao();
-
-      // Atualizar a questão atual no serviço de estado
-      this.atualizarQuestaoAtual();
-
+      }
       this.cdr.detectChanges();
-    }
+    });
+  }
+
+  private configurarModoNaoIniciado(simuladoId: number) {
+    this.simuladoService.iniciarSimulado(simuladoId);
+
+    this.visualizando = false;
+    this.jaRespondeu = false;
+    this.realizandoSimulado = true;
+    this.simuladoFinalizado = false;
+
+    this.paginaAtual = 0;
+    this.questaoAtual = this.questoes[0];
+
+    this.iniciarSimulado(0);
+    this.contagemRegressivaSimuladoQuestao();
+    this.atualizarQuestaoAtual();
+    this.cdr.detectChanges();
   }
 
 
@@ -380,12 +399,7 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
   gerarGrafico(acertos: number, erros: number, qtdQuestoes: number) {
     this.acertos = acertos;
     this.totalQuestoes = qtdQuestoes;
-
-    if (this.totalQuestoes > 0) {
-      this.porcentagemAcertos = Math.round((this.acertos / this.totalQuestoes) * 100);
-    } else {
-      this.porcentagemAcertos = 0;
-    }
+    this.porcentagemAcertos = Math.round((acertos / qtdQuestoes) * 100);
 
     if (this.chart) {
       this.chart.destroy();
@@ -399,27 +413,28 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
           {
             data: [acertos, erros],
             backgroundColor: [
-              'rgba(46, 204, 113, 1)',
-              'rgba(231, 76, 60, 1)'],
-            borderColor: '#2c3e50',
-            borderWidth: 2
+              '#48bb78',
+              '#f56565'
+            ],
+            borderWidth: 0,
+            hoverBackgroundColor: ['#38a169', '#c53030']
           },
         ],
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            display: false
-          },
-          tooltip: {
-            enabled: true
-          },
-          doughnut: {
-            cutout: '75%'
-          }
+        cutoutPercentage: 70,
+        legend: {
+          display: false
         },
+        tooltips: {
+          enabled: true
+        },
+        animation: {
+          animateScale: true,
+          animateRotate: true
+        }
       },
     });
   }
@@ -1151,7 +1166,6 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
       }, 1000);
     }
 
-    // Essas flags controlam a exibição no HTML
     this.simuladoIniciado = true;
     this.simuladoFinalizado = false;
   }
@@ -1162,7 +1176,6 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
         if (this.tempoRestanteQuestaoSimulado <= 0) {
           this.tempoRestanteQuestaoSimulado = 0;
           this.radioDisabled = true;
-          // clearInterval(this.intervalContagemRegressiva); 
         } else {
           this.tempoRestanteQuestaoSimulado--;
         }
@@ -1185,7 +1198,6 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
     this.revisandoSimulado = true;
   }
 
-  // Função para formatar o tempo decorrido (opcional)
   formatarTempo(segundos: number): string {
     const horas = Math.floor(segundos / 3600);
     const minutos = Math.floor((segundos % 3600) / 60);
@@ -1195,20 +1207,17 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
     )}:${this.formatarNumero(segs)}`;
   }
 
-  // Função auxiliar para formatar com dois dígitos
   formatarNumero(numero: number): string {
     return numero < 10 ? `0${numero}` : `${numero}`;
   }
 
   revisarSimulado(id: number | null) {
-
     if (id === null || Number.isNaN(id)) {
       return;
     }
 
     this.simuladoService.obterSimuladoPorId(id).subscribe(
       (data) => {
-        // console.log('Simulado:', data);
         this.router.navigate(['/usuario/simulados'], { state: { simulado: data } });
       },
       (error) => {
@@ -1252,17 +1261,17 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
   }
 
   verificarRespostaUsuario(resposta: Resposta) {
-    this.selectedOption = resposta.opcaoSelecionada; // Alternativa escolhida
-    this.isRespostaCorreta = resposta.correct; // Se está correta ou não
+    this.selectedOption = resposta.opcaoSelecionada;
+    this.isRespostaCorreta = resposta.correct;
 
     if (resposta.correct) {
       this.respostaCorreta = this.selectedOption;
       this.respostaErrada = '';
     } else {
       this.respostaErrada = this.selectedOption;
-      this.respostaCorreta = resposta.opcaoCorreta; // Alternativa correta
+      this.respostaCorreta = resposta.opcaoCorreta;
     }
-    this.respostaVerificada = true; // Marca como verificada
+    this.respostaVerificada = true;
 
   }
 

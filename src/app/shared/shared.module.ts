@@ -27,6 +27,7 @@ import { ModalTrilhaComponent } from './modal-trilha/modal-trilha.component';
 import { ModalEditarSemanaTrilhaComponent } from './modal-editar-semana-trilha/modal-editar-semana-trilha.component';
 import { GlobalSearchComponent } from './global-search/global-search.component';
 import { ModalPadraoComponent } from './modal-padrao/modal-padrao.component';
+import { DialogResultadoSimuladoComponent } from './dialog-resultado-simulado/dialog-resultado-simulado.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { ModalPadraoComponent } from './modal-padrao/modal-padrao.component';
     ModalEditarSemanaTrilhaComponent,
     HappyMessagePopupComponent,
     GlobalSearchComponent,
-    ModalPadraoComponent
+    ModalPadraoComponent,
+    DialogResultadoSimuladoComponent
   ],
   imports: [
     CommonModule,
