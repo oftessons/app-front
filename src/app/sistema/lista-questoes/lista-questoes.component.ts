@@ -7,10 +7,6 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { QuestaoBusca } from '../questaoBusca';
 import { Dificuldade } from '../page-questoes/enums/dificuldade';
-import {
-  getDescricaoTipoDeProva,
-  getDescricaoAno,
-} from '../page-questoes/enums/enum-utils';
 import { Subtema } from '../page-questoes/enums/subtema';
 import { Tema } from '../page-questoes/enums/tema';
 import { Filtro } from '../filtro';
@@ -324,7 +320,7 @@ export class ListaQuestoesComponent implements OnInit {
       },
       (error) => {
         console.log("Error name" + error);
-        this.mensagemErroAtribuicao = error.error?.message || 'Erro ao atribuir comentador.';
+        this.mensagemErroAtribuicao = error || 'Erro ao atribuir comentador.';
         this.carregandoAtribuicao = false;
       }
     );

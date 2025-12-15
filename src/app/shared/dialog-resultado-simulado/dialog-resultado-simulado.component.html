@@ -1,0 +1,59 @@
+<div class="dialog-container">
+
+    <div class="dialog-header">
+        <h2>Resultados do Simulado</h2>
+        <button class="close-btn" (click)="fechar()">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <div mat-dialog-content class="dialog-content">
+        <div class="layout-grid">
+
+            <div class="chart-section">
+                <div class="chart-wrapper">
+                    <canvas id="graficoDialogResultado"></canvas>
+                    <div class="chart-percentage">
+                        <span class="percent-value">{{ porcentagemAcertos }}%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="metrics-section">
+
+                <div class="stat-card success">
+                    <div class="stat-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="label">ACERTOS</span>
+                        <span class="value">{{ acertos }} <small>/ {{ totalQuestoes }}</small></span>
+                    </div>
+                </div>
+
+                <div class="stat-card danger">
+                    <div class="stat-icon">
+                        <i class="fas fa-times"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="label">ERROS</span>
+                        <span class="value">{{ erros }}</span>
+                    </div>
+                </div>
+
+                <div class="stat-card info">
+                    <div class="stat-icon">
+                        <i class="fas fa-stopwatch"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="label">TEMPO</span>
+                        <span class="value">{{ formatarTempo(tempoTotal) }}</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
