@@ -1,0 +1,177 @@
+<div class="dashboard-container">
+  <div class="page-header">
+    <h2>Métricas</h2>
+  </div>
+
+  <div class="filters-bar">
+    <div class="filter-group">
+      <span class="filter-label">Filtrar por:</span>
+      <select
+        class="custom-select"
+        [(ngModel)]="selectedAno"
+        (change)="onFilterChange()"
+      >
+        <option value="">Todos os anos</option>
+        <option *ngFor="let op of anosDisponiveis" [value]="op.value">
+          {{ op.label }}
+        </option>
+      </select>
+
+      <select
+        class="custom-select"
+        [(ngModel)]="selectedTipo"
+        (change)="onFilterChange()"
+      >
+        <option value="">Todas as provas</option>
+        <option *ngFor="let op of tiposProvaDisponiveis" [value]="op.value">
+          {{ op.label }}
+        </option>
+      </select>
+
+      <select
+        class="custom-select"
+        [(ngModel)]="selectedDificuldade"
+        (change)="onFilterChange()"
+      >
+        <option value="">Todas as dificuldades</option>
+        <option *ngFor="let op of dificuldadesDisponiveis" [value]="op.value">
+          {{ op.label }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading" class="loading-state">Carregando dados...</div>
+
+  <div *ngIf="!isLoading && metrics" class="content-area">
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-header">
+          <span>Total de questoes analisadas</span>
+        </div>
+        <div class="kpi-value">{{ metrics.totalQuestionsAnalyzed }}</div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-header">
+          <span>Tema Principal Identificado</span>
+        </div>
+        <div class="kpi-value">{{ metrics.mainThemeIdentified }}</div>
+        <div class="kpi-subtext">
+          {{ metrics.mainThemeCount }} questões ({{
+            metrics.mainThemePercentage
+          }}%)
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-header">
+          <span>Subtema Mais Difícil</span>
+        </div>
+        <div class="kpi-value">{{ metrics.hardestSubtopic }}</div>
+        <div class="kpi-subtext">
+          Média: {{ metrics.hardestSubtopicAverage }}%
+        </div>
+      </div>
+    </div>
+
+    <div class="analysis-section">
+      <div class="analysis-header">
+        <h3>Análise de Temas e Subtemas</h3>
+        <p class="subtitle">
+          Detalhamento da distribuição de questões por tópicos
+        </p>
+      </div>
+
+      <div class="table-container">
+        <div class="table-header">
+          <div class="col-name">NOME DO TÓPICO</div>
+          <div class="col-qtd">QTD. DE QUESTÕES</div>
+          <div class="col-freq">FREQUÊNCIA (%)</div>
+        </div>
+
+        <div class="table-body">
+          <div *ngFor="let topic of metrics.topicStats" class="table-row-group">
+            <div class="table-row" (click)="toggleRow(topic)">
+              <div class="col-name">
+                <span class="chevron" [class.rotated]="topic.expanded">›</span>
+                {{ topic.name }}
+              </div>
+              <div class="col-qtd">
+                <span class="badge">{{ topic.questionCount }}</span>
+              </div>
+              <div class="col-freq">{{ topic.frequencyPercentage }}%</div>
+            </div>
+
+            <div class="row-details" *ngIf="topic.expanded" style="background-color: #171B1C;">
+              <div *ngIf="topic.subTopics && topic.subTopics.length > 0">
+                <div *ngFor="let sub of topic.subTopics" class="subtopic-row" style="background-color: #171B1C;"> 
+                  <div class="col-name subtopic-name">
+                    <span class="subtopic-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="9" viewBox="0 0 10 9" fill="none">
+  <path d="M9.57083 6.2375L7.74167 8.14167C7.62083 8.27083 7.45417 8.33333 7.29167 8.33333C7.12917 8.33333 6.97917 8.275 6.85833 8.15833C6.60833 7.91667 6.6 7.525 6.84167 7.275L8.22917 5.83333H2.29167C1.02917 5.83333 0 4.80417 0 3.54167V0.625C0 0.279167 0.279167 0 0.625 0C0.970833 0 1.25 0.279167 1.25 0.625V3.54167C1.25 4.11667 1.71667 4.58333 2.29167 4.58333H8.22917L6.84167 3.14167C6.60417 2.89167 6.60833 2.49583 6.85833 2.25833C7.10833 2.02083 7.50417 2.025 7.74167 2.275L9.57917 4.1875C10.1375 4.74583 10.1375 5.67083 9.57083 6.24167V6.2375Z" fill="white"/>
+</svg>
+                    </span>
+                    <span>{{ sub.name }}</span>
+                  </div>
+
+                  <div class="col-qtd">
+                    <span class="badge badge-green">{{
+                      sub.questionCount
+                    }}</span>
+                  </div>
+
+                  <div class="col-freq">{{ sub.frequencyPercentage }}%</div>
+                </div>
+              </div>
+
+              <div
+                *ngIf="!topic.subTopics || topic.subTopics.length === 0"
+                class="no-subtopics"
+              >
+                Sem subtemas registrados para este tópico.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mosaic-section">
+      <h3>Distribuição de Temas</h3>
+      <p class="subtitle">Visualização proporcional por volume de questões</p>
+
+      <div class="mosaic-grid">
+        <div
+          *ngFor="let topic of metrics.topicStats; let i = index"
+          class="mosaic-item"
+          [ngClass]="getMosaicClasses(i)"
+          [title]="topic.name + ': ' + topic.questionCount + ' questões'"
+        >
+          <span class="mosaic-label">{{ topic.name }}</span>
+
+          <div class="mosaic-tooltip">
+              <div class="tooltip-title">{{ topic.name }}</div>
+              
+              <div class="tooltip-row">
+                  <span class="tooltip-value">{{ topic.frequencyPercentage }}%</span>
+                  <span class="tooltip-desc">Frequência</span>
+              </div>
+              
+              <div class="tooltip-row">
+                  <span class="tooltip-value">{{ topic.questionCount }}</span>
+                  <span class="tooltip-desc">Qtd de questões</span>
+              </div>
+          </div>
+        </div>
+
+        <div
+          *ngIf="metrics.topicStats.length === 0"
+          style="grid-column: span 4; text-align: center; color: #a1a5b7"
+        >
+          Nenhum dado para exibir no gráfico.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

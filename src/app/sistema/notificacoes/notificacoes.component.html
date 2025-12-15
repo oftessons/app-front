@@ -1,7 +1,7 @@
 <div class="container-notificacoes pt-5">
   
   <h1 class="titulo-pagina">Notificações</h1>
-
+  
   <!-- Barra de Controles -->
   <div class="toolbar-notificacoes">
     
@@ -42,13 +42,12 @@
       
       <!-- Conteúdo (Esquerda) -->
       <div class="conteudo-notificacao">
-        <p class="texto-mensagem">{{ item.mensagem }}</p>
+        <p class="texto-mensagem" [innerHTML]="formatarMensagem(item.mensagem)"></p>
       </div>
 
       <!-- Meta Info (Direita) -->
       <div class="meta-info">
         <span class="data">{{ item.dataCriacao | date:'dd/MM/yyyy HH:mm' }}</span>
-        <!-- Bolinha amarela (apenas se não lida) -->
         <div *ngIf="!item.lida" class="indicador-container">
            <div class="indicador-nao-lida"></div>
         </div>
@@ -58,37 +57,27 @@
   </div>
 
   <!-- Paginação (Rodapé Direito) -->
-  <div *ngIf="!loading && notificacoes.length > 0" class="paginacao-container">
+  <div *ngIf="!loading && notificacoes.length > 0 && totalPaginas > 1" class="paginacao-container">
     <button class="btn-paginacao seta" (click)="paginaAnterior()" [disabled]="paginaAtual === 1">
        <svg xmlns="http://www.w3.org/2000/svg" width="8" height="14" viewBox="0 0 8 14" fill="none">
-  <path d="M7.2541 1.06694L1.50888 6.81222L7.2541 12.5575C7.49818 12.8015 7.49818 13.1972 7.2541 13.4413C7.01002 13.6854 6.61435 13.6854 6.37027 13.4413L0.183058 7.25414C0.0658498 7.13689 0 6.97797 0 6.81222C0 6.64639 0.0658498 6.48747 0.183058 6.37022L6.37027 0.18306C6.40077 0.152552 6.4336 0.125851 6.46827 0.102968C6.71085 -0.0572071 7.04052 -0.0305068 7.2541 0.18306C7.49818 0.427135 7.49818 0.822868 7.2541 1.06694Z" fill="white"/>
-</svg>
+          <path d="M7.2541 1.06694L1.50888 6.81222L7.2541 12.5575C7.49818 12.8015 7.49818 13.1972 7.2541 13.4413C7.01002 13.6854 6.61435 13.6854 6.37027 13.4413L0.183058 7.25414C0.0658498 7.13689 0 6.97797 0 6.81222C0 6.64639 0.0658498 6.48747 0.183058 6.37022L6.37027 0.18306C6.40077 0.152552 6.4336 0.125851 6.46827 0.102968C6.71085 -0.0572071 7.04052 -0.0305068 7.2541 0.18306C7.49818 0.427135 7.49818 0.822868 7.2541 1.06694Z" fill="white"/>
+       </svg>
     </button>
     
     <div class="paginas-lista">
-      <!-- Exemplo simplificado de lógica de páginas (ajuste conforme seu componente de paginação real) -->
       <button 
+        *ngFor="let p of paginas"
         class="btn-numero" 
-        [class.ativo]="paginaAtual === 1" 
-        (click)="paginaAtual = 1; carregarNotificacoes()">1</button>
-        
-      <button 
-        class="btn-numero" 
-        [class.ativo]="paginaAtual === 2" 
-        (click)="paginaAtual = 2; carregarNotificacoes()"
-        *ngIf="totalPaginas >= 2">2</button>
-        
-      <button 
-        class="btn-numero" 
-        [class.ativo]="paginaAtual === 3" 
-        (click)="paginaAtual = 3; carregarNotificacoes()"
-        *ngIf="totalPaginas >= 3">3</button>
+        [class.ativo]="paginaAtual === p" 
+        (click)="selecionarPagina(p)">
+        {{ p }}
+      </button>
     </div>
 
     <button class="btn-paginacao seta" (click)="proximaPagina()" [disabled]="paginaAtual === totalPaginas">
       <svg xmlns="http://www.w3.org/2000/svg" width="8" height="14" viewBox="0 0 8 14" fill="none">
-  <path d="M0.183062 12.5575L5.92834 6.81222L0.183062 1.06694C0.152546 1.03643 0.125854 1.00355 0.102971 0.968891C0.0497622 0.888308 0.0171792 0.798116 0.00521254 0.705758C0.00173754 0.678958 3.88589e-06 0.651974 3.88589e-06 0.624999C3.88589e-06 0.484183 0.0472868 0.343374 0.14187 0.228424C0.154728 0.212807 0.168454 0.197658 0.183062 0.183058C0.194496 0.171616 0.206271 0.160707 0.218354 0.150341C0.463904 -0.0604843 0.834304 -0.0495756 1.06695 0.183058L7.25409 6.37022C7.37134 6.48747 7.43717 6.64647 7.43717 6.81222C7.43717 6.97797 7.37134 7.13688 7.25409 7.25413L1.06695 13.4413C1.03643 13.4718 1.00355 13.4985 0.968896 13.5214C0.726304 13.6815 0.396629 13.6549 0.183062 13.4413C0.152546 13.4108 0.125854 13.3779 0.102971 13.3433C-0.0572045 13.1006 -0.0305125 12.771 0.183062 12.5575Z" fill="#B9B9B9"/>
-</svg>
+          <path d="M0.183062 12.5575L5.92834 6.81222L0.183062 1.06694C0.152546 1.03643 0.125854 1.00355 0.102971 0.968891C0.0497622 0.888308 0.0171792 0.798116 0.00521254 0.705758C0.00173754 0.678958 3.88589e-06 0.651974 3.88589e-06 0.624999C3.88589e-06 0.484183 0.0472868 0.343374 0.14187 0.228424C0.154728 0.212807 0.168454 0.197658 0.183062 0.183058C0.194496 0.171616 0.206271 0.160707 0.218354 0.150341C0.463904 -0.0604843 0.834304 -0.0495756 1.06695 0.183058L7.25409 6.37022C7.37134 6.48747 7.43717 6.64647 7.43717 6.81222C7.43717 6.97797 7.37134 7.13688 7.25409 7.25413L1.06695 13.4413C1.03643 13.4718 1.00355 13.4985 0.968896 13.5214C0.726304 13.6815 0.396629 13.6549 0.183062 13.4413C0.152546 13.4108 0.125854 13.3779 0.102971 13.3433C-0.0572045 13.1006 -0.0305125 12.771 0.183062 12.5575Z" fill="#B9B9B9"/>
+      </svg>
     </button>
   </div>
 

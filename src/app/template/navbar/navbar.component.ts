@@ -1,4 +1,4 @@
-import { Component, ViewChild, NgZone } from '@angular/core';
+import { Component, ViewChild, NgZone, ChangeDetectorRef } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Router, NavigationEnd } from '@angular/router';
@@ -43,6 +43,8 @@ export class NavbarComponent {
   private ofensivaSub: Subscription | null = null;
 
   unreadCount: number = 0;
+  private unreadCountSub: Subscription | null = null;
+  private pollingSubscription: Subscription | null = null;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -53,14 +55,15 @@ export class NavbarComponent {
     private notificacaoService: NotificacaoService,
     private ngZone: NgZone,
     private themeService: ThemeService,
+    private cdr: ChangeDetectorRef,
   ) { }
 
   ngOnInit() {
+    this.carregarContadorNotificacoes();
     this.authService.obterNomeUsuario().subscribe(
       nome => this.nomeUsuario = nome,
       err => console.error('Erro ao buscar nome do usuário ', err)
     );
-
     this.usuarioLogado = this.authService.getUsuarioAutenticado();
 
     if (this.usuarioLogado) {
@@ -91,10 +94,6 @@ export class NavbarComponent {
       }
     });
 
-    this.notificacaoService.unreadCount$.subscribe(count => {
-      this.unreadCount = count;
-    });
-
     const dadosAtuais = this.ofensivaService.getValorAtual();
     if (!dadosAtuais) {
       this.ofensivaService.getDadosOfensiva().subscribe({
@@ -117,6 +116,40 @@ export class NavbarComponent {
       this.verificarPeriodoTeste();
     }
 
+  }
+
+  private carregarContadorNotificacoes(): void {
+    // 1. Busca o Usuário Garantido do Backend
+    this.authService.obterUsuarioAutenticadoDoBackend().subscribe({
+      next: (usuario) => {
+        if (usuario && usuario.id) {
+          const userId = Number(usuario.id);
+
+          // Busca inicial imediata
+          this.notificacaoService.fetchUnreadCount(userId).subscribe();
+
+          // Inicia polling local (a cada 15s) usando o ID garantido
+          // Isso resolve o problema de atualização se o Service não conseguir pegar o ID sozinho
+          this.pollingSubscription?.unsubscribe();
+          this.pollingSubscription = interval(1000).subscribe(() => {
+             this.notificacaoService.fetchUnreadCount(userId).subscribe();
+          });
+        }
+      },
+      error: (err) => console.error('[Navbar] Erro ao obter usuário autenticado:', err)
+    });
+
+    // 2. Inscrição Reativa no Serviço
+    this.unreadCountSub?.unsubscribe();
+    this.unreadCountSub = this.notificacaoService.unreadCount$.subscribe({
+      next: (contador) => {
+        if (this.unreadCount !== contador) {
+            this.unreadCount = contador;
+            this.cdr.detectChanges();
+        }
+      },
+      error: (err) => console.error('[Navbar] Erro no stream de notificações:', err),
+    });
   }
 
   verificarPeriodoTeste() {
