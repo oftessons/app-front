@@ -201,9 +201,9 @@ export class QuestoesService {
   filtrarQuestoes(
     userId: number,
     filtros: any,
+    timestampBusca?: number | null,
     page: number = 0,
-    size: number = 10,
-    seed?: number
+    size: number = 10
   ): Observable<any[]> {
     const url = `${this.apiURL}/filtro/${userId}`;
     let params = new HttpParams();
@@ -220,13 +220,13 @@ export class QuestoesService {
       }
     }
 
+    if (timestampBusca) {
+      params = params.set('timestampBusca', timestampBusca.toString());
+    }
 
     params = params.set('page', page.toString());
     params = params.set('size', size.toString());
 
-    if (seed) {
-      params = params.set('seed', seed.toString());
-    }
 
     const cacheKey = `${url}?${params.toString()}`;
 
