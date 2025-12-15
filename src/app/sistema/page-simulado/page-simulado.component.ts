@@ -215,17 +215,17 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
 
   }
 
-  salvarTempoAtual(): void {
-    if (this.isSimuladoIniciado && !this.simuladoFinalizado && this.simuladoIdRespondendo > 0) {
-      console.log(`Salvando tempo: ${this.tempo}s para o simulado ${this.simuladoIdRespondendo}`);
+  // salvarTempoAtual(): void {
+  //   if (this.isSimuladoIniciado && !this.simuladoFinalizado && this.simuladoIdRespondendo > 0) {
+  //     console.log(`Salvando tempo: ${this.tempo}s para o simulado ${this.simuladoIdRespondendo}`);
 
-      this.simuladoService.atualizarTempoSimulado(this.simuladoIdRespondendo, this.tempo)
-        .subscribe({
-          next: () => console.log('Tempo salvo com sucesso.'),
-          error: (err) => console.error('Erro ao salvar o tempo:', err)
-        });
-    }
-  }
+  //     this.simuladoService.atualizarTempoSimulado(this.simuladoIdRespondendo, this.tempo)
+  //       .subscribe({
+  //         next: () => console.log('Tempo salvo com sucesso.'),
+  //         error: (err) => console.error('Erro ao salvar o tempo:', err)
+  //       });
+  //   }
+  // }
 
   async carregarDadosIniciais() {
     try {
@@ -370,7 +370,7 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
 
 
   finalizarSimulado() {
-    this.salvarTempoAtual();
+    // this.salvarTempoAtual();
 
     if (this.intervalId) {
       clearInterval(this.intervalId);
@@ -386,7 +386,7 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
     this.totalQuestoes = this.questoes.length;
 
     this.simuladoService
-      .finalizarSimulado(this.usuarioId, this.simuladoIdRespondendo, this.respostasList)
+      .finalizarSimulado(this.usuarioId, this.simuladoIdRespondendo, this.respostasList, this.tempoTotal)
       .subscribe((resultado) => {
         this.gerarGrafico(resultado.acertos, resultado.erros, this.totalQuestoes);
       });

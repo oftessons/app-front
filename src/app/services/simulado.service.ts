@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -34,8 +34,18 @@ export class SimuladoService {
 
   }
 
-  finalizarSimulado(idUser: number, idSimulado: number, respostasEnviadas: any[]) {
-    return this.http.post<any>(`${this.apiURL}/finalizar/${idUser}/${idSimulado}`, respostasEnviadas);
+  finalizarSimulado(idUser: number, idSimulado: number, respostasEnviadas: any[], tempoGasto?: number) {
+    let params = new HttpParams();
+
+    if (tempoGasto != null) {
+      params = params.set('tempoGasto', tempoGasto.toString());
+    }
+
+    return this.http.post<any>(
+      `${this.apiURL}/finalizar/${idUser}/${idSimulado}`,
+      respostasEnviadas,
+      { params }
+    );
   }
 
   // Método para cadastrar um novo simulado
