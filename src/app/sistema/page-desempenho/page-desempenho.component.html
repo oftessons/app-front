@@ -15,101 +15,94 @@
       </ng-template>
     </h1>
 
-    <div class="dashboard-wrapper">
 
-      <div class="row"> 
-        <div class="col-12 col-md-4 mb-4" *ngFor="let pie of pieChartsData">
+    <div class="row mt-4"> <div class="col-12 col-md-4 mb-4" *ngFor="let pie of pieChartsData">
+        
+        <div class="card-oftlessons-dark shadow-sm">
           
-          <div class="card-oftlessons-dark shadow-sm">
-            
-            <h5 class="text-center">{{ pie.title }}</h5>
+          <h5 class="text-center">{{ pie.title }}</h5>
 
-            <ng-container *ngIf="(pie.data[0] + pie.data[1]) > 0; else noData">
+          <ng-container *ngIf="(pie.data[0] + pie.data[1]) > 0; else noData">
+            
+            <div class="chart-doughnut-wrapper">
               
-              <div class="chart-doughnut-wrapper">
-                
-                <canvas baseChart 
-                        [data]="pie.data" 
-                        [labels]="pie.labels" 
-                        [chartType]="pie.chartType"
-                        [options]="pie.options" 
-                        [colors]="pie.colors" 
-                        [legend]="true">
-                </canvas>
-
-                <div class="center-text-overlay">
-                  <span class="percentage-number">{{ pie.percentualValor }}%</span>
-                  <span class="percentage-label">{{ pie.percentualTexto }}</span>
-                </div>
-
-              </div>
-
-            </ng-container>
-
-            <ng-template #noData>
-              <div class="d-flex align-items-center justify-content-center" style="height: 200px;">
-                <p class="text-center text-muted mb-0">Sem dados disponíveis</p>
-              </div>
-            </ng-template>
-          </div>
-      </div>
-
-
-
-
-      <div class="row">
-        <div class="col-md-12">
-          <div class="card-oftlessons-dark">
-            
-            <div class="mb-4">
-              <h5 class="text-white mb-1">Acertos e Erros por mês em {{ anoAtual }}</h5>
-              <small class="text-muted">Total de Questões: {{totalQuestoesAno}}</small>
-            </div>
-
-            <div class="chart-container" style="position: relative; height: 300px; width: 150%;">
               <canvas baseChart 
-                [datasets]="barChartData3" 
-                [labels]="barChartLabels3" 
-                [options]="barChartOptions3"
-                [legend]="barChartLegend" 
-                [chartType]="lineChartType"> </canvas>
-            </div>
-          </div>
-        </div>
-      </div>
-
-
-
-
-
-
-      <div class="row">
-        <div class="col-md-12 p-3">
-          <div class="chart-container">
-            <div style="display: block;" class="container-height">
-              <canvas baseChart [datasets]="barChartData2" [labels]="barChartLabels2" [options]="barChartOptions2"
-                [legend]="barChartLegend" [chartType]="barChartType">
+                      [data]="pie.data" 
+                      [labels]="pie.labels" 
+                      [chartType]="pie.chartType"
+                      [options]="pie.options" 
+                      [colors]="pie.colors" 
+                      [legend]="true">
               </canvas>
+
+              <div class="center-text-overlay">
+                <span class="percentage-number">{{ pie.percentualValor }}%</span>
+                <span class="percentage-label">{{ pie.percentualTexto }}</span>
+              </div>
+
             </div>
-          </div>
-        </div>
-      </div>
 
-      <div class="row">
-        <div class="col-md-12">
-          <div class="chart-container">
-            <div style="display: block;" class="container-height">
-              <canvas baseChart [datasets]="barChartData4" [labels]="barChartLabels4" [options]="barChartOptions4"
-                [legend]="barChartLegend" [chartType]="barChartType">
-              </canvas>
+          </ng-container>
+
+          <ng-template #noData>
+            <div class="d-flex align-items-center justify-content-center" style="height: 200px;">
+              <p class="text-center text-muted mb-0">Sem dados disponíveis</p>
             </div>
-          </div>
+          </ng-template>
         </div>
-      </div>
-
-
     </div>
 
 
+
+
+    <div class="row mt-4">
+      <div class="col-md-12">
+        <div class="card-oftlessons-dark shadow-sm">
+          
+          <div class="mb-4">
+            <h5 class="text-white mb-1">Acertos e Erros por mês em {{ anoAtual }}</h5>
+            <small class="text-muted">Total de Questões: {{totalQuestoesAno}}</small>
+          </div>
+
+          <div class="chart-container" style="position: relative; height: 300px; width: 100%;">
+            <canvas baseChart 
+              [datasets]="barChartData3" 
+              [labels]="barChartLabels3" 
+              [options]="barChartOptions3"
+              [legend]="barChartLegend" 
+              [chartType]="lineChartType"> </canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+
+    <div class="row">
+      <div class="col-md-12 p-3">
+        <div class="chart-container">
+          <div style="display: block;" class="container-height">
+            <canvas baseChart [datasets]="barChartData2" [labels]="barChartLabels2" [options]="barChartOptions2"
+              [legend]="barChartLegend" [chartType]="barChartType">
+            </canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="chart-container">
+          <div style="display: block;" class="container-height">
+            <canvas baseChart [datasets]="barChartData4" [labels]="barChartLabels4" [options]="barChartOptions4"
+              [legend]="barChartLegend" [chartType]="barChartType">
+            </canvas>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
