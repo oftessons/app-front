@@ -34,8 +34,11 @@ export class SimuladoService {
 
   }
 
-  finalizarSimulado(idUser: number, idSimulado: number, respostasEnviadas: any[]) {
-    return this.http.post<any>(`${this.apiURL}/finalizar/${idUser}/${idSimulado}`, respostasEnviadas);
+  finalizarSimulado(idUser: number, idSimulado: number, respostasEnviadas: any[], tempoGasto?: number) {
+
+    const param = tempoGasto ? `?tempoGasto=${tempoGasto}` : '';
+
+    return this.http.post<any>(`${this.apiURL}/finalizar/${idUser}/${idSimulado}${param}`, respostasEnviadas);
   }
 
   // Método para cadastrar um novo simulado
