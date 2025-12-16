@@ -6,17 +6,16 @@
   background-color: var(--bg-container);
   border-radius: 15px;
   padding: 20px;
-  /* Adicionei padding para espaçamento interno */
   margin-bottom: 10px;
-  font-size: 16px;
+  font-size: 18px;
+  line-height: 1.6;
 }
 
 .conteudo-questao p {
   padding: 10px;
-  /* Espaçamento para o parágrafo */
   margin: 0;
-  /* Remover margens padrão */
-  font-size: 16px;
+  font-size: 18px;
+  line-height: 1.6;
 }
 
 .questao-foto {
@@ -47,8 +46,9 @@
 }
 
 .identificadores-questao h3 {
-  font-size: 16px;
+  font-size: 15px;
   margin: 0 14px 0 22px;
+  font-weight: 500;
 }
 
 .identificadores-questao-resul {
@@ -1246,6 +1246,27 @@ p {
 
 .radio-oculto {
   display: none;
+}
+
+.comentario-titulo {
+  margin-top: 20px;
+  margin-bottom: 15px;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.referencia-texto {
+  font-size: 14px;
+  margin-top: 10px;
+  color: var(--text-color);
+  opacity: 0.9;
+}
+
+.img-comentario {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 12px;
 }
 
 .indicador-letra {

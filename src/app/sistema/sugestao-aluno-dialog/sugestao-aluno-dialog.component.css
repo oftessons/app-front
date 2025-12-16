@@ -130,3 +130,147 @@
 .close-popup-button:hover {
   color: var(--text-color) !important;
 }
+
+/* Estilos para exemplos de questões */
+.exemplos-questoes {
+  margin-top: 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 12px;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.exemplos-questoes summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--text-color);
+  padding: 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+  list-style: none;
+}
+
+.exemplos-questoes summary::-webkit-details-marker {
+  display: none;
+}
+
+.exemplos-questoes summary::before {
+  content: "▶ ";
+  display: inline-block;
+  margin-right: 8px;
+  transition: transform 0.2s;
+}
+
+.exemplos-questoes[open] summary::before {
+  transform: rotate(90deg);
+}
+
+.exemplos-questoes summary:hover {
+  background-color: var(--multiple-select-hover-bg);
+}
+
+.exemplos-questoes ul {
+  margin: 12px 0 0 0;
+  padding: 0 0 0 20px;
+  list-style: disc;
+}
+
+.exemplos-questoes li {
+  margin: 8px 0;
+  color: var(--text-color);
+  line-height: 1.5;
+}
+
+.exemplos-questoes li p {
+  margin: 0;
+  color: var(--text-color) !important;
+}
+
+/* Sobrescrever estilos inline forçados que vêm do backend - Regras abrangentes */
+
+/* SPANS dentro de LI */
+::ng-deep .exemplos-questoes li span[style*="rgb(0, 0, 0)"],
+::ng-deep .exemplos-questoes li span[style*="rgb(0,0,0)"],
+::ng-deep .exemplos-questoes li span[style*="color: black"],
+::ng-deep .exemplos-questoes li span[style*="color: rgb(0, 0, 0)"],
+::ng-deep .exemplos-questoes li span[style*="color: rgb(0,0,0)"],
+::ng-deep .exemplos-questoes li span[style*="color:rgb(0, 0, 0)"],
+::ng-deep .exemplos-questoes li span[style*="color:rgb(0,0,0)"],
+::ng-deep .exemplos-questoes li span[style*="color: rgb(33, 37, 41)"],
+::ng-deep .exemplos-questoes li span[style*="color: rgb(17, 17, 17)"],
+::ng-deep .exemplos-questoes span[style*="--clrSquiggleHighlightTextColor"] {
+  color: var(--text-color) !important;
+}
+
+/* SPANS com background-color (exceto transparente) */
+::ng-deep .exemplos-questoes li span[style*="background-color"]:not([style*="background-color: transparent"]):not([style*="background-color: rgba(0, 0, 0, 0)"]) {
+  color: #000 !important;
+}
+
+/* SPANS com background transparente */
+::ng-deep .exemplos-questoes li span[style*="background-color: transparent"],
+::ng-deep .exemplos-questoes li span[style*="background-color: rgba(0, 0, 0, 0)"] {
+  color: var(--text-color) !important;
+}
+
+/* PARÁGRAFOS P dentro de LI */
+::ng-deep .exemplos-questoes li p[style*="rgb(0, 0, 0)"],
+::ng-deep .exemplos-questoes li p[style*="rgb(0,0,0)"],
+::ng-deep .exemplos-questoes li p[style*="color: black"],
+::ng-deep .exemplos-questoes li p[style*="color: rgb(0, 0, 0)"],
+::ng-deep .exemplos-questoes li p[style*="color: rgb(0,0,0)"],
+::ng-deep .exemplos-questoes li p[style*="color:rgb(0, 0, 0)"],
+::ng-deep .exemplos-questoes li p[style*="color:rgb(0,0,0)"],
+::ng-deep .exemplos-questoes li p[style*="color: rgb(33, 37, 41)"],
+::ng-deep .exemplos-questoes li p[style*="color: rgb(17, 17, 17)"],
+::ng-deep .exemplos-questoes p[style*="--clrSquiggleHighlightTextColor"] {
+  color: var(--text-color) !important;
+}
+
+/* P com background-color */
+::ng-deep .exemplos-questoes li p[style*="background-color"]:not([style*="background-color: transparent"]):not([style*="background-color: rgba(0, 0, 0, 0)"]) {
+  color: #000 !important;
+}
+
+/* P com background transparente */
+::ng-deep .exemplos-questoes li p[style*="background-color: transparent"],
+::ng-deep .exemplos-questoes li p[style*="background-color: rgba(0, 0, 0, 0)"] {
+  color: var(--text-color) !important;
+}
+
+/* SPANS dentro de P dentro de LI */
+::ng-deep .exemplos-questoes li p span[style*="rgb(0, 0, 0)"],
+::ng-deep .exemplos-questoes li p span[style*="rgb(0,0,0)"],
+::ng-deep .exemplos-questoes li p span[style*="color: black"],
+::ng-deep .exemplos-questoes li p span[style*="color: rgb(0, 0, 0)"],
+::ng-deep .exemplos-questoes li p span[style*="color: rgb(0,0,0)"],
+::ng-deep .exemplos-questoes li p span[style*="color:rgb(0, 0, 0)"],
+::ng-deep .exemplos-questoes li p span[style*="color:rgb(0,0,0)"],
+::ng-deep .exemplos-questoes li p span[style*="color: rgb(33, 37, 41)"],
+::ng-deep .exemplos-questoes li p span[style*="color: rgb(17, 17, 17)"] {
+  color: var(--text-color) !important;
+}
+
+/* STRONG dentro de LI */
+::ng-deep .exemplos-questoes li strong[style*="rgb(0, 0, 0)"],
+::ng-deep .exemplos-questoes li strong[style*="rgb(0,0,0)"],
+::ng-deep .exemplos-questoes li strong[style*="color: black"],
+::ng-deep .exemplos-questoes li strong[style*="color: rgb(0, 0, 0)"],
+::ng-deep .exemplos-questoes li strong[style*="color: rgb(0,0,0)"],
+::ng-deep .exemplos-questoes li strong[style*="color:rgb(0, 0, 0)"],
+::ng-deep .exemplos-questoes li strong[style*="color:rgb(0,0,0)"],
+::ng-deep .exemplos-questoes li strong[style*="color: rgb(33, 37, 41)"],
+::ng-deep .exemplos-questoes li strong[style*="color: rgb(17, 17, 17)"],
+::ng-deep .exemplos-questoes strong[style*="--clrSquiggleHighlightTextColor"] {
+  color: var(--text-color) !important;
+}
+
+/* EM dentro de LI */
+::ng-deep .exemplos-questoes li em[style*="background-color"]:not([style*="background-color: transparent"]):not([style*="background-color: rgba(0, 0, 0, 0)"]) {
+  color: #000 !important;
+}
+
+::ng-deep .exemplos-questoes li em[style*="background-color: transparent"],
+::ng-deep .exemplos-questoes li em[style*="background-color: rgba(0, 0, 0, 0)"] {
+  color: var(--text-color) !important;
+}

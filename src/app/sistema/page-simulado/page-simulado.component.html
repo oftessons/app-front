@@ -159,7 +159,7 @@
               </h3>
             </div>
             <div class="enunciado-questao" [innerHTML]="questaoAtual.enunciadoDaQuestao"></div>
-            <ng-container *ngIf="questaoAtual?.fotoDaQuestaoUrl">
+            <ng-container *ngIf="questaoAtual.fotoDaQuestaoUrl">
               <img *ngIf="isImage(questaoAtual.fotoDaQuestaoUrl)" [src]="questaoAtual.fotoDaQuestaoUrl"
                 alt="Foto da questão" class="questao-foto">
               <video *ngIf="isVideo(questaoAtual.fotoDaQuestaoUrl)" [src]="questaoAtual.fotoDaQuestaoUrl" controls
@@ -208,10 +208,10 @@
             </div>
 
             <div *ngIf="mostrarGabarito && questaoAtual">
-              <h2 style="margin-top: 10px;">Comentário da Questão</h2>
+              <h2 class="comentario-titulo">Comentário da Questão</h2>
               <!-- Exibe o comentário da Questão com HTML Sanitizado -->
               <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestao | safeHtml"></div>
-              <ng-container *ngIf="questaoAtual?.fotoDaRespostaUmUrl">
+              <ng-container *ngIf="questaoAtual.fotoDaRespostaUmUrl">
                 <img *ngIf="isImage(questaoAtual.fotoDaRespostaUmUrl)" [src]="questaoAtual.fotoDaRespostaUmUrl"
                   alt="Foto da questão" class="questao-foto">
                 <video *ngIf="isVideo(questaoAtual.fotoDaRespostaUmUrl)" [src]="questaoAtual.fotoDaRespostaUmUrl"
@@ -220,7 +220,7 @@
               </ng-container>
               <!-- Exibe o comentário da Questão com HTML Sanitizado -->
               <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestaoDois | safeHtml"></div>
-              <ng-container *ngIf="questaoAtual?.fotoDaRespostaDoisUrl">
+              <ng-container *ngIf="questaoAtual.fotoDaRespostaDoisUrl">
                 <img *ngIf="isImage(questaoAtual.fotoDaRespostaDoisUrl)" [src]="questaoAtual.fotoDaRespostaDoisUrl"
                   alt="Foto da questão" class="questao-foto">
                 <video *ngIf="isVideo(questaoAtual.fotoDaRespostaDoisUrl)" [src]="questaoAtual.fotoDaRespostaDoisUrl"
@@ -229,7 +229,7 @@
               </ng-container>
               <!-- Exibe o comentário da Questão com HTML Sanitizado -->
               <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestaoTres | safeHtml"></div>
-              <ng-container *ngIf="questaoAtual?.fotoDaRespostaTresUrl">
+              <ng-container *ngIf="questaoAtual.fotoDaRespostaTresUrl">
                 <img *ngIf="isImage(questaoAtual.fotoDaRespostaTresUrl)" [src]="questaoAtual.fotoDaRespostaTresUrl"
                   alt="Foto da questão" class="questao-foto">
                 <video *ngIf="isVideo(questaoAtual.fotoDaRespostaTresUrl)" [src]="questaoAtual.fotoDaRespostaTresUrl"
@@ -238,26 +238,26 @@
               </ng-container>
               <!-- Exibe o comentário da Questão com HTML Sanitizado -->
               <div class="img-comentario" [innerHTML]="questaoAtual.comentarioDaQuestaoQuatro | safeHtml"></div>
-              <ng-container *ngIf="questaoAtual?.fotoDaRespostaQuatroUrl">
+              <ng-container *ngIf="questaoAtual.fotoDaRespostaQuatroUrl">
                 <img *ngIf="isImage(questaoAtual.fotoDaRespostaQuatroUrl)" [src]="questaoAtual.fotoDaRespostaQuatroUrl"
                   alt="Foto da questão" class="questao-foto">
                 <video *ngIf="isVideo(questaoAtual.fotoDaRespostaQuatroUrl)"
                   [src]="questaoAtual.fotoDaRespostaQuatroUrl" controls controlsList="nodownload" class="questao-video">
                 </video>
               </ng-container>
-              <div *ngIf="questaoAtual?.comentarioDaQuestaoCinco" class="img-comentario"
+              <div *ngIf="questaoAtual.comentarioDaQuestaoCinco" class="img-comentario"
                 [innerHTML]="questaoAtual.comentarioDaQuestaoCinco | safeHtml"></div>
-              <ng-container *ngIf="questaoAtual?.fotoDaRespostaCincoUrl">
+              <ng-container *ngIf="questaoAtual.fotoDaRespostaCincoUrl">
                 <img *ngIf="isImage(questaoAtual.fotoDaRespostaCincoUrl)" [src]="questaoAtual.fotoDaRespostaCincoUrl"
                   alt="Foto da questão" class="questao-foto">
                 <video *ngIf="isVideo(questaoAtual.fotoDaRespostaCincoUrl)" [src]="questaoAtual.fotoDaRespostaCincoUrl"
                   controls controlsList="nodownload" class="questao-video">
                 </video>
               </ng-container>
-              <div *ngIf="questaoAtual?.comentarioDaQuestaoSeis" class="img-comentario"
+              <div *ngIf="questaoAtual.comentarioDaQuestaoSeis" class="img-comentario"
                 [innerHTML]="questaoAtual.comentarioDaQuestaoSeis | safeHtml"></div>
-              <p *ngIf="questaoAtual?.referenciaBi">Referência: {{ questaoAtual.referenciaBi }}</p>
-              <p *ngIf="questaoAtual?.comentadorDaQuestao">Comentado por: {{ questaoAtual.comentadorDaQuestao }}</p>
+              <p *ngIf="questaoAtual.referenciaBi" class="referencia-texto">Referência: {{ questaoAtual.referenciaBi }}</p>
+              <p *ngIf="questaoAtual.comentadorDaQuestao" class="comentador-texto">Comentado por: {{ questaoAtual.comentadorDaQuestao }}</p>
             </div>
 
             <div class="navigation-fixed">
