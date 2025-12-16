@@ -69,10 +69,16 @@
 }
 
 @media (min-width: 768px) {
+  .col-md-4 {
+    flex: 0 0 33.333333%;
+    max-width: 33.333333%;
+  }
+  
   .col-md-6 {
     flex: 0 0 50%;
     max-width: 50%;
   }
+  
   .col-md-12 {
     flex: 0 0 100%;
     max-width: 100%;
@@ -199,10 +205,33 @@
   box-shadow: none;
 }
 
+.text-center{
+  padding-bottom: 10px;
+}
+
 
 .text-total-questoes {
   color: #94a3b8;
   font-size: 0.9rem;
   margin-top: -5px;
   display: block;
+}
+
+.dashboard-wrapper {
+  background-color: #14181A;
+  border-radius: 20px;      
+  padding: 20px;
+  margin-top: 20px;         
+  margin-bottom: 30px;       
+  border: 1px solid rgba(255, 255, 255, 0.05); 
+  box-sizing: border-box; 
+  overflow: hidden;
+}
+
+
+[class*="col-"] {
+  position: relative;
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
 }
