@@ -903,7 +903,7 @@
                         <i class="fa fa-arrow-left"></i>
                         Voltar questão
                 </button>
-                <div class="id-questao">
+                <div class="id-questao" *ngIf="questaoDTO.id">
                   <span>ID da questão: {{ questaoDTO.id }}</span>
                 </div>
                 <button *ngIf="questaoDTO.id" type="button" class="btn btn-secondary" (click)="irParaProximaQuestao()"
