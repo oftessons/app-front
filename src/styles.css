@@ -112,6 +112,10 @@ body.dark-mode .mat-radio-button .mat-radio-outer-circle {
   border-color: #a0a0a0;
 }
 
+.dark-mode {
+  color: var(--text-color);
+} 
+
 
 *,
 *::before,
