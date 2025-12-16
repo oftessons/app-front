@@ -36,8 +36,8 @@
 }
 
 .chart-container {
-  width: 100%; /* Ajusta o container para ocupar toda a largura disponível */
-  max-width: 100%; /* Garante que o container não exceda 100% da largura */
+  width: 100%;
+  max-width: 100%;
   padding: 10px;
   background-color: var(--bg-container);
   border: 2px solid var(--border-color);
@@ -46,8 +46,8 @@
 }
 
 .chart-container-large {
-  width: 100%; /* Ajusta o container para ocupar toda a largura disponível */
-  max-width: 100%; /* Garante que o container não exceda 100% da largura */
+  width: 100%;
+  max-width: 100%;
   padding: 10px;
   background-color: #f2f2f2;
   border: 2px solid #8c8e94;
@@ -113,4 +113,96 @@
 
 .close-popup-button:hover {
   color: var(--text-color) !important;
+}
+
+
+.card-escuro h5 {
+  color: #ffffff !important;
+}
+
+.percentage-text {
+  font-size: 2.5rem; 
+  font-weight: 700;
+  color: #ffffff; 
+  line-height: 1;
+}
+
+.label-text {
+  font-size: 1rem;
+  color: #243146; 
+  margin-top: 5px;
+}
+
+.chart-doughnut-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card-oftlessons-dark {
+  background-color: #111B2F8C !important;
+  border: 1px solid #243146;
+  border-radius: 15px;
+  padding: 20px;
+  height: 100%;
+}
+
+.card-oftlessons-dark h5 {
+  color: #ffffff !important;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.chart-doughnut-wrapper {
+  position: relative;
+  height: 250px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.center-text-overlay {
+  position: absolute;
+  top: 48%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
+  z-index: 10;
+}
+
+
+.percentage-number {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1;
+  display: block;
+}
+
+
+.percentage-label {
+  font-size: 0.9rem;
+  color: #b0b8c4;
+  font-weight: 400;
+  margin-top: 5px;
+  display: block;
+}
+
+
+.card-oftlessons-dark .chart-container {
+  background-color: transparent !important;
+  border: none !important;
+  padding: 0;
+  box-shadow: none;
+}
+
+
+.text-total-questoes {
+  color: #94a3b8;
+  font-size: 0.9rem;
+  margin-top: -5px;
+  display: block;
 }

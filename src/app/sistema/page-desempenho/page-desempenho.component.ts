@@ -1,11 +1,23 @@
 import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
 import { QuestoesService } from 'src/app/services/questoes.service'; // Atualize o caminho se necessário
-import { Label } from 'ng2-charts';
+import { Label, Color } from 'ng2-charts';
 import { TemaDescricoes } from '../page-questoes/enums/tema-descricao';
 import { AuthService } from 'src/app/services/auth.service';
 import { Usuario } from 'src/app/login/usuario';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+
+interface PieChartDataCustom {
+  title: string;
+  data: number[];
+  labels: Label[];
+  chartType: ChartType;
+  options: ChartOptions;
+  colors: Color[];
+  percentualValor: number;
+  percentualTexto: string;
+}
+
 
 @Component({
   selector: 'app-page-desempenho',
@@ -17,34 +29,11 @@ export class PageDesempenhoComponent implements OnInit {
   alunoMentoradoId!: string;
   nomeAlunoMentorado!: string;
 
-  public pieChartsData: {
-    title: string;
-    data: number[];
-    labels: string[];
-    chartType: ChartType;
-    options: ChartOptions;
-    colors: any[];
-  }[] = [];
+  public pieChartsData: PieChartDataCustom[] = [];
+  public lineChartType: ChartType = 'line';
+  public anoAtual = new Date().getFullYear();
+  public totalQuestoesAno: number = 0;
 
-
-  // Gráfico 1: Acertos e Erros por Tipo de Prova
-  public barChartOptions1: ChartOptions = {
-    responsive: true,
-    title: {
-      display: true,
-      text: 'Acertos e Erros por Tipo de Prova'
-    },
-    scales: {
-      xAxes: [
-        {
-          ticks: {
-            beginAtZero: true,
-            stepSize: 1, // Define a escala para números inteiros
-          },
-        },
-      ],
-    },
-  };
   public barChartLabels1: Label[] = [];
   public barChartType: ChartType = 'horizontalBar';
   public barChartLegend = true;
@@ -52,13 +41,13 @@ export class PageDesempenhoComponent implements OnInit {
     {
       data: [],
       label: 'Acertos',
-      backgroundColor: '#1C9212',
+      backgroundColor: '#3B82F6',
       borderColor: '#1C9212',
     },
     {
       data: [],
       label: 'Erros',
-      backgroundColor: '#3B5FA0',
+      backgroundColor: '#EF4444',
       borderColor: '#3B5FA0',
     },
   ];
@@ -75,7 +64,7 @@ export class PageDesempenhoComponent implements OnInit {
         {
           ticks: {
             beginAtZero: true,
-            stepSize: 1, // Define a escala para números inteiros
+            stepSize: 1,
           },
         },
       ],
@@ -90,39 +79,68 @@ export class PageDesempenhoComponent implements OnInit {
       borderColor: '#FFA500',
     },
   ];
-
-  // Gráfico 3: Acertos e Erros por Mês
+ 
   public barChartOptions3: ChartOptions = {
     responsive: true,
+    maintainAspectRatio: false, 
     title: {
+      display: false, 
+    },
+    legend: {
       display: true,
-      text: 'Acertos e Erros por Mês'
+      position: 'top',
+      align: 'end', 
+      labels: {
+        fontColor: '#ffffff', 
+        usePointStyle: true,  
+        boxWidth: 10
+      }
+    },
+    tooltips: {
+      mode: 'index',
+      intersect: false,
+      backgroundColor: 'rgba(0,0,0,0.8)',
+      titleFontColor: '#fff',
+      bodyFontColor: '#fff'
     },
     scales: {
-      yAxes: [
-        {
-          ticks: {
-            beginAtZero: true,
-            stepSize: 1, // Define a escala para números inteiros
-          },
+      xAxes: [{
+        gridLines: {
+          color: 'rgba(255, 255, 255, 0.1)', 
+          zeroLineColor: 'rgba(255, 255, 255, 0.1)'
         },
-      ],
-    },
+        ticks: {
+          fontColor: '#9ca3af', 
+        }
+      }],
+      yAxes: [{
+        gridLines: {
+          color: 'rgba(255, 255, 255, 0.1)', 
+          zeroLineColor: 'rgba(255, 255, 255, 0.1)'
+        },
+        ticks: {
+          fontColor: '#9ca3af', 
+          beginAtZero: true,
+          stepSize: 5, 
+          padding: 10
+        }
+      }]
+    }
   };
   public barChartType3: ChartType = 'bar';
   public barChartLabels3: string[] = [
-    'Janeiro',
-    'Fevereiro',
-    'Março',
-    'Abril',
-    'Maio',
-    'Junho',
-    'Julho',
-    'Agosto',
-    'Setembro',
-    'Outubro',
-    'Novembro',
-    'Dezembro',
+    'Jan',
+    'Fev',
+    'Mar',
+    'Abr',
+    'Mai',
+    'Jun',
+    'Jul',
+    'Ago',
+    'Set',
+    'Out',
+    'Nov',
+    'Dez',
   ];
   public barChartData3: ChartDataSets[] = [
     {
@@ -138,6 +156,7 @@ export class PageDesempenhoComponent implements OnInit {
       borderColor: '#3B5FA0',
     },
   ];
+
 
   // Gráfico 4: Acertos e Erros por Tema
   public barChartOptions4: ChartOptions = {
@@ -196,11 +215,13 @@ export class PageDesempenhoComponent implements OnInit {
 
         const idUser = parseInt(this.usuario.id);
 
+
         this.questoesService
           .getAcertosEErrosPorTipoDeProva(idUser)
           .subscribe((data1) => {
             this.processChartData1(data1);
           });
+
 
         this.questoesService
           .getQuestoesFeitasPorTema(idUser)
@@ -208,12 +229,14 @@ export class PageDesempenhoComponent implements OnInit {
             this.processChartData2(data2);
           });
 
+
         this.questoesService
           .getAcertosEErrosPorMes(idUser)
           .subscribe((data3) => {
             const dataMap = this.convertBackendDataToMap(data3);
             this.processChartData3(dataMap);
           });
+
 
         this.questoesService
           .getAcertosErrosPorTema(idUser)
@@ -227,6 +250,7 @@ export class PageDesempenhoComponent implements OnInit {
     );
   }
 
+  //gráfico de acerto e erro por prova
   private processChartData1(data: any): void {
     const provas = [
       'Prova de Bases (Teórica 1)',
@@ -234,20 +258,45 @@ export class PageDesempenhoComponent implements OnInit {
       'Prova de Imagens (Teórico-prática)',
     ];
 
+    // @ts-ignore (ignorando erro de tipagem estrita no map se necessário)
     this.pieChartsData = provas.map((tipo) => {
       const tipoData = data[tipo] || { acertos: 0, erros: 0 };
+      
+      const total = tipoData.acertos + tipoData.erros;
+      const percentual = total > 0 ? Math.round((tipoData.acertos / total) * 100) : 0;
+
       return {
         title: tipo,
         data: [tipoData.acertos, tipoData.erros],
         labels: ['Acertos', 'Erros'],
-        chartType: 'pie' as ChartType,
+        
+        chartType: 'doughnut',
+
+        percentualValor: percentual,
+        percentualTexto: 'Acertos',
+
         options: {
           responsive: true,
           maintainAspectRatio: false,
+          cutoutPercentage: 60, 
+          legend: {
+            display: true,
+            position: 'bottom',
+            labels: {
+              fontColor: '#ffffff', 
+              usePointStyle: true, 
+              padding: 20
+            }
+          },
+          tooltips: {
+            enabled: true 
+          }
         },
         colors: [
           {
-            backgroundColor: ['#2d7d96', '#e05538'],
+            backgroundColor: ['#3b82f6', '#ef4444'], 
+            borderWidth: 1, 
+            borderColor: '#F6F8FE' 
           },
         ],
       };
@@ -255,6 +304,7 @@ export class PageDesempenhoComponent implements OnInit {
   }
 
 
+  //gráfico acertos erro por mes
   private processChartData2(data: any): void {
     const temas = Object.values(TemaDescricoes);
     this.barChartLabels2 = temas;
@@ -272,6 +322,7 @@ export class PageDesempenhoComponent implements OnInit {
       },
     ];
   }
+
 
   private processChartData4(data: any): void {
     const temas = Object.values(TemaDescricoes);
@@ -300,9 +351,11 @@ export class PageDesempenhoComponent implements OnInit {
     ];
   }
 
+
   private processChartData3(data: Map<string, Map<string, number>>): void {
     const acertosData: number[] = new Array(12).fill(0);
     const errosData: number[] = new Array(12).fill(0);
+    
 
     this.barChartLabels3.forEach((mes, index) => {
       const mesData = data.get(this.getMonthYearString(index));
@@ -312,25 +365,39 @@ export class PageDesempenhoComponent implements OnInit {
       }
     });
 
+    const totalAcertos = acertosData.reduce((a,b) => a+b,0);
+    const totalErros = errosData.reduce((a,b) => a+b,0);
+    this.totalQuestoesAno = totalAcertos+totalErros;
+
     this.barChartData3 = [
       {
         data: acertosData,
         label: 'Acertos',
-        backgroundColor: '#0A275E',
-        borderColor: '#0A275E',
-        hoverBackgroundColor: '#113A87',
-        hoverBorderColor: '#113A87',
+        borderColor: '#3B82F6', 
+        backgroundColor: '#3B82F6', 
+        pointBackgroundColor: '#3B82F6',
+        pointBorderColor: '#fff',
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderColor: '#3B82F6',
+        fill: false, 
+        lineTension: 0.4,
+        borderWidth: 2
       },
       {
         data: errosData,
         label: 'Erros',
-        backgroundColor: '#4E5E7B',
-        borderColor: '#4E5E7B',
-        hoverBackgroundColor: '#667A9F',
-        hoverBorderColor: '#667A9F',
+        borderColor: '#EF4444', 
+        backgroundColor: '#EF4444',
+        pointBackgroundColor: '#EF4444',
+        pointBorderColor: '#fff',
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderColor: '#EF4444',
+        fill: false,
+        lineTension: 0.4,
+        borderWidth: 2
       },
     ];
-  }
+}
 
   private convertBackendDataToMap(data: any): Map<string, Map<string, number>> {
     const result = new Map<string, Map<string, number>>();

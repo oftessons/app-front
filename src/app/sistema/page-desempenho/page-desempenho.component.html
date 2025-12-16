@@ -5,8 +5,8 @@
       &times;
     </button>
 
-    <h1 class="mt-4">
-      <span> | </span>
+
+    <h1 class="mt-4 text-white"> <span> | </span>
       <ng-container *ngIf="alunoMentoradoId; else meuDesempenho">
         Desempenho geral de "{{ nomeAlunoMentorado }}"
       </ng-container>
@@ -15,38 +15,71 @@
       </ng-template>
     </h1>
 
-    <div class="row">
-      <div class="col-12 col-sm-6 col-md-4 mb-4" *ngFor="let pie of pieChartsData">
-        <div class="chart-wrapper p-3 shadow-sm rounded bg-white h-100">
-          <h5 class="text-center mb-3" style="color: black; font-weight: bold;">{{ pie.title }}</h5>
+
+    <div class="row mt-4"> <div class="col-12 col-md-4 mb-4" *ngFor="let pie of pieChartsData">
+        
+        <div class="card-oftlessons-dark shadow-sm">
+          
+          <h5 class="text-center">{{ pie.title }}</h5>
 
           <ng-container *ngIf="(pie.data[0] + pie.data[1]) > 0; else noData">
-            <div class="chart-container" style="position: relative; height: 240px; width: 100%;">
-              <canvas baseChart [data]="pie.data" [labels]="pie.labels" [chartType]="pie.chartType"
-                [options]="pie.options" [colors]="pie.colors" [legend]="true">
+            
+            <div class="chart-doughnut-wrapper">
+              
+              <canvas baseChart 
+                      [data]="pie.data" 
+                      [labels]="pie.labels" 
+                      [chartType]="pie.chartType"
+                      [options]="pie.options" 
+                      [colors]="pie.colors" 
+                      [legend]="true">
               </canvas>
+
+              <div class="center-text-overlay">
+                <span class="percentage-number">{{ pie.percentualValor }}%</span>
+                <span class="percentage-label">{{ pie.percentualTexto }}</span>
+              </div>
+
             </div>
+
           </ng-container>
 
           <ng-template #noData>
-            <p class="text-center text-muted">Sem dados disponíveis</p>
+            <div class="d-flex align-items-center justify-content-center" style="height: 200px;">
+              <p class="text-center text-muted mb-0">Sem dados disponíveis</p>
+            </div>
           </ng-template>
         </div>
-      </div>
     </div>
 
 
-    <div class="row">
+
+
+    <div class="row mt-4">
       <div class="col-md-12">
-        <div class="chart-container">
-          <div style="display: block;">
-            <canvas baseChart [datasets]="barChartData3" [labels]="barChartLabels3" [options]="barChartOptions3"
-              [legend]="barChartLegend" [chartType]="barChartType3">
-            </canvas>
+        <div class="card-oftlessons-dark shadow-sm">
+          
+          <div class="mb-4">
+            <h5 class="text-white mb-1">Acertos e Erros por mês em {{ anoAtual }}</h5>
+            <small class="text-muted">Total de Questões: {{totalQuestoesAno}}</small>
+          </div>
+
+          <div class="chart-container" style="position: relative; height: 300px; width: 100%;">
+            <canvas baseChart 
+              [datasets]="barChartData3" 
+              [labels]="barChartLabels3" 
+              [options]="barChartOptions3"
+              [legend]="barChartLegend" 
+              [chartType]="lineChartType"> </canvas>
           </div>
         </div>
       </div>
     </div>
+
+
+
+
+
 
     <div class="row">
       <div class="col-md-12 p-3">
