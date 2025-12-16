@@ -6422,7 +6422,7 @@ a.close.disabled {
 
 .modal-body .form-control {
   border-radius: 8px;
-  background-color: #c1c0bf3d;
+  background-color: #fff;
   border: 1px solid #ced4da;
 }
 
@@ -6463,7 +6463,7 @@ a.close.disabled {
   flex-direction: column;
   width: 100%;
   pointer-events: auto;
-  background-color: #fff;
+  background-color: var(--bg-container);
   background-clip: padding-box;
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 0.3rem;
@@ -6472,7 +6472,7 @@ a.close.disabled {
 
 
 .modal-header {
-  background-color: #002752;
+  background-color: var(--bg-container);
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -6483,21 +6483,29 @@ a.close.disabled {
 }
 
 .modal-header .close {
+  color: var(--texto-color) !important;
   padding: 1rem 1rem;
   margin: -1rem -1rem -1rem auto;
 }
 
 .btn-close-white {
-  color: #fff;
   border: none;
-  /* Opcional: remove a borda, se houver */
+}
+
+.btn-close {
+  filter: none;
+  color: var(--text-color) !important;
+}
+
+body.dark-mode .btn-close {
+  filter: brightness(0) invert(1);
 }
 
 .mat-h5,
 .mat-typography h5 {
   font: 400 16px / 20px Roboto, "Helvetica Neue", sans-serif !important;
   margin: 0 !important;
-  color: #fff !important;
+  color: var(--text-color) !important;
 }
 
 .mat-select-panel.custom-dropdown {
@@ -6532,6 +6540,7 @@ a.close.disabled {
   position: relative;
   flex: 1 1 auto;
   padding: 1rem;
+  background-color: var(--bg-container);
 }
 
 .modal-footer {
@@ -6540,13 +6549,20 @@ a.close.disabled {
   align-items: center;
   justify-content: flex-end;
   padding: 0.75rem;
-  border-top: none !important;
+  background-color: var(--bg-container);
+  border-top: 1px solid var(--border-color);
   border-bottom-right-radius: calc(0.3rem - 1px);
   border-bottom-left-radius: calc(0.3rem - 1px);
 }
 
 .modal-footer>* {
   margin: 0.25rem;
+}
+
+.modal-footer {
+  background-color: var(--bg-container) !important;
+  border-top: none !important;
+  color: var(--text-color);
 }
 
 .modal-scrollbar-measure {
