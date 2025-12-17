@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, Optional } from '@angular/core';
+import { Component, ElementRef, HostListener, Inject, OnInit, Optional, ViewChild } from '@angular/core';
 import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
 import { QuestoesService } from 'src/app/services/questoes.service'; // Atualize o caminho se necessário
 import { Label, Color } from 'ng2-charts';
@@ -18,6 +18,12 @@ interface PieChartDataCustom {
   percentualTexto: string;
 }
 
+interface TemaData {
+  nome: string;
+  valor: number;
+  selecionado: boolean;
+}
+
 
 @Component({
   selector: 'app-page-desempenho',
@@ -33,6 +39,17 @@ export class PageDesempenhoComponent implements OnInit {
   public lineChartType: ChartType = 'line';
   public anoAtual = new Date().getFullYear();
   public totalQuestoesAno: number = 0;
+
+  //dados para o gŕafico de quantidade de questoes feitas por tema
+  public totalQuestoesGeral: number = 0;
+  public taxaAcertoGeral: number = 0;
+  public taxaErroGeral: number = 0;
+  public temaDestaque: string = '---';
+  public questoesDestaque: number = 0;
+  public showRadarConfig: boolean = false; 
+  public todosTemas: TemaData[] = [];
+  public maxTemasPermitidos: number = 10;
+  public radarChartType: ChartType = 'radar';
 
   public barChartLabels1: Label[] = [];
   public barChartType: ChartType = 'horizontalBar';
@@ -52,24 +69,52 @@ export class PageDesempenhoComponent implements OnInit {
     },
   ];
 
-  // Gráfico 2: Quantidade de Questões Feitas por Tema
-  public barChartOptions2: ChartOptions = {
+
+
+
+
+
+
+
+  public radarChartOptions: ChartOptions = {
     responsive: true,
-    title: {
-      display: true,
-      text: 'Quantidade de Questões Feitas por Tema'
+    maintainAspectRatio: false,
+    title: { display: false },
+    legend: { display: false }, 
+    scale: {
+      angleLines: {
+        color: 'rgba(255, 255, 255, 0.1)' 
+      },
+      gridLines: {
+        color: 'rgba(255, 255, 255, 0.1)' 
+      },
+      pointLabels: {
+        fontColor: '#ffffff', 
+        fontSize: 12
+      },
+      ticks: {
+        backdropColor: 'transparent', 
+        fontColor: '#94a3b8',
+        beginAtZero: true,
+        showLabelBackdrop: false
+      }
     },
-    scales: {
-      xAxes: [
-        {
-          ticks: {
-            beginAtZero: true,
-            stepSize: 1,
-          },
-        },
-      ],
-    },
+    tooltips: {
+      backgroundColor: '#1e293b',
+      titleFontColor: '#fff',
+      bodyFontColor: '#fff',
+      borderColor: 'rgba(255,255,255,0.1)',
+      borderWidth: 1
+    }
   };
+  public radarChartLabels: Label[] = [];
+  public radarChartData: ChartDataSets[] = [
+    { data: [], label: 'Questões' }
+  ];
+
+
+
+  // Gráfico 2: Quantidade de Questões Feitas por Tema
   public barChartLabels2: Label[] = [];
   public barChartData2: ChartDataSets[] = [
     {
@@ -139,6 +184,22 @@ export class PageDesempenhoComponent implements OnInit {
       }]
     }
   };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   public barChartType3: ChartType = 'bar';
   public barChartLabels3: string[] = [
     'Jan',
@@ -168,6 +229,11 @@ export class PageDesempenhoComponent implements OnInit {
       borderColor: '#3B5FA0',
     },
   ];
+
+
+
+
+
 
 
   // Gráfico 4: Acertos e Erros por Tema
@@ -203,6 +269,11 @@ export class PageDesempenhoComponent implements OnInit {
       borderColor: '#3B5FA0',
     },
   ];
+
+
+
+
+
 
   constructor(
     private questoesService: QuestoesService,
@@ -290,14 +361,14 @@ export class PageDesempenhoComponent implements OnInit {
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          cutoutPercentage: 60, 
+          cutoutPercentage: 55, 
           legend: {
             display: true,
             position: 'bottom',
             labels: {
               fontColor: '#ffffff', 
               usePointStyle: true, 
-              padding: 30
+              padding: 20
             }
           },
           tooltips: {
@@ -316,24 +387,98 @@ export class PageDesempenhoComponent implements OnInit {
   }
 
 
+  
+
   //gráfico acertos erro por mes
   private processChartData2(data: any): void {
-    const temas = Object.values(TemaDescricoes);
-    this.barChartLabels2 = temas;
+    const nomes = Object.keys(data);
+    
+    this.todosTemas = nomes.map(nome => {
+      return {
+        nome: nome,
+        valor: data[nome] || 0,
+        selecionado: false,
+        ordemAleatoria: Math.random()
+      };
+    });
 
-    const questoesFeitasData = temas.map((tema) => data[tema] || 0);
+    this.todosTemas.sort((a, b) => b.valor - a.valor);
 
-    this.barChartData2 = [
-      {
-        data: questoesFeitasData,
-        label: 'Questões Feitas',
-        backgroundColor: '#D69C11',
-        borderColor: '#D69C11',
-        hoverBackgroundColor: '#FFBF23',
-        hoverBorderColor: '#FFBF23',
-      },
-    ];
+    this.todosTemas.forEach((tema, index) => {
+      if (index < 10) {
+        tema.selecionado = true;
+      }
+    });
+
+    this.atualizarTotaisGerais();
+
+    this.atualizarGraficoRadar();
   }
+
+
+  public toggleTema(tema: TemaData): void {
+    const totalSelecionados = this.todosTemas.filter(t => t.selecionado).length;
+    if (!tema.selecionado && totalSelecionados >= this.maxTemasPermitidos) {
+      alert(`Você só pode selecionar no máximo ${this.maxTemasPermitidos} temas.`);
+      return;
+    }
+    tema.selecionado = !tema.selecionado;
+    
+    this.atualizarGraficoRadar();
+  }
+
+  private atualizarGraficoRadar(): void {
+    let ativos = [...this.todosTemas.filter(t => t.selecionado)];
+    ativos.sort((a, b) => a.nome.localeCompare(b.nome));
+
+    this.radarChartLabels = ativos.map(t => t.nome);
+    this.radarChartData = [{
+      data: ativos.map(t => t.valor),
+      label: 'Questões Feitas',
+      backgroundColor: 'rgba(214, 156, 17, 0.2)',
+      borderColor: '#D69C11',
+      pointBackgroundColor: '#D69C11',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: '#D69C11',
+      borderWidth: 2
+    }];
+  }
+
+  private atualizarTotaisGerais(): void {
+    const valores = this.todosTemas.map(t => t.valor);
+    this.totalQuestoesGeral = valores.reduce((a, b) => a + b, 0);
+
+    if (this.todosTemas.length > 0) {
+      this.temaDestaque = this.todosTemas[0].nome;
+      this.questoesDestaque = this.todosTemas[0].valor;
+    }
+  }
+
+  public toggleConfig(): void {
+    this.showRadarConfig = !this.showRadarConfig;
+  }
+
+  @ViewChild('modalConfig') modalConfig!: ElementRef;
+  @ViewChild('btnConfig') btnConfig!: ElementRef;
+
+  @HostListener('document:click', ['$event'])
+  clickFora(event: MouseEvent) {
+    if (!this.showRadarConfig) {
+      return;
+    }
+    const clicouNoModal = this.modalConfig && this.modalConfig.nativeElement.contains(event.target);
+    
+    const clicouNoBotao = this.btnConfig && this.btnConfig.nativeElement.contains(event.target);
+
+    if (!clicouNoModal && !clicouNoBotao) {
+      this.showRadarConfig = false; 
+    }
+  }
+
+
+
+
 
 
   private processChartData4(data: any): void {
@@ -362,6 +507,14 @@ export class PageDesempenhoComponent implements OnInit {
       },
     ];
   }
+
+
+
+
+
+
+
+
 
 
   private processChartData3(data: Map<string, Map<string, number>>): void {
@@ -393,7 +546,7 @@ export class PageDesempenhoComponent implements OnInit {
         pointHoverBorderColor: '#fff',
         pointHoverBorderWidth: 2,
         fill: false, 
-        lineTension: 0.4, 
+        lineTension: 0.2, 
         borderWidth: 2
       },
       {
@@ -407,14 +560,21 @@ export class PageDesempenhoComponent implements OnInit {
         pointHoverBackgroundColor: '#EF4444',
         pointHoverBorderColor: '#fff',
         pointHoverBorderWidth: 2,
-        // ------------------------------
 
         fill: false,
-        lineTension: 0.4,
+        lineTension: 0.2,
         borderWidth: 2
       },
     ];
   }
+
+
+
+
+
+
+
+
 
   private convertBackendDataToMap(data: any): Map<string, Map<string, number>> {
     const result = new Map<string, Map<string, number>>();

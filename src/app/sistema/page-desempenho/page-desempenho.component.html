@@ -54,7 +54,7 @@
 
 
 
-
+    <!-- RELACIONADO AO GŔAFICO E DADOS DE QUESTOES COM ACER E ERROS POR MES DO ANO ATUAL -->
     <div class="row mt-4">
       <div class="col-md-12">
         <div class="card-oftlessons-dark shadow-sm">
@@ -77,21 +77,105 @@
     </div>
 
 
+    <!-- RELACIONADO AO GŔAFICO E DADOS DE QUESTOES POR TEMA COM ACER E ERROS -->
+    <h2 class="mt-4 text-white">Questões por tema com Erros e Acertos</h2>
 
+    <div class="row mb-4">
+      <div class="col-6 col-md-3 mb-3">
+        <div class="info-card">
+          <span class="info-label">Total de Questões</span>
+          <div class="info-value">{{ totalQuestoesGeral }}</div>
+          <span class="info-sub">{{ radarChartLabels.length }} temas</span>
+        </div>
+      </div>
 
+      <div class="col-6 col-md-3 mb-3">
+        <div class="info-card">
+          <span class="info-label">Total de Acertos</span>
+          <div class="info-value">--</div> 
+          <span class="info-sub">{{ taxaAcertoGeral }}% de acerto</span>
+        </div>
+      </div>
 
+      <div class="col-6 col-md-3 mb-3">
+        <div class="info-card">
+          <span class="info-label">Total de Erros</span>
+          <div class="info-value">--</div>
+          <span class="info-sub">{{ taxaErroGeral }}% de erro</span>
+        </div>
+      </div>
 
-    <div class="row">
-      <div class="col-md-12 p-3">
-        <div class="chart-container">
-          <div style="display: block;" class="container-height">
-            <canvas baseChart [datasets]="barChartData2" [labels]="barChartLabels2" [options]="barChartOptions2"
-              [legend]="barChartLegend" [chartType]="barChartType">
-            </canvas>
-          </div>
+      <div class="col-6 col-md-3 mb-3">
+        <div class="info-card">
+          <span class="info-label">Tema em Destaque</span>
+          <div class="info-value" style="font-size: 1.2rem; margin-top: 5px;">{{ temaDestaque }}</div>
+          <span class="info-sub">{{ questoesDestaque }} questões</span>
         </div>
       </div>
     </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card-oftlessons-dark shadow-sm position-relative">
+          
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+              <h5 class="text-white mb-1">Questões Feitas por Tema</h5>
+              <small class="text-muted">
+                Exibindo {{ radarChartLabels.length }} de {{ todosTemas.length }} temas
+              </small>
+            </div>
+            
+            <button #btnConfig (click)="toggleConfig()" 
+                    class="btn config-btn" 
+                    [class.active]="showRadarConfig">
+              <i class="fa fa-cog icon-spin-hover"></i> 
+            </button>
+          </div>
+
+          <div #modalConfig class="radar-config-panel" *ngIf="showRadarConfig">
+            <h6 class="text-white mb-3">Selecione os temas (Máx 10)</h6>
+            
+            <div class="themes-list">
+              <div class="theme-item" *ngFor="let item of todosTemas">
+                <label class="custom-checkbox">
+                  <input type="checkbox" 
+                        [checked]="item.selecionado"
+                        (change)="toggleTema(item)"
+                        [disabled]="!item.selecionado && (radarChartLabels.length >= maxTemasPermitidos)">
+                  <span class="checkmark"></span>
+                  <span class="label-text">{{ item.nome }} <small class="text-muted">({{ item.valor }})</small></span>
+                </label>
+              </div>
+            </div>
+
+            <div class="text-end mt-3">
+              <button class="btn btn-sm btn-primary" (click)="toggleConfig()">Concluir</button>
+            </div>
+          </div>
+
+          <div class="chart-container" style="position: relative; height: 400px; width: 100%;">
+            <canvas baseChart 
+              [datasets]="radarChartData" 
+              [labels]="radarChartLabels" 
+              [options]="radarChartOptions"
+              [legend]="false" 
+              [chartType]="radarChartType">
+            </canvas>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+
+
+
+
 
     <div class="row">
       <div class="col-md-12">

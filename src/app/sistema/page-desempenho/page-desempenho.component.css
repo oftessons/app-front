@@ -127,11 +127,6 @@
   line-height: 1;
 }
 
-.label-text {
-  font-size: 1rem;
-  color: #243146; 
-  margin-top: 5px;
-}
 
 .chart-doughnut-container {
   position: relative;
@@ -205,4 +200,150 @@
   font-size: 0.9rem;
   margin-top: -5px;
   display: block;
+}
+
+
+.info-card {
+  background-color: #14181A;
+  border: 2px solid #243146;
+  border-radius: 12px;
+  padding: 15px 20px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.info-label {
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+.info-value {
+  color: #ffffff;
+  font-size: 1.8rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.info-sub {
+  color: #ffffff;
+  font-size: 0.8rem;
+  margin-top: 5px;
+}
+
+
+canvas {
+ 
+  max-width: 100%; 
+}
+
+.config-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  
+  background-color: transparent;
+  border: 1px solid #334155;
+  color: #94a3b8;
+  padding: 10px 20px;
+  font-size: 1rem;   
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.config-btn:hover, 
+.config-btn.active {
+  background-color: #334155;
+  color: white;             
+  border-color: #475569;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.radar-config-panel {
+  position: absolute;
+  top: 60px;
+  right: 20px;
+  width: 300px;
+  max-height: 380px;
+  background-color: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  padding: 15px;
+  z-index: 100;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  display: flex;
+  flex-direction: column;
+}
+
+.themes-list {
+  overflow-y: auto;
+  flex-grow: 1;
+  padding-right: 5px;
+}
+.themes-list::-webkit-scrollbar {
+  width: 6px;
+}
+.themes-list::-webkit-scrollbar-thumb {
+  background-color: #475569;
+  border-radius: 4px;
+}
+
+.theme-item {
+  margin-bottom: 8px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  padding-bottom: 4px;
+}
+.custom-checkbox {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.custom-checkbox input {
+  display: none;
+}
+
+.checkmark {
+  height: 18px;
+  width: 18px;
+  background-color: #0f172a;
+  border: 1px solid #475569;
+  border-radius: 4px;
+  margin-right: 10px;
+  position: relative;
+  transition: all 0.2s;
+}
+
+.custom-checkbox input:checked ~ .checkmark {
+  background-color: #D69C11;
+  border-color: #D69C11;
+}
+
+.custom-checkbox input:checked ~ .checkmark:after {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.custom-checkbox input:disabled ~ .label-text {
+  color: #475569;
+  cursor: not-allowed;
+}
+
+.label-text {
+  color: #e2e8f0;
+  font-size: 0.9rem;
 }
