@@ -10,7 +10,7 @@
         {{ getLabelFromValue(selectedValue) }}
       </span>
 
-      <span class="remove-value" *ngIf="selectedValue && !disabled" (click)="removeValue($event)">×</span>
+      <span class="remove-value" *ngIf="selectedValue && !notDeleteContent" (click)="removeValue($event)">×</span>
 
     </div>
 

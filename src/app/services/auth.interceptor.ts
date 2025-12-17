@@ -31,10 +31,10 @@ export class AuthInterceptor implements HttpInterceptor {
             this.router.navigate(['/planos']);
 
           } else {
-            this.snackBar.open('Sua sessão expirou. Faça login novamente.', 'Fechar', {
-              duration: 20000,
-              panelClass: ['snackbar-warning']
-            });
+            // this.snackBar.open('Sua sessão expirou. Faça login novamente.', 'Fechar', {
+            //   duration: 20000,
+            //   panelClass: ['snackbar-warning']
+            // });
 
             localStorage.removeItem('access_token');
 

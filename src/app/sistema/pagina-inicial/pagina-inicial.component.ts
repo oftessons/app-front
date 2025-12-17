@@ -233,7 +233,7 @@ export class PaginaInicialComponent implements OnInit {
     this.camposComErro = [];
     this.mensagensDeErro = {};
 
-    this.validarCampoObrigatorio('nome', 'O campo nome é obrigatório');
+    // this.validarCampoObrigatorio('nome', 'O campo nome é obrigatório');
     this.validarCampoObrigatorio('email', 'O campo e-mail é obrigatório');
 
     if (!this.tipoDeEstudante) {
@@ -259,7 +259,7 @@ export class PaginaInicialComponent implements OnInit {
     const usuario: Usuario = new Usuario();
     usuario.password = this.password;
     usuario.email = this.email;
-    usuario.nome = this.nome;
+    // usuario.nome = this.nome;
     usuario.tipoDeEstudante = this.tipoDeEstudante;
 
     this.authService
@@ -269,7 +269,7 @@ export class PaginaInicialComponent implements OnInit {
           this.mensagemSucesso = "Cadastro realizado com sucesso! Efetue o login.";
           this.password = '';
           this.email = '';
-          this.nome = '';
+          // this.nome = '';
           this.tipoDeEstudante = '';
           this.errors = [];
 

@@ -131,9 +131,9 @@ export class LoginComponent implements OnInit {
   }
 
   // Validação de campo de nome
-  if (!this.nome) {
-    passwordValidationErrors.push("O campo de nome é obrigatório.");
-  }
+  // if (!this.nome) {
+  //   passwordValidationErrors.push("O campo de nome é obrigatório.");
+  // }
 
   if(!this.tipoDeEstudante) {
     passwordValidationErrors.push("Selecione o tipo de usuário.");
@@ -148,7 +148,7 @@ export class LoginComponent implements OnInit {
     const usuario: Usuario = new Usuario();
     usuario.password = this.password;
     usuario.email = this.email.toLowerCase();
-    usuario.nome = this.nome;
+    // usuario.nome = this.nome;
     usuario.tipoDeEstudante = this.tipoDeEstudante;
 
     console.log(usuario);
@@ -161,7 +161,7 @@ export class LoginComponent implements OnInit {
           this.username = '';
           this.password = '';
           this.email = '';
-          this.nome = '';
+          // this.nome = '';
           this.tipoDeEstudante = '';
           this.errors = [];
         },  errorResponse => {

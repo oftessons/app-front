@@ -102,7 +102,7 @@ export class PermissaoProfessorComponent implements OnInit {
     
     let usuario: Usuario = new Usuario();
     usuario.password = userData.password;
-    usuario.nome = userData.nome;
+    // usuario.nome = userData.nome;
     usuario.email = userData.email;
     usuario.bolsaAssinatura = userData.bolsa;
     usuario.diasDeTeste = userData.quantidadeDiasBolsa;
@@ -244,9 +244,9 @@ export class PermissaoProfessorComponent implements OnInit {
 
     }
   
-    if (!userData.nome) {
-      passwordValidationErrors.push("O campo de nome é obrigatório.");
-    }
+    // if (!userData.nome) {
+    //   passwordValidationErrors.push("O campo de nome é obrigatório.");
+    // }
     
     if (passwordValidationErrors.length > 0) {
       this.modalErrors = passwordValidationErrors;

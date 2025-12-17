@@ -69,6 +69,7 @@
       <div class="filtro-select">
         <app-select-padrao
           [options]="opcoesFiltro"
+          [notDeleteContent]="true"
           [selectedValue]="filtroSelecionado"
           [label]="'Filtrar por'"
           (selectedValueChange)="onFiltroSelecionado($event)"
