@@ -82,47 +82,59 @@ export class PageDesempenhoComponent implements OnInit {
  
   public barChartOptions3: ChartOptions = {
     responsive: true,
-    maintainAspectRatio: false, 
-    title: {
-      display: false, 
-    },
+    maintainAspectRatio: false,
+    title: { display: false },
     legend: {
       display: true,
       position: 'top',
       align: 'end', 
       labels: {
-        fontColor: '#ffffff', 
+        fontColor: '#cbd5e1', 
         usePointStyle: true,  
-        boxWidth: 10
+        boxWidth: 8,          
+        padding: 20
+      }
+    },
+    layout: {
+      padding: {
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0
       }
     },
     tooltips: {
       mode: 'index',
       intersect: false,
-      backgroundColor: 'rgba(0,0,0,0.8)',
+      backgroundColor: '#1e293b', 
       titleFontColor: '#fff',
-      bodyFontColor: '#fff'
+      bodyFontColor: '#cbd5e1',
+      borderColor: 'rgba(255,255,255,0.1)',
+      borderWidth: 1
     },
     scales: {
       xAxes: [{
         gridLines: {
-          color: 'rgba(255, 255, 255, 0.1)', 
-          zeroLineColor: 'rgba(255, 255, 255, 0.1)'
+          display: false, 
+          drawBorder: false,
         },
         ticks: {
-          fontColor: '#9ca3af', 
+          fontColor: '#94a3b8', 
+          padding: 15           
         }
       }],
       yAxes: [{
+        position: 'right',
         gridLines: {
-          color: 'rgba(255, 255, 255, 0.1)', 
-          zeroLineColor: 'rgba(255, 255, 255, 0.1)'
+          color: 'rgba(255, 255, 255, 0.08)', 
+          drawBorder: false, 
+          zeroLineColor: 'rgba(255, 255, 255, 0.08)'
         },
         ticks: {
-          fontColor: '#9ca3af', 
+          fontColor: '#94a3b8', // Cor dos números
           beginAtZero: true,
-          stepSize: 5, 
-          padding: 10
+          padding: 15,
+          stepSize: 100 
         }
       }]
     }
@@ -285,7 +297,7 @@ export class PageDesempenhoComponent implements OnInit {
             labels: {
               fontColor: '#ffffff', 
               usePointStyle: true, 
-              padding: 20
+              padding: 30
             }
           },
           tooltips: {
@@ -356,7 +368,6 @@ export class PageDesempenhoComponent implements OnInit {
     const acertosData: number[] = new Array(12).fill(0);
     const errosData: number[] = new Array(12).fill(0);
     
-
     this.barChartLabels3.forEach((mes, index) => {
       const mesData = data.get(this.getMonthYearString(index));
       if (mesData) {
@@ -367,20 +378,22 @@ export class PageDesempenhoComponent implements OnInit {
 
     const totalAcertos = acertosData.reduce((a,b) => a+b,0);
     const totalErros = errosData.reduce((a,b) => a+b,0);
-    this.totalQuestoesAno = totalAcertos+totalErros;
+    this.totalQuestoesAno = totalAcertos + totalErros;
 
     this.barChartData3 = [
       {
         data: acertosData,
         label: 'Acertos',
-        borderColor: '#3B82F6', 
+        borderColor: '#3B82F6',
         backgroundColor: '#3B82F6', 
-        pointBackgroundColor: '#3B82F6',
-        pointBorderColor: '#fff',
-        pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: '#3B82F6',
+        pointRadius: 0,
+        pointHitRadius: 10,      
+        pointHoverRadius: 6,      
+        pointHoverBackgroundColor: '#3B82F6',
+        pointHoverBorderColor: '#fff',
+        pointHoverBorderWidth: 2,
         fill: false, 
-        lineTension: 0.4,
+        lineTension: 0.4, 
         borderWidth: 2
       },
       {
@@ -388,16 +401,20 @@ export class PageDesempenhoComponent implements OnInit {
         label: 'Erros',
         borderColor: '#EF4444', 
         backgroundColor: '#EF4444',
-        pointBackgroundColor: '#EF4444',
-        pointBorderColor: '#fff',
-        pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: '#EF4444',
+        pointRadius: 0,
+        pointHitRadius: 10,
+        pointHoverRadius: 6,
+        pointHoverBackgroundColor: '#EF4444',
+        pointHoverBorderColor: '#fff',
+        pointHoverBorderWidth: 2,
+        // ------------------------------
+
         fill: false,
         lineTension: 0.4,
         borderWidth: 2
       },
     ];
-}
+  }
 
   private convertBackendDataToMap(data: any): Map<string, Map<string, number>> {
     const result = new Map<string, Map<string, number>>();
