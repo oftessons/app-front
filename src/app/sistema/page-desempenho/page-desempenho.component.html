@@ -5,7 +5,6 @@
       &times;
     </button>
 
-
     <h1 class="mt-4 text-white"> <span> | </span>
       <ng-container *ngIf="alunoMentoradoId; else meuDesempenho">
         Desempenho geral de "{{ nomeAlunoMentorado }}"
@@ -15,178 +14,232 @@
       </ng-template>
     </h1>
 
+    <div class="dashboard-wrapper p-4 mt-4" style="background-color: #14181A; border-radius: 20px;">
 
-    <div class="row mt-4"> <div class="col-12 col-md-4 mb-4" *ngFor="let pie of pieChartsData">
-        
-        <div class="card-oftlessons-dark shadow-sm">
-          
-          <h5 class="text-center">{{ pie.title }}</h5>
-
-          <ng-container *ngIf="(pie.data[0] + pie.data[1]) > 0; else noData">
+      <div class="row"> 
+        <div class="col-12 col-md-4 mb-4" *ngFor="let pie of pieChartsData">
+          <div class="card-oftlessons-dark shadow-sm h-100">
+            <h5 class="text-center">{{ pie.title }}</h5>
             
-            <div class="chart-doughnut-wrapper">
-              
+            <ng-container *ngIf="(pie.data[0] + pie.data[1]) > 0; else noData">
+              <div class="chart-doughnut-wrapper">
+                <canvas baseChart 
+                        [data]="pie.data" 
+                        [labels]="pie.labels" 
+                        [chartType]="pie.chartType"
+                        [options]="pie.options" 
+                        [colors]="pie.colors" 
+                        [legend]="true">
+                </canvas>
+                <div class="center-text-overlay">
+                  <span class="percentage-number">{{ pie.percentualValor }}%</span>
+                  <span class="percentage-label">{{ pie.percentualTexto }}</span>
+                </div>
+              </div>
+            </ng-container>
+
+            <ng-template #noData>
+              <div class="d-flex align-items-center justify-content-center" style="height: 200px;">
+                <p class="text-center text-muted mb-0">Sem dados disponíveis</p>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mb-5">
+        <div class="col-md-12">
+          <div class="card-oftlessons-dark shadow-sm">
+            <div class="mb-4">
+              <h5 class="text-white mb-1">Acertos e Erros por mês em {{ anoAtual }}</h5>
+              <small class="text-muted">Total de Questões: {{totalQuestoesAno}}</small>
+            </div>
+            <div class="chart-container" style="position: relative; height: 350px; width: 100%;">
               <canvas baseChart 
-                      [data]="pie.data" 
-                      [labels]="pie.labels" 
-                      [chartType]="pie.chartType"
-                      [options]="pie.options" 
-                      [colors]="pie.colors" 
-                      [legend]="true">
+                [datasets]="barChartData3" 
+                [labels]="barChartLabels3" 
+                [options]="barChartOptions3"
+                [legend]="barChartLegend" 
+                [chartType]="lineChartType"> </canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h2 class="text-white mb-4">Questões por tema com Erros e Acertos</h2>
+
+      <div class="row mb-4">
+        <div class="col-6 col-md-3 mb-3">
+          <div class="info-card">
+            <span class="info-label">Total de Questões</span>
+            <div class="info-value">{{ totalQuestoesGeral }}</div>
+            <span class="info-sub">{{ radarChartLabels.length }} temas</span>
+          </div>
+        </div>
+        <div class="col-6 col-md-3 mb-3">
+          <div class="info-card">
+            <span class="info-label">Total de Acertos</span>
+            <div class="info-value">{{ totalAcertosCard }}</div> 
+            <span class="info-sub">{{ pctAcertosCard }}% de acerto</span>
+          </div>
+        </div>
+        <div class="col-6 col-md-3 mb-3">
+          <div class="info-card">
+            <span class="info-label">Total de Erros</span>
+            <div class="info-value">{{ totalErrosCard }}</div>
+            <span class="info-sub">{{ pctErrosCard }}% de erro</span>
+          </div>
+        </div>
+        <div class="col-6 col-md-3 mb-3">
+          <div class="info-card">
+            <span class="info-label">Tema em Destaque</span>
+            <div class="info-value" style="font-size: 1.2rem; margin-top: 5px;">{{ temaDestaque }}</div>
+            <span class="info-sub">{{ questoesDestaque }} questões</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mb-4">
+        <div class="col-md-12">
+          <div class="card-oftlessons-dark shadow-sm position-relative">
+            
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <div>
+                <h5 class="text-white mb-1">Questões Feitas por Tema</h5>
+                <small class="text-muted">
+                  Exibindo {{ radarChartLabels.length }} de {{ todosTemas.length }} temas
+                </small>
+              </div>
+              
+              <button #btnConfig (click)="toggleConfig()" 
+                      class="btn config-btn" 
+                      [class.active]="showRadarConfig">
+                <i class="fa fa-cog icon-spin-hover"></i> 
+              </button>
+            </div>
+
+            <div #modalConfig class="radar-config-panel" *ngIf="showRadarConfig">
+              <h6 class="text-white mb-3">Selecione os temas (Máx 10)</h6>
+              <div class="themes-list">
+                <div class="theme-item" *ngFor="let item of todosTemas">
+                  <label class="custom-checkbox">
+                    <input type="checkbox" 
+                          [checked]="item.selecionado"
+                          (change)="toggleTema(item)"
+                          [disabled]="!item.selecionado && (radarChartLabels.length >= maxTemasPermitidos)">
+                    <span class="checkmark"></span>
+                    <span class="label-text">{{ item.nome }} <small class="text-muted">({{ item.valor }})</small></span>
+                  </label>
+                </div>
+              </div>
+              <div class="text-end mt-3">
+                <button class="btn btn-sm btn-primary" (click)="toggleConfig()">Concluir</button>
+              </div>
+            </div>
+
+            <div class="chart-container radar-fix-height">
+              <canvas baseChart 
+                [datasets]="radarChartData" 
+                [labels]="radarChartLabels" 
+                [options]="radarChartOptions"
+                [legend]="false" 
+                [chartType]="radarChartType">
               </canvas>
+            </div>
 
-              <div class="center-text-overlay">
-                <span class="percentage-number">{{ pie.percentualValor }}%</span>
-                <span class="percentage-label">{{ pie.percentualTexto }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        
+        <div class="col-md-6 mb-4">
+          <div class="card-oftlessons-dark shadow-sm position-relative h-100">
+            
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <div>
+                <h5 class="text-white mb-1">
+                  <i class="fa fa-check-circle text-primary me-2"></i>Acertos por Tema
+                </h5>
+                <small class="text-muted">Total: {{ totalAcertosCard }}</small>
               </div>
-
+              <button (click)="toggleConfigAcertos()" class="btn config-btn" [class.active]="showConfigAcertos">
+                <i class="fa fa-cog"></i>
+              </button>
             </div>
 
-          </ng-container>
-
-          <ng-template #noData>
-            <div class="d-flex align-items-center justify-content-center" style="height: 200px;">
-              <p class="text-center text-muted mb-0">Sem dados disponíveis</p>
-            </div>
-          </ng-template>
-        </div>
-    </div>
-
-
-
-    <!-- RELACIONADO AO GŔAFICO E DADOS DE QUESTOES COM ACER E ERROS POR MES DO ANO ATUAL -->
-    <div class="row mt-4">
-      <div class="col-md-12">
-        <div class="card-oftlessons-dark shadow-sm">
-          
-          <div class="mb-4">
-            <h5 class="text-white mb-1">Acertos e Erros por mês em {{ anoAtual }}</h5>
-            <small class="text-muted">Total de Questões: {{totalQuestoesAno}}</small>
-          </div>
-
-          <div class="chart-container" style="position: relative; height: 300px; width: 100%;">
-            <canvas baseChart 
-              [datasets]="barChartData3" 
-              [labels]="barChartLabels3" 
-              [options]="barChartOptions3"
-              [legend]="barChartLegend" 
-              [chartType]="lineChartType"> </canvas>
-          </div>
-        </div>
-      </div>
-    </div>
-
-
-    <!-- RELACIONADO AO GŔAFICO E DADOS DE QUESTOES POR TEMA COM ACER E ERROS -->
-    <h2 class="mt-4 text-white">Questões por tema com Erros e Acertos</h2>
-
-    <div class="row mb-4">
-      <div class="col-6 col-md-3 mb-3">
-        <div class="info-card">
-          <span class="info-label">Total de Questões</span>
-          <div class="info-value">{{ totalQuestoesGeral }}</div>
-          <span class="info-sub">{{ radarChartLabels.length }} temas</span>
-        </div>
-      </div>
-
-      <div class="col-6 col-md-3 mb-3">
-        <div class="info-card">
-          <span class="info-label">Total de Acertos</span>
-          <div class="info-value">--</div> 
-          <span class="info-sub">{{ taxaAcertoGeral }}% de acerto</span>
-        </div>
-      </div>
-
-      <div class="col-6 col-md-3 mb-3">
-        <div class="info-card">
-          <span class="info-label">Total de Erros</span>
-          <div class="info-value">--</div>
-          <span class="info-sub">{{ taxaErroGeral }}% de erro</span>
-        </div>
-      </div>
-
-      <div class="col-6 col-md-3 mb-3">
-        <div class="info-card">
-          <span class="info-label">Tema em Destaque</span>
-          <div class="info-value" style="font-size: 1.2rem; margin-top: 5px;">{{ temaDestaque }}</div>
-          <span class="info-sub">{{ questoesDestaque }} questões</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-md-12">
-        <div class="card-oftlessons-dark shadow-sm position-relative">
-          
-          <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-              <h5 class="text-white mb-1">Questões Feitas por Tema</h5>
-              <small class="text-muted">
-                Exibindo {{ radarChartLabels.length }} de {{ todosTemas.length }} temas
-              </small>
-            </div>
-            
-            <button #btnConfig (click)="toggleConfig()" 
-                    class="btn config-btn" 
-                    [class.active]="showRadarConfig">
-              <i class="fa fa-cog icon-spin-hover"></i> 
-            </button>
-          </div>
-
-          <div #modalConfig class="radar-config-panel" *ngIf="showRadarConfig">
-            <h6 class="text-white mb-3">Selecione os temas (Máx 10)</h6>
-            
-            <div class="themes-list">
-              <div class="theme-item" *ngFor="let item of todosTemas">
-                <label class="custom-checkbox">
-                  <input type="checkbox" 
-                        [checked]="item.selecionado"
-                        (change)="toggleTema(item)"
-                        [disabled]="!item.selecionado && (radarChartLabels.length >= maxTemasPermitidos)">
-                  <span class="checkmark"></span>
-                  <span class="label-text">{{ item.nome }} <small class="text-muted">({{ item.valor }})</small></span>
-                </label>
+            <div class="radar-config-panel" *ngIf="showConfigAcertos">
+              <h6 class="text-white mb-3">Filtrar Acertos</h6>
+              <div class="themes-list">
+                <div class="theme-item" *ngFor="let item of todosTemasAcertos">
+                  <label class="custom-checkbox checkbox-blue">
+                      <input type="checkbox" [checked]="item.selecionado" (change)="toggleTemaEspecifico(item, 'acertos')">
+                      <span class="checkmark"></span>
+                      <span class="label-text">{{ item.nome }} <small class="text-muted">({{ item.valor }})</small></span>
+                  </label>
+                </div>
+              </div>
+              <div class="text-end mt-3">
+                <button class="btn btn-sm btn-primary" (click)="toggleConfigAcertos()">OK</button>
               </div>
             </div>
 
-            <div class="text-end mt-3">
-              <button class="btn btn-sm btn-primary" (click)="toggleConfig()">Concluir</button>
+            <div class="chart-container radar-fix-height">
+              <canvas baseChart 
+                [datasets]="radarAcertosData" 
+                [labels]="radarAcertosLabels" 
+                [options]="radarChartOptions"
+                [legend]="false" 
+                [chartType]="'radar'">
+              </canvas>
             </div>
           </div>
-
-          <div class="chart-container" style="position: relative; height: 400px; width: 100%;">
-            <canvas baseChart 
-              [datasets]="radarChartData" 
-              [labels]="radarChartLabels" 
-              [options]="radarChartOptions"
-              [legend]="false" 
-              [chartType]="radarChartType">
-            </canvas>
-          </div>
-
         </div>
-      </div>
-    </div>
 
+        <div class="col-md-6 mb-4">
+          <div class="card-oftlessons-dark shadow-sm position-relative h-100">
+            
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <div>
+                <h5 class="text-white mb-1">
+                  <i class="fa fa-times-circle text-danger me-2"></i>Erros por Tema
+                </h5>
+                <small class="text-muted">Total: {{ totalErrosCard }}</small>
+              </div>
+              <button (click)="toggleConfigErros()" class="btn config-btn" [class.active]="showConfigErros">
+                <i class="fa fa-cog"></i>
+              </button>
+            </div>
 
+            <div class="radar-config-panel" *ngIf="showConfigErros">
+              <h6 class="text-white mb-3">Filtrar Erros</h6>
+              <div class="themes-list">
+                <div class="theme-item" *ngFor="let item of todosTemasErros">
+                  <label class="custom-checkbox checkbox-red">
+                      <input type="checkbox" [checked]="item.selecionado" (change)="toggleTemaEspecifico(item, 'erros')">
+                      <span class="checkmark"></span>
+                      <span class="label-text">{{ item.nome }} <small class="text-muted">({{ item.valor }})</small></span>
+                  </label>
+                </div>
+              </div>
+              <div class="text-end mt-3">
+                <button class="btn btn-sm btn-primary" (click)="toggleConfigErros()">OK</button>
+              </div>
+            </div>
 
-
-
-
-
-
-
-
-    <div class="row">
-      <div class="col-md-12">
-        <div class="chart-container">
-          <div style="display: block;" class="container-height">
-            <canvas baseChart [datasets]="barChartData4" [labels]="barChartLabels4" [options]="barChartOptions4"
-              [legend]="barChartLegend" [chartType]="barChartType">
-            </canvas>
+            <div class="chart-container radar-fix-height">
+              <canvas baseChart 
+                [datasets]="radarErrosData" 
+                [labels]="radarErrosLabels" 
+                [options]="radarChartOptions"
+                [legend]="false" 
+                [chartType]="'radar'">
+              </canvas>
+            </div>
           </div>
         </div>
+
       </div>
-    </div>
-  </div>
+
+    </div> </div>
 </div>

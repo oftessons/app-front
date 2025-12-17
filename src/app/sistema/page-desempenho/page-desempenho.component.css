@@ -347,3 +347,34 @@ canvas {
   color: #e2e8f0;
   font-size: 0.9rem;
 }
+
+
+
+
+.radar-fix-height {
+  position: relative;
+ 
+  height: 500px !important; 
+  width: 100% !important;
+ 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.radar-fix-height canvas {
+  width: 100% !important;
+  height: 100% !important;
+ 
+  max-height: none !important; 
+  max-width: none !important;
+}
+
+
+@media (max-width: 768px) {
+  .radar-fix-height {
+    height: 350px !important;
+  }
+}
+
