@@ -86,11 +86,6 @@ export class PageDesempenhoComponent implements OnInit {
 
 
 
-
-
-
-
-
   public radarChartOptions: ChartOptions = {
     responsive: true,
     maintainAspectRatio: false,
@@ -203,18 +198,6 @@ export class PageDesempenhoComponent implements OnInit {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
   public barChartType3: ChartType = 'bar';
   public barChartLabels3: string[] = [
     'Jan',
@@ -284,10 +267,6 @@ export class PageDesempenhoComponent implements OnInit {
       borderColor: '#3B5FA0',
     },
   ];
-
-
-
-
 
 
   constructor(
@@ -401,9 +380,6 @@ export class PageDesempenhoComponent implements OnInit {
     });
   }
 
-
-  
-
   
   private processChartData2(data: any): void {
     const nomes = Object.keys(data);
@@ -477,22 +453,41 @@ export class PageDesempenhoComponent implements OnInit {
   @ViewChild('modalConfig') modalConfig!: ElementRef;
   @ViewChild('btnConfig') btnConfig!: ElementRef;
 
+  @ViewChild('modalConfigAcertos') modalConfigAcertos!: ElementRef;
+  @ViewChild('btnConfigAcertos') btnConfigAcertos!: ElementRef;
+
+  @ViewChild('modalConfigErros') modalConfigErros!: ElementRef;
+  @ViewChild('btnConfigErros') btnConfigErros!: ElementRef;
+
+
   @HostListener('document:click', ['$event'])
   clickFora(event: MouseEvent) {
-    if (!this.showRadarConfig) {
-      return;
-    }
-    const clicouNoModal = this.modalConfig && this.modalConfig.nativeElement.contains(event.target);
-    
-    const clicouNoBotao = this.btnConfig && this.btnConfig.nativeElement.contains(event.target);
+    const target = event.target as HTMLElement;
 
-    if (!clicouNoModal && !clicouNoBotao) {
-      this.showRadarConfig = false; 
+    if (this.showRadarConfig) {
+      const clicouNoModal = this.modalConfig && this.modalConfig.nativeElement.contains(target);
+      const clicouNoBotao = this.btnConfig && this.btnConfig.nativeElement.contains(target);
+      if (!clicouNoModal && !clicouNoBotao) {
+        this.showRadarConfig = false;
+      }
+    }
+
+    if (this.showConfigAcertos) {
+      const clicouNoModal = this.modalConfigAcertos && this.modalConfigAcertos.nativeElement.contains(target);
+      const clicouNoBotao = this.btnConfigAcertos && this.btnConfigAcertos.nativeElement.contains(target);
+      if (!clicouNoModal && !clicouNoBotao) {
+        this.showConfigAcertos = false;
+      }
+    }
+
+    if (this.showConfigErros) {
+      const clicouNoModal = this.modalConfigErros && this.modalConfigErros.nativeElement.contains(target);
+      const clicouNoBotao = this.btnConfigErros && this.btnConfigErros.nativeElement.contains(target);
+      if (!clicouNoModal && !clicouNoBotao) {
+        this.showConfigErros = false;
+      }
     }
   }
-
-
-
 
 
   private processChartData4(data: any): void {
@@ -596,13 +591,6 @@ export class PageDesempenhoComponent implements OnInit {
   }
 
 
-
-
-
-
-
-
-
   private processChartData3(data: Map<string, Map<string, number>>): void {
     const acertosData: number[] = new Array(12).fill(0);
     const errosData: number[] = new Array(12).fill(0);
@@ -653,12 +641,6 @@ export class PageDesempenhoComponent implements OnInit {
       },
     ];
   }
-
-
-
-
-
-
 
 
 

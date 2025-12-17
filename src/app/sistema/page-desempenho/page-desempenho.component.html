@@ -151,6 +151,8 @@
         </div>
       </div>
 
+      
+      
       <div class="row">
         
         <div class="col-md-6 mb-4">
@@ -163,12 +165,16 @@
                 </h5>
                 <small class="text-muted">Total: {{ totalAcertosCard }}</small>
               </div>
-              <button (click)="toggleConfigAcertos()" class="btn config-btn" [class.active]="showConfigAcertos">
+              
+              <button #btnConfigAcertos 
+                      (click)="toggleConfigAcertos()" 
+                      class="btn config-btn" 
+                      [class.active]="showConfigAcertos">
                 <i class="fa fa-cog"></i>
               </button>
             </div>
 
-            <div class="radar-config-panel" *ngIf="showConfigAcertos">
+            <div #modalConfigAcertos class="radar-config-panel" *ngIf="showConfigAcertos">
               <h6 class="text-white mb-3">Filtrar Acertos</h6>
               <div class="themes-list">
                 <div class="theme-item" *ngFor="let item of todosTemasAcertos">
@@ -185,13 +191,7 @@
             </div>
 
             <div class="chart-container radar-fix-height">
-              <canvas baseChart 
-                [datasets]="radarAcertosData" 
-                [labels]="radarAcertosLabels" 
-                [options]="radarChartOptions"
-                [legend]="false" 
-                [chartType]="'radar'">
-              </canvas>
+              <canvas baseChart [datasets]="radarAcertosData" [labels]="radarAcertosLabels" [options]="radarChartOptions" [legend]="false" [chartType]="'radar'"></canvas>
             </div>
           </div>
         </div>
@@ -206,12 +206,16 @@
                 </h5>
                 <small class="text-muted">Total: {{ totalErrosCard }}</small>
               </div>
-              <button (click)="toggleConfigErros()" class="btn config-btn" [class.active]="showConfigErros">
+              
+              <button #btnConfigErros 
+                      (click)="toggleConfigErros()" 
+                      class="btn config-btn" 
+                      [class.active]="showConfigErros">
                 <i class="fa fa-cog"></i>
               </button>
             </div>
 
-            <div class="radar-config-panel" *ngIf="showConfigErros">
+            <div #modalConfigErros class="radar-config-panel" *ngIf="showConfigErros">
               <h6 class="text-white mb-3">Filtrar Erros</h6>
               <div class="themes-list">
                 <div class="theme-item" *ngFor="let item of todosTemasErros">
@@ -228,18 +232,12 @@
             </div>
 
             <div class="chart-container radar-fix-height">
-              <canvas baseChart 
-                [datasets]="radarErrosData" 
-                [labels]="radarErrosLabels" 
-                [options]="radarChartOptions"
-                [legend]="false" 
-                [chartType]="'radar'">
-              </canvas>
+              <canvas baseChart [datasets]="radarErrosData" [labels]="radarErrosLabels" [options]="radarChartOptions" [legend]="false" [chartType]="'radar'"></canvas>
             </div>
           </div>
         </div>
 
       </div>
 
-    </div> </div>
+    </div>
 </div>
