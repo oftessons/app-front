@@ -55,7 +55,7 @@
         </div>
 
         <div class="questoes-footer">
-          <div class="right-buttons">
+          <div class="center-buttons">
             <button class="btn-anterior" [disabled]="questaoAtualIndex === 0" (click)="questaoAnterior()">
               Anterior
             </button>
@@ -73,6 +73,93 @@
         </div>
       </ng-container>
 
+      <!-- ==================== MODO: EXECUTANDO AULAS ==================== -->
+      <ng-container *ngIf="modoAtual === 'executando' && etapaAtual === 'aulas'">
+        <div class="modal-trilha-header questoes-header">
+          <div class="questoes-header-info">
+            <div>
+              <h2 class="modal-trilha-title">Aulas da Trilha</h2>
+              <p class="modal-trilha-subtitle">Aula {{ aulaAtualIndex + 1 }} de {{ trilhaData.aulas.length || 0 }}</p>
+            </div>
+          </div>
+          <button class="modal-trilha-close" (click)="onModalClose()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M18 6L6 18M6 6l12 12" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="modal-trilha-content aulas-content">
+          <div class="aula-trilha-container" *ngIf="aulaAtual">
+            
+            <!-- Player de Vídeo -->
+            <div class="video-container-trilha">
+              <div class="loading-video" *ngIf="isLoadingVideo">
+                <div class="spinner"></div>
+                <p>Carregando vídeo...</p>
+              </div>
+              
+              <iframe 
+                #vdoIframe 
+                *ngIf="vdoCipherUrl && !isLoadingVideo" 
+                [src]="vdoCipherUrl"
+                style="width:100%; height:100%; border:0;"
+                allow="encrypted-media; fullscreen; picture-in-picture"
+                allowfullscreen>
+              </iframe>
+            </div>
+
+            <!-- Informações da Aula -->
+            <div class="info-aula-trilha">
+              <div class="aula-header-trilha">
+                <h3 class="aula-titulo-trilha">{{ aulaAtual.titulo }}</h3>
+                <p class="aula-descricao-trilha" *ngIf="aulaAtual.descricao">
+                  {{ aulaAtual.descricao }}
+                </p>
+              </div>
+
+              <!-- Material da Aula -->
+              <div class="material-aula-trilha" *ngIf="aulaAtual.documentos && aulaAtual.documentos.length > 0">
+                <h4>Material da Aula</h4>
+                <hr>
+                <div class="material-list">
+                  <div class="material-item" *ngFor="let documento of aulaAtual.documentos">
+                    <span class="material-nome">{{ formatFileName(documento.key) }}</span>
+                    <button class="btn-visualizar-material" (click)="visualizarPdf(documento.url)">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                      </svg>
+                      Visualizar
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="material-aula-trilha" *ngIf="!aulaAtual.documentos || aulaAtual.documentos.length === 0">
+                <h4>Material da Aula</h4>
+                <hr>
+                <span class="no-material">Nenhum material adicionado</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="questoes-footer">
+          <div class="right-buttons">
+            <button class="btn-proxima-aula" 
+                    (click)="proximaAula()"
+                    *ngIf="aulaAtualIndex < trilhaData.aulas.length - 1">
+              Próxima Aula
+            </button>
+            <button class="btn-proxima-aula" 
+                    (click)="finalizarAulas()"
+                    *ngIf="aulaAtualIndex === trilhaData.aulas.length - 1">
+              Finalizar Aulas
+            </button>
+          </div>
+        </div>
+      </ng-container>
+
       <!-- ==================== MODO: RESUMO ==================== -->
       <ng-container *ngIf="modoAtual === 'resumo'">
         <div class="modal-trilha-header resumo-header">
@@ -84,22 +171,55 @@
         </div>
 
         <div class="modal-trilha-content resumo-content">
-          <!-- Animação de Desbloqueio -->
-          <div class="resumo-animation">
+          <!-- Animação de Sucesso (>80%) ou Esforço (<=80%) quando trilha está concluída -->
+          <div class="resumo-animation" *ngIf="isTrilhaConcluida() && (etapaAtual === 'questoes-pre' || etapaAtual === 'questoes-pos')">
+            <ng-lottie 
+              *ngIf="isDesempenhoExcelente()"
+              [options]="animacaoSucessoOptions" 
+            ></ng-lottie>
+            <ng-lottie 
+              *ngIf="!isDesempenhoExcelente()"
+              [options]="animacaoEsforcoOptions" 
+            ></ng-lottie>
+          </div>
+
+          <!-- Animação de Desbloqueio padrão para etapas intermediárias -->
+          <div class="resumo-animation" *ngIf="!isTrilhaConcluida() || (etapaAtual !== 'questoes-pre' && etapaAtual !== 'questoes-pos')">
             <ng-lottie 
               [options]="animacaoDesbloqueioOptions" 
-              [width]="'300px'"
             ></ng-lottie>
           </div>
 
           <!-- Título e Subtítulo -->
           <div class="resumo-header-text">
-            <h2 class="modal-trilha-title">
-              {{ !proximaEtapaDesbloqueada() ? 'Parabéns, trilha concluída!' : 'Você desbloqueou o próximo passo!' }}
-            </h2>
-            <p class="modal-trilha-subtitle" *ngIf="proximaEtapaDesbloqueada()">
-              {{ getSubtituloResumo() }}
-            </p>
+            <!-- Trilha Concluída com Desempenho Excelente (>80%) -->
+            <ng-container *ngIf="isTrilhaConcluida() && isDesempenhoExcelente() && (etapaAtual === 'questoes-pre' || etapaAtual === 'questoes-pos')">
+              <h2 class="modal-trilha-title">Parabéns! Excelente desempenho!</h2>
+              <p class="modal-trilha-subtitle">
+                Você completou a trilha com {{ calcularDesempenho() }}% de acertos. Continue assim!
+              </p>
+            </ng-container>
+
+            <!-- Trilha Concluída com Desempenho Abaixo de 80% -->
+            <ng-container *ngIf="isTrilhaConcluida() && !isDesempenhoExcelente() && (etapaAtual === 'questoes-pre' || etapaAtual === 'questoes-pos')">
+              <h2 class="modal-trilha-title">Parabéns pelo seu esforço...</h2>
+              <p class="modal-trilha-subtitle">
+                Mas seu desempenho nesta trilha foi inferior a 80%.<br>
+                Sugerimos que você refaça a trilha para reforçar seus conhecimentos.
+              </p>
+            </ng-container>
+
+            <!-- Etapas Intermediárias (não é trilha concluída) -->
+            <ng-container *ngIf="!isTrilhaConcluida() || (etapaAtual !== 'questoes-pre' && etapaAtual !== 'questoes-pos')">
+              <h2 class="modal-trilha-title">
+                {{ !proximaEtapaDesbloqueada() ? 'Parabéns, trilha concluída!' : 'Você desbloqueou o próximo passo!' }}
+              </h2>
+              <p class="modal-trilha-subtitle" *ngIf="proximaEtapaDesbloqueada()">
+                {{ getSubtituloResumo() }}
+              </p>
+            </ng-container>
+
+            <!-- Tempo Total sempre visível -->
             <p class="modal-trilha-subtitle tempo-total" *ngIf="tempoTotal">
               Tempo Total: <strong>{{ tempoTotal }}</strong>
             </p>
@@ -130,6 +250,9 @@
           <!-- Cards de Estatísticas para Flashcards -->
           <div class="resumo-stats-cards" *ngIf="etapaAtual === 'flashcards'">
             <div class="card-estatistica-resumo card-flashcard">
+              <div class="card-icon-wrapper">
+                <img src="assets/Icons/flashcards-summary.svg" alt="Ícone de Flashcards Estudados">
+              </div>
               <div class="card-text-estatistica-resumo">
                 <h3>{{ flashcardsEstudados }}</h3>
                 <p>Cards Estudados</p>
