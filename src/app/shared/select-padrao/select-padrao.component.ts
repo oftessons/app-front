@@ -83,6 +83,17 @@ export class SelectPadraoComponent implements OnInit, OnChanges {
     );
   }
 
+  removeValue(event: Event): void {
+    event.stopPropagation(); 
+    if (this.disabled) return;
+
+    this.selectedValue = null;
+    this.selectedValueChange.emit(null);
+
+    this.searchTerm = '';
+    this.filteredOptions = this.options;
+  }
+
   getLabelFromValue(value: any): string {
     if (value === null || value === undefined) {
       return '';
