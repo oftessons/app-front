@@ -23,48 +23,48 @@
 /* --- Filtros --- */
 .filters-bar {
     border-radius: 16px;
-    background: #14181A;
+    background-color: var(--bg-card);
     padding: 15px 20px;
-    border-radius: 8px;
     margin-bottom: 20px;
     display: flex;
-    align-items: center;
+    align-items: flex-end; /* Alinha pela base */
+    border: 1px solid var(--border-color);
 }
 
-.filters-bar .filter-group {
+.filter-group {
     display: flex;
-    gap: 16px;
+    gap: 20px;
     align-items: center;
+    width: 100%;
+    flex-wrap: wrap; /* Permite quebrar linha se necessário */
 }
 
-.filters-bar .filter-label {
-    color: #a1a5b7;
-    font-size: 0.85rem;
+/* Wrapper para controlar o tamanho do select customizado */
+.filter-wrapper {
+    flex: 1; /* Cresce igualmente */
+    min-width: 200px; /* Tamanho mínimo para não ficar espremido */
+    max-width: 300px; /* Tamanho máximo para não ficar gigante */
 }
 
-.filters-bar .custom-select {
-    display: flex;
-    padding: 8px 16px;
-    align-items: center;
-    gap: 8px;
-    background-color: #2C2F35;
-    border-radius: 16px;
-    border: 1px solid #2C2F35;
-    color: #ffffff;
-    padding: 8px 12px;
-    font-size: 0.9rem;
-    cursor: pointer;
-    min-width: 120px;
-}
+/* --- Responsividade --- */
 
-.filters-bar .custom-select .option{
-    margin: 10px;
-    padding: 10px;
-}
+/* Mobile: Empilha tudo */
+@media (max-width: 768px) {
+    .filters-bar {
+        flex-direction: column;
+        align-items: stretch;
+    }
 
-.filters-bar .custom-select:focus {
-    outline: none;
-    border-color: #3699ff;
+    .filter-group {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .filter-wrapper {
+        width: 100%;
+        max-width: 100%; /* No mobile ocupa tudo */
+        min-width: auto;
+    }
 }
 
 /* --- KPI Cards --- */

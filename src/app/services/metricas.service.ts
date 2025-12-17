@@ -45,28 +45,29 @@ export class MetricasService {
   constructor(private http: HttpClient) {}
 
   getMetrics(
-    ano?: string,
-    tipoProva?: string,
-    dificuldade?: string
+    anos?: string[], 
+    tiposProva?: string[], 
+    dificuldades?: string[]
   ): Observable<DashboardMetrics> {
-    // Configura os parâmetros da URL
+    
     let params = new HttpParams();
-
-    if (ano) {
-      params = params.set('ano', ano);
-    }
-    if (tipoProva) {
-      params = params.set('tipoProva', tipoProva);
-    }
-    if (dificuldade) {
-      params = params.set('dificuldade', dificuldade);
+    
+    if (anos && anos.length > 0) {
+      params = params.append('anos', anos.join(','));
     }
 
-    return this.http
-      .get<DashboardMetrics>(`${this.apiUrl}/metrics`, { params })
+    if (tiposProva && tiposProva.length > 0) {
+      params = params.append('tiposProva', tiposProva.join(','));
+    }
+
+    if (dificuldades && dificuldades.length > 0) {
+      params = params.append('dificuldades', dificuldades.join(','));
+    }
+
+    return this.http.get<DashboardMetrics>(`${this.apiUrl}/metrics`, { params })
       .pipe(
         catchError((err) => {
-          console.error('Erro ao buscar métricas do dashboard', err);
+          console.error('Erro ao buscar métricas', err);
           return throwError(() => err);
         })
       );

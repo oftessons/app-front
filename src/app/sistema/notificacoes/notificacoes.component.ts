@@ -22,6 +22,9 @@ export class NotificacoesComponent implements OnInit {
   filtroAtual: 'todas' | 'nao-lidas' = 'todas';
 
   mostrarModalConfirmacao: boolean = false;
+  isLoading = false;
+  isMarkingAsRead: { [key: number]: boolean } = {};
+  isMarkingAllAsRead = false
 
   // Paginação
   paginaAtual: number = 1;
@@ -34,6 +37,7 @@ export class NotificacoesComponent implements OnInit {
   constructor(
     private notificacaoService: NotificacaoService,
     private authService: AuthService,
+    private router: Router,
     private themeService: ThemeService,
     private sanitizer: DomSanitizer,
   ) {
@@ -160,20 +164,32 @@ export class NotificacoesComponent implements OnInit {
   }
 
   aoClicarNotificacao(notificacao: Notificacao): void {
-    // 1. Marca como lida se não estiver
-    if (!notificacao.lida) {
-      notificacao.lida = true; // Atualiza visualmente instantaneamente
-      if (this.userId) {
-        this.notificacaoService.markAsRead([notificacao.id]).subscribe();
-      }
+      this.marcarComoLida(notificacao);
+  }
+
+  marcarComoLida(notificacao: Notificacao): void {
+    // Se já estiver lida ou processando, navega direto
+    if (notificacao.lida || !notificacao.id || this.isMarkingAsRead[notificacao.id]) {
+        this.navegarParaReferencia(notificacao);
+        return;
     }
 
-    // 2. Redireciona baseado no referenciaId
-    if (notificacao.referenciaId) {
-      console.log('Navegando para referência:', notificacao.referenciaId);
-      // Exemplo de navegação real:
-      // this.router.navigate(['/usuario/painel-de-aulas', notificacao.referenciaId]);
-    }
+    this.isMarkingAsRead[notificacao.id] = true;
+
+    this.notificacaoService.markAsRead([notificacao.id]).subscribe({
+      next: () => {
+        notificacao.lida = true;
+        this.isMarkingAsRead[notificacao.id] = false;
+        // Navega após marcar como lida
+        //this.navegarParaReferencia(notificacao);
+      },
+      error: (error) => {
+        console.error('Erro ao marcar como lida:', error);
+        this.isMarkingAsRead[notificacao.id] = false;
+        // Tenta navegar mesmo com erro
+        //this.navegarParaReferencia(notificacao);
+      }
+    });
   }
 
   // --- Controles de Paginação ---
@@ -202,6 +218,10 @@ export class NotificacoesComponent implements OnInit {
   formatarMensagem(mensagem: string): SafeHtml {
     // O backend já envia o HTML formatado (strong, em, br), apenas confiamos nele
     return this.sanitizer.bypassSecurityTrustHtml(mensagem);
+  }
+
+  navegarParaReferencia(notificacao: Notificacao): void {
+    console.warn("A implementar navegação pelas notificações.")
   }
 
   isDarkMode(): boolean {
