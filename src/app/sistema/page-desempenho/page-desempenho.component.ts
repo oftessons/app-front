@@ -49,7 +49,6 @@ export class PageDesempenhoComponent implements OnInit {
   public maxTemasPermitidos: number = 10;
   public radarChartType: ChartType = 'radar';
 
-
   public showConfigAcertos: boolean = false;
   public showConfigErros: boolean = false;
   public todosTemasAcertos: TemaData[] = [];
@@ -63,6 +62,9 @@ export class PageDesempenhoComponent implements OnInit {
   public pctAcertosCard: number = 0;
   public pctErrosCard: number = 0;
   public larguraTela: number = window.innerWidth;
+
+  public limiteAnterior = this.maxTemasPermitidos;
+  public isMobile = this.larguraTela < 900; 
 
 
 
@@ -101,7 +103,7 @@ export class PageDesempenhoComponent implements OnInit {
       },
       pointLabels: {
         fontColor: '#ffffff', 
-        fontSize: 12
+        fontSize: this.isMobile ?10: 12
       },
       ticks: {
         backdropColor: 'transparent', 
@@ -336,16 +338,11 @@ export class PageDesempenhoComponent implements OnInit {
   }
 
   private verificarResolucaoEAtualizar(forcarAtualizacaoGraficos: boolean): void {
-    
-    const limiteAnterior = this.maxTemasPermitidos;
-    const isMobile = this.larguraTela < 900; 
+  
+    this.maxTemasPermitidos = this.isMobile ? 5 : 10;
 
-    this.maxTemasPermitidos = isMobile ? 5 : 10;
-
-    
-    if (limiteAnterior !== this.maxTemasPermitidos || forcarAtualizacaoGraficos) {
-      
-      
+    if (this.limiteAnterior !== this.maxTemasPermitidos || forcarAtualizacaoGraficos) {
+          
       this.reaplicarLimiteSelecao(this.todosTemas);
       this.atualizarGraficoRadar();
 

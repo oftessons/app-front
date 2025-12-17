@@ -119,7 +119,7 @@
             </div>
 
             <div #modalConfig class="radar-config-panel" *ngIf="showRadarConfig">
-              <h6 class="text-white mb-3">Selecione os temas (Máx 10)</h6>
+              <h6 class="text-white mb-3">Selecione os temas (Máx {{maxTemasPermitidos}})</h6>
               <div class="themes-list">
                 <div class="theme-item" *ngFor="let item of todosTemas">
                   <label class="custom-checkbox">
@@ -175,7 +175,7 @@
             </div>
 
             <div #modalConfigAcertos class="radar-config-panel" *ngIf="showConfigAcertos">
-              <h6 class="text-white mb-3">Filtrar Acertos</h6>
+              <h6 class="text-white mb-3">Selecione os temas (Máx {{maxTemasPermitidos}})</h6>
               <div class="themes-list">
                 <div class="theme-item" *ngFor="let item of todosTemasAcertos">
                   <label class="custom-checkbox checkbox-blue">
@@ -218,7 +218,7 @@
             </div>
 
             <div #modalConfigErros class="radar-config-panel" *ngIf="showConfigErros">
-              <h6 class="text-white mb-3">Filtrar Erros</h6>
+              <h6 class="text-white mb-3">Selecione os temas (Máx {{maxTemasPermitidos}})</h6>
               <div class="themes-list">
                 <div class="theme-item" *ngFor="let item of todosTemasErros">
                   <label class="custom-checkbox checkbox-red">
