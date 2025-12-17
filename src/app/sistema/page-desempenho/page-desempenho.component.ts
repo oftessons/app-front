@@ -584,8 +584,15 @@ export class PageDesempenhoComponent implements OnInit {
   public toggleConfigAcertos() { this.showConfigAcertos = !this.showConfigAcertos; }
   public toggleConfigErros() { this.showConfigErros = !this.showConfigErros; }
 
+
   public toggleTemaEspecifico(item: TemaData, tipo: 'acertos' | 'erros') {
     
+    const lista = tipo === 'acertos' ? this.todosTemasAcertos : this.todosTemasErros;
+    const totalSelecionados = lista.filter(t => t.selecionado).length;
+    if (!item.selecionado && totalSelecionados >= this.maxTemasPermitidos) {
+      alert(`Você só pode selecionar no máximo ${this.maxTemasPermitidos} temas para visualizar.`);
+      return; 
+    }
     item.selecionado = !item.selecionado;
     this.atualizarRadarVisual(tipo);
   }

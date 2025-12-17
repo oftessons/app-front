@@ -179,9 +179,11 @@
               <div class="themes-list">
                 <div class="theme-item" *ngFor="let item of todosTemasAcertos">
                   <label class="custom-checkbox checkbox-blue">
-                      <input type="checkbox" [checked]="item.selecionado" (change)="toggleTemaEspecifico(item, 'acertos')">
-                      <span class="checkmark"></span>
-                      <span class="label-text">{{ item.nome }} <small class="text-muted">({{ item.valor }})</small></span>
+                    <input type="checkbox" 
+                            [checked]="item.selecionado" 
+                            (change)="toggleTemaEspecifico(item, 'acertos')"
+                            [disabled]="!item.selecionado && (radarAcertosLabels.length >= maxTemasPermitidos)"> <span class="checkmark"></span>
+                    <span class="label-text">{{ item.nome }} <small class="text-muted">({{ item.valor }})</small></span>
                   </label>
                 </div>
               </div>
@@ -220,9 +222,11 @@
               <div class="themes-list">
                 <div class="theme-item" *ngFor="let item of todosTemasErros">
                   <label class="custom-checkbox checkbox-red">
-                      <input type="checkbox" [checked]="item.selecionado" (change)="toggleTemaEspecifico(item, 'erros')">
-                      <span class="checkmark"></span>
-                      <span class="label-text">{{ item.nome }} <small class="text-muted">({{ item.valor }})</small></span>
+                    <input type="checkbox" 
+                            [checked]="item.selecionado" 
+                            (change)="toggleTemaEspecifico(item, 'erros')"
+                            [disabled]="!item.selecionado && (radarErrosLabels.length >= maxTemasPermitidos)"> <span class="checkmark"></span>
+                    <span class="label-text">{{ item.nome }} <small class="text-muted">({{ item.valor }})</small></span>
                   </label>
                 </div>
               </div>
