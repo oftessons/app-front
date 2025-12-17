@@ -1,6 +1,10 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ThemeService } from 'src/app/services/theme.service';
+import { AulasService } from 'src/app/services/aulas.service';
+import { Aula } from 'src/app/sistema/painel-de-aulas/aula';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap, tap, finalize, takeUntil } from 'rxjs/operators';
 import { CertasErradas } from 'src/app/sistema/page-questoes/enums/certas-erradas';
 import { RespostasSimulado } from 'src/app/sistema/page-questoes/enums/resp-simu';
 import { Comentada } from 'src/app/sistema/page-questoes/enums/comentadas';
@@ -41,7 +45,7 @@ export interface ConteudoSemana {
   templateUrl: './modal-editar-semana-trilha.component.html',
   styleUrls: ['./modal-editar-semana-trilha.component.css']
 })
-export class ModalEditarSemanaTrilhaComponent implements OnInit {
+export class ModalEditarSemanaTrilhaComponent implements OnInit, OnDestroy {
   semanaNumero: number;
   titulo: string = '';
   
@@ -68,6 +72,14 @@ export class ModalEditarSemanaTrilhaComponent implements OnInit {
   multSelectComentariosPos: string[] = [];
   palavraChavePos: string = '';
   quantidadeQuestoesPos: string = '';
+  
+  aulasDisponiveis: Aula[] = [];
+  aulasSelecionadas: number[] = [];
+  carregandoAulas: boolean = false;
+  erroCarregarAulas: string = '';
+  pesquisaAula: string = '';
+  private searchTerms = new Subject<string>();
+  private destroy$ = new Subject<void>();
   
   subtemasAgrupadosPorTema: {
     label: string;
@@ -104,7 +116,8 @@ export class ModalEditarSemanaTrilhaComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<ModalEditarSemanaTrilhaComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ConteudoSemana,
-    private themeService: ThemeService
+    private themeService: ThemeService,
+    private aulasService: AulasService
   ) {
     this.semanaNumero = data.semanaNumero;
     this.titulo = data.titulo || '';
@@ -131,11 +144,54 @@ export class ModalEditarSemanaTrilhaComponent implements OnInit {
     this.palavraChavePos = data.filtrosQuestoesPos?.palavraChave || '';
     this.quantidadeQuestoesPos = data.filtrosQuestoesPos?.quantidadeQuestoes ? String(data.filtrosQuestoesPos.quantidadeQuestoes) : '';
     
+    this.aulasSelecionadas = data.aulasIds || [];
+    
     // Inicializar opções dos filtros
     this.inicializarOpcoesFiltros();
   }
 
   ngOnInit(): void {
+    this.carregarAulas();
+    this.configurarPesquisa();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  configurarPesquisa(): void {
+    this.searchTerms.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      tap(() => this.carregandoAulas = true),
+      switchMap((term: string) => {
+        if (!term || term.length < 2) {
+          this.carregandoAulas = false;
+          return [];
+        }
+        return this.aulasService.pesquisarAulasPorTitulo(term).pipe(
+          finalize(() => this.carregandoAulas = false)
+        );
+      }),
+      takeUntil(this.destroy$)
+    ).subscribe({
+      next: (resultados) => {
+        this.aulasDisponiveis = resultados.map(r => ({
+          id: parseInt(r.id),
+          titulo: r.titulo,
+          descricao: r.subtitulo,
+          categoria: r.tipo,
+          poster: r.thumbnailUrl
+        } as any));
+        this.carregandoAulas = false;
+      },
+      error: (erro) => {
+        console.error('Erro ao pesquisar aulas:', erro);
+        this.erroCarregarAulas = 'Erro ao pesquisar aulas.';
+        this.carregandoAulas = false;
+      }
+    });
   }
 
   inicializarOpcoesFiltros(): void {
@@ -177,6 +233,53 @@ export class ModalEditarSemanaTrilhaComponent implements OnInit {
 
   trocarAba(aba: 'questoes-pre' | 'aulas' | 'questoes-pos' | 'flashcards'): void {
     this.abaAtiva = aba;
+  }
+
+  carregarAulas(): void {
+    this.carregandoAulas = true;
+    this.erroCarregarAulas = '';
+
+    this.aulasService.listarTodasAulas().subscribe({
+      next: (aulas) => {
+        this.aulasDisponiveis = aulas;
+        this.carregandoAulas = false;
+      },
+      error: (erro) => {
+        console.error('Erro ao carregar aulas:', erro);
+        this.erroCarregarAulas = 'Não foi possível carregar as aulas. Tente novamente.';
+        this.carregandoAulas = false;
+      }
+    });
+  }
+
+  get aulasFiltradas(): Aula[] {
+    return this.aulasDisponiveis;
+  }
+
+  onPesquisaChange(termo: string): void {
+    this.pesquisaAula = termo;
+    if (!termo || termo.length < 2) {
+      this.carregarAulas();
+      return;
+    }
+    this.searchTerms.next(termo);
+  }
+
+  toggleAulaSelecionada(aulaId: number): void {
+    const index = this.aulasSelecionadas.indexOf(aulaId);
+    if (index === -1) {
+      this.aulasSelecionadas.push(aulaId);
+    } else {
+      this.aulasSelecionadas.splice(index, 1);
+    }
+  }
+
+  isAulaSelecionada(aulaId: number): boolean {
+    return this.aulasSelecionadas.includes(aulaId);
+  }
+
+  limparSelecaoAulas(): void {
+    this.aulasSelecionadas = [];
   }
 
   isDarkMode(): boolean {
@@ -260,7 +363,9 @@ export class ModalEditarSemanaTrilhaComponent implements OnInit {
         comentada: this.multSelectComentariosPos,
         palavraChave: this.palavraChavePos || undefined,
         quantidadeQuestoes: this.quantidadeQuestoesPos ? parseInt(this.quantidadeQuestoesPos, 10) : undefined
-      }
+      },
+      aulasIds: this.aulasSelecionadas,
+      flashcardsIds: this.data.flashcardsIds || []
     };
     
     this.dialogRef.close(resultado);

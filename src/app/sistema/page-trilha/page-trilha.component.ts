@@ -5,8 +5,12 @@ import { ModalTrilhaService, TrilhaData } from 'src/app/services/modal-trilha.se
 import { MatDialog } from '@angular/material/dialog';
 import { ModalEditarSemanaTrilhaComponent, ConteudoSemana } from 'src/app/shared/modal-editar-semana-trilha/modal-editar-semana-trilha.component';
 import { AuthService } from 'src/app/services/auth.service';
+import { AulasService } from 'src/app/services/aulas.service';
+import { Aula } from '../painel-de-aulas/aula';
 import { Usuario } from 'src/app/login/usuario';
 import { PageMeuPerfilComponent } from '../page-meu-perfil/page-meu-perfil.component';
+import { forkJoin, of } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-page-trilha',
@@ -94,7 +98,10 @@ export class PageTrilhaComponent implements OnInit {
           questoes: 1,
           flashcards: 20,
           tempo: '1h30',
-          progresso: 0
+          progresso: 0,
+          aulasIds: [],
+          filtrosQuestoesPre: {},
+          filtrosQuestoesPos: {}
         }
       ] 
     },
@@ -156,7 +163,8 @@ export class PageTrilhaComponent implements OnInit {
     private elementRef: ElementRef,
     private modalTrilhaService: ModalTrilhaService,
     private dialog: MatDialog,
-    private authService: AuthService
+    private authService: AuthService,
+    private aulasService: AulasService
   ) { }
 
   ngOnInit(): void {
@@ -281,12 +289,32 @@ export class PageTrilhaComponent implements OnInit {
   }
 
   abrirModalTrilha(card: any): void {
-    // Criar dados de exemplo para o modal
+    // Se houver aulasIds, buscar aulas reais do banco
+    if (card.aulasIds && card.aulasIds.length > 0) {
+      this.buscarAulasReais(card.aulasIds).subscribe((aulasReais: Aula[]) => {
+        this.abrirModalComDados(card, aulasReais);
+      });
+    } else {
+      // Usar dados mock se não houver aulasIds
+      const aulasMock = this.gerarAulasExemplo(card.aulas || 0, card.titulo);
+      this.abrirModalComDados(card, aulasMock);
+    }
+  }
+
+  private buscarAulasReais(aulasIds: number[]): any {
+    return this.aulasService.listarTodasAulas().pipe(
+      map(todasAulas => 
+        todasAulas.filter(aula => aulasIds.includes(aula.id))
+      )
+    );
+  }
+
+  private abrirModalComDados(card: any, aulas: any[]): void {
     const trilhaData: TrilhaData = {
       titulo: card.titulo,
       descricao: `Complete a trilha de ${card.semana} com questões, aulas e flashcards`,
       questoesPre: this.gerarQuestoesExemplo(card.questoes, card.titulo, 'pre'),
-      aulas: this.gerarAulasExemplo(card.aulas, card.titulo),
+      aulas: aulas,
       questoesPos: this.gerarQuestoesExemplo(card.questoes, card.titulo, 'pos'),
       flashcards: this.gerarFlashcardsExemplo(card.flashcards, card.titulo),
       progresso: card.progresso,
@@ -443,6 +471,8 @@ export class PageTrilhaComponent implements OnInit {
         card.titulo = resultado.titulo;
         card.filtrosQuestoesPre = resultado.filtrosQuestoesPre;
         card.filtrosQuestoesPos = resultado.filtrosQuestoesPos;
+        card.aulasIds = resultado.aulasIds || [];
+        card.aulas = resultado.aulasIds?.length || 0;
       }
     });
   }
