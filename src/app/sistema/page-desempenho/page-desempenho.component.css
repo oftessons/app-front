@@ -348,33 +348,43 @@ canvas {
   font-size: 0.9rem;
 }
 
-
-
-
 .radar-fix-height {
   position: relative;
- 
-  height: 500px !important; 
   width: 100% !important;
- 
+  height: 500px !important;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 0 !important;
 }
 
+@media (max-width: 1024px) {
+  .radar-fix-height {
+    height: 420px !important; 
+  }
+  
+  .col-md-6 {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
 
 .radar-fix-height canvas {
   width: 100% !important;
   height: 100% !important;
- 
-  max-height: none !important; 
-  max-width: none !important;
 }
 
 
 @media (max-width: 768px) {
   .radar-fix-height {
-    height: 350px !important;
+    height: 350px !important; 
+  }
+
+  .card-oftlessons-dark {
+    padding: 10px !important;
+  }
+  
+  .dashboard-wrapper {
+    padding: 15px !important;
   }
 }
-

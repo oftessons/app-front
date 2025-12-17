@@ -62,6 +62,7 @@ export class PageDesempenhoComponent implements OnInit {
   public totalErrosCard: number = 0;
   public pctAcertosCard: number = 0;
   public pctErrosCard: number = 0;
+  public larguraTela: number = window.innerWidth;
 
 
 
@@ -281,6 +282,8 @@ export class PageDesempenhoComponent implements OnInit {
     }
   }
 
+  
+
   ngOnInit(): void {
     this.authService.obterUsuarioAutenticadoDoBackend().subscribe(
       (data) => {
@@ -325,6 +328,34 @@ export class PageDesempenhoComponent implements OnInit {
         console.error('Erro ao obter perfil do usuário:', error);
       }
     );
+  }
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.larguraTela = window.innerWidth;
+    this.verificarResolucaoEAtualizar(true);
+  }
+
+  private verificarResolucaoEAtualizar(forcarAtualizacaoGraficos: boolean): void {
+    
+    const limiteAnterior = this.maxTemasPermitidos;
+    const isMobile = this.larguraTela < 900; 
+
+    this.maxTemasPermitidos = isMobile ? 5 : 10;
+
+    
+    if (limiteAnterior !== this.maxTemasPermitidos || forcarAtualizacaoGraficos) {
+      
+      
+      this.reaplicarLimiteSelecao(this.todosTemas);
+      this.atualizarGraficoRadar();
+
+      
+      this.reaplicarLimiteSelecao(this.todosTemasAcertos);
+      this.atualizarRadarVisual('acertos');
+
+      this.reaplicarLimiteSelecao(this.todosTemasErros);
+      this.atualizarRadarVisual('erros');
+    }
   }
 
   
@@ -389,7 +420,6 @@ export class PageDesempenhoComponent implements OnInit {
         nome: nome,
         valor: data[nome] || 0,
         selecionado: false,
-        ordemAleatoria: Math.random()
       };
     });
 
@@ -420,9 +450,9 @@ export class PageDesempenhoComponent implements OnInit {
 
   private atualizarGraficoRadar(): void {
     let ativos = [...this.todosTemas.filter(t => t.selecionado)];
-    ativos.sort((a, b) => a.nome.localeCompare(b.nome));
-
-    this.radarChartLabels = ativos.map(t => t.nome);
+    ativos.sort((a, b) => a.nome.localeCompare(b.nome)); 
+    this.radarChartLabels = ativos.map(t => this.quebrarTextoEmLinhas(t.nome));
+    
     this.radarChartData = [{
       data: ativos.map(t => t.valor),
       label: 'Questões Feitas',
@@ -535,13 +565,8 @@ export class PageDesempenhoComponent implements OnInit {
 
   
   private prepararDadosRadar(lista: TemaData[], tipo: 'acertos' | 'erros'): void {
-    
     lista.sort((a, b) => b.valor - a.valor);
-    
-    
-    lista.forEach((item, index) => item.selecionado = index < 10);
-
-    
+    this.reaplicarLimiteSelecao(lista);
     this.atualizarRadarVisual(tipo);
   }
 
@@ -549,11 +574,9 @@ export class PageDesempenhoComponent implements OnInit {
   public atualizarRadarVisual(tipo: 'acertos' | 'erros'): void {
     const lista = tipo === 'acertos' ? this.todosTemasAcertos : this.todosTemasErros;
     
-    
     let ativos = [...lista.filter(t => t.selecionado)];
     ativos.sort((a, b) => a.nome.localeCompare(b.nome));
 
-    
     const corFundo = tipo === 'acertos' ? 'rgba(59, 130, 246, 0.2)' : 'rgba(239, 68, 68, 0.2)';
     const corBorda = tipo === 'acertos' ? '#3B82F6' : '#EF4444'; 
 
@@ -569,11 +592,11 @@ export class PageDesempenhoComponent implements OnInit {
       borderWidth: 2
     }];
 
-    const labels = ativos.map(t => t.nome);
+    const labels = ativos.map(t => this.quebrarTextoEmLinhas(t.nome));
 
     if (tipo === 'acertos') {
       this.radarAcertosData = dataset;
-      this.radarAcertosLabels = labels;
+      this.radarAcertosLabels = labels; 
     } else {
       this.radarErrosData = dataset;
       this.radarErrosLabels = labels;
@@ -673,5 +696,39 @@ export class PageDesempenhoComponent implements OnInit {
     if (this.dialogRef) {
       this.dialogRef.close();
     }
+  }
+
+  private reaplicarLimiteSelecao(lista: TemaData[]): void {
+    
+    lista.sort((a, b) => b.valor - a.valor);
+    
+    lista.forEach((item, index) => {
+      
+      item.selecionado = index < this.maxTemasPermitidos;
+    });
+  }
+  
+  private quebrarTextoEmLinhas(texto: string): string | string[] {
+    const limiteCaracteres = 15; 
+    
+    if (texto.length <= limiteCaracteres) {
+      return texto;
+    }
+
+    const palavras = texto.split(' ');
+    const linhas: string[] = [];
+    let linhaAtual = palavras[0];
+
+    for (let i = 1; i < palavras.length; i++) {
+      if (linhaAtual.length + 1 + palavras[i].length <= limiteCaracteres) {
+        linhaAtual += ' ' + palavras[i];
+      } else {
+        linhas.push(linhaAtual);
+        linhaAtual = palavras[i];
+      }
+    }
+    linhas.push(linhaAtual);
+    
+    return linhas; 
   }
 }
