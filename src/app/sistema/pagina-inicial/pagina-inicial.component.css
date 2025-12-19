@@ -19,7 +19,7 @@
   right: 0;
   z-index: 1000;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
   padding: 15px 30px;
   height: 80px;
@@ -37,7 +37,7 @@
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 30px;
 }
 
 
