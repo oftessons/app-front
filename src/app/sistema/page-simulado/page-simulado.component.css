@@ -27,7 +27,8 @@
 }
 
 .enunciado-questao {
-  font-size: 16px;
+  font-size: 18px;
+  line-height: 1.6;
 }
 
 .enunciado-questao p img {
@@ -63,8 +64,9 @@
 }
 
 .identificadores-questao h3 {
-  font-size: 14px;
+  font-size: 15px;
   margin: 0 14px 0 22px;
+  font-weight: 500;
 }
 
 .example-radio-group {
@@ -164,6 +166,7 @@
 
 .alternativa-comentario {
   font-size: 16px;
+  line-height: 1.5;
 }
 
 .content-with-fixed-buttons {
@@ -458,7 +461,6 @@ body.has-fixed-buttons .chatbot-toggle-button {
 
 .btn-gabarito {
   padding: 10px 20px;
-  width: 130px;
   border: 2px solid #f4a261;
   /* Borda da cor especificada */
   border-radius: 5px;
@@ -946,6 +948,28 @@ canvas {
 
 .radio-oculto {
   display: none;
+}
+
+.comentario-titulo {
+  margin-top: 20px;
+  margin-bottom: 15px;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.referencia-texto,
+.comentador-texto {
+  font-size: 14px;
+  margin-top: 10px;
+  color: var(--text-color);
+  opacity: 0.9;
+}
+
+.img-comentario {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 12px;
 }
 
 .indicador-letra {
