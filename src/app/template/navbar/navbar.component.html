@@ -133,6 +133,7 @@
         mat-list-item
         routerLink="/usuario/dashboard"
         [ngClass]="{ 'active-link': isActive('/usuario/dashboard') }"
+        *ngIf="permissionAllowed()"
       >
         <img
           [src]="
@@ -162,7 +163,7 @@
           alt="Ícone de Questões"
           class="icon"
         />
-        <span class="ml-2">Questões</span>
+        <span class="ml-2">Modo Treino</span>
       </a>
       <a
         mat-list-item
@@ -219,7 +220,7 @@
           alt="Ícone do Simulado"
           class="icon"
         />
-        <span class="ml-2">Simulados</span>
+        <span class="ml-2">Modo Prova</span>
       </a>
       <a
         mat-list-item
@@ -236,7 +237,7 @@
           alt="Ícone de Meus Simulados"
           class="icon"
         />
-        <span class="ml-2">Meus Simulados</span>
+        <span class="ml-2">Minhas Provas</span>
       </a>
 
       <a
