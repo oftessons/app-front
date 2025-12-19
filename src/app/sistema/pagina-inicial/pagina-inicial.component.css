@@ -21,13 +21,18 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 30px;
+  padding: 15px 30px;
+  height: 80px;
+  box-sizing: border-box;
   background-color: #0f1934;
 }
 
 .logo img {
-  height: 40px;
+  height: 50px;
+  display: block; 
 }
+
+
 
 .nav-links {
   display: flex;
@@ -35,12 +40,15 @@
   gap: 24px;
 }
 
+
+
 .nav-links a {
   color: white;
   text-decoration: none;
   font-weight: 500;
   position: relative;
   padding-bottom: 5px;
+  font-size: 14px;
 }
 
 .nav-links a.active {
@@ -67,6 +75,32 @@
   width: 100%;
   opacity: 1;
   visibility: visible;
+}
+
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+}
+
+.btn-login-nav {
+  display: inline-block;
+  color: #fff;
+  border: 1px solid #F4B92B;
+  padding: 10px 24px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  background-color: transparent;
+}
+
+.btn-login-nav:hover {
+  background-color: #F4B92B;
+  color: #0f1934;
+  box-shadow: 0 0 15px rgba(217, 164, 29, 0.4);
 }
 
 .section-indicator {
@@ -582,7 +616,7 @@ label {
   margin-top: 20px;
 }
 
-/* Seção de Professores */
+
 .professores-section {
   padding: 80px 0;
   padding-top: 140px;
@@ -621,7 +655,7 @@ label {
   max-width: 800px;
 }
 
-/* Categoria de Professores */
+
 .professores-categoria {
   margin-bottom: 50px;
 }
@@ -777,7 +811,7 @@ label {
   margin: 0;
 }
 
-/* Seção de Planos */
+
 .planos-section {
   padding: 80px 0;
   background-color: #f5f7fa;
@@ -859,9 +893,28 @@ label {
   .logo img {
     height: 35px;
   }
+
+  .nav-links {
+    gap: 15px;
+  }
+
+  .nav-links a {
+    font-size: 13px;
+  }
+
+  .btn-login {
+    padding: 8px 16px;
+  }
 }
 
 @media (max-width: 992px) {  
+  .nav-links, 
+  .nav-actions {
+    display: none; 
+  }
+  .navbar {
+    justify-content: space-between; 
+  }
   .depoimentos-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -1072,9 +1125,7 @@ label {
     padding: 20px;
   }
   
-  /* .register-header h3 {
-    font-size: 24px;
-  } */
+ 
   
   .register-content h2 {
     font-size: 28px;
