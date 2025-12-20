@@ -386,6 +386,37 @@
     </section>
 
 
+    <section id="faq" class="faq-section">
+      <div class="container">
+        
+        <div class="faq-header">
+          <h2>Perguntas frequentes</h2>
+        </div>
+
+        <div class="faq-container">
+          
+          <div 
+            class="faq-item" 
+            *ngFor="let item of faqList; let i = index" 
+            [class.active]="item.open"
+            (click)="toggleFaq(i)">
+            
+            <div class="faq-question">
+              <h3>{{ item.question }}</h3>
+              <div class="arrow-icon"></div>
+            </div>
+
+            <div class="faq-answer">
+              <div class="answer-inner">
+                <p>{{ item.answer }}</p>
+              </div>
+            </div>
+            
+          </div>
+
+        </div>
+      </div>
+    </section>
 
   </div>
 

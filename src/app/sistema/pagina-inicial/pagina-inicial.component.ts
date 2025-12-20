@@ -284,6 +284,50 @@ export class PaginaInicialComponent implements OnInit {
     }
   ]
 
+  faqList = [
+    {
+      question: 'Como funciona a plataforma?',
+      answer: 'O Oftlessons Q-Bank é uma plataforma completa de ensino em oftalmologia que oferece questões comentadas com recursos visuais como imagens e tabelas, proporcionando uma aprendizagem mais didática e eficiente. Com filtros personalizáveis por ano, tipo de prova, relevância do tema e grau de dificuldade, além de simulados cronometrados, ela se adapta às necessidades de cada usuário. As questões abrangem toda a grade exigida pelo CBO, com atualizações anuais, e o desempenho pode ser acompanhado por meio de gráficos detalhados. A plataforma também conta com flashcards pelo Brainscape organizados por temas, ideais para revisar e fixar o conteúdo. Eles podem ser acessados a qualquer hora e de qualquer dispositivo, oferecendo flexibilidade para estudar no seu próprio ritmo e onde for mais conveniente para você.',
+      open: false
+    },
+    {
+      question: 'Como me inscrevo?',
+      answer: 'Para se inscrever, escolha o plano de assinatura que melhor atende às suas necessidades e crie sua conta. O processo é rápido, seguro e dá acesso imediato à plataforma após a confirmação do pagamento.',
+      open: false
+    },
+    {
+      question: 'Quais são os métodos de pagamento aceitos?',
+      answer: 'Aceitamos pagamentos via cartões de crédito, débito e Pix, proporcionando flexibilidade e segurança na sua assinatura.',
+      open: false
+    },
+    {
+      question: 'Posso cancelar minha assinatura a qualquer momento?',
+      answer: 'Sim, você pode cancelar sua assinatura a qualquer momento diretamente pela plataforma. Caso o cancelamento ocorra dentro do período de teste gratuito de 7 dias, o reembolso é realizado integralmente, sem burocracia. Após esse prazo, o acesso permanece ativo até o fim do ciclo vigente, sem cobranças futuras.',
+      open: false
+    },
+    {
+      question: 'Há um período de teste gratuito?',
+      answer: 'Sim. Oferecemos 7 dias de acesso gratuito para que você possa explorar todas as funcionalidades da plataforma antes de decidir pela assinatura.',
+      open: false
+    },
+    {
+      question: 'Como entro em contato com o suporte?',
+      answer: 'Nosso suporte está disponível via e-mail (victorcb610@gmail.com) e WhatsApp (11 92090-9632), prontos para auxiliar com qualquer dúvida ou necessidade.',
+      open: false
+    },
+    {
+      question: 'Os conteúdos são atualizados regularmente?',
+      answer: 'Sim. A plataforma é atualizada anualmente com novas questões e conteúdos, alinhados às diretrizes do CBO, garantindo que você tenha acesso ao material mais recente e relevante.',
+      open: false
+    },
+    {
+      question: 'Posso acessar o site de qualquer dispositivo?',
+      answer: 'Sim. A plataforma é compatível com navegadores web em computadores, tablets e smartphones, permitindo que você estude quando e onde quiser.',
+      open: false
+    }
+  ];
+
+
   @ViewChild('videoPlayer') videoPlayer!: ElementRef<HTMLVideoElement>;
 
   constructor(
@@ -680,6 +724,10 @@ export class PaginaInicialComponent implements OnInit {
     if (this.rotationInterval) {
       clearInterval(this.rotationInterval);
     }
+  }
+
+  toggleFaq(index: number) {
+    this.faqList[index].open = !this.faqList[index].open;
   }
   
 }
