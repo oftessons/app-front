@@ -44,8 +44,77 @@
 
   </section>
 
+
   
-  <section id="hero" class="hero-section">
+  <section id="professores" class="professores-section-dark">
+    <div class="professores-overlay"></div>
+
+    <div class="container-fluid relative-z"> 
+      
+      <div class="professores-header">
+        <h2 class="professores-title">Nossa Equipe</h2>
+        <p class="professores-subtitle">Subespecialistas que comentam as questões e ministram as aulas da plataforma.</p>
+      </div>
+
+      <div class="carousel-wrapper">
+        
+        <button class="nav-btn prev" (click)="prevProfessor()">❮</button>
+
+        <div class="carousel-viewport">
+          
+          <div class="professores-track" [style.transform]="trackTransform">
+            
+            <div class="professor-card-dark" 
+                *ngFor="let professor of todosProfessores"
+                [style.flex]="'0 0 ' + cardWidthPercentage + '%'">
+              
+              <div class="card-inner"> <div class="card-avatar">
+                  <div class="avatar-circle">
+                    <img [src]="professor.foto" [alt]="professor.nome" />
+                  </div>
+                </div>
+                
+                <h3 class="prof-name">{{ professor.nome }}</h3>
+                
+                <div class="prof-badge">
+                  <span class="badge-text">{{ professor.especialidade || 'Oftalmologia' }}</span>
+                  <span class="badge-sub">OftLessons Team</span>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+        <button class="nav-btn next" (click)="nextProfessor()">❯</button>
+
+      </div>
+
+      <div class="carousel-indicators">
+        <span *ngFor="let p of todosProfessores; let i = index" 
+              class="dot" 
+              [class.active]="i === startIndexProfessores"> </span>
+      </div>
+
+    </div>
+  </section>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+  <!-- <section id="hero" class="hero-section">
     <div class="container">
       <div class="hero-content">
         <div class="hero-text">
@@ -162,9 +231,9 @@
         </div>
       </div>
     </div>
-  </section>
+  </section> -->
 
-  <section id="professores" class="professores-section">
+  <!-- <section id="professores" class="professores-section">
     <div class="container">
       <div class="professores-border">
         <div class="professores-header">
@@ -172,7 +241,7 @@
           <p class="professores-subtitle">Subespecialistas que ministram aulas e comentam as questões da plataforma</p>
         </div>
 
-        <!-- Professores que dão aulas -->
+
         <div class="professores-categoria">
           <div class="categoria-header">
             <div class="categoria-icon">
@@ -195,10 +264,10 @@
           </div>
         </div>
 
-        <!-- Divisor -->
+
         <div class="categoria-divisor"></div>
 
-        <!-- Professores comentadores -->
+
         <div class="professores-categoria">
           <div class="categoria-header">
             <div class="categoria-icon comentador">
@@ -222,7 +291,7 @@
         </div>
       </div>
     </div>
-  </section>
+  </section> -->
 
   <section id="depoimentos" class="depoimentos-section">
     <div class="container">

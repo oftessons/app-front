@@ -195,6 +195,12 @@ export class PaginaInicialComponent implements OnInit {
     }
   ];
 
+
+  todosProfessores: any[] = [];
+  startIndexProfessores = 0;
+  itemsPorSlide = 6;
+  rotationInterval: any;
+
   @ViewChild('videoPlayer') videoPlayer!: ElementRef<HTMLVideoElement>;
 
   constructor(
@@ -204,7 +210,7 @@ export class PaginaInicialComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    //localStorage.removeItem('access_token');
+    
     this.checkActiveSection();
     this.registerForm = this.formBuilder.group({
       nome: ['', [Validators.required, Validators.minLength(3)]],
@@ -212,6 +218,11 @@ export class PaginaInicialComponent implements OnInit {
       tipoDeEstudante: ['RESIDENTE', Validators.required],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
+
+    this.todosProfessores = [...this.professoresAulas, ...this.professoresComentadores];
+    this.checkItemsPerSlide();
+    window.addEventListener('resize', () => this.checkItemsPerSlide());
+    this.startRotation();
 
     this.checkScreenSize();
     this.initCarousel();
@@ -226,6 +237,7 @@ export class PaginaInicialComponent implements OnInit {
 
   ngOnDestroy(): void {
     this.stopAutoPlay();
+    this.stopRotation();
   }
 
 
@@ -491,15 +503,87 @@ export class PaginaInicialComponent implements OnInit {
 
   playVideo() {
     if (this.videoPlayer && this.videoPlayer.nativeElement) {
-      // O catch evita erros se o navegador bloquear o play rápido demais
       this.videoPlayer.nativeElement.play().catch(err => console.log('Erro ao reproduzir:', err));
     }
   }
 
-  // 3. Função disparada quando o mouse SAI da seção
   pauseVideo() {
     if (this.videoPlayer && this.videoPlayer.nativeElement) {
       this.videoPlayer.nativeElement.pause();
     }
   }
+
+  checkItemsPerSlide() {
+    const width = window.innerWidth;
+    if (width < 768) {
+      this.itemsPorSlide = 1; 
+    } else if (width < 1200) {
+      this.itemsPorSlide = 4; 
+    } else {
+      this.itemsPorSlide = 6; 
+    }
+  }
+
+prevProfessor() {
+    this.stopRotation(); 
+    const maxIndex = this.todosProfessores.length - this.itemsPorSlide;
+    
+    if (this.startIndexProfessores > 0) {
+      this.startIndexProfessores--;
+    } else {
+      
+      this.startIndexProfessores = maxIndex;
+    }
+    this.startRotation(); 
+  }
+
+  nextProfessor() {
+    this.stopRotation();
+    const maxIndex = this.todosProfessores.length - this.itemsPorSlide;
+
+    if (this.startIndexProfessores < maxIndex) {
+      this.startIndexProfessores++;
+    } else {
+      
+      this.startIndexProfessores = 0;
+    }
+    this.startRotation();
+  }
+
+  
+  startRotation() {
+    
+    this.stopRotation(); 
+    this.rotationInterval = setInterval(() => {
+      const maxIndex = this.todosProfessores.length - this.itemsPorSlide;
+      if (this.startIndexProfessores < maxIndex) {
+        this.startIndexProfessores++;
+      } else {
+        this.startIndexProfessores = 0;
+      }
+    }, 4000); 
+  }
+
+  stopRotation() {
+    if (this.rotationInterval) {
+      clearInterval(this.rotationInterval);
+    }
+  }
+
+  get professoresVisiveis() {
+    
+    if (!this.todosProfessores.length) return [];
+    return this.todosProfessores.slice(this.startIndexProfessores, this.startIndexProfessores + this.itemsPorSlide);
+  }
+
+  get cardWidthPercentage(): number {
+    return 100 / this.itemsPorSlide;
+  }
+
+  
+  get trackTransform(): string {
+    const translateValue = this.startIndexProfessores * this.cardWidthPercentage;
+    return `translateX(-${translateValue}%)`;
+  }
+  
 }
