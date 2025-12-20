@@ -103,6 +103,20 @@
   box-shadow: 0 0 15px rgba(217, 164, 29, 0.4);
 }
 
+.main-background-wrapper {
+  position: relative;
+  width: 100%;
+  background-image: url('../../../assets/imagens/background_landingpage.jpg'); 
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  min-height: 100vh; 
+  overflow: hidden;
+}
+
+
+
+
 .section-indicator {
   position: fixed;
   left: 6px;
@@ -928,12 +942,9 @@ label {
 
 .tech-section {
   position: relative;
-  
- 
   width: 100vw;
   margin-left: calc(-50vw + 50%);
   margin-right: calc(-50vw + 50%);
-  
   height: 700px;
   background-color: #000;
   display: flex;
@@ -1026,20 +1037,21 @@ label {
 
 .professores-section-dark {
   position: relative;
-  background-image: url('../../../assets/imagens/background_landingpage.jpg'); 
+  background: transparent;
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
   padding: 100px 0;
   color: white;
   overflow: hidden;
+  position: relative;
 }
 
 
 .professores-overlay {
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(2, 6, 23, 0.85);
+  background: transparent;
   z-index: 0;
 }
 
@@ -1262,9 +1274,10 @@ label {
 }
 
 .features-section {
-  background-image: url('../../../assets/imagens/background_landingpage.jpg'); 
   padding: 80px 0;
   color: white;
+  position: relative;
+  background: transparent;
 }
 
 .features-header {
