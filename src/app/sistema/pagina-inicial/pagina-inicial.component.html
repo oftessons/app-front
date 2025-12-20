@@ -20,6 +20,30 @@
     </div>
 
   </nav>
+
+
+  <section class="tech-section" (mouseenter)="playVideo()" (mouseleave)="pauseVideo()">
+    
+    <div class="video-container">
+      <video #videoPlayer muted loop playsinline class="bg-video" poster="../../../assets/imagens/landingpage/desempenhopreview.jpg">
+        <source src="../../../assets/videos/trilha.mp4" type="video/mp4">
+        Seu navegador não suporta vídeos HTML5.
+      </video>
+    </div>
+
+    <div class="content-tech">
+      <h2 class="tech-title">TECNOLOGIA NA SUA ROTINA.</h2>
+      
+      <button class="btn-tech">
+        ACESSE AGORA 
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 18l6-6-6-6"/>
+        </svg>
+      </button>
+    </div>
+
+  </section>
+
   
   <section id="hero" class="hero-section">
     <div class="container">

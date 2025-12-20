@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -194,6 +194,8 @@ export class PaginaInicialComponent implements OnInit {
       experiencia: 'Residente de Oftalmologia - FAV'
     }
   ];
+
+  @ViewChild('videoPlayer') videoPlayer!: ElementRef<HTMLVideoElement>;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -483,6 +485,21 @@ export class PaginaInicialComponent implements OnInit {
   stopAutoPlay() {
     if (this.carouselInterval) {
       clearInterval(this.carouselInterval);
+    }
+  }
+
+
+  playVideo() {
+    if (this.videoPlayer && this.videoPlayer.nativeElement) {
+      // O catch evita erros se o navegador bloquear o play rápido demais
+      this.videoPlayer.nativeElement.play().catch(err => console.log('Erro ao reproduzir:', err));
+    }
+  }
+
+  // 3. Função disparada quando o mouse SAI da seção
+  pauseVideo() {
+    if (this.videoPlayer && this.videoPlayer.nativeElement) {
+      this.videoPlayer.nativeElement.pause();
     }
   }
 }
