@@ -7,6 +7,8 @@ import { Permissao } from '../../login/Permissao';
 import { TipoUsuario } from '../../login/enums/tipo-usuario';
 import { TipoUsuarioDescricao } from '../../login/enums/tipo-usuario-descricao';
 import { CardPlanoComponent } from '../../shared/card-plano/card-plano.component';
+import { FaqItem, FAQLIST, FEATURES, Professor, PROFESSORESAULAS, PROFESSORESCOMENTADORES, RESULTADOS } from './info_mock';
+
 
 @Component({
   selector: 'app-pagina-inicial',
@@ -14,6 +16,14 @@ import { CardPlanoComponent } from '../../shared/card-plano/card-plano.component
   styleUrls: ['./pagina-inicial.component.css']
 })
 export class PaginaInicialComponent implements OnInit {
+
+  resultados = RESULTADOS;
+  faqList: FaqItem[] = FAQLIST;
+  features = FEATURES;
+  professoresAulas = PROFESSORESAULAS;
+  professoresComentadores = PROFESSORESCOMENTADORES;
+
+
   password: string = '';
   nome: string = '';
   email: string = '';
@@ -58,274 +68,10 @@ export class PaginaInicialComponent implements OnInit {
   transitionStyle = 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)'; 
   isAnimating = false; 
 
-  depoimentos = [
-    {
-      name: 'Paloma Schürmann Ribeiro',
-      role: 'Santa Catarina',
-      content: 'A plataforma da Oftlessons têm auxiliado muito na sedimentação do conteúdo estudado, desde a grande variedade de temas, até a organização de questões em diferentes níveis de dificuldade, de forma que possa identificar minhas fragilidades e entender melhor com os comentários das questões.',
-      image: 'assets/imagens/depoimentos/paloma.jpg'
-    },
-    {
-      name: 'Carla Tavares',
-      role: 'Pernambuco',
-      content: 'Através das questões e comentários, é possível fazer uma boa revisão dos assuntos mais contemplados na prova do CBO. Ótima ferramenta de estudo 👏!',
-      image: 'assets/imagens/depoimentos/carla.jpg'
-    },
-    {
-      name: 'Dhiego Carvalho',
-      role: 'Ceará',
-      content: 'Estou extremamente satisfeito com o aplicativo de questões. O conteúdo é bem organizado, com muitas questões, de todos os assuntos, atualizadas e comentadas de forma clara e objetiva. Além disso, a interface é intuitiva e facilita muito o estudo no dia a dia. Tem sido uma ferramenta essencial na minha preparação e formação, pois ajuda a fixar os principais temas cobrados. Recomendo para todos que estão se preparando para a prova de título!',
-      image: 'assets/imagens/depoimentos/dhiego.jpeg'
-    },
-    {
-      name: 'Caio Barros',
-      role: 'Pernambuco',
-      content: 'Com as questões do Oftlessons, eu consigo não só me preparar para a prova do CBO como também revisar temas importantes para a prática do dia-a-dia da oftalmologia.',
-      image: 'assets/imagens/depoimentos/caio.jpg'
-    }
-  ];
-
-  professoresAulas = [
-    {
-      nome: 'Gustavo Paz',
-      foto: 'assets/imagens/professores/gustavo-paz.png',
-      especialidade: 'Catarata', 
-      experiencia: 'Oftalmologista pela Obras Sociais Irmã Dulce - Salvador. Fellowship de Catarata',
-      instituicao:"Hospital Humberto Castro Lima.",
-      isComentador: false
-    },
-    {
-      nome: 'Mariana Melo',
-      foto: 'assets/imagens/professores/mariana-melo.png',
-      especialidade: 'Retina e Vítreo', 
-      experiencia: 'Fellowship de Retina e Vítreo',
-      instituicao:"FAV",
-      isComentador: false
-    },
-    {
-      nome: 'Mariana Gurgel',
-      foto: 'assets/imagens/professores/mariana-gurgel.png',
-      especialidade: 'Glaucoma', 
-      experiencia: 'Fellowship em Glaucoma',
-      instituicao:"Fundação Altino Ventura",
-      isComentador: false
-    },
-    {
-      nome: 'Sarah Nápoli',
-      foto: 'assets/imagens/professores/sarah-napoli.png',
-      especialidade: 'Uveítes', 
-      experiencia: 'Oftalmologista pelo CLIHON - BA. Fellowship em Retina Clínica, Oncologia e Uveítes',
-      instituicao:"Unifesp",
-      isComentador: false
-    },
-    {
-      nome: 'Marcela Raposo',
-      foto: 'assets/imagens/professores/marcela-raposo.png',
-      especialidade: 'Córnea, Cirurgia Refrativa e Transplante', 
-      experiencia: 'Fellowship em Córnea pelo Banco de Olhos de Sorocaba.',
-      instituicao:"Fundação Altino Ventura - Recife",
-      isComentador: false
-    },
-    {
-      nome: 'Lyvia Nunes',
-      foto: 'assets/imagens/professores/lyvia-nunes.png',
-      especialidade: 'Retina e Vítreo', 
-      experiencia: 'Oftalmologista pelo Cenoft - João Pessoa. Fellowship em Retina Cirúrgica',
-      instituicao:"Fundação Altino Ventura",
-      isComentador: false
-    },
-    {
-      nome: 'Lídia Guedes',
-      foto: 'assets/imagens/professores/lidia-guedes.png',
-      especialidade: 'Oncologia', 
-      experiencia: 'Oftalmologista pelo HC-UFPE. Fellowship em Oncologia e Ultrassonografia Ocular pela Unifesp.',
-      instituicao:"Unifesp",
-      isComentador: false
-    },
-    {
-      nome: 'Carla Tavares',
-      foto: 'assets/imagens/professores/carla-tavares.png',
-      especialidade: 'Lentes de Contato', 
-      experiencia: 'Fellowship em Lentes de Contato pela Unifesp.',
-      instituicao:"Unicamp - São Paulo",
-      isComentador: false
-    },
-    {
-      nome: 'Gabriela Gusmão',
-      foto: 'assets/imagens/professores/gabriela-gusmao.png',
-      especialidade: 'Oftalmopediatria e Estrabismo', 
-      experiencia: 'Fellowship em Oftalmopediatria e Estrabismo pela Unifesp.',
-      instituicao:"Unifesp",
-      isComentador: false
-    },
-    {
-      nome: 'Letícia da Fonte',
-      foto: 'assets/imagens/professores/leticia-da-fonte.png',
-      especialidade: 'Retina e Vítreo',
-      experiencia: 'Fellowship em Retina e Vítreo.',
-      instituicao:"FAV",
-      isComentador: false
-    },
-    {
-      nome: 'Letícia Amorim',
-      foto: 'assets/imagens/professores/leticia-amorim.png',
-      especialidade: 'Glaucoma e Neuroftalmologia',
-      experiencia: 'Fellowship Glaucoma e Neuroftalmologia - Unifesp.',
-      instituicao:"Fundação Altino Ventura - Recife",
-      isComentador: false
-    }
-  ];
-
-  professoresComentadores = [
-    {
-      nome: 'Antônio Cassiano',
-      foto: 'assets/imagens/professores/antonio-cassiano.png',
-      especialidade: 'Retina e Vítreo', 
-      experiencia: 'Fellowship de Retina e Vítreo',
-      instituicao:"FAV",
-      isComentador: true
-    },
-    {
-      nome: 'Lyndon Serra',
-      foto: 'assets/imagens/professores/lyndon-serra.png',
-      especialidade: 'Glaucoma', 
-      experiencia: 'Fellowship em Glaucoma',
-      instituicao:"FAMENE",
-      isComentador: true
-    },
-    {
-      nome: 'Clara Menezes',
-      foto: 'assets/imagens/professores/clara-menezes.png',
-      especialidade: 'Q-Bank Team', 
-      experiencia: 'Residente de Oftalmologia',
-      instituicao:"Escola Cearense",
-      isComentador: true
-    },
-    {
-      nome: 'Hélio Ferreira',
-      foto: 'assets/imagens/professores/helio-ferreira.png',
-      especialidade: 'Q-Bank Team', 
-      experiencia: 'Residente de Oftalmologia',
-      instituicao:"SEOPE",
-      isComentador: true
-    },
-    {
-      nome: 'Matheus Leal',
-      foto: 'assets/imagens/professores/matheus-leal.png',
-      especialidade: 'Q-Bank Team', 
-      experiencia: 'Residente de Oftalmologia',
-      instituicao:"FAV",
-      isComentador: true
-    },
-    {
-      nome: 'Mateus Araújo',
-      foto: 'assets/imagens/professores/mateus-araujo.png',
-      especialidade: 'Córnea e Refrativa', 
-      experiencia: 'Fellowship Córnea e Refrativa pela Fundação Altino Ventura',
-      instituicao:"Hospital Univertisário\nOnofre Lopes - Natal",
-      isComentador: true
-    },
-    {
-      nome: 'Taíse Araújo',
-      foto: 'assets/imagens/professores/taise-araujo.png',
-      especialidade: 'Q-Bank Team',
-      experiencia: 'Residente de Oftalmologia',
-      instituicao:"FAV",
-      isComentador: true
-    }
-  ];
-
-  todosProfessores: any[] = [];
+  todosProfessores: Professor[] = [];
   startIndexProfessores = 0;
   itemsPorSlide = 6;
   rotationInterval: any;
-
-
-  features = [
-    {
-      title: 'IA COM PROMPTS AUTORAIS',
-      video: '../../../assets/videos/trilha.mp4', 
-      poster: '../../../assets/imagens/landingpage/desempenhopreview.jpg'
-    },
-    {
-      title: 'SUGESTÃO DE REVISÃO POR IA',
-      video: '../../../assets/videos/trilha.mp4',
-      poster: '../../../assets/imagens/landingpage/desempenhopreview.jpg'
-    },
-    {
-      title: 'AULAS ILUSTRADAS E AUDIOVISUAL PROFISSIONAL',
-      video: '../../../assets/videos/trilha.mp4',
-      poster: '../../../assets/imagens/landingpage/desempenhopreview.jpg'
-    },
-    {
-      title: 'DASHBOARD DE MÉTRICAS DA SUA PROVA',
-      video: '../../../assets/videos/trilha.mp4',
-      poster: '../../../assets/imagens/landingpage/desempenhopreview.jpg'
-    },
-    {
-      title: 'SIMULADOS COM DESEMPENHO',
-      video: '../../../assets/videos/trilha.mp4',
-      poster: '../../../assets/imagens/landingpage/desempenhopreview.jpg'
-    },
-    {
-      title: 'FILTRO INTELIGENTE DE QUESTÕES',
-      video: '../../../assets/videos/trilha.mp4',
-      poster: '../../../assets/imagens/landingpage/desempenhopreview.jpg'
-    }
-  ];
-
-
-  resultados = [
-    {
-      nome:"Bento Júnior",
-      instituicao:"Fellow Unifesp",
-      especialidade:"Córnea 2026",
-      foto: "assets/imagens/depoimentos/bentojunior.png"
-    }
-  ]
-
-  faqList = [
-    {
-      question: 'Como funciona a plataforma?',
-      answer: 'O Oftlessons Q-Bank é uma plataforma completa de ensino em oftalmologia que oferece questões comentadas com recursos visuais como imagens e tabelas, proporcionando uma aprendizagem mais didática e eficiente. Com filtros personalizáveis por ano, tipo de prova, relevância do tema e grau de dificuldade, além de simulados cronometrados, ela se adapta às necessidades de cada usuário. As questões abrangem toda a grade exigida pelo CBO, com atualizações anuais, e o desempenho pode ser acompanhado por meio de gráficos detalhados. A plataforma também conta com flashcards pelo Brainscape organizados por temas, ideais para revisar e fixar o conteúdo. Eles podem ser acessados a qualquer hora e de qualquer dispositivo, oferecendo flexibilidade para estudar no seu próprio ritmo e onde for mais conveniente para você.',
-      open: false
-    },
-    {
-      question: 'Como me inscrevo?',
-      answer: 'Para se inscrever, escolha o plano de assinatura que melhor atende às suas necessidades e crie sua conta. O processo é rápido, seguro e dá acesso imediato à plataforma após a confirmação do pagamento.',
-      open: false
-    },
-    {
-      question: 'Quais são os métodos de pagamento aceitos?',
-      answer: 'Aceitamos pagamentos via cartões de crédito, débito e Pix, proporcionando flexibilidade e segurança na sua assinatura.',
-      open: false
-    },
-    {
-      question: 'Posso cancelar minha assinatura a qualquer momento?',
-      answer: 'Sim, você pode cancelar sua assinatura a qualquer momento diretamente pela plataforma. Caso o cancelamento ocorra dentro do período de teste gratuito de 7 dias, o reembolso é realizado integralmente, sem burocracia. Após esse prazo, o acesso permanece ativo até o fim do ciclo vigente, sem cobranças futuras.',
-      open: false
-    },
-    {
-      question: 'Há um período de teste gratuito?',
-      answer: 'Sim. Oferecemos 7 dias de acesso gratuito para que você possa explorar todas as funcionalidades da plataforma antes de decidir pela assinatura.',
-      open: false
-    },
-    {
-      question: 'Como entro em contato com o suporte?',
-      answer: 'Nosso suporte está disponível via e-mail (victorcb610@gmail.com) e WhatsApp (11 92090-9632), prontos para auxiliar com qualquer dúvida ou necessidade.',
-      open: false
-    },
-    {
-      question: 'Os conteúdos são atualizados regularmente?',
-      answer: 'Sim. A plataforma é atualizada anualmente com novas questões e conteúdos, alinhados às diretrizes do CBO, garantindo que você tenha acesso ao material mais recente e relevante.',
-      open: false
-    },
-    {
-      question: 'Posso acessar o site de qualquer dispositivo?',
-      answer: 'Sim. A plataforma é compatível com navegadores web em computadores, tablets e smartphones, permitindo que você estude quando e onde quiser.',
-      open: false
-    }
-  ];
 
 
   @ViewChild('videoPlayer') videoPlayer!: ElementRef<HTMLVideoElement>;
@@ -352,14 +98,6 @@ export class PaginaInicialComponent implements OnInit {
     this.startRotation();
 
     this.checkScreenSize();
-    this.initCarousel();
-
-    window.addEventListener('resize', () => {
-      this.checkScreenSize();
-      this.initCarousel();
-    });
-
-    this.startAutoPlay();
   }
 
   ngOnDestroy(): void {
@@ -516,110 +254,8 @@ export class PaginaInicialComponent implements OnInit {
     this.isMobile = window.innerWidth < 768;
   }
 
-  initCarousel() {
-    const itemsToShow = this.isMobile ? 1 : 2;
-
-    this.depoimentosExibidos = this.depoimentos.slice(0, itemsToShow);
-    this.currentDepoimentoIndex = 0;
-  }
-
-  nextDepoimento() {
-    this.stopAutoPlay();
-    const itemsToShow = this.isMobile ? 1 : 2;
 
 
-    const gridElement = document.querySelector('.depoimentos-grid') as HTMLElement;
-    if (gridElement) {
-      gridElement.style.opacity = '0';
-      gridElement.style.transform = 'translateX(-15px)';
-
-      setTimeout(() => {
-
-        this.currentDepoimentoIndex = (this.currentDepoimentoIndex + 1) % (this.depoimentos.length - itemsToShow + 1);
-        this.depoimentosExibidos = this.depoimentos.slice(this.currentDepoimentoIndex, this.currentDepoimentoIndex + itemsToShow);
-
-
-        setTimeout(() => {
-          gridElement.style.opacity = '1';
-          gridElement.style.transform = 'translateX(0)';
-        }, 50);
-      }, 300);
-    } else {
-
-      this.currentDepoimentoIndex = (this.currentDepoimentoIndex + 1) % (this.depoimentos.length - itemsToShow + 1);
-      this.depoimentosExibidos = this.depoimentos.slice(this.currentDepoimentoIndex, this.currentDepoimentoIndex + itemsToShow);
-    }
-
-    this.startAutoPlay();
-  }
-
-  prevDepoimento() {
-    this.stopAutoPlay();
-    const itemsToShow = this.isMobile ? 1 : 2;
-
-
-    const gridElement = document.querySelector('.depoimentos-grid') as HTMLElement;
-    if (gridElement) {
-      gridElement.style.opacity = '0';
-      gridElement.style.transform = 'translateX(15px)';
-
-      setTimeout(() => {
-
-        this.currentDepoimentoIndex = (this.currentDepoimentoIndex - 1 + this.depoimentos.length - itemsToShow + 1) % (this.depoimentos.length - itemsToShow + 1);
-        this.depoimentosExibidos = this.depoimentos.slice(this.currentDepoimentoIndex, this.currentDepoimentoIndex + itemsToShow);
-
-
-        setTimeout(() => {
-          gridElement.style.opacity = '1';
-          gridElement.style.transform = 'translateX(0)';
-        }, 50);
-      }, 300);
-    } else {
-
-      this.currentDepoimentoIndex = (this.currentDepoimentoIndex - 1 + this.depoimentos.length - itemsToShow + 1) % (this.depoimentos.length - itemsToShow + 1);
-      this.depoimentosExibidos = this.depoimentos.slice(this.currentDepoimentoIndex, this.currentDepoimentoIndex + itemsToShow);
-    }
-
-    this.startAutoPlay();
-  }
-
-  goToDepoimento(index: number) {
-    this.stopAutoPlay();
-    const itemsToShow = this.isMobile ? 1 : 2;
-
-
-    if (index >= 0 && index <= this.depoimentos.length - itemsToShow) {
-
-      const gridElement = document.querySelector('.depoimentos-grid') as HTMLElement;
-      if (gridElement) {
-        gridElement.style.opacity = '0';
-
-        setTimeout(() => {
-
-          this.currentDepoimentoIndex = index;
-          this.depoimentosExibidos = this.depoimentos.slice(this.currentDepoimentoIndex, this.currentDepoimentoIndex + itemsToShow);
-
-
-          setTimeout(() => {
-            gridElement.style.opacity = '1';
-            gridElement.style.transform = 'translateX(0)';
-          }, 50);
-        }, 300);
-      } else {
-
-        this.currentDepoimentoIndex = index;
-        this.depoimentosExibidos = this.depoimentos.slice(this.currentDepoimentoIndex, this.currentDepoimentoIndex + itemsToShow);
-      }
-    }
-
-    this.startAutoPlay();
-  }
-
-  startAutoPlay() {
-    this.carouselInterval = setInterval(() => {
-      this.nextDepoimento();
-    }, this.autoPlayInterval);
-  }
 
   stopAutoPlay() {
     if (this.carouselInterval) {
@@ -679,7 +315,9 @@ export class PaginaInicialComponent implements OnInit {
     this.transformStyle = `translateX(-${this.cardWidthPercentage}%)`;
     setTimeout(() => {
       const firstItem = this.todosProfessores.shift();
-      this.todosProfessores.push(firstItem);
+      if (firstItem) { 
+        this.todosProfessores.push(firstItem); 
+      }
       this.transitionStyle = 'none';
       this.transformStyle = 'translateX(0%)';
       this.isAnimating = false;
@@ -694,7 +332,9 @@ export class PaginaInicialComponent implements OnInit {
     this.isAnimating = true;
     this.transitionStyle = 'none';
     const lastItem = this.todosProfessores.pop();
-    this.todosProfessores.unshift(lastItem);
+    if (lastItem) { 
+      this.todosProfessores.unshift(lastItem); 
+    }
     this.transformStyle = `translateX(-${this.cardWidthPercentage}%)`;
 
     setTimeout(() => {
