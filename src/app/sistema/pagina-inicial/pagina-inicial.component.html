@@ -21,8 +21,8 @@
 
   </nav>
 
-  <div class="main-background-wrapper">
 
+  <div class="main-background-wrapper">
 
 
     <section id="inicio" class="tech-section" (mouseenter)="playVideo()" (mouseleave)="pauseVideo()">
@@ -137,6 +137,68 @@
 
       </div>
     </section>
+
+
+
+    <section id="resultados" class="resultados-section">
+      <div class="container">
+        
+        <div class="section-header">
+          <h2 class="section-title">Resultados</h2>
+        </div>
+
+        <div class="results-container">
+          
+          <div class="result-card" *ngFor="let item of resultados">
+            
+            <div class="result-img-wrapper">
+              <img [src]="item.foto" [alt]="item.nome">
+            </div>
+
+            <div class="result-content">
+              
+              <h3 class="result-name">{{ item.nome }}</h3>
+              
+              <div class="approval-badge">
+                <span class="status-text">APROVADO</span>
+                <div class="status-details">
+                  <span>{{ item.instituicao }}</span>
+                </div>
+
+                <div class="status-subdetails">
+                  <span>{{ item.especialidade }}</span>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   </div>

@@ -274,6 +274,16 @@ export class PaginaInicialComponent implements OnInit {
     }
   ];
 
+
+  resultados = [
+    {
+      nome:"Bento Júnior",
+      instituicao:"Fellow Unifesp",
+      especialidade:"Córnea 2026",
+      foto: "assets/imagens/depoimentos/bentojunior.png"
+    }
+  ]
+
   @ViewChild('videoPlayer') videoPlayer!: ElementRef<HTMLVideoElement>;
 
   constructor(

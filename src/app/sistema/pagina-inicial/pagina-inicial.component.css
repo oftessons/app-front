@@ -1365,3 +1365,160 @@ label {
   }
 }
 
+
+
+.resultados-section {
+  background: transparent; 
+  padding: 100px 0;
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 70px;
+}
+
+.section-title {
+  font-size: 42px;
+  font-weight: 700;
+  color: #ffffff !important;
+}
+
+
+.results-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+
+.result-card {
+  display: flex;
+  align-items: center;
+  position: relative;
+  max-width: 900px;
+  margin: 0 20px;
+}
+
+
+.result-img-wrapper {
+  position: relative;
+  z-index: 10;
+  flex-shrink: 0;
+  margin-right: -80px; 
+}
+
+.result-img-wrapper img {
+  width: 280px; 
+  height: 280px;
+  border-radius: 50%;
+  object-fit: cover;
+  
+  border: 5px solid #F4B92B !important;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+}
+
+
+.result-content {
+  background-color: #0d1b46; 
+  border-radius: 20px;
+  padding: 20px 60px 20px 130px; 
+  min-width: 450px;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+}
+
+
+.result-name {
+  color: #F4B92B !important;
+  font-size: 28px; 
+  font-weight: 700;
+  margin-bottom: 15px;
+  margin-left: 40px; 
+}
+
+
+.approval-badge {
+  background-color: #3B5FA0;
+  border-radius: 16px;
+  width: 240px; 
+  height: 160px;
+  padding: 0;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;    
+  text-align: center;     
+  gap: 10px;
+}
+
+.status-text {
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 24px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.status-details {
+  display: flex;
+  flex-direction: column;
+  font-size: 20px; 
+  color: #ffffff !important;
+  font-weight: 800;
+  line-height: 1.4;
+}
+
+.status-subdetails{
+  display: flex;
+  flex-direction: column;
+  font-size: 20px; 
+  color: #e0e0e0;
+  font-weight: 500;
+  line-height: 1.4;
+
+}
+
+
+@media (max-width: 900px) {
+  .result-card {
+    flex-direction: column;
+    text-align: center;
+    max-width: 100%;
+  }
+
+  .result-img-wrapper {
+    margin-right: 0;
+    margin-bottom: -60px;
+  }
+
+  .result-img-wrapper img {
+    width: 200px;
+    height: 200px;
+  }
+
+  .result-content {
+    padding: 70px 30px 40px 30px;
+    align-items: center;
+    min-width: auto;
+    width: 100%;
+  }
+  
+  .result-name {
+    margin-left: 0;
+    font-size: 24px;
+  }
+  
+  .approval-badge {
+    text-align: center;
+    padding: 15px 20px;
+  }
+}
