@@ -315,224 +315,79 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  </div>
-
-<!-- 
-  <section id="hero" class="hero-section">
-    <div class="container">
-      <div class="hero-content">
-        <div class="hero-text">
-          <h1><span>Domine</span> os conceitos que <span>caem</span> na Prova Nacional de <span>Oftalmologia</span></h1>
-          <p>Não é sobre estudar tudo, é sobre estudar certo.</p>
-        </div>
-        <div class="register-card">
-          <div class="register-header">
-            <h3>Já possui uma conta?</h3>
-            <button class="btn btn-login" (click)="navigateToLogin()">Faça Login</button>
-          </div>
-          <div class="register-body">
-            <form (submit)="cadastrar()">
-              <div class="column-form">
-                <div class="form-group">
-                  <label class="small mb-1">Nome *</label>
-                  <input type="text" name="nome" [(ngModel)]="nome"
-                    class="form-control py-2"
-                    [ngClass]="{'input-error': camposComErro.includes('nome')}"
-                    placeholder="Digite o seu nome" required />
-                  <small class="text-danger" *ngIf="camposComErro.includes('nome')">
-                    {{ obterMensagemErro('nome') }}
-                  </small>
-                </div>
-
-                <div class="form-group">
-                  <label class="small mb-1">E-mail *</label>
-                  <input type="email" name="email" [(ngModel)]="email"
-                    class="form-control py-2"
-                    [ngClass]="{'input-error': camposComErro.includes('email')}"
-                    placeholder="Digite seu e-mail" required />
-                  <small class="text-danger" *ngIf="camposComErro.includes('email')">
-                    {{ obterMensagemErro('email') }}
-                  </small>
-                </div>
-
-                <div class="form-group">
-                  <div class="password-container-tooltip">
-                    <label class="small mb-1">Senha *</label>
-                    <div class="input-group">
-                      <input type="password" name="password" [(ngModel)]="password"
-                        class="form-control py-2"
-                        [ngClass]="{'input-error': camposComErro.includes('password')}"
-                        placeholder="Digite sua senha" required
-                        (input)="validatePassword()"
-                        (focus)="showTooltip = true"
-                        (blur)="showTooltip = false"/>
-                      <div class="input-group-append">
-                        <div class="btn btn-outline-secondary" type="button" (click)="togglePasswordVisibility('password')">
-                          <img *ngIf="!passwordVisible.password" src="assets/imagens/view.svg" alt="Mostrar senha" width="16" height="16">
-                          <img *ngIf="passwordVisible.password" src="assets/imagens/view-off.svg" alt="Ocultar senha" width="16" height="16">
-                        </div>
-                      </div>
-                    </div>
-                    <div *ngIf="showTooltip" class="password-tooltip">
-                      <p class="tooltip-title">A senha precisa ter:</p>
-                      <ul>
-                        <li [class.valid]="passwordValidations.minLength">Ao menos 8 caracteres</li>
-                        <li [class.valid]="passwordValidations.uppercase">1 letra maiúscula</li>
-                        <li [class.valid]="passwordValidations.lowercase">1 letra minúscula</li>
-                        <li [class.valid]="passwordValidations.number">1 número</li>
-                        <li [class.valid]="passwordValidations.specialChar">1 caractere especial (!&#64;#$%^&*)</li>
-                      </ul>
-                    </div>
-                  </div>
-                  <small class="text-danger" *ngIf="camposComErro.includes('password')">
-                    {{ obterMensagemErro('password') }}
-                  </small>
-                </div>
-
-                <div class="form-group">
-                  <label class="small mb-1">Você é: *</label>
-                  <select name="tipoEstudante"
-                  [(ngModel)]="tipoDeEstudante"
-                  [ngClass]="{'input-error': camposComErro.includes('tipoDeEstudante')}"
-                  class="form-select py-2"
-                  required>
-                    <option value="" disabled selected>Selecione o tipo de usuário</option>
-                    <option *ngFor="let tipo of tiposUsuario" [value]="tipo.key">
-                      {{ tipo.description }}
-                    </option>
-                  </select>
-                  <small class="text-danger" *ngIf="camposComErro.includes('tipoDeEstudante')">
-                    {{ obterMensagemErro('tipoDeEstudante') }}
-                  </small>
-                </div>
-
-
-                <div class="col-sm-12 mt-3">
-                  <div class="form-check">
-                    <input type="checkbox" id="consentimento" [(ngModel)]="consentimento" name="consentimento" class="form-check-input" required />
-                    <label for="consentimento" class="form-check-label">
-                      Eu concordo com os
-                      <a href="assets/docs/pp.pdf" target="_blank">Termos de Uso</a> e a
-                      <a href="assets/docs/pp.pdf" target="_blank">Política de Privacidade</a>.
-                    </label>
-                  </div>
-                </div>
-              </div>
-
-              <div class="form-group mt-4 mb-0">
-                <div class="d-flex justify-content-between">
-                  <button type="submit" class="btn btn-submit" [disabled]="!consentimento">Cadastrar</button>
-                </div>
-                <div class="alert alert-success" *ngIf="mensagemSucesso">
-                  {{ mensagemSucesso }}
-                </div>
-                <div class="alert alert-danger" *ngFor="let erro of errors">
-                  {{ erro }}
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
- -->
-
-
-
-
-
-
-
-
-
-
-
-
-  <section id="planos" class="planos-section">
-    <div class="container">
-      <div class="title-planos">
-        <h2>Planos acessíveis para todos os perfis</h2>
-        <p>Escolha um plano e tenha acesso ilimitado a nossas questões e comentários.</p>
-      </div>
-
+    <section id="planos" class="planos-section">
       <div class="planos-container">
-        <app-card-plano
-            titulo="7 dias Grátis"
-            [descricao]="['Acesso a um número limitado de questões.', 'Ideal para quem está começando ou quer experimentar a plataforma.', 'Sem compromisso, totalmente gratuito.']"
-            [preco]="''"
-            textoParcelas="Gratuito"
-            textoBotao="Teste 7 dias grátis"
-            [mostrarPorMes]="false"
-            [recomendado]="false"
-            textoAdicional=""
-            [apenasEmitir]="true"
-            (botaoClicado)="onPlanoSelecionado('GRATUITO')">
-        </app-card-plano>
+        <div class="title-planos">
+          <h2>Teste e adquira o seu plano!</h2>
+        </div>
 
-        <app-card-plano
-            titulo="QBank + Mentoria"
-            [descricao]="[
+        <div class="plans-grid">
+
+          <app-card-plano-new
+            badgeText="24h Grátis"
+            mainTitle="Gratuito"
+            [features]="[
+              'Acesso a um número limitado de questões.',
+              'Ideal para quem está começando ou quer experimentar a plataforma.',
+              'Sem compromisso, totalmente gratuito.',
+            ]"
+            buttonText="TESTE 24 HORAS GRÁTIS"
+            (buttonClick)="onPlanoSelecionado('gratuito')">
+          </app-card-plano-new>
+
+          <app-card-plano-new
+            badgeText="QBank + Mentoria"
+            mainTitle="6x R$ 450,26"
+            titleSuffix="/mês"
+            subTitle="Ou em 1x de R$ 2.400,00"
+            [features]="[
               'Banco de questões com mais de 4 mil questões.',
-              '+2500 questões comentadas ricas em ilustrações.',
+              '+2500 questões comentadas.',
               'Assistente de IA que tira dúvidas, elabora novos comentários e explicações.',
               'Mentoria de acompanhamento do desempenho com questões.',
               'Fichas de simulados de acordo com a necessidade do aluno.'
             ]"
-            [preco]="450.26"
-            [textoParcelas]="'6x'"
-            textoBotao="Escolher plano"
-            [recomendado]="false"
-            textoAdicional="Ou em 1x de R$2.400,00"
-            corCabecalho="#041E4E"
-            [apenasEmitir]="true"
-            (botaoClicado)="onPlanoSelecionado('ASSINATURA_SEMESTRAL_PARCELADA')">
-        </app-card-plano>
-
-        <app-card-plano
-            titulo="Anual"
-            [descricao]="[
+            buttonText="ESCOLHER PLANO"
+            (buttonClick)="onPlanoSelecionado('qbank')">
+          </app-card-plano-new>
+          
+          <app-card-plano-new
+            badgeText="Anual"
+            mainTitle="12x R$ 175,51"
+            titleSuffix="/mês"
+            subTitle="ou em 1x de R$ 1.697,00"
+            [features]="[
               'Banco de questões com mais de 4 mil questões.',
               '+2500 questões comentadas ricas em ilustrações.',
               'Assistente de IA que tira dúvidas, elabora novos comentários e explicações.'
             ]"
-            [preco]="175.51"
-            [textoParcelas]="'12x'"
-            textoBotao="Escolher plano"
-            [recomendado]="true"
-            textoAdicional="ou em 1x de R$1.697,00"
-            corCabecalho="#0F1934"
-            [apenasEmitir]="true"
-            (botaoClicado)="onPlanoSelecionado('ASSINATURA_ANUAL_PARCELADA')">
-        </app-card-plano>
-      </div>
+            buttonText="ESCOLHER PLANO"
+            (buttonClick)="onPlanoSelecionado('anual')">
+          </app-card-plano-new>
 
-      <div class="planos-footer">
-        <span>
-          Sujeito às condições estabelecidas em nossos 
-          <a href="assets/docs/pp.pdf" target="_blank">Termos de Uso</a> e
-          <a href="assets/docs/pp.pdf" target="_blank">Política de Assinaturas.</a>
-        </span>
+
+          <app-card-plano-new
+            badgeText="Completo"
+            mainTitle="12x R$465,09"
+            titleSuffix="/mês"
+            subTitle="ou em 1x de R$1.697,00"
+            [features]="[
+              'Banco de questões com mais de 4 mil questões.',
+              '+2500 questões comentadas ricas em ilustrações.',
+              'Assistente de IA que tira dúvidas, elabora novos comentários e explicações.'
+            ]"
+            buttonText="ESCOLHER PLANO"
+            (buttonClick)="onPlanoSelecionado('Completo')">
+          </app-card-plano-new>
+
+        </div>
+
       </div>
-    </div>
-  </section>
+    </section>
+
+
+
+  </div>
 
 
   <div class="section-indicator">
