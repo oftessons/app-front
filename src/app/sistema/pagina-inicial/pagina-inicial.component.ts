@@ -54,6 +54,10 @@ export class PaginaInicialComponent implements OnInit {
   autoPlayInterval = 8000;
   isMobile = false;
 
+  transformStyle = 'translateX(0%)';
+  transitionStyle = 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)'; 
+  isAnimating = false; 
+
   depoimentos = [
     {
       name: 'Paloma Schürmann Ribeiro',
@@ -86,67 +90,89 @@ export class PaginaInicialComponent implements OnInit {
       nome: 'Gustavo Paz',
       foto: 'assets/imagens/professores/gustavo-paz.png',
       especialidade: 'Catarata', 
-      experiencia: 'Oftalmologista pela Obras Sociais Irmã Dulce - Salvador. Fellowship de Catarata pelo Hospital Humberto Castro Lima.'
+      experiencia: 'Oftalmologista pela Obras Sociais Irmã Dulce - Salvador. Fellowship de Catarata',
+      instituicao:"Hospital Humberto Castro Lima.",
+      isComentador: false
     },
     {
       nome: 'Mariana Melo',
       foto: 'assets/imagens/professores/mariana-melo.png',
       especialidade: 'Retina e Vítreo', 
-      experiencia: 'Oftalmologista pela FAV. Fellowship de Retina e Vítreo pela FAV.'
+      experiencia: 'Fellowship de Retina e Vítreo',
+      instituicao:"FAV",
+      isComentador: false
     },
     {
       nome: 'Mariana Gurgel',
       foto: 'assets/imagens/professores/mariana-gurgel.png',
       especialidade: 'Glaucoma', 
-      experiencia: 'Oftalmologista pela Fundação Altino Ventura. Fellowship em Glaucoma pela Fundação Altino Ventura.'
+      experiencia: 'Fellowship em Glaucoma',
+      instituicao:"Fundação Altino Ventura",
+      isComentador: false
     },
     {
       nome: 'Sarah Nápoli',
       foto: 'assets/imagens/professores/sarah-napoli.png',
-      especialidade: 'Uveíte', 
-      experiencia: 'Oftalmologista pelo CLIHON - BA. Fellowship em Retina Clínica, Oncologia e Uveítes pela Unifesp - SP.'
+      especialidade: 'Uveítes', 
+      experiencia: 'Oftalmologista pelo CLIHON - BA. Fellowship em Retina Clínica, Oncologia e Uveítes',
+      instituicao:"Unifesp",
+      isComentador: false
     },
     {
       nome: 'Marcela Raposo',
       foto: 'assets/imagens/professores/marcela-raposo.png',
       especialidade: 'Córnea, Cirurgia Refrativa e Transplante', 
-      experiencia: 'Oftalmologista pela Fundação Altino Ventura - Recife. Fellowship em Córnea pelo Banco de Olhos de Sorocaba.'
+      experiencia: 'Fellowship em Córnea pelo Banco de Olhos de Sorocaba.',
+      instituicao:"Fundação Altino Ventura - Recife",
+      isComentador: false
     },
     {
       nome: 'Lyvia Nunes',
       foto: 'assets/imagens/professores/lyvia-nunes.png',
       especialidade: 'Retina e Vítreo', 
-      experiencia: 'Oftalmologista pelo Cenoft - João Pessoa. Fellowship em Retina Cirúrgica pela Fundação Altino Ventura'
+      experiencia: 'Oftalmologista pelo Cenoft - João Pessoa. Fellowship em Retina Cirúrgica',
+      instituicao:"Fundação Altino Ventura",
+      isComentador: false
     },
     {
       nome: 'Lídia Guedes',
       foto: 'assets/imagens/professores/lidia-guedes.png',
       especialidade: 'Oncologia', 
-      experiencia: 'Oftalmologista pelo HC-UFPE. Fellowship em Oncologia e Ultrassonografia Ocular pela Unifesp.'
+      experiencia: 'Oftalmologista pelo HC-UFPE. Fellowship em Oncologia e Ultrassonografia Ocular pela Unifesp.',
+      instituicao:"Unifesp",
+      isComentador: false
     },
     {
       nome: 'Carla Tavares',
       foto: 'assets/imagens/professores/carla-tavares.png',
       especialidade: 'Lentes de Contato', 
-      experiencia: 'Oftalmologista pela Unicamp - São Paulo. Fellowship em Lentes de Contato pela Unifesp.'
+      experiencia: 'Fellowship em Lentes de Contato pela Unifesp.',
+      instituicao:"Unicamp - São Paulo",
+      isComentador: false
     },
     {
       nome: 'Gabriela Gusmão',
       foto: 'assets/imagens/professores/gabriela-gusmao.png',
       especialidade: 'Oftalmopediatria e Estrabismo', 
-      experiencia: 'Oftalmologista pela Unifesp. Fellowship em Oftalmopediatria e Estrabismo pela Unifesp.'
+      experiencia: 'Fellowship em Oftalmopediatria e Estrabismo pela Unifesp.',
+      instituicao:"Unifesp",
+      isComentador: false
     },
     {
       nome: 'Letícia da Fonte',
       foto: 'assets/imagens/professores/leticia-da-fonte.png',
       especialidade: 'Retina e Vítreo',
-      experiencia: 'Oftalmologista pela FAV. Fellowship em Retina e Vítreo pela FAV.'
+      experiencia: 'Fellowship em Retina e Vítreo.',
+      instituicao:"FAV",
+      isComentador: false
     },
     {
       nome: 'Letícia Amorim',
       foto: 'assets/imagens/professores/leticia-amorim.png',
       especialidade: 'Glaucoma e Neuroftalmologia',
-      experiencia: 'Oftalmologista pela Fundação Altino Ventura - Recife. Fellowship Glaucoma e Neuroftalmologia - Unifesp.'
+      experiencia: 'Fellowship Glaucoma e Neuroftalmologia - Unifesp.',
+      instituicao:"Fundação Altino Ventura - Recife",
+      isComentador: false
     }
   ];
 
@@ -155,51 +181,98 @@ export class PaginaInicialComponent implements OnInit {
       nome: 'Antônio Cassiano',
       foto: 'assets/imagens/professores/antonio-cassiano.png',
       especialidade: 'Retina e Vítreo', 
-      experiencia: 'Oftalmologista pela FAV. Fellowship de Retina e Vítreo pela FAV.'
+      experiencia: 'Fellowship de Retina e Vítreo',
+      instituicao:"FAV",
+      isComentador: true
     },
     {
       nome: 'Lyndon Serra',
       foto: 'assets/imagens/professores/lyndon-serra.png',
       especialidade: 'Glaucoma', 
-      experiencia: 'Oftalmologista pela FAMENE. Fellowship em Glaucoma pela FAV.'
+      experiencia: 'Fellowship em Glaucoma',
+      instituicao:"FAMENE",
+      isComentador: true
     },
     {
       nome: 'Clara Menezes',
       foto: 'assets/imagens/professores/clara-menezes.png',
       especialidade: 'Q-Bank Team', 
-      experiencia: 'Residente de Oftalmologia na Escola Cearense'
+      experiencia: 'Residente de Oftalmologia',
+      instituicao:"Escola Cearense",
+      isComentador: true
     },
     {
       nome: 'Hélio Ferreira',
       foto: 'assets/imagens/professores/helio-ferreira.png',
       especialidade: 'Q-Bank Team', 
-      experiencia: 'Residente de Oftalmologia - SEOPE'
+      experiencia: 'Residente de Oftalmologia',
+      instituicao:"SEOPE",
+      isComentador: true
     },
     {
       nome: 'Matheus Leal',
       foto: 'assets/imagens/professores/matheus-leal.png',
       especialidade: 'Q-Bank Team', 
-      experiencia: 'Residente de Oftalmologia - FAV'
+      experiencia: 'Residente de Oftalmologia',
+      instituicao:"FAV",
+      isComentador: true
     },
     {
       nome: 'Mateus Araújo',
       foto: 'assets/imagens/professores/mateus-araujo.png',
       especialidade: 'Córnea e Refrativa', 
-      experiencia: 'Oftalmologista pelo Hospital Universitário Onofre Lopes - Natal. Fellowship Córnea e Refrativa pela Fundação Altino Ventura.'
+      experiencia: 'Fellowship Córnea e Refrativa pela Fundação Altino Ventura',
+      instituicao:"Hospital Univertisário\nOnofre Lopes - Natal",
+      isComentador: true
     },
     {
       nome: 'Taíse Araújo',
       foto: 'assets/imagens/professores/taise-araujo.png',
       especialidade: 'Q-Bank Team',
-      experiencia: 'Residente de Oftalmologia - FAV'
+      experiencia: 'Residente de Oftalmologia',
+      instituicao:"FAV",
+      isComentador: true
     }
   ];
-
 
   todosProfessores: any[] = [];
   startIndexProfessores = 0;
   itemsPorSlide = 6;
   rotationInterval: any;
+
+
+  features = [
+    {
+      title: 'IA COM PROMPTS AUTORAIS',
+      video: '../../../assets/videos/trilha.mp4', 
+      poster: '../../../assets/imagens/landingpage/desempenhopreview.jpg'
+    },
+    {
+      title: 'SUGESTÃO DE REVISÃO POR IA',
+      video: '../../../assets/videos/trilha.mp4',
+      poster: '../../../assets/imagens/landingpage/desempenhopreview.jpg'
+    },
+    {
+      title: 'AULAS ILUSTRADAS E AUDIOVISUAL PROFISSIONAL',
+      video: '../../../assets/videos/trilha.mp4',
+      poster: '../../../assets/imagens/landingpage/desempenhopreview.jpg'
+    },
+    {
+      title: 'DASHBOARD DE MÉTRICAS DA SUA PROVA',
+      video: '../../../assets/videos/trilha.mp4',
+      poster: '../../../assets/imagens/landingpage/desempenhopreview.jpg'
+    },
+    {
+      title: 'SIMULADOS COM DESEMPENHO',
+      video: '../../../assets/videos/trilha.mp4',
+      poster: '../../../assets/imagens/landingpage/desempenhopreview.jpg'
+    },
+    {
+      title: 'FILTRO INTELIGENTE DE QUESTÕES',
+      video: '../../../assets/videos/trilha.mp4',
+      poster: '../../../assets/imagens/landingpage/desempenhopreview.jpg'
+    }
+  ];
 
   @ViewChild('videoPlayer') videoPlayer!: ElementRef<HTMLVideoElement>;
 
@@ -513,6 +586,14 @@ export class PaginaInicialComponent implements OnInit {
     }
   }
 
+  playGridVideo(videoElement: HTMLVideoElement) {
+    videoElement.play().catch(e => console.log(e));
+  }
+
+  pauseGridVideo(videoElement: HTMLVideoElement) {
+    videoElement.pause();
+  }
+
   checkItemsPerSlide() {
     const width = window.innerWidth;
     if (width < 768) {
@@ -524,54 +605,9 @@ export class PaginaInicialComponent implements OnInit {
     }
   }
 
-prevProfessor() {
-    this.stopRotation(); 
-    const maxIndex = this.todosProfessores.length - this.itemsPorSlide;
-    
-    if (this.startIndexProfessores > 0) {
-      this.startIndexProfessores--;
-    } else {
-      
-      this.startIndexProfessores = maxIndex;
-    }
-    this.startRotation(); 
-  }
 
-  nextProfessor() {
-    this.stopRotation();
-    const maxIndex = this.todosProfessores.length - this.itemsPorSlide;
-
-    if (this.startIndexProfessores < maxIndex) {
-      this.startIndexProfessores++;
-    } else {
-      
-      this.startIndexProfessores = 0;
-    }
-    this.startRotation();
-  }
-
-  
-  startRotation() {
-    
-    this.stopRotation(); 
-    this.rotationInterval = setInterval(() => {
-      const maxIndex = this.todosProfessores.length - this.itemsPorSlide;
-      if (this.startIndexProfessores < maxIndex) {
-        this.startIndexProfessores++;
-      } else {
-        this.startIndexProfessores = 0;
-      }
-    }, 4000); 
-  }
-
-  stopRotation() {
-    if (this.rotationInterval) {
-      clearInterval(this.rotationInterval);
-    }
-  }
 
   get professoresVisiveis() {
-    
     if (!this.todosProfessores.length) return [];
     return this.todosProfessores.slice(this.startIndexProfessores, this.startIndexProfessores + this.itemsPorSlide);
   }
@@ -581,9 +617,59 @@ prevProfessor() {
   }
 
   
-  get trackTransform(): string {
-    const translateValue = this.startIndexProfessores * this.cardWidthPercentage;
-    return `translateX(-${translateValue}%)`;
+  nextProfessor() {
+    if (this.isAnimating) return; 
+    this.stopRotation();
+    this.isAnimating = true;
+    this.transitionStyle = 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)';
+    this.transformStyle = `translateX(-${this.cardWidthPercentage}%)`;
+    setTimeout(() => {
+      const firstItem = this.todosProfessores.shift();
+      this.todosProfessores.push(firstItem);
+      this.transitionStyle = 'none';
+      this.transformStyle = 'translateX(0%)';
+      this.isAnimating = false;
+      this.startRotation(); 
+    }, 600); 
+  }
+
+  
+  prevProfessor() {
+    if (this.isAnimating) return;
+    this.stopRotation();
+    this.isAnimating = true;
+    this.transitionStyle = 'none';
+    const lastItem = this.todosProfessores.pop();
+    this.todosProfessores.unshift(lastItem);
+    this.transformStyle = `translateX(-${this.cardWidthPercentage}%)`;
+
+    setTimeout(() => {
+      
+      this.transitionStyle = 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)';
+      this.transformStyle = 'translateX(0%)';
+      
+      setTimeout(() => {
+        this.isAnimating = false;
+        this.startRotation();
+      }, 600); 
+    }, 20);
+  }
+
+  
+  startRotation() {
+    this.stopRotation();
+    this.rotationInterval = setInterval(() => {
+      
+      if (!document.hidden) {
+        this.nextProfessor();
+      }
+    }, 4000);
+  }
+
+  stopRotation() {
+    if (this.rotationInterval) {
+      clearInterval(this.rotationInterval);
+    }
   }
   
 }
