@@ -312,8 +312,27 @@ export const FAQLIST:FaqItem[] = [
 
 
 
+export const LISTA_MATERIAL = [
+   {
+    imageSrc: 'assets/imagens/material/as50plus.png', 
+    title: 'As 50 + da PNO',
+    description: 'Questões comentadas por item e com imagens das mais recorrentes nos últimos 3 anos da PNO.',
+    link: '#'
+  },
+  {
+    imageSrc: 'assets/imagens/material/as25plus.png',
+    title: 'As 25+ Óptica e Refração',
+    description: 'Ideal para entender os conceitos e resolver questões importantes para a prova e para o dia a dia.',
+    link: '#'
+  },
+  {
+    imageSrc: 'assets/imagens/material/editaloft.png',
+    title: 'Edital PNO 2026',
+    description: 'Edital completo da Prova Nacional de Oftalmologia',
+    link: '#'
+  }
 
-
+]
 
 
 
