@@ -29,6 +29,7 @@ import { GlobalSearchComponent } from './global-search/global-search.component';
 import { ModalPadraoComponent } from './modal-padrao/modal-padrao.component';
 import { DialogResultadoSimuladoComponent } from './dialog-resultado-simulado/dialog-resultado-simulado.component';
 import { CardPlanoNewComponent } from './card-plano-new/card-plano-new.component';
+import { CardMaterialComponent } from './card-material/card-material.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { CardPlanoNewComponent } from './card-plano-new/card-plano-new.component
     ModalComponent,
     CardPlanoComponent,
     CardPlanoNewComponent,
+    CardMaterialComponent,
     ModalDeleteComponent,
     PageEmDesenvolvimentoComponent,
     FlashcardsTemasCardsComponent,
@@ -74,6 +76,7 @@ import { CardPlanoNewComponent } from './card-plano-new/card-plano-new.component
     ModalComponent,
     CardPlanoComponent,
     CardPlanoNewComponent,
+    CardMaterialComponent,
     PageEmDesenvolvimentoComponent,
     HappyMessagePopupComponent,
     FlashcardsTemasCardsComponent,
