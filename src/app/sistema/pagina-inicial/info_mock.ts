@@ -211,32 +211,26 @@ export const FEATURES = [
     {
       title: 'IA COM PROMPTS AUTORAIS',
       video: '../../../assets/videos/landingpage/chatbot.mp4', 
-      poster: '../../../assets/imagens/landingpage/desempenhopreview.jpg'
     },
     {
       title: 'SUGESTÃO DE REVISÃO POR IA',
       video: '../../../assets/videos/landingpage/mentoria.mp4', 
-      poster: '../../../assets/imagens/landingpage/desempenhopreview.jpg'
     },
     {
       title: 'AULAS ILUSTRADAS E AUDIOVISUAL PROFISSIONAL',
       video: '../../../assets/videos/landingpage/aula.mp4', 
-      poster: '../../../assets/imagens/landingpage/desempenhopreview.jpg'
     },
     {
       title: 'DASHBOARD DE MÉTRICAS DA SUA PROVA',
       video: '../../../assets/videos/landingpage/metricas.mp4', 
-      poster: '../../../assets/imagens/landingpage/desempenhopreview.jpg'
     },
     {
       title: 'SIMULADOS COM DESEMPENHO',
       video: '../../../assets/videos/landingpage/simuladodesempenho.mp4', 
-      poster: '../../../assets/imagens/landingpage/desempenhopreview.jpg'
     },
     {
       title: 'FILTRO INTELIGENTE DE QUESTÕES',
       video: '../../../assets/videos/landingpage/filtroQuestao.mp4', 
-      poster: '../../../assets/imagens/landingpage/desempenhopreview.jpg'
     }
   ];
 

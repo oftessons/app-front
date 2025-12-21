@@ -28,7 +28,7 @@
     <section id="inicio" class="tech-section" (mouseenter)="playVideo()" (mouseleave)="pauseVideo()">
       
       <div class="video-container">
-        <video #videoPlayer muted loop playsinline class="bg-video" poster="../../../assets/imagens/landingpage/desempenhopreview.jpg">
+        <video #videoPlayer muted loop playsinline class="bg-video" poster="">
           <source src="assets/videos/landingpage/desempenho.mp4" type="video/mp4">
           Seu navegador não suporta vídeos HTML5.
         </video>
@@ -123,7 +123,7 @@
               (mouseleave)="pauseGridVideo(featVideo)">
             
             <div class="feature-video-container">
-              <video #featVideo muted loop playsinline class="feature-video" [poster]="item.poster">
+              <video #featVideo muted loop playsinline class="feature-video" [poster]="">
                 <source [src]="item.video" type="video/mp4">
               </video>
             </div>
@@ -303,7 +303,7 @@
           </div>
 
           <div class="hero-video-wrapper" (mouseenter)="heroVideo.play()" (mouseleave)="heroVideo.pause()">
-            <video #heroVideo muted loop playsinline class="hero-video-player" poster="assets/imagens/landingpage/desempenhopreview.jpg">
+            <video #heroVideo muted loop playsinline class="hero-video-player" poster="">
               <source src="/assets/videos/landingpage/trilha.mp4" type="video/mp4">
               Seu navegador não suporta vídeos HTML5.
             </video>

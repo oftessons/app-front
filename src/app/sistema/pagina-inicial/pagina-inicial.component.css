@@ -1068,7 +1068,7 @@ app-card-plano-new {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.75; 
+  opacity: 0.4; 
   display: block;
   transition: transform 0.5s ease;
 }
@@ -1429,7 +1429,7 @@ app-card-plano-new {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.85;
+  opacity: 0.4;
   transition: opacity 0.3s;
 }
 
