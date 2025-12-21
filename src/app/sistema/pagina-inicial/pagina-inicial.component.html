@@ -8,7 +8,7 @@
       <a href="#professores" (click)="scrollToSection('professores'); $event.preventDefault()">EQUIPE</a>
       <a href="#features" (click)="scrollToSection('features'); $event.preventDefault()">FEATURES</a>
       <a href="#planos" (click)="scrollToSection('planos'); $event.preventDefault()">PLANOS</a>
-      <a href="#planos" (click)="scrollToSection('planos'); $event.preventDefault()">RECURSOS</a>
+      <a href="#recursos" (click)="scrollToSection('recursos'); $event.preventDefault()">RECURSOS</a>
       <a href="#faq" (click)="scrollToSection('faq'); $event.preventDefault()">FAQ</a>
       <a href="#planos" (click)="scrollToSection('planos'); $event.preventDefault()">CONTATO</a>
       <!-- <a href="#hero" (click)="scrollToSection('hero'); $event.preventDefault()" class="active">Cadastro</a>
@@ -417,6 +417,33 @@
         </div>
       </div>
     </section>
+
+
+  <section id="recursos" class="conheca-section">
+    <div class="container">
+      
+      <div class="section-header">
+        <h2 class="section-title">Conheça</h2>
+      </div>
+
+      <div class="materials-grid">
+        <app-card-material
+          *ngFor="let item of materiais"
+          [imageSrc]="item.imageSrc"
+          [title]="item.title"
+          [description]="item.description"
+          buttonText="BAIXE GRÁTIS"
+          (buttonClick)="downloadMaterial(item)">
+        </app-card-material>
+      </div>
+
+    </div>
+  </section>
+
+
+
+
+
 
   </div>
 

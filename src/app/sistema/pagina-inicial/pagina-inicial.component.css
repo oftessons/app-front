@@ -1724,3 +1724,42 @@ app-card-plano-new {
   color: #b0b8c4 !important;
   padding-top: 10px;
 }
+
+
+
+
+.conheca-section {
+  background: transparent;
+  padding: 60px 20px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+
+.container {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.section-title {
+  font-size: 36px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+
+.materials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  justify-content: center; 
+}

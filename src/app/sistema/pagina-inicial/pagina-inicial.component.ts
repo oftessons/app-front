@@ -7,7 +7,7 @@ import { Permissao } from '../../login/Permissao';
 import { TipoUsuario } from '../../login/enums/tipo-usuario';
 import { TipoUsuarioDescricao } from '../../login/enums/tipo-usuario-descricao';
 import { CardPlanoComponent } from '../../shared/card-plano/card-plano.component';
-import { FaqItem, FAQLIST, FEATURES, Professor, PROFESSORESAULAS, PROFESSORESCOMENTADORES, RESULTADOS } from './info_mock';
+import { FaqItem, FAQLIST, FEATURES, LISTA_MATERIAL, Professor, PROFESSORESAULAS, PROFESSORESCOMENTADORES, RESULTADOS } from './info_mock';
 
 
 @Component({
@@ -22,6 +22,7 @@ export class PaginaInicialComponent implements OnInit {
   features = FEATURES;
   professoresAulas = PROFESSORESAULAS;
   professoresComentadores = PROFESSORESCOMENTADORES;
+  materiais = LISTA_MATERIAL;
 
 
   password: string = '';
@@ -370,4 +371,9 @@ export class PaginaInicialComponent implements OnInit {
     this.faqList[index].open = !this.faqList[index].open;
   }
   
+  downloadMaterial(item: any) {
+    console.log('Baixando:', item.title);
+    // window.open(item.link, '_blank');
+  }
+
 }
