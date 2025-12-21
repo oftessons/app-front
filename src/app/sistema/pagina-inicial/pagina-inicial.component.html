@@ -10,7 +10,7 @@
       <a href="#planos" (click)="scrollToSection('planos'); $event.preventDefault()">PLANOS</a>
       <a href="#recursos" (click)="scrollToSection('recursos'); $event.preventDefault()">RECURSOS</a>
       <a href="#faq" (click)="scrollToSection('faq'); $event.preventDefault()">FAQ</a>
-      <a href="#planos" (click)="scrollToSection('planos'); $event.preventDefault()">CONTATO</a>
+      <a href="#" (click)="scrollToSection('planos'); $event.preventDefault()">CONTATO</a>
       <!-- <a href="#hero" (click)="scrollToSection('hero'); $event.preventDefault()" class="active">Cadastro</a>
       <a href="#depoimentos" (click)="scrollToSection('depoimentos'); $event.preventDefault()">Depoimentos</a> -->
     </div>
@@ -419,41 +419,100 @@
     </section>
 
 
-  <section id="recursos" class="conheca-section">
-    <div class="container">
-      
-      <div class="section-header">
-        <h2 class="section-title">Conheça</h2>
-      </div>
+    <section id="recursos" class="conheca-section">
+      <div class="container">
+        
+        <div class="section-header">
+          <h2 class="section-title">Conheça</h2>
+        </div>
 
-      <div class="materials-grid">
-        <app-card-material
-          *ngFor="let item of materiais"
-          [imageSrc]="item.imageSrc"
-          [title]="item.title"
-          [description]="item.description"
-          buttonText="BAIXE GRÁTIS"
-          (buttonClick)="downloadMaterial(item)">
-        </app-card-material>
-      </div>
+        <div class="materials-grid">
+          <app-card-material
+            *ngFor="let item of materiais"
+            [imageSrc]="item.imageSrc"
+            [title]="item.title"
+            [description]="item.description"
+            buttonText="BAIXE GRÁTIS"
+            (buttonClick)="downloadMaterial(item)">
+          </app-card-material>
+        </div>
 
+      </div>
+    </section>
+  </div>
+
+
+
+
+
+
+  <section class="info-oftlessons">
+    <div class="container-rodape">
+      <div class="info-grid">
+        
+        <div class="info-col brand-col">
+          <div class="logo-wrapper">
+            <img src="assets/imagens/logofooter.png" alt="Oftlessons" class="logo-img">
+          </div>
+          
+          <div class="address-block">
+            <p>Av. Paulista, 1636</p>
+            <p>Bela Vista - 01310-200</p>
+            <p>São Paulo / SP - Brasil</p>
+          </div>
+        </div>
+
+        <div class="info-col">
+          <h4 class="info-heading">Institucional</h4>
+          <ul class="info-links">
+            <li><a href="#inicio">Home</a></li>
+            <li><a href="#professores">Equipe</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#planos">Planos</a></li>
+            <li><a href="#recursos">Recursos</a></li>
+          </ul>
+        </div>
+
+        <div class="info-col">
+          <h4 class="info-heading">Sobre</h4>
+          <ul class="info-links">
+            <li><a href="#faq">Faq</a></li>
+            <li><a href="#">Q-Bank</a></li>
+            <li><a href="assets/docs/pp.pdf" target="_blank">Termos de uso</a></li>
+            <li><a href="assets/docs/pp.pdf" target="_blank">Política de privacidade</a></li>
+          </ul>
+        </div>
+
+        <div class="info-col contact-col">
+          <h4 class="info-heading">Fale com a Oftlessons</h4>
+          <ul class="contact-list">
+            <li>
+              <img src="assets/Icons/emailicongold.png" alt="Email" class="icon-yellow">
+              <a href="mailto:Suporte@Oftlessons.com.br">Suporte@Oftlessons.com.br</a>
+            </li>
+            <li>
+              <img src="assets/Icons/instagramicongold.png" alt="Instagram" class="icon-yellow">
+              <a href="https://www.instagram.com/oftlessons">Oftlessons</a>
+            </li>
+            <li>
+              <img src="assets/Icons/linkedinicongold.png" alt="LinkedIn" class="icon-yellow">
+              <a href="https://www.linkedin.com/company/oftlessons">Oftlessons</a>
+            </li>
+            <li>
+              <img src="assets/Icons/whatsappicongold.png" alt="WhatsApp" class="icon-yellow">
+              <a
+                href="https://wa.me/551152418213?text=Ol%C3%A1%2C%20gostaria%20de%20saber%20mais%20sobre%20a%20Oftlessons%21" 
+                target="_blank" 
+                rel="noopener noreferrer">
+                (11) 5241‑8213
+              </a>
+            </li>
+          </ul>
+        </div>
+
+      </div>
     </div>
   </section>
-
-
-
-
-
-
-  </div>
-
-
-  <div class="section-indicator">
-    <a href="#hero" class="section-dot" data-section="hero"></a>
-    <a href="#professores" class="section-dot" data-section="professores"></a>
-    <a href="#depoimentos" class="section-dot" data-section="depoimentos"></a>
-    <a href="#planos" class="section-dot" data-section="planos"></a>
-  </div>
 
   <footer class="footer">
     <div class="container">
