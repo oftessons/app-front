@@ -1,0 +1,75 @@
+<div class="modal-overlay" *ngIf="isOpen" (click)="onClose()">
+  <div class="modal-container" (click)="$event.stopPropagation()">
+
+    <div class="modal-header-bar">
+      <div class="header-left">
+        <h3 class="header-title">Baixar<br>Material</h3>
+      </div>
+      <div class="header-right">
+        <p class="header-subtitle">
+          Preencha os dados para receber: <strong>{{ materialTitle }}</strong>
+        </p>
+      </div>
+      <button class="close-btn-white" (click)="onClose()" type="button">&times;</button>
+    </div>
+
+    <div class="modal-body">
+      <form (submit)="$event.preventDefault()">
+
+        <div class="form-group-modal">
+          <label>Nome *</label>
+          <input type="text" #nomeRef placeholder="Digite seu nome">
+        </div>
+
+        <div class="form-group-modal">
+          <label>Telefone / WhatsApp *</label>
+          <input 
+            type="tel" 
+            #telRef 
+            required 
+            placeholder="(XX) XXXXX-XXXX"
+            maxlength="15"
+            (input)="formatarTelefone($event)"
+            [class.input-error]="erroTelefone"
+          >
+          <span *ngIf="erroTelefone" class="error-msg">Telefone inválido (mínimo 10 dígitos com DDD).</span>
+        </div>
+
+        <p *ngIf="formInvalido && !erroTelefone" class="error-msg text-center mb-3">
+          Por favor, preencha Nome, Telefone corretamente e aceite os Termos.
+        </p>
+
+        <div class="form-group-modal">
+          <label>Email</label>
+          <input type="email" #emailRef placeholder="Digite seu e-mail (opcional)">
+        </div>
+
+        <div class="form-group-modal">
+          <label>Insira uma mensagem</label>
+          <textarea #msgRef rows="3" placeholder="Digite sua mensagem (opcional)"></textarea>
+        </div>
+
+        <div class="form-check-modal">
+          <input type="checkbox" id="termosCheck" #termosRef>
+          <label for="termosCheck">
+            Li e concordo com a <a href="assets/docs/pp.pdf" target="_blank">Política de Privacidade</a>
+          </label>
+        </div>
+
+        <p *ngIf="formInvalido" class="error-msg text-center mb-3">
+          Por favor, preencha os campos obrigatórios (*) e aceite os termos.
+        </p>
+
+        <button 
+          type="button" 
+          class="btn-submit-modal" 
+          (click)="processarEnvio(nomeRef.value, telRef.value, emailRef.value, msgRef.value, termosRef.checked)"
+        >
+          BAIXAR PDF AGORA!
+        </button>
+
+      </form>
+    </div>
+
+  </div>
+</div>

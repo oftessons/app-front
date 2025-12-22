@@ -5,39 +5,40 @@
 
   <div class="filters-bar">
     <div class="filter-group">
-      <span class="filter-label">Filtrar por:</span>
-      <select
-        class="custom-select"
-        [(ngModel)]="selectedAno"
-        (change)="onFilterChange()"
-      >
-        <option value="">Todos os anos</option>
-        <option *ngFor="let op of anosDisponiveis" [value]="op.value">
-          {{ op.label }}
-        </option>
-      </select>
+      
+      <div class="filter-wrapper">
+        <app-multiplo-select
+            label="Filtrar por Ano"
+            [options]="anosDisponiveis"
+            [(selectedValue)]="selectedAnos"
+            [multiple]="true"
+            [searchable]="true"
+            (selectedValueChange)="onFilterChange()">
+        </app-multiplo-select>
+      </div>
 
-      <select
-        class="custom-select"
-        [(ngModel)]="selectedTipo"
-        (change)="onFilterChange()"
-      >
-        <option value="">Todas as provas</option>
-        <option *ngFor="let op of tiposProvaDisponiveis" [value]="op.value">
-          {{ op.label }}
-        </option>
-      </select>
+      <div class="filter-wrapper">
+        <app-multiplo-select
+            label="Tipo de Prova"
+            [options]="tiposProvaDisponiveis"
+            [(selectedValue)]="selectedTipos"
+            [multiple]="true"
+            [searchable]="true"
+            (selectedValueChange)="onFilterChange()">
+        </app-multiplo-select>
+      </div>
 
-      <select
-        class="custom-select"
-        [(ngModel)]="selectedDificuldade"
-        (change)="onFilterChange()"
-      >
-        <option value="">Todas as dificuldades</option>
-        <option *ngFor="let op of dificuldadesDisponiveis" [value]="op.value">
-          {{ op.label }}
-        </option>
-      </select>
+      <div class="filter-wrapper">
+        <app-multiplo-select
+            label="Dificuldade"
+            [options]="dificuldadesDisponiveis"
+            [(selectedValue)]="selectedDificuldades"
+            [multiple]="true"
+            [searchable]="false" 
+            (selectedValueChange)="onFilterChange()">
+        </app-multiplo-select>
+      </div>
+
     </div>
   </div>
 

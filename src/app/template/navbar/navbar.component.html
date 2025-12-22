@@ -21,14 +21,26 @@
 
   <a class="navbar-brand mx-auto" routerLink="/usuario/inicio">
     <img
-      src="assets/imagens/logoq-bank.svg"
+      src="assets/imagens/logoq-bank-nome.svg"
       alt=""
-      style="padding: 10px; height: 65px"
+      style="padding: 10px; height: 50px"
       class="d-inline-block align-text-top"
     />
   </a>
-
-  <img src="assets/Icons/raio-contador.svg" class="ofensiva-icon" />
+  
+  <a class="btn-notificacao" routerLink="/usuario/notificacoes">
+    <div class="icon-wrapper">
+      <img 
+        [src]="'assets/Icons/dark/sino-dark.svg'" 
+        alt="Notificações" 
+        class="icon-sino"
+        onerror="this.src='assets/Icons/sino-dark.svg'" 
+      />
+      <span *ngIf="unreadCount > 0" class="badge-contador">
+        {{ unreadCount > 99 ? '99+' : unreadCount }}
+      </span>
+    </div>
+  </a>
   
   <div class="ofensiva-badge">
     <div class="badge-container">
@@ -37,20 +49,6 @@
         </div>
     </div>
   </div>
-
-  <a class="btn-notificacao mr-3" routerLink="/usuario/notificacoes">
-        <div class="icon-wrapper">
-            <img 
-              [src]="'assets/Icons/dark/sino-dark.svg'" 
-              alt="Notificações" 
-              class="icon-sino"
-              onerror="this.src='assets/Icons/sino-dark.svg'" 
-            />
-            <span *ngIf="unreadCount > 0" class="badge-contador">
-                {{ unreadCount > 99 ? '99+' : unreadCount }}
-            </span>
-        </div>
-  </a>
 
 
   <a
@@ -135,6 +133,7 @@
         mat-list-item
         routerLink="/usuario/dashboard"
         [ngClass]="{ 'active-link': isActive('/usuario/dashboard') }"
+        *ngIf="permissionAllowed()"
       >
         <img
           [src]="
@@ -164,7 +163,7 @@
           alt="Ícone de Questões"
           class="icon"
         />
-        <span class="ml-2">Questões</span>
+        <span class="ml-2">Modo Treino</span>
       </a>
       <a
         mat-list-item
@@ -221,7 +220,7 @@
           alt="Ícone do Simulado"
           class="icon"
         />
-        <span class="ml-2">Simulados</span>
+        <span class="ml-2">Modo Prova</span>
       </a>
       <a
         mat-list-item
@@ -238,7 +237,7 @@
           alt="Ícone de Meus Simulados"
           class="icon"
         />
-        <span class="ml-2">Meus Simulados</span>
+        <span class="ml-2">Minhas Provas</span>
       </a>
 
       <a

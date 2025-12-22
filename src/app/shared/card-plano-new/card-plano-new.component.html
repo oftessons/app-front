@@ -1,0 +1,32 @@
+<div class="plan-card-container">
+  
+  <div class="badge-flag" *ngIf="badgeText">
+    {{ badgeText }}
+  </div>
+
+  <div class="card-body">
+    
+    <div class="card-header-area">
+      <h2 class="main-title">
+        {{ mainTitle }}
+        <span class="suffix" *ngIf="titleSuffix">{{ titleSuffix }}</span>
+      </h2>
+      <p class="sub-title" *ngIf="subTitle">{{ subTitle }}</p>
+    </div>
+
+    <ul class="features-list">
+      <li *ngFor="let item of features">
+        <span class="bullet">&bull;</span>
+        <span class="feature-text">{{ item }}</span>
+      </li>
+    </ul>
+
+  </div>
+
+  <div class="card-footer">
+    <button class="btn-action" (click)="onButtonClick()">
+      {{ buttonText }}
+    </button>
+  </div>
+
+</div>

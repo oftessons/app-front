@@ -758,10 +758,20 @@
   padding: 1.5rem 2rem;
 }
 
+.center-buttons {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
 .right-buttons {
   display: flex;
   gap: 10px;
   align-items: center;
+  justify-content: flex-end;
+  width: 100%;
 }
 
 .btn-anterior,
@@ -793,6 +803,29 @@
   background-color: var(--green);
 }
 
+.btn-proxima-aula {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 14px 24px;
+  min-width: 160px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  color: #fff;
+  font-weight: 600;
+  background-color: var(--green);
+  transition: all 0.3s;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+.btn-proxima-aula:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+  filter: brightness(1.1);
+}
+
 .btn-anterior:disabled {
   background-color: #9a9a9a;
   cursor: not-allowed;
@@ -808,6 +841,178 @@
 .btn-responder:hover:not(:disabled),
 .btn-anterior:hover:not(:disabled) {
   opacity: 0.9;
+}
+
+/* ==================== AULAS ==================== */
+.aulas-content {
+  padding: 2rem;
+  max-height: 65vh;
+  overflow-y: auto;
+}
+
+.aula-trilha-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* Player de Vídeo */
+.video-container-trilha {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-color);
+}
+
+/* Informações da Aula */
+.info-aula-trilha {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.aula-header-trilha {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.aula-titulo-trilha {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-color);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.aula-descricao-trilha {
+  font-size: 1rem;
+  color: var(--text-color);
+  opacity: 0.85;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* Material da Aula */
+.material-aula-trilha {
+  display: flex;
+  flex-direction: column;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.material-aula-trilha h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin: 0 0 0.5rem 0;
+}
+
+.material-aula-trilha hr {
+  border: none;
+  border-top: 1px solid var(--border-color);
+  margin: 0.5rem 0 1rem 0;
+}
+
+.material-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.material-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: var(--card-trilha-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  gap: 1rem;
+  transition: all 0.2s;
+}
+
+.material-item:hover {
+  border-color: var(--yellow);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.material-nome {
+  flex: 1;
+  color: var(--text-color);
+  font-size: 0.9rem;
+  word-break: break-word;
+}
+
+.btn-visualizar-material {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  color: var(--text-color);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.btn-visualizar-material:hover {
+  background: var(--yellow);
+  border-color: var(--yellow);
+  color: #000;
+}
+
+.btn-visualizar-material svg {
+  width: 16px;
+  height: 16px;
+}
+
+.no-material {
+  color: var(--text-color);
+  opacity: 0.6;
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+.loading-video {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  color: #fff;
+}
+
+.loading-video .spinner {
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top: 3px solid #fff;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-video p {
+  font-size: 16px;
+  margin: 0;
 }
 
 /* ==================== RESUMO ==================== */
@@ -830,12 +1035,16 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 0.5rem;
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
 }
 
 .resumo-animation ng-lottie {
   max-width: 300px;
   width: 100%;
+  display: block;
+  margin: 0 auto;
 }
 
 .resumo-header-text {
@@ -858,19 +1067,23 @@
   font-size: 16px;
   color: var(--text-color);
   opacity: 0.8;
+  line-height: 1.6;
 }
 
 .resumo-header-text .modal-trilha-subtitle.tempo-total {
-  padding: 8px 16px;
+  padding: 12px 20px;
   background: rgba(59, 130, 246, 0.1);
   border: 1px solid rgba(59, 130, 246, 0.3);
   border-radius: 8px;
   display: inline-block;
-  margin: 0 auto;
+  margin: 8px auto 0 auto;
+  font-size: 15px;
+  opacity: 1;
 }
 
 .resumo-header-text .modal-trilha-subtitle.tempo-total strong {
   color: #3b82f6;
+  font-weight: 700;
 }
 
 .resumo-stats-cards {
@@ -897,6 +1110,14 @@
 .card-estatistica-resumo img {
   width: 20px;
   height: 20px;
+}
+
+.card-icon-wrapper.acerto img{
+  filter: invert(44%) sepia(72%) saturate(357%) hue-rotate(85deg) brightness(91%) contrast(87%);
+}
+
+.card-icon-wrapper.erro img{
+  filter: invert(19%) sepia(91%) saturate(7473%) hue-rotate(356deg) brightness(91%) contrast(87%);
 }
 
 .card-text-estatistica-resumo {
@@ -937,7 +1158,6 @@
   border: 2px solid #ef4444;
   border-radius: 8px;
   font-size: 16px;
-  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
   min-width: 150px;
@@ -955,7 +1175,6 @@
   border: none;
   border-radius: 8px;
   font-size: 16px;
-  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s;
   display: inline-flex;
@@ -966,7 +1185,6 @@
 }
 
 .btn-assistir-agora:hover {
-  transform: translateY(-2px);
   box-shadow: 0 8px 16px rgba(52, 168, 83, 0.3);
 }
 
@@ -1003,6 +1221,10 @@
     transform: rotate(90deg);
   }
 
+  .resumo-animation {
+    max-width: 250px;
+  }
+
   .resumo-animation ng-lottie {
     max-width: 250px;
   }
@@ -1021,7 +1243,38 @@
   }
 }
 
+@media (max-width: 768px) {
+  .modal-trilha-container {
+    max-width: 100%;
+    max-height: 95vh;
+    margin: 10px;
+  }
+
+  .aulas-content {
+    padding: 1rem;
+    max-height: 70vh;
+  }
+
+  .aula-titulo-trilha {
+    font-size: 1.25rem;
+  }
+
+  .material-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .btn-visualizar-material {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
 @media (max-width: 480px) {
+  .resumo-animation {
+    max-width: 200px;
+  }
+
   .resumo-animation ng-lottie {
     max-width: 200px;
   }
