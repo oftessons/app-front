@@ -322,7 +322,7 @@ export const LISTA_MATERIAL = [
   {
     imageSrc: 'assets/imagens/material/editaloft.png',
     title: 'Edital PNO 2026',
-    description: 'Edital completo da Prova Nacional de Oftalmologia',
+    description: 'Edital completo da Prova Nacional de Oftalmologia.',
     linkDownload: 'assets/docs/Edital_Prova_Nacional_Oftamologia_2026_-_By_Oftlessons.pdf'
   }
 
