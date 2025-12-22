@@ -113,13 +113,8 @@ export class PaginaInicialComponent implements OnInit {
   }
 
    ngAfterViewInit(): void {
-    // 1. Toca o vídeo principal IMEDIATAMENTE (Prioridade)
     this.playHeroVideo();
-
-    // 2. Configura o observador para os vídeos dos cards (Só tocam ao aparecer)
     this.setupVideoObserver();
-
-    // Se a lista mudar, reconecta o observador
     this.featureVideos.changes.subscribe(() => {
       this.setupVideoObserver();
     });
