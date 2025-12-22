@@ -204,11 +204,10 @@ label.active {
 
 .select-dropdown {
   background: var(--bg-input, #fff);
-  border: 1px solid var(--border-color, #ced4da); 
   padding: 4px 10px; 
-  padding-top: 18px; 
+  /* padding-top: 18px;  */
   cursor: pointer;
-  min-height: 48px;
+  /* min-height: 48px; */
   border-radius: 8px;
   display: flex;
   align-items: center; 
@@ -225,7 +224,7 @@ label.active {
 }
 
 .selected-value-container.has-value {
-  background-color: var(--multiple-select-value-bg);
+  /* background-color: var(--multiple-select-value-bg); */
   padding: 2px 8px;
   margin-top: -2px;
 }

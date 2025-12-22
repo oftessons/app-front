@@ -13,9 +13,9 @@
 
         <div class="btn-container">
           <button type="button" class="btn btn-secondary" *ngIf="questaoDTO.id" (click)="voltarQuestao()"
-                  [disabled]="loading">
-                  <i class="fa fa-arrow-left"></i>
-                  Voltar questão
+            [disabled]="loading">
+            <i class="fa fa-arrow-left"></i>
+            Voltar questão
           </button>
           <button *ngIf="questaoDTO.id" type="button" class="btn btn-secondary" (click)="irParaProximaQuestao()"
             [disabled]="limiteQuestoes">
@@ -51,14 +51,15 @@
             <div class="col-md-6">
               <div class="form-group">
                 <app-select-padrao [disabled]="isFiltroBloqueado()" label="Ano" [options]="anos"
-                  [(selectedValue)]="questaoDTO.ano">
+                  [(selectedValue)]="questaoDTO.ano" [notDeleteContent]="true">
                 </app-select-padrao>
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
                 <app-select-padrao label="Tipo de Prova" [options]="tiposDeProva"
-                  [(selectedValue)]="questaoDTO.tipoDeProva" (selectedValueChange)="onTipoDeProvaChange()">
+                  [(selectedValue)]="questaoDTO.tipoDeProva" (selectedValueChange)="onTipoDeProvaChange()"
+                  [notDeleteContent]="true">
                 </app-select-padrao>
               </div>
             </div>
@@ -92,20 +93,21 @@
             <div class="col-md-6">
               <div class="form-group">
                 <app-select-padrao label="Dificuldade" [options]="dificuldades"
-                  [(selectedValue)]="questaoDTO.dificuldade">
+                  [(selectedValue)]="questaoDTO.dificuldade" [notDeleteContent]="true">
                 </app-select-padrao>
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <app-select-padrao label="Relevância" [options]="relevancias" [(selectedValue)]="questaoDTO.relevancia">
+                <app-select-padrao label="Relevância" [options]="relevancias" [(selectedValue)]="questaoDTO.relevancia"
+                  [notDeleteContent]="true">
                 </app-select-padrao>
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
                 <app-select-padrao label="Assunto" [options]="subtemasAgrupadosPorTema"
-                  [(selectedValue)]="selectedSubtemaValue" [searchable]="true">
+                  [(selectedValue)]="selectedSubtemaValue" [searchable]="true" [notDeleteContent]="true">
                 </app-select-padrao>
               </div>
             </div>
@@ -899,9 +901,9 @@
             <div class="d-flex justify-content-between">
               <div class="btn-container">
                 <button type="button" class="btn btn-secondary" *ngIf="questaoDTO.id" (click)="voltarQuestao()"
-                        [disabled]="loading">
-                        <i class="fa fa-arrow-left"></i>
-                        Voltar questão
+                  [disabled]="loading">
+                  <i class="fa fa-arrow-left"></i>
+                  Voltar questão
                 </button>
                 <div class="id-questao" *ngIf="questaoDTO.id">
                   <span>ID da questão: {{ questaoDTO.id }}</span>
