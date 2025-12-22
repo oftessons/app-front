@@ -1,0 +1,128 @@
+:host {
+  display: flex;
+  width: 100%;
+}
+
+.plan-card-container {
+  background-color: #041E4E;
+  display: flex;
+  flex-direction: column;
+  flex: 1; 
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.plan-card-container:hover {
+  transform: translateY(-5px);
+  border-color: #3B5FA0;
+}
+
+
+.badge-flag {
+  background-color: #ffffff;
+  color: #031033;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 12px 24px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  z-index: 2;
+  box-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+  text-transform: uppercase;
+}
+
+
+.card-body {
+  padding: 90px 30px 20px 30px;
+  color: white;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+
+.card-header-area {
+  text-align: center;
+  margin-bottom: 35px;
+  min-height: 80px; 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.main-title { 
+  font-size: 32px; 
+  font-weight: 700; 
+  color: #ffffff !important; 
+  margin: 0; 
+  line-height: 1.1; 
+}
+.suffix { 
+  font-size: 16px; 
+  font-weight: 400; 
+  color: #b0b8c4; 
+  margin-left: 4px; 
+}
+
+.sub-title { 
+  font-size: 13px; 
+  color: #b0b8c4;
+  margin-top: 8px; 
+  font-weight: 400; 
+}
+
+.features-list { 
+  list-style: none; 
+  padding: 0; margin: 0; 
+  display: flex; 
+  flex-direction: column; 
+  gap: 16px; 
+}
+
+.features-list li { 
+  display: flex; 
+  align-items: flex-start; 
+  font-size: 15px; 
+  line-height: 1.5; 
+  color: #e0e0e0; 
+}
+
+.bullet { 
+  font-size: 20px; 
+  color: #ffffff; 
+  margin-right: 12px; 
+  line-height: 1; 
+  margin-top: -2px; 
+}
+
+.card-footer {
+  padding: 20px 30px 35px 30px;
+  margin-top: auto;
+}
+
+.btn-action {
+  width: 100%;
+  padding: 16px;
+  border-radius: 6px;
+  border: none;
+  background: linear-gradient(90deg, #F6D365 0%, #FFBF23 100%);
+  color: #0F1934;
+  font-weight: 800; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 191, 35, 0.25);
+}
+
+.btn-action:hover {
+  filter: brightness(1.1); transform: translateY(-3px); box-shadow: 0 8px 25px rgba(255, 191, 35, 0.4);
+}

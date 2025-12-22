@@ -28,6 +28,9 @@ import { ModalEditarSemanaTrilhaComponent } from './modal-editar-semana-trilha/m
 import { GlobalSearchComponent } from './global-search/global-search.component';
 import { ModalPadraoComponent } from './modal-padrao/modal-padrao.component';
 import { DialogResultadoSimuladoComponent } from './dialog-resultado-simulado/dialog-resultado-simulado.component';
+import { CardPlanoNewComponent } from './card-plano-new/card-plano-new.component';
+import { CardMaterialComponent } from './card-material/card-material.component';
+import { ModalLeadDownloadComponent } from './modal-lead-download/modal-lead-download.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +41,9 @@ import { DialogResultadoSimuladoComponent } from './dialog-resultado-simulado/di
     MultiploSelectComponent,
     ModalComponent,
     CardPlanoComponent,
+    CardPlanoNewComponent,
+    CardMaterialComponent,
+    ModalLeadDownloadComponent,
     ModalDeleteComponent,
     PageEmDesenvolvimentoComponent,
     FlashcardsTemasCardsComponent,
@@ -71,6 +77,9 @@ import { DialogResultadoSimuladoComponent } from './dialog-resultado-simulado/di
     MultiploSelectComponent,
     ModalComponent,
     CardPlanoComponent,
+    CardPlanoNewComponent,
+    CardMaterialComponent,
+    ModalLeadDownloadComponent,
     PageEmDesenvolvimentoComponent,
     HappyMessagePopupComponent,
     FlashcardsTemasCardsComponent,
