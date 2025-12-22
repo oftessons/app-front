@@ -1041,6 +1041,7 @@ app-card-plano-new {
 
 
 .tech-section {
+  margin-top: 4vw;
   position: relative;
   width: 100vw;
   margin-left: calc(-50vw + 50%);
@@ -1141,7 +1142,7 @@ app-card-plano-new {
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
-  padding: 100px 0;
+  padding: 50px 0;
   color: white;
   overflow: hidden;
   position: relative;
