@@ -14,18 +14,22 @@ export class MetricasComponent implements OnInit {
   errorMessage: string | null = null;
 
   // Variáveis para os filtros (ligadas ao ngModel no HTML se necessário)
-  selectedAno: string = '';
-  selectedTipo: string = '';
-  selectedDificuldade: string = '';
+  selectedAnos: string[] = [];
+  selectedTipos: string[] = [];
+  selectedDificuldades: string[] = [];
 
+  // --- Opções para os Dropdowns (Vindas do Banco) ---
   anosDisponiveis: SelectOption[] = [];
   tiposProvaDisponiveis: SelectOption[] = [];
   dificuldadesDisponiveis: SelectOption[] = [];
+
+  private readonly STORAGE_KEY = 'dashboard_filters_pref_v1';
 
   constructor(private metricasService: MetricasService) { }
 
   ngOnInit(): void {
     this.loadFilterOptions();
+    this.loadFiltersFromStorage();
     this.loadMetrics();
   }
 
@@ -44,23 +48,27 @@ export class MetricasComponent implements OnInit {
 
   loadMetrics(): void {
     this.isLoading = true;
+    this.errorMessage = null;
+
     this.metricasService.getMetrics(
-      this.selectedAno, 
-      this.selectedTipo, 
-      this.selectedDificuldade
+      this.selectedAnos, 
+      this.selectedTipos, 
+      this.selectedDificuldades
     ).subscribe({
-        next: (data) => {
+        next: (data: DashboardMetrics) => {
           this.metrics = data;
           this.isLoading = false;
         },
         error: (err) => {
-          console.error(err);
+          console.error('Erro ao carregar métricas:', err);
+          this.errorMessage = 'Não foi possível carregar os dados do painel.';
           this.isLoading = false;
         }
       });
   }
 
   onFilterChange(): void {
+    this.saveFiltersToStorage();
     this.loadMetrics();
   }
 
@@ -90,6 +98,41 @@ export class MetricasComponent implements OnInit {
     }
 
     return `${colorClass} ${sizeClass}`;
+  }
+
+  private loadFiltersFromStorage(): void {
+    const savedData = localStorage.getItem(this.STORAGE_KEY);
+    
+    if (savedData) {
+      try {
+        const filters = JSON.parse(savedData);
+
+        if (Array.isArray(filters.anos)) {
+          this.selectedAnos = filters.anos;
+        }
+        
+        if (Array.isArray(filters.tipos)) {
+          this.selectedTipos = filters.tipos;
+        }
+        
+        if (Array.isArray(filters.dificuldades)) {
+          this.selectedDificuldades = filters.dificuldades;
+        }
+
+      } catch (e) {
+        console.error('Erro ao ler filtros salvos. Resetando preferências.', e);
+        localStorage.removeItem(this.STORAGE_KEY);
+      }
+    }
+  }
+  private saveFiltersToStorage(): void {
+    const stateToSave = {
+      anos: this.selectedAnos,
+      tipos: this.selectedTipos,
+      dificuldades: this.selectedDificuldades
+    };
+    
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(stateToSave));
   }
 
 }

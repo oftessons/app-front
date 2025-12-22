@@ -1,15 +1,9 @@
 /* --- Container Geral --- */
 .container-notificacoes {
-  max-width: 1200px;
-  margin-top: 80px;
-    margin-right: 20px;
-    margin-bottom: 20px;
-    margin-left: 20px;
-  padding: 40px 20px;
-  min-height: 100vh;
-  
-  /* Garante o fundo escuro se não herdado */
-  /* background-color: #121214; */ 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 50px;
 }
 
 .titulo-pagina {
