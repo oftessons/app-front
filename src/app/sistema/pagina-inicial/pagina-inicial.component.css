@@ -332,9 +332,6 @@
     min-height: auto;
   }
 
-  /* .register-card-styled {
-    padding: 30px 20px;
-  } */
   
   .register-header {
     flex-direction: row !important; 
@@ -1167,6 +1164,7 @@ app-card-plano-new {
 
 .register-card-styled {
   background-color: #2F3042 !important;
+  border-radius: 20px;
   padding: 30px 40px; 
 }
 .column-form {
