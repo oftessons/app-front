@@ -55,7 +55,7 @@ export const PROFESSORESAULAS:Professor [] = [
       nome: 'Gustavo Paz',
       foto: 'assets/imagens/professores/gustavo-paz.png',
       especialidade: 'Catarata', 
-      experiencia: 'Oftalmologista pela Obras Sociais Irmã Dulce - Salvador. Fellowship de Catarata',
+      experiencia: 'Oftalmologista pela Obras Sociais Irmã Dulce. Fellowship de Catarata',
       instituicao:"Hospital Humberto Castro Lima.",
       isComentador: false
     },
@@ -64,7 +64,7 @@ export const PROFESSORESAULAS:Professor [] = [
       foto: 'assets/imagens/professores/mariana-melo.png',
       especialidade: 'Retina e Vítreo', 
       experiencia: 'Fellowship de Retina e Vítreo',
-      instituicao:"FAV",
+      instituicao:"Fundação Altino Ventura",
       isComentador: false
     },
     {
@@ -88,7 +88,7 @@ export const PROFESSORESAULAS:Professor [] = [
       foto: 'assets/imagens/professores/marcela-raposo.png',
       especialidade: 'Córnea, Cirurgia Refrativa e Transplante', 
       experiencia: 'Fellowship em Córnea pelo Banco de Olhos de Sorocaba.',
-      instituicao:"Fundação Altino Ventura - Recife",
+      instituicao:"Fundação Altino Ventura",
       isComentador: false
     },
     {
@@ -112,14 +112,14 @@ export const PROFESSORESAULAS:Professor [] = [
       foto: 'assets/imagens/professores/carla-tavares.png',
       especialidade: 'Lentes de Contato', 
       experiencia: 'Fellowship em Lentes de Contato pela Unifesp.',
-      instituicao:"Unicamp - São Paulo",
+      instituicao:"Unicamp",
       isComentador: false
     },
     {
       nome: 'Gabriela Gusmão',
       foto: 'assets/imagens/professores/gabriela-gusmao.png',
       especialidade: 'Oftalmopediatria e Estrabismo', 
-      experiencia: 'Fellowship em Oftalmopediatria e Estrabismo pela Unifesp.',
+      experiencia: 'Fellowship em Oftalmopediatria e Estrabismo',
       instituicao:"Unifesp",
       isComentador: false
     },
@@ -128,7 +128,7 @@ export const PROFESSORESAULAS:Professor [] = [
       foto: 'assets/imagens/professores/leticia-da-fonte.png',
       especialidade: 'Retina e Vítreo',
       experiencia: 'Fellowship em Retina e Vítreo.',
-      instituicao:"FAV",
+      instituicao:"Fundação Altino Ventura",
       isComentador: false
     },
     {
@@ -136,7 +136,7 @@ export const PROFESSORESAULAS:Professor [] = [
       foto: 'assets/imagens/professores/leticia-amorim.png',
       especialidade: 'Glaucoma e Neuroftalmologia',
       experiencia: 'Fellowship Glaucoma e Neuroftalmologia - Unifesp.',
-      instituicao:"Fundação Altino Ventura - Recife",
+      instituicao:"Unifesp",
       isComentador: false
     }
   ];
@@ -152,7 +152,7 @@ export const PROFESSORESCOMENTADORES:Professor [] = [
       foto: 'assets/imagens/professores/antonio-cassiano.png',
       especialidade: 'Retina e Vítreo', 
       experiencia: 'Fellowship de Retina e Vítreo',
-      instituicao:"FAV",
+      instituicao:"Fundação Altino Ventura",
       isComentador: true
     },
     {
@@ -184,7 +184,7 @@ export const PROFESSORESCOMENTADORES:Professor [] = [
       foto: 'assets/imagens/professores/matheus-leal.png',
       especialidade: 'Q-Bank Team', 
       experiencia: 'Residente de Oftalmologia',
-      instituicao:"FAV",
+      instituicao:"Fundação Altino Ventura",
       isComentador: true
     },
     {
@@ -192,7 +192,7 @@ export const PROFESSORESCOMENTADORES:Professor [] = [
       foto: 'assets/imagens/professores/mateus-araujo.png',
       especialidade: 'Córnea e Refrativa', 
       experiencia: 'Fellowship Córnea e Refrativa pela Fundação Altino Ventura',
-      instituicao:"Hospital Univertisário\nOnofre Lopes - Natal",
+      instituicao:"Fundação Altino Ventura",
       isComentador: true
     },
     {
@@ -200,7 +200,7 @@ export const PROFESSORESCOMENTADORES:Professor [] = [
       foto: 'assets/imagens/professores/taise-araujo.png',
       especialidade: 'Q-Bank Team',
       experiencia: 'Residente de Oftalmologia',
-      instituicao:"FAV",
+      instituicao:"Fundação Altino Ventura",
       isComentador: true
     }
   ];
