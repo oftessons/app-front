@@ -165,7 +165,7 @@ export class PermissaoAdminComponent implements OnInit {
 
     const usuario = new Usuario();
     usuario.password = userData.password;
-    usuario.nome = userData.nome;
+   // usuario.nome = userData.nome;
     usuario.email = userData.email;
     usuario.tipoUsuario = userData.tipoUsuario;
     usuario.bolsaAssinatura = userData.bolsa;
@@ -355,9 +355,9 @@ export class PermissaoAdminComponent implements OnInit {
 
     }
 
-    if (!userData.nome) {
-      passwordValidationErrors.push("O campo de nome é obrigatório.");
-    }
+    // if (!userData.nome) {
+    //   passwordValidationErrors.push("O campo de nome é obrigatório.");
+    // }
 
     if (!userData.tipoUsuario && this.cadastrando) {
       passwordValidationErrors.push("O campo de seleção de permissão de usuário é obrigatório.");

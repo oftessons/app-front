@@ -26,7 +26,7 @@
 
 
     <section id="inicio" class="tech-section" (mouseenter)="playVideo()" (mouseleave)="pauseVideo()">
-      
+
       <div class="video-container">
         <video #videoPlayer muted loop playsinline class="bg-video" poster="">
           <source src="assets/videos/landingpage/desempenho.mp4" type="video/mp4">
@@ -36,11 +36,12 @@
 
       <div class="content-tech">
         <h2 class="tech-title">TECNOLOGIA NA SUA ROTINA.</h2>
-        
+
         <button (click)="scrollToSection('hero')" class="btn-tech">
-          ACESSE AGORA 
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M9 18l6-6-6-6"/>
+          ACESSE AGORA
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 18l6-6-6-6" />
           </svg>
         </button>
       </div>
@@ -51,27 +52,25 @@
     <section id="professores" class="professores-section-dark">
       <div class="professores-overlay"></div>
 
-      <div class="container-fluid relative-z"> 
-        
+      <div class="container-fluid relative-z">
+
         <div class="professores-header">
           <h2 class="professores-title">Nossa Equipe</h2>
-          <p class="professores-subtitle">Subespecialistas que comentam as questões e ministram as aulas da plataforma.</p>
+          <p class="professores-subtitle">Subespecialistas que comentam as questões e ministram as aulas da plataforma.
+          </p>
         </div>
 
         <div class="carousel-wrapper">
-          
+
           <button class="nav-btn prev" (click)="prevProfessor()">❮</button>
 
           <div class="carousel-viewport">
-            
-            <div class="professores-track" 
-                [style.transform]="transformStyle"
-                [style.transition]="transitionStyle">
-              
-              <div class="professor-card-dark" 
-                  *ngFor="let professor of todosProfessores"
-                  [style.flex]="'0 0 ' + cardWidthPercentage + '%'">
-                
+
+            <div class="professores-track" [style.transform]="transformStyle" [style.transition]="transitionStyle">
+
+              <div class="professor-card-dark" *ngFor="let professor of todosProfessores"
+                [style.flex]="'0 0 ' + cardWidthPercentage + '%'">
+
                 <div class="card-inner">
                   <div class="card-top-content">
                     <div class="card-avatar">
@@ -88,7 +87,7 @@
                   <div class="card-bottom-content" *ngIf="professor.isComentador">
                     <p class="commentator-label">Equipe de comentário do Q-Bank</p>
                   </div>
-                  </div>
+                </div>
 
               </div>
 
@@ -100,9 +99,8 @@
         </div>
 
         <div class="carousel-indicators">
-          <span *ngFor="let p of todosProfessores; let i = index" 
-                class="dot" 
-                [class.active]="i === startIndexProfessores"> </span>
+          <span *ngFor="let p of todosProfessores; let i = index" class="dot"
+            [class.active]="i === startIndexProfessores"> </span>
         </div>
 
       </div>
@@ -111,21 +109,17 @@
 
     <section id="features" class="features-section">
       <div class="features-container-fluid">
-        
+
         <div class="features-header">
           <h2>Seu estudo com o Oftlessons começa agora!</h2>
         </div>
 
         <div class="features-grid">
-          <div class="feature-card" 
-              *ngFor="let item of features" 
-              (mouseenter)="playGridVideo(featVideo)" 
-              (mouseleave)="pauseGridVideo(featVideo)">
-            
-            <div class="feature-video-container"
-              (mouseenter)="!isMobile && heroVideo.play()" 
-              (mouseleave)="!isMobile && heroVideo.pause()"
-            >
+          <div class="feature-card" *ngFor="let item of features" (mouseenter)="playGridVideo(featVideo)"
+            (mouseleave)="pauseGridVideo(featVideo)">
+
+            <div class="feature-video-container" (mouseenter)="!isMobile && heroVideo.play()"
+              (mouseleave)="!isMobile && heroVideo.pause()">
               <video #featVideo muted loop playsinline class="feature-video" [poster]="" [autoplay]="isMobile">
                 <source [src]="item.video" type="video/mp4">
               </video>
@@ -145,23 +139,23 @@
 
     <section id="resultados" class="resultados-section">
       <div class="container">
-        
+
         <div class="section-header">
           <h2 class="section-title">Resultados</h2>
         </div>
 
         <div class="results-container">
-          
+
           <div class="result-card" *ngFor="let item of resultados">
-            
+
             <div class="result-img-wrapper">
               <img [src]="item.foto" [alt]="item.nome">
             </div>
 
             <div class="result-content">
-              
+
               <h3 class="result-name">{{ item.nome }}</h3>
-              
+
               <div class="approval-badge">
                 <span class="status-text">APROVADO</span>
                 <div class="status-details">
@@ -195,32 +189,20 @@
         <div class="hero-grid-layout">
 
           <div class="register-card-styled">
-            
+
             <div class="register-header">
               <h3>Já possui uma conta?</h3>
               <button class="btn btn-login" (click)="navigateToLogin()">Faça Login</button>
             </div>
-            
+
             <div class="register-body">
               <form (submit)="cadastrar()">
                 <div class="column-form">
                   <div class="form-group">
-                    <label class="small mb-1">Nome *</label>
-                    <input type="text" name="nome" [(ngModel)]="nome"
-                      class="form-control py-2"
-                      [ngClass]="{'input-error': camposComErro.includes('nome')}"
-                      placeholder="Digite o seu nome" required />
-                    <small class="text-danger" *ngIf="camposComErro.includes('nome')">
-                      {{ obterMensagemErro('nome') }}
-                    </small>
-                  </div>
-
-                  <div class="form-group">
                     <label chero-video-wrapperlass="small mb-1">E-mail *</label>
-                    <input type="email" name="email" [(ngModel)]="email"
-                      class="form-control py-2"
-                      [ngClass]="{'input-error': camposComErro.includes('email')}"
-                      placeholder="Digite seu e-mail" required />
+                    <input type="email" name="email" [(ngModel)]="email" class="form-control py-2"
+                      [ngClass]="{'input-error': camposComErro.includes('email')}" placeholder="Digite seu e-mail"
+                      required />
                     <small class="text-danger" *ngIf="camposComErro.includes('email')">
                       {{ obterMensagemErro('email') }}
                     </small>
@@ -230,17 +212,17 @@
                     <div class="password-container-tooltip">
                       <label class="small mb-1">Senha *</label>
                       <div class="input-group">
-                        <input type="password" name="password" [(ngModel)]="password"
-                          class="form-control py-2"
-                          [ngClass]="{'input-error': camposComErro.includes('password')}"
-                          placeholder="Digite sua senha" required
-                          (input)="validatePassword()"
-                          (focus)="showTooltip = true"
-                          (blur)="showTooltip = false"/>
+                        <input type="password" name="password" [(ngModel)]="password" class="form-control py-2"
+                          [ngClass]="{'input-error': camposComErro.includes('password')}" placeholder="Digite sua senha"
+                          required (input)="validatePassword()" (focus)="showTooltip = true"
+                          (blur)="showTooltip = false" />
                         <div class="input-group-append">
-                          <div class="btn btn-outline-secondary" type="button" (click)="togglePasswordVisibility('password')">
-                            <img *ngIf="!passwordVisible.password" src="assets/imagens/view.svg" alt="Mostrar senha" width="16" height="16">
-                            <img *ngIf="passwordVisible.password" src="assets/imagens/view-off.svg" alt="Ocultar senha" width="16" height="16">
+                          <div class="btn btn-outline-secondary" type="button"
+                            (click)="togglePasswordVisibility('password')">
+                            <img *ngIf="!passwordVisible.password" src="assets/imagens/view.svg" alt="Mostrar senha"
+                              width="16" height="16">
+                            <img *ngIf="passwordVisible.password" src="assets/imagens/view-off.svg" alt="Ocultar senha"
+                              width="16" height="16">
                           </div>
                         </div>
                       </div>
@@ -261,12 +243,20 @@
                   </div>
 
                   <div class="form-group">
+                    <label class="small mb-1">Telefone *</label>
+                    <input type="text" name="telefone" [(ngModel)]="telefone"
+                      [ngClass]="{'input-error': camposComErro.includes('telefone')}" class="form-control py-2"
+                      placeholder="Digite seu telefone" required />
+                    <small class="text-danger" *ngIf="camposComErro.includes('telefone')">
+                      {{ obterMensagemErro('telefone') }}
+                    </small>
+                  </div>
+
+                  <div class="form-group">
                     <label class="small mb-1">Você é: *</label>
-                    <select name="tipoEstudante"
-                    [(ngModel)]="tipoDeEstudante"
-                    [ngClass]="{'input-error': camposComErro.includes('tipoDeEstudante')}"
-                    class="form-select py-2"
-                    required>
+                    <select name="tipoEstudante" [(ngModel)]="tipoDeEstudante"
+                      [ngClass]="{'input-error': camposComErro.includes('tipoDeEstudante')}" class="form-select py-2"
+                      required>
                       <option value="" disabled selected>Selecione o tipo de usuário</option>
                       <option *ngFor="let tipo of tiposUsuario" [value]="tipo.key">
                         {{ tipo.description }}
@@ -280,7 +270,8 @@
 
                   <div class="col-sm-12 mt-3">
                     <div class="form-check">
-                      <input type="checkbox" id="consentimento" [(ngModel)]="consentimento" name="consentimento" class="form-check-input" required />
+                      <input type="checkbox" id="consentimento" [(ngModel)]="consentimento" name="consentimento"
+                        class="form-check-input" required />
                       <label for="consentimento" class="form-check-label">
                         Eu concordo com os
                         <a href="assets/docs/pp.pdf" target="_blank">Termos de Uso</a> e a
@@ -302,13 +293,11 @@
                   </div>
                 </div>
               </form>
-              </div>
+            </div>
           </div>
 
-          <div class="hero-video-wrapper" 
-            (mouseenter)="!isMobile && heroVideo.play()" 
-            (mouseleave)="!isMobile && heroVideo.pause()"
-          >
+          <div class="hero-video-wrapper" (mouseenter)="!isMobile && heroVideo.play()"
+            (mouseleave)="!isMobile && heroVideo.pause()">
             <video #heroVideo muted loop playsinline class="hero-video-player" poster="" [autoplay]="isMobile">
               <source src="/assets/videos/landingpage/trilha.mp4" type="video/mp4">
               Seu navegador não suporta vídeos HTML5.
@@ -329,61 +318,38 @@
 
         <div class="plans-grid">
 
-          <app-card-plano-new
-            badgeText="24h Grátis"
-            mainTitle="Gratuito"
-            [features]="[
+          <app-card-plano-new badgeText="24h Grátis" mainTitle="Gratuito" [features]="[
               'Acesso a um número limitado de questões.',
               'Ideal para quem está começando ou quer experimentar a plataforma.',
               'Sem compromisso, totalmente gratuito.',
-            ]"
-            buttonText="TESTE 24 HORAS GRÁTIS"
-            (buttonClick)="onPlanoSelecionado('gratuito')">
+            ]" buttonText="TESTE 24 HORAS GRÁTIS" (buttonClick)="onPlanoSelecionado('gratuito')">
           </app-card-plano-new>
 
-          <app-card-plano-new
-            badgeText="QBank + Mentoria"
-            mainTitle="6x R$ 450,26"
-            titleSuffix="/mês"
-            subTitle="Ou em 1x de R$ 2.400,00"
-            [features]="[
+          <app-card-plano-new badgeText="QBank + Mentoria" mainTitle="6x R$ 450,26" titleSuffix="/mês"
+            subTitle="Ou em 1x de R$ 2.400,00" [features]="[
               'Banco de questões com mais de 4 mil questões.',
               '+2500 questões comentadas.',
               'Assistente de IA que tira dúvidas, elabora novos comentários e explicações.',
               'Mentoria de acompanhamento do desempenho com questões.',
               'Fichas de provas de acordo com a necessidade do aluno.'
-            ]"
-            buttonText="ESCOLHER PLANO"
-            (buttonClick)="onPlanoSelecionado('qbank')">
+            ]" buttonText="ESCOLHER PLANO" (buttonClick)="onPlanoSelecionado('qbank')">
           </app-card-plano-new>
-          
-          <app-card-plano-new
-            badgeText="Anual"
-            mainTitle="12x R$ 175,51"
-            titleSuffix="/mês"
-            subTitle="ou em 1x de R$ 1.697,00"
-            [features]="[
+
+          <app-card-plano-new badgeText="Anual" mainTitle="12x R$ 175,51" titleSuffix="/mês"
+            subTitle="ou em 1x de R$ 1.697,00" [features]="[
               'Banco de questões com mais de 4 mil questões.',
               '+2500 questões comentadas ricas em ilustrações.',
               'Assistente de IA que tira dúvidas, elabora novos comentários e explicações.'
-            ]"
-            buttonText="ESCOLHER PLANO"
-            (buttonClick)="onPlanoSelecionado('anual')">
+            ]" buttonText="ESCOLHER PLANO" (buttonClick)="onPlanoSelecionado('anual')">
           </app-card-plano-new>
 
 
-          <app-card-plano-new
-            badgeText="Completo"
-            mainTitle="12x R$465,09"
-            titleSuffix="/mês"
-            subTitle="ou em 1x de R$1.697,00"
-            [features]="[
+          <app-card-plano-new badgeText="Completo" mainTitle="12x R$465,09" titleSuffix="/mês"
+            subTitle="ou em 1x de R$1.697,00" [features]="[
               'Banco de questões com mais de 4 mil questões.',
               '+2500 questões comentadas ricas em ilustrações.',
               'Assistente de IA que tira dúvidas, elabora novos comentários e explicações.'
-            ]"
-            buttonText="ESCOLHER PLANO"
-            (buttonClick)="onPlanoSelecionado('Completo')">
+            ]" buttonText="ESCOLHER PLANO" (buttonClick)="onPlanoSelecionado('Completo')">
           </app-card-plano-new>
 
         </div>
@@ -394,19 +360,16 @@
 
     <section id="faq" class="faq-section">
       <div class="container">
-        
+
         <div class="faq-header">
           <h2>Perguntas frequentes</h2>
         </div>
 
         <div class="faq-container">
-          
-          <div 
-            class="faq-item" 
-            *ngFor="let item of faqList; let i = index" 
-            [class.active]="item.open"
+
+          <div class="faq-item" *ngFor="let item of faqList; let i = index" [class.active]="item.open"
             (click)="toggleFaq(i)">
-            
+
             <div class="faq-question">
               <h3>{{ item.question }}</h3>
               <div class="arrow-icon"></div>
@@ -417,7 +380,7 @@
                 <p>{{ item.answer }}</p>
               </div>
             </div>
-            
+
           </div>
 
         </div>
@@ -427,19 +390,14 @@
 
     <section id="recursos" class="conheca-section">
       <div class="container">
-        
+
         <div class="section-header">
           <h2 class="section-title">Conheça</h2>
         </div>
 
         <div class="materials-grid">
-          <app-card-material
-            *ngFor="let item of materiais"
-            [imageSrc]="item.imageSrc"
-            [title]="item.title"
-            [description]="item.description"
-            buttonText="BAIXE GRÁTIS"
-            (buttonClick)="abrirModal(item)">
+          <app-card-material *ngFor="let item of materiais" [imageSrc]="item.imageSrc" [title]="item.title"
+            [description]="item.description" buttonText="BAIXE GRÁTIS" (buttonClick)="abrirModal(item)">
           </app-card-material>
         </div>
 
@@ -455,12 +413,12 @@
   <section class="info-oftlessons">
     <div class="container-rodape">
       <div class="info-grid">
-        
+
         <div class="info-col brand-col">
           <div class="logo-wrapper">
             <img src="assets/imagens/logofooter.png" alt="Oftlessons" class="logo-img">
           </div>
-          
+
           <div class="address-block">
             <p>Av. Paulista, 1636</p>
             <p>Bela Vista - 01310-200</p>
@@ -506,10 +464,8 @@
             </li>
             <li>
               <img src="assets/Icons/whatsappicongold.png" alt="WhatsApp" class="icon-yellow">
-              <a
-                href="https://wa.me/551152418213?text=Ol%C3%A1%2C%20gostaria%20de%20saber%20mais%20sobre%20a%20Oftlessons%21" 
-                target="_blank" 
-                rel="noopener noreferrer">
+              <a href="https://wa.me/551152418213?text=Ol%C3%A1%2C%20gostaria%20de%20saber%20mais%20sobre%20a%20Oftlessons%21"
+                target="_blank" rel="noopener noreferrer">
                 (11) 5241‑8213
               </a>
             </li>
@@ -522,10 +478,7 @@
 
 
 
-  <app-modal-lead-download
-    [isOpen]="modalAberto"
-    [materialTitle]="materialSelecionado?.title"
-    (close)="fecharModal()"
+  <app-modal-lead-download [isOpen]="modalAberto" [materialTitle]="materialSelecionado?.title" (close)="fecharModal()"
     (submitForm)="processarDownload($event)">
   </app-modal-lead-download>
 
@@ -533,7 +486,8 @@
   <footer class="footer">
     <div class="container">
       <div class="footer-bottom">
-        <p>&copy; 2024-{{ anoAtual }} Oftlessons - Todos os direitos reservados - CNPJ: 54.642.493/0001-92 - Av. Paulista, 1636. Bela Vista – São Paulo/SP.</p>
+        <p>&copy; 2024-{{ anoAtual }} Oftlessons - Todos os direitos reservados - CNPJ: 54.642.493/0001-92 - Av.
+          Paulista, 1636. Bela Vista – São Paulo/SP.</p>
       </div>
     </div>
   </footer>

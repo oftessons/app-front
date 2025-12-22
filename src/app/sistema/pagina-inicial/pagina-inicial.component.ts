@@ -27,6 +27,7 @@ export class PaginaInicialComponent implements OnInit {
 
   password: string = '';
   nome: string = '';
+  telefone: string = '';
   email: string = '';
   tipoDeEstudante: string = '';
   consentimento: boolean = false;
@@ -66,8 +67,8 @@ export class PaginaInicialComponent implements OnInit {
   isMobile = false;
 
   transformStyle = 'translateX(0%)';
-  transitionStyle = 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)'; 
-  isAnimating = false; 
+  transitionStyle = 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)';
+  isAnimating = false;
 
   todosProfessores: Professor[] = [];
   startIndexProfessores = 0;
@@ -87,11 +88,12 @@ export class PaginaInicialComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    
+
     this.checkActiveSection();
     this.registerForm = this.formBuilder.group({
       nome: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
+      telefone: ['', Validators.required],
       tipoDeEstudante: ['RESIDENTE', Validators.required],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
@@ -116,8 +118,9 @@ export class PaginaInicialComponent implements OnInit {
     this.camposComErro = [];
     this.mensagensDeErro = {};
 
-    this.validarCampoObrigatorio('nome', 'O campo nome é obrigatório');
+    // this.validarCampoObrigatorio('nome', 'O campo nome é obrigatório');
     this.validarCampoObrigatorio('email', 'O campo e-mail é obrigatório');
+    this.validarCampoObrigatorio('telefone', 'O campo telefone é obrigatório');
 
     if (!this.tipoDeEstudante) {
       this.adicionarErro('tipoDeEstudante', 'Selecione o tipo de usuário');
@@ -142,7 +145,8 @@ export class PaginaInicialComponent implements OnInit {
     const usuario: Usuario = new Usuario();
     usuario.password = this.password;
     usuario.email = this.email;
-    usuario.nome = this.nome;
+    usuario.telefone = this.telefone;
+    // usuario.nome = this.nome;
     usuario.tipoDeEstudante = this.tipoDeEstudante;
 
     this.authService
@@ -152,7 +156,8 @@ export class PaginaInicialComponent implements OnInit {
           this.mensagemSucesso = "Cadastro realizado com sucesso! Efetue o login.";
           this.password = '';
           this.email = '';
-          this.nome = '';
+          this.telefone = '';
+          // this.nome = '';
           this.tipoDeEstudante = '';
           this.errors = [];
 
@@ -295,11 +300,11 @@ export class PaginaInicialComponent implements OnInit {
   checkItemsPerSlide() {
     const width = window.innerWidth;
     if (width < 768) {
-      this.itemsPorSlide = 1; 
+      this.itemsPorSlide = 1;
     } else if (width < 1200) {
-      this.itemsPorSlide = 4; 
+      this.itemsPorSlide = 4;
     } else {
-      this.itemsPorSlide = 6; 
+      this.itemsPorSlide = 6;
     }
   }
 
@@ -314,54 +319,54 @@ export class PaginaInicialComponent implements OnInit {
     return 100 / this.itemsPorSlide;
   }
 
-  
+
   nextProfessor() {
-    if (this.isAnimating) return; 
+    if (this.isAnimating) return;
     this.stopRotation();
     this.isAnimating = true;
     this.transitionStyle = 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)';
     this.transformStyle = `translateX(-${this.cardWidthPercentage}%)`;
     setTimeout(() => {
       const firstItem = this.todosProfessores.shift();
-      if (firstItem) { 
-        this.todosProfessores.push(firstItem); 
+      if (firstItem) {
+        this.todosProfessores.push(firstItem);
       }
       this.transitionStyle = 'none';
       this.transformStyle = 'translateX(0%)';
       this.isAnimating = false;
-      this.startRotation(); 
-    }, 600); 
+      this.startRotation();
+    }, 600);
   }
 
-  
+
   prevProfessor() {
     if (this.isAnimating) return;
     this.stopRotation();
     this.isAnimating = true;
     this.transitionStyle = 'none';
     const lastItem = this.todosProfessores.pop();
-    if (lastItem) { 
-      this.todosProfessores.unshift(lastItem); 
+    if (lastItem) {
+      this.todosProfessores.unshift(lastItem);
     }
     this.transformStyle = `translateX(-${this.cardWidthPercentage}%)`;
 
     setTimeout(() => {
-      
+
       this.transitionStyle = 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)';
       this.transformStyle = 'translateX(0%)';
-      
+
       setTimeout(() => {
         this.isAnimating = false;
         this.startRotation();
-      }, 600); 
+      }, 600);
     }, 20);
   }
 
-  
+
   startRotation() {
     this.stopRotation();
     this.rotationInterval = setInterval(() => {
-      
+
       if (!document.hidden) {
         this.nextProfessor();
       }
@@ -377,7 +382,7 @@ export class PaginaInicialComponent implements OnInit {
   toggleFaq(index: number) {
     this.faqList[index].open = !this.faqList[index].open;
   }
-  
+
 
   abrirModal(item: any) {
     this.materialSelecionado = item;
@@ -389,7 +394,7 @@ export class PaginaInicialComponent implements OnInit {
     this.materialSelecionado = null;
   }
 
-  
+
   processarDownload(dados: any) {
     this.enviarParaGoogleSheets(dados);
     this.baixarArquivoReal();
@@ -401,8 +406,8 @@ export class PaginaInicialComponent implements OnInit {
     const urlForm = 'https://docs.google.com/forms/d/e/1FAIpQLSdUQ5SvQGL-_2KDHoEmhT38GdgOCaDplhuvXvQZvF-KX5fmjA/formResponse';
 
     const formData = new FormData();
-    
-    formData.append('entry.1146452729', dados.nome); 
+
+    formData.append('entry.1146452729', dados.nome);
     formData.append('entry.2052748158', dados.telefone);
     formData.append('entry.1482741367', dados.email || 'Não informado');
     formData.append('entry.811351103', this.materialSelecionado?.title || 'Material Desconhecido');
@@ -411,12 +416,12 @@ export class PaginaInicialComponent implements OnInit {
     fetch(urlForm, {
       method: 'POST',
       body: formData,
-      mode: 'no-cors' 
+      mode: 'no-cors'
     })
-    .then(() => {
-      console.log('Lead salvo na planilha com sucesso!');
-    })
-    .catch(err => console.error('Erro ao salvar na planilha:', err));
+      .then(() => {
+        console.log('Lead salvo na planilha com sucesso!');
+      })
+      .catch(err => console.error('Erro ao salvar na planilha:', err));
   }
 
   baixarArquivoReal() {
@@ -424,7 +429,7 @@ export class PaginaInicialComponent implements OnInit {
       const link = document.createElement('a');
       link.href = this.materialSelecionado.linkDownload;
       link.download = this.materialSelecionado.title;
-      link.target = '_blank'; 
+      link.target = '_blank';
       link.click();
     }
   }

@@ -146,7 +146,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="confirmacaoModalLabel">Deseja salvar o filtro de questões?</h5>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <form class="form-group">
@@ -162,7 +162,7 @@
               </div>
             </form>
           </div>
-          <div class="modal-footer">
+          <div class="modal-footer modal-footer-custom">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Não salvar</button>
             <button type="button" class="btn btn-success" [disabled]="carregandoSalvar"
               (click)="confirmarSalvarFiltro(nomeFiltroInput.value, descricaoFiltroInput.value)">
