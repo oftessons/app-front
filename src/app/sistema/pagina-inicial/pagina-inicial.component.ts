@@ -74,6 +74,9 @@ export class PaginaInicialComponent implements OnInit {
   itemsPorSlide = 6;
   rotationInterval: any;
 
+  modalAberto: boolean = false;
+  materialSelecionado: any = null;
+
 
   @ViewChild('videoPlayer') videoPlayer!: ElementRef<HTMLVideoElement>;
 
@@ -371,9 +374,33 @@ export class PaginaInicialComponent implements OnInit {
     this.faqList[index].open = !this.faqList[index].open;
   }
   
-  downloadMaterial(item: any) {
-    console.log('Baixando:', item.title);
-    // window.open(item.link, '_blank');
+
+  abrirModal(item: any) {
+    this.materialSelecionado = item;
+    this.modalAberto = true;
+  }
+
+  fecharModal() {
+    this.modalAberto = false;
+    this.materialSelecionado = null;
+  }
+
+  
+  processarDownload(dados: any) {
+    console.log('Novo Lead Capturado:', dados);
+    
+    this.baixarArquivoReal();
+    this.fecharModal();
+  }
+
+  baixarArquivoReal() {
+    if (this.materialSelecionado && this.materialSelecionado.linkDownload) {
+      const link = document.createElement('a');
+      link.href = this.materialSelecionado.linkDownload;
+      link.download = this.materialSelecionado.title; 
+      link.target = '_blank'; 
+      link.click();
+    }
   }
 
 }

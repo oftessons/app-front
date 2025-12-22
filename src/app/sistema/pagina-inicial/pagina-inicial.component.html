@@ -433,7 +433,7 @@
             [title]="item.title"
             [description]="item.description"
             buttonText="BAIXE GRÁTIS"
-            (buttonClick)="downloadMaterial(item)">
+            (buttonClick)="abrirModal(item)">
           </app-card-material>
         </div>
 
@@ -513,6 +513,16 @@
       </div>
     </div>
   </section>
+
+
+
+  <app-modal-lead-download
+    [isOpen]="modalAberto"
+    [materialTitle]="materialSelecionado?.title"
+    (close)="fecharModal()"
+    (submitForm)="processarDownload($event)">
+  </app-modal-lead-download>
+
 
   <footer class="footer">
     <div class="container">
