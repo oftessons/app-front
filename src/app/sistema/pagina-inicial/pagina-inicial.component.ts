@@ -448,7 +448,7 @@ export class PaginaInicialComponent implements OnInit {
         }
       });
     }, {
-      rootMargin: '5px' 
+      rootMargin: '100px' 
     });
 
     this.featureVideos.forEach((videoRef) => {
