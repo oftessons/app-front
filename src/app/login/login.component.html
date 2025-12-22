@@ -141,6 +141,13 @@
                                     </div> -->
 
                                     <div class="form-group col-sm-12 col-md-6">
+                                        <label class="small mb-1" style="font-size: 1.2em;">Celular *</label>
+                                        <input type="text" name="telefone" [(ngModel)]="telefone"
+                                            class="form-control py-2 responsive-input"
+                                            placeholder="Digite o Celular (XX) XXXX-XXX" required />
+                                    </div>
+
+                                    <div class="form-group col-sm-12 col-md-6">
                                         <label class="small mb-1" style="font-size: 1.2em;">Você é? *</label>
                                         <select name="tipoEstudante" [(ngModel)]="tipoDeEstudante"
                                             class="form-select py-2 responsive-input" required>
