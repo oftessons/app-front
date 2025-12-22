@@ -25,10 +25,10 @@
   <div class="main-background-wrapper">
 
 
-    <section id="inicio" class="tech-section" (mouseenter)="playVideo()" (mouseleave)="pauseVideo()">
+    <section id="inicio" class="tech-section">
 
       <div class="video-container">
-        <video #videoPlayer muted loop playsinline class="bg-video" poster="">
+        <video #videoPlayer muted loop playsinline class="bg-video">
           <source src="assets/videos/landingpage/desempenho.mp4" type="video/mp4">
           Seu navegador não suporta vídeos HTML5.
         </video>
@@ -115,12 +115,10 @@
         </div>
 
         <div class="features-grid">
-          <div class="feature-card" *ngFor="let item of features" (mouseenter)="playGridVideo(featVideo)"
-            (mouseleave)="pauseGridVideo(featVideo)">
+          <div class="feature-card" *ngFor="let item of features">
 
-            <div class="feature-video-container" (mouseenter)="!isMobile && heroVideo.play()"
-              (mouseleave)="!isMobile && heroVideo.pause()">
-              <video #featVideo muted loop playsinline class="feature-video" [poster]="" [autoplay]="isMobile">
+            <div class="feature-video-container">
+              <video #featureVideoPlayer autoplay muted loop playsinline class="feature-video">
                 <source [src]="item.video" type="video/mp4">
               </video>
             </div>
@@ -296,12 +294,13 @@
             </div>
           </div>
 
-          <div class="hero-video-wrapper" (mouseenter)="!isMobile && heroVideo.play()"
-            (mouseleave)="!isMobile && heroVideo.pause()">
-            <video #heroVideo muted loop playsinline class="hero-video-player" poster="" [autoplay]="isMobile">
-              <source src="/assets/videos/landingpage/trilha.mp4" type="video/mp4">
+          <div class="hero-video-wrapper">
+            
+            <video #heroVideo autoplay muted loop playsinline class="hero-video-player" poster="">
+              <source src="assets/videos/landingpage/trilha.mp4" type="video/mp4">
               Seu navegador não suporta vídeos HTML5.
             </video>
+            
           </div>
 
         </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, HostListener, ViewChild, ElementRef, ViewChildren, QueryList } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -78,8 +78,9 @@ export class PaginaInicialComponent implements OnInit {
   modalAberto: boolean = false;
   materialSelecionado: any = null;
 
-
   @ViewChild('videoPlayer') videoPlayer!: ElementRef<HTMLVideoElement>;
+  @ViewChildren('featureVideoPlayer') featureVideos!: QueryList<ElementRef>;
+  @ViewChild('heroVideo') heroVideo!: ElementRef<HTMLVideoElement>;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -111,6 +112,28 @@ export class PaginaInicialComponent implements OnInit {
     this.stopRotation();
   }
 
+
+  ngAfterViewInit(): void {
+
+    if (this.heroVideo && this.heroVideo.nativeElement) {
+      this.heroVideo.nativeElement.muted = true;
+      this.heroVideo.nativeElement.play().catch(err => {
+        console.log('Autoplay Hero bloqueado:', err);
+      });
+    }
+    
+    if (this.videoPlayer && this.videoPlayer.nativeElement) {
+      this.videoPlayer.nativeElement.muted = true;
+      this.videoPlayer.nativeElement.play().catch(error => {
+        console.log('Autoplay hero bloqueado:', error);
+      });
+    }
+    this.playAllFeatureVideos();
+    
+    this.featureVideos.changes.subscribe(() => {
+      this.playAllFeatureVideos();
+    });
+  }
 
 
   cadastrar() {
@@ -268,7 +291,15 @@ export class PaginaInicialComponent implements OnInit {
   }
 
 
-
+  playAllFeatureVideos() {
+    this.featureVideos.forEach((videoRef) => {
+      const video = videoRef.nativeElement;
+      video.muted = true;
+      video.play().catch((err: any) => {
+         console.log('Autoplay feature bloqueado:', err);
+      });
+    });
+  }
 
   stopAutoPlay() {
     if (this.carouselInterval) {
@@ -276,26 +307,6 @@ export class PaginaInicialComponent implements OnInit {
     }
   }
 
-
-  playVideo() {
-    if (this.videoPlayer && this.videoPlayer.nativeElement) {
-      this.videoPlayer.nativeElement.play().catch(err => console.log('Erro ao reproduzir:', err));
-    }
-  }
-
-  pauseVideo() {
-    if (this.videoPlayer && this.videoPlayer.nativeElement) {
-      this.videoPlayer.nativeElement.pause();
-    }
-  }
-
-  playGridVideo(videoElement: HTMLVideoElement) {
-    videoElement.play().catch(e => console.log(e));
-  }
-
-  pauseGridVideo(videoElement: HTMLVideoElement) {
-    videoElement.pause();
-  }
 
   checkItemsPerSlide() {
     const width = window.innerWidth;
@@ -307,7 +318,6 @@ export class PaginaInicialComponent implements OnInit {
       this.itemsPorSlide = 6;
     }
   }
-
 
 
   get professoresVisiveis() {
