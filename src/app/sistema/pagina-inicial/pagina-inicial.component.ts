@@ -121,7 +121,7 @@ export class PaginaInicialComponent implements OnInit {
         console.log('Autoplay Hero bloqueado:', err);
       });
     }
-    
+
     if (this.videoPlayer && this.videoPlayer.nativeElement) {
       this.videoPlayer.nativeElement.muted = true;
       this.videoPlayer.nativeElement.play().catch(error => {
@@ -421,7 +421,6 @@ export class PaginaInicialComponent implements OnInit {
     formData.append('entry.2052748158', dados.telefone);
     formData.append('entry.1482741367', dados.email || 'Não informado');
     formData.append('entry.811351103', this.materialSelecionado?.title || 'Material Desconhecido');
-    formData.append('entry.672663205', dados.mensagem || '');
 
     fetch(urlForm, {
       method: 'POST',
