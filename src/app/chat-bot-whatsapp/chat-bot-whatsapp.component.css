@@ -156,6 +156,7 @@
 
 .bot-message {
     background-color: #e8f5e9;
+    color: #333 !important;
     padding: 12px;
     border-radius: 15px;
     margin-bottom: 15px;

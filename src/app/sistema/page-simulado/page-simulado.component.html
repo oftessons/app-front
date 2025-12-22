@@ -11,7 +11,7 @@
         <ng-container *ngIf="nomeAlunoMentorado; else simuladosTitulo">
           Criando simulado para "{{ nomeAlunoMentorado }}"
         </ng-container>
-        <ng-template #simuladosTitulo>Simulados</ng-template>
+        <ng-template #simuladosTitulo>Modo Prova</ng-template>
       </h1>
       <button class="btn-filtros" (click)="toggleFiltros()">
         <img src="assets/imagens/q-f.svg" alt="Ícone do Filtro" class="icon">
