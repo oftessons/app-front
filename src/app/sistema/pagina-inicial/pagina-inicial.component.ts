@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, HostListener, ViewChild, ElementRef, ViewChildren, QueryList } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -78,8 +78,9 @@ export class PaginaInicialComponent implements OnInit {
   modalAberto: boolean = false;
   materialSelecionado: any = null;
 
-
   @ViewChild('videoPlayer') videoPlayer!: ElementRef<HTMLVideoElement>;
+  @ViewChildren('featureVideoPlayer') featureVideos!: QueryList<ElementRef>;
+  @ViewChild('heroVideo') heroVideo!: ElementRef<HTMLVideoElement>;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -109,6 +110,14 @@ export class PaginaInicialComponent implements OnInit {
   ngOnDestroy(): void {
     this.stopAutoPlay();
     this.stopRotation();
+  }
+
+   ngAfterViewInit(): void {
+    this.playHeroVideo();
+    this.setupVideoObserver();
+    this.featureVideos.changes.subscribe(() => {
+      this.setupVideoObserver();
+    });
   }
 
 
@@ -267,35 +276,12 @@ export class PaginaInicialComponent implements OnInit {
     this.isMobile = window.innerWidth < 768;
   }
 
-
-
-
   stopAutoPlay() {
     if (this.carouselInterval) {
       clearInterval(this.carouselInterval);
     }
   }
 
-
-  playVideo() {
-    if (this.videoPlayer && this.videoPlayer.nativeElement) {
-      this.videoPlayer.nativeElement.play().catch(err => console.log('Erro ao reproduzir:', err));
-    }
-  }
-
-  pauseVideo() {
-    if (this.videoPlayer && this.videoPlayer.nativeElement) {
-      this.videoPlayer.nativeElement.pause();
-    }
-  }
-
-  playGridVideo(videoElement: HTMLVideoElement) {
-    videoElement.play().catch(e => console.log(e));
-  }
-
-  pauseGridVideo(videoElement: HTMLVideoElement) {
-    videoElement.pause();
-  }
 
   checkItemsPerSlide() {
     const width = window.innerWidth;
@@ -307,7 +293,6 @@ export class PaginaInicialComponent implements OnInit {
       this.itemsPorSlide = 6;
     }
   }
-
 
 
   get professoresVisiveis() {
@@ -411,7 +396,6 @@ export class PaginaInicialComponent implements OnInit {
     formData.append('entry.2052748158', dados.telefone);
     formData.append('entry.1482741367', dados.email || 'Não informado');
     formData.append('entry.811351103', this.materialSelecionado?.title || 'Material Desconhecido');
-    formData.append('entry.672663205', dados.mensagem || '');
 
     fetch(urlForm, {
       method: 'POST',
@@ -432,6 +416,44 @@ export class PaginaInicialComponent implements OnInit {
       link.target = '_blank';
       link.click();
     }
+  }
+
+
+  playHeroVideo() {
+    const videosPrioritarios = [this.heroVideo, this.videoPlayer];
+    videosPrioritarios.forEach(videoRef => {
+      if (videoRef && videoRef.nativeElement) {
+        const video = videoRef.nativeElement;
+        video.muted = true; 
+        video.play().catch(err => console.log('Autoplay Hero/Tech bloqueado:', err));
+      }
+    });
+  }
+
+  setupVideoObserver() {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const video = entry.target as HTMLVideoElement;
+
+        if (entry.isIntersecting) {
+          video.muted = true; 
+          const playPromise = video.play();
+          if (playPromise !== undefined) {
+            playPromise.catch(error => {
+            });
+          }
+        } 
+        else {
+          video.pause();
+        }
+      });
+    }, {
+      rootMargin: '5px' 
+    });
+
+    this.featureVideos.forEach((videoRef) => {
+      observer.observe(videoRef.nativeElement);
+    });
   }
 
 }

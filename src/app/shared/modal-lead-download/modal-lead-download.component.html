@@ -44,11 +44,6 @@
           <input type="email" #emailRef placeholder="Digite seu e-mail (opcional)">
         </div>
 
-        <div class="form-group-modal">
-          <label>Insira uma mensagem</label>
-          <textarea #msgRef rows="3" placeholder="Digite sua mensagem (opcional)"></textarea>
-        </div>
-
         <div class="form-check-modal">
           <input type="checkbox" id="termosCheck" #termosRef>
           <label for="termosCheck">
@@ -63,7 +58,7 @@
         <button 
           type="button" 
           class="btn-submit-modal" 
-          (click)="processarEnvio(nomeRef.value, telRef.value, emailRef.value, msgRef.value, termosRef.checked)"
+          (click)="processarEnvio(nomeRef.value, telRef.value, emailRef.value, termosRef.checked)"
         >
           BAIXAR PDF AGORA!
         </button>

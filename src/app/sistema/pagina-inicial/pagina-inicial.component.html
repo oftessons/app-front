@@ -25,11 +25,11 @@
   <div class="main-background-wrapper">
 
 
-    <section id="inicio" class="tech-section" (mouseenter)="playVideo()" (mouseleave)="pauseVideo()">
+    <section id="inicio" class="tech-section">
 
       <div class="video-container">
-        <video #videoPlayer muted loop playsinline class="bg-video" poster="">
-          <source src="assets/videos/landingpage/desempenho.mp4" type="video/mp4">
+        <video #videoPlayer muted loop playsinline preload="auto" class="bg-video">
+          <source src="assets/videos/landingpage/headervideo.mp4" type="video/mp4">
           Seu navegador não suporta vídeos HTML5.
         </video>
       </div>
@@ -115,12 +115,10 @@
         </div>
 
         <div class="features-grid">
-          <div class="feature-card" *ngFor="let item of features" (mouseenter)="playGridVideo(featVideo)"
-            (mouseleave)="pauseGridVideo(featVideo)">
+          <div class="feature-card" *ngFor="let item of features">
 
-            <div class="feature-video-container" (mouseenter)="!isMobile && heroVideo.play()"
-              (mouseleave)="!isMobile && heroVideo.pause()">
-              <video #featVideo muted loop playsinline class="feature-video" [poster]="" [autoplay]="isMobile">
+            <div class="feature-video-container">
+              <video #featureVideoPlayer autoplay muted loop playsinline preload="none" class="feature-video">
                 <source [src]="item.video" type="video/mp4">
               </video>
             </div>
@@ -296,12 +294,13 @@
             </div>
           </div>
 
-          <div class="hero-video-wrapper" (mouseenter)="!isMobile && heroVideo.play()"
-            (mouseleave)="!isMobile && heroVideo.pause()">
-            <video #heroVideo muted loop playsinline class="hero-video-player" poster="" [autoplay]="isMobile">
-              <source src="/assets/videos/landingpage/trilha.mp4" type="video/mp4">
+          <div class="hero-video-wrapper">
+            
+            <video #heroVideo autoplay muted loop playsinline class="hero-video-player" poster="">
+              <source src="assets/videos/landingpage/trilha.mp4" type="video/mp4">
               Seu navegador não suporta vídeos HTML5.
             </video>
+            
           </div>
 
         </div>
@@ -328,27 +327,30 @@
           <app-card-plano-new badgeText="QBank + Mentoria" mainTitle="6x R$ 450,26" titleSuffix="/mês"
             subTitle="Ou em 1x de R$ 2.400,00" [features]="[
               'Banco de questões com mais de 4 mil questões.',
-              '+2500 questões comentadas.',
+              '+ 2500 questões comentadas.',
               'Assistente de IA que tira dúvidas, elabora novos comentários e explicações.',
               'Mentoria de acompanhamento do desempenho com questões.',
-              'Fichas de provas de acordo com a necessidade do aluno.'
+              'Fichas de simulados de acordo com a necessidade do aluno.'
             ]" buttonText="ESCOLHER PLANO" (buttonClick)="onPlanoSelecionado('qbank')">
           </app-card-plano-new>
 
-          <app-card-plano-new badgeText="Anual" mainTitle="12x R$ 175,51" titleSuffix="/mês"
+          <app-card-plano-new badgeText="Q Bank - Anual" mainTitle="12x R$ 175,51" titleSuffix="/mês"
             subTitle="ou em 1x de R$ 1.697,00" [features]="[
               'Banco de questões com mais de 4 mil questões.',
-              '+2500 questões comentadas ricas em ilustrações.',
+              '+ 2500 questões comentadas ricas em ilustrações.',
               'Assistente de IA que tira dúvidas, elabora novos comentários e explicações.'
             ]" buttonText="ESCOLHER PLANO" (buttonClick)="onPlanoSelecionado('anual')">
           </app-card-plano-new>
 
 
           <app-card-plano-new badgeText="Completo" mainTitle="12x R$465,09" titleSuffix="/mês"
-            subTitle="ou em 1x de R$1.697,00" [features]="[
-              'Banco de questões com mais de 4 mil questões.',
-              '+2500 questões comentadas ricas em ilustrações.',
-              'Assistente de IA que tira dúvidas, elabora novos comentários e explicações.'
+            subTitle="ou em 1x de R$4.497,00" [features]="[
+                '+ 100 horas de conteúdo com sub especialistas',
+                'Ia com sugestão de revisão e novas questões',
+                'Chat com prompts', 
+                'Métricas da prova',
+                '+ 3000 flashcards',
+                '+ 3400 questões comentada'
             ]" buttonText="ESCOLHER PLANO" (buttonClick)="onPlanoSelecionado('Completo')">
           </app-card-plano-new>
 

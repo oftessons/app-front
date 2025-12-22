@@ -45,7 +45,7 @@ export class ModalLeadDownloadComponent {
   }
 
   
-  processarEnvio(nome: string, telefone: string, email: string, mensagem: string, termos: boolean) {
+  processarEnvio(nome: string, telefone: string, email: string, termos: boolean) {
     
     const telLimpo = telefone.replace(/\D/g, '');
 
@@ -72,7 +72,6 @@ export class ModalLeadDownloadComponent {
       nome: nome,
       telefone: telefone, 
       email: email,
-      mensagem: mensagem,
       termos: termos
     };
 
