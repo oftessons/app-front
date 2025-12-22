@@ -1,7 +1,7 @@
 export interface Professor {
   nome: string;
   foto: string;
-  especialidade: string;
+  especialidade?: string;
   experiencia?:string;
   instituicao?: string; 
   isComentador?: boolean;
