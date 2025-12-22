@@ -23,8 +23,21 @@
 
         <div class="form-group-modal">
           <label>Telefone / WhatsApp *</label>
-          <input type="tel" #telRef placeholder="(XX) XXXXX-XXXX">
+          <input 
+            type="tel" 
+            #telRef 
+            required 
+            placeholder="(XX) XXXXX-XXXX"
+            maxlength="15"
+            (input)="formatarTelefone($event)"
+            [class.input-error]="erroTelefone"
+          >
+          <span *ngIf="erroTelefone" class="error-msg">Telefone inválido (mínimo 10 dígitos com DDD).</span>
         </div>
+
+        <p *ngIf="formInvalido && !erroTelefone" class="error-msg text-center mb-3">
+          Por favor, preencha Nome, Telefone corretamente e aceite os Termos.
+        </p>
 
         <div class="form-group-modal">
           <label>Email</label>
