@@ -166,15 +166,6 @@
   align-items: stretch;
 }
 
-.register-card-styled {
-  background-color: #2F3042;
-  border-radius: 24px;
-  padding: 40px 50px;
- 
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
 
 .hero-content {
   display: grid;
@@ -350,11 +341,6 @@
     justify-content: space-between;
     align-items: center;
     gap: 10px;
-  }
-
-  .register-header h3 {
-    font-size: 14px;
-    white-space: nowrap;
   }
 
   .btn-login {
@@ -1127,13 +1113,71 @@ app-card-plano-new {
   transform: scale(1.05);
 }
 
+
+
 @media (max-width: 768px) {
-  .tech-section { height: 500px; }
-  .tech-title { font-size: 36px; }
-  .btn-tech { padding: 12px 24px; font-size: 14px; }
+  
+  .tech-section {
+    margin-top: 5rem; 
+    height: auto !important;
+    min-height: 250px !important;
+    padding-bottom: 0;
+    display: flex;
+    align-items: center;
+  }
+
+  .video-container {
+   
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .bg-video {
+   
+    object-fit: cover; 
+    width: 100%;
+    height: 100%;
+    opacity: 0.5;
+  }
+
+  .content-tech {
+    position: relative;
+    z-index: 10;
+    width: 90%;
+    transform: none;
+    left: auto;
+    top: auto;
+    margin: 0 auto;
+  }
+
+  .tech-title {
+    font-size: 32px !important;
+    line-height: 1.2;
+    margin-bottom: 20px;
+  }
+
+  .btn-tech {
+    width: 100%;
+    max-width: 300px;
+  }
 }
 
+.register-card-styled {
+ 
+  padding: 30px 40px; 
+}
+.column-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
 
+.register-header h3 {
+  margin-bottom: 0;
+}
 
 
 .professores-section-dark {
