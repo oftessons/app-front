@@ -387,17 +387,39 @@ export class PaginaInicialComponent implements OnInit {
 
   
   processarDownload(dados: any) {
-    console.log('Novo Lead Capturado:', dados);
-    
+    this.enviarParaGoogleSheets(dados);
     this.baixarArquivoReal();
     this.fecharModal();
+  }
+
+  enviarParaGoogleSheets(dados: any) {
+    // URL de envio (Note que termina com /formResponse)
+    const urlForm = 'https://docs.google.com/forms/d/e/1FAIpQLSdUQ5SvQGL-_2KDHoEmhT38GdgOCaDplhuvXvQZvF-KX5fmjA/formResponse';
+
+    const formData = new FormData();
+    
+    formData.append('entry.1146452729', dados.nome); 
+    formData.append('entry.2052748158', dados.telefone);
+    formData.append('entry.1482741367', dados.email || 'Não informado');
+    formData.append('entry.811351103', this.materialSelecionado?.title || 'Material Desconhecido');
+    formData.append('entry.672663205', dados.mensagem || '');
+
+    fetch(urlForm, {
+      method: 'POST',
+      body: formData,
+      mode: 'no-cors' 
+    })
+    .then(() => {
+      console.log('Lead salvo na planilha com sucesso!');
+    })
+    .catch(err => console.error('Erro ao salvar na planilha:', err));
   }
 
   baixarArquivoReal() {
     if (this.materialSelecionado && this.materialSelecionado.linkDownload) {
       const link = document.createElement('a');
       link.href = this.materialSelecionado.linkDownload;
-      link.download = this.materialSelecionado.title; 
+      link.download = this.materialSelecionado.title;
       link.target = '_blank'; 
       link.click();
     }
