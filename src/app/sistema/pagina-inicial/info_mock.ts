@@ -88,7 +88,7 @@ export const PROFESSORESAULAS:Professor [] = [
       foto: 'assets/imagens/professores/marcela-raposo.png',
       especialidade: 'Córnea, Cirurgia Refrativa e Transplante', 
       experiencia: 'Fellowship em Córnea pelo Banco de Olhos de Sorocaba.',
-      instituicao:"Fundação Altino Ventura",
+      instituicao:"Banco de Olhos de Sorocaba",
       isComentador: false
     },
     {
