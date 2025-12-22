@@ -30,6 +30,7 @@ import { ModalPadraoComponent } from './modal-padrao/modal-padrao.component';
 import { DialogResultadoSimuladoComponent } from './dialog-resultado-simulado/dialog-resultado-simulado.component';
 import { CardPlanoNewComponent } from './card-plano-new/card-plano-new.component';
 import { CardMaterialComponent } from './card-material/card-material.component';
+import { ModalLeadDownloadComponent } from './modal-lead-download/modal-lead-download.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { CardMaterialComponent } from './card-material/card-material.component';
     CardPlanoComponent,
     CardPlanoNewComponent,
     CardMaterialComponent,
+    ModalLeadDownloadComponent,
     ModalDeleteComponent,
     PageEmDesenvolvimentoComponent,
     FlashcardsTemasCardsComponent,
@@ -77,6 +79,7 @@ import { CardMaterialComponent } from './card-material/card-material.component';
     CardPlanoComponent,
     CardPlanoNewComponent,
     CardMaterialComponent,
+    ModalLeadDownloadComponent,
     PageEmDesenvolvimentoComponent,
     HappyMessagePopupComponent,
     FlashcardsTemasCardsComponent,
