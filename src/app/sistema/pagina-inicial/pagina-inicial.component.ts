@@ -112,28 +112,19 @@ export class PaginaInicialComponent implements OnInit {
     this.stopRotation();
   }
 
+   ngAfterViewInit(): void {
+    // 1. Toca o vídeo principal IMEDIATAMENTE (Prioridade)
+    this.playHeroVideo();
 
-  ngAfterViewInit(): void {
+    // 2. Configura o observador para os vídeos dos cards (Só tocam ao aparecer)
+    this.setupVideoObserver();
 
-    if (this.heroVideo && this.heroVideo.nativeElement) {
-      this.heroVideo.nativeElement.muted = true;
-      this.heroVideo.nativeElement.play().catch(err => {
-        console.log('Autoplay Hero bloqueado:', err);
-      });
-    }
-
-    if (this.videoPlayer && this.videoPlayer.nativeElement) {
-      this.videoPlayer.nativeElement.muted = true;
-      this.videoPlayer.nativeElement.play().catch(error => {
-        console.log('Autoplay hero bloqueado:', error);
-      });
-    }
-    this.playAllFeatureVideos();
-    
+    // Se a lista mudar, reconecta o observador
     this.featureVideos.changes.subscribe(() => {
-      this.playAllFeatureVideos();
+      this.setupVideoObserver();
     });
   }
+
 
 
   cadastrar() {
@@ -290,17 +281,6 @@ export class PaginaInicialComponent implements OnInit {
     this.isMobile = window.innerWidth < 768;
   }
 
-
-  playAllFeatureVideos() {
-    this.featureVideos.forEach((videoRef) => {
-      const video = videoRef.nativeElement;
-      video.muted = true;
-      video.play().catch((err: any) => {
-         console.log('Autoplay feature bloqueado:', err);
-      });
-    });
-  }
-
   stopAutoPlay() {
     if (this.carouselInterval) {
       clearInterval(this.carouselInterval);
@@ -441,6 +421,44 @@ export class PaginaInicialComponent implements OnInit {
       link.target = '_blank';
       link.click();
     }
+  }
+
+
+  playHeroVideo() {
+    const videosPrioritarios = [this.heroVideo, this.videoPlayer];
+    videosPrioritarios.forEach(videoRef => {
+      if (videoRef && videoRef.nativeElement) {
+        const video = videoRef.nativeElement;
+        video.muted = true; 
+        video.play().catch(err => console.log('Autoplay Hero/Tech bloqueado:', err));
+      }
+    });
+  }
+
+  setupVideoObserver() {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const video = entry.target as HTMLVideoElement;
+
+        if (entry.isIntersecting) {
+          video.muted = true; 
+          const playPromise = video.play();
+          if (playPromise !== undefined) {
+            playPromise.catch(error => {
+            });
+          }
+        } 
+        else {
+          video.pause();
+        }
+      });
+    }, {
+      rootMargin: '5px' 
+    });
+
+    this.featureVideos.forEach((videoRef) => {
+      observer.observe(videoRef.nativeElement);
+    });
   }
 
 }

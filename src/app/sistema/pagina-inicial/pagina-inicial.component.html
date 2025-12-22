@@ -28,7 +28,7 @@
     <section id="inicio" class="tech-section">
 
       <div class="video-container">
-        <video #videoPlayer muted loop playsinline class="bg-video">
+        <video #videoPlayer muted loop playsinline preload="auto" class="bg-video">
           <source src="assets/videos/landingpage/desempenho.mp4" type="video/mp4">
           Seu navegador não suporta vídeos HTML5.
         </video>
@@ -118,7 +118,7 @@
           <div class="feature-card" *ngFor="let item of features">
 
             <div class="feature-video-container">
-              <video #featureVideoPlayer autoplay muted loop playsinline class="feature-video">
+              <video #featureVideoPlayer autoplay muted loop playsinline preload="none" class="feature-video">
                 <source [src]="item.video" type="video/mp4">
               </video>
             </div>
