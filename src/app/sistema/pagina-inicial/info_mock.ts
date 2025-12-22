@@ -311,13 +311,13 @@ export const LISTA_MATERIAL = [
     imageSrc: 'assets/imagens/material/as50plus.png', 
     title: 'As 50 + da PNO',
     description: 'Questões comentadas por item e com imagens das mais recorrentes nos últimos 3 anos da PNO.',
-    link: 'assets/docs/AS_25_+Óptica_e_Refração_CBO_2025_-_By_Oftlessons.pdf'
+    linkDownload: 'assets/docs/AS_25_+Óptica_e_Refração_CBO_2025_-_By_Oftlessons.pdf'
   },
   {
     imageSrc: 'assets/imagens/material/as25plus.png',
     title: 'As 25+ Óptica e Refração',
     description: 'Ideal para entender os conceitos e resolver questões importantes para a prova e para o dia a dia.',
-    link: 'assets/docs/AS_25_+Óptica_e_Refração_CBO_2025_-_By_Oftlessons.pdf'
+    linkDownload: 'assets/docs/AS_25_+Óptica_e_Refração_CBO_2025_-_By_Oftlessons.pdf'
   },
   {
     imageSrc: 'assets/imagens/material/editaloft.png',
