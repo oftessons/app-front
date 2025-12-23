@@ -1,5 +1,6 @@
 <div class="card">
     <span *ngIf="recomendado" class="badge badge-recomendado">Recomendado</span>
+    <span *ngIf="lancamento" class="badge badge-recomendado">Lançamento</span>
     <div class="card-header" [ngStyle]="{'background-color': corCabecalho}">
       <h3>{{ titulo }}</h3>
     </div>

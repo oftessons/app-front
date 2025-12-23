@@ -19,6 +19,7 @@
         textoBotao="Teste 7 dias grátis"
         [mostrarPorMes]="false"
         [recomendado]="false"
+        [lancamento]="false"
         textoAdicional=""
         (botaoClicado)="onBotaoClicado()"
         planoSelecionado="GRATUITO">
@@ -49,6 +50,7 @@
         [textoParcelas]="'6x'"
         textoBotao="Escolher plano"
         [recomendado]="false"
+        [lancamento]="false"
         textoAdicional="Ou em 1x de R$2.400,00"
         corCabecalho="#041E4E"
         (botaoClicado)="onBotaoClicado()"
@@ -71,13 +73,14 @@
         [textoParcelas]="'12x'"
         textoBotao="Escolher plano"
         [recomendado]="true"
+        [lancamento]="false"
         textoAdicional="ou em 1x de R$1.697,00"
         corCabecalho="#0F1934"
         (botaoClicado)="onBotaoClicado()"
         [planoSelecionado]="'assinatura_anual_parcelada'.toUpperCase()"
         planoHotmart="5089420">
     </app-card-plano>
-    
+
     <app-card-plano
         titulo="COMPLETO"
         [descricao]="[
@@ -92,6 +95,7 @@
         [textoParcelas]="'12x'"
         textoBotao="Escolher plano"
         [recomendado]="false"
+        [lancamento]="true"
         textoAdicional="ou em 1x de R$4.497,00"
         corCabecalho="#0F1934"
         (botaoClicado)="onBotaoClicado()"
