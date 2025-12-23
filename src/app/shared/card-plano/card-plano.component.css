@@ -1,6 +1,6 @@
 .card {
   border: 1px solid #f0f0f0;
-  background: #e5ebff44;
+  background: #041E4E;
   border-radius: 16px;
   text-align: center;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
@@ -16,15 +16,15 @@
 .card-header {
   margin-bottom: 16px;
   margin-right: 40px;
-  background: #253c66;
-  border-radius: 16px 0 24px 0;
+  background: #ffffff !important;
+  border-radius: 14px 0 24px 0;
   width: 60%;
   display: flex;
   flex-shrink: 0;
 }
 
 .card-header h3 {
-  color: white !important;
+  color: #031033 !important;
 }
 
 .card-body {
@@ -34,6 +34,7 @@
   justify-content: space-between;
   flex-grow: 1;
   min-height: 0;
+  color: #ffffff;
 }
 
 .card h3 {
@@ -50,11 +51,14 @@
 
 .value h4 {
   margin: 0;
-  color: #041e4e !important;
+  color: #eeeeee !important;
   font-size: 33px;
   font-weight: 500;
 }
 
+.texto-adicional{
+  color: #b0b8c4 !important;
+}
 .value .texto-parcelas {
   margin: 0;
   color: #041e4e;
@@ -64,7 +68,7 @@
 
 .value span {
   font-size: 16px;
-  color: #041e4e;
+  color: #ffffff;
 }
 
 .value p {
@@ -111,20 +115,23 @@
 
 .btn-plano {
   width: 100%;
-  background: #ffbf23;
-  color: #ffffff;
+  background: linear-gradient(90deg, #F6D365 0%, #FFBF23 100%);
+  color: #0F1934;
   border: none;
   border-radius: 8px;
   padding: 12px 24px;
   font-size: 16px;
   font-weight: 500;
-  cursor: pointer;
   margin-top: auto;
   flex-shrink: 0;
+  font-weight: 800; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 191, 35, 0.25);
 }
 
 .btn-plano:hover {
-  background: #e69f00;
+  filter: brightness(1.1); transform: translateY(-3px); box-shadow: 0 8px 25px rgba(255, 191, 35, 0.4);
 }
 
 @media (max-width: 768px) {
