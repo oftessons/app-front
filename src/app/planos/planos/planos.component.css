@@ -1,10 +1,10 @@
 .main-container {
-  margin: 48px;
+ 
   max-width: 100%;
-  background: #ffffff;
-  border-radius: 24px;
+  background-color: #0f1934;
+ 
   padding: 40px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+ 
 }
 
 .title-planos {
@@ -16,14 +16,14 @@
 .title-planos h2 {
   font-size: 32px;
   font-weight: 500;
-  color: #3b5fa0 !important;
+  color: #ffffff !important;
   margin: 16px;
   text-align: center;
 }
 
 .title-planos p {
   font-size: 16px;
-  color: #1a1918;
+  color: #FFBF23;
   margin: 16px;
   width: 50%;
   text-align: center;
@@ -42,6 +42,8 @@
   margin-right: auto;
 }
 
+
+
 .planos-footer {
   display: flex;
   justify-content: center;
@@ -51,20 +53,39 @@
 
 .planos-footer span {
   font-size: 14px;
-  color: #1a1918;
+  color: #ffffff !important;
   margin: 16px;
+  line-height: 1.6;
 }
 
-.planos-footer a {
+
+.planos-footer > span > a {
   font-size: 14px;
-  color: #2f7ce0;
-  text-decoration: underline;
+  color: #F4B92B;
+  text-decoration: none;
   cursor: pointer;
+  position: relative;
+  font-weight: 600;
+  margin: 0 4px;
 }
 
-.planos-footer a:hover {
-  color: #006eff;
+
+.planos-footer > span > a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -2px;
+  left: 0;
+  background-color: #F4B92B;
+  transition: width 0.3s ease;
 }
+
+
+.planos-footer > span > a:hover::after {
+  width: 100%;
+}
+
 
 
 .texto-informativo {
@@ -74,23 +95,40 @@
   justify-content: center;
   text-align: center;
   font-size: 16px;
-  color: #1a1918;
+  color: #ffffff;
   margin-top: 24px;
 }
 
 .texto-informativo p {
   margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
 }
+
 
 .texto-informativo a {
-  font-size: 16px;
-  color: #2f7ce0;
-  text-decoration: underline;
-  cursor: pointer;
+  display: inline-block;
+  color: #ffffff;
+  border: 1px solid #F4B92B;
+  padding: 10px 24px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  background-color: transparent;
 }
 
+
 .texto-informativo a:hover {
-  color: #006eff;
+  background-color: #F4B92B;
+  color: #0f1934;
+  box-shadow: 0 0 15px rgba(217, 164, 29, 0.4);
+  transform: translateY(-2px);
 }
 
 

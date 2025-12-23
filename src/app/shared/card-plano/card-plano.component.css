@@ -113,7 +113,7 @@
   position: absolute;
   top: -22px;
   right: 14px;
-  background-color: #ffbf23;
+  background: linear-gradient(90deg, #F6D365 0%, #FFBF23 100%);
   color: #0f1934;
   padding: 8px 20px;
   border-radius: 4px;
