@@ -1316,6 +1316,10 @@ app-card-plano-new {
   align-items: center;    
   justify-content: center;
   margin-bottom: 10px;
+  width: min-content;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
   line-height: 1.1;
   text-align: center;
   overflow: hidden;
