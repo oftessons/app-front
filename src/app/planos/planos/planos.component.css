@@ -32,11 +32,14 @@
 .planos-container {
   display: grid;
   justify-items: center;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 48px;
   justify-content: center;
-  margin: 40px 120px;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 40px;
+  margin: 40px 20px; 
   padding-top: 32px;
+  max-width: 1600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .planos-footer {
@@ -113,6 +116,15 @@
     margin: 16px;
     justify-items: center;
     grid-template-columns: 1fr; 
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1400px) {
+  .planos-container {
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 15px;
+    margin: 40px 10px;
+    padding: 0 10px;
   }
 }
 
