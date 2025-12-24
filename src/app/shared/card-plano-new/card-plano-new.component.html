@@ -1,5 +1,8 @@
 <div class="plan-card-container">
   
+  <span *ngIf="recomendado" class="badge-destaque">Recomendado</span>
+  <span *ngIf="!recomendado && lancamento" class="badge-destaque">Lançamento</span>
+
   <div class="badge-flag" *ngIf="badgeText">
     {{ badgeText }}
   </div>

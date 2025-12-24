@@ -1024,7 +1024,7 @@ app-card-plano-new {
 
 
 .tech-section {
-  margin-top: 4vw;
+  margin-top: 81px; 
   position: relative;
   width: 100vw;
   margin-left: calc(-50vw + 50%);
@@ -1316,6 +1316,10 @@ app-card-plano-new {
   align-items: center;    
   justify-content: center;
   margin-bottom: 10px;
+  width: min-content;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
   line-height: 1.1;
   text-align: center;
   overflow: hidden;

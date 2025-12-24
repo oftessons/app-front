@@ -10,6 +10,9 @@ export class CardPlanoNewComponent {
   // Badge branca superior esquerda (Ex: "24h Grátis" ou "Mais vendido")
   @Input() badgeText: string = '';
 
+  @Input() recomendado: boolean = false;
+  @Input() lancamento: boolean = false;
+
   // Título Principal (Ex: "Gratuito" OU "12x R$175,51")
   @Input() mainTitle: string = '';
 
