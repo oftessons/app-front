@@ -30,7 +30,7 @@ export class AuthInterceptor implements HttpInterceptor {
           if (error.error && error.error.message === 'Assinatura inativa.') {
             this.router.navigate(['/planos']);
 
-          } else {
+          } else if (error.error?.error === 'invalid_token') {
             this.snackBar.open('Sua sessão expirou. Faça login novamente.', 'Fechar', {
               duration: 20000,
               panelClass: ['snackbar-warning']

@@ -24,6 +24,7 @@ export class SelectPadraoComponent implements OnInit, OnChanges {
   @Input() customStyles: { [key: string]: string } = {};
   @Input() searchable: boolean = false;
   @Input() disabled: boolean = false;
+  @Input() notDeleteContent: boolean = false;
 
   searchTerm: string = '';
   isOpen: boolean = false;
@@ -81,6 +82,17 @@ export class SelectPadraoComponent implements OnInit, OnChanges {
       (this.options[0] as any).options !== undefined &&
       Array.isArray((this.options[0] as any).options)
     );
+  }
+
+  removeValue(event: Event): void {
+    event.stopPropagation(); 
+    if (this.notDeleteContent) return;
+
+    this.selectedValue = null;
+    this.selectedValueChange.emit(null);
+
+    this.searchTerm = '';
+    this.filteredOptions = this.options;
   }
 
   getLabelFromValue(value: any): string {

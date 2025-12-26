@@ -1,45 +1,69 @@
 <div class="select-container" [class.disabled]="disabled">
-  <label [class.active]="selectedValue">{{ label }}</label>
+  <label [class.active]="selectedValue || isOpen">{{ label }}</label>
 
-  <div [ngStyle]="customStyles" class="select-dropdown" [class.disabled]="disabled" (click)="!disabled && toggleDropdown()">
-    <div class="selected-value">
-      {{ getLabelFromValue(selectedValue) || '' }}
+  <div [ngStyle]="customStyles" class="select-dropdown" [class.disabled]="disabled"
+    (click)="!disabled && toggleDropdown()">
+
+    <div class="selected-value-container" [class.has-value]="selectedValue">
+
+      <span class="value-text">
+        {{ getLabelFromValue(selectedValue) }}
+      </span>
+
+      <span class="remove-value" *ngIf="selectedValue && !notDeleteContent" (click)="removeValue($event)">×</span>
+
     </div>
+
     <div class="arrow-down" [class.disabled]="disabled"></div>
   </div>
 
   <div class="options-container" *ngIf="isOpen && !disabled">
-    <input
-      *ngIf="searchable"
-      type="text"
-      [(ngModel)]="searchTerm"
-      (input)="onSearchTermChange()"
-      class="search-input"
-      placeholder="Buscar..."
-      (click)="$event.stopPropagation()"
-    />
+
+    <input *ngIf="searchable" type="text" [(ngModel)]="searchTerm" (input)="onSearchTermChange()" class="search-input"
+      placeholder="Buscar..." (click)="$event.stopPropagation()" />
 
     <ng-container *ngIf="isGroupedOptions(); else flatOptions">
       <div class="theme-group-main" *ngFor="let theme of filteredOptions">
         <div class="theme-label-main">{{ theme.label }}</div>
-        <div
-          class="option"
-          *ngFor="let subitem of theme.options"
-          (click)="onSelect(subitem.value)"
-          [class.selected]="subitem.value === selectedValue"
-        >
+        <div class="option" *ngFor="let subitem of theme.options" (click)="onSelect(subitem.value)"
+          [class.selected]="subitem.value === selectedValue">
           {{ subitem.label }}
         </div>
       </div>
     </ng-container>
 
     <ng-template #flatOptions>
-      <div
-        class="option"
-        *ngFor="let option of filteredOptions"
+      <div class="option" *ngFor="let option of filteredOptions"
         (click)="onSelect(option.value ? option.value : option)"
-        [class.selected]="(option.value ? option.value : option) === selectedValue"
-      >
+        [class.selected]="(option.value ? option.value : option) === selectedValue">
+        {{ option.label ? option.label : option }}
+      </div>
+    </ng-template>
+
+    <div *ngIf="filteredOptions.length === 0" class="no-results" style="padding: 10px; color: #999;">
+      Nenhum resultado encontrado.
+    </div>
+  </div>
+
+
+  <div class="options-container" *ngIf="isOpen && !disabled">
+    <input *ngIf="searchable" type="text" [(ngModel)]="searchTerm" (input)="onSearchTermChange()" class="search-input"
+      placeholder="Buscar..." (click)="$event.stopPropagation()" />
+
+    <ng-container *ngIf="isGroupedOptions(); else flatOptions">
+      <div class="theme-group-main" *ngFor="let theme of filteredOptions">
+        <div class="theme-label-main">{{ theme.label }}</div>
+        <div class="option" *ngFor="let subitem of theme.options" (click)="onSelect(subitem.value)"
+          [class.selected]="subitem.value === selectedValue">
+          {{ subitem.label }}
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-template #flatOptions>
+      <div class="option" *ngFor="let option of filteredOptions"
+        (click)="onSelect(option.value ? option.value : option)"
+        [class.selected]="(option.value ? option.value : option) === selectedValue">
         {{ option.label ? option.label : option }}
       </div>
     </ng-template>

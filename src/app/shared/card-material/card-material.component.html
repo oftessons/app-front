@@ -1,0 +1,18 @@
+<div class="material-card">
+  
+  <div class="card-image-wrapper">
+    <img [src]="imageSrc" [alt]="imageAlt" class="card-img">
+  </div>
+
+  <div class="card-content">
+    <h3 class="card-title">{{ title }}</h3>
+    <p class="card-description">{{ description }}</p>
+  </div>
+
+  <div class="card-footer">
+    <button class="btn-download" (click)="onButtonClick()">
+      {{ buttonText }}
+    </button>
+  </div>
+
+</div>

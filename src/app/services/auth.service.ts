@@ -153,6 +153,14 @@ export class AuthService {
     return null;
   }
 
+  getIdUsuarioLocalStorage(): string | null {
+    const usuarioLogado = this.getUsuarioAutenticado();
+    if (usuarioLogado && usuarioLogado.id) {
+        return usuarioLogado.id.toString();
+    }
+    return null;
+  }
+
   // Método para obter o nome do usuário autenticado no AuthService
   obterNomeUsuario(): Observable<string> {
     return this.http.get<{ nome: string }>(`${this.apiURL}/nome`).pipe(

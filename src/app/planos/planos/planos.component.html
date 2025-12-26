@@ -19,6 +19,7 @@
         textoBotao="Teste 7 dias grátis"
         [mostrarPorMes]="false"
         [recomendado]="false"
+        [lancamento]="false"
         textoAdicional=""
         (botaoClicado)="onBotaoClicado()"
         planoSelecionado="GRATUITO">
@@ -37,18 +38,19 @@
     </app-card-plano> -->
 
     <app-card-plano
-        titulo="QBank + Mentoria"
+        titulo="QBANK + MENTORIA"
         [descricao]="[
           'Banco de questões com mais de 4 mil questões.',
           '+2500 questões comentadas ricas em ilustrações.',
           'Assistente de IA que tira dúvidas, elabora novos comentários e explicações.',
           'Mentoria de acompanhamento do desempenho com questões.',
-          'Fichas de simulados de acordo com a necessidade do aluno.'
+          'Fichas de provas de acordo com a necessidade do aluno.'
         ]"
         [preco]="450.26"
         [textoParcelas]="'6x'"
         textoBotao="Escolher plano"
         [recomendado]="false"
+        [lancamento]="false"
         textoAdicional="Ou em 1x de R$2.400,00"
         corCabecalho="#041E4E"
         (botaoClicado)="onBotaoClicado()"
@@ -61,7 +63,7 @@
     </app-card-plano>
 
     <app-card-plano
-        titulo="Anual"
+        titulo="QBANK - ANUAL"
         [descricao]="[
           'Banco de questões com mais de 4 mil questões.',
           '+2500 questões comentadas ricas em ilustrações.',
@@ -71,12 +73,37 @@
         [textoParcelas]="'12x'"
         textoBotao="Escolher plano"
         [recomendado]="true"
+        [lancamento]="false"
         textoAdicional="ou em 1x de R$1.697,00"
         corCabecalho="#0F1934"
         (botaoClicado)="onBotaoClicado()"
         [planoSelecionado]="'assinatura_anual_parcelada'.toUpperCase()"
         planoHotmart="5089420">
     </app-card-plano>
+
+    <app-card-plano
+        titulo="COMPLETO"
+        [descricao]="[
+          '+ 100 horas de conteúdo com sub especialistas.',
+          'Ia com sugestão de revisão e novas questões.',
+          'Chat com prompts.', 
+          'Métricas da prova.',
+          '+ 3000 flashcards.',
+          '+ 3400 questões comentadas.'
+          ]"
+        [preco]="465.09"
+        [textoParcelas]="'12x'"
+        textoBotao="Escolher plano"
+        [recomendado]="false"
+        [lancamento]="true"
+        textoAdicional="ou em 1x de R$4.497,00"
+        corCabecalho="#0F1934"
+        (botaoClicado)="onBotaoClicado()"
+        [planoSelecionado]="'ASSINATURA_COMBO'"
+        planoHotmart="">
+    </app-card-plano>
+
+
     <!--
     <app-card-plano
       titulo="Banco + Flashcards"

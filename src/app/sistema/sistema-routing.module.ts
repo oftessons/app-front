@@ -28,6 +28,7 @@ import { FlashcardsCadastroComponent } from './flashcards-cadastro/flashcards-ca
 import { CanDeactivateSimuladoGuard } from '../services/CanDeactivateSimulado.Guard';
 import { ModuloDeAulasComponent } from './modulo-de-aulas/modulo-de-aulas.component';
 import { NotificacoesComponent } from './notificacoes/notificacoes.component';
+import { MetricasComponent } from './metricas/metricas.component';
 
 
 const routes: Routes = [
@@ -63,6 +64,7 @@ const routes: Routes = [
       { path: 'simulados', component: PageSimuladoComponent, canDeactivate: [CanDeactivateSimuladoGuard] },
       { path: 'simulados/:id', component: PageSimuladoComponent },
       { path: 'meus-simulados', component: MeusSimuladosComponent },
+      { path: 'metricas', component: MetricasComponent },
       { path: 'flashcards/:temaId', component: TemaFlashcardsComponent },
       {
         path: 'forbidden',

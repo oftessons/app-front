@@ -164,10 +164,84 @@
 
           <!-- Conteúdo: Aulas -->
           <div class="tab-panel" *ngIf="abaAtiva === 'aulas'">
-            <div class="placeholder-content">
-              <img src="assets/Icons/aula.svg" alt="Aulas" class="placeholder-icon">
-              <h3>Seleção de Aulas</h3>
-              <p>Funcionalidade em desenvolvimento. Em breve você poderá selecionar as aulas para esta semana.</p>
+            <div class="filter-info">
+              <h3>Selecionar Aulas</h3>
+              <p class="filter-description">
+                Escolha as aulas que farão parte desta semana da trilha.
+                <span class="filter-count">{{ aulasSelecionadas.length }} aula(s) selecionada(s)</span>
+              </p>
+              <button class="btn-clear-filters" (click)="limparSelecaoAulas()" *ngIf="aulasSelecionadas.length > 0">
+                Limpar seleção
+              </button>
+            </div>
+
+            <div class="form-group search-box">
+              <div class="search-input-wrapper">
+                <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input 
+                  type="text" 
+                  [value]="pesquisaAula"
+                  (input)="onPesquisaChange($any($event.target).value)"
+                  placeholder="Pesquisar aulas por título (mínimo 2 caracteres)..."
+                  class="form-input">
+                <div class="loading-spinner" *ngIf="carregandoAulas"></div>
+              </div>
+            </div>
+
+            <!-- Loading state -->
+            <div class="loading-state" *ngIf="carregandoAulas">
+              <div class="spinner"></div>
+              <p>Carregando aulas...</p>
+            </div>
+
+            <!-- Error state -->
+            <div class="error-state" *ngIf="erroCarregarAulas">
+              <p>{{ erroCarregarAulas }}</p>
+              <button class="btn-retry" (click)="carregarAulas()">Tentar novamente</button>
+            </div>
+
+            <!-- Lista de aulas -->
+            <div class="aulas-list" *ngIf="!carregandoAulas && !erroCarregarAulas">
+              <div 
+                *ngFor="let aula of aulasFiltradas" 
+                class="aula-item-card" 
+                [class.selected]="isAulaSelecionada(aula.id)"
+                (click)="toggleAulaSelecionada(aula.id)">
+                
+                <div class="aula-checkbox">
+                  <input 
+                    type="checkbox" 
+                    [checked]="isAulaSelecionada(aula.id)"
+                    (click)="$event.stopPropagation()">
+                </div>
+
+                <div class="aula-thumbnail">
+                  <img *ngIf="aula.poster" 
+                       [src]="aula.poster" 
+                       [alt]="aula.titulo"
+                       onerror="this.style.display='none'">
+                  <div class="thumbnail-placeholder" *ngIf="!aula.poster">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                  </div>
+                </div>
+
+                <div class="aula-info-compact">
+                  <h4 class="aula-title-compact">{{ aula.titulo }}</h4>
+                  <span class="aula-category" *ngIf="aula.categoria">{{ aula.categoria }}</span>
+                </div>
+              </div>
+
+              <div class="empty-state" *ngIf="aulasFiltradas.length === 0 && !carregandoAulas">
+                <img src="assets/Icons/aula.svg" alt="Sem aulas" class="empty-icon">
+                <p *ngIf="pesquisaAula && pesquisaAula.length >= 2">Nenhuma aula encontrada com "{{ pesquisaAula }}"</p>
+                <p *ngIf="!pesquisaAula || pesquisaAula.length < 2">Digite pelo menos 2 caracteres para pesquisar ou carregue todas as aulas.</p>
+                <button class="btn-retry" (click)="carregarAulas()" *ngIf="!pesquisaAula">Carregar todas as aulas</button>
+              </div>
             </div>
           </div>
 

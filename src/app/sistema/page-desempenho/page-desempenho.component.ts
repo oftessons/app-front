@@ -1,11 +1,29 @@
-import { Component, Inject, OnInit, Optional } from '@angular/core';
+import { Component, ElementRef, HostListener, Inject, OnInit, Optional, ViewChild } from '@angular/core';
 import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
-import { QuestoesService } from 'src/app/services/questoes.service'; // Atualize o caminho se necessário
-import { Label } from 'ng2-charts';
+import { QuestoesService } from 'src/app/services/questoes.service'; 
+import { Label, Color } from 'ng2-charts';
 import { TemaDescricoes } from '../page-questoes/enums/tema-descricao';
 import { AuthService } from 'src/app/services/auth.service';
 import { Usuario } from 'src/app/login/usuario';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+
+interface PieChartDataCustom {
+  title: string;
+  data: number[];
+  labels: Label[];
+  chartType: ChartType;
+  options: ChartOptions;
+  colors: Color[];
+  percentualValor: number;
+  percentualTexto: string;
+}
+
+interface TemaData {
+  nome: string;
+  valor: number;
+  selecionado: boolean;
+}
+
 
 @Component({
   selector: 'app-page-desempenho',
@@ -17,34 +35,40 @@ export class PageDesempenhoComponent implements OnInit {
   alunoMentoradoId!: string;
   nomeAlunoMentorado!: string;
 
-  public pieChartsData: {
-    title: string;
-    data: number[];
-    labels: string[];
-    chartType: ChartType;
-    options: ChartOptions;
-    colors: any[];
-  }[] = [];
+  public pieChartsData: PieChartDataCustom[] = [];
+  public lineChartType: ChartType = 'line';
+  public anoAtual = new Date().getFullYear();
+  public totalQuestoesAno: number = 0;
+
+  
+  public totalQuestoesGeral: number = 0;
+  public temaDestaque: string = '---';
+  public questoesDestaque: number = 0;
+  public showRadarConfig: boolean = false; 
+  public todosTemas: TemaData[] = [];
+  public maxTemasPermitidos: number = 10;
+  public radarChartType: ChartType = 'radar';
+
+  public showConfigAcertos: boolean = false;
+  public showConfigErros: boolean = false;
+  public todosTemasAcertos: TemaData[] = [];
+  public todosTemasErros: TemaData[] = [];
+  public radarAcertosLabels: Label[] = [];
+  public radarAcertosData: ChartDataSets[] = [];
+  public radarErrosLabels: Label[] = [];
+  public radarErrosData: ChartDataSets[] = [];
+  public totalAcertosCard: number = 0;
+  public totalErrosCard: number = 0;
+  public pctAcertosCard: number = 0;
+  public pctErrosCard: number = 0;
+  public larguraTela: number = window.innerWidth;
+
+  public limiteAnterior = this.maxTemasPermitidos;
+  public isMobile = this.larguraTela < 900; 
 
 
-  // Gráfico 1: Acertos e Erros por Tipo de Prova
-  public barChartOptions1: ChartOptions = {
-    responsive: true,
-    title: {
-      display: true,
-      text: 'Acertos e Erros por Tipo de Prova'
-    },
-    scales: {
-      xAxes: [
-        {
-          ticks: {
-            beginAtZero: true,
-            stepSize: 1, // Define a escala para números inteiros
-          },
-        },
-      ],
-    },
-  };
+
+
   public barChartLabels1: Label[] = [];
   public barChartType: ChartType = 'horizontalBar';
   public barChartLegend = true;
@@ -52,35 +76,58 @@ export class PageDesempenhoComponent implements OnInit {
     {
       data: [],
       label: 'Acertos',
-      backgroundColor: '#1C9212',
+      backgroundColor: '#3B82F6',
       borderColor: '#1C9212',
     },
     {
       data: [],
       label: 'Erros',
-      backgroundColor: '#3B5FA0',
+      backgroundColor: '#EF4444',
       borderColor: '#3B5FA0',
     },
   ];
 
-  // Gráfico 2: Quantidade de Questões Feitas por Tema
-  public barChartOptions2: ChartOptions = {
+
+
+  public radarChartOptions: ChartOptions = {
     responsive: true,
-    title: {
-      display: true,
-      text: 'Quantidade de Questões Feitas por Tema'
+    maintainAspectRatio: false,
+    title: { display: false },
+    legend: { display: false }, 
+    scale: {
+      angleLines: {
+        color: 'rgba(255, 255, 255, 0.1)' 
+      },
+      gridLines: {
+        color: 'rgba(255, 255, 255, 0.1)' 
+      },
+      pointLabels: {
+        fontColor: '#ffffff', 
+        fontSize: this.isMobile ?10: 12
+      },
+      ticks: {
+        backdropColor: 'transparent', 
+        fontColor: '#94a3b8',
+        beginAtZero: true,
+        showLabelBackdrop: false
+      }
     },
-    scales: {
-      xAxes: [
-        {
-          ticks: {
-            beginAtZero: true,
-            stepSize: 1, // Define a escala para números inteiros
-          },
-        },
-      ],
-    },
+    tooltips: {
+      backgroundColor: '#1e293b',
+      titleFontColor: '#fff',
+      bodyFontColor: '#fff',
+      borderColor: 'rgba(255,255,255,0.1)',
+      borderWidth: 1
+    }
   };
+  public radarChartLabels: Label[] = [];
+  public radarChartData: ChartDataSets[] = [
+    { data: [], label: 'Questões' }
+  ];
+
+
+
+  
   public barChartLabels2: Label[] = [];
   public barChartData2: ChartDataSets[] = [
     {
@@ -90,39 +137,84 @@ export class PageDesempenhoComponent implements OnInit {
       borderColor: '#FFA500',
     },
   ];
-
-  // Gráfico 3: Acertos e Erros por Mês
+ 
   public barChartOptions3: ChartOptions = {
     responsive: true,
-    title: {
+    maintainAspectRatio: false,
+    title: { display: false },
+    legend: {
       display: true,
-      text: 'Acertos e Erros por Mês'
+      position: 'top',
+      align: 'end', 
+      labels: {
+        fontColor: '#cbd5e1', 
+        usePointStyle: true,  
+        boxWidth: 8,          
+        padding: 20
+      }
+    },
+    layout: {
+      padding: {
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0
+      }
+    },
+    tooltips: {
+      mode: 'index',
+      intersect: false,
+      backgroundColor: '#1e293b', 
+      titleFontColor: '#fff',
+      bodyFontColor: '#cbd5e1',
+      borderColor: 'rgba(255,255,255,0.1)',
+      borderWidth: 1
     },
     scales: {
-      yAxes: [
-        {
-          ticks: {
-            beginAtZero: true,
-            stepSize: 1, // Define a escala para números inteiros
-          },
+      xAxes: [{
+        gridLines: {
+          display: false, 
+          drawBorder: false,
         },
-      ],
-    },
+        ticks: {
+          fontColor: '#94a3b8', 
+          padding: 15           
+        }
+      }],
+      yAxes: [{
+        position: 'right',
+        gridLines: {
+          color: 'rgba(255, 255, 255, 0.08)', 
+          drawBorder: false, 
+          zeroLineColor: 'rgba(255, 255, 255, 0.08)'
+        },
+        ticks: {
+          fontColor: '#94a3b8', 
+          beginAtZero: true,
+          padding: 15,
+          stepSize: 100 
+        }
+      }]
+    }
   };
+
+
+
+
   public barChartType3: ChartType = 'bar';
   public barChartLabels3: string[] = [
-    'Janeiro',
-    'Fevereiro',
-    'Março',
-    'Abril',
-    'Maio',
-    'Junho',
-    'Julho',
-    'Agosto',
-    'Setembro',
-    'Outubro',
-    'Novembro',
-    'Dezembro',
+    'Jan',
+    'Fev',
+    'Mar',
+    'Abr',
+    'Mai',
+    'Jun',
+    'Jul',
+    'Ago',
+    'Set',
+    'Out',
+    'Nov',
+    'Dez',
   ];
   public barChartData3: ChartDataSets[] = [
     {
@@ -139,7 +231,13 @@ export class PageDesempenhoComponent implements OnInit {
     },
   ];
 
-  // Gráfico 4: Acertos e Erros por Tema
+
+
+
+
+
+
+  
   public barChartOptions4: ChartOptions = {
     responsive: true,
     title: {
@@ -173,6 +271,7 @@ export class PageDesempenhoComponent implements OnInit {
     },
   ];
 
+
   constructor(
     private questoesService: QuestoesService,
     private authService: AuthService,
@@ -185,6 +284,8 @@ export class PageDesempenhoComponent implements OnInit {
     }
   }
 
+  
+
   ngOnInit(): void {
     this.authService.obterUsuarioAutenticadoDoBackend().subscribe(
       (data) => {
@@ -196,11 +297,13 @@ export class PageDesempenhoComponent implements OnInit {
 
         const idUser = parseInt(this.usuario.id);
 
+
         this.questoesService
           .getAcertosEErrosPorTipoDeProva(idUser)
           .subscribe((data1) => {
             this.processChartData1(data1);
           });
+
 
         this.questoesService
           .getQuestoesFeitasPorTema(idUser)
@@ -208,12 +311,14 @@ export class PageDesempenhoComponent implements OnInit {
             this.processChartData2(data2);
           });
 
+
         this.questoesService
           .getAcertosEErrosPorMes(idUser)
           .subscribe((data3) => {
             const dataMap = this.convertBackendDataToMap(data3);
             this.processChartData3(dataMap);
           });
+
 
         this.questoesService
           .getAcertosErrosPorTema(idUser)
@@ -226,7 +331,31 @@ export class PageDesempenhoComponent implements OnInit {
       }
     );
   }
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.larguraTela = window.innerWidth;
+    this.verificarResolucaoEAtualizar(true);
+  }
 
+  private verificarResolucaoEAtualizar(forcarAtualizacaoGraficos: boolean): void {
+  
+    this.maxTemasPermitidos = this.isMobile ? 5 : 10;
+
+    if (this.limiteAnterior !== this.maxTemasPermitidos || forcarAtualizacaoGraficos) {
+          
+      this.reaplicarLimiteSelecao(this.todosTemas);
+      this.atualizarGraficoRadar();
+
+      
+      this.reaplicarLimiteSelecao(this.todosTemasAcertos);
+      this.atualizarRadarVisual('acertos');
+
+      this.reaplicarLimiteSelecao(this.todosTemasErros);
+      this.atualizarRadarVisual('erros');
+    }
+  }
+
+  
   private processChartData1(data: any): void {
     const provas = [
       'Prova de Bases (Teórica 1)',
@@ -234,76 +363,265 @@ export class PageDesempenhoComponent implements OnInit {
       'Prova de Imagens (Teórico-prática)',
     ];
 
+    
     this.pieChartsData = provas.map((tipo) => {
       const tipoData = data[tipo] || { acertos: 0, erros: 0 };
+      
+      const total = tipoData.acertos + tipoData.erros;
+      const percentual = total > 0 ? Math.round((tipoData.acertos / total) * 100) : 0;
+
       return {
         title: tipo,
         data: [tipoData.acertos, tipoData.erros],
         labels: ['Acertos', 'Erros'],
-        chartType: 'pie' as ChartType,
+        
+        chartType: 'doughnut',
+
+        percentualValor: percentual,
+        percentualTexto: 'Acertos',
+
         options: {
           responsive: true,
           maintainAspectRatio: false,
+          cutoutPercentage: 55, 
+          legend: {
+            display: true,
+            position: 'bottom',
+            labels: {
+              fontColor: '#ffffff', 
+              usePointStyle: true, 
+              padding: 20
+            }
+          },
+          tooltips: {
+            enabled: true 
+          }
         },
         colors: [
           {
-            backgroundColor: ['#2d7d96', '#e05538'],
+            backgroundColor: ['#3b82f6', '#ef4444'], 
+            borderWidth: 1, 
+            borderColor: '#F6F8FE' 
           },
         ],
       };
     });
   }
 
-
+  
   private processChartData2(data: any): void {
-    const temas = Object.values(TemaDescricoes);
-    this.barChartLabels2 = temas;
+    const nomes = Object.keys(data);
+    
+    this.todosTemas = nomes.map(nome => {
+      return {
+        nome: nome,
+        valor: data[nome] || 0,
+        selecionado: false,
+      };
+    });
 
-    const questoesFeitasData = temas.map((tema) => data[tema] || 0);
+    this.todosTemas.sort((a, b) => b.valor - a.valor);
 
-    this.barChartData2 = [
-      {
-        data: questoesFeitasData,
-        label: 'Questões Feitas',
-        backgroundColor: '#D69C11',
-        borderColor: '#D69C11',
-        hoverBackgroundColor: '#FFBF23',
-        hoverBorderColor: '#FFBF23',
-      },
-    ];
+    this.todosTemas.forEach((tema, index) => {
+      if (index < 10) {
+        tema.selecionado = true;
+      }
+    });
+
+    this.atualizarTotaisGerais();
+
+    this.atualizarGraficoRadar();
   }
+
+
+  public toggleTema(tema: TemaData): void {
+    const totalSelecionados = this.todosTemas.filter(t => t.selecionado).length;
+    if (!tema.selecionado && totalSelecionados >= this.maxTemasPermitidos) {
+      alert(`Você só pode selecionar no máximo ${this.maxTemasPermitidos} temas.`);
+      return;
+    }
+    tema.selecionado = !tema.selecionado;
+    
+    this.atualizarGraficoRadar();
+  }
+
+  private atualizarGraficoRadar(): void {
+    let ativos = [...this.todosTemas.filter(t => t.selecionado)];
+    ativos.sort((a, b) => a.nome.localeCompare(b.nome)); 
+    this.radarChartLabels = ativos.map(t => this.quebrarTextoEmLinhas(t.nome));
+    
+    this.radarChartData = [{
+      data: ativos.map(t => t.valor),
+      label: 'Questões Feitas',
+      backgroundColor: 'rgba(214, 156, 17, 0.2)',
+      borderColor: '#D69C11',
+      pointBackgroundColor: '#D69C11',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: '#D69C11',
+      borderWidth: 2
+    }];
+  }
+
+  private atualizarTotaisGerais(): void {
+    const valores = this.todosTemas.map(t => t.valor);
+    this.totalQuestoesGeral = valores.reduce((a, b) => a + b, 0);
+
+    if (this.todosTemas.length > 0) {
+      this.temaDestaque = this.todosTemas[0].nome;
+      this.questoesDestaque = this.todosTemas[0].valor;
+    }
+  }
+
+  public toggleConfig(): void {
+    this.showRadarConfig = !this.showRadarConfig;
+  }
+
+  @ViewChild('modalConfig') modalConfig!: ElementRef;
+  @ViewChild('btnConfig') btnConfig!: ElementRef;
+
+  @ViewChild('modalConfigAcertos') modalConfigAcertos!: ElementRef;
+  @ViewChild('btnConfigAcertos') btnConfigAcertos!: ElementRef;
+
+  @ViewChild('modalConfigErros') modalConfigErros!: ElementRef;
+  @ViewChild('btnConfigErros') btnConfigErros!: ElementRef;
+
+
+  @HostListener('document:click', ['$event'])
+  clickFora(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+
+    if (this.showRadarConfig) {
+      const clicouNoModal = this.modalConfig && this.modalConfig.nativeElement.contains(target);
+      const clicouNoBotao = this.btnConfig && this.btnConfig.nativeElement.contains(target);
+      if (!clicouNoModal && !clicouNoBotao) {
+        this.showRadarConfig = false;
+      }
+    }
+
+    if (this.showConfigAcertos) {
+      const clicouNoModal = this.modalConfigAcertos && this.modalConfigAcertos.nativeElement.contains(target);
+      const clicouNoBotao = this.btnConfigAcertos && this.btnConfigAcertos.nativeElement.contains(target);
+      if (!clicouNoModal && !clicouNoBotao) {
+        this.showConfigAcertos = false;
+      }
+    }
+
+    if (this.showConfigErros) {
+      const clicouNoModal = this.modalConfigErros && this.modalConfigErros.nativeElement.contains(target);
+      const clicouNoBotao = this.btnConfigErros && this.btnConfigErros.nativeElement.contains(target);
+      if (!clicouNoModal && !clicouNoBotao) {
+        this.showConfigErros = false;
+      }
+    }
+  }
+
 
   private processChartData4(data: any): void {
-    const temas = Object.values(TemaDescricoes);
-    this.barChartLabels4 = temas;
+    const temas = Object.values(TemaDescricoes); 
+    
+    
+    this.totalAcertosCard = 0;
+    this.totalErrosCard = 0;
+    this.todosTemasAcertos = [];
+    this.todosTemasErros = [];
 
-    const acertosData = temas.map((tema) => data[tema]?.acertos || 0);
-    const errosData = temas.map((tema) => data[tema]?.erros || 0);
+    
+    temas.forEach(tema => {
+      const acertos = data[tema]?.acertos || 0;
+      const erros = data[tema]?.erros || 0;
 
-    this.barChartData4 = [
-      {
-        data: acertosData,
-        label: 'Acertos',
-        backgroundColor: '#1C9212',
-        borderColor: '#1C9212',
-        hoverBackgroundColor: '#113A87',
-        hoverBorderColor: '#113A87',
-      },
-      {
-        data: errosData,
-        label: 'Erros',
-        backgroundColor: '#3B5FA0',
-        borderColor: '#3B5FA0',
-        hoverBackgroundColor: '#667A9F',
-        hoverBorderColor: '#667A9F',
-      },
-    ];
+      
+      this.totalAcertosCard += acertos;
+      this.totalErrosCard += erros;
+
+      
+      this.todosTemasAcertos.push({
+        nome: tema,
+        valor: acertos,
+        selecionado: false 
+      });
+
+      
+      this.todosTemasErros.push({
+        nome: tema,
+        valor: erros,
+        selecionado: false
+      });
+    });
+
+    
+    const totalGeral = this.totalAcertosCard + this.totalErrosCard;
+    this.pctAcertosCard = totalGeral > 0 ? Math.round((this.totalAcertosCard / totalGeral) * 100) : 0;
+    this.pctErrosCard = totalGeral > 0 ? Math.round((this.totalErrosCard / totalGeral) * 100) : 0;
+
+    
+    this.prepararDadosRadar(this.todosTemasAcertos, 'acertos');
+    this.prepararDadosRadar(this.todosTemasErros, 'erros');
   }
+
+  
+  private prepararDadosRadar(lista: TemaData[], tipo: 'acertos' | 'erros'): void {
+    lista.sort((a, b) => b.valor - a.valor);
+    this.reaplicarLimiteSelecao(lista);
+    this.atualizarRadarVisual(tipo);
+  }
+
+  
+  public atualizarRadarVisual(tipo: 'acertos' | 'erros'): void {
+    const lista = tipo === 'acertos' ? this.todosTemasAcertos : this.todosTemasErros;
+    
+    let ativos = [...lista.filter(t => t.selecionado)];
+    ativos.sort((a, b) => a.nome.localeCompare(b.nome));
+
+    const corFundo = tipo === 'acertos' ? 'rgba(59, 130, 246, 0.2)' : 'rgba(239, 68, 68, 0.2)';
+    const corBorda = tipo === 'acertos' ? '#3B82F6' : '#EF4444'; 
+
+    const dataset = [{
+      data: ativos.map(t => t.valor),
+      label: tipo === 'acertos' ? 'Acertos' : 'Erros',
+      backgroundColor: corFundo,
+      borderColor: corBorda,
+      pointBackgroundColor: corBorda,
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: corBorda,
+      borderWidth: 2
+    }];
+
+    const labels = ativos.map(t => this.quebrarTextoEmLinhas(t.nome));
+
+    if (tipo === 'acertos') {
+      this.radarAcertosData = dataset;
+      this.radarAcertosLabels = labels; 
+    } else {
+      this.radarErrosData = dataset;
+      this.radarErrosLabels = labels;
+    }
+  }
+
+
+  public toggleConfigAcertos() { this.showConfigAcertos = !this.showConfigAcertos; }
+  public toggleConfigErros() { this.showConfigErros = !this.showConfigErros; }
+
+
+  public toggleTemaEspecifico(item: TemaData, tipo: 'acertos' | 'erros') {
+    
+    const lista = tipo === 'acertos' ? this.todosTemasAcertos : this.todosTemasErros;
+    const totalSelecionados = lista.filter(t => t.selecionado).length;
+    if (!item.selecionado && totalSelecionados >= this.maxTemasPermitidos) {
+      alert(`Você só pode selecionar no máximo ${this.maxTemasPermitidos} temas para visualizar.`);
+      return; 
+    }
+    item.selecionado = !item.selecionado;
+    this.atualizarRadarVisual(tipo);
+  }
+
 
   private processChartData3(data: Map<string, Map<string, number>>): void {
     const acertosData: number[] = new Array(12).fill(0);
     const errosData: number[] = new Array(12).fill(0);
-
+    
     this.barChartLabels3.forEach((mes, index) => {
       const mesData = data.get(this.getMonthYearString(index));
       if (mesData) {
@@ -312,25 +630,46 @@ export class PageDesempenhoComponent implements OnInit {
       }
     });
 
+    const totalAcertos = acertosData.reduce((a,b) => a+b,0);
+    const totalErros = errosData.reduce((a,b) => a+b,0);
+    this.totalQuestoesAno = totalAcertos + totalErros;
+
     this.barChartData3 = [
       {
         data: acertosData,
         label: 'Acertos',
-        backgroundColor: '#0A275E',
-        borderColor: '#0A275E',
-        hoverBackgroundColor: '#113A87',
-        hoverBorderColor: '#113A87',
+        borderColor: '#3B82F6',
+        backgroundColor: '#3B82F6', 
+        pointRadius: 0,
+        pointHitRadius: 10,      
+        pointHoverRadius: 6,      
+        pointHoverBackgroundColor: '#3B82F6',
+        pointHoverBorderColor: '#fff',
+        pointHoverBorderWidth: 2,
+        fill: false, 
+        lineTension: 0.2, 
+        borderWidth: 2
       },
       {
         data: errosData,
         label: 'Erros',
-        backgroundColor: '#4E5E7B',
-        borderColor: '#4E5E7B',
-        hoverBackgroundColor: '#667A9F',
-        hoverBorderColor: '#667A9F',
+        borderColor: '#EF4444', 
+        backgroundColor: '#EF4444',
+        pointRadius: 0,
+        pointHitRadius: 10,
+        pointHoverRadius: 6,
+        pointHoverBackgroundColor: '#EF4444',
+        pointHoverBorderColor: '#fff',
+        pointHoverBorderWidth: 2,
+
+        fill: false,
+        lineTension: 0.2,
+        borderWidth: 2
       },
     ];
   }
+
+
 
   private convertBackendDataToMap(data: any): Map<string, Map<string, number>> {
     const result = new Map<string, Map<string, number>>();
@@ -354,5 +693,39 @@ export class PageDesempenhoComponent implements OnInit {
     if (this.dialogRef) {
       this.dialogRef.close();
     }
+  }
+
+  private reaplicarLimiteSelecao(lista: TemaData[]): void {
+    
+    lista.sort((a, b) => b.valor - a.valor);
+    
+    lista.forEach((item, index) => {
+      
+      item.selecionado = index < this.maxTemasPermitidos;
+    });
+  }
+  
+  private quebrarTextoEmLinhas(texto: string): string | string[] {
+    const limiteCaracteres = 15; 
+    
+    if (texto.length <= limiteCaracteres) {
+      return texto;
+    }
+
+    const palavras = texto.split(' ');
+    const linhas: string[] = [];
+    let linhaAtual = palavras[0];
+
+    for (let i = 1; i < palavras.length; i++) {
+      if (linhaAtual.length + 1 + palavras[i].length <= limiteCaracteres) {
+        linhaAtual += ' ' + palavras[i];
+      } else {
+        linhas.push(linhaAtual);
+        linhaAtual = palavras[i];
+      }
+    }
+    linhas.push(linhaAtual);
+    
+    return linhas; 
   }
 }

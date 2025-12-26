@@ -370,8 +370,6 @@ export class PageSimuladoComponent implements OnInit, OnDestroy {
 
 
   finalizarSimulado() {
-    // this.salvarTempoAtual();
-
     if (this.intervalId) {
       clearInterval(this.intervalId);
       this.intervalId = null;

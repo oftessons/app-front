@@ -58,7 +58,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private router: Router,
     private authService: AuthService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
   }
@@ -99,85 +99,91 @@ export class LoginComponent implements OnInit {
     this.cadastrando = false;
   }
 
-  cadastrar(){
-  this.errors = []; // Limpa os erros anteriores
-  const passwordValidationErrors: string[] = [];
+  cadastrar() {
+    this.errors = []; // Limpa os erros anteriores
+    const passwordValidationErrors: string[] = [];
 
-  // Validações de senha
-  if (this.password.length < 8) {
-    passwordValidationErrors.push("A senha deve ter pelo menos 8 caracteres.");
-  }
-  if (!/[A-Z]/.test(this.password)) {
-    passwordValidationErrors.push("A senha deve conter pelo menos uma letra maiúscula.");
-  }
-  if (!/[a-z]/.test(this.password)) {
-    passwordValidationErrors.push("A senha deve conter pelo menos uma letra minúscula.");
-  }
-  if (!/[0-9]/.test(this.password)) {
-    passwordValidationErrors.push("A senha deve conter pelo menos um número.");
-  }
-  if (!/[!@#$%^&*]/.test(this.password)) {
-    passwordValidationErrors.push("A senha deve conter pelo menos um caractere especial (por exemplo, !@#$%^&*).");
-  }
+    // Validações de senha
+    if (this.password.length < 8) {
+      passwordValidationErrors.push("A senha deve ter pelo menos 8 caracteres.");
+    }
+    if (!/[A-Z]/.test(this.password)) {
+      passwordValidationErrors.push("A senha deve conter pelo menos uma letra maiúscula.");
+    }
+    if (!/[a-z]/.test(this.password)) {
+      passwordValidationErrors.push("A senha deve conter pelo menos uma letra minúscula.");
+    }
+    if (!/[0-9]/.test(this.password)) {
+      passwordValidationErrors.push("A senha deve conter pelo menos um número.");
+    }
+    if (!/[!@#$%^&*]/.test(this.password)) {
+      passwordValidationErrors.push("A senha deve conter pelo menos um caractere especial (por exemplo, !@#$%^&*).");
+    }
 
-  // Validação de campo de login
-  // if (!this.username) {
-  //   passwordValidationErrors.push("O campo de login é obrigatório.");
-  // }
+    // Validação de campo de login
+    // if (!this.username) {
+    //   passwordValidationErrors.push("O campo de login é obrigatório.");
+    // }
 
-  // Validação de campo de email
-  if (!this.email) {
-    passwordValidationErrors.push("O campo de email é obrigatório.");
-  }
+    // Validação de campo de email
+    if (!this.email) {
+      passwordValidationErrors.push("O campo de email é obrigatório.");
+    }
 
-  // Validação de campo de nome
-  if (!this.nome) {
-    passwordValidationErrors.push("O campo de nome é obrigatório.");
-  }
+    // Validação de campo de nome
+    // if (!this.nome) {
+    //   passwordValidationErrors.push("O campo de nome é obrigatório.");
+    // }
 
-  if(!this.tipoDeEstudante) {
-    passwordValidationErrors.push("Selecione o tipo de usuário.");
-  }
+    if (!this.telefone) {
+      passwordValidationErrors.push("O campo de telefone é obrigatório.");
 
-  // Se houver erros de validação, armazene-os em this.errors e não prossiga
-  if (passwordValidationErrors.length > 0) {
-    this.errors = passwordValidationErrors;
-    return; // Interrompe a execução do método
-  }
+    }
+
+    if (!this.tipoDeEstudante) {
+      passwordValidationErrors.push("Selecione o tipo de usuário.");
+    }
+
+    // Se houver erros de validação, armazene-os em this.errors e não prossiga
+    if (passwordValidationErrors.length > 0) {
+      this.errors = passwordValidationErrors;
+      return; // Interrompe a execução do método
+    }
 
     const usuario: Usuario = new Usuario();
     usuario.password = this.password;
     usuario.email = this.email.toLowerCase();
-    usuario.nome = this.nome;
+    usuario.telefone = this.telefone;
+    // usuario.nome = this.nome;
     usuario.tipoDeEstudante = this.tipoDeEstudante;
 
     console.log(usuario);
 
     this.authService
-        .salvar(usuario, this.permissaoUsuario)
-        .subscribe( response => {
-          this.mensagemSucesso = "Cadastro realizado com sucesso! Efetue o login.";
-          this.cadastrando = false;
-          this.username = '';
-          this.password = '';
-          this.email = '';
-          this.nome = '';
-          this.tipoDeEstudante = '';
-          this.errors = [];
-        },  errorResponse => {
-          if (errorResponse.status === 401) {
-              // Trata o erro de token expirado
-              this.errors = ['Sessão expirada. Por favor, faça login novamente.'];
-              localStorage.removeItem('access_token'); // Remove o token expirado
-              this.router.navigate(['/login']); // Redireciona para a página de login
-          } else if (errorResponse.status === 400) {
-            // Exibe a mensagem de erro vinda do back-end
-            this.errors = [errorResponse.error];
-          } else {
-              this.errors = ['Erro ao cadastrar o usuário.'];
-          }
+      .salvar(usuario, this.permissaoUsuario)
+      .subscribe(response => {
+        this.mensagemSucesso = "Cadastro realizado com sucesso! Efetue o login.";
+        this.cadastrando = false;
+        this.username = '';
+        this.password = '';
+        this.email = '';
+        // this.nome = '';
+        this.tipoDeEstudante = '';
+        this.errors = [];
+      }, errorResponse => {
+        if (errorResponse.status === 401) {
+          // Trata o erro de token expirado
+          this.errors = ['Sessão expirada. Por favor, faça login novamente.'];
+          localStorage.removeItem('access_token'); // Remove o token expirado
+          this.router.navigate(['/login']); // Redireciona para a página de login
+        } else if (errorResponse.status === 400) {
+          // Exibe a mensagem de erro vinda do back-end
+          this.errors = [errorResponse.error];
+        } else {
+          this.errors = ['Erro ao cadastrar o usuário.'];
+        }
       }
-    );
+      );
   }
 
   salvaUserLocal() {
@@ -189,7 +195,7 @@ export class LoginComponent implements OnInit {
         localStorage.setItem('usuario', usuario.email);
       },
       error => {
-       // console.error('Erro ao obter dados do usuário:', error);
+        // console.error('Erro ao obter dados do usuário:', error);
       }
     );
   }

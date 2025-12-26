@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, ViewChild, ElementRef, ViewChildren, QueryList } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -7,6 +7,8 @@ import { Permissao } from '../../login/Permissao';
 import { TipoUsuario } from '../../login/enums/tipo-usuario';
 import { TipoUsuarioDescricao } from '../../login/enums/tipo-usuario-descricao';
 import { CardPlanoComponent } from '../../shared/card-plano/card-plano.component';
+import { FaqItem, FAQLIST, FEATURES, LISTA_MATERIAL, Professor, PROFESSORESAULAS, PROFESSORESCOMENTADORES, RESULTADOS } from './info_mock';
+
 
 @Component({
   selector: 'app-pagina-inicial',
@@ -14,8 +16,18 @@ import { CardPlanoComponent } from '../../shared/card-plano/card-plano.component
   styleUrls: ['./pagina-inicial.component.css']
 })
 export class PaginaInicialComponent implements OnInit {
+
+  resultados = RESULTADOS;
+  faqList: FaqItem[] = FAQLIST;
+  features = FEATURES;
+  professoresAulas = PROFESSORESAULAS;
+  professoresComentadores = PROFESSORESCOMENTADORES;
+  materiais = LISTA_MATERIAL;
+
+
   password: string = '';
   nome: string = '';
+  telefone: string = '';
   email: string = '';
   tipoDeEstudante: string = '';
   consentimento: boolean = false;
@@ -54,146 +66,21 @@ export class PaginaInicialComponent implements OnInit {
   autoPlayInterval = 8000;
   isMobile = false;
 
-  depoimentos = [
-    {
-      name: 'Paloma Schürmann Ribeiro',
-      role: 'Santa Catarina',
-      content: 'A plataforma da Oftlessons têm auxiliado muito na sedimentação do conteúdo estudado, desde a grande variedade de temas, até a organização de questões em diferentes níveis de dificuldade, de forma que possa identificar minhas fragilidades e entender melhor com os comentários das questões.',
-      image: 'assets/imagens/depoimentos/paloma.jpg'
-    },
-    {
-      name: 'Carla Tavares',
-      role: 'Pernambuco',
-      content: 'Através das questões e comentários, é possível fazer uma boa revisão dos assuntos mais contemplados na prova do CBO. Ótima ferramenta de estudo 👏!',
-      image: 'assets/imagens/depoimentos/carla.jpg'
-    },
-    {
-      name: 'Dhiego Carvalho',
-      role: 'Ceará',
-      content: 'Estou extremamente satisfeito com o aplicativo de questões. O conteúdo é bem organizado, com muitas questões, de todos os assuntos, atualizadas e comentadas de forma clara e objetiva. Além disso, a interface é intuitiva e facilita muito o estudo no dia a dia. Tem sido uma ferramenta essencial na minha preparação e formação, pois ajuda a fixar os principais temas cobrados. Recomendo para todos que estão se preparando para a prova de título!',
-      image: 'assets/imagens/depoimentos/dhiego.jpeg'
-    },
-    {
-      name: 'Caio Barros',
-      role: 'Pernambuco',
-      content: 'Com as questões do Oftlessons, eu consigo não só me preparar para a prova do CBO como também revisar temas importantes para a prática do dia-a-dia da oftalmologia.',
-      image: 'assets/imagens/depoimentos/caio.jpg'
-    }
-  ];
+  transformStyle = 'translateX(0%)';
+  transitionStyle = 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)';
+  isAnimating = false;
 
-  professoresAulas = [
-    {
-      nome: 'Gustavo Paz',
-      foto: 'assets/imagens/professores/gustavo-paz.png',
-      especialidade: 'Catarata', 
-      experiencia: 'Oftalmologista pela Obras Sociais Irmã Dulce - Salvador. Fellowship de Catarata pelo Hospital Humberto Castro Lima.'
-    },
-    {
-      nome: 'Mariana Melo',
-      foto: 'assets/imagens/professores/mariana-melo.png',
-      especialidade: 'Retina e Vítreo', 
-      experiencia: 'Oftalmologista pela FAV. Fellowship de Retina e Vítreo pela FAV.'
-    },
-    {
-      nome: 'Mariana Gurgel',
-      foto: 'assets/imagens/professores/mariana-gurgel.png',
-      especialidade: 'Glaucoma', 
-      experiencia: 'Oftalmologista pela Fundação Altino Ventura. Fellowship em Glaucoma pela Fundação Altino Ventura.'
-    },
-    {
-      nome: 'Sarah Nápoli',
-      foto: 'assets/imagens/professores/sarah-napoli.png',
-      especialidade: 'Uveíte', 
-      experiencia: 'Oftalmologista pelo CLIHON - BA. Fellowship em Retina Clínica, Oncologia e Uveítes pela Unifesp - SP.'
-    },
-    {
-      nome: 'Marcela Raposo',
-      foto: 'assets/imagens/professores/marcela-raposo.png',
-      especialidade: 'Córnea, Cirurgia Refrativa e Transplante', 
-      experiencia: 'Oftalmologista pela Fundação Altino Ventura - Recife. Fellowship em Córnea pelo Banco de Olhos de Sorocaba.'
-    },
-    {
-      nome: 'Lyvia Nunes',
-      foto: 'assets/imagens/professores/lyvia-nunes.png',
-      especialidade: 'Retina e Vítreo', 
-      experiencia: 'Oftalmologista pelo Cenoft - João Pessoa. Fellowship em Retina Cirúrgica pela Fundação Altino Ventura'
-    },
-    {
-      nome: 'Lídia Guedes',
-      foto: 'assets/imagens/professores/lidia-guedes.png',
-      especialidade: 'Oncologia', 
-      experiencia: 'Oftalmologista pelo HC-UFPE. Fellowship em Oncologia e Ultrassonografia Ocular pela Unifesp.'
-    },
-    {
-      nome: 'Carla Tavares',
-      foto: 'assets/imagens/professores/carla-tavares.png',
-      especialidade: 'Lentes de Contato', 
-      experiencia: 'Oftalmologista pela Unicamp - São Paulo. Fellowship em Lentes de Contato pela Unifesp.'
-    },
-    {
-      nome: 'Gabriela Gusmão',
-      foto: 'assets/imagens/professores/gabriela-gusmao.png',
-      especialidade: 'Oftalmopediatria e Estrabismo', 
-      experiencia: 'Oftalmologista pela Unifesp. Fellowship em Oftalmopediatria e Estrabismo pela Unifesp.'
-    },
-    {
-      nome: 'Letícia da Fonte',
-      foto: 'assets/imagens/professores/leticia-da-fonte.png',
-      especialidade: 'Retina e Vítreo',
-      experiencia: 'Oftalmologista pela FAV. Fellowship em Retina e Vítreo pela FAV.'
-    },
-    {
-      nome: 'Letícia Amorim',
-      foto: 'assets/imagens/professores/leticia-amorim.png',
-      especialidade: 'Glaucoma e Neuroftalmologia',
-      experiencia: 'Oftalmologista pela Fundação Altino Ventura - Recife. Fellowship Glaucoma e Neuroftalmologia - Unifesp.'
-    }
-  ];
+  todosProfessores: Professor[] = [];
+  startIndexProfessores = 0;
+  itemsPorSlide = 6;
+  rotationInterval: any;
 
-  professoresComentadores = [
-    {
-      nome: 'Antônio Cassiano',
-      foto: 'assets/imagens/professores/antonio-cassiano.png',
-      especialidade: 'Retina e Vítreo', 
-      experiencia: 'Oftalmologista pela FAV. Fellowship de Retina e Vítreo pela FAV.'
-    },
-    {
-      nome: 'Lyndon Serra',
-      foto: 'assets/imagens/professores/lyndon-serra.png',
-      especialidade: 'Glaucoma', 
-      experiencia: 'Oftalmologista pela FAMENE. Fellowship em Glaucoma pela FAV.'
-    },
-    {
-      nome: 'Clara Menezes',
-      foto: 'assets/imagens/professores/clara-menezes.png',
-      especialidade: 'Q-Bank Team', 
-      experiencia: 'Residente de Oftalmologia na Escola Cearense'
-    },
-    {
-      nome: 'Hélio Ferreira',
-      foto: 'assets/imagens/professores/helio-ferreira.png',
-      especialidade: 'Q-Bank Team', 
-      experiencia: 'Residente de Oftalmologia - SEOPE'
-    },
-    {
-      nome: 'Matheus Leal',
-      foto: 'assets/imagens/professores/matheus-leal.png',
-      especialidade: 'Q-Bank Team', 
-      experiencia: 'Residente de Oftalmologia - FAV'
-    },
-    {
-      nome: 'Mateus Araújo',
-      foto: 'assets/imagens/professores/mateus-araujo.png',
-      especialidade: 'Córnea e Refrativa', 
-      experiencia: 'Oftalmologista pelo Hospital Universitário Onofre Lopes - Natal. Fellowship Córnea e Refrativa pela Fundação Altino Ventura.'
-    },
-    {
-      nome: 'Taíse Araújo',
-      foto: 'assets/imagens/professores/taise-araujo.png',
-      especialidade: 'Q-Bank Team',
-      experiencia: 'Residente de Oftalmologia - FAV'
-    }
-  ];
+  modalAberto: boolean = false;
+  materialSelecionado: any = null;
+
+  @ViewChild('videoPlayer') videoPlayer!: ElementRef<HTMLVideoElement>;
+  @ViewChildren('featureVideoPlayer') featureVideos!: QueryList<ElementRef>;
+  @ViewChild('heroVideo') heroVideo!: ElementRef<HTMLVideoElement>;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -202,28 +89,35 @@ export class PaginaInicialComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    //localStorage.removeItem('access_token');
+
     this.checkActiveSection();
     this.registerForm = this.formBuilder.group({
       nome: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
+      telefone: ['', Validators.required],
       tipoDeEstudante: ['RESIDENTE', Validators.required],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
 
+    this.todosProfessores = [...this.professoresAulas, ...this.professoresComentadores];
+    this.checkItemsPerSlide();
+    window.addEventListener('resize', () => this.checkItemsPerSlide());
+    this.startRotation();
+
     this.checkScreenSize();
-    this.initCarousel();
-
-    window.addEventListener('resize', () => {
-      this.checkScreenSize();
-      this.initCarousel();
-    });
-
-    this.startAutoPlay();
   }
 
   ngOnDestroy(): void {
     this.stopAutoPlay();
+    this.stopRotation();
+  }
+
+   ngAfterViewInit(): void {
+    this.playHeroVideo();
+    this.setupVideoObserver();
+    this.featureVideos.changes.subscribe(() => {
+      this.setupVideoObserver();
+    });
   }
 
 
@@ -233,8 +127,9 @@ export class PaginaInicialComponent implements OnInit {
     this.camposComErro = [];
     this.mensagensDeErro = {};
 
-    this.validarCampoObrigatorio('nome', 'O campo nome é obrigatório');
+    // this.validarCampoObrigatorio('nome', 'O campo nome é obrigatório');
     this.validarCampoObrigatorio('email', 'O campo e-mail é obrigatório');
+    this.validarCampoObrigatorio('telefone', 'O campo telefone é obrigatório');
 
     if (!this.tipoDeEstudante) {
       this.adicionarErro('tipoDeEstudante', 'Selecione o tipo de usuário');
@@ -259,7 +154,8 @@ export class PaginaInicialComponent implements OnInit {
     const usuario: Usuario = new Usuario();
     usuario.password = this.password;
     usuario.email = this.email;
-    usuario.nome = this.nome;
+    usuario.telefone = this.telefone;
+    // usuario.nome = this.nome;
     usuario.tipoDeEstudante = this.tipoDeEstudante;
 
     this.authService
@@ -269,7 +165,8 @@ export class PaginaInicialComponent implements OnInit {
           this.mensagemSucesso = "Cadastro realizado com sucesso! Efetue o login.";
           this.password = '';
           this.email = '';
-          this.nome = '';
+          this.telefone = '';
+          // this.nome = '';
           this.tipoDeEstudante = '';
           this.errors = [];
 
@@ -322,8 +219,12 @@ export class PaginaInicialComponent implements OnInit {
   scrollToSection(sectionId: string) {
     const section = document.getElementById(sectionId);
     if (section) {
-      section.scrollIntoView({ behavior: 'smooth' });
+      setTimeout(() => {
+        section.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+
     }
+
   }
 
   validatePassword() {
@@ -375,114 +276,184 @@ export class PaginaInicialComponent implements OnInit {
     this.isMobile = window.innerWidth < 768;
   }
 
-  initCarousel() {
-    const itemsToShow = this.isMobile ? 1 : 2;
-
-    this.depoimentosExibidos = this.depoimentos.slice(0, itemsToShow);
-    this.currentDepoimentoIndex = 0;
-  }
-
-  nextDepoimento() {
-    this.stopAutoPlay();
-    const itemsToShow = this.isMobile ? 1 : 2;
-
-
-    const gridElement = document.querySelector('.depoimentos-grid') as HTMLElement;
-    if (gridElement) {
-      gridElement.style.opacity = '0';
-      gridElement.style.transform = 'translateX(-15px)';
-
-      setTimeout(() => {
-
-        this.currentDepoimentoIndex = (this.currentDepoimentoIndex + 1) % (this.depoimentos.length - itemsToShow + 1);
-        this.depoimentosExibidos = this.depoimentos.slice(this.currentDepoimentoIndex, this.currentDepoimentoIndex + itemsToShow);
-
-
-        setTimeout(() => {
-          gridElement.style.opacity = '1';
-          gridElement.style.transform = 'translateX(0)';
-        }, 50);
-      }, 300);
-    } else {
-
-      this.currentDepoimentoIndex = (this.currentDepoimentoIndex + 1) % (this.depoimentos.length - itemsToShow + 1);
-      this.depoimentosExibidos = this.depoimentos.slice(this.currentDepoimentoIndex, this.currentDepoimentoIndex + itemsToShow);
-    }
-
-    this.startAutoPlay();
-  }
-
-  prevDepoimento() {
-    this.stopAutoPlay();
-    const itemsToShow = this.isMobile ? 1 : 2;
-
-
-    const gridElement = document.querySelector('.depoimentos-grid') as HTMLElement;
-    if (gridElement) {
-      gridElement.style.opacity = '0';
-      gridElement.style.transform = 'translateX(15px)';
-
-      setTimeout(() => {
-
-        this.currentDepoimentoIndex = (this.currentDepoimentoIndex - 1 + this.depoimentos.length - itemsToShow + 1) % (this.depoimentos.length - itemsToShow + 1);
-        this.depoimentosExibidos = this.depoimentos.slice(this.currentDepoimentoIndex, this.currentDepoimentoIndex + itemsToShow);
-
-
-        setTimeout(() => {
-          gridElement.style.opacity = '1';
-          gridElement.style.transform = 'translateX(0)';
-        }, 50);
-      }, 300);
-    } else {
-
-      this.currentDepoimentoIndex = (this.currentDepoimentoIndex - 1 + this.depoimentos.length - itemsToShow + 1) % (this.depoimentos.length - itemsToShow + 1);
-      this.depoimentosExibidos = this.depoimentos.slice(this.currentDepoimentoIndex, this.currentDepoimentoIndex + itemsToShow);
-    }
-
-    this.startAutoPlay();
-  }
-
-  goToDepoimento(index: number) {
-    this.stopAutoPlay();
-    const itemsToShow = this.isMobile ? 1 : 2;
-
-
-    if (index >= 0 && index <= this.depoimentos.length - itemsToShow) {
-
-      const gridElement = document.querySelector('.depoimentos-grid') as HTMLElement;
-      if (gridElement) {
-        gridElement.style.opacity = '0';
-
-        setTimeout(() => {
-
-          this.currentDepoimentoIndex = index;
-          this.depoimentosExibidos = this.depoimentos.slice(this.currentDepoimentoIndex, this.currentDepoimentoIndex + itemsToShow);
-
-
-          setTimeout(() => {
-            gridElement.style.opacity = '1';
-            gridElement.style.transform = 'translateX(0)';
-          }, 50);
-        }, 300);
-      } else {
-
-        this.currentDepoimentoIndex = index;
-        this.depoimentosExibidos = this.depoimentos.slice(this.currentDepoimentoIndex, this.currentDepoimentoIndex + itemsToShow);
-      }
-    }
-
-    this.startAutoPlay();
-  }
-
-  startAutoPlay() {
-    this.carouselInterval = setInterval(() => {
-      this.nextDepoimento();
-    }, this.autoPlayInterval);
-  }
-
   stopAutoPlay() {
     if (this.carouselInterval) {
       clearInterval(this.carouselInterval);
     }
   }
+
+
+  checkItemsPerSlide() {
+    const width = window.innerWidth;
+    if (width < 768) {
+      this.itemsPorSlide = 1;
+    } else if (width < 1200) {
+      this.itemsPorSlide = 4;
+    } else {
+      this.itemsPorSlide = 6;
+    }
+  }
+
+
+  get professoresVisiveis() {
+    if (!this.todosProfessores.length) return [];
+    return this.todosProfessores.slice(this.startIndexProfessores, this.startIndexProfessores + this.itemsPorSlide);
+  }
+
+  get cardWidthPercentage(): number {
+    return 100 / this.itemsPorSlide;
+  }
+
+
+  nextProfessor() {
+    if (this.isAnimating) return;
+    this.stopRotation();
+    this.isAnimating = true;
+    this.transitionStyle = 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)';
+    this.transformStyle = `translateX(-${this.cardWidthPercentage}%)`;
+    setTimeout(() => {
+      const firstItem = this.todosProfessores.shift();
+      if (firstItem) {
+        this.todosProfessores.push(firstItem);
+      }
+      this.transitionStyle = 'none';
+      this.transformStyle = 'translateX(0%)';
+      this.isAnimating = false;
+      this.startRotation();
+    }, 600);
+  }
+
+
+  prevProfessor() {
+    if (this.isAnimating) return;
+    this.stopRotation();
+    this.isAnimating = true;
+    this.transitionStyle = 'none';
+    const lastItem = this.todosProfessores.pop();
+    if (lastItem) {
+      this.todosProfessores.unshift(lastItem);
+    }
+    this.transformStyle = `translateX(-${this.cardWidthPercentage}%)`;
+
+    setTimeout(() => {
+
+      this.transitionStyle = 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)';
+      this.transformStyle = 'translateX(0%)';
+
+      setTimeout(() => {
+        this.isAnimating = false;
+        this.startRotation();
+      }, 600);
+    }, 20);
+  }
+
+
+  startRotation() {
+    this.stopRotation();
+    this.rotationInterval = setInterval(() => {
+
+      if (!document.hidden) {
+        this.nextProfessor();
+      }
+    }, 4000);
+  }
+
+  stopRotation() {
+    if (this.rotationInterval) {
+      clearInterval(this.rotationInterval);
+    }
+  }
+
+  toggleFaq(index: number) {
+    this.faqList[index].open = !this.faqList[index].open;
+  }
+
+
+  abrirModal(item: any) {
+    this.materialSelecionado = item;
+    this.modalAberto = true;
+  }
+
+  fecharModal() {
+    this.modalAberto = false;
+    this.materialSelecionado = null;
+  }
+
+
+  processarDownload(dados: any) {
+    this.enviarParaGoogleSheets(dados);
+    this.baixarArquivoReal();
+    this.fecharModal();
+  }
+
+  enviarParaGoogleSheets(dados: any) {
+    // URL de envio (Note que termina com /formResponse)
+    const urlForm = 'https://docs.google.com/forms/d/e/1FAIpQLSdUQ5SvQGL-_2KDHoEmhT38GdgOCaDplhuvXvQZvF-KX5fmjA/formResponse';
+
+    const formData = new FormData();
+
+    formData.append('entry.1146452729', dados.nome);
+    formData.append('entry.2052748158', dados.telefone);
+    formData.append('entry.1482741367', dados.email || 'Não informado');
+    formData.append('entry.811351103', this.materialSelecionado?.title || 'Material Desconhecido');
+
+    fetch(urlForm, {
+      method: 'POST',
+      body: formData,
+      mode: 'no-cors'
+    })
+      .then(() => {
+        console.log('Lead salvo na planilha com sucesso!');
+      })
+      .catch(err => console.error('Erro ao salvar na planilha:', err));
+  }
+
+  baixarArquivoReal() {
+    if (this.materialSelecionado && this.materialSelecionado.linkDownload) {
+      const link = document.createElement('a');
+      link.href = this.materialSelecionado.linkDownload;
+      link.download = this.materialSelecionado.title;
+      link.target = '_blank';
+      link.click();
+    }
+  }
+
+
+  playHeroVideo() {
+    const videosPrioritarios = [this.heroVideo, this.videoPlayer];
+    videosPrioritarios.forEach(videoRef => {
+      if (videoRef && videoRef.nativeElement) {
+        const video = videoRef.nativeElement;
+        video.muted = true; 
+        video.play().catch(err => console.log('Autoplay Hero/Tech bloqueado:', err));
+      }
+    });
+  }
+
+  setupVideoObserver() {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const video = entry.target as HTMLVideoElement;
+
+        if (entry.isIntersecting) {
+          video.muted = true; 
+          const playPromise = video.play();
+          if (playPromise !== undefined) {
+            playPromise.catch(error => {
+            });
+          }
+        } 
+        else {
+          video.pause();
+        }
+      });
+    }, {
+      rootMargin: '100px' 
+    });
+
+    this.featureVideos.forEach((videoRef) => {
+      observer.observe(videoRef.nativeElement);
+    });
+  }
+
 }

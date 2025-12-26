@@ -11,6 +11,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { ModalDeleteService } from 'src/app/services/modal-delete.service';
 import { Permissao } from 'src/app/login/Permissao';
 import { ComentariosQuestoesService } from 'src/app/services/comentarios-questoes.service';
+import { NotificacaoService } from 'src/app/services/notificacoes.service';
 
 interface RespostaUI extends RespostaComentarioResponse {
   editando?: boolean;
@@ -63,7 +64,8 @@ export class ComentariosAulaComponent implements OnInit, OnDestroy, OnChanges {
     private comentariosService: ComentariosAulasService,
     private authService: AuthService,
     private modalDeleteService: ModalDeleteService,
-    private comentariosQuestoesService: ComentariosQuestoesService
+    private comentariosQuestoesService: ComentariosQuestoesService,
+    private notificacaoService: NotificacaoService,
   ) { }
 
   ngOnInit(): void {
@@ -170,6 +172,7 @@ export class ComentariosAulaComponent implements OnInit, OnDestroy, OnChanges {
         // this.resetarEstado();
         // this.carregarComentarios();
         this.comentarios.unshift(novoParaLista)
+        this.notificacaoService.atualizarNotificacoes();
       },
       error: (err) => {
         console.error(err);
@@ -244,6 +247,7 @@ export class ComentariosAulaComponent implements OnInit, OnDestroy, OnChanges {
         c.mostrarFormResposta = false;
         this.carregarRespostas(c);
         if (!c.mostrarRespostas) c.mostrarRespostas = true;
+        this.notificacaoService.atualizarNotificacoes();
       },
       error: (err) => console.error(err)
     });

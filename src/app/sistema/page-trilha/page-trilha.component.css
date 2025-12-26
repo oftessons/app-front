@@ -447,7 +447,6 @@
 
 .btn-editar-card:hover {
   background-color: #ff9a4d;
-  transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(246, 165, 104, 0.4);
 }
 

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import {
@@ -13,6 +14,7 @@ import { ThemeService } from 'src/app/services/theme.service';
   selector: 'app-notificacoes',
   templateUrl: './notificacoes.component.html',
   styleUrls: ['./notificacoes.component.css'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class NotificacoesComponent implements OnInit {
   notificacoes: Notificacao[] = [];
@@ -20,37 +22,60 @@ export class NotificacoesComponent implements OnInit {
   filtroAtual: 'todas' | 'nao-lidas' = 'todas';
 
   mostrarModalConfirmacao: boolean = false;
+  isLoading = false;
+  isMarkingAsRead: { [key: number]: boolean } = {};
+  isMarkingAllAsRead = false
 
   // Paginação
   paginaAtual: number = 1;
   itensPorPagina: number = 10;
   totalItens: number = 0;
   totalPaginas: number = 1;
-  paginas: number[] = []; // Array para os botões numéricos da paginação
-
+  paginas: number[] = [];
   userId: number | null = null;
 
   constructor(
     private notificacaoService: NotificacaoService,
     private authService: AuthService,
+    private router: Router,
     private themeService: ThemeService,
-    private router: Router
-  ) {}
+    private sanitizer: DomSanitizer,
+  ) {
+  }
 
   ngOnInit(): void {
-    const userIdStr = this.authService.getUserIdFromToken();
-    if (userIdStr) {
-      const parsedId = parseInt(userIdStr, 10);
-      if (!isNaN(parsedId)) {
+    const userIdLocal = this.authService.getIdUsuarioLocalStorage();
+
+    if (userIdLocal) {
+        this.iniciarComId(userIdLocal);
+    } else {
+        this.authService.obterUsuarioAutenticadoDoBackend().subscribe({
+            next: (usuario) => {
+                if (usuario && usuario.id) {
+                    this.iniciarComId(usuario.id.toString());
+                } else {
+                    console.error('❌ [DEBUG] Perfil recuperado mas sem ID.');
+                    this.loading = false;
+                }
+            },
+            error: (err) => {
+                console.error('❌ [DEBUG] Erro ao buscar perfil do usuário:', err);
+                this.loading = false;
+            }
+        });
+    }
+  }
+
+  // Método auxiliar para iniciar o carregamento com o ID garantido
+  private iniciarComId(idStr: string): void {
+      const parsedId = parseInt(idStr, 10);
+      if (!isNaN(parsedId)) { 
         this.userId = parsedId;
         this.carregarNotificacoes();
       } else {
-        console.warn('ID do usuário inválido no token.');
+        console.warn('⚠️ [DEBUG] ID do usuário inválido (NaN):', idStr);
         this.loading = false;
       }
-    } else {
-      this.loading = false;
-    }
   }
 
   carregarNotificacoes(): void {
@@ -73,6 +98,7 @@ export class NotificacoesComponent implements OnInit {
           this.notificacoes = response.content;
           this.totalItens = response.totalElements;
           this.totalPaginas = response.totalPages;
+          console.log(response)
 
           this.gerarListaPaginas(); // Gera os números da paginação
           this.loading = false;
@@ -119,7 +145,6 @@ export class NotificacoesComponent implements OnInit {
 
     if (!this.userId) return;
 
-    // Podemos pegar os IDs das notificações não lidas carregadas atualmente
     const idsNaoLidos = this.notificacoes
       .filter((n) => !n.lida)
       .map((n) => n.id);
@@ -139,20 +164,32 @@ export class NotificacoesComponent implements OnInit {
   }
 
   aoClicarNotificacao(notificacao: Notificacao): void {
-    // 1. Marca como lida se não estiver
-    if (!notificacao.lida) {
-      notificacao.lida = true; // Atualiza visualmente instantaneamente
-      if (this.userId) {
-        this.notificacaoService.markAsRead([notificacao.id]).subscribe();
-      }
+      this.marcarComoLida(notificacao);
+  }
+
+  marcarComoLida(notificacao: Notificacao): void {
+    // Se já estiver lida ou processando, navega direto
+    if (notificacao.lida || !notificacao.id || this.isMarkingAsRead[notificacao.id]) {
+        this.navegarParaReferencia(notificacao);
+        return;
     }
 
-    // 2. Redireciona baseado no referenciaId
-    if (notificacao.referenciaId) {
-      console.log('Navegando para referência:', notificacao.referenciaId);
-      // Exemplo de navegação real:
-      // this.router.navigate(['/usuario/painel-de-aulas', notificacao.referenciaId]);
-    }
+    this.isMarkingAsRead[notificacao.id] = true;
+
+    this.notificacaoService.markAsRead([notificacao.id]).subscribe({
+      next: () => {
+        notificacao.lida = true;
+        this.isMarkingAsRead[notificacao.id] = false;
+        // Navega após marcar como lida
+        //this.navegarParaReferencia(notificacao);
+      },
+      error: (error) => {
+        console.error('Erro ao marcar como lida:', error);
+        this.isMarkingAsRead[notificacao.id] = false;
+        // Tenta navegar mesmo com erro
+        //this.navegarParaReferencia(notificacao);
+      }
+    });
   }
 
   // --- Controles de Paginação ---
@@ -176,6 +213,15 @@ export class NotificacoesComponent implements OnInit {
       this.paginaAtual = numero;
       this.carregarNotificacoes();
     }
+  }
+
+  formatarMensagem(mensagem: string): SafeHtml {
+    // O backend já envia o HTML formatado (strong, em, br), apenas confiamos nele
+    return this.sanitizer.bypassSecurityTrustHtml(mensagem);
+  }
+
+  navegarParaReferencia(notificacao: Notificacao): void {
+    console.warn("A implementar navegação pelas notificações.")
   }
 
   isDarkMode(): boolean {

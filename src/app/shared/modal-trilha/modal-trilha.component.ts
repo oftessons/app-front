@@ -1,14 +1,22 @@
 import {
   Component,
   OnInit,
+  OnDestroy,
   Input,
   Output,
   EventEmitter,
   TemplateRef,
   ViewEncapsulation,
+  ViewChild,
 } from '@angular/core';
 import { TrilhaData } from 'src/app/services/modal-trilha.service';
 import { AnimationOptions } from 'ngx-lottie';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { AulasService } from 'src/app/services/aulas.service';
+import { VdoCipherPlaybackResponse } from 'src/app/sistema/modulo-de-aulas/video-cipher-playblack-response';
+import { Location } from '@angular/common';
+
+declare var VdoPlayer: any;
 
 type TipoConteudo = 'questoes-pre' | 'aulas' | 'flashcards' | 'questoes-pos';
 type ModoVisualizacao = 'selecao' | 'executando' | 'resumo';
@@ -19,7 +27,7 @@ type ModoVisualizacao = 'selecao' | 'executando' | 'resumo';
   styleUrls: ['./modal-trilha.component.css'],
   encapsulation: ViewEncapsulation.None,
 })
-export class ModalTrilhaComponent implements OnInit {
+export class ModalTrilhaComponent implements OnInit, OnDestroy {
   @Input() title: string = 'Iniciar Trilha';
   @Input() size: string = 'max-w-4xl';
   @Input() contentTemplate?: TemplateRef<any>;
@@ -27,6 +35,8 @@ export class ModalTrilhaComponent implements OnInit {
 
   @Output() closeModal = new EventEmitter<void>();
   @Output() iniciarTrilha = new EventEmitter<TipoConteudo>();
+
+  @ViewChild('vdoIframe') vdoIframe: any;
 
   modoAtual: ModoVisualizacao = 'selecao';
   etapaAtual: TipoConteudo = 'questoes-pre';
@@ -40,6 +50,8 @@ export class ModalTrilhaComponent implements OnInit {
   isRespostaCorreta: boolean = false; 
 
   aulaAtualIndex: number = 0;
+  vdoCipherUrl: SafeResourceUrl | null = null;
+  isLoadingVideo: boolean = false;
   
   acertos: number = 0;
   erros: number = 0;
@@ -52,12 +64,34 @@ export class ModalTrilhaComponent implements OnInit {
     autoplay: true
   };
 
+  animacaoSucessoOptions: AnimationOptions = {
+    path: 'assets/animations/trofeu.json',
+    loop: false,
+    autoplay: true
+  };
+
+  animacaoEsforcoOptions: AnimationOptions = {
+    path: 'assets/animations/estudando.json',
+    loop: false,
+    autoplay: true
+  };
+
   
   Math = Math;
+  private popStateListener: any;
 
-  constructor() {}
+  constructor(
+    private sanitizer: DomSanitizer,
+    private aulasService: AulasService,
+    private location: Location
+  ) {}
 
   ngOnInit(): void {
+    history.pushState({ modal: 'trilha' }, '');
+    this.popStateListener = () => {
+      this.onModalClose();
+    };
+    window.addEventListener('popstate', this.popStateListener);
     
     if (this.trilhaData?.etapasCompletas) {
       this.etapasCompletas = new Set(this.trilhaData.etapasCompletas);
@@ -70,6 +104,12 @@ export class ModalTrilhaComponent implements OnInit {
     const primeiraEtapa = this.proximaEtapaDesbloqueada();
     if (primeiraEtapa) {
       this.iniciarEtapa(primeiraEtapa);
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.popStateListener) {
+      window.removeEventListener('popstate', this.popStateListener);
     }
   }
 
@@ -204,12 +244,99 @@ export class ModalTrilhaComponent implements OnInit {
     
     console.log('Iniciando aulas:', this.trilhaData.aulas);
     
-    this.marcarAulasCompletas();
+    if (this.trilhaData.aulas && this.trilhaData.aulas.length > 0) {
+      this.carregarVideo(this.trilhaData.aulas[0]);
+    }
+  }
+
+  carregarVideo(aula: any): void {
+    if (!aula?.id) return;
+
+    console.log('Carregando vídeo para aula ID:', aula.id);
+
+    this.isLoadingVideo = true;
+    this.vdoCipherUrl = null;
+
+    this.aulasService.obterUrlDeVideo(aula.id).subscribe({
+      next: (res: VdoCipherPlaybackResponse) => {
+        this.isLoadingVideo = false;
+
+        const rawUrl = `https://player.vdocipher.com/v2/?otp=${res.otp}&playbackInfo=${res.playbackInfo}`;
+        this.vdoCipherUrl = this.sanitizer.bypassSecurityTrustResourceUrl(rawUrl);
+
+        this.inicializarVdoCipherPlayer();
+      },
+      error: () => {
+        console.error('Não foi possível carregar o vídeo.');
+        this.isLoadingVideo = false;
+      }
+    });
+  }
+
+  private inicializarVdoCipherPlayer(): void {
+    setTimeout(() => {
+      if (!this.vdoIframe) return;
+
+      const iframeEl = this.vdoIframe.nativeElement;
+      if (!iframeEl) return;
+
+      try {
+        const player = VdoPlayer.getInstance(iframeEl);
+        if (player?.video) {
+          console.log('Player VdoCipher inicializado com sucesso');
+        }
+      } catch (error) {
+        console.error('Erro ao inicializar VdoCipher player:', error);
+      }
+    }, 1000);
+  }
+
+  get aulaAtual(): any {
+    if (!this.trilhaData?.aulas || this.aulaAtualIndex >= this.trilhaData.aulas.length) {
+      return null;
+    }
+    return this.trilhaData.aulas[this.aulaAtualIndex];
+  }
+
+  proximaAula(): void {
+    if (this.aulaAtualIndex < this.trilhaData.aulas.length - 1) {
+      this.aulaAtualIndex++;
+      this.carregarVideo(this.aulaAtual);
+    }
+  }
+
+  aulaAnterior(): void {
+    if (this.aulaAtualIndex > 0) {
+      this.aulaAtualIndex--;
+      this.carregarVideo(this.aulaAtual);
+    }
+  }
+
+  finalizarAulas(): void {
+    this.etapasCompletas.add('aulas');
+    this.modoAtual = 'resumo';
   }
 
   marcarAulasCompletas(): void {
     this.etapasCompletas.add('aulas');
     this.modoAtual = 'resumo';
+  }
+
+  formatFileName(key: string): string {
+    if (!key) return 'Documento';
+    
+    const parts = key.split('/');
+    const fileName = parts[parts.length - 1];
+    
+    const cleanName = fileName.replace(/^\d+_/, '');
+    
+    return cleanName;
+  }
+
+  visualizarPdf(url: string): void {
+    if (url) {
+      window.open(url, '_blank');
+    }
   }
 
   iniciarFlashcards(): void {
@@ -317,7 +444,26 @@ export class ModalTrilhaComponent implements OnInit {
     return Math.round((this.acertos / total) * 100);
   }
 
+  isDesempenhoExcelente(): boolean {
+    return this.calcularDesempenho() > 80;
+  }
+
+  isTrilhaConcluida(): boolean {
+    return !this.proximaEtapaDesbloqueada();
+  }
+
   onModalClose(): void {
-    this.closeModal.emit();
+    if (this.popStateListener) {
+      window.removeEventListener('popstate', this.popStateListener);
+      this.popStateListener = null;
+    }
+    if (window.history.state?.modal === 'trilha') {
+      history.back();
+      setTimeout(() => {
+        this.closeModal.emit();
+      }, 10);
+    } else {
+      this.closeModal.emit();
+    }
   }
 }

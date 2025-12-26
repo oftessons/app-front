@@ -4,306 +4,504 @@
       <img src="assets/imagens/logoq-bank.svg" alt="Oftlessons Logo" />
     </div>
     <div class="nav-links">
-      <a href="#hero" (click)="scrollToSection('hero'); $event.preventDefault()" class="active">Cadastro</a>
-      <a href="#professores" (click)="scrollToSection('professores'); $event.preventDefault()">Equipe</a>
-      <a href="#depoimentos" (click)="scrollToSection('depoimentos'); $event.preventDefault()">Depoimentos</a>
-      <a href="#planos" (click)="scrollToSection('planos'); $event.preventDefault()">Planos</a>
+      <a href="#inicio" (click)="scrollToSection('inicio'); $event.preventDefault()" class="active">HOME</a>
+      <a href="#professores" (click)="scrollToSection('professores'); $event.preventDefault()">EQUIPE</a>
+      <a href="#features" (click)="scrollToSection('features'); $event.preventDefault()">FEATURES</a>
+      <a href="#planos" (click)="scrollToSection('planos'); $event.preventDefault()">PLANOS</a>
+      <a href="#recursos" (click)="scrollToSection('recursos'); $event.preventDefault()">RECURSOS</a>
+      <a href="#faq" (click)="scrollToSection('faq'); $event.preventDefault()">FAQ</a>
+      <a href="#" (click)="scrollToSection('planos'); $event.preventDefault()">CONTATO</a>
+      <!-- <a href="#hero" (click)="scrollToSection('hero'); $event.preventDefault()" class="active">Cadastro</a>
+      <a href="#depoimentos" (click)="scrollToSection('depoimentos'); $event.preventDefault()">Depoimentos</a> -->
     </div>
+
+    <div class="nav-actions">
+      <a href="/login" class="btn-login-nav ">LOGIN / ALUNO</a>
+    </div>
+
   </nav>
-  
-  <section id="hero" class="hero-section">
-    <div class="container">
-      <div class="hero-content">
-        <div class="hero-text">
-          <h1><span>Domine</span> os conceitos que <span>caem</span> na Prova Nacional de <span>Oftalmologia</span></h1>
-          <p>Não é sobre estudar tudo, é sobre estudar certo.</p>
-        </div>
-        <div class="register-card">
-          <div class="register-header">
-            <h3>Já possui uma conta?</h3>
-            <button class="btn btn-login" (click)="navigateToLogin()">Faça Login</button>
-          </div>
-          <div class="register-body">
-            <form (submit)="cadastrar()">
-              <div class="column-form">
-                <div class="form-group">
-                  <label class="small mb-1">Nome *</label>
-                  <input type="text" name="nome" [(ngModel)]="nome"
-                    class="form-control py-2"
-                    [ngClass]="{'input-error': camposComErro.includes('nome')}"
-                    placeholder="Digite o seu nome" required />
-                  <small class="text-danger" *ngIf="camposComErro.includes('nome')">
-                    {{ obterMensagemErro('nome') }}
-                  </small>
-                </div>
-
-                <div class="form-group">
-                  <label class="small mb-1">E-mail *</label>
-                  <input type="email" name="email" [(ngModel)]="email"
-                    class="form-control py-2"
-                    [ngClass]="{'input-error': camposComErro.includes('email')}"
-                    placeholder="Digite seu e-mail" required />
-                  <small class="text-danger" *ngIf="camposComErro.includes('email')">
-                    {{ obterMensagemErro('email') }}
-                  </small>
-                </div>
-
-                <div class="form-group">
-                  <div class="password-container-tooltip">
-                    <label class="small mb-1">Senha *</label>
-                    <div class="input-group">
-                      <input type="password" name="password" [(ngModel)]="password"
-                        class="form-control py-2"
-                        [ngClass]="{'input-error': camposComErro.includes('password')}"
-                        placeholder="Digite sua senha" required
-                        (input)="validatePassword()"
-                        (focus)="showTooltip = true"
-                        (blur)="showTooltip = false"/>
-                      <div class="input-group-append">
-                        <div class="btn btn-outline-secondary" type="button" (click)="togglePasswordVisibility('password')">
-                          <img *ngIf="!passwordVisible.password" src="assets/imagens/view.svg" alt="Mostrar senha" width="16" height="16">
-                          <img *ngIf="passwordVisible.password" src="assets/imagens/view-off.svg" alt="Ocultar senha" width="16" height="16">
-                        </div>
-                      </div>
-                    </div>
-                    <div *ngIf="showTooltip" class="password-tooltip">
-                      <p class="tooltip-title">A senha precisa ter:</p>
-                      <ul>
-                        <li [class.valid]="passwordValidations.minLength">Ao menos 8 caracteres</li>
-                        <li [class.valid]="passwordValidations.uppercase">1 letra maiúscula</li>
-                        <li [class.valid]="passwordValidations.lowercase">1 letra minúscula</li>
-                        <li [class.valid]="passwordValidations.number">1 número</li>
-                        <li [class.valid]="passwordValidations.specialChar">1 caractere especial (!&#64;#$%^&*)</li>
-                      </ul>
-                    </div>
-                  </div>
-                  <small class="text-danger" *ngIf="camposComErro.includes('password')">
-                    {{ obterMensagemErro('password') }}
-                  </small>
-                </div>
-
-                <div class="form-group">
-                  <label class="small mb-1">Você é: *</label>
-                  <select name="tipoEstudante"
-                  [(ngModel)]="tipoDeEstudante"
-                  [ngClass]="{'input-error': camposComErro.includes('tipoDeEstudante')}"
-                  class="form-select py-2"
-                  required>
-                    <option value="" disabled selected>Selecione o tipo de usuário</option>
-                    <option *ngFor="let tipo of tiposUsuario" [value]="tipo.key">
-                      {{ tipo.description }}
-                    </option>
-                  </select>
-                  <small class="text-danger" *ngIf="camposComErro.includes('tipoDeEstudante')">
-                    {{ obterMensagemErro('tipoDeEstudante') }}
-                  </small>
-                </div>
 
 
-                <div class="col-sm-12 mt-3">
-                  <div class="form-check">
-                    <input type="checkbox" id="consentimento" [(ngModel)]="consentimento" name="consentimento" class="form-check-input" required />
-                    <label for="consentimento" class="form-check-label">
-                      Eu concordo com os
-                      <a href="assets/docs/pp.pdf" target="_blank">Termos de Uso</a> e a
-                      <a href="assets/docs/pp.pdf" target="_blank">Política de Privacidade</a>.
-                    </label>
-                  </div>
-                </div>
-              </div>
+  <div class="main-background-wrapper">
 
-              <div class="form-group mt-4 mb-0">
-                <div class="d-flex justify-content-between">
-                  <button type="submit" class="btn btn-submit" [disabled]="!consentimento">Cadastrar</button>
-                </div>
-                <div class="alert alert-success" *ngIf="mensagemSucesso">
-                  {{ mensagemSucesso }}
-                </div>
-                <div class="alert alert-danger" *ngFor="let erro of errors">
-                  {{ erro }}
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
+
+    <section id="inicio" class="tech-section">
+
+      <div class="video-container">
+        <video #videoPlayer muted loop playsinline preload="auto" class="bg-video">
+          <source src="assets/videos/landingpage/headervideo.mp4" type="video/mp4">
+          Seu navegador não suporta vídeos HTML5.
+        </video>
       </div>
-    </div>
-  </section>
 
-  <section id="professores" class="professores-section">
-    <div class="container">
-      <div class="professores-border">
+      <div class="content-tech">
+        <h2 class="tech-title">TECNOLOGIA NA SUA ROTINA.</h2>
+
+        <button (click)="scrollToSection('hero')" class="btn-tech">
+          ACESSE AGORA
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 18l6-6-6-6" />
+          </svg>
+        </button>
+      </div>
+
+    </section>
+
+
+    <section id="professores" class="professores-section-dark">
+      <div class="professores-overlay"></div>
+
+      <div class="container-fluid relative-z">
+
         <div class="professores-header">
           <h2 class="professores-title">Nossa Equipe</h2>
-          <p class="professores-subtitle">Subespecialistas que ministram aulas e comentam as questões da plataforma</p>
+          <p class="professores-subtitle">Subespecialistas que comentam as questões e ministram as aulas da plataforma.
+          </p>
         </div>
 
-        <!-- Professores que dão aulas -->
-        <div class="professores-categoria">
-          <div class="categoria-header">
-            <div class="categoria-icon">
-              <img src="assets/Icons/au-bra.svg" alt="" srcset="">
+        <div class="carousel-wrapper">
+
+          <button class="nav-btn prev" (click)="prevProfessor()">❮</button>
+
+          <div class="carousel-viewport">
+
+            <div class="professores-track" [style.transform]="transformStyle" [style.transition]="transitionStyle">
+
+              <div class="professor-card-dark" *ngFor="let professor of todosProfessores"
+                [style.flex]="'0 0 ' + cardWidthPercentage + '%'">
+
+                <div class="card-inner">
+                  <div class="card-top-content">
+                    <div class="card-avatar">
+                      <div class="avatar-circle">
+                        <img [src]="professor.foto" [alt]="professor.nome" />
+                      </div>
+                    </div>
+                    <h3 class="prof-name">{{ professor.nome }}</h3>
+                    <div class="prof-badge">
+                      <span class="badge-text">{{ professor.especialidade }}</span>
+                      <span class="badge-sub" *ngIf="professor.instituicao">{{ professor.instituicao }}</span>
+                    </div>
+                  </div>
+                  <div class="card-bottom-content" *ngIf="professor.isComentador">
+                    <p class="commentator-label">Equipe de comentário do Q-Bank</p>
+                  </div>
+                </div>
+
+              </div>
+
             </div>
-            <h3 class="categoria-title">Equipe de Aulas</h3>
           </div>
-          <p class="categoria-descricao">Profissionais que ministram as videoaulas e conteúdos didáticos da plataforma</p>
-          <div class="professores-grid">
-            <div class="professor-card" *ngFor="let professor of professoresAulas">
-              <div class="professor-foto">
-                <img [src]="professor.foto" [alt]="professor.nome" />
-              </div>
-              <div class="professor-info">
-                <h3 class="professor-nome">{{ professor.nome }}</h3>
-                <p class="professor-especialidade" *ngIf="professor.especialidade">{{ professor.especialidade }}</p>
-                <p class="professor-experiencia">{{ professor.experiencia }}</p>
-              </div>
+
+          <button class="nav-btn next" (click)="nextProfessor()">❯</button>
+
+        </div>
+
+        <div class="carousel-indicators">
+          <span *ngFor="let p of todosProfessores; let i = index" class="dot"
+            [class.active]="i === startIndexProfessores"> </span>
+        </div>
+
+      </div>
+    </section>
+
+
+    <section id="features" class="features-section">
+      <div class="features-container-fluid">
+
+        <div class="features-header">
+          <h2>Seu estudo com o Oftlessons começa agora!</h2>
+        </div>
+
+        <div class="features-grid">
+          <div class="feature-card" *ngFor="let item of features">
+
+            <div class="feature-video-container">
+              <video #featureVideoPlayer autoplay muted loop playsinline preload="none" class="feature-video">
+                <source [src]="item.video" type="video/mp4">
+              </video>
             </div>
+
+            <div class="feature-content">
+              <h3>{{ item.title }}</h3>
+            </div>
+
           </div>
         </div>
 
-        <!-- Divisor -->
-        <div class="categoria-divisor"></div>
+      </div>
+    </section>
 
-        <!-- Professores comentadores -->
-        <div class="professores-categoria">
-          <div class="categoria-header">
-            <div class="categoria-icon comentador">
-              <img src="assets/Icons/dark/caderno-dark.svg" alt="" srcset="">
+
+
+    <section id="resultados" class="resultados-section">
+      <div class="container">
+
+        <div class="section-header">
+          <h2 class="section-title">Resultados</h2>
+        </div>
+
+        <div class="results-container">
+
+          <div class="result-card" *ngFor="let item of resultados">
+
+            <div class="result-img-wrapper">
+              <img [src]="item.foto" [alt]="item.nome">
             </div>
-            <h3 class="categoria-title comentador">Equipe de Comentários de Questões</h3>
+
+            <div class="result-content">
+
+              <h3 class="result-name">{{ item.nome }}</h3>
+
+              <div class="approval-badge">
+                <span class="status-text">APROVADO</span>
+                <div class="status-details">
+                  <span>{{ item.instituicao }}</span>
+                </div>
+
+                <div class="status-subdetails">
+                  <span>{{ item.especialidade }}</span>
+                </div>
+              </div>
+
+            </div>
+
           </div>
-          <p class="categoria-descricao">Especialistas responsáveis pelos comentários detalhados das questões</p>
-          <div class="professores-grid">
-            <div class="professor-card comentador" *ngFor="let professor of professoresComentadores">
-              <div class="professor-foto comentador">
-                <img [src]="professor.foto" [alt]="professor.nome" />
-              </div>
-              <div class="professor-info">
-                <h3 class="professor-nome">{{ professor.nome }}</h3>
-                <p class="professor-especialidade" *ngIf="professor.especialidade">{{ professor.especialidade }}</p>
-                <p class="professor-experiencia">{{ professor.experiencia }}</p>
-              </div>
+
+        </div>
+
+      </div>
+    </section>
+
+
+
+    <section id="hero" class="hero-section">
+      <div class="hero-container-fluid relative-z">
+
+        <div class="hero-text-header">
+          <h1>TRILHA DE<br>CONHECIMENTO<br>ATÉ A PROVA!</h1>
+          <p>Acompanhe cada etapa da sua evolução.</p>
+        </div>
+
+        <div class="hero-grid-layout">
+
+          <div class="register-card-styled">
+
+            <div class="register-header">
+              <h3>Já possui uma conta?</h3>
+              <button class="btn btn-login" (click)="navigateToLogin()">Faça Login</button>
+            </div>
+
+            <div class="register-body">
+              <form (submit)="cadastrar()">
+                <div class="column-form">
+                  <div class="form-group">
+                    <label chero-video-wrapperlass="small mb-1">E-mail *</label>
+                    <input type="email" name="email" [(ngModel)]="email" class="form-control py-2"
+                      [ngClass]="{'input-error': camposComErro.includes('email')}" placeholder="Digite seu e-mail"
+                      required />
+                    <small class="text-danger" *ngIf="camposComErro.includes('email')">
+                      {{ obterMensagemErro('email') }}
+                    </small>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="password-container-tooltip">
+                      <label class="small mb-1">Senha *</label>
+                      <div class="input-group">
+                        <input type="password" name="password" [(ngModel)]="password" class="form-control py-2"
+                          [ngClass]="{'input-error': camposComErro.includes('password')}" placeholder="Digite sua senha"
+                          required (input)="validatePassword()" (focus)="showTooltip = true"
+                          (blur)="showTooltip = false" />
+                        <div class="input-group-append">
+                          <div class="btn btn-outline-secondary" type="button"
+                            (click)="togglePasswordVisibility('password')">
+                            <img *ngIf="!passwordVisible.password" src="assets/imagens/view.svg" alt="Mostrar senha"
+                              width="16" height="16">
+                            <img *ngIf="passwordVisible.password" src="assets/imagens/view-off.svg" alt="Ocultar senha"
+                              width="16" height="16">
+                          </div>
+                        </div>
+                      </div>
+                      <div *ngIf="showTooltip" class="password-tooltip">
+                        <p class="tooltip-title">A senha precisa ter:</p>
+                        <ul>
+                          <li [class.valid]="passwordValidations.minLength">Ao menos 8 caracteres</li>
+                          <li [class.valid]="passwordValidations.uppercase">1 letra maiúscula</li>
+                          <li [class.valid]="passwordValidations.lowercase">1 letra minúscula</li>
+                          <li [class.valid]="passwordValidations.number">1 número</li>
+                          <li [class.valid]="passwordValidations.specialChar">1 caractere especial (!&#64;#$%^&*)</li>
+                        </ul>
+                      </div>
+                    </div>
+                    <small class="text-danger" *ngIf="camposComErro.includes('password')">
+                      {{ obterMensagemErro('password') }}
+                    </small>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="small mb-1">Telefone *</label>
+                    <input type="text" name="telefone" [(ngModel)]="telefone"
+                      [ngClass]="{'input-error': camposComErro.includes('telefone')}" class="form-control py-2"
+                      placeholder="Digite seu telefone" required />
+                    <small class="text-danger" *ngIf="camposComErro.includes('telefone')">
+                      {{ obterMensagemErro('telefone') }}
+                    </small>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="small mb-1">Você é: *</label>
+                    <select name="tipoEstudante" [(ngModel)]="tipoDeEstudante"
+                      [ngClass]="{'input-error': camposComErro.includes('tipoDeEstudante')}" class="form-select py-2"
+                      required>
+                      <option value="" disabled selected>Selecione o tipo de usuário</option>
+                      <option *ngFor="let tipo of tiposUsuario" [value]="tipo.key">
+                        {{ tipo.description }}
+                      </option>
+                    </select>
+                    <small class="text-danger" *ngIf="camposComErro.includes('tipoDeEstudante')">
+                      {{ obterMensagemErro('tipoDeEstudante') }}
+                    </small>
+                  </div>
+
+
+                  <div class="col-sm-12 mt-3">
+                    <div class="form-check">
+                      <input type="checkbox" id="consentimento" [(ngModel)]="consentimento" name="consentimento"
+                        class="form-check-input" required />
+                      <label for="consentimento" class="form-check-label">
+                        Eu concordo com os
+                        <a href="assets/docs/pp.pdf" target="_blank">Termos de Uso</a> e a
+                        <a href="assets/docs/pp.pdf" target="_blank">Política de Privacidade</a>.
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group mt-4 mb-0">
+                  <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-submit" [disabled]="!consentimento">Cadastrar</button>
+                  </div>
+                  <div class="alert alert-success" *ngIf="mensagemSucesso">
+                    {{ mensagemSucesso }}
+                  </div>
+                  <div class="alert alert-danger" *ngFor="let erro of errors">
+                    {{ erro }}
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
+
+          <div class="hero-video-wrapper">
+            
+            <video #heroVideo autoplay muted loop playsinline class="hero-video-player" poster="">
+              <source src="assets/videos/landingpage/trilha.mp4" type="video/mp4">
+              Seu navegador não suporta vídeos HTML5.
+            </video>
+            
+          </div>
+
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section id="depoimentos" class="depoimentos-section">
-    <div class="container">
-      <h2 class="depoimento-title">Depoimentos</h2>
-      <div class="carousel-container">
-        <div class="depoimentos-grid">
-          <div class="depoimento-card" *ngFor="let depoimento of depoimentosExibidos">
-            <div class="depoimento-author">
-              <div class="depoimento-avatar">
-                <img [src]="depoimento.image" alt="{{ depoimento.name }}" />
-              </div>
-              <div class="depoimento-info">
-                <h4>{{ depoimento.name }}</h4>
-                <p>{{ depoimento.role }}</p>
-              </div>
-            </div>
-            <div class="depoimento-content">
-              <p>"{{ depoimento.content }}"</p>
-            </div>
-          </div>
-        </div>
-        <div class="carousel-controls">
-          <button class="carousel-control prev" (click)="prevDepoimento()">❮</button>
-          <div class="carousel-dots">
-            <span *ngFor="let _, let i = index; of: depoimentos.slice(0, depoimentos.length - (isMobile ? 0 : 1))"
-                  class="carousel-dot"
-                  [class.active]="i === currentDepoimentoIndex"
-                  (click)="goToDepoimento(i)"></span>
-          </div>
-          <button class="carousel-control next" (click)="nextDepoimento()">❯</button>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <section id="planos" class="planos-section">
-    <div class="container">
-      <div class="title-planos">
-        <h2>Planos acessíveis para todos os perfis</h2>
-        <p>Escolha um plano e tenha acesso ilimitado a nossas questões e comentários.</p>
-      </div>
 
+    <section id="planos" class="planos-section">
       <div class="planos-container">
-        <app-card-plano
-            titulo="7 dias Grátis"
-            [descricao]="['Acesso a um número limitado de questões.', 'Ideal para quem está começando ou quer experimentar a plataforma.', 'Sem compromisso, totalmente gratuito.']"
-            [preco]="''"
-            textoParcelas="Gratuito"
-            textoBotao="Teste 7 dias grátis"
-            [mostrarPorMes]="false"
-            [recomendado]="false"
-            textoAdicional=""
-            [apenasEmitir]="true"
-            (botaoClicado)="onPlanoSelecionado('GRATUITO')">
-        </app-card-plano>
+        <div class="title-planos">
+          <h2>Teste e adquira o seu plano!</h2>
+        </div>
 
-        <app-card-plano
-            titulo="QBank + Mentoria"
-            [descricao]="[
+        <div class="plans-grid">
+
+          <app-card-plano-new badgeText="24h Grátis" mainTitle="Gratuito" [features]="[
+              'Acesso a um número limitado de questões.',
+              'Ideal para quem está começando ou quer experimentar a plataforma.',
+              'Sem compromisso, totalmente gratuito.',
+            ]" buttonText="TESTE 24 HORAS GRÁTIS" (buttonClick)="onPlanoSelecionado('gratuito')"
+            [lancamento]="false"
+            [recomendado]="false"              
+            >
+          </app-card-plano-new>
+
+          <app-card-plano-new badgeText="QBank + Mentoria" mainTitle="6x R$ 450,26" titleSuffix="/mês"
+            subTitle="Ou em 1x de R$ 2.400,00" [features]="[
               'Banco de questões com mais de 4 mil questões.',
-              '+2500 questões comentadas ricas em ilustrações.',
+              '+ 2500 questões comentadas.',
               'Assistente de IA que tira dúvidas, elabora novos comentários e explicações.',
               'Mentoria de acompanhamento do desempenho com questões.',
               'Fichas de simulados de acordo com a necessidade do aluno.'
-            ]"
-            [preco]="450.26"
-            [textoParcelas]="'6x'"
-            textoBotao="Escolher plano"
-            [recomendado]="false"
-            textoAdicional="Ou em 1x de R$2.400,00"
-            corCabecalho="#041E4E"
-            [apenasEmitir]="true"
-            (botaoClicado)="onPlanoSelecionado('ASSINATURA_SEMESTRAL_PARCELADA')">
-        </app-card-plano>
+            ]" buttonText="ESCOLHER PLANO" (buttonClick)="onPlanoSelecionado('qbank')"
+            [lancamento]="false"
+            [recomendado]="false"              
+            >
+          </app-card-plano-new>
 
-        <app-card-plano
-            titulo="Anual"
-            [descricao]="[
+          <app-card-plano-new badgeText="Q Bank - Anual" mainTitle="12x R$ 175,51" titleSuffix="/mês"
+            subTitle="ou em 1x de R$ 1.697,00" [features]="[
               'Banco de questões com mais de 4 mil questões.',
-              '+2500 questões comentadas ricas em ilustrações.',
+              '+ 2500 questões comentadas ricas em ilustrações.',
               'Assistente de IA que tira dúvidas, elabora novos comentários e explicações.'
-            ]"
-            [preco]="175.51"
-            [textoParcelas]="'12x'"
-            textoBotao="Escolher plano"
-            [recomendado]="true"
-            textoAdicional="ou em 1x de R$1.697,00"
-            corCabecalho="#0F1934"
-            [apenasEmitir]="true"
-            (botaoClicado)="onPlanoSelecionado('ASSINATURA_ANUAL_PARCELADA')">
-        </app-card-plano>
-      </div>
+            ]" buttonText="ESCOLHER PLANO" (buttonClick)="onPlanoSelecionado('anual')"
+            [lancamento]="false"
+            [recomendado]="true"            
+            >
+          </app-card-plano-new>
 
-      <div class="planos-footer">
-        <span>
-          Sujeito às condições estabelecidas em nossos 
-          <a href="assets/docs/pp.pdf" target="_blank">Termos de Uso</a> e
-          <a href="assets/docs/pp.pdf" target="_blank">Política de Assinaturas.</a>
-        </span>
+
+          <app-card-plano-new badgeText="Completo" mainTitle="12x R$465,09" titleSuffix="/mês"
+            subTitle="ou em 1x de R$4.497,00" [features]="[
+                '+ 100 horas de conteúdo com sub especialistas.',
+                'Ia com sugestão de revisão e novas questões.',
+                'Chat com prompts.', 
+                'Métricas da prova.',
+                '+ 3000 flashcards.',
+                '+ 3400 questões comentadas.'
+            ]" buttonText="ESCOLHER PLANO" (buttonClick)="onPlanoSelecionado('Completo')"
+            [lancamento]="true"
+            [recomendado]="false"
+            >
+          </app-card-plano-new>
+
+        </div>
+
+      </div>
+    </section>
+
+
+    <section id="faq" class="faq-section">
+      <div class="container">
+
+        <div class="faq-header">
+          <h2>Perguntas frequentes</h2>
+        </div>
+
+        <div class="faq-container">
+
+          <div class="faq-item" *ngFor="let item of faqList; let i = index" [class.active]="item.open"
+            (click)="toggleFaq(i)">
+
+            <div class="faq-question">
+              <h3>{{ item.question }}</h3>
+              <div class="arrow-icon"></div>
+            </div>
+
+            <div class="faq-answer">
+              <div class="answer-inner">
+                <p>{{ item.answer }}</p>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+
+    <section id="recursos" class="conheca-section">
+      <div class="container">
+
+        <div class="section-header">
+          <h2 class="section-title">Conheça</h2>
+        </div>
+
+        <div class="materials-grid">
+          <app-card-material *ngFor="let item of materiais" [imageSrc]="item.imageSrc" [title]="item.title"
+            [description]="item.description" buttonText="BAIXE GRÁTIS" (buttonClick)="abrirModal(item)">
+          </app-card-material>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+
+
+
+
+
+  <section class="info-oftlessons">
+    <div class="container-rodape">
+      <div class="info-grid">
+
+        <div class="info-col brand-col">
+          <div class="logo-wrapper">
+            <img src="assets/imagens/logofooter.png" alt="Oftlessons" class="logo-img">
+          </div>
+
+          <div class="address-block">
+            <p>Av. Paulista, 1636</p>
+            <p>Bela Vista - 01310-200</p>
+            <p>São Paulo / SP - Brasil</p>
+          </div>
+        </div>
+
+        <div class="info-col">
+          <h4 class="info-heading">Institucional</h4>
+          <ul class="info-links">
+            <li><a href="#inicio">Home</a></li>
+            <li><a href="#professores">Equipe</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#planos">Planos</a></li>
+            <li><a href="#recursos">Recursos</a></li>
+          </ul>
+        </div>
+
+        <div class="info-col">
+          <h4 class="info-heading">Sobre</h4>
+          <ul class="info-links">
+            <li><a href="#faq">Faq</a></li>
+            <li><a href="#">Q-Bank</a></li>
+            <li><a href="assets/docs/pp.pdf" target="_blank">Termos de uso</a></li>
+            <li><a href="assets/docs/pp.pdf" target="_blank">Política de privacidade</a></li>
+          </ul>
+        </div>
+
+        <div class="info-col contact-col">
+          <h4 class="info-heading">Fale com a Oftlessons</h4>
+          <ul class="contact-list">
+            <li>
+              <img src="assets/Icons/emailicongold.png" alt="Email" class="icon-yellow">
+              <a href="mailto:Suporte@Oftlessons.com.br">Suporte@Oftlessons.com.br</a>
+            </li>
+            <li>
+              <img src="assets/Icons/instagramicongold.png" alt="Instagram" class="icon-yellow">
+              <a href="https://www.instagram.com/oftlessons">Oftlessons</a>
+            </li>
+            <li>
+              <img src="assets/Icons/linkedinicongold.png" alt="LinkedIn" class="icon-yellow">
+              <a href="https://www.linkedin.com/company/oftlessons">Oftlessons</a>
+            </li>
+            <li>
+              <img src="assets/Icons/whatsappicongold.png" alt="WhatsApp" class="icon-yellow">
+              <a href="https://wa.me/551152418213?text=Ol%C3%A1%2C%20gostaria%20de%20saber%20mais%20sobre%20a%20Oftlessons%21"
+                target="_blank" rel="noopener noreferrer">
+                (11) 5241‑8213
+              </a>
+            </li>
+          </ul>
+        </div>
+
       </div>
     </div>
   </section>
 
 
-  <div class="section-indicator">
-    <a href="#hero" class="section-dot" data-section="hero"></a>
-    <a href="#professores" class="section-dot" data-section="professores"></a>
-    <a href="#depoimentos" class="section-dot" data-section="depoimentos"></a>
-    <a href="#planos" class="section-dot" data-section="planos"></a>
-  </div>
+
+  <app-modal-lead-download [isOpen]="modalAberto" [materialTitle]="materialSelecionado?.title" (close)="fecharModal()"
+    (submitForm)="processarDownload($event)">
+  </app-modal-lead-download>
+
 
   <footer class="footer">
     <div class="container">
       <div class="footer-bottom">
-        <p>&copy; 2024-{{ anoAtual }} Oftlessons - Todos os direitos reservados - CNPJ: 54.642.493/0001-92 - Av. Paulista, 1636. Bela Vista – São Paulo/SP.</p>
+        <p>&copy; 2024-{{ anoAtual }} Oftlessons - Todos os direitos reservados - CNPJ: 54.642.493/0001-92 - Av.
+          Paulista, 1636. Bela Vista – São Paulo/SP.</p>
       </div>
     </div>
   </footer>

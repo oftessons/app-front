@@ -1,0 +1,387 @@
+.dashboard-container {
+    background: #1A1E22;
+    color: #ffffff;
+    padding: 20px;
+    margin-top: 80px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    margin-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    font-family: 'Inter', sans-serif;
+}
+
+.page-header h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    border-left: 3px solid #ffffff;
+    padding-left: 10px;
+}
+
+/* --- Filtros --- */
+.filters-bar {
+    border-radius: 16px;
+    background-color: var(--bg-card);
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: flex-end; /* Alinha pela base */
+    border: 1px solid var(--border-color);
+}
+
+.filter-group {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    width: 100%;
+    flex-wrap: wrap; /* Permite quebrar linha se necessário */
+}
+
+/* Wrapper para controlar o tamanho do select customizado */
+.filter-wrapper {
+    flex: 1; /* Cresce igualmente */
+    min-width: 200px; /* Tamanho mínimo para não ficar espremido */
+    max-width: 300px; /* Tamanho máximo para não ficar gigante */
+}
+
+/* --- Responsividade --- */
+
+/* Mobile: Empilha tudo */
+@media (max-width: 768px) {
+    .filters-bar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filter-group {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .filter-wrapper {
+        width: 100%;
+        max-width: 100%; /* No mobile ocupa tudo */
+        min-width: auto;
+    }
+}
+
+/* --- KPI Cards --- */
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+@media (max-width: 768px) {
+    .kpi-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.kpi-card {
+    border-radius: 16px;
+    background: #14181A;
+    padding: 20px;
+    margin: 0;
+    display: flex;
+    gap: 16px;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.kpi-card .kpi-header {
+    display: flex;
+    justify-content: space-between;
+    color: #a1a5b7;
+    font-size: 0.85rem;
+    margin-bottom: 10px;
+}
+
+.kpi-card .kpi-value {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 5px;
+}
+
+.kpi-card .kpi-subtext {
+    font-size: 0.8rem;
+    color: #a1a5b7;
+}
+
+/* --- Seções Gerais (Titulos) --- */
+h3 {
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.subtitle {
+    color: #a1a5b7;
+    font-size: 0.85rem;
+    margin-bottom: 20px;
+}
+
+.analysis-section {
+    border-radius: 16px;
+    background: #14181A;
+}
+
+.analysis-header {
+    display: flex;
+    padding: 16px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    align-self: stretch;
+}
+
+/* --- Tabela --- */
+.table-container {
+    background: #171B1C;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 30px;
+}
+
+.table-header {
+    display: flex;
+    padding: 15px;
+    border-top: 1px solid #2C2F35;
+    border-bottom: 1px solid #2C2F35;
+    background: #171B1C;
+    color: #a1a5b7;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.table-row {
+    display: flex;
+    padding: 15px;
+    background-color: #14181A;
+    align-items: center;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.row-details {
+    background-color: #14181A; /* Mesma cor de fundo da tabela */
+    padding: 0; /* Remove padding para as linhas internas encostarem */
+    border-bottom: 1px solid #2C2F35;
+}
+
+/* Estilo da linha de cada subtema */
+.subtopic-row {
+    display: flex; /* Usa flex para alinhar com as colunas principais */
+    padding: 12px 15px; /* Espaçamento interno ligeiramente menor que a linha principal */
+    background-color: #14181A;
+    align-items: center;
+    border-bottom: 1px solid #2C2F35; /* Separador sutil entre subtemas */
+    color: #a1a5b7; /* Cor de texto secundária */
+    font-size: 0.85rem; /* Fonte ligeiramente menor */
+}
+
+/* Remove a borda do último subtema para não duplicar com a borda do container */
+.subtopic-row:last-child {
+    border-bottom: none;
+}
+
+/* Ajuste específico para a coluna de nome do subtema */
+.subtopic-name {
+    padding-left: 24px; /* Recuo para dar hierarquia visual */
+    gap: 10px; /* Espaço entre o ícone de seta e o nome */
+    color: #ffffff; /* Nome do subtema em destaque (branco) */
+}
+
+/* Ícone de seta curvada (↳) */
+.subtopic-icon {
+    font-size: 1.1rem;
+    color: #a1a5b7; /* Cor discreta para o ícone */
+    font-family: monospace; /* Garante a renderização correta do caractere */
+}
+
+/* Novo Badge Verde para os subtemas (conforme imagem) */
+.badge-green {
+    /* Cor de fundo verde translúcido */
+    background: rgba(39, 174, 96, 0.2);
+    /* Cor do texto verde vibrante */
+    color: #27ae60;
+    /* Mantém as mesmas propriedades do badge padrão */
+    border-radius: 16px;
+    padding: 4px 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* Estilo para a mensagem quando não há subtemas */
+.no-subtopics {
+    padding: 15px;
+    text-align: center;
+    color: #a1a5b7;
+    font-style: italic;
+    font-size: 0.85rem;
+}
+
+.table-row:hover {
+    background-color: #2C2F35;
+}
+
+/* Colunas da Tabela */
+.col-name {
+    flex: 2;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.col-qtd {
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+.col-freq {
+    flex: 1;
+    font-weight: 600;
+}
+
+.badge {
+    border-radius: 16px;
+    background: rgba(59, 95, 160, 0.45);
+    padding: 4px 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.chevron {
+    font-size: 1.2rem;
+    transition: transform 0.2s;
+}
+
+.chevron.rotated {
+    transform: rotate(90deg);
+}
+
+.row-details {
+    background-color: #1a1a28;
+    padding: 15px;
+    color: #a1a5b7;
+    font-size: 0.9rem;
+    border-bottom: 1px solid #2b2b40;
+}
+
+.mosaic-section {
+    background-color: #14181A;
+    border-radius: 16px;
+    padding: 20px;
+}
+
+.mosaic-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 120px;
+    gap: 2px;
+    background-color: #151521;
+    border: 2px solid #151521;
+}
+
+.mosaic-item {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    padding: 15px;
+    color: #ffffff;
+    font-weight: 500;
+    word-break: break-word;
+}
+
+.mosaic-tooltip {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out, visibility 0.2s;
+
+    background-color: #1A1E22;
+    border: 1px solid #2C2F35;
+    padding: 12px 16px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    
+    width: max-content;
+    max-width: 90%;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.mosaic-item:hover{
+    opacity: 0.8;
+}
+
+.mosaic-item:hover .mosaic-tooltip {
+    visibility: visible;
+    opacity: 1;
+}
+
+.tooltip-title {
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+    border-bottom: 1px solid #2C2F35;
+    padding-bottom: 4px;
+}
+
+.tooltip-row {
+    display: flex;
+    gap: 6px;
+    font-size: 0.85rem;
+    margin-bottom: 4px;
+    align-items: center;
+}
+
+.tooltip-row:last-child {
+    margin-bottom: 0;
+}
+
+.tooltip-value {
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.tooltip-desc {
+    color: #a1a5b7;
+    font-weight: 400;
+}
+
+.span-large {
+    grid-column: span 2;
+    grid-row: span 2;
+}
+
+.span-medium {
+    grid-row: span 2;
+}
+
+.span-tall {
+    grid-row: span 2;
+}
+
+.tile-blue-1 {
+    background-color: #3b5ba5;
+}
+
+.tile-blue-2 {
+    background-color: #2f4a8b;
+}
+
+.tile-blue-3 {
+    background-color: #243a70;
+}
