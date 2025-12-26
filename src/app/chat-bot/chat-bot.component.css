@@ -3,10 +3,10 @@
   bottom: 20px;
   right: 20px;
   z-index: 1000;
-  transition: top 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), 
-              bottom 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), 
-              left 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), 
-              right 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: top 0.6s cubic-bezier(0.25, 0.8, 0.25, 1),
+    bottom 0.6s cubic-bezier(0.25, 0.8, 0.25, 1),
+    left 0.6s cubic-bezier(0.25, 0.8, 0.25, 1),
+    right 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 :host.dragging {
@@ -14,10 +14,10 @@
 }
 
 :host.transitioning {
-  transition: top 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), 
-              bottom 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), 
-              left 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), 
-              right 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: top 0.6s cubic-bezier(0.25, 0.8, 0.25, 1),
+    bottom 0.6s cubic-bezier(0.25, 0.8, 0.25, 1),
+    left 0.6s cubic-bezier(0.25, 0.8, 0.25, 1),
+    right 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 :host.top-left {
@@ -105,13 +105,13 @@
 
 .resize-handle:active {
   opacity: 1;
-  color: var(--primary-color); 
+  color: var(--primary-color);
   transform: scale(1.05);
 }
 
 .chatbot-container.resizing .resize-handle {
   opacity: 1;
-  color: var(--primary-color); 
+  color: var(--primary-color);
 }
 
 /* Posicionamento do handle baseado na posição do chatbot */
@@ -286,7 +286,6 @@
 
 .citarQuestao img:hover {
   cursor: pointer;
-
 }
 
 .text-input-container {
@@ -307,7 +306,7 @@
   border: 1px solid #000;
   border-radius: 15px;
   font-size: 14px;
-  word-wrap: break-word; 
+  word-wrap: break-word;
   transition: border-color 0.3s;
 }
 
@@ -318,13 +317,12 @@
 
 .user-text-input::-webkit-scrollbar {
   width: 5px;
-  
 }
 
 .user-text-input::-webkit-scrollbar-track {
   background: #f1f1f1;
   border-radius: 10px;
-  margin: 8px 0; 
+  margin: 8px 0;
 }
 
 .user-text-input::-webkit-scrollbar-thumb {
@@ -334,7 +332,7 @@
 
 .user-text-input::-webkit-scrollbar-thumb:hover {
   background: #f6d365;
-  background-clip: content-box; 
+  background-clip: content-box;
 }
 
 .chatbot-footer {
@@ -483,7 +481,7 @@
 
 .chatbot-toggle-button.nav-active {
   bottom: 90px;
-} 
+}
 
 .chatbot-logo {
   width: 30px;
@@ -563,6 +561,7 @@ button:disabled .chatbot-logo {
 .username {
   font-weight: bold;
   font-size: 0.9em;
+  color: black;
 }
 
 .timestamp {
@@ -616,7 +615,6 @@ button:disabled .chatbot-logo {
   animation: fadeInSlideUp 0.8s ease-out forwards;
 }
 
-
 @keyframes fadeInSlideUp {
   0% {
     opacity: 0;
@@ -627,7 +625,6 @@ button:disabled .chatbot-logo {
     transform: translateY(0);
   }
 }
-
 
 .bot-message .message-content {
   animation: revealContent 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
@@ -643,7 +640,6 @@ button:disabled .chatbot-logo {
     clip-path: inset(0 0 0 0);
   }
 }
-
 
 .bot-message .message-content > * {
   animation: fadeInElement 0.6s ease-out forwards;
@@ -670,7 +666,7 @@ button:disabled .chatbot-logo {
   animation-delay: 0.6s;
 }
 
-.bot-message .message-content > *:nth-child(n+6) {
+.bot-message .message-content > *:nth-child(n + 6) {
   animation-delay: 0.7s;
 }
 
@@ -684,7 +680,6 @@ button:disabled .chatbot-logo {
     transform: translateY(0);
   }
 }
-
 
 .bot-message ::ng-deep markdown h1,
 .bot-message ::ng-deep markdown h2,
@@ -727,7 +722,7 @@ button:disabled .chatbot-logo {
   animation-delay: 0.4s;
 }
 
-.bot-message ::ng-deep markdown p:nth-of-type(n+5) {
+.bot-message ::ng-deep markdown p:nth-of-type(n + 5) {
   animation-delay: 0.5s;
 }
 
@@ -781,7 +776,7 @@ button:disabled .chatbot-logo {
   margin: 0 0 8px 0;
 }
 
-::ng-deep markdown ul, 
+::ng-deep markdown ul,
 ::ng-deep markdown ol {
   padding-left: 20px;
   margin: 8px 0;
@@ -928,7 +923,6 @@ button:disabled .chatbot-logo {
     max-width: 98%;
   }
 
-  
   ::ng-deep .markdown-content table {
     font-size: 0.75em;
     display: block;
@@ -940,7 +934,7 @@ button:disabled .chatbot-logo {
     padding: 6px 8px;
     min-width: 80px;
   }
-  
+
   .chatbot-logo {
     width: 24px;
     height: 24px;
@@ -987,7 +981,6 @@ button:disabled .chatbot-logo {
   word-wrap: break-word;
 }
 
-
 ::ng-deep .math-inline {
   display: inline;
   margin: 0 2px;
@@ -996,7 +989,6 @@ button:disabled .chatbot-logo {
 ::ng-deep .math-inline .katex {
   font-size: 1.05em;
 }
-
 
 ::ng-deep .math-block {
   display: block;
@@ -1014,7 +1006,6 @@ button:disabled .chatbot-logo {
 ::ng-deep .math-block .katex {
   font-size: 1.15em;
 }
-
 
 ::ng-deep .math-block::-webkit-scrollbar {
   height: 6px;
@@ -1034,7 +1025,6 @@ button:disabled .chatbot-logo {
   background: #555;
 }
 
-
 ::ng-deep .math-error {
   color: #d32f2f;
   background-color: #ffebee;
@@ -1045,7 +1035,6 @@ button:disabled .chatbot-logo {
   font-size: 0.9em;
 }
 
-
 ::ng-deep .bot-message .katex {
   color: inherit;
 }
@@ -1053,7 +1042,6 @@ button:disabled .chatbot-logo {
 ::ng-deep .user-message .katex {
   color: inherit;
 }
-
 
 ::ng-deep .message-content .katex {
   font-size: 1.1em;
@@ -1069,7 +1057,6 @@ button:disabled .chatbot-logo {
   overflow-x: auto;
   overflow-y: hidden;
 }
-
 
 ::ng-deep .message-content table {
   overflow-x: auto;
@@ -1089,7 +1076,6 @@ button:disabled .chatbot-logo {
   overflow-wrap: normal;
 }
 
-
 ::ng-deep markdown table td > *,
 ::ng-deep markdown table th > * {
   display: inline;
@@ -1101,13 +1087,52 @@ button:disabled .chatbot-logo {
   white-space: nowrap;
 }
 
-
 @media (max-width: 768px) {
   ::ng-deep .message-content .katex {
     font-size: 1em;
   }
-  
+
   ::ng-deep .message-content .katex-display {
     font-size: 0.9em;
   }
+}
+
+.chatbot-container,
+.chatbot-body,
+.text-input-container,
+.chatbot-footer,
+.user-text-input {
+  background-color: #ffffff !important;
+}
+
+.chatbot-container .username,
+.chatbot-container .message-content,
+.chatbot-container .user-text-input,
+.chatbot-container .prompt-item-inline,
+.chatbot-container .citarQuestao {
+  color: #000000 !important;
+}
+
+::ng-deep markdown p,
+::ng-deep markdown h1,
+::ng-deep markdown h2,
+::ng-deep markdown h3,
+::ng-deep markdown li,
+::ng-deep markdown span,
+::ng-deep markdown code {
+  color: #000000 !important;
+}
+
+::ng-deep markdown table td {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+::ng-deep markdown table th {
+  background-color: #f5ce50 !important;
+  color: #0f1934 !important;
+}
+
+.user-text-input::placeholder {
+  color: #666666 !important;
 }

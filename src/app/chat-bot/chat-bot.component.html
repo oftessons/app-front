@@ -1,59 +1,38 @@
-<button
-  class="chatbot-toggle-button"
-  [class.nav-active]="isNavigationBarActive"
-  (click)="toggleChat()"
-  *ngIf="showButton"
-  [disabled]="!chatAtivo">
-  <img
-    src="assets/imagens/logo-iconnavegador.svg"
-    alt="Chatbot Logo"
-    class="chatbot-logo"
-  />
+<button class="chatbot-toggle-button" [class.nav-active]="isNavigationBarActive" (click)="toggleChat()"
+  *ngIf="showButton" [disabled]="!chatAtivo">
+  <img src="assets/imagens/logo-iconnavegador.svg" alt="Chatbot Logo" class="chatbot-logo" />
 </button>
 
-<div class="chatbot-container" 
-     [class.nav-active]="isNavigationBarActive"
-     [class.resizing]="isResizing"
-     [style.width.px]="currentSize.width"
-     [style.height.px]="currentSize.height"
-     [@chatBotAnimation]="isOpen ? 'open' : 'closed'">
-  
-  <div class="resize-handle" 
-       [class.top-left]="currentPosition === 'top-left'"
-       [class.top-right]="currentPosition === 'top-right'"
-       [class.bottom-left]="currentPosition === 'bottom-left'"
-       [class.bottom-right]="currentPosition === 'bottom-right'"
-       (mousedown)="onResizeStart($event)"
-       (touchstart)="onResizeTouchStart($event)"
-       title="Arrastar para redimensionar">
+<div class="chatbot-container" [class.nav-active]="isNavigationBarActive" [class.resizing]="isResizing"
+  [style.width.px]="currentSize.width" [style.height.px]="currentSize.height"
+  [@chatBotAnimation]="isOpen ? 'open' : 'closed'">
+
+  <div class="resize-handle" [class.top-left]="currentPosition === 'top-left'"
+    [class.top-right]="currentPosition === 'top-right'" [class.bottom-left]="currentPosition === 'bottom-left'"
+    [class.bottom-right]="currentPosition === 'bottom-right'" (mousedown)="onResizeStart($event)"
+    (touchstart)="onResizeTouchStart($event)" title="Arrastar para redimensionar">
     <svg width="16" height="16" viewBox="0 0 16 16">
-      <path d="M14 2L2 14M14 6L6 14M14 10L10 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M14 2L2 14M14 6L6 14M14 10L10 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
     </svg>
   </div>
 
-  <div class="chatbot-header" 
-       (mousedown)="onDragStart($event)"
-       (touchstart)="onTouchStart($event)"
-       [style.cursor]="isDragging ? 'grabbing' : 'grab'">
-       VictorIA
+  <div class="chatbot-header" (mousedown)="onDragStart($event)" (touchstart)="onTouchStart($event)"
+    [style.cursor]="isDragging ? 'grabbing' : 'grab'">
+    VictorIA
   </div>
   <button class="new-conversation-btn" (click)="iniciarNovaConversa()" title="Iniciar nova conversa">
     Novo chat
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <path d="M12 5v14M5 12h14"/>
+      <path d="M12 5v14M5 12h14" />
     </svg>
   </button>
   <button class="close-btn" (click)="toggleChat()">×</button>
   <div class="chatbot-body" #chatBody>
-    <div
-      *ngFor="let message of messages"
-      class="message"
-      [ngClass]="{
+    <div *ngFor="let message of messages" class="message" [ngClass]="{
         'user-message': message.type === 'user',
         'bot-message': message.type === 'bot',
         'typing-message': message.type === 'typing'
-      }"
-    >
+      }">
       <div class="message-header">
         <div class="avatar-container" *ngIf="message.avatar">
           <img *ngIf="message.avatar" [src]="message.avatar" alt="Avatar" class="avatar-img">
@@ -83,23 +62,19 @@
     </div>
 
     <div class="support-options">
-      <button [disabled]="!temQuestaoParaCitar()" [class.active]="isCitarQuestao" class="citarQuestao" (click)="citarQuestaoAtual(userMessage)"><div [class.active]="isCitarQuestao" class="citarQuestao-butao-texto">Citar Questão</div><img src="assets/Icons/x.png" [class.active]="isCitarQuestao"></button>
-      <button class="suporte-btn" (click)="enviarParaSuporte()"> <img style="width: 20px;" src="assets/Icons/whatsapp-verde.svg" alt="whatsapp">Suporte WhatsApp</button>
+      <button [disabled]="!temQuestaoParaCitar()" [class.active]="isCitarQuestao" class="citarQuestao"
+        (click)="citarQuestaoAtual(userMessage)">
+        <div [class.active]="isCitarQuestao" class="citarQuestao-butao-texto">Citar Questão</div><img
+          src="assets/Icons/x.png" [class.active]="isCitarQuestao">
+      </button>
+      <button class="suporte-btn" (click)="enviarParaSuporte()"> <img style="width: 20px;"
+          src="assets/Icons/whatsapp-verde.svg" alt="whatsapp">Suporte WhatsApp</button>
     </div>
-    
-    <div class="text-input-container"> 
-      <textarea
-        class="user-text-input"
-        [(ngModel)]="userMessage"
-        (keydown)="handleKeydown($event)"
-        placeholder="Escreva sua mensagem..."
-        [disabled]="!chatAtivo"
-      ></textarea>
-      <button
-        class="send-button"
-        (click)="sendMessage()"
-        [disabled]="!userMessage.trim()"
-      >
+
+    <div class="text-input-container">
+      <textarea class="user-text-input" [(ngModel)]="userMessage" (keydown)="handleKeydown($event)"
+        placeholder="Escreva sua mensagem..." [disabled]="!chatAtivo"></textarea>
+      <button class="send-button" (click)="sendMessage()" [disabled]="!userMessage.trim()">
         <img src="assets/Icons/enviar.svg" alt="Enviar" class="send-icon" />
       </button>
     </div>

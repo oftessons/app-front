@@ -114,8 +114,11 @@ body.dark-mode .mat-radio-button .mat-radio-outer-circle {
 
 .dark-mode {
   color: var(--text-color);
-} 
+}
 
+body.dark-mode .mat-typography {
+    color: var(--text-color) !important;
+}
 
 *,
 *::before,
@@ -11490,3 +11493,20 @@ body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
+/* body.dark-mode .modal-body, 
+body.dark-mode .card-body,
+body.dark-mode p,
+body.dark-mode li {
+    color: var(--text-color) !important;
+}
+
+body.dark-mode .text-muted,
+body.dark-mode .text-color-secondary {
+    color: #b0b0b0 !important; 
+} */
+
+body.dark-mode .ql-editor {
+    color: black;
+}
+
